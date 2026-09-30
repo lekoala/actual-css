@@ -4,7 +4,12 @@
  * build step, no watch, no transform.
  *
  * Usage:
- *   bun scripts/serve.js [--port 3000]
+ *   bun scripts/serve.js [--port 3000] [--cors]
+ *
+ * --cors lets another origin read the files — needed to load the Penpot
+ * plugin (bun run export:design) into penpot.app. Off by default: with it,
+ * any page open in a browser on the network can read the repository while
+ * the server runs.
  *
  * For a device on the same network, use the LAN address it prints. For a
  * remote browser service, start that service's local tunnel first, then open
@@ -20,6 +25,7 @@ const ROOT = join(import.meta.dirname, "..");
 const args = process.argv.slice(2);
 const { "--port": portArg } = readFlags(args, { "--port": { fallback: "3000" } });
 const port = Number(portArg);
+const cors = args.includes("--cors");
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
   console.error(`serve: --port expects a port number, received "${portArg}".`);
   process.exit(1);
@@ -72,6 +78,18 @@ try {
     port,
     hostname: "0.0.0.0",
     fetch(request) {
+      /* Chrome preflights a public site's request to localhost (Private
+         Network Access) and only proceeds on this explicit opt-in. */
+      if (cors && request.method === "OPTIONS") {
+        return new Response(null, {
+          status: 204,
+          headers: {
+            "access-control-allow-origin": "*",
+            "access-control-allow-headers": "*",
+            "access-control-allow-private-network": "true",
+          },
+        });
+      }
       const { pathname } = new URL(request.url);
       const target = resolveTarget(pathname);
       console.log(`${target ? 200 : 404} ${pathname}`);
@@ -79,7 +97,9 @@ try {
 
       /* A test device that caches dist/ will keep reporting a result the
          working tree no longer produces. */
-      return new Response(Bun.file(target), { headers: { "cache-control": "no-store" } });
+      const headers = { "cache-control": "no-store" };
+      if (cors) headers["access-control-allow-origin"] = "*";
+      return new Response(Bun.file(target), { headers });
     },
   });
 } catch (error) {
@@ -88,7 +108,7 @@ try {
   process.exit(1);
 }
 
-console.log(`Serving ${ROOT}`);
+console.log(`Serving ${ROOT}${cors ? " (CORS: any origin)" : ""}`);
 console.log(`  http://localhost:${server.port}/`);
 for (const address of lanAddresses()) console.log(`  http://${address}:${server.port}/`);
 console.log(`Demo pages: http://localhost:${server.port}/demo/templates/<name>.html`);

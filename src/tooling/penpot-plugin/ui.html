@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Actual CSS components</title>
+    <script>
+      /* Penpot passes its own theme (light/dark); the system colors below
+         follow it through color-scheme. */
+      document.documentElement.style.colorScheme =
+        new URLSearchParams(location.search).get("theme") === "light" ? "light" : "dark";
+    </script>
+    <style>
+      body {
+        background: Canvas;
+        color: CanvasText;
+        margin: 0;
+        padding: 12px;
+        font: 13px/1.4 system-ui, sans-serif;
+      }
+      label {
+        display: block;
+        margin-block-end: 8px;
+      }
+      input {
+        inline-size: 100%;
+        box-sizing: border-box;
+      }
+      pre {
+        white-space: pre-wrap;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Import <code>penpot/tokens.json</code> first (Tokens → Tools → Import).</p>
+    <label>
+      Font family
+      <input id="font" value="Inter" />
+    </label>
+    <button id="build" type="button">Build components</button>
+    <pre id="report"></pre>
+    <script>
+      /* The spec is written next to this page by `bun run export:design`. */
+      const report = document.getElementById("report");
+      document.getElementById("build").addEventListener("click", async () => {
+        report.textContent = "Building…";
+        const spec = await fetch("spec.json").then((response) => response.json());
+        parent.postMessage(
+          { type: "build", spec, font: document.getElementById("font").value.trim() },
+          "*",
+        );
+      });
+      window.addEventListener("message", (event) => {
+        if (event.data?.type === "report") report.textContent = event.data.text;
+      });
+    </script>
+  </body>
+</html>

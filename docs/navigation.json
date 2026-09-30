@@ -9,7 +9,8 @@
         "modular-import",
         "progressive-enhancement",
         "bootstrap",
-        "tailwind"
+        "tailwind",
+        "design-tools"
       ]
     },
     {

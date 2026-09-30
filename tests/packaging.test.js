@@ -226,6 +226,9 @@ packTest("packed tarball ships every critical public export", async () => {
       "package/src/css/layout/index.css", // actual-css/css/layout
       "package/src/css/layout/column-layout.css", // actual-css/css/layout/column-layout
       "package/src/tooling/css-bundle.js", // shared bundler for CLI and build scripts
+      "package/src/css/actual.full.css", // measured by `actual-css design`
+      "package/src/tooling/design-export.js", // actual-css design
+      "package/src/tooling/penpot-plugin/plugin.js", // copied next to the export
       "package/reserved-classes.json", // actual-css/reserved-classes.json
     ];
     for (const entry of critical) {
