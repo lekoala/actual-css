@@ -28,7 +28,9 @@
 In a `.modal` or a `.drawer`, the close sits out of the content flow at the
 panel's top inline-end corner. Place it as a direct child of the dialog, of its
 top-level `form` or `header`, or of a `form` inside that header; a `.close`
-deeper in the content keeps its own place. See [Dialog](dialog.md) and
+deeper in the content keeps its own place, so wrapping it in a `.cluster` keeps
+it in the header's row. A header that hosts the corner close reserves inline
+room so a title never runs under it. See [Dialog](dialog.md) and
 [Drawer](drawer.md).
 
 ```html

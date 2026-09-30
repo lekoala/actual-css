@@ -4729,6 +4729,7 @@ a.badge[aria-disabled="true"] {
  * The corner close control is .close (components/close.css).
  *
  * Internal:
+ * --dialog-inner-radius
  * --dialog-focus-bleed
  * --dialog-viewport-block
  * --dialog-viewport-gap-default
@@ -4746,6 +4747,11 @@ a.badge[aria-disabled="true"] {
     var(--dialog-viewport-gap, var(--dialog-viewport-gap-default)) +
     var(--dialog-viewport-gap, var(--dialog-viewport-gap-default))
   );
+
+  /* The radius of the surface inside its own border, shared by the padded
+     wrapper and any edge band (header, confirmation footer) so none of them
+     overshoots the dialog's outer corner. */
+  --dialog-inner-radius: calc(var(--radius-lg) - var(--border-width));
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button. */
@@ -4789,7 +4795,7 @@ a.badge[aria-disabled="true"] {
   display: grid;
   gap: var(--space-40);
   max-block-size: calc(var(--dialog-viewport-block) - var(--dialog-viewport-gap-2x));
-  border-radius: inherit;
+  border-radius: var(--dialog-inner-radius);
   overflow: auto;
   overscroll-behavior: contain;
   padding: var(--surface-pad);
@@ -4806,8 +4812,8 @@ a.badge[aria-disabled="true"] {
   gap: var(--space-30);
   min-block-size: var(--close-size, var(--control-size));
   padding: var(--modal-pad, var(--space-40));
-  border-start-start-radius: calc(var(--radius-lg) - var(--border-width));
-  border-start-end-radius: calc(var(--radius-lg) - var(--border-width));
+  border-start-start-radius: var(--dialog-inner-radius);
+  border-start-end-radius: var(--dialog-inner-radius);
   background: var(--modal-header-bg, var(--surface-subtle));
 }
 
@@ -4910,6 +4916,16 @@ a.badge[aria-disabled="true"] {
   );
 }
 
+/* A corner .close that is a direct child of the chrome header needs the same
+   reserve, but never below the header's own pad. Kept as its own rule so an
+   unsupported :has() drops only this geometry, not the wrapper reserve. */
+:where(dialog).modal > header:has(> .close) {
+  padding-inline-end: max(
+    var(--modal-pad, var(--space-40)),
+    calc(var(--close-size, var(--control-size)) + var(--space-20) + var(--space-30))
+  );
+}
+
 :where(dialog).modal > :where(form, .stack) > footer {
   display: flex;
   flex-wrap: wrap;
@@ -4934,8 +4950,8 @@ a.badge[aria-disabled="true"] {
 
 :where(dialog).modal.dialog-confirmation > form > footer {
   padding: var(--space-40) var(--space-50);
-  border-end-start-radius: calc(var(--radius-lg) - var(--border-width));
-  border-end-end-radius: calc(var(--radius-lg) - var(--border-width));
+  border-end-start-radius: var(--dialog-inner-radius);
+  border-end-end-radius: var(--dialog-inner-radius);
   background: var(--surface-subtle);
 }
 

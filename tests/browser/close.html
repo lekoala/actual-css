@@ -20,6 +20,16 @@
     </div>
   </dialog>
 
+  <!-- A direct .close in the chrome header stays a corner overlay; the header
+       reserves inline room so a wrapping title cannot run under it. -->
+  <dialog class="modal" id="chrome" open style="--modal-size: 20rem">
+    <header>
+      <h2 id="chrome-title">A long chrome header title wraps onto several lines and stays clear of the corner close</h2>
+      <button class="close" type="button" aria-label="Close"></button>
+    </header>
+    <div class="stack"><p>Body.</p></div>
+  </dialog>
+
   <dialog class="drawer" id="drawer">
     <header>
       <strong>Drawer</strong>

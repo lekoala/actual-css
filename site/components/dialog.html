@@ -244,10 +244,15 @@ body wrapper. Put a flexible <code>.media</code> title region first and a <code>
 controls second. The title has the close control's minimum height; its leading
 icon and every trailing control share the same center axis. A wrapped title
 simply makes the row taller.</p>
+<p>A direct <code>dialog &gt; header</code> is dialog chrome and forms a distinct header band.
+Put an ordinary content heading inside the padded <code>form</code> or <code>.stack</code> instead.</p>
 <p>Keep a corner <a href="close.html"><code>.close</code></a> as a direct child of the dialog and put the
 title in the wrapper's direct <code>&lt;header&gt;</code>. The button then stays outside the
 content flow while the header reserves enough inline space to keep its title
 clear.</p>
+<p>A <code>.close</code> placed as a direct child of the chrome header is still the corner
+overlay. That header reserves the same inline room for it, never below its own
+<code>--modal-pad</code>, so a wrapping title stays clear either way.</p>
 <p>Add <code>.bleed</code> to that header when it should form a full-width band. It reaches
 the dialog edges, keeps the modal's inner padding, and can take a surface token
 such as <code>background: var(--surface-subtle)</code>.</p>

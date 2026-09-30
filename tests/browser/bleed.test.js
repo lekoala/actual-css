@@ -71,19 +71,27 @@ it("a modal header band reaches the surface edges and keeps the modal inset", as
         const wrapperRect = wrapper.getBoundingClientRect();
         const headerRect = header.getBoundingClientRect();
         const style = getComputedStyle(header);
+        const dialogStyle = getComputedStyle(dialog);
+        const px = (value) => Math.round(parseFloat(value) * 100) / 100;
+        const dialogRadius = px(dialogStyle.borderStartStartRadius);
+        const borderWidth = px(dialogStyle.borderTopWidth);
         return {
           sameStart: Math.round(headerRect.left) === Math.round(wrapperRect.left),
           sameEnd: Math.round(headerRect.right) === Math.round(wrapperRect.right),
           padding: style.paddingInlineStart,
-          radius: style.borderStartStartRadius,
-          dialogRadius: getComputedStyle(dialog).borderStartStartRadius,
+          headerRadius: px(style.borderStartStartRadius),
+          wrapperRadius: px(getComputedStyle(wrapper).borderStartStartRadius),
+          innerRadius: Math.round((dialogRadius - borderWidth) * 100) / 100,
         };
       })()`);
 
       expect(result.sameStart).toBe(true);
       expect(result.sameEnd).toBe(true);
       expect(result.padding).toBe("24px");
-      expect(result.radius).toBe(result.dialogRadius);
+      // The band shares the wrapper's inner corner, which is the dialog's
+      // outer radius minus its border.
+      expect(result.headerRadius).toBe(result.wrapperRadius);
+      expect(result.wrapperRadius).toBe(result.innerRadius);
     },
     { artifactName: "bleed-modal" },
   );
