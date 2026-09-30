@@ -102,15 +102,15 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Don't create file outside the project
 - Temp files can be created in `./tmp`
 - If code and docs disagree, treat code as the API source and update the smallest doc that explains the decision
-- Release tags carry no `v` prefix: `0.7.0`, never `v0.7.0`. The maintainer
-  creates the tag — a release stops at the version commit (dated changelog
-  section, bumped `package.json`, rebuilt artifacts). Do not tag and do not
-  publish to npm. Read the format from `git ls-remote --tags github`, not from
-  the local tag list, which can hold a stray a push never carried. `.npmrc`
-  keeps `npm version <patch|minor|major>` on that format, and pushing the tag
-  is what publishes the GitHub release (CI job `release`), so the changelog
-  section must be dated and complete before the tag moves — preview it with
-  `bun run release:notes`.
+- Release tags carry no `v` prefix: `0.7.0`, never `v0.7.0`. Ship a release
+  with `bun run release <patch|minor|major>` — the only entry point: it moves
+  CDN pins to the new minor, dates `[Unreleased]`, bumps `package.json`, runs
+  `build:all`, then creates the version commit and the bare tag. Do not bump,
+  tag, or publish to npm by hand. Read the format from
+  `git ls-remote --tags github`, not from the local tag list, which can hold
+  a stray a push never carried. Pushing the tag is what publishes the GitHub
+  release (CI job `release`); `bun run release:notes` previews the notes
+  before the push.
 - Resolve designs toward the system before transcribing them. Prefer an existing
   token or primitive when it is a close match. Use a public component hook for
   intentional local deviations. Add application CSS only when the difference is

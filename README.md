@@ -53,7 +53,7 @@ size is not worth optimizing:
 ```
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/actual-css@0.10/dist/actual.full.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/actual-css@0.11/dist/actual.full.min.css">
 ```
 
 ## Usage
@@ -127,7 +127,7 @@ registries:
 * **Full runtime, zero-config** — every built-in enhancer, compiled:
 
   ```html
-  <script src="https://cdn.jsdelivr.net/npm/actual-css@0.10/dist/actual.full.js" type="module"></script>
+  <script src="https://cdn.jsdelivr.net/npm/actual-css@0.11/dist/actual.full.js" type="module"></script>
   ```
 
 * **Your own build** — copy the package's `src/js/full.js` as your entry,
