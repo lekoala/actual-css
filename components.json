@@ -198,6 +198,7 @@
       "--btn-default-hover-bg",
       "--btn-border-block-end-color",
       "--btn-border-block-end-width",
+      "--btn-border-block",
       "--spinner-width"
     ],
     "states": [

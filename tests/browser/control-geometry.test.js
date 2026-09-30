@@ -53,6 +53,32 @@ it("sm and lg rows keep input and button heights together", async () => {
   });
 });
 
+it("a button matches the input height on its own, borders included", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const m = await measure(view, [
+      "s-input",
+      "s-btn",
+      "s-input-sm",
+      "s-btn-sm",
+      "s-input-lg",
+      "s-btn-lg",
+      "s-btn-edge",
+      "s-link",
+      "s-file",
+    ]);
+    // Exact, not within(): the bug this guards was 2px, one tolerance away.
+    expect(m["s-btn"].h).toBe(m["s-input"].h);
+    expect(m["s-btn-sm"].h).toBe(m["s-input-sm"].h);
+    expect(m["s-btn-lg"].h).toBe(m["s-input-lg"].h);
+    // A thicker block-end border (the edge theme's) is taken from the padding.
+    expect(m["s-btn-edge"].h).toBe(m["s-input"].h);
+    // .link has no border at all: none may be subtracted from it.
+    expect(m["s-link"].h).toBe(m["s-input"].h);
+    // The file selector button follows the same control scale.
+    expect(m["s-file"].h).toBe(m["s-input"].h);
+  });
+});
+
 it("spinner follows its context instead of imposing a size", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
     // Stylesheet-applied gate: an unstyled span measures 0 and would fail
