@@ -7,16 +7,23 @@ import { inlineImports, minifyCss } from "../tooling/css-bundle.js";
 function usage() {
   return [
     "actual-css bundle INPUT --out FILE [--minify]",
+    "actual-css design [--theme FILE] [--name NAME] --out DIR",
     "",
-    "  -o, --out FILE   write the bundle to FILE (required)",
+    "  -o, --out FILE   write the bundle to FILE / the export to DIR (required)",
     "      --minify     collapse comments and whitespace",
+    "      --theme FILE export this [data-theme] file instead of the default theme",
+    "      --name NAME  the data-theme name, when the file declares several",
     "  -h, --help       show this message",
     "      --version    print the actual-css version",
     "",
-    "Bundle plain CSS @import chains from relative files and actual-css/css/* subpaths.",
-    "A layer or layer(name) import is flattened into the @layer block it stands for.",
-    "Remote imports are kept and hoisted to the top of the bundle.",
+    "bundle: flatten plain CSS @import chains from relative files and actual-css/css/*",
+    "subpaths. A layer or layer(name) import is flattened into the @layer block it",
+    "stands for. Remote imports are kept and hoisted to the top of the bundle.",
     "Leaves modern CSS syntax untouched; this is a bundler, not a transpiler.",
+    "",
+    "design: export a theme's tokens for Figma and Penpot, plus Button, Input, Badge,",
+    "Alert and Card measured in headless Chrome and a Penpot plugin that builds them.",
+    "Needs Bun (bunx actual-css design ...).",
   ].join("\n");
 }
 
@@ -34,6 +41,10 @@ function parseArgs(argv) {
 
   if (command === "--version" || command === "-v") {
     return { version: true };
+  }
+
+  if (command === "design") {
+    return parseDesignArgs(rest);
   }
 
   if (command !== "bundle") {
@@ -87,7 +98,39 @@ function parseArgs(argv) {
     throw new Error("Missing required --out FILE option.");
   }
 
-  return { help: false, input, out, minify };
+  return { help: false, command: "bundle", input, out, minify };
+}
+
+function parseDesignArgs(rest) {
+  const options = { help: false, command: "design", themeFile: null, name: null, out: "" };
+  const valued = { "--theme": "themeFile", "--name": "name", "--out": "out", "-o": "out" };
+
+  for (let i = 0; i < rest.length; i += 1) {
+    const arg = rest[i];
+    if (arg === "--help" || arg === "-h") return { help: true };
+    const key = valued[arg];
+    if (!key) throw new Error(`Unknown option: ${arg}`);
+    const value = rest[i + 1];
+    if (!value) throw new Error(`Missing value for ${arg}.`);
+    options[key] = value;
+    i += 1;
+  }
+
+  if (!options.out) throw new Error("Missing required --out DIR option.");
+  return options;
+}
+
+async function design({ themeFile, name, out }) {
+  // Checked before the import: under Node the module does not even parse
+  // (`await using`), and `bundle` must stay usable there.
+  if (typeof Bun === "undefined") {
+    throw new Error(
+      "actual-css design needs Bun: it reads the theme in headless Chrome through Bun.WebView. Run it with bunx.",
+    );
+  }
+  const { exportDesign } = await import("../tooling/design-export.js");
+  const written = await exportDesign({ themeFile, name, out: resolve(out) });
+  console.log(`Exported ${written.length} files to ${resolve(out)}`);
 }
 
 async function bundle({ input, out, minify }) {
@@ -124,7 +167,7 @@ async function main() {
     return;
   }
 
-  await bundle(args);
+  await (args.command === "design" ? design(args) : bundle(args));
 }
 
 main().catch((error) => {

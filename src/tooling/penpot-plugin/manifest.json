@@ -1,0 +1,7 @@
+{
+  "name": "Actual CSS components",
+  "description": "Builds Actual CSS components from a measured spec and binds them to the imported tokens.",
+  "version": 2,
+  "code": "plugin.js",
+  "permissions": ["content:read", "content:write", "library:read", "library:write"]
+}
