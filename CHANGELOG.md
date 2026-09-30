@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-09-30
+
 ### Added
 
 - `dialog.modal > header` provides aligned icon/title/action chrome through `--modal-header-bg`; modal body wrappers expose `--modal-pad` and support `.bleed` bands.
