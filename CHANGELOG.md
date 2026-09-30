@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+
+## [0.11.0] - 2026-09-30
+
 ### Breaking changes
 
 - `enhancementSelector()` and `hasEnhancement()` are no longer exported from `actual-css/js/enhance`; query `[data-enhance~="name"]` directly.
