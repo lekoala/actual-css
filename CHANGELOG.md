@@ -9,11 +9,20 @@
 - `actual-css design` writes a Penpot plugin that builds Button, Input, Badge, Alert and Card bound to those tokens.
 - Soft fills and borders export as recipe tokens named `<variant>-<intent>-<role>` (`soft-danger-bg`).
 - `scripts/serve.js --cors` serves the repository to another origin, such as penpot.app loading a local plugin.
+- `--meter-track` sets the `.meter` track, matching `--progress-track`.
+- `--close-bg` sets the dialog corner `.close` background, so a dialog over a painted band can drop the default chip.
+- `--close-color` and `--close-hover-color` set the X ink at rest and on hover, so a bare X can take a painted band's foreground.
+- `--close-hover-overlay` routes the `.close` hover/active wash (matching `--btn-hover-overlay`); the modal/drawer corner sets it transparent so only the ink changes.
+
+### Changed
+
+- `dialog.modal` is borderless: the raised surface and shadow define the panel, so a full-bleed header, footer, or hero band no longer meets a hard edge; a forced-colors border keeps the outline.
 
 ### Fixed
 
 - A corner `.close` that is a direct child of `dialog.modal > header` reserves inline room for itself; previously only the wrapper `<header>` did, so a long chrome title could run under it.
-- `dialog.modal` derives one `--dialog-inner-radius` (`--radius-lg - --border-width`) for the body wrapper, the header band, and the `.dialog-confirmation` footer, instead of the wrapper taking the dialog's outer radius.
+- `dialog.modal` derives one `--dialog-inner-radius` for the body wrapper, the header band, and the `.dialog-confirmation` footer, so an edge band keeps the panel corner instead of taking its own radius.
+- The `.dialog-confirmation` action band spreads a two-action decision to its edges, keeping a cancel action apart from the committing one.
 - `.dialog-confirmation` centers its leading icon on the title while keeping supporting copy in the same text column.
 - `.btn` and the `.file` selector button take their borders out of the block padding, so they match `.input` height at every size instead of standing 2px taller outside a `.join`.
 - `tests/browser/control-geometry.test.js` measures controls outside a `.join`, whose stretch had hidden the mismatch.

@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modal patterns - Actual CSS</title>
+  <meta name="description" content="A torture test of modal layouts: decision, destructive, hero, illustration, release, dense form, option picker and profile, each composed from the modal plus the smallest application CSS it needs.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <style>
+    .modal-patterns-page {
+      --center-size: 76rem;
+
+      padding-block: var(--space-60);
+    }
+
+    .patterns-intro,
+    .pattern-group {
+      display: grid;
+      gap: var(--space-30);
+    }
+
+    .patterns-intro {
+      padding-block-end: var(--space-40);
+    }
+
+    .pattern-group {
+      padding-block: var(--space-50);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .pattern-group > :is(h2, p) {
+      margin: 0;
+    }
+
+    .patterns-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+      gap: var(--space-30);
+    }
+
+    .pattern-card {
+      gap: var(--space-20);
+    }
+
+    .pattern-card > :is(h3, p) {
+      margin: 0;
+    }
+
+    .pattern-card > .btn {
+      align-self: start;
+    }
+
+    /*
+     * Everything below is application CSS for the layouts the framework does
+     * not name. Each rule belongs to one dialog's own composition; none of
+     * them restates a framework declaration to reach its specificity.
+     */
+
+    /* A centered message block. The body wrapper stays a .stack, so centering
+       is one alignment on that stack, not a new modal variant. */
+    .pattern-center-body {
+      align-items: center;
+      text-align: center;
+    }
+
+    /* Centered decision: a larger icon well and a roomier inset. */
+    .modal-centered {
+      --modal-size: 24rem;
+      --modal-pad: var(--space-50);
+    }
+
+    .modal-centered .dialog-icon {
+      --dialog-icon-size: 4rem;
+      --dialog-icon-glyph-size: 2rem;
+    }
+
+    /* Hero: the promo paint is a mesh that fades into the surface rather than a
+       solid band with a hard seam. A div skips the structural header padding
+       that dialog.modal gives a <header>, and .bleed carries it to the edge. */
+    .modal-hero {
+      --modal-size: 24rem;
+    }
+
+    .modal-hero .pattern-hero-band {
+      display: grid;
+      place-items: center;
+      min-block-size: 10rem;
+      background:
+        radial-gradient(130% 120% at 8% -10%, var(--primary) 0%, transparent 58%),
+        radial-gradient(130% 130% at 100% 0%, var(--secondary) 0%, transparent 55%);
+    }
+
+    .modal-hero .pattern-hero-band .dialog-icon {
+      --dialog-icon-size: 5rem;
+      --dialog-icon-glyph-size: 2.5rem;
+      --ui-bg: var(--surface-raised);
+      --ui-fg: var(--primary);
+
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    /* Illustration: a dotted band with two provider tiles and an arrow. */
+    .modal-illustration {
+      --modal-size: 28rem;
+    }
+
+    .modal-illustration .pattern-import-band {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-30);
+      padding-block: var(--space-50);
+      background:
+        radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0) 0 0 / 12px 12px,
+        var(--surface-subtle);
+    }
+
+    .modal-illustration .provider {
+      display: grid;
+      place-items: center;
+      inline-size: 3.25rem;
+      block-size: 3.25rem;
+      border-radius: var(--radius-lg);
+      background: var(--surface-raised);
+      box-shadow: var(--shadow);
+      font-size: 1.5rem;
+    }
+
+    /* Release notes: a warning band carries the label and the version. It is a
+       <header>, so the framework reserves the corner close's inline room on the
+       trailing edge; the app CSS only owns the paint and the leading inset. */
+    .modal-release {
+      --modal-size: 24rem;
+    }
+
+    .modal-release .pattern-release-band {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-30);
+      padding-block: var(--space-40);
+      padding-inline-start: var(--space-50);
+      background: var(--warning);
+      color: var(--warning-fg);
+    }
+
+    .modal-release .pattern-release-band > * {
+      margin: 0;
+    }
+
+    /* The band owns its foreground; .overline would otherwise keep the muted
+       page color and lose contrast on the warning fill. */
+    .modal-release .pattern-release-band > .overline {
+      color: inherit;
+    }
+
+    .modal-release ol {
+      display: grid;
+      gap: var(--space-10);
+      margin: 0;
+      padding-inline-start: var(--space-40);
+    }
+
+    /* Close over a painted band. --close-bg and --close-color are public hooks
+       (close.css): the hero keeps a translucent square so the muted X holds on
+       the mesh, while the solid warning band drops the chip and takes its own
+       ink, brightening on hover. */
+    .modal-hero > .close {
+      --close-bg: color-mix(in oklab, var(--surface-opaque) 30%, transparent);
+    }
+
+    .modal-release > .close {
+      --close-bg: transparent;
+      --close-color: color-mix(in oklab, var(--warning-fg) 70%, transparent);
+      --close-hover-color: var(--warning-fg);
+    }
+
+    /* The light import band also drops the chip; its surface keeps the default
+       muted X legible without an ink override. */
+    .modal-illustration > .close {
+      --close-bg: transparent;
+    }
+
+    /* Profile island: split footer, icon-led term rows, a display number. */
+    .modal-profile {
+      --modal-size: 34rem;
+    }
+
+    /* The storage meter sits on a subtle card, so its default subtle track
+       would vanish; lift the track to the raised surface. */
+    .modal-profile .meter {
+      --meter-track: var(--surface-raised);
+    }
+
+    .modal-profile .profile-footer {
+      justify-content: space-between;
+    }
+
+    .modal-profile .data-list dt {
+      display: flex;
+      align-items: center;
+      gap: var(--space-20);
+    }
+
+    .modal-profile .profile-stat {
+      font-size: 1.75rem;
+      line-height: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center modal-patterns-page">
+    <header class="patterns-intro">
+      <p class="overline">Modal patterns</p>
+      <h1>Modal layouts, composed</h1>
+      <p class="lead">
+        Eight real application modals, each built from the same <code>.modal</code>
+        surface and the layout primitives. The point is to see where the
+        framework ends and where a project's own CSS begins: every rule under
+        <em>application CSS</em> in this page is the smallest addition a dialog
+        needs, and everything else is a documented primitive.
+      </p>
+      <div class="cluster">
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+      </div>
+      <p class="muted">
+        Open each pattern, then resize the window, switch theme, and toggle
+        forced colors. The centered, hero, illustration, release and profile
+        dialogs are the ones that carry application CSS; the confirmation,
+        filters and picker dialogs are pure framework composition.
+      </p>
+    </header>
+
+    <section class="pattern-group">
+      <h2>Decision</h2>
+      <p class="muted">Short, focused surfaces where the choice is the whole dialog.</p>
+      <div class="patterns-grid">
+        <article class="card pattern-card">
+          <h3>Centered decision</h3>
+          <p class="muted">Icon, title and copy on one center axis, stacked full-width actions. Needs local alignment.</p>
+          <button class="btn" type="button" commandfor="p-centered" command="show-modal" aria-haspopup="dialog" aria-controls="p-centered">Open</button>
+        </article>
+
+        <article class="card pattern-card">
+          <h3>Destructive confirm</h3>
+          <p class="muted">Leading status icon, an item preview, and a full-width action band. Pure <code>dialog-confirmation</code>.</p>
+          <button class="btn danger" type="button" commandfor="p-destructive" command="show-modal" aria-haspopup="dialog" aria-controls="p-destructive">Open</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="pattern-group">
+      <h2>Marketing</h2>
+      <p class="muted">Surfaces that sell the next step rather than ask a question.</p>
+      <div class="patterns-grid">
+        <article class="card pattern-card">
+          <h3>Hero promo</h3>
+          <p class="muted">A full-bleed gradient band, a centered message and one primary action.</p>
+          <button class="btn primary" type="button" commandfor="p-hero" command="show-modal" aria-haspopup="dialog" aria-controls="p-hero">Open</button>
+        </article>
+
+        <article class="card pattern-card">
+          <h3>Illustration import</h3>
+          <p class="muted">A dotted band with provider tiles, centered copy, stacked full-width actions.</p>
+          <button class="btn" type="button" commandfor="p-import" command="show-modal" aria-haspopup="dialog" aria-controls="p-import">Open</button>
+        </article>
+
+        <article class="card pattern-card">
+          <h3>Release notes</h3>
+          <p class="muted">A warning band with the version, a changelog list, a single update action.</p>
+          <button class="btn" type="button" commandfor="p-release" command="show-modal" aria-haspopup="dialog" aria-controls="p-release">Open</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="pattern-group">
+      <h2>Forms</h2>
+      <p class="muted">Scrollable bodies that keep their header and footer in place.</p>
+      <div class="patterns-grid">
+        <article class="card pattern-card">
+          <h3>Dense filters</h3>
+          <p class="muted">Chips, selects, a range and switches in a scrollable body. Pure framework.</p>
+          <button class="btn" type="button" commandfor="p-filters" command="show-modal" aria-haspopup="dialog" aria-controls="p-filters">Open</button>
+        </article>
+
+        <article class="card pattern-card">
+          <h3>Option picker</h3>
+          <p class="muted">A scrollable list of selectable cards with a sticky decision footer. Pure framework.</p>
+          <button class="btn" type="button" commandfor="p-picker" command="show-modal" aria-haspopup="dialog" aria-controls="p-picker">Open</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="pattern-group">
+      <h2>Records</h2>
+      <p class="muted">A surface whose body is structured data.</p>
+      <div class="patterns-grid">
+        <article class="card pattern-card">
+          <h3>Profile island</h3>
+          <p class="muted">Avatar header, key/value grid, setting rows, a storage card and a split footer.</p>
+          <button class="btn" type="button" commandfor="p-profile" command="show-modal" aria-haspopup="dialog" aria-controls="p-profile">Open</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Centered decision — application CSS centers the message and the actions. -->
+  <dialog class="modal modal-centered" id="p-centered" aria-labelledby="p-centered-title">
+    <button class="close" type="button" commandfor="p-centered" command="request-close" aria-controls="p-centered" aria-label="Close dialog"></button>
+
+    <div class="stack">
+      <div class="stack pattern-center-body">
+        <span class="dialog-icon primary soft" aria-hidden="true"><i class="ti ti-bell"></i></span>
+        <h2 id="p-centered-title">Get instant notifications</h2>
+        <p class="muted">You will receive notifications and status updates about anything you follow.</p>
+      </div>
+
+      <div class="stack">
+        <button class="btn primary inline-size-full" type="button" commandfor="p-centered" command="request-close">Allow notifications</button>
+        <button class="btn ghost inline-size-full" type="button" commandfor="p-centered" command="request-close">Not now</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Destructive confirm — the item preview lives in the confirmation header. -->
+  <dialog class="modal dialog-confirmation" id="p-destructive" closedby="none" aria-labelledby="p-destructive-title">
+    <form method="dialog">
+      <div class="media">
+        <span class="dialog-icon danger soft" aria-hidden="true"><i class="ti ti-alert-triangle"></i></span>
+
+        <header>
+          <h3 id="p-destructive-title">Delete "Q3 campaign"?</h3>
+          <p class="muted">The campaign, its audience, and its scheduled sends are removed permanently.</p>
+
+          <div class="card subtle stack">
+            <strong>Q3 campaign</strong>
+            <p class="muted">3 emails &middot; 12,480 recipients &middot; last sent 12 Sep</p>
+          </div>
+        </header>
+      </div>
+
+      <footer>
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn danger" value="delete">Delete campaign</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Hero promo — a full-bleed gradient band, then a centered message. -->
+  <dialog class="modal modal-hero" id="p-hero" aria-labelledby="p-hero-title">
+    <button class="close" type="button" commandfor="p-hero" command="request-close" aria-controls="p-hero" aria-label="Close dialog"></button>
+
+    <div class="stack">
+      <div class="bleed pattern-hero-band">
+        <span class="dialog-icon" aria-hidden="true"><i class="ti ti-sparkles"></i></span>
+      </div>
+
+      <div class="stack pattern-center-body">
+        <h2 id="p-hero-title">Activate Copilot</h2>
+        <p class="muted">Turn complex tasks into simple conversations. Copilot is included in your plan.</p>
+      </div>
+
+      <div class="stack">
+        <button class="btn primary inline-size-full" type="button" commandfor="p-hero" command="request-close">Activate Copilot</button>
+        <button class="btn ghost inline-size-full" type="button" commandfor="p-hero" command="request-close">Maybe later</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Illustration import — a dotted provider band, centered copy, stacked actions. -->
+  <dialog class="modal modal-illustration" id="p-import" aria-labelledby="p-import-title">
+    <button class="close" type="button" commandfor="p-import" command="request-close" aria-controls="p-import" aria-label="Close dialog"></button>
+
+    <div class="stack">
+      <div class="bleed pattern-import-band" aria-hidden="true">
+        <span class="provider"><i class="ti ti-brand-google"></i></span>
+        <i class="ti ti-chevron-right muted"></i>
+        <span class="provider"><i class="ti ti-inbox"></i></span>
+      </div>
+
+      <div class="stack pattern-center-body">
+        <h2 id="p-import-title">Import your messages</h2>
+        <p class="muted">You will be directed to sign in with Google.</p>
+      </div>
+
+      <div class="stack">
+        <button class="btn primary inline-size-full" type="button" commandfor="p-import" command="request-close">
+          <i class="ti ti-brand-google" aria-hidden="true"></i>
+          Sign in with Google
+        </button>
+        <button class="btn outline inline-size-full" type="button" commandfor="p-import" command="request-close">Cancel</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Release notes — a warning band, a changelog list, one update action. -->
+  <dialog class="modal modal-release" id="p-release" aria-labelledby="p-release-title">
+    <button class="close" type="button" commandfor="p-release" command="request-close" aria-controls="p-release" aria-label="Close dialog"></button>
+
+    <div class="stack">
+      <header class="bleed pattern-release-band">
+        <h2 class="overline" id="p-release-title">About update</h2>
+        <span class="badge">v2.3.6</span>
+      </header>
+
+      <ol>
+        <li>Fix some stubborn bugs</li>
+        <li>New navigation interaction</li>
+        <li>Improve loading experience</li>
+        <li>Voice-integrated search in the app</li>
+      </ol>
+
+      <div class="stack">
+        <button class="btn primary inline-size-full" type="button" commandfor="p-release" command="request-close">Update now</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Dense filters — pure framework: scrollable body, sticky header and footer. -->
+  <dialog class="modal scrollable" id="p-filters" aria-labelledby="p-filters-title">
+    <button class="close" type="button" commandfor="p-filters" command="request-close" aria-controls="p-filters" aria-label="Close dialog"></button>
+
+    <form method="dialog" class="stack">
+      <header>
+        <h3 id="p-filters-title">Filters</h3>
+        <p class="muted">Refine which opportunities appear in your feed.</p>
+      </header>
+
+      <div class="stack">
+        <fieldset class="field-group">
+          <legend class="field-label">Exposure</legend>
+          <div class="cluster">
+            <label class="choice-card chip">
+              <input type="checkbox" name="exposure" value="link" checked>
+              Link building
+            </label>
+            <label class="choice-card chip">
+              <input type="checkbox" name="exposure" value="niche" checked>
+              Niche edits
+            </label>
+            <label class="choice-card chip">
+              <input type="checkbox" name="exposure" value="mentions">
+              Mentions
+            </label>
+            <label class="choice-card chip">
+              <input type="checkbox" name="exposure" value="press">
+              Press releases
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label" for="f-category">Site category</label>
+            <select class="select" id="f-category">
+              <option>WordPress</option>
+              <option>Webflow</option>
+              <option>Shopify</option>
+              <option>Custom</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="f-country">Country</label>
+            <select class="select" id="f-country">
+              <option>Any country</option>
+              <option>United States</option>
+              <option>United Kingdom</option>
+              <option>Germany</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <output class="field-label" for="f-traffic">Minimum monthly searches</output>
+          <input class="range" data-enhance="range" id="f-traffic" type="range" min="0" max="100" value="35" aria-label="Minimum monthly searches">
+          <span class="field-help">Sites below this threshold are hidden.</span>
+        </div>
+
+        <ul class="list">
+          <li class="list-item">
+            <label class="list-item-content" for="f-fast">
+              <span class="list-item-title">Fast publishing time</span>
+              <span class="list-item-text">Only sites that publish within a week.</span>
+            </label>
+            <span class="list-item-trailing">
+              <input class="switch" type="checkbox" role="switch" id="f-fast" aria-checked="true" checked>
+            </span>
+          </li>
+          <li class="list-item">
+            <label class="list-item-content" for="f-news">
+              <span class="list-item-title">News sites only</span>
+              <span class="list-item-text">Exclude evergreen blogs and directories.</span>
+            </label>
+            <span class="list-item-trailing">
+              <input class="switch" type="checkbox" role="switch" id="f-news" aria-checked="false">
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <footer>
+        <button class="btn outline" value="clear">Clear filters</button>
+        <button class="btn primary" value="apply">Apply filters</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Option picker — pure framework: a scrollable list of choice cards. -->
+  <dialog class="modal scrollable" id="p-picker" aria-labelledby="p-picker-title">
+    <button class="close" type="button" commandfor="p-picker" command="request-close" aria-controls="p-picker" aria-label="Close dialog"></button>
+
+    <form method="dialog" class="stack">
+      <header>
+        <h3 id="p-picker-title">Choose a booster</h3>
+        <p class="muted">Pick one deliverable to supercharge performance.</p>
+      </header>
+
+      <div class="stack">
+        <label class="choice-card">
+          <input type="radio" name="booster" value="clear" checked>
+          <span class="cluster"><strong>Clear Scope</strong><span class="badge success">Recommended</span></span>
+          <span class="muted">We will handle uploading to the CMS for you.</span>
+          <strong>$40 <span class="muted">/blog post</span></strong>
+        </label>
+
+        <label class="choice-card">
+          <input type="radio" name="booster" value="seo">
+          <span class="cluster"><strong>SEO</strong></span>
+          <span class="muted">We will handle uploading to the CMS for you.</span>
+          <strong>$99 <span class="muted">/blog post</span></strong>
+        </label>
+
+        <label class="choice-card">
+          <input type="radio" name="booster" value="links">
+          <span class="cluster"><strong>Link optimization</strong></span>
+          <span class="muted">We will handle uploading to the CMS for you.</span>
+          <strong>$99 <span class="muted">/blog post</span></strong>
+        </label>
+
+        <label class="choice-card">
+          <input type="radio" name="booster" value="content">
+          <span class="cluster"><strong>Content optimisation</strong></span>
+          <span class="muted">We will handle uploading to the CMS for you.</span>
+          <strong>$40 <span class="muted">/blog post</span></strong>
+        </label>
+      </div>
+
+      <footer>
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn primary" value="select">Select and close</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Profile island — application CSS for the split footer and the term rows.
+       scrollable keeps the close over the fixed header instead of the body
+       scrollbar, and pins the identity and the footer while the cards scroll. -->
+  <dialog class="modal modal-profile scrollable" id="p-profile" aria-labelledby="p-profile-name">
+    <button class="close" type="button" commandfor="p-profile" command="request-close" aria-controls="p-profile" aria-label="Close dialog"></button>
+
+    <div class="stack">
+      <header>
+        <div class="media">
+          <span class="avatar lg"><abbr title="Roberta Pouros">RP</abbr></span>
+
+          <div class="stack">
+            <h3 id="p-profile-name">Roberta Pouros</h3>
+            <p class="muted">USD &middot; 9:45am local time</p>
+            <p><span class="badge warning soft">3 conversations</span> <span class="badge">2 open</span></p>
+
+            <div class="cluster">
+              <a class="btn sm ghost icon-only" href="#p-profile" aria-label="X profile"><i class="ti ti-brand-x" aria-hidden="true"></i></a>
+              <a class="btn sm ghost icon-only" href="#p-profile" aria-label="Facebook profile"><i class="ti ti-brand-facebook" aria-hidden="true"></i></a>
+              <a class="btn sm ghost icon-only" href="#p-profile" aria-label="LinkedIn profile"><i class="ti ti-brand-linkedin" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="stack">
+        <div class="card subtle stack">
+          <div class="grid-2">
+            <dl class="data-list stacked">
+              <dt><i class="ti ti-mail" aria-hidden="true"></i> Email</dt>
+              <dd>roberta@example.com</dd>
+
+              <dt><i class="ti ti-map-pin" aria-hidden="true"></i> Location</dt>
+              <dd>Los Angeles, California</dd>
+            </dl>
+
+            <dl class="data-list stacked">
+              <dt><i class="ti ti-phone" aria-hidden="true"></i> Phone</dt>
+              <dd>(515) 4645-6864</dd>
+
+              <dt><i class="ti ti-clock" aria-hidden="true"></i> Time zone</dt>
+              <dd>Pacific Daylight Time (GMT-7)</dd>
+            </dl>
+          </div>
+        </div>
+
+        <div class="card subtle stack">
+          <ul class="list">
+            <li class="list-item">
+              <label class="list-item-content" for="p-transfer">
+                <span class="list-item-title">Notify conversation transfer</span>
+                <span class="list-item-text">See when a user moves a conversation in queue to elevated.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="p-transfer" aria-checked="true" checked>
+              </span>
+            </li>
+            <li class="list-item">
+              <label class="list-item-content" for="p-admin">
+                <span class="list-item-title">Admin privileges</span>
+                <span class="list-item-text">Allow access to archiving and CRUD abilities.</span>
+              </label>
+              <span class="list-item-trailing">
+                <input class="switch" type="checkbox" role="switch" id="p-admin" aria-checked="false">
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card subtle stack">
+          <div class="cluster" style="justify-content: space-between">
+            <strong>Storage plan</strong>
+            <span class="badge warning soft">Professional</span>
+          </div>
+
+          <p class="profile-stat">10%</p>
+          <meter class="meter" value="0.1" min="0" max="1" aria-label="Storage used"></meter>
+
+          <div class="cluster" style="justify-content: space-between">
+            <span class="muted">30 GB</span>
+            <span class="muted">70 GB left</span>
+          </div>
+        </div>
+      </div>
+
+      <footer class="profile-footer">
+        <span class="cluster">
+          <strong>Sync status</strong>
+          <span class="badge success">Active</span>
+        </span>
+        <button class="btn outline" value="sync"><i class="ti ti-refresh" aria-hidden="true"></i> Sync account</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    /* Keeping aria-checked in sync is the switch enhancement from the docs, not
+       something the component does on its own. */
+    for (const control of document.querySelectorAll('.switch[role="switch"]')) {
+      control.addEventListener("change", () => {
+        control.setAttribute("aria-checked", String(control.checked));
+      });
+    }
+
+    /* Deep link: opening the page with #p-hero opens that pattern. */
+    const deepLink = location.hash.slice(1);
+    if (deepLink) document.getElementById(deepLink)?.showModal();
+  </script>
+</body>
+
+</html>

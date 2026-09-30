@@ -16,8 +16,17 @@
  * Public hooks:
  * --close-size
  * --close-icon-size
+ * --close-bg
+ * --close-color
+ * --close-hover-color
+ * --close-hover-overlay
  */
 .close {
+  /* Routes the hover/active wash, as --btn-hover-overlay does for .btn. A
+     context that wants ink-only feedback (the dialog corner) sets it
+     transparent. */
+  --close-hover-overlay: var(--hover-overlay);
+
   display: inline-grid;
   place-items: center;
   flex: none;
@@ -44,12 +53,12 @@
    the control (the dialog corner's --surface-subtle) instead of replacing it. */
 @media (hover: hover) {
   .close:hover {
-    box-shadow: inset 0 0 0 999px var(--hover-overlay);
+    box-shadow: inset 0 0 0 999px var(--close-hover-overlay);
   }
 }
 
 .close:active {
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
+  box-shadow: inset 0 0 0 999px var(--close-hover-overlay);
 }
 
 .close:focus-visible {
@@ -61,23 +70,25 @@
    surface rather than to the header or a scroll container inside it. Matched
    on the documented positions (the dialog, its form, its header, or a form
    inside that header) so a .close inside content — an alert in the body —
-   keeps its own place. */
+   keeps its own place. The corner drops the wash: only the ink changes. */
 :where(dialog):is(.modal, .drawer) > .close,
 :where(dialog):is(.modal, .drawer) > :is(form, header) > .close,
 :where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close {
+  --close-hover-overlay: transparent;
+
   position: absolute;
   z-index: 1;
   inset-block-start: var(--space-20);
   inset-inline-end: var(--space-20);
-  background: var(--surface-subtle);
-  color: var(--text-muted);
+  background: var(--close-bg, var(--surface-subtle));
+  color: var(--close-color, var(--text-muted));
 }
 
 @media (hover: hover) {
   :where(dialog):is(.modal, .drawer) > .close:hover,
   :where(dialog):is(.modal, .drawer) > :is(form, header) > .close:hover,
   :where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close:hover {
-    color: var(--text);
+    color: var(--close-hover-color, var(--text));
   }
 }
 
