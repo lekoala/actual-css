@@ -759,7 +759,7 @@ test("drawer RTL keeps the Degraded fallback and enhances inherited direction", 
 test("confirmation dialog composes media alignment with an intent-aware icon well", () => {
   const css = readCss("src/css/components/modal.css");
 
-  expect(css).toContain(":where(dialog).modal.dialog-confirmation > form > .media");
+  expect(css).toContain(":where(dialog).modal.dialog-confirmation > form > :is(.media, header)");
   expect(css).toMatch(/\.dialog-icon\s*\{[^}]*place-items:\s*center;/);
   expect(css).toMatch(/\.dialog-icon\s*\{[^}]*border-radius:\s*var\(--radius-full\);/);
   expect(css).toContain("background: var(--ui-bg, var(--surface-subtle));");

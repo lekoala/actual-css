@@ -59,3 +59,32 @@ it("a band outside the padded element list pads itself from --bleed-pad", async 
     { artifactName: "bleed-band" },
   );
 });
+
+it("a modal header band reaches the surface edges and keeps the modal inset", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        const dialog = document.getElementById("modal");
+        const wrapper = dialog.querySelector(".stack");
+        const header = dialog.querySelector("header");
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const headerRect = header.getBoundingClientRect();
+        const style = getComputedStyle(header);
+        return {
+          sameStart: Math.round(headerRect.left) === Math.round(wrapperRect.left),
+          sameEnd: Math.round(headerRect.right) === Math.round(wrapperRect.right),
+          padding: style.paddingInlineStart,
+          radius: style.borderStartStartRadius,
+          dialogRadius: getComputedStyle(dialog).borderStartStartRadius,
+        };
+      })()`);
+
+      expect(result.sameStart).toBe(true);
+      expect(result.sameEnd).toBe(true);
+      expect(result.padding).toBe("24px");
+      expect(result.radius).toBe(result.dialogRadius);
+    },
+    { artifactName: "bleed-modal" },
+  );
+});

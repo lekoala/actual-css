@@ -1,12 +1,12 @@
 {
-  "totalRaw": 341835,
+  "totalRaw": 345083,
   "core": {
     "minified": 11757,
     "brotli": 2697
   },
   "full": {
-    "minified": 129714,
-    "brotli": 18580
+    "minified": 131633,
+    "brotli": 18785
   },
   "js": {
     "full": {
@@ -21,12 +21,12 @@
       "raw": 13112
     },
     {
-      "file": "core/tokens.css",
-      "raw": 10898
+      "file": "components/modal.css",
+      "raw": 11592
     },
     {
-      "file": "components/modal.css",
-      "raw": 9074
+      "file": "core/tokens.css",
+      "raw": 10898
     },
     {
       "file": "forms/choice-card.css",
@@ -41,16 +41,16 @@
       "raw": 8200
     },
     {
+      "file": "components/button.css",
+      "raw": 7935
+    },
+    {
       "file": "components/drawer.css",
       "raw": 7754
     },
     {
       "file": "forms/choice.css",
       "raw": 7733
-    },
-    {
-      "file": "components/button.css",
-      "raw": 7435
     },
     {
       "file": "components/badge.css",
@@ -178,7 +178,7 @@
     },
     {
       "file": "forms/native.css",
-      "raw": 2865
+      "raw": 2980
     },
     {
       "file": "themes/spruce.css",
@@ -205,6 +205,10 @@
       "raw": 2785
     },
     {
+      "file": "components/bleed.css",
+      "raw": 2772
+    },
+    {
       "file": "core/base.css",
       "raw": 2772
     },
@@ -219,10 +223,6 @@
     {
       "file": "themes/sunset.css",
       "raw": 2677
-    },
-    {
-      "file": "components/bleed.css",
-      "raw": 2657
     },
     {
       "file": "themes/lavender.css",

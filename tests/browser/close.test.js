@@ -23,12 +23,15 @@ it("dialog corners pin the close, content keeps its own, containers size it", as
       const result = await view.evaluate(`(() => {
         const style = (selector) => getComputedStyle(document.querySelector(selector));
         const box = (selector) => Math.round(document.querySelector(selector).getBoundingClientRect().width);
+        const closeRect = document.querySelector("#modal > .close").getBoundingClientRect();
+        const titleRect = document.getElementById("modal-title").getBoundingClientRect();
         return {
           modalCorner: style("#modal > .close").position,
           drawerCorner: style("#drawer .close").position,
           nested: style("#modal .alert .close").position,
           nestedSize: style("#modal .alert .close").inlineSize,
           badgeTarget: box("#badge .close"),
+          titleClearsClose: titleRect.right < closeRect.left,
         };
       })()`);
 
@@ -37,6 +40,7 @@ it("dialog corners pin the close, content keeps its own, containers size it", as
       expect(result.nested).toBe("static");
       expect(result.nestedSize).toBe("28px");
       expect(result.badgeTarget).toBeGreaterThanOrEqual(24);
+      expect(result.titleClearsClose).toBe(true);
     },
     { artifactName: "close" },
   );

@@ -21,6 +21,37 @@ Self-describing leaf behavior should use the feature's own documented attribute,
 
 Native `<dialog>` is semantically self-describing and does not need a generic enhancement token merely to be a dialog.
 
+## Dialog anatomy
+
+Treat `.modal` as the outer surface, not as its content layout. It deliberately
+has no padding. Wrap modal content in a direct `<form>` or `.stack`; do not put
+`.stack` on `dialog.modal` itself.
+
+For a header band, put `<header>` directly under the dialog before the body
+wrapper. Compose a flexible `.media` title region and a trailing `.cluster` of
+controls. Nest `.close` in that cluster so it remains in flow; the title,
+leading `.dialog-icon`, close, and any additional control then share one center
+axis and the title uses the close control's minimum height.
+
+For a corner close button, keep `.close` as a direct child of the dialog and put
+the title in the content wrapper's direct `<header>`. The close button is then
+anchored to the surface, and the header reserves room so the title cannot run
+under it. Put actions in the wrapper's `<footer>`.
+
+Use `.bleed` on that direct header when it needs a contrasting full-width band;
+the wrapper relays the modal padding so the band reaches the surface edges while
+its contents keep the normal inset. In `.dialog-confirmation`, keep the icon and
+the text header as the media object's two children; the component centers the
+header's first heading on the icon while following copy stays in that text
+column. For a trailing icon, use the confirmation's direct header as a
+non-wrapping split `.cluster`, with `.grow` on the text group. Do not compensate
+heading alignment with a literal margin.
+
+Do not turn the dialog heading into an `.alert` to obtain icon or surface
+styling. Compose `.dialog-icon` with `.media` for a leading title icon; reserve
+`.alert` for a distinct status message in the dialog body. Inspect
+`docs/pages/components/dialog.md` in the installed package for current recipes.
+
 ## Custom widgets
 
 Before implementing lifecycle, focus, Escape handling, keyboard navigation, input rewriting, or floating-surface policy from scratch, inspect the exported Actual JS primitives.

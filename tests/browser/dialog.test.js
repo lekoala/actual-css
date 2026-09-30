@@ -88,6 +88,19 @@ async function click(view, id) {
   }
 }
 
+/*
+ * A <dialog> queues its close event as a task, and the runtime restores focus
+ * to the trigger on that task. Wait for the event before moving focus, or the
+ * restoration runs late and steals it back from the next trigger.
+ */
+async function closeDialogAndWait(view, id) {
+  await view.evaluate(`new Promise((resolve) => {
+    const dialog = document.getElementById(${JSON.stringify(id)});
+    dialog.addEventListener("close", () => resolve(true), { once: true });
+    dialog.close();
+  })`);
+}
+
 const scrollTo1200 = (evalIn) =>
   evalIn("(() => { window.scrollTo(0, 1200); return window.scrollY; })()");
 
@@ -280,7 +293,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
       expect(Math.abs(modal.startDrift)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(modal.endDrift)).toBeLessThanOrEqual(0.5);
 
-      await view.evaluate('document.getElementById("dlg-scrollable").close()');
+      await closeDialogAndWait(view, "dlg-scrollable");
       await click(view, "open-drawer");
       await view.press("Tab");
       await waitForBrowser(view, `document.activeElement.id === "drawer-edge-control"`);
@@ -348,7 +361,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
       // the 2 × border baseline alone (which clipped 1px of a button line).
       // Opened from the keyboard, so the dialog's initial focus is
       // keyboard-modal and matches :focus-visible.
-      await view.evaluate('document.getElementById("drawer").close()');
+      await closeDialogAndWait(view, "drawer");
       await view.evaluate('document.getElementById("open-thick").focus()');
       await view.press("Enter");
       await waitForBrowser(view, `document.activeElement?.id === "thick-edge-button"`);
