@@ -25,8 +25,8 @@
 - `--choice-card-gap` sets the space between a `.choice-card` indicator and its label.
 - `tests/browser/choice-card.test.js` locks the leading indicator: visible at rest, level with the first line of a wrapping label, and kept under forced colors.
 - `.shimmer` (`actual-css/css/effects/shimmer`) sweeps a highlight across a text label for an activity in progress; hooks `--shimmer-color` and `--shimmer-highlight`.
-
-- `.range` moves to a `1.125rem` thumb on a `0.625rem` track with a `data-enhance="range"` fill (`--range-progress`), named `datalist` values (`aria-valuetext` plus `output` sync), and `--flyout-pad` gives rich flyout panels dialog air.
+- `.range` moves to a `1.125rem` thumb on a `0.625rem` track with a `data-enhance="range"` fill (`--range-progress`) and named `datalist` values (`aria-valuetext` plus `output` sync).
+- `--flyout-pad` gives rich flyout panels dialog air.
 - `tests/browser/control-geometry.test.js` locks the shared control block geometry: input, select, addon, and buttons (including busy and icon-only) share one height per size, and the spinner follows its context at `1em`.
 
 ### Changed

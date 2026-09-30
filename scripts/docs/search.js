@@ -1,8 +1,8 @@
 /*
  * Search index generation and ranking. One entry per page, plain-text body
  * for scoring. scoreEntry() is the source of truth for ranking — the docs
- * runtime in scripts/docs/assets/docs.js mirrors it (no bundler there), so
- * keep both in sync when the weights change.
+ * runtime in scripts/docs/assets/docs.js mirrors it (no bundler there);
+ * tests/browser/docs-search.test.js enforces the parity.
  */
 
 function stripHtml(html) {
