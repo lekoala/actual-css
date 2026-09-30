@@ -272,9 +272,13 @@ room so a title never runs under it. See <a href="dialog.html">Dialog</a> and
 <ul>
 <li><code>--close-size</code> — inline and block size of the button; <code>--control-size</code> unless the container sets it.</li>
 <li><code>--close-icon-size</code> — size of the X.</li>
+<li><code>--close-bg</code> — background of the dialog corner close; <code>--surface-subtle</code> unless the dialog or a painted band sets it, e.g. <code>transparent</code> for a bare X.</li>
+<li><code>--close-color</code> — ink of the X; <code>--text-muted</code> at the dialog corner, otherwise inherited from the context.</li>
+<li><code>--close-hover-color</code> — ink of the dialog corner close on hover; <code>--text</code> unless a band sets its own foreground.</li>
+<li><code>--close-hover-overlay</code> — hover and active wash that tints the fill the context gave the control; the dialog corner sets it <code>transparent</code> so a hover changes only the ink.</li>
 </ul>
-<p>Alerts and badges declare both hooks on themselves, so set them on the container
-or on the button.</p>
+<p>Alerts and badges declare both size hooks on themselves, so set them on the
+container or on the button.</p>
 
 </div>
 

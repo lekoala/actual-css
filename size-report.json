@@ -1,12 +1,12 @@
 {
-  "totalRaw": 345761,
+  "totalRaw": 346878,
   "core": {
     "minified": 11757,
     "brotli": 2697
   },
   "full": {
-    "minified": 131841,
-    "brotli": 18819
+    "minified": 132101,
+    "brotli": 18867
   },
   "js": {
     "full": {
@@ -22,7 +22,7 @@
     },
     {
       "file": "components/modal.css",
-      "raw": 12270
+      "raw": 12879
     },
     {
       "file": "core/tokens.css",
@@ -165,16 +165,16 @@
       "raw": 3563
     },
     {
+      "file": "components/close.css",
+      "raw": 3517
+    },
+    {
       "file": "components/rating.css",
       "raw": 3240
     },
     {
       "file": "components/status-bar.css",
       "raw": 3239
-    },
-    {
-      "file": "components/close.css",
-      "raw": 3061
     },
     {
       "file": "forms/native.css",
@@ -273,12 +273,12 @@
       "raw": 2255
     },
     {
-      "file": "components/chat.css",
-      "raw": 2189
+      "file": "components/meter.css",
+      "raw": 2224
     },
     {
-      "file": "components/meter.css",
-      "raw": 2172
+      "file": "components/chat.css",
+      "raw": 2189
     },
     {
       "file": "forms/form-actions.css",

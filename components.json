@@ -264,7 +264,11 @@
     ],
     "publicHooks": [
       "--close-size",
-      "--close-icon-size"
+      "--close-icon-size",
+      "--close-bg",
+      "--close-color",
+      "--close-hover-color",
+      "--close-hover-overlay"
     ]
   },
   {
@@ -446,6 +450,7 @@
       "meter"
     ],
     "publicHooks": [
+      "--meter-track",
       "--meter-value",
       "--bar-height"
     ]

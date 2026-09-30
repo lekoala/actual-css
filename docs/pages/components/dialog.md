@@ -38,6 +38,10 @@ A `.close` placed as a direct child of the chrome header is still the corner
 overlay. That header reserves the same inline room for it, never below its own
 `--modal-pad`, so a wrapping title stays clear either way.
 
+The corner close overlays the panel edge, so a body tall enough to scroll would
+run its scrollbar under the button. Give such a dialog the `scrollable` anatomy:
+the close then sits over the fixed header and the scrollbar starts below it.
+
 Add `.bleed` to that header when it should form a full-width band. It reaches
 the dialog edges, keeps the modal's inner padding, and can take a surface token
 such as `background: var(--surface-subtle)`.
@@ -109,7 +113,8 @@ For a compact destructive confirmation with a leading status icon, compose
 `dialog-confirmation` with the media object. The icon well accepts the shared
 intent and emphasis classes; `dialog-icon danger soft` creates the tinted red
 circle while keeping the glyph centered. The footer becomes a separate action
-band without changing the semantics of the form or its buttons.
+band whose two actions sit at its edges, so the cancel-style control never sits
+next to the committing one.
 
 ```html demo
 <button class="btn danger"
