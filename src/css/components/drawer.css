@@ -22,6 +22,7 @@
  * Internal:
  * --drawer-closed-translate (side/RTL positioning state)
  * --drawer-focus-bleed
+ * --drawer-close-reserve (header room for a corner close; zero without a close)
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
  *   changes in one place; entry state redefines it longer)
  */
@@ -31,6 +32,10 @@
   /* The inset a direct .bleed child cancels (components/bleed.css). */
   --surface-pad: var(--drawer-pad);
   --drawer-closed-translate: -100%;
+  /* Header room for a corner close. Unconditional baseline: without :has()
+     (Degraded tier) a header keeps too much room rather than a title running
+     under the close. Zeroed when the drawer has no close. */
+  --drawer-close-reserve: calc(var(--close-size, var(--control-size)) + var(--space-30));
   /* Exit is shorter than entry so the panel clears quickly; the scrim reads
      the same variable through inheritance and never lags the panel. */
   --drawer-motion-duration: var(--duration);
@@ -210,9 +215,20 @@
   }
 }
 
+/* No close anywhere: reclaim the reserve. Deliberately coarse — a close in
+   the body keeps the reserve, which costs only room, never overlap. */
+:where(dialog).drawer:not(:has(.close)) {
+  --drawer-close-reserve: 0px;
+}
+
 /* The header reserves inline room so the title never runs under the close
-   control. */
+   control. A .bleed header keeps at least its band inset. */
 :where(dialog).drawer > header,
-:where(dialog).drawer > form > header {
-  padding-inline-end: calc(var(--close-size, var(--control-size)) + var(--space-30));
+:where(dialog).drawer > :where(form) > header {
+  padding-inline-end: var(--drawer-close-reserve);
+}
+
+:where(dialog).drawer > header:where(.bleed),
+:where(dialog).drawer > :where(form) > header:where(.bleed) {
+  padding-inline-end: max(var(--bleed-pad, 0px), var(--drawer-close-reserve));
 }
