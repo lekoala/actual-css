@@ -455,8 +455,7 @@
       "is-static",
       "media",
       "modal",
-      "scrollable",
-      "stack"
+      "scrollable"
     ],
     "publicHooks": [
       "--modal-size",

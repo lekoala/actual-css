@@ -17,14 +17,10 @@
     }
 
     .blocks-intro {
-      --center-size: 72rem;
-
       margin-block-end: var(--space-50);
     }
 
     .block-section {
-      --center-size: 72rem;
-
       padding-block: var(--space-60);
       border-block-start: var(--border-width) solid var(--border);
     }
@@ -42,32 +38,10 @@
       background: var(--surface);
     }
 
-    .block-page-header {
-      display: grid;
-      gap: var(--space-30);
-    }
-
-    .block-page-header-main {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: var(--space-40);
-    }
-
-    .block-toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-20);
-      align-items: center;
-      justify-content: space-between;
-    }
-
+    /* A tighter rhythm than --gap for the filter controls; .cluster owns the
+       row. Not .compact: that would also shrink the controls. */
     .block-filter-group {
-      display: flex;
-      flex-wrap: wrap;
       gap: var(--space-20);
-      align-items: center;
     }
 
     .block-filter-group :where(.input, .select) {
@@ -75,8 +49,8 @@
       min-inline-size: min(100%, 11rem);
     }
 
+    /* Name and email read as one unit: tighter than the .stack default. */
     .block-account {
-      display: grid;
       gap: var(--space-10);
     }
 
@@ -110,22 +84,12 @@
       align-items: start;
     }
 
-    .block-meta-list {
-      display: grid;
-      gap: var(--space-30);
-    }
-
     .block-meta-row {
       display: flex;
       justify-content: space-between;
       gap: var(--space-30);
       padding-block-end: var(--space-30);
       border-block-end: var(--border-width) solid var(--border);
-    }
-
-    .block-message-list {
-      display: grid;
-      gap: var(--space-30);
     }
 
     /* .media (framework) provides the auto/1fr grid shape. */
@@ -260,14 +224,14 @@
       <p class="block-note">Validates breadcrumb, hgroup, action lists, and responsive wrapping for common app page chrome.</p>
 
       <div class="block-example">
-        <header class="block-page-header">
+        <header class="stack">
           <ol class="breadcrumb" aria-label="Breadcrumb">
             <li><a href="#">Projects</a></li>
             <li><a href="#">Actual Cloud</a></li>
             <li aria-current="page">Deployments</li>
           </ol>
 
-          <div class="block-page-header-main">
+          <div class="cluster items-start justify-content-space-between">
             <hgroup>
               <h2>Deployments</h2>
               <p class="muted">Review production releases, failed jobs, and pending approvals.</p>
@@ -321,8 +285,8 @@
       <p class="block-note">Validates dense operational UI: filters, table chrome, row selection, badges, truncation, flyout menus, and pagination.</p>
 
       <div class="block-example stack">
-        <div class="block-toolbar">
-          <div class="block-filter-group">
+        <div class="cluster justify-content-space-between">
+          <div class="cluster block-filter-group">
             <input class="input sm" type="search" aria-label="Search accounts" placeholder="Search accounts">
             <!-- No --cluster-wrap: nowrap here. Two controls at their 11rem
                  floor outgrow this column at every width; forcing one row only
@@ -371,7 +335,7 @@
               <tr>
                 <td><input class="check" type="checkbox" aria-label="Select Northstar Logistics"></td>
                 <td>
-                  <div class="block-account">
+                  <div class="stack block-account">
                     <strong>Northstar Logistics</strong>
                     <span class="muted">Enterprise renewal</span>
                   </div>
@@ -402,7 +366,7 @@
               <tr>
                 <td><input class="check" type="checkbox" aria-label="Select Helio Systems"></td>
                 <td>
-                  <div class="block-account">
+                  <div class="stack block-account">
                     <strong>Helio Systems</strong>
                     <span class="muted">Expansion motion</span>
                   </div>
@@ -416,7 +380,7 @@
               <tr>
                 <td><input class="check" type="checkbox" aria-label="Select Orchid Health"></td>
                 <td>
-                  <div class="block-account">
+                  <div class="stack block-account">
                     <strong>Orchid Health</strong>
                     <span class="muted">Risk mitigation</span>
                   </div>
@@ -431,7 +395,7 @@
           </table>
         </div>
 
-        <footer class="cluster" style="--cluster-justify: space-between;">
+        <footer class="cluster justify-content-space-between">
           <span class="muted">Showing 3 of 28 accounts</span>
           <nav aria-label="Accounts pages">
             <ol class="pagination sm">
@@ -557,7 +521,7 @@
             <span class="badge danger soft">Active</span>
           </header>
 
-          <dl class="block-meta-list">
+          <dl class="stack">
             <div class="block-meta-row">
               <dt class="muted">Owner</dt>
               <dd>Ada Morgan</dd>
@@ -601,7 +565,7 @@
           </menu>
         </section>
 
-        <div class="block-message-list" aria-label="Recent messages">
+        <div class="stack" aria-label="Recent messages">
           <article class="media block-message">
             <span class="avatar success sm"><abbr>OK</abbr></span>
             <div class="stack" style="--gap: var(--space-10);">
