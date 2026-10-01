@@ -43,10 +43,10 @@
       min-block-size: 100dvh;
     }
 
+    /* A .stack hidden below the breakpoint: display: none outranks .stack on
+       source order, and the media query below restores flex. */
     .app-layout-sidebar {
       display: none;
-      flex-direction: column;
-      gap: var(--gap);
       inline-size: 16rem;
       padding: 1rem;
       border-inline-end: var(--border-width) solid var(--border);
@@ -143,11 +143,11 @@
       }
     }
 
+    /* The card is already a column; the stat packs its items to the start. */
     .app-stat {
-      display: flex;
-      flex-direction: column;
+      --card-gap: var(--space-20);
+
       align-items: flex-start;
-      gap: 0.5rem;
     }
 
     .app-stat-value {
@@ -263,7 +263,7 @@
 <body>
   <div class="app-sidebar-shell">
     <!-- Sidebar (visible >= 64rem); mirrored inside the drawer for mobile. -->
-    <aside class="app-layout-sidebar app-sidebar" aria-label="Primary">
+    <aside class="stack app-layout-sidebar app-sidebar" aria-label="Primary">
       <a class="navbar-brand" href="#" style="text-decoration: none; color: inherit;">
         <span class="avatar primary"><abbr class="circle">AC</abbr></span>
         Actual Clinic

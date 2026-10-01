@@ -14,19 +14,9 @@
       padding-block: var(--space-60);
     }
 
-    .adaptive-intro,
-    .adaptive-demo,
-    .adaptive-copy {
+    .adaptive-demo {
       display: grid;
       gap: var(--space-30);
-    }
-
-    .adaptive-intro > *,
-    .adaptive-copy > * {
-      margin: 0;
-    }
-
-    .adaptive-demo {
       padding-block: var(--space-60);
       border-block-start: var(--border-width) solid var(--border);
     }
@@ -67,10 +57,6 @@
 
     .adaptive-results {
       --grid-min: 15rem;
-    }
-
-    .adaptive-results .card > * {
-      margin: 0;
     }
 
     /* A bottom sheet is a product-specific presentation of the existing
@@ -117,7 +103,7 @@
 </head>
 <body>
   <main class="center adaptive-page">
-    <header class="adaptive-intro">
+    <header class="stack">
       <p class="overline">Application composition</p>
       <h1>One task, two explicit surfaces</h1>
       <p class="lead">
@@ -137,7 +123,7 @@
     </header>
 
     <section class="adaptive-demo" aria-labelledby="catalog-title">
-      <div class="adaptive-copy">
+      <div class="stack">
         <h2 id="catalog-title">Workshop catalog</h2>
         <p>Open Filters, change the criteria, then apply them. Both presentations share the same local state.</p>
       </div>

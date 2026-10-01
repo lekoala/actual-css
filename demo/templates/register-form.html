@@ -30,10 +30,6 @@
       gap: var(--space-20);
     }
 
-    .register-card > * {
-      margin: 0;
-    }
-
     /* This flow names three short steps, so it fits below the generic
        --step-min budget: 3 x 5rem = 240px, scroll stays for tinier widths. */
     #register-steps {
@@ -216,7 +212,7 @@
         </div>
 
         <div class="field">
-          <span class="cluster" style="--cluster-gap: var(--space-10);">
+          <span class="cluster" style="--gap: var(--space-10);">
             <label class="field-label" for="phone">Mobile</label>
             <span class="register-info" tabindex="0" role="img" aria-label="Why we ask for your mobile"
                   data-tooltip="Used to verify your account. The number is normalized and validated on the server."

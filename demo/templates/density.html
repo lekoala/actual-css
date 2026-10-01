@@ -43,28 +43,18 @@
     }
 
     .density-switcher {
-      display: flex;
-      flex-wrap: wrap;
       gap: var(--space-20);
-      align-items: center;
       margin-block-start: var(--space-30);
     }
 
     .density-cols {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
-      gap: var(--gap);
+      --grid-min: 15rem;
+
       align-items: start;
       margin-block-start: var(--space-40);
     }
 
-    .density-col {
-      display: grid;
-      gap: var(--space-30);
-    }
-
     .density-col > h3 {
-      margin: 0;
       font-size: var(--font-size-sm);
       font-weight: var(--font-weight-semibold);
       text-transform: uppercase;
@@ -130,7 +120,7 @@
         at once — no class on the children.
       </p>
 
-      <div class="density-switcher" role="radiogroup" aria-label="Density context">
+      <div class="cluster density-switcher" role="radiogroup" aria-label="Density context">
         <label class="choice">
           <input class="radio" type="radio" name="density" value="compact">
           <span>.compact</span>
@@ -182,8 +172,8 @@
         intrinsic, so density leaves it alone.
       </p>
 
-      <div class="density-cols">
-        <div class="density-col">
+      <div class="grid density-cols">
+        <div class="stack density-col">
           <h3>.compact</h3>
           <div class="compact density-sample">
             <div class="cluster">
@@ -195,7 +185,7 @@
           </div>
         </div>
 
-        <div class="density-col">
+        <div class="stack density-col">
           <h3>default</h3>
           <div class="density-sample">
             <div class="cluster">
@@ -207,7 +197,7 @@
           </div>
         </div>
 
-        <div class="density-col">
+        <div class="stack density-col">
           <h3>.spacious</h3>
           <div class="spacious density-sample">
             <div class="cluster">
@@ -237,8 +227,8 @@
         move together. They do not establish a context for unrelated children.
       </p>
 
-      <div class="density-cols">
-        <div class="density-col">
+      <div class="grid density-cols">
+        <div class="stack density-col">
           <h3>.btn</h3>
           <div class="cluster">
             <button class="btn sm">Small</button>
@@ -247,7 +237,7 @@
           </div>
         </div>
 
-        <div class="density-col">
+        <div class="stack density-col">
           <h3>.badge</h3>
           <div class="cluster">
             <span class="badge sm"><i class="ti ti-check" aria-hidden="true"></i> Small</span>
@@ -256,7 +246,7 @@
           </div>
         </div>
 
-        <div class="density-col">
+        <div class="stack density-col">
           <h3>.input</h3>
           <div class="cluster">
             <input class="input sm" placeholder="Small">
@@ -278,8 +268,8 @@
         context.
       </p>
 
-      <div class="density-cols">
-        <div class="density-col">
+      <div class="grid density-cols">
+        <div class="stack density-col">
           <h3>default</h3>
           <div class="density-sample">
             <div class="cluster">
@@ -304,7 +294,7 @@
           </div>
         </div>
 
-        <div class="density-col">
+        <div class="stack density-col">
           <h3>.compact</h3>
           <div class="compact density-sample">
             <div class="cluster">
@@ -345,8 +335,8 @@
         layout instance instead of adding a new utility family.
       </p>
 
-      <div class="density-cols">
-        <div class="density-col">
+      <div class="grid density-cols">
+        <div class="stack density-col">
           <h3>default</h3>
           <div class="density-sample">
             <div class="cluster">
@@ -357,7 +347,7 @@
           </div>
         </div>
 
-        <div class="density-col">
+        <div class="stack density-col">
           <h3>tuned per dimension</h3>
           <div class="density-sample">
             <div class="cluster" style="--gap: var(--space-20);">

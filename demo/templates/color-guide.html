@@ -55,13 +55,9 @@
       margin: 0 0 var(--space-50);
     }
 
+    /* The caption is a .stack set tighter than the figure rhythm. */
     .cg-figure > figcaption {
-      display: grid;
       gap: var(--space-20);
-    }
-
-    .cg-figure > figcaption > * {
-      margin: 0;
     }
 
     .cg-figure h3 {
@@ -96,19 +92,14 @@
 
     /* Island preview -----------------------------------------------------
        A [data-theme] island painted as a page canvas. The framework puts that
-       surface on `body`, so a preview of another palette has to restate it. */
+       surface on `body`, so a preview of another palette has to restate it.
+       The island is a .stack; only the canvas is local. */
     .cg-island {
-      display: grid;
-      gap: var(--space-30);
       padding: var(--space-40);
       border: var(--border-width) solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
       color: var(--text);
-    }
-
-    .cg-island > * {
-      margin: 0;
     }
 
     /* The island's own label, so it reads inside the palette it names. */
@@ -355,7 +346,7 @@
       </section>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Neutrals lean</h3>
           <p class="muted measure">
@@ -367,12 +358,12 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 18rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · light</p>
             <div class="cg-ramp" data-ramp></div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · light</p>
             <div class="cg-ramp" data-ramp></div>
           </div>
@@ -391,7 +382,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Chroma is a curve, and light is not dark reversed</h3>
           <p class="muted measure">
@@ -403,19 +394,19 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 14rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · light</p>
             <div class="cg-chroma" data-chroma></div>
           </div>
-          <div class="cg-island" data-theme="ocean" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: dark;">
             <p class="cg-island-name">ocean · dark</p>
             <div class="cg-chroma" data-chroma></div>
           </div>
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · light</p>
             <div class="cg-chroma" data-chroma></div>
           </div>
-          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: dark;">
             <p class="cg-island-name">sunset · dark</p>
             <div class="cg-chroma" data-chroma></div>
           </div>
@@ -445,7 +436,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Ambient hue is not the brand hue</h3>
           <p class="muted measure">
@@ -456,13 +447,13 @@
           </p>
         </figcaption>
 
-        <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+        <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
           <p class="cg-island-name">ocean · light</p>
           <div class="cg-hue-axis" data-hue-axis></div>
           <div class="cluster cg-hue-key" data-hue-key style="--gap: var(--space-30);"></div>
         </div>
 
-        <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+        <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
           <p class="cg-island-name">sunset · light</p>
           <div class="cg-hue-axis" data-hue-axis></div>
           <div class="cluster cg-hue-key" data-hue-key style="--gap: var(--space-30);"></div>
@@ -493,7 +484,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Pure white is allowed</h3>
           <p class="muted measure">
@@ -505,7 +496,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 18rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · white card on a cool canvas</p>
             <div class="card">
               <strong>Raised surface</strong>
@@ -513,7 +504,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · warm card on a warm canvas</p>
             <div class="card">
               <strong>Raised surface</strong>
@@ -544,7 +535,7 @@
       </section>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3><code>.soft</code> is a recipe, not six more tokens</h3>
           <p class="muted measure">
@@ -557,7 +548,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 18rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · light</p>
             <div class="cluster">
               <span class="badge primary soft">Primary</span>
@@ -569,7 +560,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: dark;">
             <p class="cg-island-name">sunset · dark</p>
             <div class="cluster">
               <span class="badge primary soft">Primary</span>
@@ -600,7 +591,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>One dial changes the whole language</h3>
           <p class="muted measure">
@@ -612,7 +603,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 18rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">default · 65%</p>
             <div class="cluster">
               <span class="badge primary soft">Primary</span>
@@ -622,7 +613,7 @@
             <div class="alert warning">Contoured soft surfaces.</div>
           </div>
 
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light; --soft-border-mix: var(--soft-bg-mix);">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light; --soft-border-mix: var(--soft-bg-mix);">
             <p class="cg-island-name">rim resolved to the fill</p>
             <div class="cluster">
               <span class="badge primary soft">Primary</span>
@@ -644,7 +635,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Shadow is the colour of absent light</h3>
           <p class="muted measure">
@@ -655,7 +646,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 18rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · shadow ink</p>
             <div class="cluster">
               <span class="cg-chip" data-swatch="--shadow-color"></span>
@@ -667,7 +658,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · shadow ink</p>
             <div class="cluster">
               <span class="cg-chip" data-swatch="--shadow-color"></span>
@@ -696,7 +687,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Semantics stay recognisable, and still belong</h3>
           <p class="muted measure">
@@ -708,7 +699,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 18rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · light</p>
             <div class="cluster">
               <span class="cg-chip" data-swatch="--danger"></span>
@@ -723,7 +714,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · light</p>
             <div class="cluster">
               <span class="cg-chip" data-swatch="--danger"></span>
@@ -763,7 +754,7 @@
       </section>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>A gradient is two stops from the same palette</h3>
           <p class="muted measure">
@@ -775,7 +766,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 15rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · flat</p>
             <div class="cluster">
               <button class="btn primary" type="button">Deploy</button>
@@ -783,7 +774,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · flat</p>
             <div class="cluster">
               <button class="btn primary" type="button">Deploy</button>
@@ -791,7 +782,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="gradient" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="gradient" style="color-scheme: light;">
             <p class="cg-island-name">gradient · same markup</p>
             <div class="cluster">
               <button class="btn primary" type="button">Deploy</button>
@@ -811,7 +802,7 @@
 );</code></pre>
         </div>
 
-        <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+        <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
           <p class="cg-island-name">sunset · derived stops, then hand-picked ones</p>
           <div class="cg-bar-wide cg-bar-derived"></div>
           <div class="cg-bar-wide cg-bar-handwritten"></div>
@@ -834,7 +825,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Interaction belongs to the palette too</h3>
           <p class="muted measure">
@@ -846,7 +837,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 18rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · light</p>
             <div class="cluster">
               <span class="cg-chip"></span>
@@ -864,7 +855,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · light</p>
             <div class="cluster">
               <span class="cg-chip"></span>
@@ -924,7 +915,7 @@
       </section>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Four palettes, one document</h3>
           <p class="muted measure">
@@ -936,22 +927,22 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 13rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · light</p>
             <button class="btn primary" type="button">Deploy</button>
             <span class="badge success soft fit">Healthy</span>
           </div>
-          <div class="cg-island" data-theme="ocean" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: dark;">
             <p class="cg-island-name">ocean · dark</p>
             <button class="btn primary" type="button">Deploy</button>
             <span class="badge success soft fit">Healthy</span>
           </div>
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · light</p>
             <button class="btn primary" type="button">Deploy</button>
             <span class="badge success soft fit">Healthy</span>
           </div>
-          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: dark;">
             <p class="cg-island-name">sunset · dark</p>
             <button class="btn primary" type="button">Deploy</button>
             <span class="badge success soft fit">Healthy</span>
@@ -975,7 +966,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>An island recomputes what it derives</h3>
           <p class="muted measure">
@@ -985,7 +976,7 @@
           </p>
         </figcaption>
 
-        <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+        <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
           <p class="cg-island-name">ocean</p>
           <p class="muted">Selection ink, shadow, focus ring and the native <code>accent-color</code> all belong to this palette.</p>
           <div class="cluster">
@@ -993,7 +984,7 @@
             <button class="btn primary" type="button">Focus me</button>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: dark;">
             <p class="cg-island-name">sunset · dark, nested inside ocean</p>
             <p class="muted">Same markup. Every derived alias recomputed at this boundary.</p>
             <div class="cluster">
@@ -1037,7 +1028,7 @@
       </section>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Demo one — a plan card</h3>
           <p class="muted measure">
@@ -1048,7 +1039,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 15rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · light</p>
             <div class="card raised">
               <div class="cluster" style="--cluster-justify: space-between;">
@@ -1062,7 +1053,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="ocean" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: dark;">
             <p class="cg-island-name">ocean · dark</p>
             <div class="card raised">
               <div class="cluster" style="--cluster-justify: space-between;">
@@ -1076,7 +1067,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · light</p>
             <div class="card raised">
               <div class="cluster" style="--cluster-justify: space-between;">
@@ -1090,7 +1081,7 @@
             </div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: dark;">
             <p class="cg-island-name">sunset · dark</p>
             <div class="card raised">
               <div class="cluster" style="--cluster-justify: space-between;">
@@ -1107,7 +1098,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Demo two — a status panel</h3>
           <p class="muted measure">
@@ -1118,7 +1109,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 15rem;">
-          <div class="cg-island" data-theme="ocean" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
             <p class="cg-island-name">ocean · light</p>
             <div class="cg-demo-stats">
               <div class="cg-demo-stat"><strong>99.9%</strong><small>Uptime</small></div>
@@ -1130,7 +1121,7 @@
             <div class="alert danger">Two workers failed their health check.</div>
           </div>
 
-          <div class="cg-island" data-theme="ocean" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: dark;">
             <p class="cg-island-name">ocean · dark</p>
             <div class="cg-demo-stats">
               <div class="cg-demo-stat"><strong>99.9%</strong><small>Uptime</small></div>
@@ -1142,7 +1133,7 @@
             <div class="alert danger">Two workers failed their health check.</div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">sunset · light</p>
             <div class="cg-demo-stats">
               <div class="cg-demo-stat"><strong>99.9%</strong><small>Uptime</small></div>
@@ -1154,7 +1145,7 @@
             <div class="alert danger">Two workers failed their health check.</div>
           </div>
 
-          <div class="cg-island" data-theme="sunset" style="color-scheme: dark;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: dark;">
             <p class="cg-island-name">sunset · dark</p>
             <div class="cg-demo-stats">
               <div class="cg-demo-stat"><strong>99.9%</strong><small>Uptime</small></div>
@@ -1179,7 +1170,7 @@
       </section>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>The greyscale check</h3>
           <p class="muted measure">
@@ -1190,7 +1181,7 @@
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 18rem;">
-          <div class="cg-island" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">as authored</p>
             <div class="cluster">
               <button class="btn primary" type="button">Save</button>
@@ -1201,7 +1192,7 @@
             <p style="font-size: var(--font-size-sm); color: var(--text-subtle);">Tertiary metadata.</p>
           </div>
 
-          <div class="cg-island cg-grey" data-theme="sunset" style="color-scheme: light;">
+          <div class="stack cg-island cg-grey" data-theme="sunset" style="color-scheme: light;">
             <p class="cg-island-name">hue removed</p>
             <div class="cluster">
               <button class="btn primary" type="button">Save</button>
@@ -1224,7 +1215,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>What the palette does not get to decide</h3>
           <p class="muted measure">
@@ -1263,7 +1254,7 @@
       </figure>
 
       <figure class="card raised cg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Two rungs that are missing on purpose</h3>
           <p class="muted measure">
