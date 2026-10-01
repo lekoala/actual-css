@@ -311,20 +311,20 @@
     </nav>
   </dialog>
 
-  <dialog class="modal dialog-confirmation" id="send-invoice-modal" closedby="any" data-dialog-dismissible>
+  <dialog class="modal" id="send-invoice-modal" closedby="any" data-dialog-dismissible>
     <form method="dialog">
       <div class="media">
         <span class="dialog-icon primary soft" aria-hidden="true">
           <i class="ti ti-send"></i>
         </span>
 
-        <header>
+        <header class="stack">
           <h3>Send invoice #INV-2050?</h3>
           <p class="muted">Ada Morgan (ada@northstarlogistics.com) will receive the invoice by email with a payment link.</p>
         </header>
       </div>
 
-      <footer>
+      <footer class="bleed background-subtle justify-content-space-between">
         <button class="btn outline" value="cancel">Cancel</button>
         <button class="btn primary" value="send">Send invoice</button>
       </footer>

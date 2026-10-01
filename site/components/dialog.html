@@ -230,7 +230,6 @@
 <tbody>
 <tr><td><code>.modal</code></td><td>Component</td><td>Centered surface on the native <code>&lt;dialog&gt;</code>.</td></tr>
 <tr><td><code>.scrollable</code></td><td>Variant</td><td>Header and footer stay while the body scrolls.</td></tr>
-<tr><td><code>.dialog-confirmation</code></td><td>Variant</td><td>Message above a full-width action band.</td></tr>
 <tr><td><code>.dialog-icon</code></td><td>Component</td><td>Circular intent-aware icon well.</td></tr>
 <tr><td><code>.close</code></td><td>Composition</td><td>Icon-only close button, at the top end.</td></tr>
 </tbody>
@@ -256,9 +255,11 @@ overlay. That header reserves the same inline room for it, never below its own
 <p>The corner close overlays the panel edge, so a body tall enough to scroll would
 run its scrollbar under the button. Give such a dialog the <code>scrollable</code> anatomy:
 the close then sits over the fixed header and the scrollbar starts below it.</p>
-<p>Add <code>.bleed</code> to that header when it should form a full-width band. It reaches
-the dialog edges, keeps the modal's inner padding, and can take a surface token
-such as <code>background: var(--surface-subtle)</code>.</p>
+<p>Add <code>.bleed</code> to that header, or to the wrapper's footer, when it should form a
+full-width band. It reaches the dialog edges and corners, keeps the modal's
+inner padding, and takes a surface utility such as <code>.background-subtle</code>. The
+footer's row layout has zero specificity, so a <code>.justify-content-*</code> utility
+moves its actions.</p>
 <h3 id="where-each-region-lives">Where each region lives</h3>
 <p>Two anatomies are legitimate. Pick one; each owns its scroll, footer, and close
 placement.</p>
@@ -365,12 +366,17 @@ runtime, backdrop clicks give a small static feedback instead of closing.</p>
   </div>
 </div>
 <div class="prose docs-prose">
-<p>For a compact destructive confirmation with a leading status icon, compose
-<code>dialog-confirmation</code> with the media object. The icon well accepts the shared
-intent and emphasis classes; <code>dialog-icon danger soft</code> creates the tinted red
-circle while keeping the glyph centered. The footer becomes a separate action
-band whose two actions sit at its edges, so the cancel-style control never sits
-next to the committing one.</p>
+<h3 id="confirmation-with-an-icon-and-an-action-band">Confirmation with an icon and an action band</h3>
+<p>For a compact confirmation with a leading status icon, put a <code>.dialog-icon</code> and
+the text column in a <code>.media</code> row. The first heading of that column centers on
+the icon; following copy stays in the same column. The icon well accepts the
+shared intent and emphasis classes: <code>dialog-icon danger soft</code> is the tinted red
+circle.</p>
+<p>The action band is the footer composed with existing primitives: <code>.bleed</code>
+reaches the panel edges and corners, <code>.background-subtle</code> paints it, and
+<code>.justify-content-space-between</code> splits the decision pair. Keep the
+cancel-style action first, so it holds the leading edge and never sits next to
+the committing one.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -383,7 +389,7 @@ next to the committing one.</p>
   Deactivate account
 </button>
 
-<dialog class="modal dialog-confirmation"
+<dialog class="modal"
         id="deactivate-dialog"
         closedby="none"
         style="--modal-size: 40rem">
@@ -393,13 +399,13 @@ next to the committing one.</p>
         <i class="ti ti-alert-triangle"></i>
       </span>
 
-      <header>
+      <header class="stack">
         <h3>Deactivate account</h3>
         <p class="muted">Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.</p>
       </header>
     </div>
 
-    <footer>
+    <footer class="bleed background-subtle justify-content-space-between">
       <button class="btn outline" value="cancel">Cancel</button>
       <button class="btn danger" value="deactivate">Deactivate</button>
     </footer>
@@ -416,7 +422,7 @@ next to the committing one.</p>
   Deactivate account
 &lt;/button&gt;
 
-&lt;dialog class=&quot;modal dialog-confirmation&quot;
+&lt;dialog class=&quot;modal&quot;
         id=&quot;deactivate-dialog&quot;
         closedby=&quot;none&quot;
         style=&quot;--modal-size: 40rem&quot;&gt;
@@ -426,13 +432,13 @@ next to the committing one.</p>
         &lt;i class=&quot;ti ti-alert-triangle&quot;&gt;&lt;/i&gt;
       &lt;/span&gt;
 
-      &lt;header&gt;
+      &lt;header class=&quot;stack&quot;&gt;
         &lt;h3&gt;Deactivate account&lt;/h3&gt;
         &lt;p class=&quot;muted&quot;&gt;Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.&lt;/p&gt;
       &lt;/header&gt;
     &lt;/div&gt;
 
-    &lt;footer&gt;
+    &lt;footer class=&quot;bleed background-subtle justify-content-space-between&quot;&gt;
       &lt;button class=&quot;btn outline&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
       &lt;button class=&quot;btn danger&quot; value=&quot;deactivate&quot;&gt;Deactivate&lt;/button&gt;
     &lt;/footer&gt;
@@ -443,8 +449,7 @@ next to the committing one.</p>
 <div class="prose docs-prose">
 <p>For a trailing illustration, use a direct <code>&lt;header&gt;</code> as the message region and
 compose it as a non-wrapping split cluster. <code>.grow</code> keeps the text column
-flexible while <code>.dialog-icon</code> stays at the inline end. The confirmation variant
-pads either this header or the leading-icon <code>.media</code> shape above.</p>
+flexible while <code>.dialog-icon</code> stays at the inline end.</p>
 <p>Use the same anatomy in a <code>.card</code> instead when the surface belongs in page
 content and does not need modal focus or a backdrop.</p>
 </div>
@@ -459,7 +464,7 @@ content and does not need modal focus or a backdrop.</p>
   Customize workspace
 </button>
 
-<dialog class="modal dialog-confirmation"
+<dialog class="modal"
         id="customize-dialog"
         closedby="none"
         aria-labelledby="customize-dialog-title">
@@ -476,9 +481,9 @@ content and does not need modal focus or a backdrop.</p>
       </span>
     </header>
 
-    <footer>
-      <button class="btn primary" value="customize">Customize</button>
+    <footer class="bleed background-subtle">
       <button class="btn ghost" value="later">Later</button>
+      <button class="btn primary" value="customize">Customize</button>
     </footer>
   </form>
 </dialog>
@@ -493,7 +498,7 @@ content and does not need modal focus or a backdrop.</p>
   Customize workspace
 &lt;/button&gt;
 
-&lt;dialog class=&quot;modal dialog-confirmation&quot;
+&lt;dialog class=&quot;modal&quot;
         id=&quot;customize-dialog&quot;
         closedby=&quot;none&quot;
         aria-labelledby=&quot;customize-dialog-title&quot;&gt;
@@ -510,9 +515,9 @@ content and does not need modal focus or a backdrop.</p>
       &lt;/span&gt;
     &lt;/header&gt;
 
-    &lt;footer&gt;
-      &lt;button class=&quot;btn primary&quot; value=&quot;customize&quot;&gt;Customize&lt;/button&gt;
+    &lt;footer class=&quot;bleed background-subtle&quot;&gt;
       &lt;button class=&quot;btn ghost&quot; value=&quot;later&quot;&gt;Later&lt;/button&gt;
+      &lt;button class=&quot;btn primary&quot; value=&quot;customize&quot;&gt;Customize&lt;/button&gt;
     &lt;/footer&gt;
   &lt;/form&gt;
 &lt;/dialog&gt;</code></pre>
@@ -1132,10 +1137,10 @@ composition that must fill this width sets <code>inline-size</code> as well.</li
 <li><code>--modal-pad</code> — padding of the direct <code>&lt;form&gt;</code> or <code>.stack</code> content wrapper.</li>
 <li><code>--modal-header-bg</code> — background of a direct header band.</li>
 <li><code>--dialog-viewport-gap</code> — distance kept between the dialog and the viewport edges.</li>
-<li><code>--dialog-icon-size</code> — diameter of the <code>.dialog-icon</code> circle. The confirmation
-title reads the same hook to center on the icon, so set it on the icon's
-media row (or the dialog) and both inherit one value. A value on the icon
-alone sizes only the circle.</li>
+<li><code>--dialog-icon-size</code> — diameter of the <code>.dialog-icon</code> circle. The heading
+beside a leading icon reads the same hook to center on it, so set it on the
+icon's media row (or the dialog) and both inherit one value. A value on the
+icon alone sizes only the circle.</li>
 <li><code>--dialog-icon-glyph-size</code> — size of the glyph centered inside <code>.dialog-icon</code>;
 same placement as <code>--dialog-icon-size</code>.</li>
 <li><code>--close-size</code> / <code>--close-icon-size</code> — size of the corner <code>.close</code> and of its
@@ -1166,6 +1171,7 @@ the title never runs under it.</li>
         <li><a class="nav-link" href="#where-each-region-lives" data-docs-toc-item data-level="3">Where each region lives</a></li>
         <li><a class="nav-link" href="#usage" data-docs-toc-item data-level="2">Usage</a></li>
         <li><a class="nav-link" href="#alert-dialog" data-docs-toc-item data-level="2">Alert dialog</a></li>
+        <li><a class="nav-link" href="#confirmation-with-an-icon-and-an-action-band" data-docs-toc-item data-level="3">Confirmation with an icon and an action band</a></li>
         <li><a class="nav-link" href="#customize-dialog-title" data-docs-toc-item data-level="3">Make this workspace your own</a></li>
         <li><a class="nav-link" href="#information-modal" data-docs-toc-item data-level="2">Information modal</a></li>
         <li><a class="nav-link" href="#action-modal" data-docs-toc-item data-level="2">Action modal</a></li>
