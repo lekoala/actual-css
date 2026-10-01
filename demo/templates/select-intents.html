@@ -50,11 +50,7 @@
     }
 
     .page-note {
-      display: flex;
-      flex-wrap: wrap;
       gap: var(--space-20) var(--space-30);
-      align-items: baseline;
-      justify-content: space-between;
       padding-block-start: var(--space-30);
       border-block-start: var(--border-width) solid var(--border);
       color: var(--text-muted);
@@ -277,7 +273,7 @@ registerEnhancement("select-intent", (select) => {
       </section>
     </div>
 
-    <footer class="page-note">
+    <footer class="cluster items-baseline justify-content-space-between page-note">
       <span>
         Enhancement loaded from jsDelivr, pinned: <code>actual-css@0.7.0/src/js/enhance.js</code>.
         Only the behavior is loaded; the skin is the local <code>dist/actual.full.css</code>.

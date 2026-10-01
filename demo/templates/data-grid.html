@@ -75,11 +75,7 @@
     }
 
     .page-note {
-      display: flex;
-      flex-wrap: wrap;
       gap: var(--space-20) var(--space-30);
-      align-items: baseline;
-      justify-content: space-between;
       padding-block-start: var(--space-30);
       border-block-start: var(--border-width) solid var(--border);
       color: var(--text-muted);
@@ -380,7 +376,7 @@
       <p class="dg-status" id="team-status" role="status">Select rows to reveal the bulk action bar.</p>
     </section>
 
-    <footer class="page-note">
+    <footer class="cluster items-baseline justify-content-space-between page-note">
       <span>Loaded from jsDelivr: <code>data-grid-component@3.3.0/dist/data-grid.min.css</code> and
         <code>data-grid-component@3.3.0/dist/data-grid.min.js</code>.</span>
     </footer>
