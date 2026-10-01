@@ -322,7 +322,7 @@ can be multi-column with `<section>` / `<ul>` groups.
 
 ```html demo
 <nav aria-label="Main navigation">
-  <ul class="list-reset cluster">
+  <ul class="cluster">
     <li class="flyout-trigger">
       <button class="btn ghost"
               type="button"
@@ -373,7 +373,7 @@ a separate `dialog.drawer` when the content needs a modal mobile presentation.
 
 ```html demo
 <nav aria-label="Product navigation">
-  <ul class="list-reset cluster">
+  <ul class="cluster">
     <li class="flyout-trigger">
       <button class="btn ghost"
               type="button"

@@ -22,7 +22,7 @@ Use patterns when a semantic element needs a small amount of normalization befor
 Patterns often compose with layout primitives.
 
 ```html
-<menu class="actions cluster">...</menu>
+<menu class="cluster">...</menu>
 <ul class="nav-list cluster">...</ul>
 <ul class="nav-list stack">...</ul>
 <section class="grid">...</section>
