@@ -4,7 +4,12 @@
  * The docs shell is also a flex item forced to fill .app-shell; its declared
  * inline size must therefore subtract the two padding edges. */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  waitForBrowser,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/docs-shell.html";
 const TIMEOUT = 60_000;
@@ -67,7 +72,18 @@ it("docs header stays a single row", async () => {
           deviceScaleFactor: 1,
           mobile: false,
         });
-        await sleep(100);
+        // Wait for the breakpoint decision rather than a fixed delay: reading
+        // before the media query re-resolves was the CI flake (a stale row at
+        // the previous width). The height is final once the theme field's
+        // visibility matches this width.
+        const themeVisible = width > 528;
+        await waitForBrowser(
+          view,
+          `(() => {
+            const field = document.querySelector(".docs-header-inner .docs-theme-field");
+            return (getComputedStyle(field).display !== "none") === ${themeVisible};
+          })()`,
+        );
 
         const height = await view.evaluate(`(() => {
           const header = document.querySelector(".docs-header-inner");
