@@ -43,6 +43,16 @@
     <div class="stack"><p>Body.</p></div>
   </dialog>
 
+  <!-- Paint composes, anatomy holds: a surface utility replaces the band fill,
+       a composed .cluster does not reset the title/close split. -->
+  <dialog class="modal" id="header-paint" open>
+    <header class="cluster background-raised">
+      <h2>Painted header</h2>
+      <div class="cluster"><button class="btn ghost" type="button">?</button></div>
+    </header>
+    <div class="stack"><p>Body.</p></div>
+  </dialog>
+
   <!-- The icon-size hook is shared geometry: set on the media row or the dialog
        so the title that centers on the circle inherits the same value. -->
   <dialog class="modal" id="icon-hook-media" open>

@@ -283,6 +283,7 @@
     "internalHooks": [
       "--drawer-closed-translate",
       "--drawer-focus-bleed",
+      "--drawer-close-reserve",
       "--drawer-motion-duration"
     ],
     "states": [
@@ -460,13 +461,13 @@
     "publicHooks": [
       "--modal-size",
       "--modal-pad",
-      "--modal-header-bg",
       "--dialog-viewport-gap",
       "--dialog-icon-size",
       "--dialog-icon-glyph-size"
     ],
     "internalHooks": [
       "--dialog-inner-radius",
+      "--dialog-close-reserve",
       "--dialog-focus-bleed",
       "--dialog-viewport-block",
       "--dialog-viewport-gap-default",
