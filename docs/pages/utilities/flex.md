@@ -6,13 +6,14 @@ Small flex helpers for grow behavior and other one-line needs.
 
 Base utilities:
 
-| Class           | Description                                                    |
-| --------------- | -------------------------------------------------------------- |
-| `.grow`         | Makes an item take available flex space without overflowing.   |
-| `.items-start`  | Aligns children to the block-start edge; sets `--items-align`. |
-| `.items-center` | Centers children on the cross axis; sets `--items-align`.      |
-| `.items-end`    | Aligns children to the block-end edge; sets `--items-align`.   |
-| `.dot`          | Inline separator dot for metadata rows.                        |
+| Class             | Description                                                         |
+| ----------------- | ------------------------------------------------------------------- |
+| `.grow`           | Makes an item take available flex space without overflowing.        |
+| `.items-start`    | Aligns children to the block-start edge; sets `--items-align`.      |
+| `.items-center`   | Centers children on the cross axis; sets `--items-align`.           |
+| `.items-end`      | Aligns children to the block-end edge; sets `--items-align`.        |
+| `.items-baseline` | Aligns children on their first text baseline; sets `--items-align`. |
+| `.dot`            | Inline separator dot for metadata rows.                             |
 
 Extra utilities:
 
@@ -66,11 +67,20 @@ Use `.items-start` on flex or grid layouts when children should keep their natur
 
 Use `.items-center` when a flex or grid layout should center its children on the cross axis. Use `.items-end` when children should align to the block-end edge.
 
+Use `.items-baseline` when a row mixes text sizes — a price and its period, a name and a timestamp — so the words share one line instead of their boxes sharing a center.
+
+```html demo
+<p class="cluster items-baseline">
+  <strong style="font-size: 2rem">$29</strong>
+  <span class="muted">/ month</span>
+</p>
+```
+
 These helpers work by setting a custom property that participating components read,
 so they also apply inside a component's own grid anatomy rather than only on plain
 flex containers:
 
-- `.items-start` / `.items-center` / `.items-end` set `--items-align`, read by `.alert` and `.card`.
+- `.items-start` / `.items-center` / `.items-end` / `.items-baseline` set `--items-align`, read by `.alert` and `.card`.
 - `.text-start` / `.text-center` / `.text-end` set `--text-align`, read by `.table` cells.
 - `.justify-content-*` (utilities/extra) set `--cluster-justify`, read by `.cluster`.
 - `.flex-wrap` / `.flex-nowrap` (utilities/extra) set `flex-wrap` directly on any flex container.
@@ -107,6 +117,6 @@ Always mark it `aria-hidden="true"` — it is a visual separator, not content.
 
 ## CSS hooks
 
-- `--items-align` — cross-axis alignment, set by `.items-start` / `.items-center` / `.items-end`.
+- `--items-align` — cross-axis alignment, set by the `.items-*` helpers.
 - `--text-align` — text alignment, set by `.text-start` / `.text-center` / `.text-end`.
 - `--cluster-justify` — main-axis distribution, set by the optional `.justify-content-*` helpers and read by `.cluster`.

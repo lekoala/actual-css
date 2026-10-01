@@ -59,10 +59,7 @@
     }
 
     .stage-meter {
-      display: flex;
-      flex-wrap: wrap;
       gap: var(--space-20);
-      align-items: baseline;
       margin-block: 0 var(--space-30);
       font-size: var(--font-size-sm);
       color: var(--text-muted);
@@ -194,7 +191,7 @@
           below share the same canvas, so a span can be counted by eye.
         </p>
         <div class="stage" data-stage>
-          <p class="stage-meter">
+          <p class="cluster items-baseline stage-meter">
             <span>container <b data-width>&mdash;</b></span>
             <span>unit <b data-unit>&mdash;</b></span>
           </p>
@@ -250,7 +247,7 @@
         collapsing to one twelfth.
       </p>
       <div class="stage" data-stage>
-        <p class="stage-meter">
+        <p class="cluster items-baseline stage-meter">
           <span>container <b data-width>&mdash;</b></span>
           <span>unit <b data-unit>&mdash;</b></span>
         </p>
@@ -287,7 +284,7 @@
         always approximating, and it flips in a right-to-left context for free.
       </p>
       <div class="stage" data-stage>
-        <p class="stage-meter">
+        <p class="cluster items-baseline stage-meter">
           <span>container <b data-width>&mdash;</b></span>
           <span>unit <b data-unit>&mdash;</b></span>
         </p>
@@ -342,7 +339,7 @@
   }
 }</code></pre>
       <div class="stage container-query" data-stage>
-        <p class="stage-meter">
+        <p class="cluster items-baseline stage-meter">
           <span>container <b data-width>&mdash;</b></span>
           <span>stacks below 40rem &mdash; because this page says so</span>
         </p>
@@ -376,7 +373,7 @@
       </p>
       <pre><code>8 + 4   &rarr;   6 + 6   &rarr;   stacked</code></pre>
       <div class="stage container-query" data-stage>
-        <p class="stage-meter">
+        <p class="cluster items-baseline stage-meter">
           <span>container <b data-width>&mdash;</b></span>
           <span>8+4, then 6+6 below 48rem, then stacked below 32rem</span>
         </p>
