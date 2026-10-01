@@ -45,9 +45,12 @@ the close then sits over the fixed header and the scrollbar starts below it.
 
 Add `.bleed` to that header, or to the wrapper's footer, when it should form a
 full-width band. It reaches the dialog edges and corners, keeps the modal's
-inner padding, and takes a surface utility such as `.background-subtle`. The
-footer's row layout has zero specificity, so a `.justify-content-*` utility
-moves its actions.
+inner padding, and takes a surface utility such as `.background-subtle`.
+
+The wrapper's `<footer>` is a structural slot: it stays fixed under
+`.scrollable` but has no layout of its own. Compose the action row in markup —
+`<footer class="cluster justify-content-end">` for trailing actions,
+`.justify-content-space-between` for a split pair.
 
 ### Where each region lives
 
@@ -121,7 +124,7 @@ runtime, backdrop clicks give a small static feedback instead of closing.
       <p>The project, saved reports, and connected automations will be removed permanently.</p>
     </div>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn outline" value="cancel">Cancel</button>
 
       <button class="btn danger"
@@ -143,7 +146,7 @@ circle.
 
 The action band is the footer composed with existing primitives: `.bleed`
 reaches the panel edges and corners, `.background-subtle` paints it, and
-`.justify-content-space-between` splits the decision pair. Keep the
+`.cluster.justify-content-space-between` splits the decision pair. Keep the
 cancel-style action first, so it holds the leading edge and never sits next to
 the committing one.
 
@@ -173,7 +176,7 @@ the committing one.
       </header>
     </div>
 
-    <footer class="bleed background-subtle justify-content-space-between">
+    <footer class="bleed background-subtle cluster justify-content-space-between">
       <button class="btn outline" value="cancel">Cancel</button>
       <button class="btn danger" value="deactivate">Deactivate</button>
     </footer>
@@ -215,7 +218,7 @@ content and does not need modal focus or a backdrop.
       </span>
     </header>
 
-    <footer class="bleed background-subtle">
+    <footer class="bleed background-subtle cluster justify-content-end">
       <button class="btn ghost" value="later">Later</button>
       <button class="btn primary" value="customize">Customize</button>
     </footer>
@@ -319,7 +322,7 @@ the dialog title itself is not an alert.
 
     <p>Confirm these settings to finish setting up the workspace.</p>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn primary inline-size-full" value="continue">Continue</button>
     </footer>
   </form>
@@ -374,7 +377,7 @@ single element (`<div class="stack">`) when there should be one scrollbar.
       <p>Section 7. Continued use confirms acceptance of the current terms.</p>
     </div>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn outline" value="cancel">Cancel</button>
 
       <button class="btn primary" value="accept">
@@ -426,7 +429,7 @@ between them scrolls.
       <p>Section 6. Continued use confirms acceptance of the current terms.</p>
     </div>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn outline" value="cancel">Cancel</button>
       <button class="btn primary" value="accept">Accept</button>
     </footer>
@@ -572,7 +575,7 @@ transition.
       <p>This dialog morphs to and from the trigger button.</p>
     </header>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn outline" value="cancel">Cancel</button>
       <button class="btn primary" value="confirm">Confirm</button>
     </footer>

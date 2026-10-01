@@ -15,6 +15,10 @@
  *
  * The corner close control is .close (components/close.css).
  *
+ * The body footer is a structural slot with no layout of its own: its action
+ * row is composed in markup (`<footer class="cluster justify-content-end">`),
+ * as in the drawer. A default row here would fight every composed one.
+ *
  * Internal:
  * --dialog-inner-radius
  * --dialog-close-reserve (header room for a corner close; zero without a close)
@@ -248,16 +252,6 @@
    unsupported :has() drops only this geometry, not the wrapper reserve. */
 :where(dialog).modal > header:has(> .close) {
   padding-inline-end: max(var(--modal-pad, var(--space-40)), var(--dialog-close-reserve));
-}
-
-/* Zero specificity: the footer is a default action row that authors compose
-   (.bleed band, a .background-* surface, a .justify-content-* split). At
-   0-1-1 it outranked every one-class utility and forced a variant per shape. */
-:where(dialog.modal > :is(form, .stack) > footer) {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--gap);
 }
 
 /* Intent boundary — inherited intents do not tint the icon well. A local

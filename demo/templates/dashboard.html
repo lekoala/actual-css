@@ -28,10 +28,6 @@
       background: var(--surface-raised);
     }
 
-    .dashboard-main {
-      min-inline-size: 0;
-    }
-
     /* Sticky/blur shell comes from the framework's .topbar
        (src/css/layout/topbar.css). Only the taller min-height stays local. */
     .dashboard-topbar {
@@ -108,22 +104,22 @@
        letter tracking, bolder weight. Color/size/uppercase already come
        from .overline. */
     .dashboard-section-title {
-      margin: 0;
       font-weight: var(--font-weight-semibold);
       letter-spacing: 0;
     }
 
+    /* .card.stack owns the column; the stat pins its value block between the
+       heading and the meta row. */
     .dashboard-stat {
-      display: grid;
-      gap: var(--space-40);
-      align-content: space-between;
+      justify-content: space-between;
       min-block-size: 11rem;
     }
 
-    .dashboard-stat-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* Split label rows (.cluster.justify-content-space-between) in small muted
+       type, tighter than the board rhythm. */
+    .dashboard-stat-heading,
+    .dashboard-stat-meta,
+    .dashboard-progress-label {
       gap: var(--space-20);
       color: var(--text-muted);
       font-size: var(--font-size-sm);
@@ -139,8 +135,8 @@
       color: var(--intent, var(--primary));
     }
 
-    .dashboard-stat-body {
-      display: grid;
+    .dashboard-stat-body,
+    .dashboard-progress-row {
       gap: var(--space-20);
     }
 
@@ -151,15 +147,6 @@
       line-height: 1;
     }
 
-    .dashboard-stat-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-20);
-      color: var(--text-muted);
-      font-size: var(--font-size-sm);
-    }
-
     .dashboard-board {
       display: grid;
       gap: var(--space-40);
@@ -167,43 +154,14 @@
       align-items: start;
     }
 
-    .dashboard-board-main {
-      min-inline-size: 0;
-    }
-
     .dashboard-account {
       display: grid;
       gap: var(--space-10);
     }
 
-    .dashboard-progress-list {
-      display: grid;
-      gap: var(--space-30);
-    }
-
-    .dashboard-progress-row {
-      display: grid;
-      gap: var(--space-20);
-    }
-
-    .dashboard-progress-label {
-      display: flex;
-      justify-content: space-between;
-      gap: var(--space-20);
-      color: var(--text-muted);
-      font-size: var(--font-size-sm);
-    }
-
-    .dashboard-feed {
-      display: grid;
-      gap: var(--space-30);
-    }
-
+    /* .media owns the dot/text columns; the feed keeps the divider rhythm. */
     .dashboard-feed-item {
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
       gap: var(--space-30);
-      align-items: start;
     }
 
     .dashboard-feed-item + .dashboard-feed-item {
@@ -347,7 +305,7 @@
       </div>
     </aside>
 
-    <div class="dashboard-main">
+    <div class="min-inline-size-0">
       <header class="topbar dashboard-topbar">
         <button class="btn neutral ghost dashboard-menu-button" type="button" commandfor="navigation-drawer" command="show-modal"
           aria-haspopup="dialog" aria-controls="navigation-drawer" aria-label="Open navigation">
@@ -423,18 +381,18 @@
         </section>
 
         <div class="dashboard-board">
-          <div class="stack dashboard-board-main">
+          <div class="stack min-inline-size-0">
             <section class="grid" style="--grid-min: 14rem;" aria-label="Revenue metrics">
-              <article class="card raised dashboard-stat">
-                <div class="dashboard-stat-heading">
+              <article class="card raised stack dashboard-stat">
+                <div class="cluster justify-content-space-between dashboard-stat-heading">
                   <span>Recurring revenue</span>
                   <span class="dashboard-stat-icon primary">
                     <i class="ti ti-repeat" aria-hidden="true"></i>
                   </span>
                 </div>
-                <div class="dashboard-stat-body">
+                <div class="stack dashboard-stat-body">
                   <data class="dashboard-stat-value" value="1842000">$1.84M</data>
-                  <div class="dashboard-stat-meta">
+                  <div class="cluster justify-content-space-between dashboard-stat-meta">
                     <span class="badge success soft">+8.4%</span>
                     <span>Goal $1.9M</span>
                   </div>
@@ -442,16 +400,16 @@
                 </div>
               </article>
 
-              <article class="card raised dashboard-stat">
-                <div class="dashboard-stat-heading">
+              <article class="card raised stack dashboard-stat">
+                <div class="cluster justify-content-space-between dashboard-stat-heading">
                   <span>Expansion pipeline</span>
                   <span class="dashboard-stat-icon success">
                     <i class="ti ti-trending-up" aria-hidden="true"></i>
                   </span>
                 </div>
-                <div class="dashboard-stat-body">
+                <div class="stack dashboard-stat-body">
                   <data class="dashboard-stat-value" value="642000">$642K</data>
-                  <div class="dashboard-stat-meta">
+                  <div class="cluster justify-content-space-between dashboard-stat-meta">
                     <span class="badge success soft">32 opps</span>
                     <span>82% commit</span>
                   </div>
@@ -459,16 +417,16 @@
                 </div>
               </article>
 
-              <article class="card raised dashboard-stat">
-                <div class="dashboard-stat-heading">
+              <article class="card raised stack dashboard-stat">
+                <div class="cluster justify-content-space-between dashboard-stat-heading">
                   <span>At-risk revenue</span>
                   <span class="dashboard-stat-icon warning">
                     <i class="ti ti-alert-circle" aria-hidden="true"></i>
                   </span>
                 </div>
-                <div class="dashboard-stat-body">
+                <div class="stack dashboard-stat-body">
                   <data class="dashboard-stat-value" value="312000">$312K</data>
-                  <div class="dashboard-stat-meta">
+                  <div class="cluster justify-content-space-between dashboard-stat-meta">
                     <span class="badge warning soft">17 accounts</span>
                     <span>$84K urgent</span>
                   </div>
@@ -631,23 +589,23 @@
           <aside class="stack" aria-label="Revenue sidebar">
             <section class="card stack" id="pipeline">
               <h2 style="margin: 0;">Pipeline by stage</h2>
-              <div class="dashboard-progress-list">
-                <div class="dashboard-progress-row">
-                  <div class="dashboard-progress-label">
+              <div class="stack">
+                <div class="stack dashboard-progress-row">
+                  <div class="cluster justify-content-space-between dashboard-progress-label">
                     <span>Commit</span>
                     <strong>$642K</strong>
                   </div>
                   <progress class="progress" value="82" max="100" aria-label="Commit stage"></progress>
                 </div>
-                <div class="dashboard-progress-row">
-                  <div class="dashboard-progress-label">
+                <div class="stack dashboard-progress-row">
+                  <div class="cluster justify-content-space-between dashboard-progress-label">
                     <span>Negotiation</span>
                     <strong>$418K</strong>
                   </div>
                   <progress class="progress" value="58" max="100" aria-label="Negotiation stage"></progress>
                 </div>
-                <div class="dashboard-progress-row">
-                  <div class="dashboard-progress-label">
+                <div class="stack dashboard-progress-row">
+                  <div class="cluster justify-content-space-between dashboard-progress-label">
                     <span>Procurement</span>
                     <strong>$296K</strong>
                   </div>
@@ -658,22 +616,22 @@
 
             <section class="card stack" id="activity">
               <h2 style="margin: 0;">Activity</h2>
-              <div class="dashboard-feed">
-                <div class="dashboard-feed-item">
+              <div class="stack">
+                <div class="media dashboard-feed-item">
                   <span class="dashboard-dot success" aria-hidden="true"></span>
                   <div>
                     <strong>Helio Systems approved security terms.</strong>
                     <p class="muted">Jana moved the account to commit.</p>
                   </div>
                 </div>
-                <div class="dashboard-feed-item">
+                <div class="media dashboard-feed-item">
                   <span class="dashboard-dot warning" aria-hidden="true"></span>
                   <div>
                     <strong>Orchid Health flagged timeline risk.</strong>
                     <p class="muted">Procurement needs executive approval.</p>
                   </div>
                 </div>
-                <div class="dashboard-feed-item">
+                <div class="media dashboard-feed-item">
                   <span class="dashboard-dot primary" aria-hidden="true"></span>
                   <div>
                     <strong>Northstar renewal package sent.</strong>
@@ -756,7 +714,7 @@
         </label>
       </div>
 
-      <footer>
+      <footer class="cluster justify-content-end">
         <button class="btn neutral outline" value="cancel" formnovalidate>Cancel</button>
         <button class="btn primary" value="create">Create forecast</button>
       </footer>

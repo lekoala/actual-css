@@ -103,7 +103,7 @@ actions and the close button can close the drawer.
       <p>Unsaved changes will be lost if you close without saving.</p>
     </div>
 
-    <footer class="cluster" style="--cluster-justify: end">
+    <footer class="cluster justify-content-end">
       <button class="btn" value="save">Save</button>
     </footer>
   </form>
