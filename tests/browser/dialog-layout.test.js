@@ -151,6 +151,31 @@ it("a direct header aligns its title, icon, close, and additional controls", asy
   );
 });
 
+it("a chrome header takes a surface utility but keeps its own layout", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view
+        .evaluate(`(() => {
+          const read = (id) => getComputedStyle(document.querySelector("#" + id + " > header"));
+          const painted = read("header-paint");
+          return JSON.stringify({
+            paintedBg: painted.backgroundColor,
+            defaultBg: read("header-dialog").backgroundColor,
+            raisedBg: getComputedStyle(document.getElementById("header-paint")).backgroundColor,
+            justify: painted.justifyContent,
+          });
+        })()`)
+        .then(JSON.parse);
+
+      expect(result.paintedBg).toBe(result.raisedBg);
+      expect(result.paintedBg).not.toBe(result.defaultBg);
+      expect(result.justify).toBe("space-between");
+    },
+    { artifactName: "dialog-header-paint" },
+  );
+});
+
 it("a shared --dialog-icon-size centers the confirmation title on the icon", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),

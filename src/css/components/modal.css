@@ -9,7 +9,6 @@
  * Public hooks:
  * --modal-size
  * --modal-pad
- * --modal-header-bg
  * --dialog-viewport-gap
  * --dialog-icon-size
  * --dialog-icon-glyph-size
@@ -118,7 +117,14 @@
   padding: var(--modal-pad, var(--space-40));
   border-start-start-radius: var(--dialog-inner-radius);
   border-start-end-radius: var(--dialog-inner-radius);
-  background: var(--modal-header-bg, var(--surface-subtle));
+}
+
+/* Paint is not anatomy: the default band fill has zero specificity, so a
+   .background-* utility on the header replaces it. The layout above stays at
+   the component's weight — a composed .cluster must not reset the title/close
+   alignment. */
+:where(dialog.modal > header) {
+  background: var(--surface-subtle);
 }
 
 :where(dialog).modal > header > .media {
