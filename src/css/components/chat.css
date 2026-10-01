@@ -94,9 +94,8 @@
 }
 
 /* Remove the reserved avatar gutter when a message has no avatar. This is a
-   cosmetic enhancement; the two-column baseline remains fully readable. */
-@supports selector(:has(*)) {
-  .chat:not(:has(> .chat-avatar)) {
-    column-gap: 0;
-  }
+   cosmetic enhancement; the two-column baseline remains fully readable, and a
+   browser without :has() drops only this rule. */
+.chat:not(:has(> .chat-avatar)) {
+  column-gap: 0;
 }

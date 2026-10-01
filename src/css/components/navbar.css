@@ -86,19 +86,16 @@
    removed everywhere else, never serialized as aria-current="false".
    Selection never changes text metrics: the shared medium weight is kept and
    the current link is carried by the selected accent. */
-.nav-link[aria-current] {
-  background: var(--surface-subtle);
-  color: var(--state-selected);
-}
-
 .nav-link:hover {
   background: var(--surface-subtle);
   color: var(--text);
 }
 
-/* A current link keeps its accent on hover: without this, the hover rule above
-   would drop it back to --text. The surface hover still applies. */
-.nav-link[aria-current]:hover {
+/* Current last, equal specificity to :hover (0,2,0): a hovered current link
+   keeps the selected accent instead of dropping to --text. The surface fill is
+   shared with the hover rule above. */
+.nav-link[aria-current] {
+  background: var(--surface-subtle);
   color: var(--state-selected);
 }
 
@@ -118,8 +115,8 @@
     color: var(--ui-fg, var(--text));
   }
 
-  .nav-link[aria-current],
-  .nav-link[aria-current]:hover {
+  /* After :hover so a hovered current link keeps the selected accent. */
+  .nav-link[aria-current] {
     color: var(--ui-fg, var(--state-selected));
   }
 }
