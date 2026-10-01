@@ -255,7 +255,7 @@
 <tr><td><code>.field-error</code></td><td>Composition</td><td>Inline error message, shown while invalid.</td></tr>
 <tr><td><code>.field-group</code></td><td>Composition</td><td><code>&lt;fieldset&gt;</code> with a tunable legend gutter.</td></tr>
 <tr><td><code>.choice</code></td><td>Composition</td><td>Choice-label layout around an inline control.</td></tr>
-<tr><td><code>.form-actions</code></td><td>Composition</td><td>Class-only flex row that closes a form.</td></tr>
+<tr><td><code>.form-actions</code></td><td>Composition</td><td>Role of the <code>.cluster</code> row closing a form.</td></tr>
 </tbody>
 </table></div>
 <p><code>.input</code> shares the text-control recipe with <code>.textarea</code> and <code>.select</code>, and
@@ -268,7 +268,7 @@
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<form novalidate>
+<form class="stack" novalidate>
   <div class="stack">
 
     <label class="field">
@@ -383,14 +383,14 @@
 
   </div>
 
-  <div class="form-actions">
+  <div class="cluster form-actions">
     <button type="button" class="btn outline">Cancel</button>
     <button type="submit" class="btn primary">Save changes</button>
   </div>
 </form>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;form novalidate&gt;
+    <pre><code class="language-html">&lt;form class=&quot;stack&quot; novalidate&gt;
   &lt;div class=&quot;stack&quot;&gt;
 
     &lt;label class=&quot;field&quot;&gt;
@@ -505,7 +505,7 @@
 
   &lt;/div&gt;
 
-  &lt;div class=&quot;form-actions&quot;&gt;
+  &lt;div class=&quot;cluster form-actions&quot;&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
     &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot;&gt;Save changes&lt;/button&gt;
   &lt;/div&gt;
@@ -528,7 +528,7 @@ it a stronger fill.</p>
 <li><code>.choice</code> is the choice-label API. Use <code>.check</code> or <code>.radio</code> on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.</li>
 <li>For a switch, use <code>class=&quot;switch&quot;</code> and <code>role=&quot;switch&quot;</code>.</li>
 <li><code>.range</code> skins the native range control (<code>appearance: none</code> track, thumb, and focus ring). Add <code>data-enhance=&quot;range&quot;</code> for the fill share, named <code>datalist</code> values, and output sync.</li>
-<li><code>.form-actions</code> carries a default top margin. Override it with <code>--form-actions-margin-block-start</code>, <code>--form-actions-align</code>, or <code>--form-actions-justify</code>. It is class-only and may live inside or outside <code>&lt;form&gt;</code>. See Detached Actions below.</li>
+<li><code>.form-actions</code> is the role of a <code>.cluster</code> row (<code>class=&quot;cluster form-actions&quot;</code>) and carries no outer margin: <code>.stack</code> on the form spaces it from the fields. It is class-only and may live inside or outside <code>&lt;form&gt;</code>. See Detached Actions below.</li>
 <li><code>.join</code> visually joins adjacent controls into a single unit. Use <code>.join-addon</code> for static prefix/suffix content. The container still carries <code>role=&quot;group&quot;</code> for accessibility.</li>
 </ul>
 <h2 id="optional-automatic-required-marks">Optional automatic required marks</h2>

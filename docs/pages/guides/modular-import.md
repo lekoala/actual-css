@@ -98,6 +98,9 @@ cells, so they read as a list:
 - **Utilities** — `actual-css/css/utilities`
   base and extra utilities
 
+`.form-actions` composes with `.cluster`: a build that takes forms without the
+layout family imports `actual-css/css/layout/cluster` before the forms.
+
 Individual modules can be imported through their domain path:
 
 ```css

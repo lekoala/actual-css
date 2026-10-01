@@ -62,7 +62,7 @@ there is no init call. To opt in forms you cannot mark up, call
 `actual-css/js/enhance`.
 
 ```html demo
-<form class="needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
+<form class="stack needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
   <div class="stack">
     <label class="field">
       <span class="field-label">Password</span>
@@ -81,7 +81,7 @@ there is no init call. To opt in forms you cannot mark up, call
     </label>
   </div>
 
-  <div class="form-actions">
+  <div class="cluster form-actions">
     <button class="btn primary" type="submit">Submit</button>
     <button class="btn neutral outline" type="reset">Reset</button>
   </div>
@@ -139,7 +139,7 @@ The status bar (`actual-css/js/status`) auto-wires to that event: import it and 
         Switch this on to submit.
       </span>
     </div>
-    <div class="form-actions">
+    <div class="cluster form-actions">
       <button class="btn primary" type="submit">Submit</button>
       <button class="btn neutral outline" type="reset">Reset</button>
     </div>
@@ -197,7 +197,7 @@ Add your own with `FormValidator.registerRule(name, (value, el, ...opts) => bool
     <span class="field-error" id="attachment-error">Choose a .pdf or .csv file.</span>
   </label>
 
-  <div class="form-actions">
+  <div class="cluster form-actions">
     <button class="btn primary" type="submit">Submit</button>
     <button class="btn neutral outline" type="reset">Reset</button>
   </div>
@@ -246,7 +246,7 @@ The `date` rule pairs naturally with `data-mask` — the mask structures input, 
     </span>
   </label>
 
-  <div class="form-actions">
+  <div class="cluster form-actions">
     <button class="btn primary" type="submit">Submit</button>
     <button class="btn neutral outline" type="reset">Reset</button>
   </div>
