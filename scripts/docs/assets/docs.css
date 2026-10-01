@@ -110,6 +110,10 @@
   margin-block-end: var(--space-30);
 }
 
+.docs-drawer-theme {
+  margin-block-end: var(--space-30);
+}
+
 /* --- Content --- */
 
 /* The article is a .stack; its own rhythm goes on `gap`, never on --gap.
@@ -489,13 +493,19 @@
   }
 }
 
-@media (max-width: 40rem) {
-  .docs-header-inner > .cluster {
-    inline-size: 100%;
+/* The header keeps the theme select while the single-row layout has room for
+   it: brand 104 + select 128 + Search 131 + Menu 67 + three --gap = 466px.
+   Below 33rem the single row can no longer guarantee that (a scrollbar can
+   subtract another 15px), so the select moves to the drawer and the shortcut
+   hint goes with it, leaving brand + Search + Menu at 267px — one row down to
+   320px. */
+@media (max-width: 33rem) {
+  .docs-header-inner .docs-theme-field {
+    display: none;
   }
 
-  .docs-menu-toggle {
-    margin-inline-start: auto;
+  .docs-header-inner [data-docs-search] .key {
+    display: none;
   }
 }
 
