@@ -82,6 +82,7 @@
         "overview",
         "controls",
         "combobox",
+        "date-picker",
         "rich-text",
         "labels",
         "floating-field",

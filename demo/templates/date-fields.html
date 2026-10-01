@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Date fields - Actual CSS</title>
+  <meta name="description" content="A native date input, a masked text field and @lekoala/date-picker side by side, the external picker themed entirely with Actual CSS tokens.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.3.0/dist/date-picker.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <!-- defer: the element reads its <input> on connect, so it must be defined
+       after parsing — a head-time definition upgrades it before its child. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.3.0/dist/date-picker.min.js"></script>
+  <style>
+    .page {
+      --center-size: 60rem;
+      padding-block: var(--space-50) var(--space-60);
+    }
+
+    .page-cards {
+      gap: var(--space-50);
+    }
+
+    .page-note {
+      align-items: baseline;
+      gap: var(--space-20) var(--space-30);
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .page-note code {
+      color: var(--text);
+    }
+
+    /* ================================================================== */
+    /* THEME BRIDGE — the whole skin in one block                          */
+    /*                                                                     */
+    /* Actual CSS provides the visual language, the picker the behaviour.  */
+    /* No adapter, no JS integration: shared CSS contracts on the public   */
+    /* --dp-* tokens. The calendar popup is its own element, so the map    */
+    /* is declared on the element rather than inherited from a wrapper.    */
+    /* ================================================================== */
+    date-picker,
+    date-calendar {
+      --dp-bg: var(--surface-raised);
+      --dp-fg: var(--text);
+      --dp-muted: var(--text-muted);
+      --dp-border: var(--border);
+      --dp-hover: var(--surface-subtle);
+      --dp-accent: var(--primary);
+      --dp-accent-fg: var(--primary-fg);
+      --dp-radius: var(--radius);
+      /* Centers the trigger glyph on the select chevron axis: border +
+         control-pad-x from the edge, 1em wide. The button overlays the field's
+         border box, so the border is counted twice. */
+      --dp-picker-button-size: calc(var(--control-pad-x) * 2 + 1em + var(--border-width) * 2);
+    }
+
+    /* Focus: the picker paints its own --dp-accent halo, so the calendar's
+       controls are mapped back onto the core focus contract. */
+    .dp-calendar-header :where(button, select, input):focus-visible {
+      border-color: var(--dp-border);
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: calc(var(--focus-ring-width) * -1);
+      box-shadow: none;
+    }
+
+    .dp-picker-button:focus-visible,
+    .dp-day:focus-visible {
+      outline-color: var(--focus);
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center stack page">
+    <header class="cluster items-start">
+      <hgroup>
+        <p class="overline">Date input</p>
+        <h1>Date fields × Actual CSS</h1>
+        <p class="muted">
+          Three ways to collect a date: the native picker, a <code>data-mask</code>
+          text field, and <code>@lekoala/date-picker</code> loaded from CDN and
+          themed with Actual CSS tokens. Switch themes and watch the external picker
+          follow.
+        </p>
+      </hgroup>
+
+      <div class="cluster" style="gap: var(--space-20);">
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+        <a class="btn neutral outline sm" href="https://github.com/lekoala/date-picker" target="_blank" rel="noopener">
+          date-picker docs
+        </a>
+      </div>
+    </header>
+
+    <div class="stack page-cards">
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>Native — the baseline</h2>
+            <p class="muted">
+              <code>&lt;input type="date"&gt;</code> gives a real calendar with no
+              JavaScript. The submitted value is always an ISO <code>yyyy-mm-dd</code>
+              string, whatever format the platform displays, and the platform owns the
+              picker.
+            </p>
+          </hgroup>
+        </header>
+        <label class="field">
+          <span class="field-label">Start date</span>
+          <input class="input" type="date" name="native-date" value="2026-09-25">
+        </label>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>Masked text — a fixed wire format</h2>
+            <p class="muted">
+              <code>data-mask</code> structures a plain text field to a fixed shape and
+              the <code>date</code> validation rule rejects impossible values. Use it
+              when the submitted format must be explicit text rather than a platform
+              date control.
+            </p>
+          </hgroup>
+        </header>
+        <form class="stack needs-validation" data-enhance="validation" novalidate>
+          <label class="field">
+            <span class="field-label">Date (ISO)</span>
+            <input class="input" name="masked-date"
+                   data-mask="9999-99-99"
+                   data-validation-rules="date"
+                   inputmode="numeric"
+                   autocomplete="off"
+                   placeholder="yyyy-mm-dd"
+                   aria-describedby="masked-date-help masked-date-error"
+                   required />
+            <span class="field-help" id="masked-date-help">yyyy-mm-dd format.</span>
+            <span class="field-error" id="masked-date-error">Enter a valid date.</span>
+          </label>
+          <div class="form-actions">
+            <button class="btn primary" type="submit">Submit</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>External picker — a widget on Actual tokens</h2>
+            <p class="muted">
+              <code>@lekoala/date-picker</code> adds a calendar popup over a plain
+              Actual <code>.input</code>. The skin is a <code>--dp-*</code> token map
+              plus a focus mapping onto the core outline, so themes and light/dark
+              mode apply for free; the widget keeps its own behaviour.
+            </p>
+          </hgroup>
+        </header>
+        <div class="field">
+          <label class="field-label" for="picker-date">Booking date</label>
+          <date-picker value="2026-09-25" open-on-focus="false">
+            <input class="input" id="picker-date" name="picker-date">
+          </date-picker>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <h2>Which one?</h2>
+        </header>
+        <ul>
+          <li>A plain date the platform can collect: native <code>&lt;input type="date"&gt;</code>.</li>
+          <li>A fixed text format that must survive as typed text: <code>data-mask</code> plus the <code>date</code> rule.</li>
+          <li>A calendar, range, or constraint the native control cannot express: an external picker on the token bridge.</li>
+        </ul>
+      </section>
+    </div>
+
+    <footer class="cluster justify-content-space-between page-note">
+      <span>
+        Loaded from jsDelivr, pinned: <code>@lekoala/date-picker@0.3.0/dist/date-picker.css</code> and
+        <code>@lekoala/date-picker@0.3.0/dist/date-picker.min.js</code>.
+      </span>
+      <span>The picker wraps a native <code>&lt;input&gt;</code> — the input owns the form value.</span>
+    </footer>
+  </main>
+
+  <script src="../../dist/actual.full.js"></script>
+</body>
+
+</html>
