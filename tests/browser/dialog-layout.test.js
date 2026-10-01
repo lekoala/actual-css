@@ -74,16 +74,51 @@ it("a .bleed footer forms an edge band that a justify utility splits", async () 
   );
 });
 
-it("a wrapper header reserves close room only when the dialog has a corner close", async () => {
+/* The reserve is the unconditional baseline (a browser without :has() keeps
+ * it); :has() only reclaims it. Every corner position in close.css must keep
+ * it, or a title runs under the close. */
+const RESERVE_CASES = {
+  modal: { kept: ["direct", "form", "header"], none: "none", bleed: "bleed" },
+  drawer: {
+    kept: ["direct", "header", "header-form", "form-header"],
+    none: "none",
+    bleed: "bleed",
+  },
+};
+
+it("a header reserves close room for every corner position and reclaims it without one", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
-      const pad = await view.evaluate(
-        'getComputedStyle(document.querySelector("#no-close header")).paddingInlineEnd',
-      );
-      expect(pad).toBe("0px");
+      const pads = await view
+        .evaluate(`(() => {
+          const out = {};
+          for (const el of document.querySelectorAll('dialog[id^="reserve-"]')) {
+            const cs = getComputedStyle(el.querySelector("header"));
+            out[el.id] = { end: parseFloat(cs.paddingInlineEnd), start: parseFloat(cs.paddingInlineStart) };
+          }
+          return JSON.stringify(out);
+        })()`)
+        .then(JSON.parse);
+
+      for (const [kind, { kept, none, bleed }] of Object.entries(RESERVE_CASES)) {
+        const reserve = pads[`reserve-${kind}-${kept[0]}`].end;
+        expect(`${kind} reserve > 0: ${reserve > 0}`).toBe(`${kind} reserve > 0: true`);
+        for (const id of kept) {
+          expect(`${kind}-${id}: ${pads[`reserve-${kind}-${id}`].end}`).toBe(
+            `${kind}-${id}: ${reserve}`,
+          );
+        }
+        expect(`${kind}-${none}: ${pads[`reserve-${kind}-${none}`].end}`).toBe(
+          `${kind}-${none}: 0`,
+        );
+        // A band without a close keeps its own inset on both sides.
+        const band = pads[`reserve-${kind}-${bleed}`];
+        expect(`${kind}-bleed start > 0: ${band.start > 0}`).toBe(`${kind}-bleed start > 0: true`);
+        expect(`${kind}-bleed: ${band.end}`).toBe(`${kind}-bleed: ${band.start}`);
+      }
     },
-    { artifactName: "dialog-header-no-close" },
+    { artifactName: "dialog-close-reserve" },
   );
 });
 

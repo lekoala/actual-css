@@ -14,7 +14,7 @@
 - `.cluster` removes the native list chrome (`margin`, `padding`, `list-style`) from a `ul`, `ol` or `menu` it is applied to; the element stays a list in the DOM.
 - The `dialog.modal` footer row has zero specificity, so `.justify-content-*` and `.background-*` utilities apply to it.
 - A heading that is the first child beside a leading `.dialog-icon` in a `.media` row centers on the icon anywhere, not only in a dialog.
-- A wrapper `<header>` reserves room for the corner `.close` only when the dialog has one.
+- A `dialog.modal` or `.drawer` header gives back its corner-close room when the dialog contains no `.close`; without `:has()` the room stays.
 
 ### Fixed
 
