@@ -361,12 +361,12 @@ Actual's navbar is intentionally a simpler navigation pattern.
 Keep the desktop navigation as a navbar and compose the mobile experience from a
 drawer or flyout rather than looking for a `.navbar-expand-lg` equivalent:
 
-* desktop → `.navbar` with `.navbar-nav`;
+* desktop → `.navbar` with a `.cluster` link list;
 * mobile → `.drawer` with `.nav-list`;
 * trigger → a `command="show-modal"` / `commandfor` button.
 
 The [Navbar component page](../components/navbar.md) shows this composition
-as *the Actual way*: a horizontal `.navbar-nav` on the desktop bar and a vertical
+as *the Actual way*: a horizontal `.cluster` on the desktop bar and a vertical
 `.nav-list` inside the mobile drawer, opened with the native dialog command
 pattern. There is no collapse/toggler state to keep in sync.
 
