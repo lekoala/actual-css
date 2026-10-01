@@ -19,11 +19,9 @@
       align-items: flex-start;
     }
 
+    /* A .stack: a flex column's cross axis has no min-content floor, so a
+       <pre>'s unbreakable line scrolls inside its card. */
     .page-grid {
-      display: grid;
-      /* Same reason as the code cards elsewhere: an auto track inherits its
-         items' min-content, and a <pre> brings an unbreakable line. */
-      grid-template-columns: minmax(0, 1fr);
       gap: var(--space-40);
     }
 
@@ -82,7 +80,7 @@
       </div>
     </header>
 
-    <div class="page-grid">
+    <div class="stack page-grid">
       <section class="card stack">
         <header>
           <h2 style="margin: 0;">The enhancement is yours</h2>
@@ -142,7 +140,7 @@ registerEnhancement("select-intent", (select) => {
       </section>
     </div>
 
-    <div class="intent-selects page-grid">
+    <div class="stack intent-selects page-grid">
       <section class="card stack">
         <header>
           <h2 style="margin: 0;">Semantics on the option</h2>
@@ -251,7 +249,7 @@ registerEnhancement("select-intent", (select) => {
       </section>
     </div>
 
-    <div class="page-grid">
+    <div class="stack page-grid">
       <section class="card stack">
         <header>
           <h2 style="margin: 0;">Opt-in only</h2>

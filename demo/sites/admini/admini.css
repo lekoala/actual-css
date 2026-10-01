@@ -150,7 +150,6 @@
 
 /* Denser variant of .overline for a tight sidebar: no letter tracking. */
 .admini-section-title {
-  margin: 0;
   color: var(--text-subtle);
   font-weight: var(--font-weight-semibold);
   letter-spacing: 0;
@@ -219,9 +218,8 @@
   line-height: 1;
 }
 
+/* The card footer slot already lays out the row; only the rhythm is local. */
 .admini-stat-meta {
-  display: flex;
-  align-items: center;
   gap: var(--space-20);
   color: var(--text-muted);
   font-size: var(--font-size-sm);
@@ -237,15 +235,10 @@
   --gap: var(--space-30);
 }
 
-/* The feed text is one tight unit (title over description); the default
-   paragraph margins would stack on top of the media/stack gaps. */
+/* The feed text is one tight unit (title over description): a .stack set
+   tighter than the media gap. */
 .admini-feed-item > div {
-  display: grid;
   gap: var(--space-10);
-}
-
-.admini-feed-item p {
-  margin: 0;
 }
 
 .admini-feed-item + .admini-feed-item {
@@ -288,14 +281,11 @@
   border-style: dashed;
 }
 
-/* Pushes to the card bottom so action rows align across the grid even when
-   text blocks wrap to different heights. */
+/* The card footer slot lays out the row and pins it to the card bottom, so
+   action rows align across the grid; the actions sit on the card's axis. */
 .admini-user-card-actions {
-  display: flex;
-  align-items: center;
   justify-content: center;
   gap: var(--space-20);
-  margin-block-start: auto;
 }
 
 /* --------------------------------------------------------- table columns */
@@ -409,9 +399,6 @@
 }
 
 .admini-auth-form {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: var(--space-60) var(--space-40);
 }
 
@@ -437,7 +424,6 @@
 }
 
 .admini-error-code {
-  margin: 0;
   color: var(--intent, var(--primary));
   font-size: clamp(4rem, 12vw, 7rem);
   font-weight: var(--font-weight-bold);
@@ -455,15 +441,12 @@
 }
 
 .admini-kanban-column h2 {
-  margin: 0;
   font-size: var(--font-size-md);
 }
 
+/* A .stack column of fixed width in the scrolling board. */
 .admini-kanban-column {
-  display: flex;
   flex: 0 0 auto;
-  flex-direction: column;
-  gap: var(--space-30);
   inline-size: 19rem;
   max-block-size: calc(var(--viewport-block) - 14rem);
 }
@@ -474,9 +457,8 @@
   border-radius: var(--radius-lg);
 }
 
+/* A .stack drop zone, set tighter than the column rhythm. */
 .admini-kanban-list {
-  display: flex;
-  flex-direction: column;
   gap: var(--space-20);
   min-block-size: 3rem;
   overflow-y: auto;
@@ -495,14 +477,8 @@
   text-align: center;
 }
 
-.admini-kanban-card p {
-  margin: 0;
-}
-
+/* The card footer slot lays out the meta row; only the rhythm is local. */
 .admini-kanban-card-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   gap: var(--space-20);
 }
 
@@ -592,18 +568,13 @@
 }
 
 .admini-chat-thread-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-30);
   padding: var(--space-30) var(--space-40);
   border-block-end: var(--border-width) solid var(--border);
 }
 
+/* A .stack of messages that absorbs the thread height and scrolls. */
 .admini-chat-messages {
-  display: flex;
   flex: 1 1 auto;
-  flex-direction: column;
-  gap: var(--space-30);
   overflow-y: auto;
   padding: var(--space-40);
 }

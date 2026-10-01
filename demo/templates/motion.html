@@ -15,23 +15,17 @@
       padding-block: var(--space-60);
     }
 
-    .motion-intro,
-    .motion-section {
+    .motion-intro {
       display: grid;
       gap: var(--space-30);
-    }
-
-    .motion-intro {
       padding-block-end: var(--space-40);
     }
 
+    /* Sections are .stack (or .card): the primitive owns the column and the
+       child margin reset; only the band chrome is local. */
     .motion-section {
       padding-block: var(--space-50);
       border-block-start: var(--border-width) solid var(--border);
-    }
-
-    .motion-section > :is(h2, p) {
-      margin: 0;
     }
 
     .motion-section .recipe {
@@ -45,10 +39,6 @@
       padding: var(--space-40);
       border-radius: var(--radius);
       background: var(--surface-subtle);
-    }
-
-    .motion-controls {
-      flex-wrap: wrap;
     }
 
     /* What reset.css does under prefers-reduced-motion, applied on demand so

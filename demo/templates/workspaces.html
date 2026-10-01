@@ -23,12 +23,10 @@
       background: var(--surface);
     }
 
+    /* A full-height .stack; the foot's auto margin pins it to the bottom. */
     .ws-sidebar {
       position: sticky;
       inset-block-start: 0;
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-30);
       block-size: 100dvh;
       padding: var(--space-40) var(--space-30);
       border-inline-end: var(--border-width) solid var(--border);
@@ -114,12 +112,6 @@
       --list-item-pad-inline: var(--space-30);
     }
 
-    .ws-card p {
-      margin-block-end: 0;
-      color: var(--text-muted);
-      font-size: var(--font-size-sm);
-    }
-
     /* Narrow viewports stack instead of duplicating the nav into a drawer:
        one nav source, no second markup tree to keep in sync. */
     @media (max-width: 60rem) {
@@ -141,7 +133,7 @@
 
 <body>
   <div class="ws-shell">
-    <aside class="ws-sidebar" aria-label="Workspace navigation">
+    <aside class="stack ws-sidebar" aria-label="Workspace navigation">
       <a class="navbar-brand" href="#workspaces">
         <span class="avatar primary"><abbr>WS</abbr></span>
         <span>Workspaces</span>
