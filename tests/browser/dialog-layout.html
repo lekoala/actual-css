@@ -40,5 +40,123 @@
 
     <div class="stack"><p>Body.</p></div>
   </dialog>
+
+  <!-- The icon-size hook is shared geometry: set on the media row or the dialog
+       so the title that centers on the circle inherits the same value. -->
+  <dialog class="modal dialog-confirmation" id="icon-hook-media" open>
+    <form method="dialog">
+      <div class="media" style="--dialog-icon-size: 5rem">
+        <span class="dialog-icon danger soft" aria-hidden="true">!</span>
+
+        <header>
+          <h3>Hook on the row</h3>
+          <p class="muted">The title centers on the icon.</p>
+        </header>
+      </div>
+
+      <footer>
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn danger" value="go">Go</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="modal dialog-confirmation" id="icon-hook-dialog" open style="--dialog-icon-size: 5rem">
+    <form method="dialog">
+      <div class="media">
+        <span class="dialog-icon danger soft" aria-hidden="true">!</span>
+
+        <header>
+          <h3>Hook on the dialog</h3>
+          <p class="muted">The title centers on the icon.</p>
+        </header>
+      </div>
+
+      <footer>
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn danger" value="go">Go</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- External header: the chrome sits outside the scroll wrapper, so the
+       wrapper holds only content + footer. -->
+  <dialog class="modal scrollable" id="external-scrollable" aria-label="External header scrollable">
+    <header>
+      <h2>External header</h2>
+    </header>
+
+    <div class="stack">
+      <div class="stack" id="external-scroll-body">
+        <div style="block-size: 2000px; flex: none">Long body</div>
+      </div>
+
+      <footer>
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn primary" id="external-action" value="ok">Confirm</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- Region combinations for the flex scroll wrapper. Each body child is tall
+       enough to overflow its share whatever the viewport. -->
+  <dialog class="modal scrollable" id="scroll-both" aria-label="Wrapper header and footer">
+    <div class="stack">
+      <header><h2>Header</h2></header>
+      <div class="stack" id="scroll-both-body">
+        <div style="block-size: 2000px; flex: none">Body</div>
+      </div>
+      <footer>
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn primary" id="scroll-both-action" value="ok">Confirm</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <dialog class="modal scrollable" id="scroll-header" aria-label="Header only">
+    <div class="stack">
+      <header><h2>Header</h2></header>
+      <div class="stack" id="scroll-header-body">
+        <div style="block-size: 2000px; flex: none">Body</div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="modal scrollable" id="scroll-footer" aria-label="Footer only">
+    <div class="stack">
+      <div class="stack" id="scroll-footer-body">
+        <div style="block-size: 2000px; flex: none">Body</div>
+      </div>
+      <footer>
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn primary" id="scroll-footer-action" value="ok">Confirm</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <dialog class="modal scrollable" id="scroll-body" aria-label="Body only">
+    <div class="stack">
+      <div class="stack" id="scroll-body-body">
+        <div style="block-size: 2000px; flex: none">Body</div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Two bare content regions: with flex each is its own scrollport. -->
+  <dialog class="modal scrollable" id="scroll-multi" aria-label="Multiple body regions">
+    <div class="stack">
+      <header><h2>Header</h2></header>
+      <div class="stack" id="scroll-multi-a">
+        <div style="block-size: 2000px; flex: none">Region A</div>
+      </div>
+      <div class="stack" id="scroll-multi-b">
+        <div style="block-size: 2000px; flex: none">Region B</div>
+      </div>
+      <footer>
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn primary" id="scroll-multi-action" value="ok">Confirm</button>
+      </footer>
+    </div>
+  </dialog>
 </body>
 </html>

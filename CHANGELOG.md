@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- `dialog.modal.scrollable` lays the body wrapper out as a flex column: a structural header or footer keeps its size and every other region scrolls, so a modal with an external `dialog > header` no longer collapses its footer to zero.
+- `--dialog-icon-size` and `--dialog-icon-glyph-size` are read, not declared, on `.dialog-icon`, so an override on the icon's media row or the dialog moves the circle and the confirmation title together.
+- `prefers-reduced-motion` also resets `::backdrop`, so a modal or drawer scrim no longer fades when the user reduces motion.
+
 ## [0.11.1] - 2026-09-30
 
 ### Added

@@ -4908,6 +4908,24 @@ a.badge[aria-disabled="true"] {
   overscroll-behavior: contain;
 }
 
+/* The row template is positional, so it must match the wrapper's actual slots.
+   With an external header the wrapper holds only content + footer, and the base
+   auto / 1fr / auto template would put the footer in the flexible row and
+   collapse it to zero. Each slot combination is stated outright so the result
+   never depends on rule order. Without :has() these drop individually and the
+   base template remains. */
+:where(dialog).modal.scrollable > :is(form, .stack):not(:has(> header)):has(> footer) {
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+:where(dialog).modal.scrollable > :is(form, .stack):has(> header):not(:has(> footer)) {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+:where(dialog).modal.scrollable > :is(form, .stack):not(:has(> header)):not(:has(> footer)) {
+  grid-template-rows: minmax(0, 1fr);
+}
+
 /* Anatomy is bounded to the structural slots (direct children of the
    form/.stack body): a header or footer deeper in the content keeps its own
    rhythm and is not restyled as the modal's chrome. */
@@ -4990,14 +5008,17 @@ a.badge[aria-disabled="true"] {
   --ui-fg: initial;
 }
 
+/* The size hooks are read here, never declared: an author sets them on the
+   icon's media row (or the dialog) so both the circle and the title that
+   centers on it inherit one value. A local declaration on .dialog-icon would
+   shadow that value for the circle while the title kept the inherited one —
+   the two centers would drift. An override on the icon alone is deliberately
+   local and moves only the circle. */
 .dialog-icon {
-  --dialog-icon-size: 3rem;
-  --dialog-icon-glyph-size: 1.5rem;
-
   display: inline-grid;
   place-items: center;
-  inline-size: var(--dialog-icon-size);
-  block-size: var(--dialog-icon-size);
+  inline-size: var(--dialog-icon-size, 3rem);
+  block-size: var(--dialog-icon-size, 3rem);
   flex: none;
   border-radius: var(--radius-full);
   background: var(--ui-bg, var(--surface-subtle));
@@ -5007,9 +5028,9 @@ a.badge[aria-disabled="true"] {
 .dialog-icon > * {
   display: inline-grid;
   place-items: center;
-  inline-size: var(--dialog-icon-glyph-size);
-  block-size: var(--dialog-icon-glyph-size);
-  font-size: var(--dialog-icon-glyph-size);
+  inline-size: var(--dialog-icon-glyph-size, 1.5rem);
+  block-size: var(--dialog-icon-glyph-size, 1.5rem);
+  font-size: var(--dialog-icon-glyph-size, 1.5rem);
   line-height: 1;
 }
 

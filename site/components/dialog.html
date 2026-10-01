@@ -259,6 +259,22 @@ the close then sits over the fixed header and the scrollbar starts below it.</p>
 <p>Add <code>.bleed</code> to that header when it should form a full-width band. It reaches
 the dialog edges, keeps the modal's inner padding, and can take a surface token
 such as <code>background: var(--surface-subtle)</code>.</p>
+<h3 id="where-each-region-lives">Where each region lives</h3>
+<p>Two anatomies are legitimate. Pick one; each owns its scroll, footer, and close
+placement.</p>
+<p><strong>Wrapper header</strong> — a <code>&lt;header&gt;</code> inside the <code>form</code>/<code>.stack</code> body. The wrapper
+owns padding, rhythm, and overflow. With <code>.scrollable</code> the header and footer are
+fixed rows and the content between them scrolls. The <code>.close</code> stays a direct
+child of the dialog and the header reserves its inline room.</p>
+<p><strong>External header</strong> — a direct <code>dialog &gt; header</code>, before the body wrapper. The
+header is dialog chrome outside the scroll container, so it never scrolls. The
+footer stays inside the wrapper and is the trailing fixed row under
+<code>.scrollable</code>. Wrap the <code>.close</code> in the header's trailing <code>.cluster</code> to keep it
+in flow; a <code>.close</code> that is a direct child of the header is still the absolute
+corner overlay, and the header reserves its room.</p>
+<p>The <code>.scrollable</code> row template follows the regions the wrapper actually holds,
+so a modal without a header, without a footer, or with an external header all
+keep the footer reachable and the body scrollable.</p>
 <h2 id="usage">Usage</h2>
 <p>Modals use the platform-native <code>&lt;dialog class=&quot;modal&quot;&gt;</code> element with <code>commandfor</code> and <code>command</code> buttons.</p>
 <p>Use <code>command=&quot;show-modal&quot;</code> to open a modal dialog, or <code>command=&quot;--show&quot;</code> to open
@@ -788,6 +804,101 @@ nothing focusable precedes it. Mark the control you want focused <code>autofocus
   </div>
 </div>
 <div class="prose docs-prose">
+<p>An external header follows the same contract from the other side: the header is
+chrome outside the wrapper, the footer stays in the wrapper, and the content
+between them scrolls.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<button class="btn"
+        type="button"
+        commandfor="external-scroll-dialog"
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="external-scroll-dialog">
+  Open external-header modal
+</button>
+
+<dialog class="modal scrollable"
+        id="external-scroll-dialog"
+        closedby="any"
+        aria-labelledby="external-scroll-title">
+  <header>
+    <h3 id="external-scroll-title">Release notes</h3>
+
+    <div class="cluster">
+      <button class="close"
+              type="button"
+              commandfor="external-scroll-dialog"
+              command="request-close"
+              aria-controls="external-scroll-dialog"
+              aria-label="Close dialog"></button>
+    </div>
+  </header>
+
+  <form method="dialog" class="stack">
+    <div class="stack">
+      <p>Section 1. The service stores project settings, interface preferences, and theme choices.</p>
+      <p>Section 2. Administrators can invite users and review access periodically.</p>
+      <p>Section 3. Billing changes may affect future invoices.</p>
+      <p>Section 4. Export tools are provided for common formats.</p>
+      <p>Section 5. Support requests should include browser and account context.</p>
+      <p>Section 6. Continued use confirms acceptance of the current terms.</p>
+    </div>
+
+    <footer>
+      <button class="btn outline" value="cancel">Cancel</button>
+      <button class="btn primary" value="accept">Accept</button>
+    </footer>
+  </form>
+</dialog>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;button class=&quot;btn&quot;
+        type=&quot;button&quot;
+        commandfor=&quot;external-scroll-dialog&quot;
+        command=&quot;show-modal&quot;
+        aria-haspopup=&quot;dialog&quot;
+        aria-controls=&quot;external-scroll-dialog&quot;&gt;
+  Open external-header modal
+&lt;/button&gt;
+
+&lt;dialog class=&quot;modal scrollable&quot;
+        id=&quot;external-scroll-dialog&quot;
+        closedby=&quot;any&quot;
+        aria-labelledby=&quot;external-scroll-title&quot;&gt;
+  &lt;header&gt;
+    &lt;h3 id=&quot;external-scroll-title&quot;&gt;Release notes&lt;/h3&gt;
+
+    &lt;div class=&quot;cluster&quot;&gt;
+      &lt;button class=&quot;close&quot;
+              type=&quot;button&quot;
+              commandfor=&quot;external-scroll-dialog&quot;
+              command=&quot;request-close&quot;
+              aria-controls=&quot;external-scroll-dialog&quot;
+              aria-label=&quot;Close dialog&quot;&gt;&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+
+  &lt;form method=&quot;dialog&quot; class=&quot;stack&quot;&gt;
+    &lt;div class=&quot;stack&quot;&gt;
+      &lt;p&gt;Section 1. The service stores project settings, interface preferences, and theme choices.&lt;/p&gt;
+      &lt;p&gt;Section 2. Administrators can invite users and review access periodically.&lt;/p&gt;
+      &lt;p&gt;Section 3. Billing changes may affect future invoices.&lt;/p&gt;
+      &lt;p&gt;Section 4. Export tools are provided for common formats.&lt;/p&gt;
+      &lt;p&gt;Section 5. Support requests should include browser and account context.&lt;/p&gt;
+      &lt;p&gt;Section 6. Continued use confirms acceptance of the current terms.&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;footer&gt;
+      &lt;button class=&quot;btn outline&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
+      &lt;button class=&quot;btn primary&quot; value=&quot;accept&quot;&gt;Accept&lt;/button&gt;
+    &lt;/footer&gt;
+  &lt;/form&gt;
+&lt;/dialog&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="overlays-inside-modals">Overlays inside modals</h2>
 <p>Flyouts and tooltips opened from inside a modal dialog stay exactly where they
 are authored. The runtime promotes them to the top layer instead of moving
@@ -1019,8 +1130,12 @@ composition that must fill this width sets <code>inline-size</code> as well.</li
 <li><code>--modal-pad</code> — padding of the direct <code>&lt;form&gt;</code> or <code>.stack</code> content wrapper.</li>
 <li><code>--modal-header-bg</code> — background of a direct header band.</li>
 <li><code>--dialog-viewport-gap</code> — distance kept between the dialog and the viewport edges.</li>
-<li><code>--dialog-icon-size</code> — diameter of the <code>.dialog-icon</code> circle.</li>
-<li><code>--dialog-icon-glyph-size</code> — size of the glyph centered inside <code>.dialog-icon</code>.</li>
+<li><code>--dialog-icon-size</code> — diameter of the <code>.dialog-icon</code> circle. The confirmation
+title reads the same hook to center on the icon, so set it on the icon's
+media row (or the dialog) and both inherit one value. A value on the icon
+alone sizes only the circle.</li>
+<li><code>--dialog-icon-glyph-size</code> — size of the glyph centered inside <code>.dialog-icon</code>;
+same placement as <code>--dialog-icon-size</code>.</li>
 <li><code>--close-size</code> / <code>--close-icon-size</code> — size of the corner <code>.close</code> and of its
 X. The header reserves the close size, its edge inset, and a content gap so
 the title never runs under it.</li>
@@ -1046,6 +1161,7 @@ the title never runs under it.</li>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#anatomy" data-docs-toc-item data-level="2">Anatomy</a></li>
+        <li><a class="nav-link" href="#where-each-region-lives" data-docs-toc-item data-level="3">Where each region lives</a></li>
         <li><a class="nav-link" href="#usage" data-docs-toc-item data-level="2">Usage</a></li>
         <li><a class="nav-link" href="#alert-dialog" data-docs-toc-item data-level="2">Alert dialog</a></li>
         <li><a class="nav-link" href="#customize-dialog-title" data-docs-toc-item data-level="3">Make this workspace your own</a></li>
@@ -1053,6 +1169,7 @@ the title never runs under it.</li>
         <li><a class="nav-link" href="#action-modal" data-docs-toc-item data-level="2">Action modal</a></li>
         <li><a class="nav-link" href="#setup-dialog-title" data-docs-toc-item data-level="2">Finish workspace setup</a></li>
         <li><a class="nav-link" href="#scrollable-modal" data-docs-toc-item data-level="2">Scrollable modal</a></li>
+        <li><a class="nav-link" href="#external-scroll-title" data-docs-toc-item data-level="3">Release notes</a></li>
         <li><a class="nav-link" href="#overlays-inside-modals" data-docs-toc-item data-level="2">Overlays inside modals</a></li>
         <li><a class="nav-link" href="#javascript-options" data-docs-toc-item data-level="2">JavaScript options</a></li>
         <li><a class="nav-link" href="#browser-support" data-docs-toc-item data-level="2">Browser support</a></li>
