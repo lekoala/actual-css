@@ -484,8 +484,7 @@
       "nav-link",
       "nav-list",
       "navbar",
-      "navbar-brand",
-      "navbar-nav"
+      "navbar-brand"
     ],
     "internalHooks": [
       "--gap"

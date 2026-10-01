@@ -491,12 +491,12 @@ framework class.</p>
 <p>Keep the desktop navigation as a navbar and compose the mobile experience from a
 drawer or flyout rather than looking for a <code>.navbar-expand-lg</code> equivalent:</p>
 <ul>
-<li>desktop → <code>.navbar</code> with <code>.navbar-nav</code>;</li>
+<li>desktop → <code>.navbar</code> with a <code>.cluster</code> link list;</li>
 <li>mobile → <code>.drawer</code> with <code>.nav-list</code>;</li>
 <li>trigger → a <code>command=&quot;show-modal&quot;</code> / <code>commandfor</code> button.</li>
 </ul>
 <p>The <a href="../components/navbar.html">Navbar component page</a> shows this composition
-as <em>the Actual way</em>: a horizontal <code>.navbar-nav</code> on the desktop bar and a vertical
+as <em>the Actual way</em>: a horizontal <code>.cluster</code> on the desktop bar and a vertical
 <code>.nav-list</code> inside the mobile drawer, opened with the native dialog command
 pattern. There is no collapse/toggler state to keep in sync.</p>
 <p>This usually produces simpler behavior, but it is not a class-for-class migration.</p>
