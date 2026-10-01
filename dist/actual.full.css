@@ -4753,8 +4753,8 @@ a.badge[aria-disabled="true"] {
   );
 
   /* The panel is borderless, so its inner and outer radius are the same. Kept
-     as one name for the padded wrapper and any edge band (header,
-     confirmation footer) so none of them drifts from the corner. */
+     as one name for the padded wrapper and the header band; a .bleed band
+     inherits it from the wrapper, so none of them drifts from the corner. */
   --dialog-inner-radius: var(--radius-lg);
 
   /* Keep the surface anchored to the viewport in the top layer. This also
@@ -4928,9 +4928,10 @@ a.badge[aria-disabled="true"] {
 
 /* The close button is anchored to the dialog at top inline-end, out of the
    content flow; headers reserve inline room so titles never run under it.
-   The form/.stack anatomy is structural, so it stays in :where() and never
-   lends .stack's specificity to a bare <form>. */
-:where(dialog).modal > :where(form, .stack) > header {
+   Only a dialog that has one reserves it: a header without a corner close
+   keeps its full width. The form/.stack anatomy is structural, so it stays in
+   :where() and never lends .stack's specificity to a bare <form>. */
+:where(dialog).modal:where(:has(> .close)) > :where(form, .stack) > header {
   padding-inline-end: calc(
     var(--close-size, var(--control-size)) +
     var(--space-20) +
@@ -4948,36 +4949,14 @@ a.badge[aria-disabled="true"] {
   );
 }
 
-:where(dialog).modal > :where(form, .stack) > footer {
+/* Zero specificity: the footer is a default action row that authors compose
+   (.bleed band, a .background-* surface, a .justify-content-* split). At
+   0-1-1 it outranked every one-class utility and forced a variant per shape. */
+:where(dialog.modal > :is(form, .stack) > footer) {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--gap);
-}
-
-/* Confirmation layout: the media primitive owns icon/content alignment; the
-   variant only removes the form inset so both regions own their padding. */
-:where(dialog).modal.dialog-confirmation > form {
-  --surface-pad: 0px;
-
-  gap: 0;
-  padding: 0;
-}
-
-:where(dialog).modal.dialog-confirmation > form > :is(.media, header) {
-  gap: var(--space-40);
-  padding: var(--space-50);
-}
-
-/* The action band splits a decision pair: the cancel-style action holds the
-   leading edge and the committing action the trailing one, so the destructive
-   choice is never adjacent to the dismiss. */
-:where(dialog).modal.dialog-confirmation > form > footer {
-  justify-content: space-between;
-  padding: var(--space-40) var(--space-50);
-  border-end-start-radius: var(--dialog-inner-radius);
-  border-end-end-radius: var(--dialog-inner-radius);
-  background: var(--surface-subtle);
 }
 
 /* Intent boundary — inherited intents do not tint the icon well. A local
@@ -5016,32 +4995,15 @@ a.badge[aria-disabled="true"] {
   line-height: 1;
 }
 
-:where(dialog).modal.dialog-confirmation > form > .media > header {
-  display: grid;
-  gap: var(--space-20);
-}
-
-:where(dialog).modal.dialog-confirmation > form > .media > header > * {
-  margin-block: 0;
-}
-
-/* The first heading occupies the icon row, so its text centers on the icon
-   without a font-relative nudge. Following copy stays in the same column. */
-:where(dialog).modal.dialog-confirmation
-  > form
-  > .media
-  > header
-  > :is(h1, h2, h3, h4, h5, h6):first-child {
+/* A leading icon well centers the first heading of the text column beside it:
+   the heading occupies the icon row, so its text centers without a
+   font-relative nudge, and following copy stays in the same column. Keyed on
+   the media anatomy, not on the dialog, so a card or page row composes it too. */
+.media > .dialog-icon + * > :is(h1, h2, h3, h4, h5, h6):first-child {
   display: flex;
   align-items: center;
   min-block-size: var(--dialog-icon-size, 3rem);
-}
-
-@media (max-width: 30rem) {
-  :where(dialog).modal.dialog-confirmation > form > :is(.media, header),
-  :where(dialog).modal.dialog-confirmation > form > footer {
-    padding: var(--space-40);
-  }
+  margin-block: 0;
 }
 
 :where(dialog).modal[open] {
