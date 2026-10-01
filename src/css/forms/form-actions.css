@@ -1,30 +1,35 @@
 /*
- * Form actions — bottom form bar with sticky variant.
+ * Form actions — the role of a .cluster action row that closes a form.
  *
  * Docs: docs/pages/forms/form-actions.md
  *
- * A flex cluster of buttons/actions that closes a form. The sticky variant
- * docks to the viewport bottom with a translucent blur where supported; at
- * rest it stays visually neutral so it does not double as a separator.
+ * Markup: `<div class="cluster form-actions">`. The cluster owns the row
+ * (flex, wrap, gap); this role owns the form-specific alignment policy and the
+ * opt-in sticky variant. The distance to the fields above belongs to the
+ * parent layout (.stack on the form), never to a margin here: a margin would
+ * add to a stack's gap. The sticky variant docks to the viewport bottom with a
+ * translucent blur where supported; at rest it stays visually neutral so it
+ * does not double as a separator.
  *
  * Public hooks:
  * --form-actions-align
  * --form-actions-justify
- * --form-actions-margin-block-start
  *
  * Internal:
  * --form-actions-sticky-block-offset (owned by .form-actions.sticky)
  * --form-actions-sticky-inline-offset (owned by .form-actions.sticky)
  * --form-actions-sticky-padding (owned by .form-actions.sticky)
  */
+
+/* The policy hooks write the properties themselves rather than relaying
+   --cluster-*: a relay would inherit into any .cluster nested in the row.
+   These are equal-specificity overrides of .cluster, so they win only because
+   forms load after layout in the official bundle (tests/css-audit.test.js
+   guards the order); utilities load later and keep the author's last word. On
+   this row --cluster-justify/--cluster-align have no effect. */
 .form-actions {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: var(--gap);
   align-items: var(--form-actions-align, center);
   justify-content: var(--form-actions-justify, flex-start);
-  margin-block-start: var(--form-actions-margin-block-start, var(--space-50));
 }
 
 /* Opt-in sticky variant. When the bar is not stuck (at rest) the translucent

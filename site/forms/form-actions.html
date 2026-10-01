@@ -6,8 +6,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Form Actions — Actual CSS</title>
-  <meta name="description" content=".form-actions is a class-only flex row that closes a form. It may live
-inside or outside the &lt;form&gt; (see Detached Actions) and has an opt-in
+  <meta name="description" content=".form-actions is the role of the .cluster row that closes a form. It may
+live inside or outside the &lt;form&gt; (see Detached Actions) and has an opt-in
 sticky variant (see Sticky Actions).">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
@@ -221,49 +221,139 @@ sticky variant (see Sticky Actions).">
           <div class="prose docs-prose">
 <h1 id="form-actions">Form Actions</h1>
 <blockquote>
-<p><code>.form-actions</code> is a class-only flex row that closes a form. It may live
-inside or outside the <code>&lt;form&gt;</code> (see Detached Actions) and has an opt-in
+<p><code>.form-actions</code> is the role of the <code>.cluster</code> row that closes a form. It may
+live inside or outside the <code>&lt;form&gt;</code> (see Detached Actions) and has an opt-in
 sticky variant (see Sticky Actions).</p>
 </blockquote>
-<p>The default layout is a wrapping flex row: items are centered on the cross
-axis and start-aligned on the main axis, with a default top margin that
-separates the actions from the fields above.</p>
-<pre><code class="language-html">&lt;form novalidate&gt;
-  &lt;div class=&quot;stack&quot;&gt;
-    &lt;!-- fields --&gt;
-  &lt;/div&gt;
+<p><code>.cluster</code> owns the row: flex, wrap and gap. <code>.form-actions</code> adds the alignment
+policy for form actions and the sticky behaviour. The space before the row
+belongs to the parent layout: put <code>.stack</code> on the form.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<form class="stack" novalidate>
+  <label class="field">
+    <span class="field-label">Project name</span>
+    <input class="input" type="text" value="Atlas" />
+  </label>
 
-  &lt;div class=&quot;form-actions&quot;&gt;
+  <div class="cluster form-actions">
+    <button type="button" class="btn outline">Cancel</button>
+    <button type="submit" class="btn primary">Save changes</button>
+  </div>
+</form>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;form class=&quot;stack&quot; novalidate&gt;
+  &lt;label class=&quot;field&quot;&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Project name&lt;/span&gt;
+    &lt;input class=&quot;input&quot; type=&quot;text&quot; value=&quot;Atlas&quot; /&gt;
+  &lt;/label&gt;
+
+  &lt;div class=&quot;cluster form-actions&quot;&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
     &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot;&gt;Save changes&lt;/button&gt;
   &lt;/div&gt;
-&lt;/form&gt;
-</code></pre>
+&lt;/form&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="css-hooks">CSS hooks</h2>
-<p>The three layout hooks are unset by default and fall back to the values below.</p>
 <ul>
-<li><code>--form-actions-align</code> — <code>center</code> — cross-axis alignment (<code>align-items</code>).</li>
-<li><code>--form-actions-justify</code> — <code>flex-start</code> — main-axis distribution (<code>justify-content</code>).</li>
-<li><code>--form-actions-margin-block-start</code> — <code>var(--space-50)</code> — top margin separating actions from the form.</li>
+<li><code>--form-actions-justify</code> — main-axis distribution (<code>justify-content</code>).</li>
+<li><code>--form-actions-align</code> — cross-axis alignment (<code>align-items</code>).</li>
 </ul>
-<h3 id="common-arrangements">Common arrangements</h3>
-<p>Right-align the submit on wide rows:</p>
-<pre><code class="language-css">.form-actions {
+<p>Both are inherited role hooks: set them on a page or container to align every
+form action row inside it, without touching other clusters. Below, the
+container right-aligns the form actions while the tag row, also a <code>.cluster</code>,
+keeps its start alignment.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<section class="stack" style="--form-actions-justify: flex-end">
+  <div class="cluster">
+    <span class="badge">Draft</span>
+    <span class="badge">Internal</span>
+  </div>
+
+  <form class="stack" novalidate>
+    <label class="field">
+      <span class="field-label">Release title</span>
+      <input class="input" type="text" value="Autumn update" />
+    </label>
+
+    <div class="cluster form-actions">
+      <button type="button" class="btn outline">Cancel</button>
+      <button type="submit" class="btn primary">Publish</button>
+    </div>
+  </form>
+</section>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;section class=&quot;stack&quot; style=&quot;--form-actions-justify: flex-end&quot;&gt;
+  &lt;div class=&quot;cluster&quot;&gt;
+    &lt;span class=&quot;badge&quot;&gt;Draft&lt;/span&gt;
+    &lt;span class=&quot;badge&quot;&gt;Internal&lt;/span&gt;
+  &lt;/div&gt;
+
+  &lt;form class=&quot;stack&quot; novalidate&gt;
+    &lt;label class=&quot;field&quot;&gt;
+      &lt;span class=&quot;field-label&quot;&gt;Release title&lt;/span&gt;
+      &lt;input class=&quot;input&quot; type=&quot;text&quot; value=&quot;Autumn update&quot; /&gt;
+    &lt;/label&gt;
+
+    &lt;div class=&quot;cluster form-actions&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
+      &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot;&gt;Publish&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
+&lt;/section&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>In application CSS, the same policy is one declaration on the region:</p>
+<pre><code class="language-css">.checkout {
   --form-actions-justify: flex-end;
 }
 </code></pre>
-<p>Stretch each action to fill the full row width:</p>
-<pre><code class="language-css">.form-actions {
-  --form-actions-align: stretch;
-}
-</code></pre>
-<p>Because the hooks are inherited custom properties, set them on a page or
-container to apply one arrangement to every <code>.form-actions</code> inside it.</p>
+<p>On a form action row, <code>--cluster-justify</code> and <code>--cluster-align</code> have no effect;
+use the hooks above, or a <code>.justify-content-*</code> / <code>.items-*</code> utility on one row.
+A split pair keeps the dismissive action at the leading edge and the committing
+one at the trailing edge:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<form class="stack" novalidate>
+  <label class="field">
+    <span class="field-label">Display name</span>
+    <input class="input" type="text" value="Jane Doe" />
+  </label>
+
+  <div class="cluster form-actions justify-content-space-between">
+    <button type="button" class="btn outline">Cancel</button>
+    <button type="submit" class="btn primary">Save</button>
+  </div>
+</form>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;form class=&quot;stack&quot; novalidate&gt;
+  &lt;label class=&quot;field&quot;&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Display name&lt;/span&gt;
+    &lt;input class=&quot;input&quot; type=&quot;text&quot; value=&quot;Jane Doe&quot; /&gt;
+  &lt;/label&gt;
+
+  &lt;div class=&quot;cluster form-actions justify-content-space-between&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
+    &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot;&gt;Save&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/form&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <blockquote>
 <p>The sticky variant adds <code>--form-actions-sticky-block-offset</code>,
 <code>--form-actions-sticky-padding</code>, and <code>--form-actions-sticky-inline-offset</code> —
-see Sticky Actions. <code>.form-actions</code> is class-only and works inside or
-outside the form — see Detached Actions.</p>
+see Sticky Actions.</p>
 </blockquote>
 
 </div>
@@ -285,7 +375,6 @@ outside the form — see Detached Actions.</p>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
-        <li><a class="nav-link" href="#common-arrangements" data-docs-toc-item data-level="3">Common arrangements</a></li>
           </ul>
         </nav>
       </aside>

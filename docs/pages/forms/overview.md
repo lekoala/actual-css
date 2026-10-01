@@ -34,7 +34,7 @@
 | `.field-error`  | Composition | Inline error message, shown while invalid.    |
 | `.field-group`  | Composition | `<fieldset>` with a tunable legend gutter.    |
 | `.choice`       | Composition | Choice-label layout around an inline control. |
-| `.form-actions` | Composition | Class-only flex row that closes a form.       |
+| `.form-actions` | Composition | Role of the `.cluster` row closing a form.    |
 
 `.input` shares the text-control recipe with `.textarea` and `.select`, and
 `.select` also has an opt-in enhanced picker. `.field-label` works on a
@@ -47,7 +47,7 @@
 A full form using the control classes, field wrappers, and form actions:
 
 ```html demo
-<form novalidate>
+<form class="stack" novalidate>
   <div class="stack">
 
     <label class="field">
@@ -162,7 +162,7 @@ A full form using the control classes, field wrappers, and form actions:
 
   </div>
 
-  <div class="form-actions">
+  <div class="cluster form-actions">
     <button type="button" class="btn outline">Cancel</button>
     <button type="submit" class="btn primary">Save changes</button>
   </div>
@@ -186,7 +186,7 @@ it a stronger fill.
 - `.choice` is the choice-label API. Use `.check` or `.radio` on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.
 - For a switch, use `class="switch"` and `role="switch"`.
 - `.range` skins the native range control (`appearance: none` track, thumb, and focus ring). Add `data-enhance="range"` for the fill share, named `datalist` values, and output sync.
-- `.form-actions` carries a default top margin. Override it with `--form-actions-margin-block-start`, `--form-actions-align`, or `--form-actions-justify`. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
+- `.form-actions` is the role of a `.cluster` row (`class="cluster form-actions"`) and carries no outer margin: `.stack` on the form spaces it from the fields. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
 - `.join` visually joins adjacent controls into a single unit. Use `.join-addon` for static prefix/suffix content. The container still carries `role="group"` for accessibility.
 
 ## Optional automatic required marks

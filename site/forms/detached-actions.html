@@ -222,12 +222,12 @@
 <p><code>.form-actions</code> is class-only. It may live inside or outside the <code>&lt;form&gt;</code>. Use the native <code>form</code> attribute to connect a detached submit button to its form.</p>
 </blockquote>
 <p>The simplest case stays inside the form.</p>
-<pre><code class="language-html">&lt;form novalidate&gt;
+<pre><code class="language-html">&lt;form class=&quot;stack&quot; novalidate&gt;
   &lt;div class=&quot;stack&quot;&gt;
     &lt;!-- fields --&gt;
   &lt;/div&gt;
 
-  &lt;div class=&quot;form-actions&quot;&gt;
+  &lt;div class=&quot;cluster form-actions&quot;&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
     &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot;&gt;Save changes&lt;/button&gt;
   &lt;/div&gt;
@@ -240,7 +240,7 @@
   &lt;/div&gt;
 &lt;/form&gt;
 
-&lt;footer class=&quot;form-actions&quot;&gt;
+&lt;footer class=&quot;cluster form-actions&quot;&gt;
   &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
   &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot; form=&quot;profile-form&quot;&gt;
     Save changes
@@ -254,7 +254,7 @@
   &lt;!-- fields --&gt;
 &lt;/form&gt;
 
-&lt;div class=&quot;form-actions&quot;&gt;
+&lt;div class=&quot;cluster form-actions&quot;&gt;
   &lt;button type=&quot;submit&quot;
           class=&quot;btn outline&quot;
           form=&quot;article-form&quot;

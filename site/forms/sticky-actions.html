@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sticky Actions — Actual CSS</title>
-  <meta name="description" content="Use .form-actions sticky when long forms need reachable submit actions while scrolling.">
+  <meta name="description" content="Use .cluster.form-actions.sticky when long forms need reachable submit actions while scrolling.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -219,7 +219,7 @@
           <div class="prose docs-prose">
 <h1 id="sticky-actions">Sticky Actions</h1>
 <blockquote>
-<p>Use <code>.form-actions sticky</code> when long forms need reachable submit actions while scrolling.</p>
+<p>Use <code>.cluster.form-actions.sticky</code> when long forms need reachable submit actions while scrolling.</p>
 </blockquote>
 <h2 id="inside-the-form">Inside the form</h2>
 <p>The <code>&lt;form&gt;</code> is the bounding parent. The sticky stays pinned to the viewport bottom while the form is taller than the viewport, then releases when the form's bottom edge reaches it.</p>
@@ -227,7 +227,7 @@
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<form novalidate>
+<form class="stack" novalidate>
   <div class="stack">
     <label class="field">
       <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
@@ -297,14 +297,14 @@
     </label>
   </div>
 
-  <div class="form-actions sticky">
+  <div class="cluster form-actions sticky">
     <button type="button" class="btn outline">Cancel</button>
     <button type="submit" class="btn primary">Save changes</button>
   </div>
 </form>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;form novalidate&gt;
+    <pre><code class="language-html">&lt;form class=&quot;stack&quot; novalidate&gt;
   &lt;div class=&quot;stack&quot;&gt;
     &lt;label class=&quot;field&quot;&gt;
       &lt;span class=&quot;field-label&quot;&gt;Full name &lt;span class=&quot;required-mark&quot; aria-hidden=&quot;true&quot;&gt;*&lt;/span&gt;&lt;/span&gt;
@@ -374,7 +374,7 @@
     &lt;/label&gt;
   &lt;/div&gt;
 
-  &lt;div class=&quot;form-actions sticky&quot;&gt;
+  &lt;div class=&quot;cluster form-actions sticky&quot;&gt;
     &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
     &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot;&gt;Save changes&lt;/button&gt;
   &lt;/div&gt;
@@ -459,7 +459,7 @@
   </div>
 </form>
 
-<footer class="form-actions sticky">
+<footer class="cluster form-actions sticky">
   <button type="button" class="btn outline">Cancel</button>
   <button type="submit" class="btn primary" form="account-form">
     Save changes
@@ -538,7 +538,7 @@
   &lt;/div&gt;
 &lt;/form&gt;
 
-&lt;footer class=&quot;form-actions sticky&quot;&gt;
+&lt;footer class=&quot;cluster form-actions sticky&quot;&gt;
   &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
   &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot; form=&quot;account-form&quot;&gt;
     Save changes

@@ -1,6 +1,6 @@
 # Sticky Actions
 
-> Use `.form-actions sticky` when long forms need reachable submit actions while scrolling.
+> Use `.cluster.form-actions.sticky` when long forms need reachable submit actions while scrolling.
 
 ## Inside the form
 
@@ -9,7 +9,7 @@ The `<form>` is the bounding parent. The sticky stays pinned to the viewport bot
 Scroll the page to see the actions stay reachable.
 
 ```html demo
-<form novalidate>
+<form class="stack" novalidate>
   <div class="stack">
     <label class="field">
       <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
@@ -79,7 +79,7 @@ Scroll the page to see the actions stay reachable.
     </label>
   </div>
 
-  <div class="form-actions sticky">
+  <div class="cluster form-actions sticky">
     <button type="button" class="btn outline">Cancel</button>
     <button type="submit" class="btn primary">Save changes</button>
   </div>
@@ -164,7 +164,7 @@ Scroll the page to see the detached footer stay reachable.
   </div>
 </form>
 
-<footer class="form-actions sticky">
+<footer class="cluster form-actions sticky">
   <button type="button" class="btn outline">Cancel</button>
   <button type="submit" class="btn primary" form="account-form">
     Save changes
