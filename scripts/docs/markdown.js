@@ -150,9 +150,13 @@ export function prepareMarkdown(markdown) {
 function renderDemoBlock(entry) {
   const language = escapeHtml(entry.language || "html");
   const source = escapeHtml(entry.content);
-  const previewClass = entry.flags.includes("resize")
-    ? "docs-preview docs-preview-resizable"
-    : "docs-preview";
+  const previewClass = [
+    "docs-preview",
+    entry.flags.includes("resize") && "docs-preview-resizable",
+    entry.flags.includes("sticky") && "docs-preview-sticky",
+  ]
+    .filter(Boolean)
+    .join(" ");
   return `${DOCS_PROSE_END}
 <div class="docs-example">
   <div class="${previewClass}">

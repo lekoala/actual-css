@@ -153,11 +153,13 @@
 
 /* --- Demo examples --- */
 
+/* clip, not hidden: it rounds the corners the same way without making the
+   example a scroll container, which would capture a sticky demo. */
 .docs-example {
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
   background: var(--surface-raised);
-  overflow: hidden;
+  overflow: clip;
 }
 
 .docs-preview {
@@ -180,6 +182,14 @@
   resize: horizontal;
   min-inline-size: 12rem;
   max-inline-size: 100%;
+}
+
+/* The opt-in `sticky` demo flag: the preview's overflow-x scrollport would
+   capture position: sticky (overflow-y computes to auto with it), so a sticky
+   demo would pin to the preview instead of the page. Such a demo gives up the
+   horizontal scroll. */
+.docs-preview-sticky {
+  overflow: visible;
 }
 
 
