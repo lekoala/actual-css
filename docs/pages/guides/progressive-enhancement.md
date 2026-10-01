@@ -760,12 +760,12 @@ field, and dispatches a bubbling `actual:invalid` event with
 `{ form, firstInvalid, message }`. Valid fields are not marked automatically.
 
 ```html demo
-<form class="needs-validation" data-enhance="validation"
+<form class="stack needs-validation" data-enhance="validation"
       data-validation-message="Please check the fields.">
   <input class="input" name="email" type="email" required
          aria-describedby="email-error" />
   <span class="field-error" id="email-error">Enter a valid email.</span>
-  <div class="form-actions">
+  <div class="cluster form-actions">
     <button class="btn primary" type="submit">Submit</button>
   </div>
 </form>

@@ -31,14 +31,14 @@ fails to submit shows its `data-validation-message` in the status bar with the
 stays optional.
 
 ```html demo
-<form class="needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
+<form class="stack needs-validation" data-enhance="validation" data-validation-message="Please check the highlighted fields.">
   <label class="field">
     <span class="field-label">Email</span>
     <input class="input" type="email" name="email" required
            aria-describedby="sb-email-error" />
     <span class="field-error" id="sb-email-error" role="alert">Enter a valid email.</span>
   </label>
-  <div class="form-actions">
+  <div class="cluster form-actions">
     <button class="btn primary" type="submit">Submit</button>
   </div>
 </form>
