@@ -12,6 +12,10 @@
 - `.form-actions` no longer lays out its row; write `class="cluster form-actions"` (`--form-actions-justify` and `--form-actions-align` still apply).
 - `.form-actions` drops its top margin and `--form-actions-margin-block-start`; space it from the fields with `.stack` on the form.
 
+### Added
+
+- `.items-baseline` aligns children on their first text baseline and sets `--items-align`, completing the `.items-*` series.
+
 ### Changed
 
 - An action row composed from `.cluster` inherits the framework `--gap` (0.75rem); the removed `.actions` set 0.5rem. Use `.compact` for the tighter rhythm.

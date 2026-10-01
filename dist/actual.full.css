@@ -8830,6 +8830,11 @@ a.list-item[aria-current]::before {
   align-items: end;
 }
 
+.items-baseline {
+  --items-align: baseline;
+  align-items: baseline;
+}
+
 .muted {
   color: var(--text-muted);
 }

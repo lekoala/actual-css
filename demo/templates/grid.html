@@ -60,10 +60,7 @@
     }
 
     .stage-meter {
-      display: flex;
-      flex-wrap: wrap;
       gap: var(--space-20);
-      align-items: baseline;
       margin-block: 0 var(--space-30);
       font-size: var(--font-size-sm);
       color: var(--text-muted);
@@ -167,7 +164,7 @@
           so nothing is wrong with a row of two under a row of four.
         </p>
         <div class="stage" data-stage>
-          <p class="stage-meter">
+          <p class="cluster items-baseline stage-meter">
             <span>container <b data-width>&mdash;</b></span>
             <span class="badge" data-count>&mdash;</span>
           </p>
@@ -213,7 +210,7 @@
         width — with no wrapper and nothing to configure.
       </p>
       <div class="stage" data-stage>
-        <p class="stage-meter">
+        <p class="cluster items-baseline stage-meter">
           <span>container <b data-width>&mdash;</b></span>
           <span class="badge" data-count>&mdash;</span>
         </p>
@@ -262,7 +259,7 @@
         <div class="compare-col">
           <h3>Bare — <code>.grid-6</code></h3>
           <div class="stage" data-stage>
-            <p class="stage-meter">
+            <p class="cluster items-baseline stage-meter">
               <span>container <b data-width>&mdash;</b></span>
               <span class="badge" data-count>&mdash;</span>
             </p>
@@ -279,7 +276,7 @@
         <div class="compare-col">
           <h3>Wrapped — <code>.container-query &gt; .grid-6</code></h3>
           <div class="stage container-query" data-stage>
-            <p class="stage-meter">
+            <p class="cluster items-baseline stage-meter">
               <span>container <b data-width>&mdash;</b></span>
               <span class="badge" data-count>&mdash;</span>
             </p>
@@ -341,7 +338,7 @@
         <div class="stack">
           <h3><code>.grid-2</code> — large cards</h3>
           <div class="stage container-query" data-stage>
-            <p class="stage-meter">
+            <p class="cluster items-baseline stage-meter">
               <span>container <b data-width>&mdash;</b></span>
               <span class="badge" data-count>&mdash;</span>
             </p>
@@ -371,7 +368,7 @@
         <div class="stack">
           <h3><code>.grid-3</code> — standard cards</h3>
           <div class="stage container-query" data-stage>
-            <p class="stage-meter">
+            <p class="cluster items-baseline stage-meter">
               <span>container <b data-width>&mdash;</b></span>
               <span class="badge" data-count>&mdash;</span>
             </p>
@@ -395,7 +392,7 @@
         <div class="stack">
           <h3><code>.grid-4</code> — compact cards and stats</h3>
           <div class="stage container-query" data-stage>
-            <p class="stage-meter">
+            <p class="cluster items-baseline stage-meter">
               <span>container <b data-width>&mdash;</b></span>
               <span class="badge" data-count>&mdash;</span>
             </p>
@@ -411,7 +408,7 @@
         <div class="stack">
           <h3><code>.grid-6</code> — compact tiles</h3>
           <div class="stage container-query" data-stage>
-            <p class="stage-meter">
+            <p class="cluster items-baseline stage-meter">
               <span>container <b data-width>&mdash;</b></span>
               <span class="badge" data-count>&mdash;</span>
             </p>
@@ -466,7 +463,7 @@
         makes a seamless mosaic possible at all.
       </p>
       <div class="stage container-query" data-stage>
-        <p class="stage-meter">
+        <p class="cluster items-baseline stage-meter">
           <span>container <b data-width>&mdash;</b></span>
           <span class="badge" data-count>&mdash;</span>
         </p>
@@ -505,7 +502,7 @@
         <div class="compare-col">
           <h3>Tight — <code>--gap: var(--space-10)</code></h3>
           <div class="stage container-query" data-stage>
-            <p class="stage-meter">
+            <p class="cluster items-baseline stage-meter">
               <span>container <b data-width>&mdash;</b></span>
               <span class="badge" data-count>&mdash;</span>
             </p>
@@ -524,7 +521,7 @@
         <div class="compare-col">
           <h3>Airy — <code>--gap: var(--space-50)</code></h3>
           <div class="stage container-query" data-stage>
-            <p class="stage-meter">
+            <p class="cluster items-baseline stage-meter">
               <span>container <b data-width>&mdash;</b></span>
               <span class="badge" data-count>&mdash;</span>
             </p>
@@ -593,7 +590,7 @@
         </li>
       </ul>
       <div class="stage" data-stage>
-        <p class="stage-meter">
+        <p class="cluster items-baseline stage-meter">
           <span>container <b data-width>&mdash;</b></span>
           <span>three peers &mdash; never two plus one</span>
         </p>

@@ -84,17 +84,6 @@
       border-color: var(--danger);
     }
 
-    .probe-head {
-      display: flex;
-      gap: var(--space-30);
-      align-items: baseline;
-      justify-content: space-between;
-    }
-
-    .probe-head h3 {
-      margin: 0;
-    }
-
     .probe-why {
       color: var(--text-muted);
     }
@@ -411,7 +400,7 @@
 
       <div class="probe-grid">
         <article class="probe-case" data-scenario="1">
-          <div class="probe-head">
+          <div class="cluster flex-nowrap items-baseline justify-content-space-between">
             <h3>1 · Manual mode round trip</h3>
             <span class="badge sm" data-badge>idle</span>
           </div>
@@ -431,7 +420,7 @@
         </article>
 
         <article class="probe-case" data-scenario="2">
-          <div class="probe-head">
+          <div class="cluster flex-nowrap items-baseline justify-content-space-between">
             <h3>2 · Closed means invisible</h3>
             <span class="badge sm" data-badge>idle</span>
           </div>
@@ -452,7 +441,7 @@
         </article>
 
         <article class="probe-case" data-scenario="3">
-          <div class="probe-head">
+          <div class="cluster flex-nowrap items-baseline justify-content-space-between">
             <h3>3 · The DOM parent never changes</h3>
             <span class="badge sm" data-badge>idle</span>
           </div>
@@ -474,7 +463,7 @@
         </article>
 
         <article class="probe-case" data-scenario="4">
-          <div class="probe-head">
+          <div class="cluster flex-nowrap items-baseline justify-content-space-between">
             <h3>4 · Inherited context survives opening</h3>
             <span class="badge sm" data-badge>idle</span>
           </div>
@@ -505,7 +494,7 @@
         </article>
 
         <article class="probe-case" data-scenario="5">
-          <div class="probe-head">
+          <div class="cluster flex-nowrap items-baseline justify-content-space-between">
             <h3>5 · Inside a dialog, modal included</h3>
             <span class="badge sm" data-badge>idle</span>
           </div>
@@ -537,7 +526,7 @@
         </article>
 
         <article class="probe-case" data-scenario="6">
-          <div class="probe-head">
+          <div class="cluster flex-nowrap items-baseline justify-content-space-between">
             <h3>6 · Reopening during the exit</h3>
             <span class="badge sm" data-badge>idle</span>
           </div>
@@ -557,7 +546,7 @@
         </article>
 
         <article class="probe-case" data-scenario="7">
-          <div class="probe-head">
+          <div class="cluster flex-nowrap items-baseline justify-content-space-between">
             <h3>7 · Placed at pointer coordinates</h3>
             <span class="badge sm" data-badge>idle</span>
           </div>
@@ -579,7 +568,7 @@
         </article>
 
         <article class="probe-case" data-scenario="8">
-          <div class="probe-head">
+          <div class="cluster flex-nowrap items-baseline justify-content-space-between">
             <h3>8 · The scrim absorbs the pointer</h3>
             <span class="badge sm" data-badge>idle</span>
           </div>

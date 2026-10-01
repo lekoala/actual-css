@@ -230,6 +230,7 @@
 <tr><td><code>.items-start</code></td><td>Aligns children to the block-start edge; sets <code>--items-align</code>.</td></tr>
 <tr><td><code>.items-center</code></td><td>Centers children on the cross axis; sets <code>--items-align</code>.</td></tr>
 <tr><td><code>.items-end</code></td><td>Aligns children to the block-end edge; sets <code>--items-align</code>.</td></tr>
+<tr><td><code>.items-baseline</code></td><td>Aligns children on their first text baseline; sets <code>--items-align</code>.</td></tr>
 <tr><td><code>.dot</code></td><td>Inline separator dot for metadata rows.</td></tr>
 </tbody>
 </table></div>
@@ -309,11 +310,28 @@
 </div>
 <div class="prose docs-prose">
 <p>Use <code>.items-center</code> when a flex or grid layout should center its children on the cross axis. Use <code>.items-end</code> when children should align to the block-end edge.</p>
+<p>Use <code>.items-baseline</code> when a row mixes text sizes — a price and its period, a name and a timestamp — so the words share one line instead of their boxes sharing a center.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<p class="cluster items-baseline">
+  <strong style="font-size: 2rem">$29</strong>
+  <span class="muted">/ month</span>
+</p>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;p class=&quot;cluster items-baseline&quot;&gt;
+  &lt;strong style=&quot;font-size: 2rem&quot;&gt;$29&lt;/strong&gt;
+  &lt;span class=&quot;muted&quot;&gt;/ month&lt;/span&gt;
+&lt;/p&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <p>These helpers work by setting a custom property that participating components read,
 so they also apply inside a component's own grid anatomy rather than only on plain
 flex containers:</p>
 <ul>
-<li><code>.items-start</code> / <code>.items-center</code> / <code>.items-end</code> set <code>--items-align</code>, read by <code>.alert</code> and <code>.card</code>.</li>
+<li><code>.items-start</code> / <code>.items-center</code> / <code>.items-end</code> / <code>.items-baseline</code> set <code>--items-align</code>, read by <code>.alert</code> and <code>.card</code>.</li>
 <li><code>.text-start</code> / <code>.text-center</code> / <code>.text-end</code> set <code>--text-align</code>, read by <code>.table</code> cells.</li>
 <li><code>.justify-content-*</code> (utilities/extra) set <code>--cluster-justify</code>, read by <code>.cluster</code>.</li>
 <li><code>.flex-wrap</code> / <code>.flex-nowrap</code> (utilities/extra) set <code>flex-wrap</code> directly on any flex container.</li>
@@ -357,7 +375,7 @@ flex containers:</p>
 <p>Always mark it <code>aria-hidden=&quot;true&quot;</code> — it is a visual separator, not content.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
-<li><code>--items-align</code> — cross-axis alignment, set by <code>.items-start</code> / <code>.items-center</code> / <code>.items-end</code>.</li>
+<li><code>--items-align</code> — cross-axis alignment, set by the <code>.items-*</code> helpers.</li>
 <li><code>--text-align</code> — text alignment, set by <code>.text-start</code> / <code>.text-center</code> / <code>.text-end</code>.</li>
 <li><code>--cluster-justify</code> — main-axis distribution, set by the optional <code>.justify-content-*</code> helpers and read by <code>.cluster</code>.</li>
 </ul>
