@@ -43,6 +43,23 @@
     applyTheme(current);
   }
 
+  /* --- Reveal active nav item --- */
+
+  /* The sidebar is its own scroll container, so a deep link loads with the
+     current page's link wherever it falls and the browser never brings it into
+     view. Move the container itself; scrollIntoView would also scroll the
+     document. Center only when the link is clipped, so short pages stay still.
+     A hidden sidebar has no height and is skipped. */
+  const sidebar = document.querySelector(".docs-sidebar");
+  const activeNavLink = sidebar?.querySelector('.nav-link[aria-current="page"]');
+  if (sidebar && activeNavLink && sidebar.clientHeight > 0) {
+    const box = sidebar.getBoundingClientRect();
+    const link = activeNavLink.getBoundingClientRect();
+    if (link.top < box.top || link.bottom > box.bottom) {
+      sidebar.scrollTop += link.top - box.top - (box.height - link.height) / 2;
+    }
+  }
+
   /* --- Copy code blocks --- */
 
   for (const codeBlock of document.querySelectorAll(".docs-code")) {

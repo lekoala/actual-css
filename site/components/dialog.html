@@ -242,8 +242,10 @@ body wrapper. Put a flexible <code>.media</code> title region first and a <code>
 controls second. The title has the close control's minimum height; its leading
 icon and every trailing control share the same center axis. A wrapped title
 simply makes the row taller.</p>
-<p>A direct <code>dialog &gt; header</code> is dialog chrome and forms a distinct header band.
-Put an ordinary content heading inside the padded <code>form</code> or <code>.stack</code> instead.</p>
+<p>A direct <code>dialog &gt; header</code> is dialog chrome and forms a distinct header band,
+painted <code>--surface-subtle</code>. Change the fill with a surface utility on the header
+(<code>&lt;header class=&quot;background-raised&quot;&gt;</code>). Put an ordinary content heading inside
+the padded <code>form</code> or <code>.stack</code> instead.</p>
 <p>Keep a corner <a href="close.html"><code>.close</code></a> as a direct child of the dialog and put the
 title in the wrapper's direct <code>&lt;header&gt;</code>. The button then stays outside the
 content flow while the header reserves enough inline space to keep its title
@@ -256,9 +258,11 @@ run its scrollbar under the button. Give such a dialog the <code>scrollable</cod
 the close then sits over the fixed header and the scrollbar starts below it.</p>
 <p>Add <code>.bleed</code> to that header, or to the wrapper's footer, when it should form a
 full-width band. It reaches the dialog edges and corners, keeps the modal's
-inner padding, and takes a surface utility such as <code>.background-subtle</code>. The
-footer's row layout has zero specificity, so a <code>.justify-content-*</code> utility
-moves its actions.</p>
+inner padding, and takes a surface utility such as <code>.background-subtle</code>.</p>
+<p>The wrapper's <code>&lt;footer&gt;</code> is a structural slot: it stays fixed under
+<code>.scrollable</code> but has no layout of its own. Compose the action row in markup —
+<code>&lt;footer class=&quot;cluster justify-content-end&quot;&gt;</code> for trailing actions,
+<code>.justify-content-space-between</code> for a split pair.</p>
 <h3 id="where-each-region-lives">Where each region lives</h3>
 <p>Two anatomies are legitimate. Pick one; each owns its scroll, footer, and close
 placement.</p>
@@ -320,7 +324,7 @@ runtime, backdrop clicks give a small static feedback instead of closing.</p>
       <p>The project, saved reports, and connected automations will be removed permanently.</p>
     </div>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn outline" value="cancel">Cancel</button>
 
       <button class="btn danger"
@@ -352,7 +356,7 @@ runtime, backdrop clicks give a small static feedback instead of closing.</p>
       &lt;p&gt;The project, saved reports, and connected automations will be removed permanently.&lt;/p&gt;
     &lt;/div&gt;
 
-    &lt;footer&gt;
+    &lt;footer class=&quot;cluster justify-content-end&quot;&gt;
       &lt;button class=&quot;btn outline&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
 
       &lt;button class=&quot;btn danger&quot;
@@ -373,7 +377,7 @@ shared intent and emphasis classes: <code>dialog-icon danger soft</code> is the 
 circle.</p>
 <p>The action band is the footer composed with existing primitives: <code>.bleed</code>
 reaches the panel edges and corners, <code>.background-subtle</code> paints it, and
-<code>.justify-content-space-between</code> splits the decision pair. Keep the
+<code>.cluster.justify-content-space-between</code> splits the decision pair. Keep the
 cancel-style action first, so it holds the leading edge and never sits next to
 the committing one.</p>
 </div>
@@ -404,7 +408,7 @@ the committing one.</p>
       </header>
     </div>
 
-    <footer class="bleed background-subtle justify-content-space-between">
+    <footer class="bleed background-subtle cluster justify-content-space-between">
       <button class="btn outline" value="cancel">Cancel</button>
       <button class="btn danger" value="deactivate">Deactivate</button>
     </footer>
@@ -437,7 +441,7 @@ the committing one.</p>
       &lt;/header&gt;
     &lt;/div&gt;
 
-    &lt;footer class=&quot;bleed background-subtle justify-content-space-between&quot;&gt;
+    &lt;footer class=&quot;bleed background-subtle cluster justify-content-space-between&quot;&gt;
       &lt;button class=&quot;btn outline&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
       &lt;button class=&quot;btn danger&quot; value=&quot;deactivate&quot;&gt;Deactivate&lt;/button&gt;
     &lt;/footer&gt;
@@ -480,7 +484,7 @@ content and does not need modal focus or a backdrop.</p>
       </span>
     </header>
 
-    <footer class="bleed background-subtle">
+    <footer class="bleed background-subtle cluster justify-content-end">
       <button class="btn ghost" value="later">Later</button>
       <button class="btn primary" value="customize">Customize</button>
     </footer>
@@ -514,7 +518,7 @@ content and does not need modal focus or a backdrop.</p>
       &lt;/span&gt;
     &lt;/header&gt;
 
-    &lt;footer class=&quot;bleed background-subtle&quot;&gt;
+    &lt;footer class=&quot;bleed background-subtle cluster justify-content-end&quot;&gt;
       &lt;button class=&quot;btn ghost&quot; value=&quot;later&quot;&gt;Later&lt;/button&gt;
       &lt;button class=&quot;btn primary&quot; value=&quot;customize&quot;&gt;Customize&lt;/button&gt;
     &lt;/footer&gt;
@@ -655,7 +659,7 @@ the dialog title itself is not an alert.</p>
 
     <p>Confirm these settings to finish setting up the workspace.</p>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn primary inline-size-full" value="continue">Continue</button>
     </footer>
   </form>
@@ -704,7 +708,7 @@ the dialog title itself is not an alert.</p>
 
     &lt;p&gt;Confirm these settings to finish setting up the workspace.&lt;/p&gt;
 
-    &lt;footer&gt;
+    &lt;footer class=&quot;cluster justify-content-end&quot;&gt;
       &lt;button class=&quot;btn primary inline-size-full&quot; value=&quot;continue&quot;&gt;Continue&lt;/button&gt;
     &lt;/footer&gt;
   &lt;/form&gt;
@@ -757,7 +761,7 @@ single element (<code>&lt;div class=&quot;stack&quot;&gt;</code>) when there sho
       <p>Section 7. Continued use confirms acceptance of the current terms.</p>
     </div>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn outline" value="cancel">Cancel</button>
 
       <button class="btn primary" value="accept">
@@ -798,7 +802,7 @@ single element (<code>&lt;div class=&quot;stack&quot;&gt;</code>) when there sho
       &lt;p&gt;Section 7. Continued use confirms acceptance of the current terms.&lt;/p&gt;
     &lt;/div&gt;
 
-    &lt;footer&gt;
+    &lt;footer class=&quot;cluster justify-content-end&quot;&gt;
       &lt;button class=&quot;btn outline&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
 
       &lt;button class=&quot;btn primary&quot; value=&quot;accept&quot;&gt;
@@ -852,7 +856,7 @@ between them scrolls.</p>
       <p>Section 6. Continued use confirms acceptance of the current terms.</p>
     </div>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn outline" value="cancel">Cancel</button>
       <button class="btn primary" value="accept">Accept</button>
     </footer>
@@ -896,7 +900,7 @@ between them scrolls.</p>
       &lt;p&gt;Section 6. Continued use confirms acceptance of the current terms.&lt;/p&gt;
     &lt;/div&gt;
 
-    &lt;footer&gt;
+    &lt;footer class=&quot;cluster justify-content-end&quot;&gt;
       &lt;button class=&quot;btn outline&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
       &lt;button class=&quot;btn primary&quot; value=&quot;accept&quot;&gt;Accept&lt;/button&gt;
     &lt;/footer&gt;
@@ -1088,7 +1092,7 @@ transition.</p>
       <p>This dialog morphs to and from the trigger button.</p>
     </header>
 
-    <footer>
+    <footer class="cluster justify-content-end">
       <button class="btn outline" value="cancel">Cancel</button>
       <button class="btn primary" value="confirm">Confirm</button>
     </footer>
@@ -1115,7 +1119,7 @@ transition.</p>
       &lt;p&gt;This dialog morphs to and from the trigger button.&lt;/p&gt;
     &lt;/header&gt;
 
-    &lt;footer&gt;
+    &lt;footer class=&quot;cluster justify-content-end&quot;&gt;
       &lt;button class=&quot;btn outline&quot; value=&quot;cancel&quot;&gt;Cancel&lt;/button&gt;
       &lt;button class=&quot;btn primary&quot; value=&quot;confirm&quot;&gt;Confirm&lt;/button&gt;
     &lt;/footer&gt;
@@ -1134,7 +1138,6 @@ animation-friendly, and consistent across supported browsers.</p>
 dialog or an inherited value both reach it. A dialog is shrink-to-fit: a
 composition that must fill this width sets <code>inline-size</code> as well.</li>
 <li><code>--modal-pad</code> — padding of the direct <code>&lt;form&gt;</code> or <code>.stack</code> content wrapper.</li>
-<li><code>--modal-header-bg</code> — background of a direct header band.</li>
 <li><code>--dialog-viewport-gap</code> — distance kept between the dialog and the viewport edges.</li>
 <li><code>--dialog-icon-size</code> — diameter of the <code>.dialog-icon</code> circle. The heading
 beside a leading icon reads the same hook to center on it, so set it on the
@@ -1171,12 +1174,9 @@ the title never runs under it.</li>
         <li><a class="nav-link" href="#usage" data-docs-toc-item data-level="2">Usage</a></li>
         <li><a class="nav-link" href="#alert-dialog" data-docs-toc-item data-level="2">Alert dialog</a></li>
         <li><a class="nav-link" href="#confirmation-with-an-icon-and-an-action-band" data-docs-toc-item data-level="3">Confirmation with an icon and an action band</a></li>
-        <li><a class="nav-link" href="#customize-dialog-title" data-docs-toc-item data-level="3">Make this workspace your own</a></li>
         <li><a class="nav-link" href="#information-modal" data-docs-toc-item data-level="2">Information modal</a></li>
         <li><a class="nav-link" href="#action-modal" data-docs-toc-item data-level="2">Action modal</a></li>
-        <li><a class="nav-link" href="#setup-dialog-title" data-docs-toc-item data-level="2">Finish workspace setup</a></li>
         <li><a class="nav-link" href="#scrollable-modal" data-docs-toc-item data-level="2">Scrollable modal</a></li>
-        <li><a class="nav-link" href="#external-scroll-title" data-docs-toc-item data-level="3">Release notes</a></li>
         <li><a class="nav-link" href="#overlays-inside-modals" data-docs-toc-item data-level="2">Overlays inside modals</a></li>
         <li><a class="nav-link" href="#javascript-options" data-docs-toc-item data-level="2">JavaScript options</a></li>
         <li><a class="nav-link" href="#browser-support" data-docs-toc-item data-level="2">Browser support</a></li>

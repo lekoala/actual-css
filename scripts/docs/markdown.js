@@ -221,6 +221,12 @@ export function render(markdown, { resolveLink } = {}) {
   // Only authored Markdown tables become the editorial table composition.
   // Live demos own their markup and are inserted after this transformation.
   html = wrapTables(html);
+
+  // Read the TOC before demo previews are spliced in: a demo is live component
+  // markup, so its own <h2>/<h3> are not page sections and must not become
+  // in-page anchors or search terms.
+  const toc = extractToc(html);
+
   for (let i = 0; i < demos.length; i++) {
     html = html.replace(`<!--docs-demo-${i}-->`, renderDemoBlock(demos[i]));
   }
@@ -231,7 +237,7 @@ export function render(markdown, { resolveLink } = {}) {
     demos,
     title: extractTitle(markdown),
     description: extractDescription(html),
-    toc: extractToc(html),
+    toc,
     aliases: extractAliases(markdown),
   };
 }
