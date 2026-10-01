@@ -1303,6 +1303,7 @@ small {
  * --cluster-wrap
  *
  * Child contract: direct-child margins are reset, spacing comes from --gap.
+ * A ul/ol/menu keeps its semantics but loses list chrome (see below).
  */
 .cluster {
   display: flex;
@@ -1315,6 +1316,16 @@ small {
 
 .cluster > * {
   margin: 0;
+}
+
+/* Horizontal, wrapping layout is incompatible with list markers and native
+   indentation: a ul/ol/menu applied with .cluster stays a list in the DOM, but
+   its visual chrome would be accidental. .stack intentionally leaves this
+   alone — a vertical list can keep its numbers. */
+:where(ul, ol, menu).cluster {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 /*
@@ -4554,34 +4565,6 @@ a.badge[aria-disabled="true"] {
     border: var(--border-width) solid CanvasText;
     break-inside: avoid;
   }
-}
-
-/*
- * Actions — a horizontal action-button cluster.
- *
- * Docs: docs/pages/patterns/actions.md
- *
- * Composes with .btn (or any inline element) and feeds layout via the shared
- * --gap token.
- *
- * Internal:
- * --gap (local value for the shared gap token)
- */
-.actions {
-  --gap: var(--space-20);
-
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--gap);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.actions > li {
-  margin: 0;
 }
 
 

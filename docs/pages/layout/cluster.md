@@ -17,6 +17,30 @@ between items always comes from `--gap`. Unlike `.stack`, which resets only the
 block axis, cluster resets margins on both axes — a wrapping cluster's `gap`
 controls inline spacing between items and block spacing between wrapped rows.
 
+## Action rows
+
+Actions are content; the cluster owns the geometry. A semantic action list is a
+`<menu>` (or `<ul>`) with `.cluster`:
+
+```html demo
+<menu class="cluster">
+  <li><button class="btn primary" type="button">Save</button></li>
+  <li><button class="btn outline" type="button">Cancel</button></li>
+</menu>
+```
+
+There is no `.actions` class. A dense row is `cluster compact`; a vertical action
+list is `stack list-reset`.
+
+## List chrome
+
+`.cluster` neutralizes the native chrome of a `<ul>`, `<ol>` or `<menu>` it is
+applied to. The element stays a list in the DOM and for assistive technology,
+but a horizontal, wrapping group cannot carry markers and indentation
+meaningfully, so they are removed. `.stack` makes no such change — an
+`<ol class="stack">` keeps its numbers. Use `.list-reset` alone for a plain list
+with no layout.
+
 ## CSS hooks
 
 - `--cluster-justify` — main-axis distribution (`justify-content`).

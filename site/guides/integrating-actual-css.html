@@ -169,7 +169,6 @@
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../patterns/overview.html">Patterns</a></li>
-        <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
         <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
@@ -273,10 +272,13 @@ Custom exact track template        → --grid-columns
   --card-pad: var(--space-50);
 }
 
-.actions {
+.product-actions {
   --cluster-justify: space-between;
 }
 </code></pre>
+<p><code>.product-actions</code> is an application class composed onto the primitive:
+<code>&lt;div class=&quot;cluster product-actions&quot;&gt;</code>. The hook is read by <code>.cluster</code>, so the
+CSS stays a local adjustment, not a reimplementation.</p>
 <p>over reimplementing their layout:</p>
 <pre><code class="language-css">/* Avoid when an Actual primitive already owns this behavior */
 .feature-grid {
@@ -524,7 +526,6 @@ Add application identity
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../patterns/overview.html">Patterns</a></li>
-        <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
         <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>

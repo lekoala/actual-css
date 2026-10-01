@@ -169,7 +169,6 @@
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../patterns/overview.html">Patterns</a></li>
-        <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
         <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>
@@ -242,6 +241,34 @@
 between items always comes from <code>--gap</code>. Unlike <code>.stack</code>, which resets only the
 block axis, cluster resets margins on both axes — a wrapping cluster's <code>gap</code>
 controls inline spacing between items and block spacing between wrapped rows.</p>
+<h2 id="action-rows">Action rows</h2>
+<p>Actions are content; the cluster owns the geometry. A semantic action list is a
+<code>&lt;menu&gt;</code> (or <code>&lt;ul&gt;</code>) with <code>.cluster</code>:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<menu class="cluster">
+  <li><button class="btn primary" type="button">Save</button></li>
+  <li><button class="btn outline" type="button">Cancel</button></li>
+</menu>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;menu class=&quot;cluster&quot;&gt;
+  &lt;li&gt;&lt;button class=&quot;btn primary&quot; type=&quot;button&quot;&gt;Save&lt;/button&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;button class=&quot;btn outline&quot; type=&quot;button&quot;&gt;Cancel&lt;/button&gt;&lt;/li&gt;
+&lt;/menu&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>There is no <code>.actions</code> class. A dense row is <code>cluster compact</code>; a vertical action
+list is <code>stack list-reset</code>.</p>
+<h2 id="list-chrome">List chrome</h2>
+<p><code>.cluster</code> neutralizes the native chrome of a <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code> or <code>&lt;menu&gt;</code> it is
+applied to. The element stays a list in the DOM and for assistive technology,
+but a horizontal, wrapping group cannot carry markers and indentation
+meaningfully, so they are removed. <code>.stack</code> makes no such change — an
+<code>&lt;ol class=&quot;stack&quot;&gt;</code> keeps its numbers. Use <code>.list-reset</code> alone for a plain list
+with no layout.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--cluster-justify</code> — main-axis distribution (<code>justify-content</code>).</li>
@@ -303,6 +330,8 @@ under one label, set <code>--cluster-wrap: nowrap</code> and give the controls
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#action-rows" data-docs-toc-item data-level="2">Action rows</a></li>
+        <li><a class="nav-link" href="#list-chrome" data-docs-toc-item data-level="2">List chrome</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
         <li><a class="nav-link" href="#split-spread" data-docs-toc-item data-level="2">Split / spread</a></li>
         <li><a class="nav-link" href="#controls-inside-a-wrapping-cluster" data-docs-toc-item data-level="2">Controls inside a wrapping cluster</a></li>
@@ -447,7 +476,6 @@ under one label, set <code>--cluster-wrap: nowrap</code> and give the controls
       <p class="docs-nav-group">Patterns</p>
       <ul class="nav-list">
         <li><a class="nav-link" href="../patterns/overview.html">Patterns</a></li>
-        <li><a class="nav-link" href="../patterns/actions.html">Actions</a></li>
         <li><a class="nav-link" href="../patterns/navigation-list.html">Navigation List</a></li>
         <li><a class="nav-link" href="../patterns/icon-input.html">Icon Input</a></li>
         <li><a class="nav-link" href="../patterns/icon-slot.html">Icon slot</a></li>

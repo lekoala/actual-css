@@ -1,12 +1,12 @@
 {
-  "totalRaw": 346294,
+  "totalRaw": 346224,
   "core": {
     "minified": 11811,
     "brotli": 2715
   },
   "full": {
-    "minified": 130671,
-    "brotli": 18752
+    "minified": 130547,
+    "brotli": 18755
   },
   "js": {
     "full": {
@@ -14,7 +14,7 @@
       "brotli": 17465
     }
   },
-  "fileCount": 114,
+  "fileCount": 113,
   "files": [
     {
       "file": "components/steps.css",
@@ -374,11 +374,15 @@
     },
     {
       "file": "components/index.css",
-      "raw": 1116
+      "raw": 1091
     },
     {
       "file": "components/breadcrumb.css",
       "raw": 1014
+    },
+    {
+      "file": "layout/cluster.css",
+      "raw": 934
     },
     {
       "file": "components/scrollspy.css",
@@ -407,14 +411,6 @@
     {
       "file": "actual.full.css",
       "raw": 500
-    },
-    {
-      "file": "layout/cluster.css",
-      "raw": 497
-    },
-    {
-      "file": "components/actions.css",
-      "raw": 482
     },
     {
       "file": "layout/media.css",
