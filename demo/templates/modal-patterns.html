@@ -17,12 +17,6 @@
       padding-block: var(--space-60);
     }
 
-    .patterns-intro,
-    .pattern-group {
-      display: grid;
-      gap: var(--space-30);
-    }
-
     .patterns-intro {
       padding-block-end: var(--space-40);
     }
@@ -32,22 +26,16 @@
       border-block-start: var(--border-width) solid var(--border);
     }
 
-    .pattern-group > :is(h2, p) {
-      margin: 0;
-    }
-
+    /* auto-fill, not .grid's auto-fit: a group with a single card keeps the
+       card width instead of stretching it across the row. */
     .patterns-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-      gap: var(--space-30);
+      gap: var(--gap);
     }
 
     .pattern-card {
-      gap: var(--space-20);
-    }
-
-    .pattern-card > :is(h3, p) {
-      margin: 0;
+      --card-gap: var(--space-20);
     }
 
     .pattern-card > .btn {
@@ -110,10 +98,6 @@
     }
 
     .modal-illustration .pattern-import-band {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-30);
       padding-block: var(--space-50);
       background:
         radial-gradient(circle at 1px 1px, var(--border) 1px, transparent 0) 0 0 / 12px 12px,
@@ -132,25 +116,15 @@
     }
 
     /* Release notes: a warning band carries the label and the version. It is a
-       <header>, so the framework reserves the corner close's inline room on the
-       trailing edge; the app CSS only owns the paint and the leading inset. */
+       .bleed <header>, so the framework owns its inset and the corner close's
+       inline room; .cluster owns the split. The app CSS only owns the paint. */
     .modal-release {
       --modal-size: 24rem;
     }
 
     .modal-release .pattern-release-band {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-30);
-      padding-block: var(--space-40);
-      padding-inline-start: var(--space-50);
       background: var(--warning);
       color: var(--warning-fg);
-    }
-
-    .modal-release .pattern-release-band > * {
-      margin: 0;
     }
 
     /* The band owns its foreground; .overline would otherwise keep the muted
@@ -186,7 +160,7 @@
       --close-bg: transparent;
     }
 
-    /* Profile island: split footer, icon-led term rows, a display number. */
+    /* Profile island: icon-led term rows and a display number. */
     .modal-profile {
       --modal-size: 34rem;
     }
@@ -195,10 +169,6 @@
        would vanish; lift the track to the raised surface. */
     .modal-profile .meter {
       --meter-track: var(--surface-raised);
-    }
-
-    .modal-profile .profile-footer {
-      justify-content: space-between;
     }
 
     .modal-profile .data-list dt {
@@ -216,7 +186,7 @@
 
 <body>
   <main class="center modal-patterns-page">
-    <header class="patterns-intro">
+    <header class="stack patterns-intro">
       <p class="overline">Modal patterns</p>
       <h1>Modal layouts, composed</h1>
       <p class="lead">
@@ -237,7 +207,7 @@
       </p>
     </header>
 
-    <section class="pattern-group">
+    <section class="stack pattern-group">
       <h2>Decision</h2>
       <p class="muted">Short, focused surfaces where the choice is the whole dialog.</p>
       <div class="patterns-grid">
@@ -255,7 +225,7 @@
       </div>
     </section>
 
-    <section class="pattern-group">
+    <section class="stack pattern-group">
       <h2>Marketing</h2>
       <p class="muted">Surfaces that sell the next step rather than ask a question.</p>
       <div class="patterns-grid">
@@ -279,7 +249,7 @@
       </div>
     </section>
 
-    <section class="pattern-group">
+    <section class="stack pattern-group">
       <h2>Forms</h2>
       <p class="muted">Scrollable bodies that keep their header and footer in place.</p>
       <div class="patterns-grid">
@@ -297,7 +267,7 @@
       </div>
     </section>
 
-    <section class="pattern-group">
+    <section class="stack pattern-group">
       <h2>Records</h2>
       <p class="muted">A surface whose body is structured data.</p>
       <div class="patterns-grid">
@@ -378,7 +348,7 @@
     <button class="close" type="button" commandfor="p-import" command="request-close" aria-controls="p-import" aria-label="Close dialog"></button>
 
     <div class="stack">
-      <div class="bleed pattern-import-band" aria-hidden="true">
+      <div class="bleed cluster justify-content-center pattern-import-band" aria-hidden="true">
         <span class="provider"><i class="ti ti-brand-google"></i></span>
         <i class="ti ti-chevron-right muted"></i>
         <span class="provider"><i class="ti ti-inbox"></i></span>
@@ -404,7 +374,7 @@
     <button class="close" type="button" commandfor="p-release" command="request-close" aria-controls="p-release" aria-label="Close dialog"></button>
 
     <div class="stack">
-      <header class="bleed pattern-release-band">
+      <header class="bleed cluster justify-content-space-between pattern-release-band">
         <h2 class="overline" id="p-release-title">About update</h2>
         <span class="badge">v2.3.6</span>
       </header>
@@ -559,7 +529,7 @@
     </form>
   </dialog>
 
-  <!-- Profile island — application CSS for the split footer and the term rows.
+  <!-- Profile island — application CSS for the term rows and the display number.
        scrollable keeps the close over the fixed header instead of the body
        scrollbar, and pins the identity and the footer while the cards scroll. -->
   <dialog class="modal modal-profile scrollable" id="p-profile" aria-labelledby="p-profile-name">
@@ -629,7 +599,7 @@
         </div>
 
         <div class="card subtle stack">
-          <div class="cluster" style="justify-content: space-between">
+          <div class="cluster justify-content-space-between">
             <strong>Storage plan</strong>
             <span class="badge warning soft">Professional</span>
           </div>
@@ -637,14 +607,14 @@
           <p class="profile-stat">10%</p>
           <meter class="meter" value="0.1" min="0" max="1" aria-label="Storage used"></meter>
 
-          <div class="cluster" style="justify-content: space-between">
+          <div class="cluster justify-content-space-between">
             <span class="muted">30 GB</span>
             <span class="muted">70 GB left</span>
           </div>
         </div>
       </div>
 
-      <footer class="profile-footer">
+      <footer class="justify-content-space-between">
         <span class="cluster">
           <strong>Sync status</strong>
           <span class="badge success">Active</span>
