@@ -497,9 +497,20 @@
    it: brand 104 + select 128 + Search 131 + Menu 67 + three --gap = 466px.
    Below 33rem the single row can no longer guarantee that (a scrollbar can
    subtract another 15px), so the select moves to the drawer and the shortcut
-   hint goes with it, leaving brand + Search + Menu at 267px — one row down to
-   320px. */
+   hint goes with it, leaving brand + Search + Menu at 267px on the default
+   font. That is only 21px under the 288px content box at 320px, and a wider
+   system font (Linux DejaVu, Verdana) needs ~290px, so the row would wrap.
+   Tightening the header gap and the control padding buys the headroom a
+   wider font needs. */
 @media (max-width: 33rem) {
+  .docs-header-inner {
+    --gap: var(--space-10);
+  }
+
+  .docs-header-inner .btn {
+    --btn-pad-x: var(--space-20);
+  }
+
   .docs-header-inner .docs-theme-field {
     display: none;
   }
