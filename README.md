@@ -98,7 +98,7 @@ Undocumented `is-*` classes are runtime internals.
 
 **UI components** — dialog, drawer, flyout, tooltip, tabs, scrollspy, context menus, and other components that rely on JavaScript or modern platform behavior.
 
-**Patterns** — actions, navbar, and overline. These are regular source files and can be imported only when needed.
+**Patterns** — navbar and overline. These are regular source files and can be imported only when needed.
 
 **Layout primitives** — `.stack`, `.cluster`, `.grid`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, `.sidebar-layout`, and `.container-query`.
 

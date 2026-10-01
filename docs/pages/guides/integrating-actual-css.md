@@ -76,10 +76,14 @@ Prefer:
   --card-pad: var(--space-50);
 }
 
-.actions {
+.product-actions {
   --cluster-justify: space-between;
 }
 ```
+
+`.product-actions` is an application class composed onto the primitive:
+`<div class="cluster product-actions">`. The hook is read by `.cluster`, so the
+CSS stays a local adjustment, not a reimplementation.
 
 over reimplementing their layout:
 

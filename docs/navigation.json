@@ -104,7 +104,6 @@
       "slug": "patterns",
       "pages": [
         "overview",
-        "actions",
         "navigation-list",
         "icon-input",
         "icon-slot",

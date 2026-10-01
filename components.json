@@ -19,17 +19,6 @@
     ]
   },
   {
-    "name": "actions",
-    "source": "src/css/components/actions.css",
-    "cssImport": "actual-css/css/components/actions",
-    "classes": [
-      "actions"
-    ],
-    "internalHooks": [
-      "--gap"
-    ]
-  },
-  {
     "name": "alert",
     "source": "src/css/components/alert.css",
     "cssImport": "actual-css/css/components/alert",
