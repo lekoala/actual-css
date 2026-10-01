@@ -46,6 +46,27 @@ Add `.bleed` to that header when it should form a full-width band. It reaches
 the dialog edges, keeps the modal's inner padding, and can take a surface token
 such as `background: var(--surface-subtle)`.
 
+### Where each region lives
+
+Two anatomies are legitimate. Pick one; each owns its scroll, footer, and close
+placement.
+
+**Wrapper header** — a `<header>` inside the `form`/`.stack` body. The wrapper
+owns padding, rhythm, and overflow. With `.scrollable` the header and footer are
+fixed rows and the content between them scrolls. The `.close` stays a direct
+child of the dialog and the header reserves its inline room.
+
+**External header** — a direct `dialog > header`, before the body wrapper. The
+header is dialog chrome outside the scroll container, so it never scrolls. The
+footer stays inside the wrapper and is the trailing fixed row under
+`.scrollable`. Wrap the `.close` in the header's trailing `.cluster` to keep it
+in flow; a `.close` that is a direct child of the header is still the absolute
+corner overlay, and the header reserves its room.
+
+The `.scrollable` row template follows the regions the wrapper actually holds,
+so a modal without a header, without a footer, or with an external header all
+keep the footer reachable and the body scrollable.
+
 ## Usage
 
 Modals use the platform-native `<dialog class="modal">` element with `commandfor` and `command` buttons.
@@ -310,6 +331,9 @@ keyboard-focusable so it can be scrolled without a pointer — it takes a focus
 ring like any other focusable element, and it can claim initial focus when
 nothing focusable precedes it. Mark the control you want focused `autofocus`.
 
+Each non-header/footer child region is its own scrollport, so wrap the body in a
+single element (`<div class="stack">`) when there should be one scrollbar.
+
 ```html demo
 <button class="btn"
         type="button"
@@ -347,6 +371,55 @@ nothing focusable precedes it. Mark the control you want focused `autofocus`.
       <button class="btn primary" value="accept">
         Accept
       </button>
+    </footer>
+  </form>
+</dialog>
+```
+
+An external header follows the same contract from the other side: the header is
+chrome outside the wrapper, the footer stays in the wrapper, and the content
+between them scrolls.
+
+```html demo
+<button class="btn"
+        type="button"
+        commandfor="external-scroll-dialog"
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="external-scroll-dialog">
+  Open external-header modal
+</button>
+
+<dialog class="modal scrollable"
+        id="external-scroll-dialog"
+        closedby="any"
+        aria-labelledby="external-scroll-title">
+  <header>
+    <h3 id="external-scroll-title">Release notes</h3>
+
+    <div class="cluster">
+      <button class="close"
+              type="button"
+              commandfor="external-scroll-dialog"
+              command="request-close"
+              aria-controls="external-scroll-dialog"
+              aria-label="Close dialog"></button>
+    </div>
+  </header>
+
+  <form method="dialog" class="stack">
+    <div class="stack">
+      <p>Section 1. The service stores project settings, interface preferences, and theme choices.</p>
+      <p>Section 2. Administrators can invite users and review access periodically.</p>
+      <p>Section 3. Billing changes may affect future invoices.</p>
+      <p>Section 4. Export tools are provided for common formats.</p>
+      <p>Section 5. Support requests should include browser and account context.</p>
+      <p>Section 6. Continued use confirms acceptance of the current terms.</p>
+    </div>
+
+    <footer>
+      <button class="btn outline" value="cancel">Cancel</button>
+      <button class="btn primary" value="accept">Accept</button>
     </footer>
   </form>
 </dialog>
@@ -512,8 +585,12 @@ animation-friendly, and consistent across supported browsers.
 - `--modal-pad` — padding of the direct `<form>` or `.stack` content wrapper.
 - `--modal-header-bg` — background of a direct header band.
 - `--dialog-viewport-gap` — distance kept between the dialog and the viewport edges.
-- `--dialog-icon-size` — diameter of the `.dialog-icon` circle.
-- `--dialog-icon-glyph-size` — size of the glyph centered inside `.dialog-icon`.
+- `--dialog-icon-size` — diameter of the `.dialog-icon` circle. The confirmation
+  title reads the same hook to center on the icon, so set it on the icon's
+  media row (or the dialog) and both inherit one value. A value on the icon
+  alone sizes only the circle.
+- `--dialog-icon-glyph-size` — size of the glyph centered inside `.dialog-icon`;
+  same placement as `--dialog-icon-size`.
 - `--close-size` / `--close-icon-size` — size of the corner `.close` and of its
   X. The header reserves the close size, its edge inset, and a content gap so
   the title never runs under it.

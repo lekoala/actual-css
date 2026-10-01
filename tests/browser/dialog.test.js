@@ -14,6 +14,7 @@ import { expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import {
   browserAvailable,
+  clickSelector,
   fixtureUrl,
   waitForBrowser,
   withBrowserPage,
@@ -55,7 +56,7 @@ async function withPage(run) {
               : null,
           };
         })()`);
-      await run({ evalIn, settle, pressEscape, snapshot });
+      await run({ evalIn, settle, pressEscape, snapshot, view });
     },
     {
       mediaFeatures: [{ name: "prefers-reduced-motion", value: "reduce" }],
@@ -147,12 +148,21 @@ it("Escape after the open animation settles closes", async () => {
 });
 
 it("close button closes, restores focus, and keeps the scroll position", async () => {
-  await withPage(async ({ evalIn, settle, snapshot }) => {
-    const y0 = await scrollTo1200(evalIn);
-    await evalIn("document.getElementById('open-dismissible').click()");
-    await settle();
-    await evalIn("document.querySelector('#dlg-dismissible .close').click()");
-    await settle();
+  await withPage(async ({ evalIn, view, snapshot }) => {
+    // clickSelector dispatches at the element's viewport rect without scrolling,
+    // so bring the trigger into view first and take the reference scroll after
+    // that — otherwise the click misses, or the modal gets blamed for a shift
+    // the preparation caused.
+    await evalIn("document.getElementById('open-dismissible').scrollIntoView({ block: 'center' })");
+    const y0 = await evalIn("window.scrollY");
+    expect(y0).toBeGreaterThan(0);
+
+    await clickSelector(view, "#open-dismissible");
+    await waitForBrowser(view, "document.getElementById('dlg-dismissible').open");
+
+    await clickSelector(view, "#dlg-dismissible .close");
+    await waitForBrowser(view, "!document.getElementById('dlg-dismissible').open");
+    await waitForBrowser(view, "document.activeElement.id === 'open-dismissible'");
 
     const state = await snapshot("dlg-dismissible");
     expect(state.open).toBe(false);
