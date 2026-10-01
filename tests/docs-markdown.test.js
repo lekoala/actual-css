@@ -181,6 +181,16 @@ describe("render", () => {
     expect(result.toc.map((t) => t.id)).toEqual(["basic-usage", "variants", "variants-1"]);
   });
 
+  it("keeps headings inside live demos out of the TOC", () => {
+    // A demo preview is executable component markup; its headings are not page
+    // sections and would otherwise surface in the TOC and the search index.
+    const page = render(
+      '# Demo page\n\n## Real heading\n\n```html demo\n<h3 id="fake">Fake heading</h3>\n```\n',
+    );
+    expect(page.toc.map((t) => t.label)).toEqual(["Real heading"]);
+    expect(page.html).toContain('<h3 id="fake">Fake heading</h3>');
+  });
+
   it("decodes entities in TOC labels and descriptions", () => {
     // Heading text arrives entity-escaped from the renderer; templates escape
     // once more, so undecoded entities would render literally.
