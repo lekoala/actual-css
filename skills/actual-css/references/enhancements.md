@@ -44,12 +44,13 @@ wrapper's `<footer>`.
 
 Use `.bleed` on that direct header when it needs a contrasting full-width band;
 the wrapper relays the modal padding so the band reaches the surface edges while
-its contents keep the normal inset. In `.dialog-confirmation`, keep the icon and
-the text header as the media object's two children; the component centers the
-header's first heading on the icon while following copy stays in that text
-column. For a trailing icon, use the confirmation's direct header as a
-non-wrapping split `.cluster`, with `.grow` on the text group. Do not compensate
-heading alignment with a literal margin.
+its contents keep the normal inset. A confirmation is composition, not a
+variant: a `.media` row with a leading `.dialog-icon` and the text column (its
+first heading centers on the icon, following copy stays in that column), then a
+`<footer class="bleed background-subtle justify-content-space-between">` action
+band with the cancel-style action first. For a trailing icon, use the wrapper's
+direct header as a non-wrapping split `.cluster`, with `.grow` on the text
+group. Do not compensate heading alignment with a literal margin.
 
 Do not turn the dialog heading into an `.alert` to obtain icon or surface
 styling. Compose `.dialog-icon` with `.media` for a leading title icon; reserve

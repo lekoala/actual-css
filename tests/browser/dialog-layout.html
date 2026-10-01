@@ -7,18 +7,20 @@
   <link rel="stylesheet" href="../../src/css/actual.full.css">
 </head>
 <body>
-  <dialog class="modal dialog-confirmation" open>
+  <!-- Confirmation by composition: media row + a .bleed footer band split by a
+       utility. No dialog variant is involved. -->
+  <dialog class="modal" id="confirmation" open>
     <form method="dialog">
       <div class="media">
         <span class="dialog-icon danger soft" aria-hidden="true">!</span>
 
-        <header>
+        <header class="stack">
           <h3>Deactivate account</h3>
           <p class="muted">This action cannot be undone.</p>
         </header>
       </div>
 
-      <footer>
+      <footer class="bleed background-subtle justify-content-space-between">
         <button class="btn outline" value="cancel">Cancel</button>
         <button class="btn danger" value="deactivate">Deactivate</button>
       </footer>
@@ -43,12 +45,12 @@
 
   <!-- The icon-size hook is shared geometry: set on the media row or the dialog
        so the title that centers on the circle inherits the same value. -->
-  <dialog class="modal dialog-confirmation" id="icon-hook-media" open>
+  <dialog class="modal" id="icon-hook-media" open>
     <form method="dialog">
       <div class="media" style="--dialog-icon-size: 5rem">
         <span class="dialog-icon danger soft" aria-hidden="true">!</span>
 
-        <header>
+        <header class="stack">
           <h3>Hook on the row</h3>
           <p class="muted">The title centers on the icon.</p>
         </header>
@@ -61,12 +63,12 @@
     </form>
   </dialog>
 
-  <dialog class="modal dialog-confirmation" id="icon-hook-dialog" open style="--dialog-icon-size: 5rem">
+  <dialog class="modal" id="icon-hook-dialog" open style="--dialog-icon-size: 5rem">
     <form method="dialog">
       <div class="media">
         <span class="dialog-icon danger soft" aria-hidden="true">!</span>
 
-        <header>
+        <header class="stack">
           <h3>Hook on the dialog</h3>
           <p class="muted">The title centers on the icon.</p>
         </header>
@@ -76,6 +78,14 @@
         <button class="btn outline" value="cancel">Cancel</button>
         <button class="btn danger" value="go">Go</button>
       </footer>
+    </form>
+  </dialog>
+
+  <!-- A wrapper header in a dialog without a corner close keeps its full
+       width: the close reserve is conditional. -->
+  <dialog class="modal" id="no-close" open>
+    <form method="dialog">
+      <header><h3>No corner close</h3></header>
     </form>
   </dialog>
 

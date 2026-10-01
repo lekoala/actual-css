@@ -19,7 +19,8 @@ it("confirmation copy shares one column and its title centers on the icon", asyn
     fixtureUrl(FIXTURE),
     async (view) => {
       const result = await view.evaluate(`(() => {
-        const rect = (selector) => document.querySelector(selector).getBoundingClientRect();
+        const root = document.getElementById("confirmation");
+        const rect = (selector) => root.querySelector(selector).getBoundingClientRect();
         const icon = rect(".dialog-icon");
         const title = rect("h3");
         const copy = rect("header p");
@@ -33,6 +34,56 @@ it("confirmation copy shares one column and its title centers on the icon", asyn
       expect(result.columnDrift).toBeLessThanOrEqual(0.5);
     },
     { artifactName: "dialog-layout" },
+  );
+});
+
+/* The action band is pure composition, so this guards the specificity
+ * contract: the footer's default row must lose to a one-class utility. */
+it("a .bleed footer forms an edge band that a justify utility splits", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view
+        .evaluate(`(() => {
+          const root = document.getElementById("confirmation");
+          const panel = root.getBoundingClientRect();
+          const footer = root.querySelector("footer");
+          const band = footer.getBoundingClientRect();
+          const [cancel, commit] = [...footer.children].map((el) => el.getBoundingClientRect());
+          const cs = getComputedStyle(footer);
+          return JSON.stringify({
+            justify: cs.justifyContent,
+            edges: [band.left - panel.left, panel.right - band.right, panel.bottom - band.bottom],
+            radius: cs.borderEndStartRadius,
+            panelRadius: getComputedStyle(root).borderEndStartRadius,
+            leadInset: cancel.left - band.left,
+            trailInset: band.right - commit.right,
+            pad: parseFloat(cs.paddingInlineStart),
+          });
+        })()`)
+        .then(JSON.parse);
+
+      expect(result.justify).toBe("space-between");
+      for (const edge of result.edges) expect(Math.abs(edge)).toBeLessThanOrEqual(0.5);
+      expect(result.radius).toBe(result.panelRadius);
+      expect(result.pad).toBeGreaterThan(0);
+      expect(Math.abs(result.leadInset - result.pad)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(result.trailInset - result.pad)).toBeLessThanOrEqual(0.5);
+    },
+    { artifactName: "dialog-footer-band" },
+  );
+});
+
+it("a wrapper header reserves close room only when the dialog has a corner close", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const pad = await view.evaluate(
+        'getComputedStyle(document.querySelector("#no-close header")).paddingInlineEnd',
+      );
+      expect(pad).toBe("0px");
+    },
+    { artifactName: "dialog-header-no-close" },
   );
 });
 
