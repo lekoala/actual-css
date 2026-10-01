@@ -26,10 +26,8 @@
 :where(dialog).modal {
   /* --dialog-viewport-gap stays fallback-only so the responsive default can
      live in an internal token: a media query moves it without closing the
-     public hook.
-
-     calc() multiplication is not in the supported browser range, so the
-     doubled gap is spelled out with an additive calc. */
+     public hook. `-2x` is the gap on the two viewport edges, shared by the
+     width and height caps. */
   --dialog-viewport-gap-default: var(--space-40);
   --dialog-viewport-gap-2x: calc(
     var(--dialog-viewport-gap, var(--dialog-viewport-gap-default)) +
@@ -73,9 +71,9 @@
    * both edges, which reads as horizontal movement.
    */
   transform: translateY(0.35rem);
-  transition:
-    opacity var(--duration) var(--ease-exit),
-    transform var(--duration) var(--ease-exit);
+  transition-property: opacity, transform;
+  transition-duration: var(--duration);
+  transition-timing-function: var(--ease-exit);
 }
 
 @media (forced-colors: active) {
@@ -99,10 +97,8 @@
   padding: var(--surface-pad);
 }
 
-/* Optional dialog chrome lives beside the padded body wrapper. Its leading
-   region and trailing controls share one center axis; wrapping the close in
-   the trailing cluster keeps it in flow instead of invoking the absolute
-   corner treatment from close.css. */
+/* Dialog chrome beside the padded body wrapper. Wrapping the close in the
+   trailing cluster keeps it in flow, not the absolute corner overlay. */
 :where(dialog).modal > header {
   display: flex;
   align-items: center;
@@ -133,18 +129,16 @@
   flex: none;
 }
 
-@supports selector(dialog:has(> header)) {
-  /* The header stays fixed while the body wrapper owns overflow. Without
-     :has(), compact dialogs keep ordinary block flow as the fallback. */
-  :where(dialog).modal[open]:has(> header) {
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
-  }
+/* The header stays fixed while the body wrapper owns overflow. Without :has()
+   these drop individually and compact dialogs keep ordinary block flow. */
+:where(dialog).modal[open]:has(> header) {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
 
-  :where(dialog).modal:has(> header) > :is(form, .stack) {
-    min-block-size: 0;
-    max-block-size: none;
-  }
+:where(dialog).modal:has(> header) > :is(form, .stack) {
+  min-block-size: 0;
+  max-block-size: none;
 }
 
 @supports (block-size: 100svh) {
@@ -163,8 +157,19 @@
 
 :where(dialog).modal.scrollable > form,
 :where(dialog).modal.scrollable > .stack {
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+}
+
+/* Regions carry their own behaviour: a structural header or footer keeps its
+   size, every other child absorbs the free space and scrolls. Nothing here has
+   to detect which regions exist — an external header leaves the wrapper with
+   content + footer and this still holds. Each non-chrome child is its own
+   scrollport; wrap the body in one region for a single one. */
+:where(dialog).modal.scrollable > form > :is(header, footer),
+:where(dialog).modal.scrollable > .stack > :is(header, footer) {
+  flex: none;
 }
 
 :where(dialog).modal.scrollable > form > :not(:is(header, footer)),
@@ -174,6 +179,7 @@
     max(var(--focus-ring-width), var(--border-width) * 2)
   );
 
+  flex: 1 1 auto;
   min-block-size: 0;
   /* Keep focus paint inside the clip without moving the body off the fixed
      header and footer edges. The reserve covers the thicker of the two
@@ -231,9 +237,8 @@
   gap: var(--gap);
 }
 
-/* Confirmation layout — a focused message followed by a visually distinct
-   action band. The media primitive owns icon/content alignment; this variant
-   only removes the standard form inset so both regions can own their padding. */
+/* Confirmation layout: the media primitive owns icon/content alignment; the
+   variant only removes the form inset so both regions own their padding. */
 :where(dialog).modal.dialog-confirmation > form {
   --surface-pad: 0px;
 
@@ -267,14 +272,17 @@
   --ui-fg: initial;
 }
 
+/* The size hooks are read here, never declared: an author sets them on the
+   icon's media row (or the dialog) so both the circle and the title that
+   centers on it inherit one value. A local declaration on .dialog-icon would
+   shadow that value for the circle while the title kept the inherited one —
+   the two centers would drift. An override on the icon alone is deliberately
+   local and moves only the circle. */
 .dialog-icon {
-  --dialog-icon-size: 3rem;
-  --dialog-icon-glyph-size: 1.5rem;
-
   display: inline-grid;
   place-items: center;
-  inline-size: var(--dialog-icon-size);
-  block-size: var(--dialog-icon-size);
+  inline-size: var(--dialog-icon-size, 3rem);
+  block-size: var(--dialog-icon-size, 3rem);
   flex: none;
   border-radius: var(--radius-full);
   background: var(--ui-bg, var(--surface-subtle));
@@ -284,9 +292,9 @@
 .dialog-icon > * {
   display: inline-grid;
   place-items: center;
-  inline-size: var(--dialog-icon-glyph-size);
-  block-size: var(--dialog-icon-glyph-size);
-  font-size: var(--dialog-icon-glyph-size);
+  inline-size: var(--dialog-icon-glyph-size, 1.5rem);
+  block-size: var(--dialog-icon-glyph-size, 1.5rem);
+  font-size: var(--dialog-icon-glyph-size, 1.5rem);
   line-height: 1;
 }
 
@@ -321,9 +329,7 @@
 :where(dialog).modal[open] {
   opacity: 1;
   transform: none;
-  transition:
-    opacity var(--duration) var(--ease-enter),
-    transform var(--duration) var(--ease-enter);
+  transition-timing-function: var(--ease-enter);
 }
 
 @starting-style {
@@ -338,31 +344,22 @@
   opacity: 0;
   /* Scrim curve stays neutral `ease`; only the panel carries the character
      curves. */
-  transition: opacity var(--duration) ease;
+  transition-property: opacity;
+  transition-duration: var(--duration);
+  transition-timing-function: ease;
 }
 
 @supports (transition-behavior: allow-discrete) {
+  /* Add the discrete top-layer pair to the property list. Duration and timing
+     stay on the base rules, so [open] still only swaps the easing. */
   :where(dialog).modal {
-    transition:
-      opacity var(--duration) var(--ease-exit),
-      transform var(--duration) var(--ease-exit),
-      overlay var(--duration) allow-discrete,
-      display var(--duration) allow-discrete;
-  }
-
-  :where(dialog).modal[open] {
-    transition:
-      opacity var(--duration) var(--ease-enter),
-      transform var(--duration) var(--ease-enter),
-      overlay var(--duration) allow-discrete,
-      display var(--duration) allow-discrete;
+    transition-property: opacity, transform, overlay, display;
+    transition-behavior: allow-discrete;
   }
 
   :where(dialog).modal::backdrop {
-    transition:
-      opacity var(--duration) ease,
-      overlay var(--duration) allow-discrete,
-      display var(--duration) allow-discrete;
+    transition-property: opacity, overlay, display;
+    transition-behavior: allow-discrete;
   }
 }
 
