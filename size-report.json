@@ -1,12 +1,12 @@
 {
-  "totalRaw": 346224,
+  "totalRaw": 346251,
   "core": {
     "minified": 11811,
     "brotli": 2715
   },
   "full": {
-    "minified": 130547,
-    "brotli": 18755
+    "minified": 130447,
+    "brotli": 18751
   },
   "js": {
     "full": {
@@ -105,12 +105,12 @@
       "raw": 4960
     },
     {
-      "file": "core/variants.css",
-      "raw": 4916
+      "file": "components/navbar.css",
+      "raw": 4925
     },
     {
-      "file": "components/navbar.css",
-      "raw": 4898
+      "file": "core/variants.css",
+      "raw": 4916
     },
     {
       "file": "themes/gradient.css",

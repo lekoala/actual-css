@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Navbar — Actual CSS</title>
-  <meta name="description" content="Horizontal top-level navigation bar with a brand, an inline link list, and a vertical nav-list for drawers.">
+  <meta name="description" content="Horizontal top-level navigation bar with a brand, an inline .cluster link list, and a vertical .nav-list for drawers.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -218,12 +218,12 @@
           <div class="prose docs-prose">
 <h1 id="navbar">Navbar</h1>
 <blockquote>
-<p>Horizontal top-level navigation bar with a brand, an inline link list, and a vertical nav-list for drawers.</p>
+<p>Horizontal top-level navigation bar with a brand, an inline <code>.cluster</code> link list, and a vertical <code>.nav-list</code> for drawers.</p>
 </blockquote>
 <ul>
 <li>Use <code>.navbar</code> for the horizontal bar shell.</li>
 <li><code>.navbar-brand</code> is the brand link at the inline start.</li>
-<li><code>.navbar-nav</code> is the horizontal link list; its items are <code>.nav-link</code>.</li>
+<li>Horizontal links live in a <code>.cluster</code>; its items are <code>.nav-link</code>.</li>
 <li><code>.nav-list</code> is the shared vertical navigation list, reused by <code>.drawer</code> for stacked links.</li>
 <li>Mark the current page with <code>aria-current=&quot;page&quot;</code> on the active <code>.nav-link</code>.</li>
 <li>Presence is the contract: set <code>aria-current</code> on the current link and remove
@@ -233,9 +233,9 @@ with <code>aria-current=&quot;location&quot;</code>.</li>
 <p>For a public or normally scrolling page, <code>.navbar</code> belongs inside the semantic
 site header. Do not use <code>.topbar</code> or <code>.app-layout</code> unless the page actually has
 the specialized persistent application-shell behavior those APIs describe.</p>
-<p><code>.navbar-nav</code> and <code>.nav-list</code> are mutually exclusive: <code>.navbar-nav</code> is a horizontal
-flex list, <code>.nav-list</code> a vertical grid. Putting both on one element resolves to
-<code>.nav-list</code> (vertical) — pick one per container.</p>
+<p>Horizontal navbar links use a <code>.cluster</code>. Use <code>.nav-list</code> when the navigation
+becomes a full-width vertical list. The two are distinct contracts, so pick one
+per container.</p>
 <p><code>.navbar</code> stays the horizontal bar for a site or webapp header with a brand and
 normal document scrolling. <code>.app-nav</code> is not merely a stacked-icon flavour of it:
 reach for that component only when the destinations are part of a persistent
@@ -250,7 +250,6 @@ icons. See <a href="app-navigation.html">App Navigation</a>.</p>
 <tbody>
 <tr><td><code>.navbar</code></td><td>Component</td><td>Horizontal bar shell.</td></tr>
 <tr><td><code>.navbar-brand</code></td><td>Composition</td><td>Brand link at the inline start.</td></tr>
-<tr><td><code>.navbar-nav</code></td><td>Composition</td><td>Horizontal link list.</td></tr>
 <tr><td><code>.nav-link</code></td><td>Component</td><td>A link item; current page via <code>aria-current=&quot;page&quot;</code>.</td></tr>
 <tr><td><code>.nav-list</code></td><td>Component</td><td>Shared vertical navigation list, reused by <code>.drawer</code>.</td></tr>
 </tbody>
@@ -261,7 +260,7 @@ icons. See <a href="app-navigation.html">App Navigation</a>.</p>
   <div class="docs-preview">
 <nav class="navbar" aria-label="Main">
   <a class="navbar-brand" href="/">Actual CSS</a>
-  <ul class="navbar-nav">
+  <ul class="cluster">
     <li><a class="nav-link" href="/docs" aria-current="page">Docs</a></li>
     <li><a class="nav-link" href="/components">Components</a></li>
     <li><a class="nav-link" href="/examples">Examples</a></li>
@@ -271,7 +270,7 @@ icons. See <a href="app-navigation.html">App Navigation</a>.</p>
   <div class="docs-code">
     <pre><code class="language-html">&lt;nav class=&quot;navbar&quot; aria-label=&quot;Main&quot;&gt;
   &lt;a class=&quot;navbar-brand&quot; href=&quot;/&quot;&gt;Actual CSS&lt;/a&gt;
-  &lt;ul class=&quot;navbar-nav&quot;&gt;
+  &lt;ul class=&quot;cluster&quot;&gt;
     &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/docs&quot; aria-current=&quot;page&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/components&quot;&gt;Components&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/examples&quot;&gt;Examples&lt;/a&gt;&lt;/li&gt;
@@ -299,7 +298,7 @@ accessible name.</p>
   <div class="docs-preview">
 <nav class="navbar" aria-label="Main">
   <a class="navbar-brand" href="/">Actual CSS</a>
-  <ul class="navbar-nav">
+  <ul class="cluster">
     <li><a class="nav-link" href="/" aria-current="page">Home</a></li>
     <li><a class="nav-link" href="/docs">Docs</a></li>
   </ul>
@@ -339,7 +338,7 @@ accessible name.</p>
   <div class="docs-code">
     <pre><code class="language-html">&lt;nav class=&quot;navbar&quot; aria-label=&quot;Main&quot;&gt;
   &lt;a class=&quot;navbar-brand&quot; href=&quot;/&quot;&gt;Actual CSS&lt;/a&gt;
-  &lt;ul class=&quot;navbar-nav&quot;&gt;
+  &lt;ul class=&quot;cluster&quot;&gt;
     &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/&quot; aria-current=&quot;page&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/docs&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
   &lt;/ul&gt;

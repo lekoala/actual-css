@@ -114,7 +114,7 @@ img { filter: saturate(1.06) contrast(1.03); }
 .nav-toggle { display: none; }
 
 @media (max-width: 48rem) {
-  .site-header .navbar-nav,
+  .site-nav-links,
   .site-header .nav-order { display: none; }
   .nav-toggle { display: inline-flex; }
 }
