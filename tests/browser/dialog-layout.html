@@ -81,12 +81,55 @@
     </form>
   </dialog>
 
-  <!-- A wrapper header in a dialog without a corner close keeps its full
-       width: the close reserve is conditional. -->
-  <dialog class="modal" id="no-close" open>
+  <!-- Close reserve: one case per corner-close position in close.css, plus no
+       close at all and a .bleed band without one. Closed dialogs: computed
+       padding does not need layout. -->
+  <dialog class="modal" id="reserve-modal-direct">
+    <button class="close" type="button" aria-label="Close"></button>
+    <form method="dialog"><header><h3>Direct</h3></header></form>
+  </dialog>
+  <dialog class="modal" id="reserve-modal-form">
     <form method="dialog">
-      <header><h3>No corner close</h3></header>
+      <button class="close" aria-label="Close"></button>
+      <header><h3>In the form</h3></header>
     </form>
+  </dialog>
+  <dialog class="modal" id="reserve-modal-header">
+    <form method="dialog">
+      <header><h3>In the header</h3><button class="close" aria-label="Close"></button></header>
+    </form>
+  </dialog>
+  <dialog class="modal" id="reserve-modal-none">
+    <form method="dialog"><header><h3>No close</h3></header></form>
+  </dialog>
+  <dialog class="modal" id="reserve-modal-bleed">
+    <form method="dialog"><header class="bleed"><h3>Band, no close</h3></header></form>
+  </dialog>
+
+  <dialog class="drawer" id="reserve-drawer-direct">
+    <button class="close" type="button" aria-label="Close"></button>
+    <header><strong>Direct</strong></header>
+  </dialog>
+  <dialog class="drawer" id="reserve-drawer-header">
+    <header><strong>In the header</strong><button class="close" type="button" aria-label="Close"></button></header>
+  </dialog>
+  <dialog class="drawer" id="reserve-drawer-header-form">
+    <header>
+      <strong>Form in the header</strong>
+      <form method="dialog"><button class="close" aria-label="Close"></button></form>
+    </header>
+  </dialog>
+  <dialog class="drawer" id="reserve-drawer-form-header">
+    <form method="dialog">
+      <header><strong>Header in the form</strong><button class="close" aria-label="Close"></button></header>
+    </form>
+  </dialog>
+  <dialog class="drawer" id="reserve-drawer-none">
+    <header><strong>No close</strong></header>
+  </dialog>
+  <!-- .bleed only works on a direct child of the surface. -->
+  <dialog class="drawer" id="reserve-drawer-bleed">
+    <header class="bleed"><strong>Band, no close</strong></header>
   </dialog>
 
   <!-- External header: the chrome sits outside the scroll wrapper, so the

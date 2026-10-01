@@ -18,6 +18,7 @@
  *
  * Internal:
  * --dialog-inner-radius
+ * --dialog-close-reserve (header room for a corner close; zero without a close)
  * --dialog-focus-bleed
  * --dialog-viewport-block
  * --dialog-viewport-gap-default
@@ -38,6 +39,15 @@
      as one name for the padded wrapper and the header band; a .bleed band
      inherits it from the wrapper, so none of them drifts from the corner. */
   --dialog-inner-radius: var(--radius-lg);
+
+  /* Header room for a corner close. Unconditional baseline: without :has()
+     (Degraded tier) a header keeps too much room rather than a title running
+     under the close. Zeroed when the dialog has no close. */
+  --dialog-close-reserve: calc(
+    var(--close-size, var(--control-size)) +
+    var(--space-20) +
+    var(--space-30)
+  );
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button. */
@@ -208,27 +218,30 @@
   margin-block: 0;
 }
 
+/* No close anywhere: reclaim the reserve. Deliberately coarse — a close in
+   the body keeps the reserve, which costs only room, never overlap. */
+:where(dialog).modal:not(:has(.close)) {
+  --dialog-close-reserve: 0px;
+}
+
 /* The close button is anchored to the dialog at top inline-end, out of the
-   content flow; headers reserve inline room so titles never run under it.
-   Only a dialog that has one reserves it: a header without a corner close
-   keeps its full width. The form/.stack anatomy is structural, so it stays in
-   :where() and never lends .stack's specificity to a bare <form>. */
-:where(dialog).modal:where(:has(> .close)) > :where(form, .stack) > header {
-  padding-inline-end: calc(
-    var(--close-size, var(--control-size)) +
-    var(--space-20) +
-    var(--space-30)
-  );
+   content flow; headers reserve inline room so titles never run under it. A
+   .bleed header keeps at least its band inset. The form/.stack anatomy is
+   structural, so it stays in :where() and never lends .stack's specificity to
+   a bare <form>. */
+:where(dialog).modal > :where(form, .stack) > header {
+  padding-inline-end: var(--dialog-close-reserve);
+}
+
+:where(dialog).modal > :where(form, .stack) > header:where(.bleed) {
+  padding-inline-end: max(var(--bleed-pad, 0px), var(--dialog-close-reserve));
 }
 
 /* A corner .close that is a direct child of the chrome header needs the same
    reserve, but never below the header's own pad. Kept as its own rule so an
    unsupported :has() drops only this geometry, not the wrapper reserve. */
 :where(dialog).modal > header:has(> .close) {
-  padding-inline-end: max(
-    var(--modal-pad, var(--space-40)),
-    calc(var(--close-size, var(--control-size)) + var(--space-20) + var(--space-30))
-  );
+  padding-inline-end: max(var(--modal-pad, var(--space-40)), var(--dialog-close-reserve));
 }
 
 /* Zero specificity: the footer is a default action row that authors compose
