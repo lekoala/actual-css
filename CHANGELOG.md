@@ -7,13 +7,13 @@
 - `.actions` is removed; compose a `<menu>` (or `<ul>`) with `cluster` for a row, or `stack list-reset` for a vertical list.
 - `.navbar-nav` is removed; the horizontal link list is a `.cluster`, and `.navbar > :where(.cluster)` supplies the tighter navbar gap.
 - `.dialog-confirmation` is removed; compose `.media` with `.dialog-icon`, then `<footer class="bleed background-subtle justify-content-space-between">` (recipe in `docs/pages/components/dialog.md`).
+- The `dialog.modal` body `<footer>` has no layout of its own; compose its row as `<footer class="cluster justify-content-end">`, as in the drawer.
 - `--modal-header-bg` is removed; put a `.background-*` utility on the `dialog.modal > header` band.
 
 ### Changed
 
 - An action row composed from `.cluster` inherits the framework `--gap` (0.75rem); the removed `.actions` set 0.5rem. Use `.compact` for the tighter rhythm.
 - `.cluster` removes the native list chrome (`margin`, `padding`, `list-style`) from a `ul`, `ol` or `menu` it is applied to; the element stays a list in the DOM.
-- The `dialog.modal` footer row has zero specificity, so `.justify-content-*` and `.background-*` utilities apply to it.
 - A heading that is the first child beside a leading `.dialog-icon` in a `.media` row centers on the icon anywhere, not only in a dialog.
 - A `dialog.modal` or `.drawer` header gives back its corner-close room when the dialog contains no `.close`; without `:has()` the room stays.
 

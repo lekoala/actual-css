@@ -760,9 +760,10 @@ test("dialog icon well is intent-aware and anchors the heading beside it", () =>
   const css = readCss("src/css/components/modal.css");
 
   // Confirmation layout is composition (media + .bleed footer + utilities):
-  // no dialog variant, and the footer row stays at zero specificity.
+  // no dialog variant, and no implicit footer row — markup composes .cluster,
+  // and a default row here would fight every composed one.
   expect(css).not.toContain("dialog-confirmation");
-  expect(css).toContain(":where(dialog.modal > :is(form, .stack) > footer) {");
+  expect(css).not.toMatch(/footer\)?\s*\{[^}]*display:/);
   expect(css).toContain(".media > .dialog-icon + * > :is(h1, h2, h3, h4, h5, h6):first-child {");
   expect(css).toMatch(/\.dialog-icon\s*\{[^}]*place-items:\s*center;/);
   expect(css).toMatch(/\.dialog-icon\s*\{[^}]*border-radius:\s*var\(--radius-full\);/);

@@ -25,11 +25,6 @@
       }
 
       .blog-topbar-inner {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--gap);
         padding-block: 0.75rem;
       }
 
@@ -71,11 +66,6 @@
         padding-block-end: 3rem;
       }
 
-      .blog-article-body {
-        max-inline-size: 70ch;
-        margin-inline: auto;
-      }
-
       /* Article footer (tags, author, share) */
       .blog-article-end {
         max-inline-size: 70ch;
@@ -85,18 +75,12 @@
       }
 
       /* Tag pills are just .badge.soft.neutral — badge.css already handles
-         the a.badge hover/focus states. */
-      .blog-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-      }
-
-      .blog-share {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        flex-wrap: wrap;
+         the a.badge hover/focus states. Tag, share and newsletter rows are
+         .cluster rows set tighter than the article rhythm. */
+      .blog-tags,
+      .blog-share,
+      .blog-newsletter form {
+        gap: var(--space-20);
       }
 
       .blog-share span {
@@ -104,14 +88,9 @@
         font-size: 0.875rem;
       }
 
-      /* Author card */
-      /* .media items-center (framework) provides the auto/1fr grid shape. */
+      /* Author card: .card is the surface, .media items-center the shape. */
       .blog-author {
         gap: 1rem;
-        padding: 1.25rem;
-        border: var(--border-width) solid var(--border);
-        border-radius: var(--radius-lg);
-        background: var(--surface-raised);
       }
 
       .blog-author-body strong {
@@ -147,16 +126,10 @@
       }
 
       /* Related posts: column layout comes from the framework's .grid
-         (--grid-min: 14rem). */
+         (--grid-min: 14rem); each post is a .card.link-plain. */
       .blog-related-card {
-        display: grid;
-        gap: 0.5rem;
-        padding: 1rem;
-        border: var(--border-width) solid var(--border);
-        border-radius: var(--radius-lg);
-        background: var(--surface-raised);
-        color: inherit;
-        text-decoration: none;
+        --card-gap: var(--space-20);
+
         transition: border-color var(--duration), transform var(--duration);
       }
 
@@ -211,20 +184,6 @@
         color: var(--text);
       }
 
-      /* Newsletter card */
-      .blog-newsletter {
-        padding: 1.25rem;
-        border-radius: var(--radius-lg);
-        background: var(--surface-raised);
-        border: var(--border-width) solid var(--border);
-      }
-
-      .blog-newsletter form {
-        display: flex;
-        gap: 0.5rem;
-        flex-wrap: wrap;
-      }
-
       .blog-newsletter input {
         flex: 1 1 12rem;
       }
@@ -257,7 +216,7 @@
   <body>
     <!-- Site header -->
     <header class="blog-topbar">
-      <div class="center blog-topbar-inner">
+      <div class="center cluster justify-content-space-between blog-topbar-inner">
         <a class="navbar-brand" href="#">
           <span class="avatar primary"><abbr class="circle">AC</abbr></span>
           Actual Notes
@@ -318,7 +277,7 @@
         <div class="blog-page center">
           <div>
             <!-- Article body -->
-            <article class="prose blog-article-body">
+            <article class="prose margin-inline-auto">
               <p>
                 When a framework ships a typography system, the temptation is to make it loud: a seven-step type
                 scale, a fluid ramp, a Bootstrap-style utility for every heading level. The result is a system that
@@ -500,15 +459,15 @@
 
             <!-- Article end: tags + share + author -->
             <footer class="blog-article-end">
-              <ul class="list-reset blog-tags" aria-label="Tags">
+              <ul class="cluster blog-tags" aria-label="Tags">
                 <li><a class="badge soft neutral" href="#">design</a></li>
                 <li><a class="badge soft neutral" href="#">typography</a></li>
                 <li><a class="badge soft neutral" href="#">systems</a></li>
                 <li><a class="badge soft neutral" href="#">css</a></li>
               </ul>
 
-              <div class="cluster" style="justify-content: space-between; margin-block-start: 1rem; flex-wrap: wrap; gap: 1rem;">
-                <div class="blog-share">
+              <div class="cluster justify-content-space-between" style="margin-block-start: 1rem; gap: 1rem;">
+                <div class="cluster blog-share">
                   <span>Share</span>
                   <button class="btn neutral outline sm" type="button"><i class="ti ti-brand-x" aria-hidden="true"></i> Post</button>
                   <button class="btn neutral outline sm" type="button"><i class="ti ti-brand-linkedin" aria-hidden="true"></i> LinkedIn</button>
@@ -517,7 +476,7 @@
                 <button class="btn neutral ghost sm" type="button"><i class="ti ti-bookmark" aria-hidden="true"></i> Save</button>
               </div>
 
-              <article class="media items-center blog-author" style="margin-block-start: 1.5rem;">
+              <article class="card media items-center blog-author" style="margin-block-start: 1.5rem;">
                 <span class="avatar lg primary"><abbr>AM</abbr></span>
                 <div class="blog-author-body">
                   <strong>Ada Meridian</strong>
@@ -592,13 +551,13 @@
 
           <!-- Sidebar -->
           <aside class="blog-aside" aria-label="Article sidebar">
-            <section class="blog-newsletter" id="newsletter">
+            <section class="card blog-newsletter" id="newsletter">
               <hgroup>
                 <h3 style="margin: 0;">Stay close to the work</h3>
                 <p class="muted" style="margin: 0.25rem 0 0; font-size: 0.875rem;">A short note when something is
                   worth reading. No tracking, no noise.</p>
               </hgroup>
-              <form onsubmit="event.preventDefault();" style="margin-block-start: 0.75rem;">
+              <form class="cluster" onsubmit="event.preventDefault();">
                 <label class="field-label sr-only" for="newsletter-email">Email</label>
                 <input class="input sm" id="newsletter-email" type="email" placeholder="you@example.com" required>
                 <button class="btn primary sm" type="submit">Subscribe</button>
@@ -624,7 +583,7 @@
               <h3 class="overline" style="margin: 0 0 0.75rem;">
                 Topics
               </h3>
-              <ul class="list-reset blog-tags" aria-label="Topics">
+              <ul class="cluster blog-tags" aria-label="Topics">
                 <li><a class="badge soft neutral" href="#">design</a></li>
                 <li><a class="badge soft neutral" href="#">typography</a></li>
                 <li><a class="badge soft neutral" href="#">systems</a></li>
@@ -645,25 +604,25 @@
         </hgroup>
 
         <div class="grid" style="--grid-min: 14rem;">
-          <a class="blog-related-card" href="#">
+          <a class="card link-plain blog-related-card" href="#">
             <div class="blog-related-cover cover" aria-hidden="true"></div>
             <span class="overline pill">Tokens</span>
             <strong>Small surfaces, sharp contracts</strong>
             <small>5 min read</small>
           </a>
-          <a class="blog-related-card" href="#">
+          <a class="card link-plain blog-related-card" href="#">
             <div class="blog-related-cover cover" aria-hidden="true" style="--cover-a: var(--secondary); --cover-b: var(--secondary);"></div>
             <span class="overline pill">Components</span>
             <strong>Why we stopped using a type scale</strong>
             <small>7 min read</small>
           </a>
-          <a class="blog-related-card" href="#">
+          <a class="card link-plain blog-related-card" href="#">
             <div class="blog-related-cover cover" aria-hidden="true" style="--cover-a: var(--success); --cover-b: var(--success);"></div>
             <span class="overline pill">Forms</span>
             <strong>Buttons that look like buttons</strong>
             <small>4 min read</small>
           </a>
-          <a class="blog-related-card" href="#">
+          <a class="card link-plain blog-related-card" href="#">
             <div class="blog-related-cover cover" aria-hidden="true" style="--cover-a: var(--warning); --cover-b: var(--warning);"></div>
             <span class="overline pill">Layout</span>
             <strong>Stack, cluster, grid: the three primitives</strong>

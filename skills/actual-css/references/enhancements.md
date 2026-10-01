@@ -40,14 +40,16 @@ the title in the content wrapper's direct `<header>`. The close button is then
 anchored to the surface, and the header reserves room so the title cannot run
 under it. A `.close` that is a direct child of the chrome header is that same
 corner overlay, and that header reserves room for it too. Put actions in the
-wrapper's `<footer>`.
+wrapper's `<footer>` and compose its row in markup
+(`<footer class="cluster justify-content-end">`); the modal and drawer footers
+have no layout of their own.
 
 Use `.bleed` on that direct header when it needs a contrasting full-width band;
 the wrapper relays the modal padding so the band reaches the surface edges while
 its contents keep the normal inset. A confirmation is composition, not a
 variant: a `.media` row with a leading `.dialog-icon` and the text column (its
 first heading centers on the icon, following copy stays in that column), then a
-`<footer class="bleed background-subtle justify-content-space-between">` action
+`<footer class="bleed background-subtle cluster justify-content-space-between">` action
 band with the cancel-style action first. For a trailing icon, use the wrapper's
 direct header as a non-wrapping split `.cluster`, with `.grow` on the text
 group. Do not compensate heading alignment with a literal margin.
