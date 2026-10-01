@@ -25,8 +25,10 @@ controls second. The title has the close control's minimum height; its leading
 icon and every trailing control share the same center axis. A wrapped title
 simply makes the row taller.
 
-A direct `dialog > header` is dialog chrome and forms a distinct header band.
-Put an ordinary content heading inside the padded `form` or `.stack` instead.
+A direct `dialog > header` is dialog chrome and forms a distinct header band,
+painted `--surface-subtle`. Change the fill with a surface utility on the header
+(`<header class="background-raised">`). Put an ordinary content heading inside
+the padded `form` or `.stack` instead.
 
 Keep a corner [`.close`](close.md) as a direct child of the dialog and put the
 title in the wrapper's direct `<header>`. The button then stays outside the
@@ -590,7 +592,6 @@ animation-friendly, and consistent across supported browsers.
   dialog or an inherited value both reach it. A dialog is shrink-to-fit: a
   composition that must fill this width sets `inline-size` as well.
 - `--modal-pad` — padding of the direct `<form>` or `.stack` content wrapper.
-- `--modal-header-bg` — background of a direct header band.
 - `--dialog-viewport-gap` — distance kept between the dialog and the viewport edges.
 - `--dialog-icon-size` — diameter of the `.dialog-icon` circle. The heading
   beside a leading icon reads the same hook to center on it, so set it on the
