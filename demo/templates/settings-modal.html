@@ -17,15 +17,6 @@
       padding-block: var(--space-60);
     }
 
-    .settings-intro {
-      display: grid;
-      gap: var(--space-30);
-    }
-
-    .settings-intro > * {
-      margin: 0;
-    }
-
     /*
      * Everything below is the composition of this particular dialog: the two
      * hooks it sets, the panel geometry, and the placement decisions a
@@ -92,10 +83,8 @@
 
     /* The tab strip spans the column so its selected indicator lands on the
        rail's divider, which is the whole point of the vertical variant. Only
-       the rail's other content is inset. */
+       the rail's other content is inset. The rail itself is a .stack. */
     .settings-nav-inner {
-      display: grid;
-      gap: var(--space-30);
       /* The re-anchored close button sits in this column: reserve its row,
          then the same inset again as the gap below it. Spelled additively
          because calc() multiplication is below the supported floor, the same
@@ -115,10 +104,6 @@
 
     .settings-panels {
       padding: var(--space-40) var(--space-50) var(--space-50);
-    }
-
-    .settings-panel > h2 {
-      margin: 0;
     }
 
     /* Documented escape hatch, per the .list contract: regions align to the
@@ -176,7 +161,7 @@
 
 <body>
   <main class="center settings-page">
-    <header class="settings-intro">
+    <header class="stack">
       <p class="overline">Actual CSS</p>
       <h1>Settings modal</h1>
       <p class="lead">
@@ -204,7 +189,7 @@
 
     <div class="settings-body">
       <div class="settings-nav scroller">
-        <div class="settings-nav-inner">
+        <div class="stack settings-nav-inner">
           <label class="input-icon sm">
             <i class="ti ti-search" aria-hidden="true"></i>
             <!-- Without autofocus the dialog's focusing steps land on the first

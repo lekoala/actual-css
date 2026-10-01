@@ -36,9 +36,8 @@
     }
 
     .keyboard-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-      gap: var(--gap);
+      --grid-min: 22rem;
+
       align-items: start;
     }
 
@@ -63,17 +62,12 @@
       position: sticky;
       inset-block-start: var(--space-20);
       z-index: 2;
-      display: grid;
       gap: var(--space-20);
       padding: var(--space-30);
       border: var(--border-width) solid var(--border);
       border-radius: var(--radius);
       background: var(--surface-raised);
       box-shadow: var(--shadow);
-    }
-
-    .keyboard-monitor p {
-      margin: 0;
     }
 
     .keyboard-log {
@@ -128,7 +122,7 @@
       </header>
 
       <section class="keyboard-section" aria-labelledby="focus-monitor-title">
-        <div class="keyboard-monitor" aria-live="polite">
+        <div class="stack keyboard-monitor" aria-live="polite">
           <p id="focus-monitor-title"><strong>Current focus:</strong> <output id="focus-current">document body</output></p>
           <ol class="keyboard-log" id="focus-log" aria-label="Recent focus changes"></ol>
         </div>
@@ -211,7 +205,7 @@
       </div>
       <p>Start on the control immediately before each trigger so the complete tab sequence is observable.</p>
 
-      <div class="keyboard-grid">
+      <div class="grid keyboard-grid">
         <article class="keyboard-fixture">
           <h3>Action menu</h3>
           <p class="keyboard-steps">
@@ -345,7 +339,7 @@
         Escape and clicking the disclosure always remain available. The manual
         fixture also demonstrates an explicit <code>data-flyout-close</code> control.
       </p>
-      <div class="keyboard-grid">
+      <div class="grid keyboard-grid">
         <article class="keyboard-fixture">
           <h4>Default: inside and outside</h4>
           <p class="keyboard-steps">Either “Inside action” or “Outside target” closes the panel.</p>
@@ -468,7 +462,7 @@
 
     <section class="keyboard-section" aria-labelledby="other-controls-title">
       <h2 id="other-controls-title">Dismissal and native behavior</h2>
-      <div class="keyboard-grid">
+      <div class="grid keyboard-grid">
         <article class="keyboard-fixture">
           <h3>Tooltip</h3>
           <p class="keyboard-steps">Tab to the trigger, then press Escape. Focus stays on the trigger while the tooltip closes.</p>
