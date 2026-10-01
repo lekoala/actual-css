@@ -494,9 +494,9 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   // inline-start trait (CONTRIBUTING.md "Forced colors invariant").
   expect(css).toMatch(/\.nav-link\[aria-current\] \{[^}]*color: var\(--state-selected\);/);
   expect(css).not.toMatch(/\.nav-link\[aria-current\][^{]*\{[^}]*font-weight:/);
-  // A current link keeps its accent on hover: the plain hover rule drops to
-  // --text, so the current:hover rule must hold --state-selected.
-  expect(css).toMatch(/\.nav-link\[aria-current\]:hover \{[^}]*color: var\(--state-selected\);/);
+  // A hovered current link keeps the selected accent by source order: the
+  // [aria-current] rule follows :hover at equal specificity. The rendered
+  // result is asserted in tests/browser/surface-context.test.js.
   expect(css).toContain(".nav-list .nav-link[aria-current]");
   expect(css).toMatch(
     /\.nav-list \.nav-link\[aria-current\]::before \{[^}]*border-inline-start: 2px solid currentColor;/,

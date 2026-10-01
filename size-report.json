@@ -1,12 +1,12 @@
 {
-  "totalRaw": 348099,
+  "totalRaw": 347078,
   "core": {
-    "minified": 11757,
-    "brotli": 2697
+    "minified": 11811,
+    "brotli": 2715
   },
   "full": {
-    "minified": 132471,
-    "brotli": 18887
+    "minified": 131549,
+    "brotli": 18834
   },
   "js": {
     "full": {
@@ -18,7 +18,7 @@
   "files": [
     {
       "file": "components/modal.css",
-      "raw": 14100
+      "raw": 13290
     },
     {
       "file": "components/steps.css",
@@ -34,7 +34,7 @@
     },
     {
       "file": "core/theme.css",
-      "raw": 8395
+      "raw": 8660
     },
     {
       "file": "components/alert.css",
@@ -42,7 +42,7 @@
     },
     {
       "file": "components/button.css",
-      "raw": 7935
+      "raw": 7769
     },
     {
       "file": "components/drawer.css",
@@ -53,24 +53,24 @@
       "raw": 7733
     },
     {
-      "file": "components/badge.css",
-      "raw": 6981
-    },
-    {
       "file": "themes/material.css",
       "raw": 6976
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 6872
     },
     {
       "file": "effects/aura.css",
       "raw": 6445
     },
     {
-      "file": "forms/range.css",
-      "raw": 5632
+      "file": "components/avatar.css",
+      "raw": 5698
     },
     {
-      "file": "components/avatar.css",
-      "raw": 5561
+      "file": "forms/range.css",
+      "raw": 5632
     },
     {
       "file": "components/flyout.css",
@@ -101,10 +101,6 @@
       "raw": 5058
     },
     {
-      "file": "themes/gradient.css",
-      "raw": 5057
-    },
-    {
       "file": "components/tooltip.css",
       "raw": 4960
     },
@@ -114,7 +110,11 @@
     },
     {
       "file": "components/navbar.css",
-      "raw": 4876
+      "raw": 4898
+    },
+    {
+      "file": "themes/gradient.css",
+      "raw": 4667
     },
     {
       "file": "themes/glass.css",
@@ -278,7 +278,7 @@
     },
     {
       "file": "components/chat.css",
-      "raw": 2189
+      "raw": 2205
     },
     {
       "file": "forms/form-actions.css",
@@ -390,7 +390,7 @@
     },
     {
       "file": "core/reset.css",
-      "raw": 714
+      "raw": 728
     },
     {
       "file": "layout/scroll-target.css",
