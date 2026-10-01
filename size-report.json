@@ -1,12 +1,12 @@
 {
-  "totalRaw": 348314,
+  "totalRaw": 348387,
   "core": {
     "minified": 11811,
     "brotli": 2715
   },
   "full": {
-    "minified": 130697,
-    "brotli": 18802
+    "minified": 130765,
+    "brotli": 18774
   },
   "js": {
     "full": {
@@ -129,12 +129,12 @@
       "raw": 4119
     },
     {
-      "file": "components/card.css",
-      "raw": 3972
+      "file": "utilities/base.css",
+      "raw": 4037
     },
     {
-      "file": "utilities/base.css",
-      "raw": 3964
+      "file": "components/card.css",
+      "raw": 3972
     },
     {
       "file": "layout/grid.css",

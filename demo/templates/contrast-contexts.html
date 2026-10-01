@@ -56,13 +56,9 @@
       color: var(--surface-solid-fg);
     }
 
-    /* Same split as a card header, so every band reads alike. */
+    /* A split .cluster, so every band reads alike. */
     .cc-context > header {
-      display: flex;
-      flex-wrap: wrap;
       gap: var(--space-20) var(--space-30);
-      align-items: baseline;
-      justify-content: space-between;
       margin-block-end: var(--space-30);
     }
 
@@ -492,7 +488,7 @@
     const host = document.getElementById("contexts");
     host.innerHTML = CONTEXTS.map(
       (context, n) => `${context.open}
-        <header><strong>${context.name}</strong><code>${context.code.replace(/</g, "&lt;")}</code></header>
+        <header class="cluster items-baseline justify-content-space-between"><strong>${context.name}</strong><code>${context.code.replace(/</g, "&lt;")}</code></header>
         <div class="cc-samples">
           ${SAMPLES.map((sample) => `<figure class="cc-sample">${sample}<figcaption></figcaption></figure>`).join("")}
         </div>
