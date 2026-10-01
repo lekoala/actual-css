@@ -33,15 +33,11 @@
       margin: 0;
     }
 
+    /* A split .cluster pinned to the top while the cases scroll. */
     .probe-bar {
       position: sticky;
       inset-block-start: 0;
       z-index: 2;
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-30);
-      align-items: center;
-      justify-content: space-between;
       padding: var(--space-30);
       border: var(--border-width) solid var(--border);
       border-radius: var(--radius);
@@ -50,16 +46,12 @@
     }
 
     .probe-score {
-      margin: 0;
       font-size: var(--font-size-lg);
       font-weight: 600;
     }
 
     .probe-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
-      gap: var(--gap);
-      align-items: start;
+      --grid-min: 24rem;
     }
 
     .probe-case {
@@ -91,9 +83,6 @@
     .probe-checks {
       display: grid;
       gap: var(--space-10);
-      margin: 0;
-      padding: 0;
-      list-style: none;
       font-family: var(--font-mono);
       font-size: var(--font-size-sm);
     }
@@ -349,7 +338,7 @@
       </div>
     </header>
 
-    <div class="probe-bar">
+    <div class="cluster justify-content-space-between probe-bar">
       <div class="cluster">
         <button class="btn primary" type="button" id="run-all">Run all</button>
         <button class="btn outline" type="button" id="reset-all">Reset</button>
@@ -363,7 +352,7 @@
         Record this verbatim. A scenario score without the engine it was taken
         on proves nothing about a floor.
       </p>
-      <ul class="probe-checks" id="engine-facts"></ul>
+      <ul class="list-reset probe-checks" id="engine-facts"></ul>
     </section>
 
     <section class="probe-section" aria-labelledby="subset-title">
@@ -398,7 +387,7 @@
     <section class="probe-section" aria-labelledby="scenarios-title">
       <h2 id="scenarios-title">Scenarios</h2>
 
-      <div class="probe-grid">
+      <div class="grid items-start probe-grid">
         <article class="probe-case" data-scenario="1">
           <div class="cluster flex-nowrap items-baseline justify-content-space-between">
             <h3>1 · Manual mode round trip</h3>
@@ -412,7 +401,7 @@
           <div class="cluster">
             <button class="btn sm outline" type="button" data-run="1">Run</button>
           </div>
-          <ul class="probe-checks" data-checks></ul>
+          <ul class="list-reset probe-checks" data-checks></ul>
           <div class="probe-panel" id="s1-panel" popover="manual">
             <strong>Panel 1</strong>
             <span>Round trip</span>
@@ -433,7 +422,7 @@
           <div class="cluster">
             <button class="btn sm outline" type="button" data-run="2">Run</button>
           </div>
-          <ul class="probe-checks" data-checks></ul>
+          <ul class="list-reset probe-checks" data-checks></ul>
           <div class="probe-panel" id="s2-panel" popover="manual">
             <strong>Panel 2</strong>
             <button class="btn sm" type="button" id="s2-bait">Should be unreachable</button>
@@ -453,7 +442,7 @@
           <div class="cluster">
             <button class="btn sm outline" type="button" data-run="3">Run</button>
           </div>
-          <ul class="probe-checks" data-checks></ul>
+          <ul class="list-reset probe-checks" data-checks></ul>
           <div id="s3-host">
             <div class="probe-panel" id="s3-panel" popover="manual">
               <strong>Panel 3</strong>
@@ -475,7 +464,7 @@
           <div class="cluster">
             <button class="btn sm outline" type="button" data-run="4">Run</button>
           </div>
-          <ul class="probe-checks" data-checks></ul>
+          <ul class="list-reset probe-checks" data-checks></ul>
           <div id="s4-theme">
             <div class="probe-panel" id="s4-theme-panel" popover="manual">
               <strong>Theme island</strong>
@@ -507,7 +496,7 @@
           <div class="cluster">
             <button class="btn sm outline" type="button" data-run="5">Run</button>
           </div>
-          <ul class="probe-checks" data-checks></ul>
+          <ul class="list-reset probe-checks" data-checks></ul>
           <dialog class="probe-dialog" id="s5-open" open>
             <strong>Non-modal dialog</strong>
             <div class="probe-panel" id="s5-open-panel" popover="manual">
@@ -538,7 +527,7 @@
           <div class="cluster">
             <button class="btn sm outline" type="button" data-run="6">Run</button>
           </div>
-          <ul class="probe-checks" data-checks></ul>
+          <ul class="list-reset probe-checks" data-checks></ul>
           <div class="probe-panel" id="s6-panel" popover="manual">
             <strong>Panel 6</strong>
             <span>Interrupted exit</span>
@@ -560,7 +549,7 @@
           <div class="cluster">
             <button class="btn sm outline" type="button" data-run="7">Fallback: synthetic point</button>
           </div>
-          <ul class="probe-checks" data-checks></ul>
+          <ul class="list-reset probe-checks" data-checks></ul>
           <div class="probe-panel" id="s7-panel" popover="manual">
             <strong>Panel 7</strong>
             <span>At the pointer</span>
@@ -582,7 +571,7 @@
           <div class="cluster">
             <button class="btn sm outline" type="button" data-run="8">Run</button>
           </div>
-          <ul class="probe-checks" data-checks></ul>
+          <ul class="list-reset probe-checks" data-checks></ul>
           <div class="probe-panel" id="s8-panel" popover="manual">
             <strong>Panel 8</strong>
             <span>Sheet-style</span>

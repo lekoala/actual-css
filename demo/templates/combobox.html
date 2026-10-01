@@ -21,12 +21,9 @@
       align-items: flex-start;
     }
 
+    /* A .stack: a flex column's cross axis has no min-content floor, so the
+       code cards shrink and their <pre> does the scrolling it opts into. */
     .page-cards {
-      display: grid;
-      /* A single auto track takes its items' min-content as a floor, and these
-         cards hold code blocks: minmax(0, …) lets the card shrink so the <pre>
-         does the scrolling it already opts into. */
-      grid-template-columns: minmax(0, 1fr);
       gap: var(--space-50);
     }
 
@@ -185,7 +182,7 @@ font-size: var(--font-size-xs);
 
     <p class="demo-status" id="support-status" role="status"></p>
 
-    <div class="page-cards">
+    <div class="stack page-cards">
       <section class="card stack">
         <header>
           <hgroup>

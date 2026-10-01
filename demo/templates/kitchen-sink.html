@@ -68,12 +68,6 @@
       border-block-end: var(--border-width) solid var(--border);
       padding-block-end: var(--space-20);
     }
-    .sink-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--gap);
-      align-items: start;
-    }
     .sink-col { display: grid; gap: var(--space-20); }
     /* A data-theme island recomputes its tokens but paints nothing: without
        its own surface, its ink lands on the page theme's background (a light
@@ -119,7 +113,7 @@
     <h2>Buttons</h2>
 
     <h3>Variants</h3>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <div class="sink-col">
         <button class="btn">Default</button>
         <button class="btn primary">Primary</button>
@@ -147,7 +141,7 @@
     </div>
 
     <h3>Sizes</h3>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <div class="sink-col">
         <button class="btn sm primary">Small</button>
         <button class="btn primary">Regular</button>
@@ -156,7 +150,7 @@
     </div>
 
     <h3>States</h3>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <div class="sink-col">
         <button class="btn" disabled>Disabled</button>
         <button class="btn primary" aria-busy="true">Loading</button>
@@ -164,7 +158,7 @@
     </div>
 
     <h3>Links &amp; groups</h3>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <div class="sink-col">
         <a class="btn primary" href="#">Link button</a>
       </div>
@@ -179,7 +173,7 @@
   <!-- 2. Badges -->
   <section>
     <h2>Badges</h2>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <div class="sink-col">
         <span class="badge">Default</span>
         <span class="badge primary">Primary</span>
@@ -271,7 +265,7 @@
   <!-- 4. Cards -->
   <section>
     <h2>Cards</h2>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <article class="card stack" style="max-inline-size:20rem">
         <header><h3>Card title</h3></header>
         <p>Some quick example text to build on the card.</p>
@@ -292,7 +286,7 @@
   <!-- 5. Avatars -->
   <section>
     <h2>Avatars</h2>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <span class="avatar"><span>TP</span></span>
       <span class="avatar primary"><span>JD</span></span>
       <button class="avatar"><span>AB</span></button>
@@ -622,12 +616,12 @@
   <!-- 13. Spinner -->
   <section>
     <h2>Spinner</h2>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <span class="spinner"></span>
       <span class="spinner sm primary"></span>
       <span class="spinner lg danger"></span>
     </div>
-    <div class="sink-grid" style="margin-block-start:var(--space-20)">
+    <div class="cluster items-start" style="margin-block-start:var(--space-20)">
       <button class="btn primary" type="button" aria-busy="true" disabled>
         <span class="spinner" aria-hidden="true"></span>
         Saving…
@@ -643,7 +637,7 @@
   <!-- 14. Skeleton -->
   <section>
     <h2>Skeleton</h2>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <!-- Placeholders take no width of their own: the card needs one here,
            or the wrapping row shrinks it to the avatar. -->
       <article class="card" style="inline-size:min(100%, 20rem)" role="status" aria-label="Loading article">
@@ -686,7 +680,7 @@
     <h2>Steps</h2>
     <!-- Forced colors flattens complete and upcoming to the same ringed disc;
          --step-complete-mark is the documented way to keep them apart. -->
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <ol class="steps steps-horizontal" style="flex:1 1 22rem">
         <li class="step-complete"><span class="step-label">Account</span></li>
         <li aria-current="step"><span class="step-label">Payment</span></li>
@@ -805,7 +799,7 @@
   <section>
     <h2>Aura</h2>
     <!-- The wrapper carries the intent; the child keeps its own. -->
-    <div class="sink-grid" style="gap:2.5rem">
+    <div class="cluster items-start" style="gap:2.5rem">
       <span class="aura primary">
         <button class="btn" type="button">Publish</button>
       </span>
@@ -835,7 +829,7 @@
       resolved values: pressed button, selected/disabled choices, card shadow,
       focus ring, and text selection should all follow the island's green
       palette.</p>
-    <div class="sink-grid sink-island" data-theme="forest">
+    <div class="cluster items-start sink-island" data-theme="forest">
       <button class="btn" type="button" aria-pressed="false">Toggle</button>
       <button class="btn" type="button" aria-pressed="true">Toggle</button>
       <label class="choice">
@@ -882,7 +876,7 @@
 
     <h3>Density</h3>
     <!-- Density belongs on the container, never on the controls. -->
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <div class="compact sink-col">
         <p class="overline">sm</p>
         <button class="btn primary" type="button">Button</button>
@@ -919,7 +913,7 @@
   <!-- 27. Disabled & special states -->
   <section>
     <h2>Disabled &amp; special states</h2>
-    <div class="sink-grid">
+    <div class="cluster items-start">
       <div class="sink-col">
         <span class="badge" aria-disabled="true">Disabled badge</span>
         <button class="badge primary" disabled>Disabled button badge</button>

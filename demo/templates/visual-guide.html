@@ -54,13 +54,9 @@
       margin: 0 0 var(--space-50);
     }
 
+    /* The caption is a .stack set tighter than the figure rhythm. */
     .vg-figure > figcaption {
-      display: grid;
       gap: var(--space-20);
-    }
-
-    .vg-figure > figcaption > * {
-      margin: 0;
     }
 
     .vg-figure h3 {
@@ -211,12 +207,10 @@
       color: var(--text-subtle);
     }
 
-    /* Vertical bars whose height IS the control size. */
+    /* Vertical bars whose height IS the control size, in a centered .stack.
+       The gap stays local: the parent cluster sets a wider --gap. */
     .vg-height {
-      display: grid;
-      justify-items: center;
       gap: var(--space-20);
-      text-align: center;
     }
 
     .vg-height > .bar {
@@ -332,7 +326,7 @@
       </section>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>The spacing scale</h3>
           <p class="muted measure">
@@ -389,7 +383,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Gap is the relationship</h3>
           <p class="muted measure">
@@ -438,7 +432,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Space before chrome</h3>
           <p class="muted measure">
@@ -505,7 +499,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Two owners, one page</h3>
           <p class="muted measure">
@@ -548,7 +542,7 @@
       </section>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.stack</code> — one axis, one gap</h3>
           <p class="muted measure">
@@ -585,7 +579,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.cluster</code> — a row that wraps</h3>
           <p class="muted measure">
@@ -626,7 +620,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.grid</code> fills space, <code>.switcher</code> switches together</h3>
           <p class="muted measure">
@@ -677,7 +671,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.grid-N</code> collapses through divisors</h3>
           <p class="muted measure">
@@ -735,7 +729,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.center</code> bounds the page, <code>.measure</code> bounds the line</h3>
           <p class="muted measure">
@@ -779,7 +773,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3><code>.media</code> — fixed leading, flexible trailing</h3>
           <p class="muted measure">
@@ -802,7 +796,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Choosing one</h3>
           <p class="muted measure">
@@ -871,7 +865,7 @@
       </section>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Density is a context</h3>
           <p class="muted measure">
@@ -928,7 +922,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>What the context actually sets</h3>
           <p class="muted measure">
@@ -975,15 +969,15 @@
         <div class="card subtle vg-stage">
           <span class="overline">--control-size, drawn at its real height</span>
           <div class="cluster" style="--cluster-align: flex-end; --gap: var(--space-50);">
-            <div class="vg-height">
+            <div class="stack items-center text-center vg-height">
               <span class="bar" style="block-size: var(--control-size-sm);"></span>
               <span class="caption"><code>sm</code>2rem</span>
             </div>
-            <div class="vg-height">
+            <div class="stack items-center text-center vg-height">
               <span class="bar" style="block-size: var(--control-size-md);"></span>
               <span class="caption"><code>md</code>2.375rem</span>
             </div>
-            <div class="vg-height">
+            <div class="stack items-center text-center vg-height">
               <span class="bar" style="block-size: var(--control-size-lg);"></span>
               <span class="caption"><code>lg</code>2.75rem</span>
             </div>
@@ -1001,7 +995,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Density moves geometry. Size moves geometry <em>and</em> type.</h3>
           <p class="muted measure">
@@ -1039,7 +1033,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Density is opt-in, not a global multiplier</h3>
           <p class="muted measure">
@@ -1098,7 +1092,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>A local size beats an inherited context</h3>
           <p class="muted measure">
@@ -1125,7 +1119,7 @@
       </figure>
 
       <figure class="card raised vg-figure">
-        <figcaption>
+        <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Tune the dimension, not the number</h3>
           <p class="muted measure">

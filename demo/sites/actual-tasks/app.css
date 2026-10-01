@@ -75,9 +75,6 @@
   text-align: center;
 }
 
-.mobile-empty[hidden] {
-  display: none;
-}
 
 .mobile-tab-panel {
   padding-block: var(--space-40);

@@ -639,9 +639,8 @@ img { filter: saturate(1.06) contrast(1.03); }
   border-block-start: 1px solid var(--border);
 }
 
+/* .media.items-center owns the frame/text columns. */
 .feature-item {
-  display: flex;
-  align-items: center;
   gap: 0.75rem;
   padding-block-start: 0.4rem;
 }
@@ -649,7 +648,6 @@ img { filter: saturate(1.06) contrast(1.03); }
 .feature-item .frame {
   inline-size: 4rem;
   block-size: 4rem;
-  flex: none;
   border-radius: var(--radius);
 }
 
@@ -671,9 +669,9 @@ img { filter: saturate(1.06) contrast(1.03); }
 .field-grid { --grid-min: 14rem; --gap: 1rem; }
 .field-card { --card-pad: 1rem; }
 .choice-grid { --grid-min: 12rem; --gap: 0.85rem; }
+/* A .media row: the control and its descriptive text are separate grid items
+   (auto + minmax(0, 1fr)), so the long copy never compresses the control. */
 .choice-row {
-  display: flex;
-  align-items: start;
   gap: 0.65rem;
   padding: 0.95rem 1rem;
   border: 1px solid var(--border);
@@ -681,12 +679,7 @@ img { filter: saturate(1.06) contrast(1.03); }
   background: color-mix(in oklch, var(--surface-raised) 92%, transparent);
 }
 
-/* Keep the control and its descriptive text as separate flex items. The long
-   copy is fragile when it stays nested in the same flex item as the radio input,
-   because the browser compresses that text block unpredictably and the label
-   looks squashed. */
 .choice-row > :where(input[type="radio"], input[type="checkbox"]) {
-  flex: 0 0 auto;
   margin-block-start: 0.15rem;
 }
 
@@ -694,7 +687,6 @@ img { filter: saturate(1.06) contrast(1.03); }
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0.2rem;
-  flex: 1 1 auto;
   min-inline-size: 0;
 }
 

@@ -97,6 +97,5 @@
 .composer-actions {
   --cluster-justify: space-between;
 
-  align-items: center;
   padding: var(--space-20) var(--space-30);
 }
