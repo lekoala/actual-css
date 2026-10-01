@@ -124,7 +124,7 @@ of the value and never rewrites it.
     </span>
   </label>
 
-  <div class="form-actions">
+  <div class="cluster form-actions">
     <button class="btn primary" type="submit">Submit</button>
     <button class="btn neutral outline" type="reset">Reset</button>
   </div>

@@ -5,12 +5,12 @@
 The simplest case stays inside the form.
 
 ```html
-<form novalidate>
+<form class="stack" novalidate>
   <div class="stack">
     <!-- fields -->
   </div>
 
-  <div class="form-actions">
+  <div class="cluster form-actions">
     <button type="button" class="btn outline">Cancel</button>
     <button type="submit" class="btn primary">Save changes</button>
   </div>
@@ -26,7 +26,7 @@ For sticky page footers, dialog footers, card footers, and split layouts, detach
   </div>
 </form>
 
-<footer class="form-actions">
+<footer class="cluster form-actions">
   <button type="button" class="btn outline">Cancel</button>
   <button type="submit" class="btn primary" form="profile-form">
     Save changes
@@ -43,7 +43,7 @@ For multiple submit intents, pair the `form` attribute with `formaction`. The fo
   <!-- fields -->
 </form>
 
-<div class="form-actions">
+<div class="cluster form-actions">
   <button type="submit"
           class="btn outline"
           form="article-form"

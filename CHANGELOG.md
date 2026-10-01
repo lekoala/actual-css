@@ -9,6 +9,8 @@
 - `.dialog-confirmation` is removed; compose `.media` with `.dialog-icon`, then `<footer class="bleed background-subtle justify-content-space-between">` (recipe in `docs/pages/components/dialog.md`).
 - The `dialog.modal` body `<footer>` has no layout of its own; compose its row as `<footer class="cluster justify-content-end">`, as in the drawer.
 - `--modal-header-bg` is removed; put a `.background-*` utility on the `dialog.modal > header` band.
+- `.form-actions` no longer lays out its row; write `class="cluster form-actions"` (`--form-actions-justify` and `--form-actions-align` still apply).
+- `.form-actions` drops its top margin and `--form-actions-margin-block-start`; space it from the fields with `.stack` on the form.
 
 ### Changed
 
