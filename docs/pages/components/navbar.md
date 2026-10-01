@@ -1,10 +1,10 @@
 # Navbar
 
-> Horizontal top-level navigation bar with a brand, an inline link list, and a vertical nav-list for drawers.
+> Horizontal top-level navigation bar with a brand, an inline `.cluster` link list, and a vertical `.nav-list` for drawers.
 
 - Use `.navbar` for the horizontal bar shell.
 - `.navbar-brand` is the brand link at the inline start.
-- `.navbar-nav` is the horizontal link list; its items are `.nav-link`.
+- Horizontal links live in a `.cluster`; its items are `.nav-link`.
 - `.nav-list` is the shared vertical navigation list, reused by `.drawer` for stacked links.
 - Mark the current page with `aria-current="page"` on the active `.nav-link`.
 - Presence is the contract: set `aria-current` on the current link and remove
@@ -15,9 +15,9 @@ For a public or normally scrolling page, `.navbar` belongs inside the semantic
 site header. Do not use `.topbar` or `.app-layout` unless the page actually has
 the specialized persistent application-shell behavior those APIs describe.
 
-`.navbar-nav` and `.nav-list` are mutually exclusive: `.navbar-nav` is a horizontal
-flex list, `.nav-list` a vertical grid. Putting both on one element resolves to
-`.nav-list` (vertical) — pick one per container.
+Horizontal navbar links use a `.cluster`. Use `.nav-list` when the navigation
+becomes a full-width vertical list. The two are distinct contracts, so pick one
+per container.
 
 `.navbar` stays the horizontal bar for a site or webapp header with a brand and
 normal document scrolling. `.app-nav` is not merely a stacked-icon flavour of it:
@@ -32,7 +32,6 @@ icons. See [App Navigation](app-navigation.md).
 | --------------- | ----------- | ----------------------------------------------------- |
 | `.navbar`       | Component   | Horizontal bar shell.                                 |
 | `.navbar-brand` | Composition | Brand link at the inline start.                       |
-| `.navbar-nav`   | Composition | Horizontal link list.                                 |
 | `.nav-link`     | Component   | A link item; current page via `aria-current="page"`.  |
 | `.nav-list`     | Component   | Shared vertical navigation list, reused by `.drawer`. |
 
@@ -41,7 +40,7 @@ icons. See [App Navigation](app-navigation.md).
 ```html demo
 <nav class="navbar" aria-label="Main">
   <a class="navbar-brand" href="/">Actual CSS</a>
-  <ul class="navbar-nav">
+  <ul class="cluster">
     <li><a class="nav-link" href="/docs" aria-current="page">Docs</a></li>
     <li><a class="nav-link" href="/components">Components</a></li>
     <li><a class="nav-link" href="/examples">Examples</a></li>
@@ -70,7 +69,7 @@ accessible name.
 ```html demo
 <nav class="navbar" aria-label="Main">
   <a class="navbar-brand" href="/">Actual CSS</a>
-  <ul class="navbar-nav">
+  <ul class="cluster">
     <li><a class="nav-link" href="/" aria-current="page">Home</a></li>
     <li><a class="nav-link" href="/docs">Docs</a></li>
   </ul>

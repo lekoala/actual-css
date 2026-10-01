@@ -5,6 +5,7 @@
 ### Breaking changes
 
 - `.actions` is removed; compose a `<menu>` (or `<ul>`) with `cluster` for a row, or `stack list-reset` for a vertical list.
+- `.navbar-nav` is removed; the horizontal link list is a `.cluster`, and `.navbar > :where(.cluster)` supplies the tighter navbar gap.
 - `.dialog-confirmation` is removed; compose `.media` with `.dialog-icon`, then `<footer class="bleed background-subtle justify-content-space-between">` (recipe in `docs/pages/components/dialog.md`).
 
 ### Changed

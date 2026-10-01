@@ -3,8 +3,8 @@
  *
  * Docs: docs/pages/components/navbar.md
  *
- * .navbar is a horizontal bar; .navbar-brand is the brand link; .navbar-nav is
- * the inline link list using .nav-link items. .nav-list is the vertical nav
+ * .navbar is a horizontal bar; .navbar-brand is the brand link; the inline
+ * links are a .cluster using .nav-link items. .nav-list is the vertical nav
  * list shared with .drawer, fed by the shared --gap token.
  *
  * Internal:
@@ -53,15 +53,10 @@
   border-radius: var(--radius-sm);
 }
 
-.navbar-nav {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
+/* A cluster directly inside the bar takes the navbar's tight rhythm, at the
+   same specificity as .cluster so utilities (.gap-none) still win. */
+.navbar > :where(.cluster) {
   gap: var(--space-10);
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 
 .nav-link {
@@ -123,7 +118,7 @@
 
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links.
    Links fill each row so the whole line is an interactive target; the
-   horizontal .navbar-nav links keep their intrinsic size. */
+   horizontal .cluster links keep their intrinsic size. */
 .nav-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
