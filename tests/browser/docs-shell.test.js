@@ -47,3 +47,41 @@ it("docs shell never widens the document beyond the viewport", async () => {
     { artifactName: "docs-shell-width" },
   );
 });
+
+/* The compact header is a single row at every width: brand + controls, with
+ * the theme select dropped to the drawer below 32rem. A wrapping cluster would
+ * silently reintroduce the stacked logo / theme / Search+Menu header, so guard
+ * the height instead of the markup. One row is the tallest control (select,
+ * --control-size 38px) plus the header's two --space-30 edges (24px); a wrapped
+ * header roughly doubles that. */
+const ONE_ROW_HEIGHT = 64;
+
+it("docs header stays a single row", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      for (const width of [320, 360, 512, 640, 896, 1200]) {
+        await view.cdp("Emulation.setDeviceMetricsOverride", {
+          width,
+          height: 900,
+          deviceScaleFactor: 1,
+          mobile: false,
+        });
+        await sleep(100);
+
+        const height = await view.evaluate(`(() => {
+          const header = document.querySelector(".docs-header-inner");
+          const theme = document.querySelector(".docs-header-inner .docs-theme-field");
+          return {
+            height: Math.round(header.getBoundingClientRect().height),
+            themeVisible: getComputedStyle(theme).display !== "none",
+          };
+        })()`);
+
+        expect(`${width}: ${height.height <= ONE_ROW_HEIGHT}`).toBe(`${width}: true`);
+        expect(`${width}: ${height.themeVisible}`).toBe(`${width}: ${width > 528}`);
+      }
+    },
+    { artifactName: "docs-header-row" },
+  );
+});

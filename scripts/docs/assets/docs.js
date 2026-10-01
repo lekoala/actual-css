@@ -8,7 +8,10 @@
 
   /* --- Theme persistence --- */
 
-  const themeSelect = document.querySelector("[data-docs-theme]");
+  /* The theme select is duplicated: the header keeps it while there is room,
+     the drawer carries it below the compact-header breakpoint. Bind every
+     copy and mirror a change across the rest, or the hidden one drifts. */
+  const themeSelects = [...document.querySelectorAll("[data-docs-theme]")];
 
   function applyTheme(theme) {
     if (!theme || theme === "system") {
@@ -18,24 +21,26 @@
     }
   }
 
-  if (themeSelect) {
+  if (themeSelects.length > 0) {
     const storedTheme = localStorage.getItem(THEME_KEY);
     const current =
-      storedTheme && themeSelect.querySelector(`option[value="${storedTheme}"]`)
+      storedTheme && themeSelects[0].querySelector(`option[value="${storedTheme}"]`)
         ? storedTheme
         : "system";
-    themeSelect.value = current;
+    for (const select of themeSelects) {
+      select.value = current;
+      select.addEventListener("change", () => {
+        const theme = select.value;
+        if (theme === "system") {
+          localStorage.removeItem(THEME_KEY);
+        } else {
+          localStorage.setItem(THEME_KEY, theme);
+        }
+        applyTheme(theme);
+        for (const other of themeSelects) other.value = theme;
+      });
+    }
     applyTheme(current);
-
-    themeSelect.addEventListener("change", () => {
-      const theme = themeSelect.value;
-      if (theme === "system") {
-        localStorage.removeItem(THEME_KEY);
-      } else {
-        localStorage.setItem(THEME_KEY, theme);
-      }
-      applyTheme(theme);
-    });
   }
 
   /* --- Copy code blocks --- */
