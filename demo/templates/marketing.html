@@ -26,19 +26,15 @@
       border-block-end: var(--border-width) solid var(--border);
     }
 
+    /* The topbar rows are .cluster; the page keeps its own row and column
+       rhythm. */
     .mk-topbar-inner {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
       gap: 0.6rem 1rem;
       padding-block: 0.85rem;
     }
 
     .mk-topbar-nav {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
+      gap: var(--space-50);
     }
 
     .mk-topbar-nav a {
@@ -49,10 +45,6 @@
 
     .mk-topbar-nav a:hover {
       color: var(--text);
-    }
-
-    .mk-topbar-actions {
-      flex-wrap: nowrap;
     }
 
     /* Below this width the primary nav links no longer fit alongside the
@@ -119,13 +111,13 @@
         radial-gradient(ellipse 40% 40% at 85% 15%, color-mix(in oklch, var(--secondary) 14%, transparent), transparent 65%);
     }
 
+    /* .center carries the measure (--center-size) and the inline centering. */
     .mk-hero-inner {
+      --center-size: 46rem;
+
       display: grid;
       justify-items: center;
       gap: 1.5rem;
-      max-inline-size: 46rem;
-      margin-inline: auto;
-      text-align: center;
     }
 
     .mk-hero h1 {
@@ -139,18 +131,7 @@
       color: var(--primary);
     }
 
-    .mk-hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-    }
-
     .mk-hero-proof {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
       gap: 0.5rem 0.9rem;
       color: var(--text-muted);
       font-size: 0.875rem;
@@ -258,17 +239,10 @@
       margin-block-end: 2.5rem;
     }
 
-    .mk-section-head.center-text {
-      margin-inline: auto;
-      text-align: center;
-    }
-
     /* Feature cards */
     .mk-feature {
       --card-pad: 1.75rem;
-
-      display: grid;
-      gap: 0.85rem;
+      --card-gap: 0.85rem;
     }
 
     /* .cover from demo/styles/demo.css. Both gradient stops use the same
@@ -300,7 +274,6 @@
     .mk-feature.tint-success { --_tint: var(--success); }
 
     .mk-feature p {
-      margin: 0;
       color: var(--text-muted);
     }
 
@@ -317,18 +290,16 @@
       }
     }
 
+    /* A .stack of .media rows: number circle + text. */
     .mk-method-list {
-      display: grid;
       gap: 1.25rem;
     }
 
     .mk-method-list li {
-      display: flex;
       gap: 0.85rem;
     }
 
     .mk-method-list .mk-num {
-      flex: 0 0 auto;
       display: inline-grid;
       place-items: center;
       inline-size: 1.75rem;
@@ -349,9 +320,8 @@
     }
 
     .mk-quote {
-      display: grid;
-      gap: 1rem;
-      padding: 2rem;
+      --card-pad: var(--space-60);
+      --card-gap: var(--space-40);
     }
 
     .mk-quote blockquote {
@@ -368,10 +338,8 @@
       content: close-quote;
     }
 
+    /* The card footer slot already lays out the attribution row. */
     .mk-quote footer {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
       color: var(--text-muted);
       font-size: 0.875rem;
     }
@@ -382,9 +350,9 @@
 
     /* Theme gallery: small mock-UI previews standing in for real screenshots. */
     .mk-theme-grid {
-      display: grid;
+      --grid-min: 9rem;
+
       gap: 1rem;
-      grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
     }
 
     .mk-theme-card {
@@ -468,7 +436,6 @@
     }
 
     .mk-price-features {
-      display: grid;
       gap: 0.6rem;
       font-size: 0.9375rem;
     }
@@ -491,8 +458,8 @@
     }
 
     .mk-cta-inner {
-      max-inline-size: 34rem;
-      margin-inline: auto;
+      --center-size: 34rem;
+
       display: grid;
       gap: 1.5rem;
       justify-items: center;
@@ -509,9 +476,6 @@
        (--grid-min: 12rem) and demo/styles/demo.css's .footer-links. */
 
     .mk-footer-bottom {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
       gap: 1rem;
       margin-block-start: 2rem;
       padding-block-start: 1.5rem;
@@ -524,20 +488,20 @@
 <body>
   <!-- Site header -->
   <header class="mk-topbar">
-    <div class="center mk-topbar-inner">
+    <div class="center cluster justify-content-space-between mk-topbar-inner">
       <a class="mk-brand" href="#">
         <span class="mk-brand-mark" aria-hidden="true">AC</span>
         Actual CSS
       </a>
       <nav aria-label="Primary">
-        <ul class="list-reset mk-topbar-nav">
+        <ul class="cluster flex-nowrap mk-topbar-nav">
           <li><a href="#features">Features</a></li>
           <li><a href="#method">Method</a></li>
           <li><a href="#themes">Themes</a></li>
           <li><a href="#pricing">Pricing</a></li>
         </ul>
       </nav>
-      <div class="cluster mk-topbar-actions">
+      <div class="cluster flex-nowrap mk-topbar-actions">
         <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
         <a class="btn neutral outline sm" href="#">Sign in</a>
         <a class="btn primary sm" href="#pricing">Get started</a>
@@ -549,17 +513,17 @@
     <!-- Hero -->
     <section class="mk-hero">
       <div class="mk-hero-glow" aria-hidden="true"></div>
-      <div class="center mk-hero-inner">
+      <div class="center text-center mk-hero-inner">
         <span class="overline pill primary">v0.9 — public preview</span>
         <h1 class="text-display">Ship interfaces that feel <em>considered</em>.</h1>
         <p class="text-lead text-balance">
           A CSS framework built on layout primitives and semantic HTML, not a wall of utility classes. Style once, theme forever.
         </p>
-        <div class="mk-hero-actions">
+        <div class="cluster justify-content-center">
           <a class="btn primary lg" href="#pricing">Get started — it's free</a>
           <a class="btn neutral ghost lg" href="#features">See how it works</a>
         </div>
-        <p class="mk-hero-proof">
+        <p class="cluster justify-content-center mk-hero-proof">
           <span>No build step required</span>
           <span class="dot" aria-hidden="true"></span>
           <span>Zero runtime dependencies</span>
@@ -604,7 +568,7 @@
 
     <!-- Features -->
     <section class="mk-section center" id="features">
-      <div class="mk-section-head center-text">
+      <div class="mk-section-head margin-inline-auto text-center">
         <span class="overline">Why teams switch</span>
         <h2>Three primitives. No new mental model.</h2>
         <p class="muted">Layout, components, and tokens compose the way plain HTML already wants to.</p>
@@ -641,22 +605,22 @@
         <div class="stack">
           <span class="overline">The method</span>
           <h2>Quiet defaults, earned complexity</h2>
-          <ol class="list-reset mk-method-list">
-            <li>
+          <ol class="list-reset stack mk-method-list">
+            <li class="media">
               <span class="circle mk-num" aria-hidden="true">1</span>
               <div>
                 <strong>Start with plain HTML.</strong>
                 <p>The baseline styles native elements so a form or a table already looks right before a single class is added.</p>
               </div>
             </li>
-            <li>
+            <li class="media">
               <span class="circle mk-num" aria-hidden="true">2</span>
               <div>
                 <strong>Add structure with primitives.</strong>
                 <p>Reach for <code>.stack</code>, <code>.cluster</code>, and <code>.grid</code> before inventing a one-off layout.</p>
               </div>
             </li>
-            <li>
+            <li class="media">
               <span class="circle mk-num" aria-hidden="true">3</span>
               <div>
                 <strong>Theme at the token layer.</strong>
@@ -680,13 +644,13 @@
 
     <!-- Themes -->
     <section class="mk-section center" id="themes">
-      <div class="mk-section-head center-text">
+      <div class="mk-section-head margin-inline-auto text-center">
         <span class="overline">One contract, many looks</span>
         <h2>Themes are a demonstration, not a decision</h2>
         <p class="muted">Ship one theme that matches your product. The gallery below shows the same components restyled through tokens alone — no component markup changes.</p>
       </div>
 
-      <div class="mk-theme-grid" role="list" aria-label="Available theme previews">
+      <div class="grid mk-theme-grid" role="list" aria-label="Available theme previews">
         <div class="mk-theme-card" role="listitem" style="--_p-bg:#f4f4f5; --_p-fg:#3f3f46; --_p-accent:#2563eb;">
           <div class="mk-theme-preview"><span class="chip"></span><span class="chip accent"></span></div>
           <span>Light</span>
@@ -728,7 +692,7 @@
 
     <!-- Pricing -->
     <section class="mk-section center" id="pricing">
-      <div class="mk-section-head center-text">
+      <div class="mk-section-head margin-inline-auto text-center">
         <span class="overline">Pricing</span>
         <h2>Free to build. Paid support when you need it.</h2>
         <p class="muted">The framework is MIT licensed. These tiers are for teams that want a direct line to us.</p>
@@ -741,7 +705,7 @@
             <p class="muted">For side projects and small teams.</p>
           </header>
           <div class="mk-price"><strong>$0</strong><span>/ forever</span></div>
-          <ul class="list-reset mk-price-features">
+          <ul class="list-reset stack mk-price-features">
             <li><i class="ti ti-check" aria-hidden="true"></i> Full framework, MIT license</li>
             <li><i class="ti ti-check" aria-hidden="true"></i> All 17 themes</li>
             <li><i class="ti ti-check" aria-hidden="true"></i> Community Discord</li>
@@ -756,7 +720,7 @@
             <p class="muted">For products shipping to customers.</p>
           </header>
           <div class="mk-price"><strong>$29</strong><span>/ month</span></div>
-          <ul class="list-reset mk-price-features">
+          <ul class="list-reset stack mk-price-features">
             <li><i class="ti ti-check" aria-hidden="true"></i> Everything in Community</li>
             <li><i class="ti ti-check" aria-hidden="true"></i> Priority issue triage</li>
             <li><i class="ti ti-check" aria-hidden="true"></i> Theme review for your brand</li>
@@ -770,7 +734,7 @@
             <p class="muted">For organizations with a design system team.</p>
           </header>
           <div class="mk-price"><strong>Custom</strong></div>
-          <ul class="list-reset mk-price-features">
+          <ul class="list-reset stack mk-price-features">
             <li><i class="ti ti-check" aria-hidden="true"></i> Everything in Team</li>
             <li><i class="ti ti-check" aria-hidden="true"></i> Dedicated Slack channel</li>
             <li><i class="ti ti-check" aria-hidden="true"></i> Custom theme contract audit</li>
@@ -785,7 +749,7 @@
       <div class="center mk-cta-inner">
         <h2>Start with the theme you already have.</h2>
         <p class="muted">Drop in the stylesheet, keep your brand colors, and let the components do the rest.</p>
-        <div class="mk-hero-actions">
+        <div class="cluster justify-content-center">
           <a class="btn primary lg" href="#">Read the docs</a>
           <a class="btn neutral ghost lg" href="#">Star on GitHub</a>
         </div>
@@ -827,7 +791,7 @@
           </ul>
         </div>
       </div>
-      <div class="mk-footer-bottom">
+      <div class="cluster justify-content-space-between mk-footer-bottom">
         <span>© 2026 Actual CSS.</span>
         <span>Set in the system font stack.</span>
       </div>
