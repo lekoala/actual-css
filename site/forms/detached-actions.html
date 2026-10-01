@@ -234,38 +234,44 @@
 &lt;/form&gt;
 </code></pre>
 <p>For sticky page footers, dialog footers, card footers, and split layouts, detach the actions and connect the submit button with <code>form=&quot;&lt;id&gt;&quot;</code>.</p>
-<pre><code class="language-html">&lt;form id=&quot;profile-form&quot; novalidate&gt;
-  &lt;div class=&quot;stack&quot;&gt;
-    &lt;!-- long form fields --&gt;
-  &lt;/div&gt;
-&lt;/form&gt;
+<pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;form id=&quot;profile-form&quot; novalidate&gt;
+    &lt;div class=&quot;stack&quot;&gt;
+      &lt;!-- long form fields --&gt;
+    &lt;/div&gt;
+  &lt;/form&gt;
 
-&lt;footer class=&quot;cluster form-actions&quot;&gt;
-  &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
-  &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot; form=&quot;profile-form&quot;&gt;
-    Save changes
-  &lt;/button&gt;
-&lt;/footer&gt;
+  &lt;footer class=&quot;cluster form-actions&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn outline&quot;&gt;Cancel&lt;/button&gt;
+    &lt;button type=&quot;submit&quot; class=&quot;btn primary&quot; form=&quot;profile-form&quot;&gt;
+      Save changes
+    &lt;/button&gt;
+  &lt;/footer&gt;
+&lt;/div&gt;
 </code></pre>
+<p>The wrapper that holds the form and its detached actions owns the distance
+between them: give it <code>.stack</code>.</p>
 <p>For multiple submit intents, pair the <code>form</code> attribute with <code>formaction</code>. The form has one action; each submit button can override it.</p>
-<pre><code class="language-html">&lt;form id=&quot;article-form&quot;
-      action=&quot;/articles/publish&quot;
-      method=&quot;post&quot;&gt;
-  &lt;!-- fields --&gt;
-&lt;/form&gt;
+<pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;form id=&quot;article-form&quot;
+        action=&quot;/articles/publish&quot;
+        method=&quot;post&quot;&gt;
+    &lt;!-- fields --&gt;
+  &lt;/form&gt;
 
-&lt;div class=&quot;cluster form-actions&quot;&gt;
-  &lt;button type=&quot;submit&quot;
-          class=&quot;btn outline&quot;
-          form=&quot;article-form&quot;
-          formaction=&quot;/articles/draft&quot;&gt;
-    Save draft
-  &lt;/button&gt;
-  &lt;button type=&quot;submit&quot;
-          class=&quot;btn primary&quot;
-          form=&quot;article-form&quot;&gt;
-    Publish
-  &lt;/button&gt;
+  &lt;div class=&quot;cluster form-actions&quot;&gt;
+    &lt;button type=&quot;submit&quot;
+            class=&quot;btn outline&quot;
+            form=&quot;article-form&quot;
+            formaction=&quot;/articles/draft&quot;&gt;
+      Save draft
+    &lt;/button&gt;
+    &lt;button type=&quot;submit&quot;
+            class=&quot;btn primary&quot;
+            form=&quot;article-form&quot;&gt;
+      Publish
+    &lt;/button&gt;
+  &lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
 
