@@ -198,16 +198,17 @@ a.avatar[aria-disabled="true"] {
   --avatar-stack-font-size: var(--font-size-lg);
 }
 
-@supports selector(:has(> .avatar)) {
-  .avatar-stack:has(> .avatar.sm) {
-    --avatar-stack-size: 1.75rem;
-    --avatar-stack-font-size: var(--font-size-xs);
-  }
+/* Infer the stack scale from its avatars. Progressive: without :has() the
+   explicit .avatar-stack.sm/.lg classes and the default size still size the
+   group, only the inference is lost. */
+.avatar-stack:has(> .avatar.sm) {
+  --avatar-stack-size: 1.75rem;
+  --avatar-stack-font-size: var(--font-size-xs);
+}
 
-  .avatar-stack:has(> .avatar.lg) {
-    --avatar-stack-size: 3rem;
-    --avatar-stack-font-size: var(--font-size-lg);
-  }
+.avatar-stack:has(> .avatar.lg) {
+  --avatar-stack-size: 3rem;
+  --avatar-stack-font-size: var(--font-size-lg);
 }
 
 .avatar-stack > .avatar {

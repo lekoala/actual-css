@@ -94,23 +94,15 @@
   /* Bootstrap 4 gradient recipe (linear-gradient(180deg, mix(white, $color,
      15%), $color)) ported to the token contract. --ui-bg covers explicit
      .solid; --btn-default-bg covers the bare/no-variant default. Bootstrap 4
-     still darkens the button on hover even with gradients enabled, so
-     --ui-hover-bg reruns the same recipe over a darkened base color instead
-     of reusing --ui-bg verbatim — the resting gradient shape survives, just
-     shifted darker, same as the flat color-mix darken variants.css uses for
-     hover on ungradiented themes. */
+     darkens the button on hover even with gradients, so the resting gradient
+     stays put and --hover-overlay-solid paints the darkening over it — the
+     shape survives, just shifted darker. */
   [data-theme="gradient"] .btn:not(:where(.soft, .outline, .ghost, .link, .surface)) {
-    --gradient-hover-color: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
     --ui-bg: linear-gradient(
       180deg,
       color-mix(in oklch, white 15%, var(--intent, var(--neutral))),
       var(--intent, var(--neutral))
     );
     --btn-default-bg: var(--ui-bg);
-    --ui-hover-bg: linear-gradient(
-      180deg,
-      color-mix(in oklch, white 15%, var(--gradient-hover-color)),
-      var(--gradient-hover-color)
-    );
   }
 }
