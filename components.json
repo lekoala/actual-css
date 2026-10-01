@@ -459,13 +459,14 @@
     "source": "src/css/components/modal.css",
     "cssImport": "actual-css/css/components/modal",
     "classes": [
-      "dialog-confirmation",
       "dialog-icon",
       "had-scrollbar",
       "has-modal-open",
       "is-static",
+      "media",
       "modal",
-      "scrollable"
+      "scrollable",
+      "stack"
     ],
     "publicHooks": [
       "--modal-size",

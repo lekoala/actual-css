@@ -756,10 +756,14 @@ test("drawer RTL keeps the Degraded fallback and enhances inherited direction", 
   expect(css).toContain(':where(dialog).drawer[data-side="end"]:dir(rtl) {');
 });
 
-test("confirmation dialog composes media alignment with an intent-aware icon well", () => {
+test("dialog icon well is intent-aware and anchors the heading beside it", () => {
   const css = readCss("src/css/components/modal.css");
 
-  expect(css).toContain(":where(dialog).modal.dialog-confirmation > form > :is(.media, header)");
+  // Confirmation layout is composition (media + .bleed footer + utilities):
+  // no dialog variant, and the footer row stays at zero specificity.
+  expect(css).not.toContain("dialog-confirmation");
+  expect(css).toContain(":where(dialog.modal > :is(form, .stack) > footer) {");
+  expect(css).toContain(".media > .dialog-icon + * > :is(h1, h2, h3, h4, h5, h6):first-child {");
   expect(css).toMatch(/\.dialog-icon\s*\{[^}]*place-items:\s*center;/);
   expect(css).toMatch(/\.dialog-icon\s*\{[^}]*border-radius:\s*var\(--radius-full\);/);
   expect(css).toContain("background: var(--ui-bg, var(--surface-subtle));");

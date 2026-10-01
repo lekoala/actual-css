@@ -249,7 +249,7 @@
 
         <article class="card pattern-card">
           <h3>Destructive confirm</h3>
-          <p class="muted">Leading status icon, an item preview, and a full-width action band. Pure <code>dialog-confirmation</code>.</p>
+          <p class="muted">Leading status icon, an item preview, and a full-width action band. Pure composition: <code>media</code>, <code>bleed</code>, utilities.</p>
           <button class="btn danger" type="button" commandfor="p-destructive" command="show-modal" aria-haspopup="dialog" aria-controls="p-destructive">Open</button>
         </article>
       </div>
@@ -329,12 +329,12 @@
   </dialog>
 
   <!-- Destructive confirm — the item preview lives in the confirmation header. -->
-  <dialog class="modal dialog-confirmation" id="p-destructive" closedby="none" aria-labelledby="p-destructive-title">
+  <dialog class="modal" id="p-destructive" closedby="none" aria-labelledby="p-destructive-title">
     <form method="dialog">
       <div class="media">
         <span class="dialog-icon danger soft" aria-hidden="true"><i class="ti ti-alert-triangle"></i></span>
 
-        <header>
+        <header class="stack">
           <h3 id="p-destructive-title">Delete "Q3 campaign"?</h3>
           <p class="muted">The campaign, its audience, and its scheduled sends are removed permanently.</p>
 
@@ -345,7 +345,7 @@
         </header>
       </div>
 
-      <footer>
+      <footer class="bleed background-subtle justify-content-space-between">
         <button class="btn outline" value="cancel">Cancel</button>
         <button class="btn danger" value="delete">Delete campaign</button>
       </footer>

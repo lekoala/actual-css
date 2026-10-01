@@ -339,20 +339,20 @@
 
   <div class="status-bar" data-status id="settings-status" role="status" aria-live="polite" aria-atomic="true"></div>
 
-  <dialog class="modal dialog-confirmation" id="delete-account-modal" closedby="none">
+  <dialog class="modal" id="delete-account-modal" closedby="none">
     <form method="dialog">
       <div class="media">
         <span class="dialog-icon danger soft" aria-hidden="true">
           <i class="ti ti-alert-triangle"></i>
         </span>
 
-        <header>
+        <header class="stack">
           <h3>Delete account?</h3>
           <p class="muted">This will permanently remove your account and all associated data. This action cannot be undone.</p>
         </header>
       </div>
 
-      <footer>
+      <footer class="bleed background-subtle justify-content-space-between">
         <button class="btn outline" value="cancel">Cancel</button>
         <button class="btn danger" value="delete">Delete account</button>
       </footer>

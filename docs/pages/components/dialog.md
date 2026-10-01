@@ -6,13 +6,12 @@
 
 ## Class reference
 
-| Class                  | Kind        | Description                                    |
-| ---------------------- | ----------- | ---------------------------------------------- |
-| `.modal`               | Component   | Centered surface on the native `<dialog>`.     |
-| `.scrollable`          | Variant     | Header and footer stay while the body scrolls. |
-| `.dialog-confirmation` | Variant     | Message above a full-width action band.        |
-| `.dialog-icon`         | Component   | Circular intent-aware icon well.               |
-| `.close`               | Composition | Icon-only close button, at the top end.        |
+| Class          | Kind        | Description                                    |
+| -------------- | ----------- | ---------------------------------------------- |
+| `.modal`       | Component   | Centered surface on the native `<dialog>`.     |
+| `.scrollable`  | Variant     | Header and footer stay while the body scrolls. |
+| `.dialog-icon` | Component   | Circular intent-aware icon well.               |
+| `.close`       | Composition | Icon-only close button, at the top end.        |
 
 ## Anatomy
 
@@ -42,9 +41,11 @@ The corner close overlays the panel edge, so a body tall enough to scroll would
 run its scrollbar under the button. Give such a dialog the `scrollable` anatomy:
 the close then sits over the fixed header and the scrollbar starts below it.
 
-Add `.bleed` to that header when it should form a full-width band. It reaches
-the dialog edges, keeps the modal's inner padding, and can take a surface token
-such as `background: var(--surface-subtle)`.
+Add `.bleed` to that header, or to the wrapper's footer, when it should form a
+full-width band. It reaches the dialog edges and corners, keeps the modal's
+inner padding, and takes a surface utility such as `.background-subtle`. The
+footer's row layout has zero specificity, so a `.justify-content-*` utility
+moves its actions.
 
 ### Where each region lives
 
@@ -130,12 +131,19 @@ runtime, backdrop clicks give a small static feedback instead of closing.
 </dialog>
 ```
 
-For a compact destructive confirmation with a leading status icon, compose
-`dialog-confirmation` with the media object. The icon well accepts the shared
-intent and emphasis classes; `dialog-icon danger soft` creates the tinted red
-circle while keeping the glyph centered. The footer becomes a separate action
-band whose two actions sit at its edges, so the cancel-style control never sits
-next to the committing one.
+### Confirmation with an icon and an action band
+
+For a compact confirmation with a leading status icon, put a `.dialog-icon` and
+the text column in a `.media` row. The first heading of that column centers on
+the icon; following copy stays in the same column. The icon well accepts the
+shared intent and emphasis classes: `dialog-icon danger soft` is the tinted red
+circle.
+
+The action band is the footer composed with existing primitives: `.bleed`
+reaches the panel edges and corners, `.background-subtle` paints it, and
+`.justify-content-space-between` splits the decision pair. Keep the
+cancel-style action first, so it holds the leading edge and never sits next to
+the committing one.
 
 ```html demo
 <button class="btn danger"
@@ -147,7 +155,7 @@ next to the committing one.
   Deactivate account
 </button>
 
-<dialog class="modal dialog-confirmation"
+<dialog class="modal"
         id="deactivate-dialog"
         closedby="none"
         style="--modal-size: 40rem">
@@ -157,13 +165,13 @@ next to the committing one.
         <i class="ti ti-alert-triangle"></i>
       </span>
 
-      <header>
+      <header class="stack">
         <h3>Deactivate account</h3>
         <p class="muted">Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.</p>
       </header>
     </div>
 
-    <footer>
+    <footer class="bleed background-subtle justify-content-space-between">
       <button class="btn outline" value="cancel">Cancel</button>
       <button class="btn danger" value="deactivate">Deactivate</button>
     </footer>
@@ -173,8 +181,7 @@ next to the committing one.
 
 For a trailing illustration, use a direct `<header>` as the message region and
 compose it as a non-wrapping split cluster. `.grow` keeps the text column
-flexible while `.dialog-icon` stays at the inline end. The confirmation variant
-pads either this header or the leading-icon `.media` shape above.
+flexible while `.dialog-icon` stays at the inline end.
 
 Use the same anatomy in a `.card` instead when the surface belongs in page
 content and does not need modal focus or a backdrop.
@@ -189,7 +196,7 @@ content and does not need modal focus or a backdrop.
   Customize workspace
 </button>
 
-<dialog class="modal dialog-confirmation"
+<dialog class="modal"
         id="customize-dialog"
         closedby="none"
         aria-labelledby="customize-dialog-title">
@@ -206,9 +213,9 @@ content and does not need modal focus or a backdrop.
       </span>
     </header>
 
-    <footer>
-      <button class="btn primary" value="customize">Customize</button>
+    <footer class="bleed background-subtle">
       <button class="btn ghost" value="later">Later</button>
+      <button class="btn primary" value="customize">Customize</button>
     </footer>
   </form>
 </dialog>
@@ -585,10 +592,10 @@ animation-friendly, and consistent across supported browsers.
 - `--modal-pad` — padding of the direct `<form>` or `.stack` content wrapper.
 - `--modal-header-bg` — background of a direct header band.
 - `--dialog-viewport-gap` — distance kept between the dialog and the viewport edges.
-- `--dialog-icon-size` — diameter of the `.dialog-icon` circle. The confirmation
-  title reads the same hook to center on the icon, so set it on the icon's
-  media row (or the dialog) and both inherit one value. A value on the icon
-  alone sizes only the circle.
+- `--dialog-icon-size` — diameter of the `.dialog-icon` circle. The heading
+  beside a leading icon reads the same hook to center on it, so set it on the
+  icon's media row (or the dialog) and both inherit one value. A value on the
+  icon alone sizes only the circle.
 - `--dialog-icon-glyph-size` — size of the glyph centered inside `.dialog-icon`;
   same placement as `--dialog-icon-size`.
 - `--close-size` / `--close-icon-size` — size of the corner `.close` and of its
