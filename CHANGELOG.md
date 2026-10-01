@@ -4,10 +4,13 @@
 
 ### Breaking changes
 
+- `.actions` is removed; compose a `<menu>` (or `<ul>`) with `cluster` for a row, or `stack list-reset` for a vertical list.
 - `.dialog-confirmation` is removed; compose `.media` with `.dialog-icon`, then `<footer class="bleed background-subtle justify-content-space-between">` (recipe in `docs/pages/components/dialog.md`).
 
 ### Changed
 
+- An action row composed from `.cluster` inherits the framework `--gap` (0.75rem); the removed `.actions` set 0.5rem. Use `.compact` for the tighter rhythm.
+- `.cluster` removes the native list chrome (`margin`, `padding`, `list-style`) from a `ul`, `ol` or `menu` it is applied to; the element stays a list in the DOM.
 - The `dialog.modal` footer row has zero specificity, so `.justify-content-*` and `.background-*` utilities apply to it.
 - A heading that is the first child beside a leading `.dialog-icon` in a `.media` row centers on the icon anywhere, not only in a dialog.
 - A wrapper `<header>` reserves room for the corner `.close` only when the dialog has one.

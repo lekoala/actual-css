@@ -9,6 +9,7 @@
  * --cluster-wrap
  *
  * Child contract: direct-child margins are reset, spacing comes from --gap.
+ * A ul/ol/menu keeps its semantics but loses list chrome (see below).
  */
 .cluster {
   display: flex;
@@ -21,4 +22,14 @@
 
 .cluster > * {
   margin: 0;
+}
+
+/* Horizontal, wrapping layout is incompatible with list markers and native
+   indentation: a ul/ol/menu applied with .cluster stays a list in the DOM, but
+   its visual chrome would be accidental. .stack intentionally leaves this
+   alone — a vertical list can keep its numbers. */
+:where(ul, ol, menu).cluster {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }

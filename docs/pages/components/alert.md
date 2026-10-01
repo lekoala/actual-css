@@ -6,7 +6,7 @@
 - Supports longer text and lists.
 - Links inherit alert color by default.
 - Alerts are soft by default. Use `.surface` for neutral chrome with the intent only in the ink, `.solid` or `.outline` when the message needs stronger or quieter emphasis.
-- Use `<menu class="actions cluster">` for alert action lists.
+- Use `<menu class="cluster">` for alert action lists.
 - Use `role="alert"` only when the alert is injected dynamically and should be announced.
 - Not a toast.
 - Could have simple or complex html content.
@@ -90,7 +90,7 @@ intent treatment when the color itself carries the meaning.
       <p>Check your billing details or try another card.</p>
     </div>
 
-    <menu class="actions cluster">
+    <menu class="cluster">
       <li><a class="btn danger sm" href="/billing">Update billing</a></li>
       <li><a href="/support">Contact support</a></li>
     </menu>
