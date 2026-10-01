@@ -8,7 +8,7 @@ The `<form>` is the bounding parent. The sticky stays pinned to the viewport bot
 
 Scroll the page to see the actions stay reachable.
 
-```html demo
+```html demo sticky
 <form class="stack" novalidate>
   <div class="stack">
     <label class="field">
@@ -92,84 +92,86 @@ For a sticky page footer, dialog footer, or card footer, detach the actions and 
 
 Scroll the page to see the detached footer stay reachable.
 
-```html demo
-<form id="account-form" novalidate>
-  <div class="stack">
-    <label class="field">
-      <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
-      <input class="input" type="text" autocomplete="name" required placeholder="Jane Doe" />
-    </label>
+```html demo sticky
+<div class="stack">
+  <form id="account-form" novalidate>
+    <div class="stack">
+      <label class="field">
+        <span class="field-label">Full name <span class="required-mark" aria-hidden="true">*</span></span>
+        <input class="input" type="text" autocomplete="name" required placeholder="Jane Doe" />
+      </label>
 
-    <label class="field">
-      <span class="field-label">Email <span class="required-mark" aria-hidden="true">*</span></span>
-      <input class="input" type="email" autocomplete="email" required />
-    </label>
+      <label class="field">
+        <span class="field-label">Email <span class="required-mark" aria-hidden="true">*</span></span>
+        <input class="input" type="email" autocomplete="email" required />
+      </label>
 
-    <label class="field">
-      <span class="field-label">Phone</span>
-      <input class="input" type="tel" autocomplete="tel" />
-    </label>
+      <label class="field">
+        <span class="field-label">Phone</span>
+        <input class="input" type="tel" autocomplete="tel" />
+      </label>
 
-    <label class="field">
-      <span class="field-label">Bio</span>
-      <textarea class="textarea" rows="4" placeholder="Tell us about yourself…"></textarea>
-    </label>
+      <label class="field">
+        <span class="field-label">Bio</span>
+        <textarea class="textarea" rows="4" placeholder="Tell us about yourself…"></textarea>
+      </label>
 
-    <label class="field">
-      <span class="field-label">Website</span>
-      <input class="input" type="url" autocomplete="url" placeholder="https://example.com" />
-    </label>
+      <label class="field">
+        <span class="field-label">Website</span>
+        <input class="input" type="url" autocomplete="url" placeholder="https://example.com" />
+      </label>
 
-    <label class="field">
-      <span class="field-label">Language</span>
-      <select class="select">
-        <option>English</option>
-        <option>Français</option>
-        <option>Deutsch</option>
-      </select>
-    </label>
+      <label class="field">
+        <span class="field-label">Language</span>
+        <select class="select">
+          <option>English</option>
+          <option>Français</option>
+          <option>Deutsch</option>
+        </select>
+      </label>
 
-    <label class="field">
-      <span class="field-label">Experience level</span>
-      <input class="range" type="range" min="0" max="10" value="5" />
-    </label>
+      <label class="field">
+        <span class="field-label">Experience level</span>
+        <input class="range" type="range" min="0" max="10" value="5" />
+      </label>
 
-    <label class="field">
-      <span class="field-label">Profile picture</span>
-      <input class="file" type="file" accept="image/*" />
-    </label>
+      <label class="field">
+        <span class="field-label">Profile picture</span>
+        <input class="file" type="file" accept="image/*" />
+      </label>
 
-    <fieldset class="field-group">
-      <legend class="field-label">Theme</legend>
-      <div class="stack compact">
-        <label class="choice">
-          <input class="radio" type="radio" name="theme-detached" value="light" checked />
-          <span>Light</span>
-        </label>
-        <label class="choice">
-          <input class="radio" type="radio" name="theme-detached" value="dark" />
-          <span>Dark</span>
-        </label>
-        <label class="choice">
-          <input class="radio" type="radio" name="theme-detached" value="auto" />
-          <span>System</span>
-        </label>
-      </div>
-    </fieldset>
+      <fieldset class="field-group">
+        <legend class="field-label">Theme</legend>
+        <div class="stack compact">
+          <label class="choice">
+            <input class="radio" type="radio" name="theme-detached" value="light" checked />
+            <span>Light</span>
+          </label>
+          <label class="choice">
+            <input class="radio" type="radio" name="theme-detached" value="dark" />
+            <span>Dark</span>
+          </label>
+          <label class="choice">
+            <input class="radio" type="radio" name="theme-detached" value="auto" />
+            <span>System</span>
+          </label>
+        </div>
+      </fieldset>
 
-    <label class="choice">
-      <input class="check" type="checkbox" />
-      <span>Email notifications</span>
-    </label>
-  </div>
-</form>
+      <label class="choice">
+        <input class="check" type="checkbox" />
+        <span>Email notifications</span>
+      </label>
+    </div>
+  </form>
 
-<footer class="cluster form-actions sticky">
-  <button type="button" class="btn outline">Cancel</button>
-  <button type="submit" class="btn primary" form="account-form">
-    Save changes
-  </button>
-</footer>
+  <footer class="cluster form-actions sticky">
+    <button type="button" class="btn outline">Cancel</button>
+    <button type="submit" class="btn primary" form="account-form">
+      Save changes
+    </button>
+  </footer>
+</div>
 ```
 
 ## CSS hooks
