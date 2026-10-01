@@ -41,7 +41,8 @@ select {
 
   *,
   *::before,
-  *::after {
+  *::after,
+  ::backdrop {
     animation-duration: 0.01ms !important;
     animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
@@ -367,6 +368,10 @@ select {
      fields, a solid band), which rules out the primary itself. */
   --focus: hsl(268 30% 55%);
   --hover-overlay: hsl(260 20% 10% / 0.04);
+  /* Solid fills take a stronger wash than the subtle shared overlay. Black in
+     both schemes on purpose: a solid button darkens on hover even in dark mode
+     (see themes/gradient.css), unlike the neutral washes. */
+  --hover-overlay-solid: rgb(0 0 0 / 0.14);
 
   /* Radius scale — themes may override the whole scale (e.g. [data-theme="square"]) */
   --radius: 0.5rem;
@@ -3736,7 +3741,6 @@ small {
  * --btn-bg
  * --btn-fg
  * --btn-border
- * --btn-default-hover-bg
  * --btn-border-block-end-color
  * --btn-border-block-end-width
  * --btn-border-block
@@ -3762,9 +3766,8 @@ small {
   --btn-bg: var(--ui-bg, var(--btn-default-bg, var(--intent, var(--neutral))));
   --btn-fg: var(--ui-fg, var(--btn-default-fg, var(--intent-fg, var(--neutral-fg))));
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
-  --btn-default-hover-bg: var(--btn-bg);
   --btn-radius: var(--radius);
-  --btn-hover-overlay: var(--hover-overlay, rgb(0 0 0 / 0.08));
+  --btn-hover-overlay: var(--hover-overlay-solid, var(--hover-overlay));
   --btn-border-block: calc(
     var(--border-width) +
     var(--btn-border-block-end-width, var(--border-width))
@@ -3844,10 +3847,6 @@ small {
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  .btn {
-    --btn-default-hover-bg: color-mix(in oklch, var(--btn-bg) 88%, black);
-  }
-
   .btn.soft {
     --ui-hover-bg: color-mix(
       in oklab,
@@ -3863,9 +3862,9 @@ small {
 }
 
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is set locally above;
-   the overlay darkening for solid/soft is .btn-specific. */
+   the overlay darkening for solid is .btn-specific. */
 .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
-  background: var(--ui-hover-bg, var(--btn-default-hover-bg));
+  background: var(--ui-hover-bg, var(--btn-bg));
   /* Huge inset spread paints the overlay over any border-radius without a
      pseudo-element; a plain background would replace the fill instead of
      darkening it. */
@@ -4230,10 +4229,6 @@ a.btn[aria-disabled="true"] {
 }
 
 @supports (color: color-mix(in oklch, red, white)) {
-  :is(a.badge, button.badge):is(.solid, :empty) {
-    --ui-hover-bg: color-mix(in oklch, var(--intent, var(--neutral)) 88%, black);
-  }
-
   :is(a.badge, button.badge):where(:not(.solid, .outline, :empty)) {
     --badge-default-hover-bg: color-mix(
       in oklab,
@@ -4260,7 +4255,7 @@ a.btn[aria-disabled="true"] {
   :where(:disabled, [aria-disabled="true"])
 ):hover {
   /* Huge inset spread paints the overlay over the pill radius (see button.css). */
-  box-shadow: inset 0 0 0 999px var(--hover-overlay);
+  box-shadow: inset 0 0 0 999px var(--hover-overlay-solid, var(--hover-overlay));
 }
 
 button.badge {
@@ -4749,10 +4744,8 @@ a.badge[aria-disabled="true"] {
 :where(dialog).modal {
   /* --dialog-viewport-gap stays fallback-only so the responsive default can
      live in an internal token: a media query moves it without closing the
-     public hook.
-
-     calc() multiplication is not in the supported browser range, so the
-     doubled gap is spelled out with an additive calc. */
+     public hook. `-2x` is the gap on the two viewport edges, shared by the
+     width and height caps. */
   --dialog-viewport-gap-default: var(--space-40);
   --dialog-viewport-gap-2x: calc(
     var(--dialog-viewport-gap, var(--dialog-viewport-gap-default)) +
@@ -4796,9 +4789,9 @@ a.badge[aria-disabled="true"] {
    * both edges, which reads as horizontal movement.
    */
   transform: translateY(0.35rem);
-  transition:
-    opacity var(--duration) var(--ease-exit),
-    transform var(--duration) var(--ease-exit);
+  transition-property: opacity, transform;
+  transition-duration: var(--duration);
+  transition-timing-function: var(--ease-exit);
 }
 
 @media (forced-colors: active) {
@@ -4822,10 +4815,8 @@ a.badge[aria-disabled="true"] {
   padding: var(--surface-pad);
 }
 
-/* Optional dialog chrome lives beside the padded body wrapper. Its leading
-   region and trailing controls share one center axis; wrapping the close in
-   the trailing cluster keeps it in flow instead of invoking the absolute
-   corner treatment from close.css. */
+/* Dialog chrome beside the padded body wrapper. Wrapping the close in the
+   trailing cluster keeps it in flow, not the absolute corner overlay. */
 :where(dialog).modal > header {
   display: flex;
   align-items: center;
@@ -4856,18 +4847,16 @@ a.badge[aria-disabled="true"] {
   flex: none;
 }
 
-@supports selector(dialog:has(> header)) {
-  /* The header stays fixed while the body wrapper owns overflow. Without
-     :has(), compact dialogs keep ordinary block flow as the fallback. */
-  :where(dialog).modal[open]:has(> header) {
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
-  }
+/* The header stays fixed while the body wrapper owns overflow. Without :has()
+   these drop individually and compact dialogs keep ordinary block flow. */
+:where(dialog).modal[open]:has(> header) {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
 
-  :where(dialog).modal:has(> header) > :is(form, .stack) {
-    min-block-size: 0;
-    max-block-size: none;
-  }
+:where(dialog).modal:has(> header) > :is(form, .stack) {
+  min-block-size: 0;
+  max-block-size: none;
 }
 
 @supports (block-size: 100svh) {
@@ -4886,8 +4875,19 @@ a.badge[aria-disabled="true"] {
 
 :where(dialog).modal.scrollable > form,
 :where(dialog).modal.scrollable > .stack {
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
+}
+
+/* Regions carry their own behaviour: a structural header or footer keeps its
+   size, every other child absorbs the free space and scrolls. Nothing here has
+   to detect which regions exist — an external header leaves the wrapper with
+   content + footer and this still holds. Each non-chrome child is its own
+   scrollport; wrap the body in one region for a single one. */
+:where(dialog).modal.scrollable > form > :is(header, footer),
+:where(dialog).modal.scrollable > .stack > :is(header, footer) {
+  flex: none;
 }
 
 :where(dialog).modal.scrollable > form > :not(:is(header, footer)),
@@ -4897,6 +4897,7 @@ a.badge[aria-disabled="true"] {
     max(var(--focus-ring-width), var(--border-width) * 2)
   );
 
+  flex: 1 1 auto;
   min-block-size: 0;
   /* Keep focus paint inside the clip without moving the body off the fixed
      header and footer edges. The reserve covers the thicker of the two
@@ -4906,24 +4907,6 @@ a.badge[aria-disabled="true"] {
   padding-inline: var(--dialog-focus-bleed);
   overflow: auto;
   overscroll-behavior: contain;
-}
-
-/* The row template is positional, so it must match the wrapper's actual slots.
-   With an external header the wrapper holds only content + footer, and the base
-   auto / 1fr / auto template would put the footer in the flexible row and
-   collapse it to zero. Each slot combination is stated outright so the result
-   never depends on rule order. Without :has() these drop individually and the
-   base template remains. */
-:where(dialog).modal.scrollable > :is(form, .stack):not(:has(> header)):has(> footer) {
-  grid-template-rows: minmax(0, 1fr) auto;
-}
-
-:where(dialog).modal.scrollable > :is(form, .stack):has(> header):not(:has(> footer)) {
-  grid-template-rows: auto minmax(0, 1fr);
-}
-
-:where(dialog).modal.scrollable > :is(form, .stack):not(:has(> header)):not(:has(> footer)) {
-  grid-template-rows: minmax(0, 1fr);
 }
 
 /* Anatomy is bounded to the structural slots (direct children of the
@@ -4972,9 +4955,8 @@ a.badge[aria-disabled="true"] {
   gap: var(--gap);
 }
 
-/* Confirmation layout — a focused message followed by a visually distinct
-   action band. The media primitive owns icon/content alignment; this variant
-   only removes the standard form inset so both regions can own their padding. */
+/* Confirmation layout: the media primitive owns icon/content alignment; the
+   variant only removes the form inset so both regions own their padding. */
 :where(dialog).modal.dialog-confirmation > form {
   --surface-pad: 0px;
 
@@ -5065,9 +5047,7 @@ a.badge[aria-disabled="true"] {
 :where(dialog).modal[open] {
   opacity: 1;
   transform: none;
-  transition:
-    opacity var(--duration) var(--ease-enter),
-    transform var(--duration) var(--ease-enter);
+  transition-timing-function: var(--ease-enter);
 }
 
 @starting-style {
@@ -5082,31 +5062,22 @@ a.badge[aria-disabled="true"] {
   opacity: 0;
   /* Scrim curve stays neutral `ease`; only the panel carries the character
      curves. */
-  transition: opacity var(--duration) ease;
+  transition-property: opacity;
+  transition-duration: var(--duration);
+  transition-timing-function: ease;
 }
 
 @supports (transition-behavior: allow-discrete) {
+  /* Add the discrete top-layer pair to the property list. Duration and timing
+     stay on the base rules, so [open] still only swaps the easing. */
   :where(dialog).modal {
-    transition:
-      opacity var(--duration) var(--ease-exit),
-      transform var(--duration) var(--ease-exit),
-      overlay var(--duration) allow-discrete,
-      display var(--duration) allow-discrete;
-  }
-
-  :where(dialog).modal[open] {
-    transition:
-      opacity var(--duration) var(--ease-enter),
-      transform var(--duration) var(--ease-enter),
-      overlay var(--duration) allow-discrete,
-      display var(--duration) allow-discrete;
+    transition-property: opacity, transform, overlay, display;
+    transition-behavior: allow-discrete;
   }
 
   :where(dialog).modal::backdrop {
-    transition:
-      opacity var(--duration) ease,
-      overlay var(--duration) allow-discrete,
-      display var(--duration) allow-discrete;
+    transition-property: opacity, overlay, display;
+    transition-behavior: allow-discrete;
   }
 }
 
@@ -6705,16 +6676,17 @@ a.avatar[aria-disabled="true"] {
   --avatar-stack-font-size: var(--font-size-lg);
 }
 
-@supports selector(:has(> .avatar)) {
-  .avatar-stack:has(> .avatar.sm) {
-    --avatar-stack-size: 1.75rem;
-    --avatar-stack-font-size: var(--font-size-xs);
-  }
+/* Infer the stack scale from its avatars. Progressive: without :has() the
+   explicit .avatar-stack.sm/.lg classes and the default size still size the
+   group, only the inference is lost. */
+.avatar-stack:has(> .avatar.sm) {
+  --avatar-stack-size: 1.75rem;
+  --avatar-stack-font-size: var(--font-size-xs);
+}
 
-  .avatar-stack:has(> .avatar.lg) {
-    --avatar-stack-size: 3rem;
-    --avatar-stack-font-size: var(--font-size-lg);
-  }
+.avatar-stack:has(> .avatar.lg) {
+  --avatar-stack-size: 3rem;
+  --avatar-stack-font-size: var(--font-size-lg);
 }
 
 .avatar-stack > .avatar {
@@ -6938,11 +6910,10 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* Remove the reserved avatar gutter when a message has no avatar. This is a
-   cosmetic enhancement; the two-column baseline remains fully readable. */
-@supports selector(:has(*)) {
-  .chat:not(:has(> .chat-avatar)) {
-    column-gap: 0;
-  }
+   cosmetic enhancement; the two-column baseline remains fully readable, and a
+   browser without :has() drops only this rule. */
+.chat:not(:has(> .chat-avatar)) {
+  column-gap: 0;
 }
 
 /*
@@ -7724,19 +7695,16 @@ a.avatar[aria-disabled="true"] {
    removed everywhere else, never serialized as aria-current="false".
    Selection never changes text metrics: the shared medium weight is kept and
    the current link is carried by the selected accent. */
-.nav-link[aria-current] {
-  background: var(--surface-subtle);
-  color: var(--state-selected);
-}
-
 .nav-link:hover {
   background: var(--surface-subtle);
   color: var(--text);
 }
 
-/* A current link keeps its accent on hover: without this, the hover rule above
-   would drop it back to --text. The surface hover still applies. */
-.nav-link[aria-current]:hover {
+/* Current last, equal specificity to :hover (0,2,0): a hovered current link
+   keeps the selected accent instead of dropping to --text. The surface fill is
+   shared with the hover rule above. */
+.nav-link[aria-current] {
+  background: var(--surface-subtle);
   color: var(--state-selected);
 }
 
@@ -7756,8 +7724,8 @@ a.avatar[aria-disabled="true"] {
     color: var(--ui-fg, var(--text));
   }
 
-  .nav-link[aria-current],
-  .nav-link[aria-current]:hover {
+  /* After :hover so a hovered current link keeps the selected accent. */
+  .nav-link[aria-current] {
     color: var(--ui-fg, var(--state-selected));
   }
 }

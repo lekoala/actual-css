@@ -79,6 +79,10 @@
      fields, a solid band), which rules out the primary itself. */
   --focus: hsl(268 30% 55%);
   --hover-overlay: hsl(260 20% 10% / 0.04);
+  /* Solid fills take a stronger wash than the subtle shared overlay. Black in
+     both schemes on purpose: a solid button darkens on hover even in dark mode
+     (see themes/gradient.css), unlike the neutral washes. */
+  --hover-overlay-solid: rgb(0 0 0 / 0.14);
 
   /* Radius scale — themes may override the whole scale (e.g. [data-theme="square"]) */
   --radius: 0.5rem;

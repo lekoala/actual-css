@@ -718,6 +718,8 @@ a stable size while mobile browser chrome expands or collapses.</p>
 keyboard-focusable so it can be scrolled without a pointer — it takes a focus
 ring like any other focusable element, and it can claim initial focus when
 nothing focusable precedes it. Mark the control you want focused <code>autofocus</code>.</p>
+<p>Each non-header/footer child region is its own scrollport, so wrap the body in a
+single element (<code>&lt;div class=&quot;stack&quot;&gt;</code>) when there should be one scrollbar.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
