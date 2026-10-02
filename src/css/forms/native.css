@@ -25,7 +25,7 @@
     calc((var(--control-size) - 1lh - 2 * var(--border-width)) / 2)
   );
   padding-inline: var(--space-20);
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--border-control);
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
   color: var(--text);
@@ -59,7 +59,7 @@
   inline-size: var(--control-size);
   block-size: var(--control-size);
   padding: var(--border-width);
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--border-control);
   border-radius: var(--radius);
   background: var(--surface);
   cursor: pointer;

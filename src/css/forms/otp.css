@@ -21,7 +21,7 @@
   --otp-cell-size: var(--control-size);
   --otp-gap: var(--space-10);
   --otp-font-size: 1.5em;
-  --otp-cell-border: var(--border);
+  --otp-cell-border: var(--border-control);
   --otp-cell-bg: var(--surface);
   --otp-caret-space: calc((var(--otp-cell-size) - 1ch) / 2 + var(--otp-gap) + 1px);
 

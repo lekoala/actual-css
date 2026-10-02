@@ -38,7 +38,7 @@
   --choice-card-pad: var(--density-space, var(--space-40));
   --choice-card-gap: var(--space-30);
   --choice-card-radius: var(--radius);
-  --choice-card-border: var(--border);
+  --choice-card-border: var(--border-control);
   --choice-card-bg: var(--surface);
   --choice-card-check-size: 1.25em;
 

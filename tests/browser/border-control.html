@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Control border role fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+
+    /* One role, set once: controls take it, separators keep --border. */
+    :root {
+      --border: rgb(200 200 200);
+      --border-control: rgb(255 0 0);
+    }
+  </style>
+</head>
+<body>
+  <input class="input" data-control aria-label="Input">
+  <textarea class="textarea" data-control aria-label="Textarea"></textarea>
+  <select class="select" data-control aria-label="Select"><option>One</option></select>
+  <input class="check" type="checkbox" data-control aria-label="Check">
+  <input class="radio" type="radio" data-control aria-label="Radio">
+  <input class="switch" type="checkbox" role="switch" data-control aria-label="Switch">
+  <input class="color" type="color" data-control aria-label="Color">
+  <div class="join">
+    <span class="join-addon" data-control>https://</span>
+    <input class="input" aria-label="Address">
+  </div>
+  <label class="choice-card" data-control>
+    <input class="radio" type="radio" name="plan">
+    <span>Plan</span>
+  </label>
+
+  <div class="card" data-separator>Card</div>
+  <hr class="divider" data-separator>
+</body>
+</html>

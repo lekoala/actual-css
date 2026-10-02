@@ -42,6 +42,7 @@ export const THEME_COLORS = [
   "text-subtle",
   "heading",
   "border",
+  "border-control",
   "focus",
   "hover-overlay",
   "hover-overlay-solid",
@@ -162,7 +163,8 @@ const ROLE_OF = new Map(
 
 const DECLARATION_RE = /(?<![-\w])--([a-z0-9-]+)\s*:\s*([^;{}]*);/gi;
 const ALIAS_RE = /^var\(\s*--([a-z0-9-]+)\s*\)$/i;
-const THEME_NAME_RE = /\[data-theme="([^"]+)"\]/g;
+// Both quote styles: a missed name now falls back to the :root theme silently.
+const THEME_NAME_RE = /\[data-theme=(["'])([^"']+)\1\]/g;
 
 export function declaredTokens(css) {
   return new Set([...stripComments(css).matchAll(DECLARATION_RE)].map((m) => m[1]));
@@ -183,17 +185,19 @@ export function aliasCandidates(...sources) {
   return aliases;
 }
 
-/* The one data-theme value a theme file declares, light/dark excluded. */
+/* The one data-theme value a theme file declares, light/dark excluded. null
+   when it declares none: the theme is written on :root, the application's
+   own sheet rather than an island. */
 export function themeNameOf(css) {
   const names = new Set(
-    [...css.matchAll(THEME_NAME_RE)].map((m) => m[1]).filter((n) => n !== "light" && n !== "dark"),
+    [...css.matchAll(THEME_NAME_RE)].map((m) => m[2]).filter((n) => n !== "light" && n !== "dark"),
   );
-  if (names.size !== 1) {
+  if (names.size > 1) {
     throw new Error(
-      `Expected one [data-theme="…"] name in the theme, found ${names.size === 0 ? "none" : [...names].join(", ")}; pass the name explicitly.`,
+      `Expected one [data-theme="…"] name in the theme, found ${[...names].join(", ")}; pass the name explicitly.`,
     );
   }
-  return [...names][0];
+  return names.size === 1 ? [...names][0] : null;
 }
 
 export async function coreTokenCss() {
@@ -246,7 +250,7 @@ function readIslands({ css, islands, colors, lengths, weights }) {
       const raw = read(name);
       if (raw) values.weights[name] = Number(raw);
     }
-    values.scheme = attribute ? getComputedStyle(island).colorScheme : null;
+    values.scheme = getComputedStyle(island).colorScheme;
     result.push(values);
     island.remove();
   }
@@ -266,31 +270,28 @@ const evaluateIslands = (input) => inPage(readIslands, input);
 
 /*
  * Resolves one theme. `css` is the full stylesheet (framework + theme, imports
- * inlined). Without `theme`, the default theme is read through its light and
- * dark boundaries. A named theme exports the schemes it declares: `light dark`
- * gives two modes, anything else one. `islands` is returned so component
- * measurements read the same boundaries.
+ * inlined). Without `theme`, the theme is the root's — the default one, or an
+ * application theme written on :root. The theme exports the schemes it
+ * declares: `light dark` gives two modes, anything else one. `islands` is
+ * returned so component measurements read the same boundaries.
  */
-export async function resolveTokens({ css, theme, aliasSources = [] }) {
-  let islands = [
-    { mode: "light", attribute: "light" },
-    { mode: "dark", attribute: "dark" },
-  ];
-  if (theme) {
-    const [declared] = await evaluateIslands({
-      css,
-      islands: [{ attribute: theme }],
-      colors: [],
-      lengths: [],
-      weights: [],
-    });
-    const schemes = declared.scheme.split(/\s+/).filter((s) => s === "light" || s === "dark");
-    islands = (schemes.length > 0 ? schemes : ["light"]).map((mode) => ({
-      mode,
-      attribute: theme,
-      scheme: mode,
-    }));
-  }
+export async function resolveTokens({ css, theme = null, aliasSources = [] }) {
+  // A root island carries no data-theme: the core redeclares the default
+  // palette on [data-theme="light"|"dark"], which would mask a :root theme.
+  // Pinning color-scheme alone is what picks the light-dark() side.
+  const [declared] = await evaluateIslands({
+    css,
+    islands: [{ attribute: theme }],
+    colors: [],
+    lengths: [],
+    weights: [],
+  });
+  const schemes = declared.scheme.split(/\s+/).filter((s) => s === "light" || s === "dark");
+  const islands = (schemes.length > 0 ? schemes : ["light"]).map((mode) => ({
+    mode,
+    attribute: theme,
+    scheme: mode,
+  }));
 
   const read = await evaluateIslands({
     css,

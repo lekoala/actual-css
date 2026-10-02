@@ -40,7 +40,7 @@
 }
 
 .join-addon {
-  --control-border: var(--border);
+  --control-border: var(--border-control);
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-muted);
 

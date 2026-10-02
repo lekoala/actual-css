@@ -49,7 +49,9 @@ describe("source reading", () => {
   test("theme name ignores the light/dark boundaries", () => {
     expect(themeNameOf('[data-theme="ocean"] {} [data-theme="dark"] {}')).toBe("ocean");
     expect(() => themeNameOf('[data-theme="a"] {} [data-theme="b"] {}')).toThrow(/a, b/);
-    expect(() => themeNameOf(":root {}")).toThrow(/none/);
+    expect(themeNameOf("[data-theme='brand'] {}")).toBe("brand");
+    // No name: an application theme written on :root.
+    expect(themeNameOf(":root { --primary: red; } [data-theme='dark'] {}")).toBeNull();
   });
 
   test("computed srgb colors parse with and without alpha, clamped to gamut", () => {

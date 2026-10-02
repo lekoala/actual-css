@@ -23,7 +23,8 @@ if (args.length > 0) throw new Error(`Unknown arguments: ${args.join(" ")}`);
 
 const themeFile = flags["--theme"];
 const name =
-  flags["--name"] ?? (themeFile ? themeNameOf(await inlineImports(themeFile)) : "default");
+  flags["--name"] ??
+  (themeFile ? (themeNameOf(await inlineImports(themeFile)) ?? "root") : "default");
 const out = flags["--out"] ?? join("tmp", "design", name);
 
 for (const file of await exportDesign({ themeFile, name: flags["--name"], out })) {

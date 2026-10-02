@@ -26,8 +26,9 @@ export const INTENTS = ["primary", "secondary", "success", "warning", "danger", 
 /* Badges state .soft explicitly: a theme may fill badges by default
    (bootstrap-v6), which would measure a solid pair against the soft hover. */
 function islandMarkup(id, attribute, scheme) {
+  const theme = attribute ? ` data-theme="${attribute}"` : "";
   const style = scheme ? ` style="color-scheme: ${scheme}"` : "";
-  return `<div data-theme="${attribute}"${style} id="${id}">
+  return `<div${theme}${style} id="${id}">
     ${INTENTS.map((i) => `<span class="badge soft ${i}" data-badge="${i}">t</span>`).join("")}
     ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
     <span data-pair="focus-surface" style="color: var(--focus); background: var(--surface)"></span>
@@ -41,23 +42,27 @@ const ratio = (fg, bg) => (fg[3] < 255 || bg[3] < 255 ? null : contrast(fg, bg))
 
 /*
  * Measures each theme of `themes` (data-theme values) in `css`, the full
- * stylesheet with imports inlined. `null` stands for the default theme, read
- * through its light and dark boundaries; a named theme is read in each scheme
- * its `color-scheme` declares. Returns one row per island.
+ * stylesheet with imports inlined. `null` stands for the root's theme — the
+ * default one, or an application theme written on :root — labelled `label`.
+ * Each theme is read in every scheme its `color-scheme` declares. Returns one
+ * row per island.
  */
-export async function measureContrast({ css, themes }) {
+export async function measureContrast({ css, themes, label = "default" }) {
   await using view = new Bun.WebView({ backend: "chrome" });
   await view.navigate("about:blank");
 
   // Transitions off: a forced :hover must compute its end state at once.
-  const islands = await view.evaluate(`((css, themes) => {
+  const islands = await view.evaluate(`((css, themes, label) => {
     const style = document.createElement("style");
     style.textContent = css + "\\n* { transition-duration: 0s !important; }";
     document.head.append(style);
 
+    // A root island carries no data-theme: the core redeclares the default
+    // palette on [data-theme="light"|"dark"], which would mask a :root theme.
+    // Pinning color-scheme alone is what picks the light-dark() side.
     const schemesOf = (attribute) => {
       const probe = document.createElement("div");
-      probe.dataset.theme = attribute;
+      if (attribute) probe.dataset.theme = attribute;
       document.body.append(probe);
       const declared = getComputedStyle(probe).colorScheme.split(/\\s+/);
       probe.remove();
@@ -65,17 +70,13 @@ export async function measureContrast({ css, themes }) {
       return schemes.length > 0 ? schemes : ["light"];
     };
 
-    return themes.flatMap((theme) =>
-      theme === null
-        ? ["light", "dark"].map((scheme) => ({ theme: "default", scheme, attribute: scheme, pin: false }))
-        : schemesOf(theme).map((scheme, _, all) => ({ theme, scheme, attribute: theme, pin: all.length > 1 })),
+    return themes.flatMap((attribute) =>
+      schemesOf(attribute).map((scheme) => ({ theme: attribute ?? label, scheme, attribute })),
     );
-  })(${JSON.stringify(css)}, ${JSON.stringify(themes)})`);
+  })(${JSON.stringify(css)}, ${JSON.stringify(themes)}, ${JSON.stringify(label)})`);
 
   const markup = islands
-    .map((island, i) =>
-      islandMarkup(`island-${i}`, island.attribute, island.pin ? island.scheme : null),
-    )
+    .map((island, i) => islandMarkup(`island-${i}`, island.attribute, island.scheme))
     .join("\n");
   await view.evaluate(`document.body.insertAdjacentHTML("beforeend", ${JSON.stringify(markup)})`);
 
@@ -136,13 +137,14 @@ export async function measureContrast({ css, themes }) {
 
 /*
  * Measures one theme file over the framework, or the default theme without
- * `themeFile`. `name` overrides the data-theme name read from the file.
+ * `themeFile`. `name` overrides the data-theme name read from the file; a file
+ * that declares none is a :root theme.
  */
 export async function measureThemeFile({ themeFile, name }) {
   const themeCss = themeFile ? await inlineImports(themeFile) : "";
   const theme = themeFile ? (name ?? themeNameOf(themeCss)) : null;
   const css = `${await inlineImports(FRAMEWORK)}\n${themeCss}`;
-  return measureContrast({ css, themes: [theme] });
+  return measureContrast({ css, themes: [theme], label: themeFile ? ":root" : "default" });
 }
 
 /* Text tables for `rows`, and the number of pairs under their threshold. */

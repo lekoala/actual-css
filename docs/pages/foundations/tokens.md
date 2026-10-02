@@ -85,6 +85,14 @@ Surfaces are painted material and may be translucent. Two roles must stay opaque
 
 A theme with translucent surfaces overrides both with opaque values.
 
+`--border` separates surfaces: cards, tables, dividers, panels. `--border-control`
+is the resting edge that tells a control apart from the surface — fields,
+checkboxes and radios, switches, OTP cells, choice cards, join addons, the color
+and file inputs. It defaults to `--border`; set it alone to make controls
+stand out (input border, field outline, form control contrast) without
+darkening every separator. Hover, checked, invalid and disabled states keep
+their own colors.
+
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 
 Focus styling is outline-first. A global focus baseline applies `--focus-outline` and `--focus-outline-offset`: older browsers show it on `:focus`, while modern browsers limit it to `:focus-visible`. The baseline is a `currentColor` line, so text-like elements (links, `summary`, nav and menu items) follow whatever surface the application painted. Boxed components draw a solid `--focus-ring-width` line in `--focus`: inside the border box on text fields (`.input`, `.textarea`, `.select`), outside at `--focus-outline-offset` on actions (`.btn`, `.close`, choices, switches). The color never follows an intent or a local surface, so `--focus` must hold 3:1 against both `--surface` and `--surface-solid` — the page, fields and a solid band all rely on it. Both lines are `--focus-ring-width` wide. Under `forced-colors: active`, outlines map to the system focus color.
@@ -503,7 +511,7 @@ Rules:
 
 Themes override tokens, not selectors. The themes in `src/css/themes/` are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as `ocean`, `square`, `cyberpunk`, and `brutalist`.
 
-A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick `--focus` as a mid-tone that holds 3:1 against both `--surface` and `--surface-solid` in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. `bunx --bun actual-css contrast --theme FILE` measures both pairs, and exits 1 when a pair misses.
+A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick `--focus` as a mid-tone that holds 3:1 against both `--surface` and `--surface-solid` in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. `bunx --bun actual-css contrast --theme FILE` measures both pairs, and exits 1 when a pair misses. The file may declare a `[data-theme]` island or set the tokens on `:root`; the tool reads each scheme through `color-scheme`, so write dark values with `light-dark()` — a `prefers-color-scheme` media block is not measured.
 
 When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. A theme that declares no hook falls back to the `--soft-fg-mix` derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. `actual-css contrast` prints the resting and hovered soft pair for every intent in every scheme the theme declares, which is how a theme finds the roles that need a hook or a lower `--soft-fg-mix`.
 
@@ -518,6 +526,7 @@ A full theme can override:
 - intent colors and foreground pairs
 - surface, text, border, focus, and overlay colors
 - `--surface-opaque` and `--surface-solid-fg`, when surfaces are translucent
+- `--border-control`, when controls need a stronger edge than separators
 - radius tokens
 - optional shadow, motion, typography, and soft-variant mix tokens
 

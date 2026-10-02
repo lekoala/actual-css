@@ -29,7 +29,7 @@
 
 .switch {
   --switch-bg: var(--border);
-  --switch-border: var(--border);
+  --switch-border: var(--border-control);
   --switch-knob: var(--surface-raised);
   --switch-block-size: calc(var(--choice-control-size) + 0.125em);
   --switch-width: calc(var(--switch-block-size) * 1.8);

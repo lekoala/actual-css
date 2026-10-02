@@ -144,7 +144,7 @@
 /* Control geometry. --choice-* are the per-state tokens. */
 .check,
 .radio {
-  --choice-border: var(--border);
+  --choice-border: var(--border-control);
   --choice-bg: var(--surface);
   --choice-mark: var(--primary-fg);
 

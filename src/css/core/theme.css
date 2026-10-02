@@ -8,7 +8,9 @@
  * Derived: "Theme-derived aliases", Tone subsystem, Backdrop fill — reference
  * other tokens; hard-coded overrides on a custom theme will break the intent.
  * Exception: --surface-opaque and --surface-solid-fg are public; a theme with
- * translucent surfaces overrides them with opaque values.
+ * translucent surfaces overrides them with opaque values. --border-control is
+ * public too: the resting edge of a neutral control, apart from structural
+ * separators.
  * Internal: --hgroup-gap.
  */
 :root {
@@ -110,6 +112,9 @@
      never a fill. --surface-solid-fg is the ink on --surface-solid. */
   --surface-opaque: var(--surface);
   --surface-solid-fg: var(--surface);
+  /* The edge that tells a control apart from the surface, where --border only
+     separates surfaces: fields, choices, switch, OTP cells, choice cards. */
+  --border-control: var(--border);
 }
 
 /* Soft foreground hooks — the soft ink is the intent rebated toward the local
