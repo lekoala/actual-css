@@ -13,8 +13,10 @@
  *
  * .compact/.spacious set inherited density tokens: spacing rhythm and geometry
  * only, plus a slight typographic width bonus. Density never changes font size
- * or icon size. Controls consume --control-size; non-control components may
- * consume --density-* when the context should affect their local rhythm.
+ * or icon size. Controls consume --control-size and --control-pad-x, so a
+ * compact control is shorter and narrower (a height change alone read as the
+ * same control squashed); non-control components may consume --density-* when
+ * the context should affect their local rhythm.
  * .compact applies --font-width-dense through font-stretch (a variable wdth
  * axis when available, otherwise normal width-face matching); layout must
  * never depend on the narrowing being available. .spacious restores
@@ -68,6 +70,7 @@
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
+  --control-pad-x: var(--font-size-xs);
   font-stretch: var(--font-width-dense);
 }
 
@@ -75,6 +78,7 @@
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
+  --control-pad-x: var(--font-size-lg);
   font-stretch: var(--font-width);
 }
 
