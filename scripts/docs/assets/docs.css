@@ -101,6 +101,26 @@
   margin-block-start: 0;
 }
 
+/* Current page is the pill alone: the shared .nav-list rail plus the selected
+   accent would triple-signal the same state next to the subtle fill. The
+   generic .nav-link contract is untouched — this is a dense-docs policy. */
+.docs-sidebar .nav-link[aria-current],
+.docs-toc .nav-link[aria-current] {
+  color: var(--text);
+}
+
+.docs-sidebar .nav-list .nav-link[aria-current]::before,
+.docs-toc .nav-list .nav-link[aria-current]::before {
+  content: none;
+}
+
+/* The sidebars are scrollports, so an exterior ring clips against the scroll
+   edge. Keep the ring, pull it inside the row. */
+.docs-sidebar .nav-link:focus-visible,
+.docs-toc .nav-link:focus-visible {
+  outline-offset: calc(var(--focus-ring-width) * -1);
+}
+
 .docs-toc-list .nav-link[data-level="3"] {
   padding-inline-start: var(--space-40);
   font-size: var(--font-size-sm);
