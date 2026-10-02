@@ -13,8 +13,10 @@
        overflow it fails to contain would scroll the page. */
     body { margin: 0; }
 
-    /* A narrow rail with a label longer than it. */
-    #rail { inline-size: 8rem; }
+    /* The narrowest rail that holds its longest word, so the label must wrap
+       in any font: a fixed width fit Segoe UI but not the wider Linux
+       fallback, where one word alone overflowed the rail. */
+    #rail { inline-size: min-content; }
   </style>
 </head>
 <body>
