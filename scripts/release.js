@@ -8,7 +8,8 @@
  *
  * Pushing stays manual — pushing the tag is what publishes the GitHub
  * release (CI job `release`). After the script, preview with
- * `bun run release:notes`, then `git push origin main <version>`.
+ * `bun run release:notes`, then push the branch and the tag to the branch's
+ * upstream remote (the script prints the exact command).
  *
  * Usage:
  *   bun run release minor   # 0.11.0 -> 0.12.0 (pins move to @0.12)
@@ -123,6 +124,15 @@ run("git", ["add", "-A"]);
 console.log(git("status", "--porcelain"));
 run("git", ["commit", "-m", next]);
 run("git", ["tag", next]);
+/* Read, never assumed: a hard-coded `origin main` named a mirror remote and a
+   branch this repository does not have, so the tag never reached GitHub. */
+const branch = git("rev-parse", "--abbrev-ref", "HEAD");
+let remote = "";
+try {
+  remote = git("config", `branch.${branch}.remote`);
+} catch {}
 console.log(
-  `release: committed and tagged ${next} — preview above, then: git push origin main ${next}`,
+  remote
+    ? `release: committed and tagged ${next} — preview above, then: git push ${remote} ${branch} ${next}`
+    : `release: committed and tagged ${next} — ${branch} has no upstream; push it and the tag ${next} to the GitHub remote.`,
 );

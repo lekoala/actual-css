@@ -49,7 +49,7 @@ Flatten the composition for production with
 resolves package subpaths and relative files, then inlines them without
 transpiling modern CSS.
 
-Hand your theme to designers with `bunx actual-css design --theme theme.css --out design/`:
+Hand your theme to designers with `bunx --bun actual-css design --theme theme.css --out design/`:
 Figma and Penpot tokens, plus a Penpot plugin that builds the core components.
 See [Design tools](docs/pages/guides/design-tools.md).
 
