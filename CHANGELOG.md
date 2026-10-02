@@ -9,6 +9,7 @@
 ### Changed
 
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
+- The current `.nav-list` link trait sits inside the row's inline padding with rounded ends, instead of flush on its rounded edge.
 
 ### Fixed
 
