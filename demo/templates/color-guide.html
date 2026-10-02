@@ -94,11 +94,17 @@
        A [data-theme] island painted as a page canvas. The framework puts that
        surface on `body`, so a preview of another palette has to restate it.
        The island is a .stack; only the canvas is local. */
+    /* Zero specificity: a theme that paints its own backdrop on
+       [data-theme] (glass) keeps it — its translucent surface has no colour
+       without one. */
+    :where(.cg-island) {
+      background: var(--surface);
+    }
+
     .cg-island {
       padding: var(--space-40);
       border: var(--border-width) solid var(--border);
       border-radius: var(--radius);
-      background: var(--surface);
       color: var(--text);
     }
 
@@ -231,11 +237,36 @@
       filter: grayscale(1);
     }
 
-    /* The hover overlay is 4% ink — invisible as a flat swatch, so the chip
-       composites it the way .btn does: an inset shadow over the surface. */
+    /* Hover washes are translucent — invisible as flat swatches, so the chips
+       composite them the way .btn does: an inset shadow over the fill. */
     .cg-chip.cg-overlay {
       background: var(--surface);
       box-shadow: inset 0 0 0 999px var(--hover-overlay);
+    }
+
+    .cg-chip.cg-overlay-solid {
+      background: var(--primary);
+      box-shadow: inset 0 0 0 999px var(--hover-overlay-solid);
+    }
+
+    /* The focus line drawn inside the chip, on each surface it must hold
+       3:1 against. */
+    .cg-chip.cg-focus {
+      background: var(--surface);
+      box-shadow: inset 0 0 0 var(--focus-ring-width) var(--focus);
+    }
+
+    .cg-chip.cg-focus-solid {
+      background: var(--surface-solid);
+    }
+
+    /* An inverse band, the way .tooltip and a plain .status-bar paint one. */
+    .cg-solid {
+      padding: var(--space-20) var(--space-30);
+      border-radius: var(--radius-sm);
+      background: var(--surface-solid);
+      color: var(--surface-solid-fg);
+      font-size: var(--font-size-sm);
     }
 
     /* Gradient bars, sized to read as a surface rather than a swatch. */
@@ -741,6 +772,66 @@
         </div>
       </figure>
 
+      <figure class="card raised cg-figure">
+        <figcaption class="stack">
+          <span class="overline pill primary cg-tag">Figure&nbsp;</span>
+          <h3>A surface can be translucent; some roles cannot</h3>
+          <p class="muted measure">
+            Most of the time a fill and what sits under a ring are the same
+            colour, so the core makes them one. <code>glass</code> pulls them
+            apart: its surfaces are frosted white over a backdrop it paints
+            itself, and the roles that must stay opaque get their own values.
+          </p>
+        </figcaption>
+
+        <div class="grid cg-columns" style="--grid-min: 18rem;">
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
+            <p class="cg-island-name">ocean · opaque, the roles coincide</p>
+            <div class="cg-ramp" data-ramp="--surface --surface-opaque --surface-solid --surface-solid-fg"></div>
+            <div class="avatar-stack" role="group" aria-label="Team members on ocean">
+              <div class="avatar" role="img" aria-label="Ada Lovelace"><span aria-hidden="true">AL</span></div>
+              <div class="avatar" role="img" aria-label="Grace Hopper"><span aria-hidden="true">GH</span></div>
+              <div class="avatar" role="img" aria-label="Alan Turing"><span aria-hidden="true">AT</span></div>
+            </div>
+            <p class="cg-solid">Inverse band on <code>--surface-solid</code></p>
+          </div>
+
+          <div class="stack cg-island" data-theme="glass">
+            <p class="cg-island-name">glass · translucent, the roles split</p>
+            <div class="cg-ramp" data-ramp="--surface --surface-opaque --surface-solid --surface-solid-fg"></div>
+            <div class="avatar-stack" role="group" aria-label="Team members on glass">
+              <div class="avatar" role="img" aria-label="Ada Lovelace"><span aria-hidden="true">AL</span></div>
+              <div class="avatar" role="img" aria-label="Grace Hopper"><span aria-hidden="true">GH</span></div>
+              <div class="avatar" role="img" aria-label="Alan Turing"><span aria-hidden="true">AT</span></div>
+            </div>
+            <p class="cg-solid">Inverse band on <code>--surface-solid</code></p>
+          </div>
+        </div>
+
+        <div class="stack muted measure cg-legend">
+          <p>
+            <code>--surface-opaque</code> hides or separates what is painted
+            beneath: the avatar rings above, range and step markers, meter
+            separators, <code>--indicator-ring</code>. It is never a fill. On
+            <code>glass</code> it is the backdrop's mean tone — a ring in an 8%
+            white would cut nothing.
+          </p>
+          <p>
+            <code>--surface-solid-fg</code> is the ink on
+            <code>--surface-solid</code>, the inverse band behind a tooltip or a
+            plain status bar. An opaque palette reuses <code>--surface</code>
+            for it; a translucent one cannot — an 8% white ink on a light band
+            is no ink at all.
+          </p>
+          <p>
+            Both default to <code>--surface</code>, so a theme with opaque
+            surfaces never states them. <code>glass</code> is a stress test, not
+            a recommendation: its contrast depends on the backdrop, so
+            <code>report:theme-contrast</code> measures only its opaque pairs.
+          </p>
+        </div>
+      </figure>
+
       <!-- ================= Chapter 3 ================= -->
       <section class="stack cg-chapter" id="treatments">
         <p class="overline">Chapter three</p>
@@ -817,9 +908,9 @@
             page or pasted onto it.
           </p>
           <p>
-            The preset also re-runs the recipe over a darkened base for hover
-            rather than reusing the resting fill, so the gradient shape survives
-            the state change instead of flattening.
+            Hover needs no gradient of its own: the resting gradient stays put
+            and <code>--hover-overlay-solid</code> darkens it from above, so the
+            shape survives the state change instead of flattening.
           </p>
         </div>
       </figure>
@@ -829,10 +920,9 @@
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>Interaction belongs to the palette too</h3>
           <p class="muted measure">
-            Three colours that only exist while something is being used. All
-            three are declared on <code>:root, [data-theme]</code>, so they are
-            recomputed at every island rather than inherited already resolved.
-            Hover and tab through the rows below.
+            Colours that only exist while something is being used: two hover
+            washes, one focus line and the native accent. None of them is a
+            hover colour per variant. Hover and tab through the rows below.
           </p>
         </figcaption>
 
@@ -842,14 +932,22 @@
             <div class="cluster">
               <span class="cg-chip"></span>
               <span class="cg-chip cg-overlay"></span>
-              <span class="cg-value">surface, then + --hover-overlay</span>
+              <span class="cg-value">--surface, then + --hover-overlay</span>
             </div>
             <div class="cluster">
-              <span class="cg-chip" data-swatch="--focus"></span>
-              <span class="cg-value">--focus</span>
+              <span class="cg-chip" data-swatch="--primary"></span>
+              <span class="cg-chip cg-overlay-solid"></span>
+              <span class="cg-value">--primary, then + --hover-overlay-solid</span>
             </div>
             <div class="cluster">
-              <button class="btn primary" type="button">Hover me</button>
+              <span class="cg-chip cg-focus"></span>
+              <span class="cg-chip cg-focus cg-focus-solid"></span>
+              <span class="cg-value">--focus on --surface and --surface-solid</span>
+            </div>
+            <div class="cluster">
+              <button class="btn primary" type="button">Solid</button>
+              <button class="btn primary soft" type="button">Soft</button>
+              <button class="btn primary ghost" type="button">Ghost</button>
               <input type="checkbox" checked aria-label="Native checkbox on ocean">
               <input type="range" value="60" aria-label="Native range on ocean">
             </div>
@@ -860,14 +958,22 @@
             <div class="cluster">
               <span class="cg-chip"></span>
               <span class="cg-chip cg-overlay"></span>
-              <span class="cg-value">surface, then + --hover-overlay</span>
+              <span class="cg-value">--surface, then + --hover-overlay</span>
             </div>
             <div class="cluster">
-              <span class="cg-chip" data-swatch="--focus"></span>
-              <span class="cg-value">--focus</span>
+              <span class="cg-chip" data-swatch="--primary"></span>
+              <span class="cg-chip cg-overlay-solid"></span>
+              <span class="cg-value">--primary, then + --hover-overlay-solid</span>
             </div>
             <div class="cluster">
-              <button class="btn primary" type="button">Hover me</button>
+              <span class="cg-chip cg-focus"></span>
+              <span class="cg-chip cg-focus cg-focus-solid"></span>
+              <span class="cg-value">--focus on --surface and --surface-solid</span>
+            </div>
+            <div class="cluster">
+              <button class="btn primary" type="button">Solid</button>
+              <button class="btn primary soft" type="button">Soft</button>
+              <button class="btn primary ghost" type="button">Ghost</button>
               <input type="checkbox" checked aria-label="Native checkbox on sunset">
               <input type="range" value="60" aria-label="Native range on sunset">
             </div>
@@ -876,13 +982,21 @@
 
         <div class="stack muted measure cg-legend">
           <p>
-            <strong><code>--hover-overlay</code></strong> is about four percent
-            of ink. A button paints it as
-            <code>box-shadow: inset 0 0 0 999px</code> over whatever fill it
-            already has, so one token covers a solid, an outline and a table row
-            without a hover colour per variant. The second chip above is that
-            same recipe applied to <code>--surface</code>, which is the only way
-            to see four percent at all.
+            Hover is a wash painted as <code>box-shadow: inset 0 0 0 999px</code>
+            over whatever fill is already there, so it never needs to know that
+            fill. <strong><code>--hover-overlay</code></strong> is about four
+            percent of ink, for neutral surfaces: a table row, a close button.
+            <strong><code>--hover-overlay-solid</code></strong> is a stronger
+            black, for solid fills — black in both schemes, so a solid button
+            darkens on hover in dark mode too. The chips above apply each wash
+            to its fill; four percent is otherwise invisible as a flat swatch.
+          </p>
+          <p>
+            Soft, outline and ghost take no wash; hover changes their fill
+            instead. Soft moves its surface mix by
+            <code>--soft-hover-alpha</code> — a wash on top would drag its ink
+            below the resting contrast — and outline and ghost take a light
+            tint of <code>currentColor</code>.
           </p>
           <p>
             <strong><code>--focus</code></strong> is the one focus color: every
@@ -998,8 +1112,10 @@
           <p>
             Theme-derived aliases — <code>--shadow</code>,
             <code>--shadow-popout</code>, <code>--backdrop-fill</code>,
-            <code>--selection-bg</code>, <code>--heading</code>,
-            <code>--state-selected</code>, <code>--indicator-ring</code> — are
+            <code>--selection-bg</code> / <code>-fg</code>, <code>--heading</code>,
+            <code>--state-selected</code>, <code>--surface-opaque</code>,
+            <code>--surface-solid-fg</code> and <code>--indicator-ring</code>,
+            which reads <code>--surface-opaque</code> — are
             declared on <code>:root, [data-theme]</code> rather than on
             <code>:root</code> alone. A custom property resolves its
             <code>var()</code> references where it is declared, so an alias
@@ -1235,7 +1351,7 @@
   [data-theme][data-theme] {
     --border-width: 2px;
     --focus-outline-offset: 3px;
-    --focus-ring-width: 4px;
+    --focus-ring-width: 3px;
     --text-muted: var(--text);
     --text-subtle: var(--text);
   }
@@ -1333,11 +1449,15 @@
       probe.remove();
       const parts = value.match(/[\d.]+/g);
       if (!parts || parts.length < 3) return null;
-      return parts.slice(0, 3).map(Number);
+      return parts.slice(0, 4).map(Number);
     }
 
-    const hex = ([r, g, b]) =>
-      `#${[r, g, b].map((c) => Math.round(c).toString(16).padStart(2, "0")).join("")}`.toUpperCase();
+    /* A translucent token keeps its alpha in the readout: glass's white
+       surface would otherwise print as #FFFFFF. */
+    const hex = ([r, g, b, a = 1]) => {
+      const rgb = `#${[r, g, b].map((c) => Math.round(c).toString(16).padStart(2, "0")).join("")}`.toUpperCase();
+      return a < 1 ? `${rgb} / ${Math.round(a * 100)}%` : rgb;
+    };
 
     /* sRGB -> OKLab (Björn Ottosson's matrices), then to polar OKLCH. */
     function oklch([r, g, b]) {
@@ -1364,7 +1484,8 @@
     }
 
     for (const host of document.querySelectorAll("[data-ramp]")) {
-      for (const token of RAMP) {
+      const tokens = host.dataset.ramp ? host.dataset.ramp.split(" ") : RAMP;
+      for (const token of tokens) {
         const rgb = readRgb(host, token);
         if (!rgb) continue;
         const chip = cell("span", "cg-chip");
