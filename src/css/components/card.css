@@ -4,11 +4,11 @@
  * Docs: docs/pages/components/card.md
  *
  * Surface, border, radius, padding, density, and elevation stay local here.
- * Direct header/footer children are structural slots; a direct footer is
- * anchored to the card's bottom edge when extra block space is available (so
- * price/action rows align across equal-height cards in a grid). A bare card
- * owns its direct-child rhythm; a layout primitive on the same element takes
- * over that layout. Page layout remains the job of markup and layout
+ * Direct header/footer children are structural slots with a default split row;
+ * a direct footer is anchored to the card's bottom edge when extra block space
+ * is available (so price/action rows align across equal-height cards in a
+ * grid). A bare card owns its direct-child rhythm and its slot rows; a layout
+ * primitive on the card or on a slot takes over that layout. Page layout remains the job of markup and layout
  * primitives outside the card.
  *
  * Public hooks:
@@ -46,7 +46,9 @@
 
 .card {
   --card-pad: var(--space-40);
-  --card-gap: var(--space-30);
+  /* Rhythm between direct children follows the context (.compact, .spacious,
+     local or inherited); the padding stays local anatomy. */
+  --card-gap: var(--gap);
   --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
   --card-bg: var(--ui-bg, var(--surface-raised));
@@ -87,7 +89,11 @@
   margin-block: 0;
 }
 
-.card > :where(header, footer) {
+/* The slot row is a convenience default, not anatomy: like the root box it
+   lives at zero specificity, so a primitive, role or utility on the slot
+   (.cluster, .media, .form-actions, .justify-content-*) replaces it instead of
+   losing to components/ on source order. */
+:where(.card > header, .card > footer) {
   display: flex;
   flex-wrap: wrap;
   align-items: var(--items-align, center);
@@ -96,13 +102,13 @@
   min-inline-size: 0;
 }
 
+:where(.card > header) {
+  align-items: var(--items-align, flex-start);
+}
+
 .card > :where(header, footer) > * {
   min-inline-size: 0;
   margin-block: 0;
-}
-
-.card > header {
-  align-items: var(--items-align, flex-start);
 }
 
 /* A direct footer is pinned to the bottom when the card has free space.

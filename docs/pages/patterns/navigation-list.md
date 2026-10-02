@@ -1,14 +1,15 @@
 # Navigation List
 
-Use `.nav-list` for a semantic list of navigation links.
-
-It removes native list chrome but does not force a direction. Combine it with layout primitives depending on context.
+Use `.nav-list` for a vertical list of navigation links: it removes native list
+chrome, stacks the rows and stretches each `.nav-link` across the row. For a
+horizontal row of links, use `.cluster` on the list, which removes the list
+chrome too.
 
 ```html demo
 <div class="stack">
   <h2>Navigation</h2>
   <nav aria-label="Main navigation">
-    <ul class="nav-list cluster">
+    <ul class="cluster">
       <li><a href="/docs">Docs</a></li>
       <li><a href="/components">Components</a></li>
       <li><a href="/examples">Examples</a></li>
@@ -25,14 +26,6 @@ It removes native list chrome but does not force a direction. Combine it with la
   </nav>
 </div>
 ```
-
-Use `.nav-list` for:
-
-- header navigation
-- side navigation
-- footer navigation
-- tab-like navigation lists
-- documentation navigation
 
 Do not reset every list inside `nav`.
 
@@ -51,7 +44,7 @@ Prefer an explicit pattern class.
 
 ```html demo
 <nav aria-label="Footer">
-  <ul class="nav-list cluster">
+  <ul class="cluster">
     <li><a href="/privacy">Privacy</a></li>
     <li><a href="/terms">Terms</a></li>
     <li><a href="/contact">Contact</a></li>
@@ -69,7 +62,7 @@ Header navigation is usually a composition of landmarks, layout primitives, and 
     <a class="brand" href="/">Actual CSS</a>
 
     <nav aria-label="Main navigation">
-      <ul class="nav-list cluster">
+      <ul class="cluster">
         <li><a href="/docs">Docs</a></li>
         <li><a href="/components">Components</a></li>
         <li><a href="/examples">Examples</a></li>
@@ -85,8 +78,7 @@ In this example:
 - `.center` constrains the content.
 - `.cluster` arranges the brand and navigation.
 - `nav` provides navigation semantics.
-- `.nav-list` normalizes the navigation list.
-- the inner `.cluster` arranges navigation items horizontally.
+- the inner `.cluster` removes the list chrome and arranges the links horizontally.
 
 A project may add `.site-header` when it needs a visual shell.
 
@@ -206,30 +198,8 @@ A project may add `.side-nav` only when it needs specific visual behavior such a
 }
 ```
 
-### Optional Navigation Link Styling
+### Link Styling
 
-`.nav-list` can stay purely structural. If the framework wants navigation links to have a default hit area and active state, this can be added as a lightweight visual pattern.
-
-```css
-.nav-list a {
-  display: flex;
-  align-items: center;
-  gap: var(--space-20);
-  min-block-size: 2rem;
-  padding-inline: var(--space-20);
-  border-radius: var(--radius-sm);
-  color: inherit;
-  text-decoration: none;
-}
-
-.nav-list a:hover {
-  background: var(--surface-subtle);
-}
-
-.nav-list a[aria-current="page"] {
-  background: var(--surface-subtle);
-  font-weight: 600;
-}
-```
-
-Keep this separate from layout primitives. `.cluster` and `.stack` should not style links.
+`.nav-link` gives a link its hit area, hover fill and `aria-current` state, in a
+`.cluster` row or a `.nav-list` (see [Navbar](../components/navbar.md)). Set
+`--gap` on a `.nav-list` to tighten its rows.

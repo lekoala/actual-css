@@ -1,8 +1,9 @@
 /*
  * Sticky, frosted top bar shell for app/dashboard shells (persistent
  * sidebar + topbar layouts). Owns positioning, stacking, and the frosted
- * background only — row content (search, breadcrumb, actions) stays local
- * to the page.
+ * background; it also lays its children out as a default row that a layout
+ * primitive on the same element (such as .cluster) replaces. Row content
+ * (search, breadcrumb, actions) stays local to the page.
  *
  * Docs: docs/pages/layout/topbar.md
  *
@@ -16,14 +17,19 @@
   inset-block-start: 0;
   z-index: var(--z-sticky);
   isolation: isolate;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--gap);
   padding-block: var(--space-30);
   padding-inline: var(--space-40);
   border-block-end: var(--border-width) solid var(--border);
   background: var(--surface);
+}
+
+/* The row is a default at zero specificity: .topbar and the primitives share
+   layout/, so at class weight their file order alone would pick the winner. */
+:where(.topbar) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--gap);
 }
 
 /* Both conditions are required: the translucent background contains var(),
