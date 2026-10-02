@@ -64,11 +64,17 @@
   --ui-border: var(--border);
 }
 
+/* Each boundary selects a control step twice: the values, resolved here, and
+   the 0/1 step weights a nested [data-theme] island rebuilds them from
+   (tokens.css). */
 .compact {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
   --control-pad-x: var(--control-pad-x-sm);
+  --control-step-sm: 1;
+  --control-step-md: 0;
+  --control-step-lg: 0;
 }
 
 .spacious {
@@ -76,6 +82,9 @@
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
   --control-pad-x: var(--control-pad-x-lg);
+  --control-step-sm: 0;
+  --control-step-md: 0;
+  --control-step-lg: 1;
 }
 
 .tight {
@@ -113,6 +122,9 @@
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
   --control-pad-x: var(--control-pad-x-sm);
+  --control-step-sm: 1;
+  --control-step-md: 0;
+  --control-step-lg: 0;
 }
 
 :where(
@@ -137,6 +149,9 @@
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
   --control-pad-x: var(--control-pad-x-lg);
+  --control-step-sm: 0;
+  --control-step-md: 0;
+  --control-step-lg: 1;
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable

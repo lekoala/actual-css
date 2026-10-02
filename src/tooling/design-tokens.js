@@ -95,6 +95,11 @@ export const FOUNDATIONS = {
    stay out of the design tools. */
 export const NOT_EXPORTED = {
   "font stack; a design tool font token holds one family": ["font-sans", "font-mono"],
+  "internal 0/1 weights selecting a control step; the steps are exported": [
+    "control-step-sm",
+    "control-step-md",
+    "control-step-lg",
+  ],
   "no design tool equivalent": [
     "font-width",
     "line-height",

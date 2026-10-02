@@ -23,9 +23,11 @@ import { readFlags } from "./utils/browser.js";
 const ROOT = join(import.meta.dirname, "..");
 
 const args = process.argv.slice(2);
-const { "--port": portArg } = readFlags(args, { "--port": { fallback: "3000" } });
+const { "--port": portArg, "--cors": cors } = readFlags(args, {
+  "--port": { fallback: "3000" },
+  "--cors": { boolean: true },
+});
 const port = Number(portArg);
-const cors = args.includes("--cors");
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
   console.error(`serve: --port expects a port number, received "${portArg}".`);
   process.exit(1);
