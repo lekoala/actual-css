@@ -15,6 +15,7 @@
 - `.card` header and footer rows drop to zero specificity: `.media`, `.cluster`, `.form-actions` and `.justify-content-*` on a slot now take over its layout.
 - `--font-width-dense` is removed; set `font-stretch` on an element that should render condensed.
 - A theme sets `--control-pad-x-sm` / `-md` / `-lg` instead of `--control-pad-x`, which `.sm`/`.lg` and `.compact`/`.spacious` now select from.
+- A theme that sets its own control steps re-selects them in its block to work as a nested island (recipe in `docs/pages/foundations/tokens.md`).
 
 ### Added
 

@@ -20,11 +20,15 @@ actions is a `.cluster`; a vertical list is `stack list-reset`. Replace
 <ul class="stack list-reset">…</ul>
 ```
 
-- The row takes the framework `--gap` (0.75rem); `.actions` used 0.5rem. Add
-  `.tight` to keep the tighter rhythm.
+- The row takes the framework `--gap` (0.75rem). The former `.actions` used
+  0.5rem: add `.tight` to keep it.
+- The former `.navbar-nav` used `--space-10` (0.25rem), which no utility
+  reproduces. If the tighter navbar rhythm matters, set
+  `gap: var(--space-10)` on that row in application CSS.
 - `.form-actions` has no top margin and no `--form-actions-margin-block-start`:
   put `.stack` on the form. `--form-actions-justify` and `--form-actions-align`
-  still apply.
+  still apply. In a modular build, import `layout/cluster` before
+  `forms/form-actions`.
 - `.justify-content-*` aligns only its own element and no longer reaches a
   nested `.cluster`. Put the utility on the row it should align.
 
@@ -36,19 +40,26 @@ actions is a `.cluster`; a vertical list is `stack list-reset`. Replace
 - A `dialog.modal` body `<footer>` has no layout of its own: write
   `<footer class="cluster justify-content-end">`.
 - `--modal-header-bg` is removed: put a `.background-*` utility on the
-  `dialog.modal > header` band.
+  `dialog.modal > header` band. Only that default fill has zero specificity;
+  the header's layout keeps its structural rule.
+- The confirmation recipe uses the regular 1rem modal inset where the former
+  `.dialog-confirmation` used 1.5rem. Set `--modal-pad: var(--space-50)` on
+  the dialog to keep the roomier treatment.
 
 ## Cards
 
-A `.card` header or footer row has zero specificity. A `.media`, `.cluster`,
-`.form-actions` or `.justify-content-*` on that slot now replaces the default
-split row instead of losing to it; check slots that carried one of those
-classes by accident.
+The layout of a `.card` header or footer row is a zero-specificity default: any
+author rule that targets the slot replaces it, not only a `.media`, `.cluster`,
+`.form-actions` or `.justify-content-*` class. Check application CSS for bare
+element rules such as `header { … }` or `footer { … }`, which now win over the
+card's slot row.
 
 ## Themes and density
 
 - A theme sets `--control-pad-x-sm`, `--control-pad-x-md` and
-  `--control-pad-x-lg` instead of `--control-pad-x`.
+  `--control-pad-x-lg` instead of `--control-pad-x`. Used as a nested island,
+  it re-selects them in its own block; see
+  [Tokens](../foundations/tokens.md).
 - `--font-width-dense` is removed, and `.compact` no longer condenses type: set
   `font-stretch` on the element that should render condensed.
 

@@ -26,12 +26,14 @@
       <button class="btn" type="button" data-case="spacious-island">Spacious</button>
     </section>
   </div>
-  <section data-theme="bootstrap-v6" style="--control-size-md: 3rem">
-    <button class="btn" type="button" data-case="island-size">Tall step</button>
-  </section>
-  <div class="compact">
-    <section data-theme="bootstrap-v6" style="--control-size-sm: 1.75rem">
-      <button class="btn" type="button" data-case="compact-island-size">Short step</button>
+  <!-- An inherited override crosses a palette-only island, and crosses a
+       geometry theme on every token whose steps that theme leaves alone. -->
+  <div style="--control-size: 3rem; --control-pad-x: 1.25rem">
+    <section data-theme="dark">
+      <button class="btn" type="button" data-case="palette-island">Palette only</button>
+    </section>
+    <section data-theme="bootstrap-v6">
+      <button class="btn" type="button" data-case="override-island">Own padding</button>
     </section>
   </div>
 </body>

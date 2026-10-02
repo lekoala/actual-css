@@ -78,10 +78,11 @@ it("orders a theme's own padding scale through size and density", async () => {
   });
 });
 
-// Trap: the default selection resolved on :root only, so a nested theme island
-// kept the outer 16px padding. Re-selecting the default step on the island
-// instead would reset a .compact region around it; the island rebuilds the
-// selection from the inherited step weights.
+// Traps, both ways: the default selection resolved on :root only, so a nested
+// theme island kept the outer 16px padding. Rebinding on every [data-theme]
+// fixed that but made a palette-only island a geometry boundary that an
+// inherited --control-size stopped at. A theme that sets steps re-selects
+// them itself, from the inherited weights so a .compact around it holds.
 it("selects a nested theme island's own steps under inherited density", async () => {
   await withBrowserPage(fixtureUrl("tests/browser/size-density-island.html"), async (view) => {
     const result = await view.evaluate(`(() => Object.fromEntries(
@@ -99,8 +100,8 @@ it("selects a nested theme island's own steps under inherited density", async ()
     expect(result["island-sm"].pad).toBe(8);
     expect(result["compact-island"].pad).toBe(8);
     expect(result["spacious-island"].pad).toBe(16);
-    expect(result["island-size"].height).toBe(48);
-    expect(result["compact-island-size"].height).toBe(28);
+    expect(result["palette-island"]).toEqual({ pad: 20, height: 48 });
+    expect(result["override-island"]).toEqual({ pad: 12, height: 48 });
   });
 });
 

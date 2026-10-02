@@ -43,6 +43,15 @@
   --control-pad-x-sm: 0.5rem;
   --control-pad-x-md: 0.75rem;
   --control-pad-x-lg: 1rem;
+  /* Re-select from the steps above, or a nested island keeps the padding
+     resolved outside it. The inherited weights keep a surrounding .compact or
+     .spacious; a plain var(--control-pad-x-md) would reset it. Only the token
+     whose steps this theme changes: --control-size still crosses the island. */
+  --control-pad-x: calc(
+    (var(--control-pad-x-sm) * var(--control-step-sm)) +
+    (var(--control-pad-x-md) * var(--control-step-md)) +
+    (var(--control-pad-x-lg) * var(--control-step-lg))
+  );
   --control-hover-bg: var(--surface);
   --control-hover-border: #adb5bd;
 }
