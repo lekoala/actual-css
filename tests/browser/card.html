@@ -96,10 +96,15 @@
     </article>
   </section>
 
-  <!-- The rhythm between a bare card's children follows the context. -->
-  <section id="rhythm" class="grid compact">
+  <!-- The rhythm between a bare card's children is local anatomy: a grid's
+       --gap and an inherited density stay outside; .card.compact reaches it. -->
+  <section class="grid compact" style="--gap: 38px">
     <article id="rhythm-inherited" class="card">
-      <h3>Inherited compact</h3>
+      <h3>Inside a 38px compact grid</h3>
+      <p>Body.</p>
+    </article>
+    <article id="rhythm-local" class="card compact">
+      <h3>Compact card</h3>
       <p>Body.</p>
     </article>
   </section>

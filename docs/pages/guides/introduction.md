@@ -72,9 +72,8 @@ shared by buttons, badges, alerts, and cards; a subtree that needs another
 palette is a `data-theme` island, not a class. `.ghost` and `.link` are
 button-only. Size variants `.sm` and `.lg` scale typography and
 participating component geometry consistently. Density contexts `.compact` and
-`.spacious` change geometry and spacing without changing font size or icons;
-`.compact` may slightly narrow typefaces that support a width axis.
-Undocumented `is-*` classes are runtime internals.
+`.spacious` change geometry and spacing without changing font size, font width
+or icons. Undocumented `is-*` classes are runtime internals.
 
 ```html
 <button class="btn">Click me</button>

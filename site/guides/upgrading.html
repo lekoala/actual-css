@@ -5,8 +5,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Scroll Target — Actual CSS</title>
-  <meta name="description" content="Anchor scroll offset: keep #hash and scrollIntoView() targets clear of sticky headers.">
+  <title>Upgrading to 0.12 — Actual CSS</title>
+  <meta name="description" content="Each step below is a search for a removed class or hook and its replacement.
+The changelog
+lists every change; this page keeps the ones that need an edit.">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#52396F">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
@@ -89,14 +91,14 @@
       <aside class="docs-sidebar scroller stable-gutter" aria-label="Documentation">
               <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
-        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
-        <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
-        <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
-        <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
-        <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
-        <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
-        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading to 0.12</a></li>
+        <li><a class="nav-link" href="introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="integrating-actual-css.html">Building with Actual CSS</a></li>
+        <li><a class="nav-link" href="modular-import.html">Modular imports</a></li>
+        <li><a class="nav-link" href="progressive-enhancement.html">The JavaScript Runtime</a></li>
+        <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
+        <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
+        <li><a class="nav-link" href="design-tools.html">Design tools (Figma, Penpot)</a></li>
+        <li><a class="nav-link" href="upgrading.html" aria-current="page">Upgrading to 0.12</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">
@@ -107,22 +109,22 @@
       </ul>
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="overview.html">Layout Overview</a></li>
-        <li><a class="nav-link" href="choosing.html">Choosing a layout</a></li>
-        <li><a class="nav-link" href="stack.html">Stack</a></li>
-        <li><a class="nav-link" href="cluster.html">Cluster</a></li>
-        <li><a class="nav-link" href="grid.html">Grid</a></li>
-        <li><a class="nav-link" href="column-layout.html">Column Layout</a></li>
-        <li><a class="nav-link" href="center.html">Center</a></li>
-        <li><a class="nav-link" href="sidebar-layout.html">Sidebar Layout</a></li>
-        <li><a class="nav-link" href="media.html">Media Object</a></li>
-        <li><a class="nav-link" href="switcher.html">Switcher</a></li>
-        <li><a class="nav-link" href="topbar.html">Topbar</a></li>
-        <li><a class="nav-link" href="scroll-snap.html">Scroll Snap</a></li>
-        <li><a class="nav-link" href="scroll-target.html" aria-current="page">Scroll Target</a></li>
-        <li><a class="nav-link" href="frame.html">Frame</a></li>
-        <li><a class="nav-link" href="app-shell.html">App Shell</a></li>
-        <li><a class="nav-link" href="app-layout.html">App Layout</a></li>
+        <li><a class="nav-link" href="../layout/overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="../layout/choosing.html">Choosing a layout</a></li>
+        <li><a class="nav-link" href="../layout/stack.html">Stack</a></li>
+        <li><a class="nav-link" href="../layout/cluster.html">Cluster</a></li>
+        <li><a class="nav-link" href="../layout/grid.html">Grid</a></li>
+        <li><a class="nav-link" href="../layout/column-layout.html">Column Layout</a></li>
+        <li><a class="nav-link" href="../layout/center.html">Center</a></li>
+        <li><a class="nav-link" href="../layout/sidebar-layout.html">Sidebar Layout</a></li>
+        <li><a class="nav-link" href="../layout/media.html">Media Object</a></li>
+        <li><a class="nav-link" href="../layout/switcher.html">Switcher</a></li>
+        <li><a class="nav-link" href="../layout/topbar.html">Topbar</a></li>
+        <li><a class="nav-link" href="../layout/scroll-snap.html">Scroll Snap</a></li>
+        <li><a class="nav-link" href="../layout/scroll-target.html">Scroll Target</a></li>
+        <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
+        <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
+        <li><a class="nav-link" href="../layout/app-layout.html">App Layout</a></li>
       </ul>
       <p class="docs-nav-group">Components</p>
       <ul class="nav-list">
@@ -223,87 +225,78 @@
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
-              <li><span aria-current="page">Scroll Target</span></li>
+              <li><span aria-current="page">Upgrading to 0.12</span></li>
             </ol>
           </nav>
 
           <div class="prose docs-prose">
-<h1 id="scroll-target">Scroll Target</h1>
-<p>Anchor scroll offset: keep <code>#hash</code> and <code>scrollIntoView()</code> targets clear of sticky headers.</p>
-<blockquote>
-<p><strong>Module</strong> — import <code>actual-css/css/layout/scroll-target</code> or <code>actual-css/css/layout</code>.</p>
-</blockquote>
-<p>A hash link or scripted scroll places the target flush at the scroll container's start edge. Under a sticky header such as <code>.topbar</code>, the heading you jumped to lands underneath it. Add <code>.scroll-target</code> to the elements that are link targets — sections, headings — and the browser stops early, reserving space above them.</p>
-</div>
-<div class="docs-example">
-  <div class="docs-preview">
-<nav class="cluster" aria-label="Sections" style="margin-block-end: var(--space-30)">
-  <a class="btn neutral sm" href="#st-alpha">Alpha</a>
-  <a class="btn neutral sm" href="#st-beta">Beta</a>
-  <a class="btn neutral sm" href="#st-gamma">Gamma</a>
-</nav>
-<div class="overflow-auto" style="block-size: 10rem; border: var(--border-width) solid var(--border); border-radius: var(--radius)">
-  <section id="st-alpha" class="scroll-target" style="padding: var(--space-30)">
-    <h3>Alpha</h3>
-    <p>The first section. Followed by enough content to make the container scroll.</p>
-  </section>
-  <section id="st-beta" class="scroll-target" style="padding: var(--space-30)">
-    <h3>Beta</h3>
-    <p>The second section. Its top edge stops below the container edge.</p>
-  </section>
-  <section id="st-gamma" class="scroll-target" style="padding: var(--space-30)">
-    <h3>Gamma</h3>
-    <p>The last section.</p>
-  </section>
-</div>
-  </div>
-  <div class="docs-code">
-    <pre><code class="language-html">&lt;nav class=&quot;cluster&quot; aria-label=&quot;Sections&quot; style=&quot;margin-block-end: var(--space-30)&quot;&gt;
-  &lt;a class=&quot;btn neutral sm&quot; href=&quot;#st-alpha&quot;&gt;Alpha&lt;/a&gt;
-  &lt;a class=&quot;btn neutral sm&quot; href=&quot;#st-beta&quot;&gt;Beta&lt;/a&gt;
-  &lt;a class=&quot;btn neutral sm&quot; href=&quot;#st-gamma&quot;&gt;Gamma&lt;/a&gt;
-&lt;/nav&gt;
-&lt;div class=&quot;overflow-auto&quot; style=&quot;block-size: 10rem; border: var(--border-width) solid var(--border); border-radius: var(--radius)&quot;&gt;
-  &lt;section id=&quot;st-alpha&quot; class=&quot;scroll-target&quot; style=&quot;padding: var(--space-30)&quot;&gt;
-    &lt;h3&gt;Alpha&lt;/h3&gt;
-    &lt;p&gt;The first section. Followed by enough content to make the container scroll.&lt;/p&gt;
-  &lt;/section&gt;
-  &lt;section id=&quot;st-beta&quot; class=&quot;scroll-target&quot; style=&quot;padding: var(--space-30)&quot;&gt;
-    &lt;h3&gt;Beta&lt;/h3&gt;
-    &lt;p&gt;The second section. Its top edge stops below the container edge.&lt;/p&gt;
-  &lt;/section&gt;
-  &lt;section id=&quot;st-gamma&quot; class=&quot;scroll-target&quot; style=&quot;padding: var(--space-30)&quot;&gt;
-    &lt;h3&gt;Gamma&lt;/h3&gt;
-    &lt;p&gt;The last section.&lt;/p&gt;
-  &lt;/section&gt;
-&lt;/div&gt;</code></pre>
-  </div>
-</div>
-<div class="prose docs-prose">
-<p>The offset is a plain <code>scroll-margin-block-start</code>, so it works in every scroll container — the viewport, a sidebar, an overflow region — and composes with the scrollspy enhancer. Scrollspy only decides which link is active; this offset decides where the page actually lands when the link is followed.</p>
-<h2 id="css-hooks">CSS hooks</h2>
-<ul>
-<li><code>--scroll-target-offset</code> — space kept above the target after scrolling. Set it
-once on <code>:root</code> (or on the sticky header's height) in applications with a
-fixed header:</li>
-</ul>
-<pre><code class="language-css">:root {
-  --scroll-target-offset: 5rem;
-}
+<h1 id="upgrading-to-012">Upgrading to 0.12</h1>
+<p>Each step below is a search for a removed class or hook and its replacement.
+The <a href="https://github.com/lekoala/actual-css/blob/master/CHANGELOG.md">changelog</a>
+lists every change; this page keeps the ones that need an edit.</p>
+<p><strong>Related terms:</strong> migration, breaking changes, update, version.</p>
+<h2 id="action-rows">Action rows</h2>
+<p><code>.actions</code>, <code>.navbar-nav</code> and the layout of <code>.form-actions</code> are gone. A row of
+actions is a <code>.cluster</code>; a vertical list is <code>stack list-reset</code>. Replace
+<code>class=&quot;actions&quot;</code> and <code>class=&quot;navbar-nav&quot;</code> with <code>class=&quot;cluster&quot;</code>, and
+<code>class=&quot;form-actions&quot;</code> with <code>class=&quot;cluster form-actions&quot;</code>:</p>
+<pre><code class="language-html">&lt;menu class=&quot;cluster&quot;&gt;…&lt;/menu&gt;
+&lt;ul class=&quot;cluster&quot;&gt;…&lt;/ul&gt;
+&lt;div class=&quot;cluster form-actions&quot;&gt;…&lt;/div&gt;
+&lt;ul class=&quot;stack list-reset&quot;&gt;…&lt;/ul&gt;
 </code></pre>
-<p>Deliberately no <code>[id]</code> global rule: making the offset explicit per target keeps plain ids (modals, form fields, skip links) untouched.</p>
+<ul>
+<li>The row takes the framework <code>--gap</code> (0.75rem); <code>.actions</code> used 0.5rem. Add
+<code>.tight</code> to keep the tighter rhythm.</li>
+<li><code>.form-actions</code> has no top margin and no <code>--form-actions-margin-block-start</code>:
+put <code>.stack</code> on the form. <code>--form-actions-justify</code> and <code>--form-actions-align</code>
+still apply.</li>
+<li><code>.justify-content-*</code> aligns only its own element and no longer reaches a
+nested <code>.cluster</code>. Put the utility on the row it should align.</li>
+</ul>
+<h2 id="dialogs">Dialogs</h2>
+<ul>
+<li><code>.dialog-confirmation</code> is removed. Compose <code>.media</code> with <code>.dialog-icon</code>, then
+a <code>&lt;footer class=&quot;bleed background-subtle cluster justify-content-space-between&quot;&gt;</code>;
+the recipe is in <a href="../components/dialog.html">Dialog</a>.</li>
+<li>A <code>dialog.modal</code> body <code>&lt;footer&gt;</code> has no layout of its own: write
+<code>&lt;footer class=&quot;cluster justify-content-end&quot;&gt;</code>.</li>
+<li><code>--modal-header-bg</code> is removed: put a <code>.background-*</code> utility on the
+<code>dialog.modal &gt; header</code> band.</li>
+</ul>
+<h2 id="cards">Cards</h2>
+<p>A <code>.card</code> header or footer row has zero specificity. A <code>.media</code>, <code>.cluster</code>,
+<code>.form-actions</code> or <code>.justify-content-*</code> on that slot now replaces the default
+split row instead of losing to it; check slots that carried one of those
+classes by accident.</p>
+<h2 id="themes-and-density">Themes and density</h2>
+<ul>
+<li>A theme sets <code>--control-pad-x-sm</code>, <code>--control-pad-x-md</code> and
+<code>--control-pad-x-lg</code> instead of <code>--control-pad-x</code>.</li>
+<li><code>--font-width-dense</code> is removed, and <code>.compact</code> no longer condenses type: set
+<code>font-stretch</code> on the element that should render condensed.</li>
+</ul>
+<h2 id="rendering-changes-without-an-edit">Rendering changes without an edit</h2>
+<p>These need no markup change; compare the affected screens.</p>
+<ul>
+<li><code>.sm</code> controls have 13px of inline padding instead of 14px.</li>
+<li><code>.compact</code> and <code>.spacious</code> controls get narrower or wider, not only shorter
+or taller.</li>
+<li><code>.nav-list</code> rows sit <code>--space-10</code> apart instead of <code>--space-20</code>.</li>
+<li><code>.card.compact</code> lowers the gap between its children to <code>--space-20</code>.</li>
+</ul>
 
 </div>
 
           <div class="cluster docs-source-links">
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/layout/scroll-target.md" rel="noopener noreferrer">Edit on GitHub</a>
-            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/layout/scroll-target.md" rel="noopener noreferrer">View Markdown</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/guides/upgrading.md" rel="noopener noreferrer">Edit on GitHub</a>
+            <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/blob/master/docs/pages/guides/upgrading.md" rel="noopener noreferrer">View Markdown</a>
           </div>
         </article>
 
         <nav class="cluster docs-prevnext" aria-label="Page navigation">
-                    <a class="btn outline" href="scroll-snap.html">&larr; Scroll Snap</a>
-                    <a class="btn outline" href="frame.html">Frame &rarr;</a>
+                    <a class="btn outline" href="design-tools.html">&larr; Design tools (Figma, Penpot)</a>
+                    <a class="btn outline" href="../foundations/philosophy.html">Philosophy &rarr;</a>
         </nav>
       </main>
 
@@ -311,7 +304,11 @@ fixed header:</li>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
+        <li><a class="nav-link" href="#action-rows" data-docs-toc-item data-level="2">Action rows</a></li>
+        <li><a class="nav-link" href="#dialogs" data-docs-toc-item data-level="2">Dialogs</a></li>
+        <li><a class="nav-link" href="#cards" data-docs-toc-item data-level="2">Cards</a></li>
+        <li><a class="nav-link" href="#themes-and-density" data-docs-toc-item data-level="2">Themes and density</a></li>
+        <li><a class="nav-link" href="#rendering-changes-without-an-edit" data-docs-toc-item data-level="2">Rendering changes without an edit</a></li>
           </ul>
         </nav>
       </aside>
@@ -363,14 +360,14 @@ fixed header:</li>
     <nav aria-label="Documentation">
             <p class="docs-nav-group">Guides</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="../guides/introduction.html">Introduction</a></li>
-        <li><a class="nav-link" href="../guides/integrating-actual-css.html">Building with Actual CSS</a></li>
-        <li><a class="nav-link" href="../guides/modular-import.html">Modular imports</a></li>
-        <li><a class="nav-link" href="../guides/progressive-enhancement.html">The JavaScript Runtime</a></li>
-        <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
-        <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
-        <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
-        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading to 0.12</a></li>
+        <li><a class="nav-link" href="introduction.html">Introduction</a></li>
+        <li><a class="nav-link" href="integrating-actual-css.html">Building with Actual CSS</a></li>
+        <li><a class="nav-link" href="modular-import.html">Modular imports</a></li>
+        <li><a class="nav-link" href="progressive-enhancement.html">The JavaScript Runtime</a></li>
+        <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
+        <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
+        <li><a class="nav-link" href="design-tools.html">Design tools (Figma, Penpot)</a></li>
+        <li><a class="nav-link" href="upgrading.html" aria-current="page">Upgrading to 0.12</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">
@@ -381,22 +378,22 @@ fixed header:</li>
       </ul>
       <p class="docs-nav-group">Layout</p>
       <ul class="nav-list">
-        <li><a class="nav-link" href="overview.html">Layout Overview</a></li>
-        <li><a class="nav-link" href="choosing.html">Choosing a layout</a></li>
-        <li><a class="nav-link" href="stack.html">Stack</a></li>
-        <li><a class="nav-link" href="cluster.html">Cluster</a></li>
-        <li><a class="nav-link" href="grid.html">Grid</a></li>
-        <li><a class="nav-link" href="column-layout.html">Column Layout</a></li>
-        <li><a class="nav-link" href="center.html">Center</a></li>
-        <li><a class="nav-link" href="sidebar-layout.html">Sidebar Layout</a></li>
-        <li><a class="nav-link" href="media.html">Media Object</a></li>
-        <li><a class="nav-link" href="switcher.html">Switcher</a></li>
-        <li><a class="nav-link" href="topbar.html">Topbar</a></li>
-        <li><a class="nav-link" href="scroll-snap.html">Scroll Snap</a></li>
-        <li><a class="nav-link" href="scroll-target.html" aria-current="page">Scroll Target</a></li>
-        <li><a class="nav-link" href="frame.html">Frame</a></li>
-        <li><a class="nav-link" href="app-shell.html">App Shell</a></li>
-        <li><a class="nav-link" href="app-layout.html">App Layout</a></li>
+        <li><a class="nav-link" href="../layout/overview.html">Layout Overview</a></li>
+        <li><a class="nav-link" href="../layout/choosing.html">Choosing a layout</a></li>
+        <li><a class="nav-link" href="../layout/stack.html">Stack</a></li>
+        <li><a class="nav-link" href="../layout/cluster.html">Cluster</a></li>
+        <li><a class="nav-link" href="../layout/grid.html">Grid</a></li>
+        <li><a class="nav-link" href="../layout/column-layout.html">Column Layout</a></li>
+        <li><a class="nav-link" href="../layout/center.html">Center</a></li>
+        <li><a class="nav-link" href="../layout/sidebar-layout.html">Sidebar Layout</a></li>
+        <li><a class="nav-link" href="../layout/media.html">Media Object</a></li>
+        <li><a class="nav-link" href="../layout/switcher.html">Switcher</a></li>
+        <li><a class="nav-link" href="../layout/topbar.html">Topbar</a></li>
+        <li><a class="nav-link" href="../layout/scroll-snap.html">Scroll Snap</a></li>
+        <li><a class="nav-link" href="../layout/scroll-target.html">Scroll Target</a></li>
+        <li><a class="nav-link" href="../layout/frame.html">Frame</a></li>
+        <li><a class="nav-link" href="../layout/app-shell.html">App Shell</a></li>
+        <li><a class="nav-link" href="../layout/app-layout.html">App Layout</a></li>
       </ul>
       <p class="docs-nav-group">Components</p>
       <ul class="nav-list">

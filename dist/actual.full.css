@@ -4688,9 +4688,10 @@ a.badge[aria-disabled="true"] {
 
 .card {
   --card-pad: var(--space-40);
-  /* Rhythm between direct children follows the context (.compact, .spacious,
-     local or inherited); the padding stays local anatomy. */
-  --card-gap: var(--gap);
+  /* Local anatomy, like the padding. Never var(--gap): that token is
+     inherited, so the --gap of a parent grid became the rhythm inside every
+     card (+79px per card on a 38px grid). */
+  --card-gap: var(--space-30);
   --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
   --card-bg: var(--ui-bg, var(--surface-raised));
@@ -4767,6 +4768,7 @@ a.badge[aria-disabled="true"] {
 }
 .card.compact {
   --card-pad: var(--space-20);
+  --card-gap: var(--space-20);
 }
 
 @media print {

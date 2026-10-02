@@ -96,6 +96,7 @@
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
+        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading to 0.12</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">
@@ -271,7 +272,7 @@ controls inline spacing between items and block spacing between wrapped rows.</p
   </div>
 </div>
 <div class="prose docs-prose">
-<p>There is no <code>.actions</code> class. A dense row is <code>cluster compact</code>; a vertical action
+<p>There is no <code>.actions</code> class. A dense row is <code>cluster tight</code>; a vertical action
 list is <code>stack list-reset</code>.</p>
 <h2 id="list-chrome">List chrome</h2>
 <p><code>.cluster</code> neutralizes the native chrome of a <code>&lt;ul&gt;</code>, <code>&lt;ol&gt;</code> or <code>&lt;menu&gt;</code> it is
@@ -316,8 +317,9 @@ wraps to several lines — set <code>--cluster-align</code>.</p>
 </code></pre>
 <p>The optional utility layer ships <code>.justify-content-start</code>, <code>.justify-content-center</code>,
 <code>.justify-content-end</code> and <code>.justify-content-space-between</code>. They set
-<code>justify-content</code> on that one row; <code>--cluster-justify</code> inherits, so a nested
-<code>.cluster</code> follows it too. See the utilities page.</p>
+<code>justify-content</code> on that one row only; a nested <code>.cluster</code> keeps its own
+alignment. <code>--cluster-justify</code> is inherited, so setting it on a region reaches
+nested clusters too. See the utilities page.</p>
 <h2 id="controls-inside-a-wrapping-cluster">Controls inside a wrapping cluster</h2>
 <p>A form control (<code>--control-size</code>, full width) inside a <strong>wrapping</strong> cluster claims
 the full line and pushes every sibling to its own row. To keep a row of controls
@@ -405,6 +407,7 @@ under one label, set <code>--cluster-wrap: nowrap</code> and give the controls
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
+        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading to 0.12</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">

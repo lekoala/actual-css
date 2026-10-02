@@ -19,7 +19,8 @@
 ### Added
 
 - `actual-css contrast [--theme FILE]` (Bun) measures a theme's soft, focus, invalid-focus and inverse pairs in each declared scheme, and exits 1 on a miss.
-- `.tight` and `.loose` set the inherited `--gap` to `--space-20` / `--space-50` alone, without the padding, control size or font width of `.compact` / `.spacious`.
+- `.tight` and `.loose` set the inherited `--gap` to `--space-20` / `--space-50` alone, without the padding or control size of `.compact` / `.spacious`.
+- `docs/pages/guides/upgrading.md` lists the edits a 0.11 project needs for 0.12.
 - `.items-baseline` aligns children on their first text baseline and sets `--items-align`, completing the `.items-*` series.
 
 ### Changed
@@ -31,7 +32,7 @@
 - `.compact` and `.spacious` no longer set `font-stretch`: density changes rhythm and geometry, never typography.
 - `.compact` and `.spacious` select `--control-pad-x-sm` / `-lg`, so density controls get narrower or wider, not only shorter or taller.
 - `.sm` controls use the shared `--control-pad-x-sm` step: 13px of inline padding instead of 14px.
-- `--card-gap` defaults to `--gap`, so `.compact` and `.spacious` (local or inherited) set the rhythm between a card's children.
+- `.card.compact` lowers `--card-gap` to `--space-20` along with `--card-pad`.
 - `.nav-list` rows sit `--space-10` apart instead of `--space-20`, so a vertical nav reads as one list.
 - `.topbar` lays out its default row at zero specificity, so `topbar cluster` hands the row to `.cluster`.
 - The WCAG and OKLCH color math moves from `scripts/utils/color.js` to `src/tooling/color.js`.

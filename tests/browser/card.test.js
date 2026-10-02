@@ -154,6 +154,7 @@ it("slot rows are defaults that a primitive, role or utility on the slot replace
           clusterHeader: style("#slot-actions > header").justifyContent,
           actionsFooter: style("#slot-actions > footer").justifyContent,
           inheritedGap: style("#rhythm-inherited").rowGap,
+          localGap: style("#rhythm-local").rowGap,
         };
       })()`);
 
@@ -164,8 +165,10 @@ it("slot rows are defaults that a primitive, role or utility on the slot replace
       expect(result.footerAnchored).toBe(true);
       expect(result.clusterHeader).toBe("flex-start");
       expect(result.actionsFooter).toBe("center");
-      // .compact on an ancestor reaches the bare card's child rhythm.
-      expect(result.inheritedGap).toBe("8px");
+      // Trap: --card-gap once read the inherited --gap, so a grid's 38px gap
+      // re-spaced the inside of every card in it.
+      expect(result.inheritedGap).toBe("12px");
+      expect(result.localGap).toBe("8px");
     },
     { artifactName: "card-slots" },
   );
