@@ -1,12 +1,12 @@
 {
-  "totalRaw": 351740,
+  "totalRaw": 352149,
   "core": {
     "minified": 12720,
     "brotli": 2812
   },
   "full": {
-    "minified": 131531,
-    "brotli": 18857
+    "minified": 131643,
+    "brotli": 18862
   },
   "js": {
     "full": {
@@ -65,12 +65,12 @@
       "raw": 6445
     },
     {
-      "file": "components/flyout.css",
-      "raw": 5781
+      "file": "components/avatar.css",
+      "raw": 6107
     },
     {
-      "file": "components/avatar.css",
-      "raw": 5698
+      "file": "components/flyout.css",
+      "raw": 5781
     },
     {
       "file": "forms/range.css",
