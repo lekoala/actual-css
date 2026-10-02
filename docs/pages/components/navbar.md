@@ -59,31 +59,36 @@ section titles, a pinned account footer, and the native current state.
 There is no collapse/toggler mechanism. For a responsive navigation, keep the
 horizontal `.navbar` for the desktop bar and compose the mobile experience from
 a `.drawer` with a vertical `.nav-list`, opened by a `command="show-modal"` /
-`commandfor` trigger. Keep that trigger outside the `<nav>` subtree you hide at
-narrow widths, or hiding the nav hides the control that opens it.
+`commandfor` trigger. Keep that trigger in the bar but outside the `<nav>`
+subtree you hide at narrow widths, or hiding the nav hides the control that
+opens it: the bar is then the `<header>`, and the links get their own `<nav>`.
 
 When the compact layout drops labels, keep that text in the DOM and hide it
 visually instead of replacing it with `aria-label` strings: one source for the
 accessible name.
 
 ```html demo
-<nav class="navbar" aria-label="Main">
+<header class="navbar">
   <a class="navbar-brand" href="/">Actual CSS</a>
-  <ul class="cluster">
-    <li><a class="nav-link" href="/" aria-current="page">Home</a></li>
-    <li><a class="nav-link" href="/docs">Docs</a></li>
-  </ul>
-</nav>
+  <div class="cluster">
+    <nav class="site-links" aria-label="Main">
+      <ul class="cluster">
+        <li><a class="nav-link" href="/" aria-current="page">Home</a></li>
+        <li><a class="nav-link" href="/docs">Docs</a></li>
+      </ul>
+    </nav>
 
-<button class="btn ghost"
-        type="button"
-        command="show-modal"
-        commandfor="site-nav"
-        aria-haspopup="dialog"
-        aria-controls="site-nav"
-        aria-label="Open menu">
-  <i class="ti ti-menu-2" aria-hidden="true"></i>
-</button>
+    <button class="btn ghost site-menu"
+            type="button"
+            command="show-modal"
+            commandfor="site-nav"
+            aria-haspopup="dialog"
+            aria-controls="site-nav"
+            aria-label="Open menu">
+      <i class="ti ti-menu-2" aria-hidden="true"></i>
+    </button>
+  </div>
+</header>
 
 <dialog class="drawer"
         id="site-nav"
@@ -105,6 +110,22 @@ accessible name.
     </ul>
   </nav>
 </dialog>
+```
+
+The demo shows both controls; the application picks one per width:
+
+```css
+@media (width < 40rem) {
+  .site-links {
+    display: none;
+  }
+}
+
+@media (width >= 40rem) {
+  .site-menu {
+    display: none;
+  }
+}
 ```
 
 The drawer can be hidden until opened: give the `dialog` the `hidden` attribute
