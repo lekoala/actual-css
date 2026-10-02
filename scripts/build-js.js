@@ -7,9 +7,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const DIST = join(ROOT, "dist");
 
-// Only the full runtime is compiled. Composing adopters bundle their own entry
-// from `actual-css/js` (the loader) and `actual-css/js/*` sources; a compiled
-// loader alone would be a second copy of the registries next to those sources.
+// Only the full runtime is compiled, as the historical IIFE for plain
+// `<script>`. The same `src/js/full.js` entry doubles as the ESM source for
+// the full runtime with its public enhancement API. Composing adopters bundle
+// their own entry from `actual-css/js` (the loader) and `actual-css/js/*`
+// sources; a compiled loader alone would be a second copy of the registries
+// next to those sources.
 export const FULL_ENTRY = join(ROOT, "src", "js", "full.js");
 
 function formatBytes(bytes) {
@@ -17,12 +20,13 @@ function formatBytes(bytes) {
   return `${(bytes / 1024).toFixed(1)} KB`;
 }
 
-export async function buildBundle({ entrypoint, naming, outdir = DIST }) {
+export async function buildBundle({ entrypoint, naming, format, outdir = DIST }) {
   const result = await Bun.build({
     entrypoints: [entrypoint],
     outdir,
     minify: true,
     target: "browser",
+    format,
     naming: `[dir]/${naming}`,
   });
 
@@ -44,7 +48,7 @@ async function build() {
     }
   }
 
-  await buildBundle({ entrypoint: FULL_ENTRY, naming: "actual.full.[ext]" });
+  await buildBundle({ entrypoint: FULL_ENTRY, naming: "actual.full.[ext]", format: "iife" });
 
   const path = join(DIST, "actual.full.js");
   const st = await stat(path);

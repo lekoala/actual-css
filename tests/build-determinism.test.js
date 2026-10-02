@@ -30,7 +30,12 @@ const dirs = [];
 async function buildOnce() {
   const dir = await mkdtemp(join(tmpdir(), "actual-build-"));
   dirs.push(dir);
-  await buildBundle({ entrypoint: FULL_ENTRY, naming: "actual.full.[ext]", outdir: dir });
+  await buildBundle({
+    entrypoint: FULL_ENTRY,
+    naming: "actual.full.[ext]",
+    format: "iife",
+    outdir: dir,
+  });
   return readFile(join(dir, "actual.full.js"), "utf8");
 }
 
