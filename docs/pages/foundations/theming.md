@@ -194,7 +194,7 @@ nothing about your intents. Measure it, then lower `--soft-fg-mix` or declare
 the per-role hooks for the intents that miss:
 
 ```sh
-bunx actual-css contrast --theme src/theme.css
+bunx --bun actual-css contrast --theme src/theme.css
 ```
 
 It reads the theme in headless Chrome, in every scheme it declares, and exits 1

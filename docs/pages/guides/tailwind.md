@@ -446,7 +446,7 @@ What the ramp does not decide for you:
   neutral family's darkest step, and `--hover-overlay` as a few percent of
   `--text`.
 
-`bunx actual-css contrast --theme FILE` measures the focus, soft and inverse
+`bunx --bun actual-css contrast --theme FILE` measures the focus, soft and inverse
 pairs in both schemes. Check the text tiers on `--surface-subtle` by hand:
 `zinc-500` holds 4.5:1 on `white` but not on `zinc-100`.
 
