@@ -211,7 +211,13 @@ a.avatar[aria-disabled="true"] {
   --avatar-stack-font-size: var(--font-size-lg);
 }
 
+/* Overlapping avatars hide their neighbour: a translucent fill (--surface-subtle
+   on a glass palette) would show the next avatar's edge through it, most of all
+   when hover raises one above the other. The fill is layered over the opaque
+   role; on an opaque fill the base never shows. */
 .avatar-stack > .avatar {
+  background-color: var(--surface-opaque);
+  background-image: linear-gradient(var(--avatar-bg), var(--avatar-bg));
   box-shadow: 0 0 0 var(--avatar-stack-ring) var(--surface-opaque);
 }
 

@@ -38,6 +38,7 @@
 
 - `dialog.modal.scrollable` lays the body wrapper out as a flex column: a structural header or footer keeps its size and every other region scrolls, so a modal with an external `dialog > header` no longer collapses its footer to zero.
 - `--dialog-icon-size` and `--dialog-icon-glyph-size` are read, not declared, on `.dialog-icon`, so an override on the icon's media row or the dialog moves the circle and the heading beside it together.
+- An `.avatar-stack` avatar layers its fill over `--surface-opaque`, so a translucent fill no longer shows the neighbour it overlaps.
 - `prefers-reduced-motion` also resets `::backdrop`, so a modal or drawer scrim no longer fades when the user reduces motion.
 
 ## [0.11.1] - 2026-09-30

@@ -5,7 +5,8 @@
  * to hide what lies beneath it reads --surface-opaque, and ink on
  * --surface-solid reads --surface-solid-fg. A glass experiment found both roles
  * borrowing --surface: a ring that cut nothing and tooltip text at 10% alpha.
- * .aura also relied on an opaque child to hide its frame, until its mask did.
+ * .aura also relied on an opaque child to hide its frame, until its mask did,
+ * and a stacked avatar's frosted fill showed the neighbour it overlaps.
  * Under a translucent palette every color below must stay opaque, so the next
  * var(--surface) used as a mask or as ink fails here.
  */
@@ -32,6 +33,9 @@ it("masks and inverse ink stay opaque over translucent surfaces", async () => {
           surface: rgba(cs("indicator").getPropertyValue("--surface")),
           indicatorRing: shadow(cs("indicator").boxShadow),
           stackRing: shadow(cs("stacked").boxShadow),
+          // The fill itself may be translucent; the base under it hides the
+          // overlapped neighbour.
+          stackBase: rgba(cs("stacked").backgroundColor),
           meterSeparator: rgba(cs("meter-segment").borderInlineStartColor),
           currentMarker: rgba(cs("step-current", "::before").backgroundColor),
           upcomingMarker: rgba(cs("step-upcoming", "::before").backgroundColor),
