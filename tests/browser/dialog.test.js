@@ -285,6 +285,11 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
             marginStart: parseFloat(style.marginInlineStart),
             ringPastStart: bodyRect.left - (controlRect.left - paintedRing),
             ringPastEnd: controlRect.right + paintedRing - bodyRect.right,
+            ringPastTop: bodyRect.top - (controlRect.top - paintedRing),
+            // The block reserve reaches into the slot gap: the first control
+            // stays one gap below the header.
+            topDrift:
+              controlRect.top - headerRect.bottom - parseFloat(getComputedStyle(body.parentElement).rowGap),
             startDrift: controlRect.left - headerRect.left,
             endDrift: controlRect.right - headerRect.right,
           });
@@ -300,6 +305,8 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
       expect(modal.marginStart).toBe(-modal.reserve);
       expect(modal.ringPastStart).toBeLessThanOrEqual(0);
       expect(modal.ringPastEnd).toBeLessThanOrEqual(0);
+      expect(modal.ringPastTop).toBeLessThanOrEqual(0);
+      expect(Math.abs(modal.topDrift)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(modal.startDrift)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(modal.endDrift)).toBeLessThanOrEqual(0.5);
 
@@ -347,6 +354,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
             marginStart: parseFloat(bodyStyle.marginInlineStart),
             ringPastStart: bodyRect.left - (controlRect.left - paintedRing),
             ringPastEnd: controlRect.right + paintedRing - bodyRect.right,
+            ringPastTop: bodyRect.top - (controlRect.top - paintedRing),
             startDrift: controlRect.left - contentStart,
             endDrift: controlRect.right - contentEnd,
           });
@@ -363,6 +371,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
       expect(drawer.marginStart).toBe(-drawer.reserve);
       expect(drawer.ringPastStart).toBeLessThanOrEqual(0);
       expect(drawer.ringPastEnd).toBeLessThanOrEqual(0);
+      expect(drawer.ringPastTop).toBeLessThanOrEqual(0);
       expect(Math.abs(drawer.startDrift)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(drawer.endDrift)).toBeLessThanOrEqual(0.5);
 
@@ -388,6 +397,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
             width: parseFloat(cs.outlineWidth),
             ringPastStart: bodyRect.left - (controlRect.left - painted),
             ringPastEnd: controlRect.right + painted - bodyRect.right,
+            ringPastTop: bodyRect.top - (controlRect.top - painted),
           });
         })()`)
         .then(JSON.parse);
@@ -395,6 +405,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
       expect(thick.width).toBe(3);
       expect(thick.ringPastStart).toBeLessThanOrEqual(0);
       expect(thick.ringPastEnd).toBeLessThanOrEqual(0);
+      expect(thick.ringPastTop).toBeLessThanOrEqual(0);
     },
     {
       mediaFeatures: [{ name: "prefers-reduced-motion", value: "reduce" }],
