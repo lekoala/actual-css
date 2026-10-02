@@ -11,23 +11,21 @@
  *   components/badge.css   — .badge default soft behind explicit --ui-*
  *   components/alert.css   — .alert default soft behind explicit --ui-*
  *
- * .compact/.spacious set inherited density tokens: spacing rhythm and geometry
- * only, plus a slight typographic width bonus. Density never changes font size
- * or icon size. Controls consume --control-size and --control-pad-x, so a
- * compact control is shorter and narrower (a height change alone read as the
- * same control squashed); non-control components may consume --density-* when
- * the context should affect their local rhythm.
- * .compact applies --font-width-dense through font-stretch (a variable wdth
- * axis when available, otherwise normal width-face matching); layout must
- * never depend on the narrowing being available. .spacious restores
- * --font-width, so a spacious island inside a compact context returns to the
- * normal width exactly as it restores its own gap, spacing, and control size.
- * Themes whose typeface has no useful width axis opt out with
- * --font-width-dense: 100%.
+ * Three axes, each predictable on its own:
+ *   .sm/.lg            size    — typography + geometry, local to a component
+ *   .compact/.spacious density — rhythm + geometry, inherited by a region
+ *   .tight/.loose      rhythm  — --gap only, inherited by a region
  *
- * .tight/.loose set the inherited --gap only: rhythm between siblings, with
- * no padding, control size or font width. They reuse the density values so a
- * tight row and a compact one share one step.
+ * Density never touches typography: no font size, icon size or font width.
+ * A width bonus through font-stretch only showed on typefaces with a wdth axis,
+ * so .compact meant something different per OS and font; a condensed table is
+ * a typographic decision for the application. Controls consume --control-size
+ * and --control-pad-x, so a compact control is shorter and narrower (a height
+ * change alone read as the same control squashed); non-control components may
+ * consume --density-* when the context should affect their local rhythm.
+ *
+ * .tight/.loose reuse the density --gap steps, so a tight row and a compact
+ * one share one rhythm.
  *
  * .sm/.lg are local size roles, not shared measurements. Shared control
  * participants below map both typography and geometry; components with
@@ -71,7 +69,6 @@
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
   --control-pad-x: var(--control-pad-x-sm);
-  font-stretch: var(--font-width-dense);
 }
 
 .spacious {
@@ -79,7 +76,6 @@
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
   --control-pad-x: var(--control-pad-x-lg);
-  font-stretch: var(--font-width);
 }
 
 .tight {

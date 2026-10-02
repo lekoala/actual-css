@@ -115,13 +115,10 @@ baseline stays sans so app UI inherits predictably.
 
 ### Font width
 
-Two public hooks carry the typographic side of density: `--font-width` (normal
-width) and `--font-width-dense` (compact width). The document reads
-`--font-width` through `font-stretch`; `.compact` applies
-`--font-width-dense` and `.spacious` restores `--font-width`. A theme whose
-typeface has no useful width axis sets `--font-width-dense: 100%`. Width is a
-density token, not a responsive escape hatch — never condense text to fix an
-overflowing label.
+`--font-width` sets the document's `font-stretch`: a theme whose typeface has a
+`wdth` axis or several width faces picks its width there. Density does not
+change it. To condense one dense table or panel, set `font-stretch` on that
+element; never condense text to fix an overflowing label.
 
 ## Font weights
 
