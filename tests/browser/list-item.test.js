@@ -93,6 +93,38 @@ it("a row with no leading region costs neither a track nor a gap", async () => {
   );
 });
 
+it("regions center by default and .items-start on the row or the list tops them", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      // Vertical centers and tops of the three regions, per row.
+      const rows = await view.evaluate(`(() => {
+        const read = (id) => {
+          const row = document.getElementById(id);
+          const [leading, content, trailing] = [...row.children].map((el) => el.getBoundingClientRect());
+          const mid = (r) => Math.round(r.top + r.height / 2);
+          return {
+            mids: [mid(leading), mid(content), mid(trailing)],
+            tops: [leading.top, content.top, trailing.top].map(Math.round),
+          };
+        };
+        return { byDefault: read("align-default"), row: read("align-row"), list: read("align-list") };
+      })()`);
+
+      const [leadMid, contentMid, trailMid] = rows.byDefault.mids;
+      expect(leadMid).toBe(contentMid);
+      expect(trailMid).toBe(contentMid);
+
+      // The opt-out must win over the row selector, from either level.
+      for (const { tops } of [rows.row, rows.list]) {
+        expect(tops[0]).toBe(tops[1]);
+        expect(tops[2]).toBe(tops[1]);
+      }
+    },
+    { artifactName: "list-item-alignment" },
+  );
+});
+
 it("a row with no trailing region lets its content reach the end edge", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
