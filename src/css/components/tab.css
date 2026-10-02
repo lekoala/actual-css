@@ -12,6 +12,11 @@
  * author class can then adjust a vertical strip without restating the
  * attribute to reach its specificity.
  *
+ * A horizontal strip is one axis of navigation, so it never wraps: a second
+ * line no longer matches the Left/Right model and reads as a nested level.
+ * When the tabs do not fit, the strip scrolls; focus scrolls the active tab
+ * into view.
+ *
  * Public hooks:
  * --tab-gap
  */
@@ -24,16 +29,31 @@
 .tabs {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--space-10);
   margin: 0;
   padding: 0;
+  /* Block overflow is hidden, not auto: overflow-x: auto alone computes the
+     block axis to auto, so a sub-pixel line box would add a vertical
+     scrollbar inside the strip. Nothing paints outside it: the focus outline
+     is inset and the indicator sits inside the tab. */
+  overflow: auto hidden;
+  overscroll-behavior-inline: contain;
+  /* Focus scrolls a tab in with room to spare, hinting at the next one. */
+  scroll-padding-inline: var(--space-30);
   border-block-end: var(--border-width) solid var(--border);
   list-style: none;
 }
 
+/* Items keep their size and the strip scrolls instead. Covers both
+   anatomies: .tab directly in a tablist, or <li> in a navigation list. */
+.tabs > * {
+  flex: none;
+}
+
 .tabs:where([aria-orientation="vertical"]) {
   display: grid;
+  overflow: visible;
   align-content: start;
   justify-items: stretch;
   border-block-end: 0;
@@ -58,12 +78,18 @@
      the strip. The active state is carried by color and the indicator line. */
   font-weight: var(--font-weight-semibold);
   text-decoration: none;
+  /* A label breaking inside a one-line strip is the same defect as the strip
+     wrapping. */
+  white-space: nowrap;
   cursor: pointer;
 }
 
+/* A vertical strip has no inline axis to protect: long labels wrap within the
+   rail instead of overflowing it. */
 .tabs:where([aria-orientation="vertical"]) .tab {
   justify-content: flex-start;
   padding-inline-end: var(--space-40);
+  white-space: normal;
 }
 
 .tab:is(:disabled, [aria-disabled="true"]) {
@@ -94,8 +120,12 @@
   border-end-end-radius: 0;
 }
 
+/* Presence is the current contract, as for .list-item and .nav-link: the
+   attribute is removed, never serialized as "false". The value stays free, so
+   a navigation flyout trigger can mark the current section with "true" while
+   the link inside its panel carries "page". */
 .tab[aria-selected="true"],
-.tab[aria-current="page"] {
+.tab[aria-current] {
   color: var(--intent, var(--state-selected));
 }
 
@@ -104,7 +134,7 @@
    forced colors and erase the distinction. currentColor follows the palette the
    UA forces, so no forced-colors block is needed. */
 .tab[aria-selected="true"]::after,
-.tab[aria-current="page"]::after {
+.tab[aria-current]::after {
   content: "";
   position: absolute;
   inset-inline: 0;
@@ -113,7 +143,7 @@
 }
 
 .tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after,
-.tabs:where([aria-orientation="vertical"]) .tab[aria-current="page"]::after {
+.tabs:where([aria-orientation="vertical"]) .tab[aria-current]::after {
   inset-block: 0;
   inset-inline: auto 0;
   border-block-end: 0;

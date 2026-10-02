@@ -1,12 +1,12 @@
 {
-  "totalRaw": 352205,
+  "totalRaw": 355497,
   "core": {
-    "minified": 12333,
-    "brotli": 2756
+    "minified": 12366,
+    "brotli": 2766
   },
   "full": {
-    "minified": 131290,
-    "brotli": 18877
+    "minified": 132017,
+    "brotli": 18956
   },
   "js": {
     "full": {
@@ -18,7 +18,7 @@
   "files": [
     {
       "file": "components/modal.css",
-      "raw": 13202
+      "raw": 13430
     },
     {
       "file": "components/steps.css",
@@ -29,12 +29,12 @@
       "raw": 11831
     },
     {
-      "file": "forms/choice-card.css",
-      "raw": 8848
+      "file": "core/theme.css",
+      "raw": 8963
     },
     {
-      "file": "core/theme.css",
-      "raw": 8660
+      "file": "forms/choice-card.css",
+      "raw": 8856
     },
     {
       "file": "components/drawer.css",
@@ -50,7 +50,7 @@
     },
     {
       "file": "forms/choice.css",
-      "raw": 7733
+      "raw": 7741
     },
     {
       "file": "themes/material.css",
@@ -94,23 +94,27 @@
     },
     {
       "file": "forms/switch.css",
-      "raw": 5251
+      "raw": 5259
+    },
+    {
+      "file": "components/tab.css",
+      "raw": 5186
+    },
+    {
+      "file": "components/navbar.css",
+      "raw": 5176
     },
     {
       "file": "components/join.css",
-      "raw": 5164
+      "raw": 5172
     },
     {
       "file": "forms/otp.css",
-      "raw": 5058
+      "raw": 5066
     },
     {
       "file": "components/tooltip.css",
       "raw": 4960
-    },
-    {
-      "file": "components/navbar.css",
-      "raw": 4958
     },
     {
       "file": "themes/bootstrap-v6.css",
@@ -149,20 +153,16 @@
       "raw": 3857
     },
     {
-      "file": "components/tab.css",
-      "raw": 3764
+      "file": "forms/control.css",
+      "raw": 3653
     },
     {
       "file": "components/fab.css",
       "raw": 3652
     },
     {
-      "file": "forms/control.css",
-      "raw": 3645
-    },
-    {
       "file": "components/list.css",
-      "raw": 3563
+      "raw": 3646
     },
     {
       "file": "components/close.css",
@@ -178,7 +178,7 @@
     },
     {
       "file": "forms/native.css",
-      "raw": 2980
+      "raw": 2996
     },
     {
       "file": "themes/spruce.css",
@@ -247,6 +247,10 @@
     {
       "file": "themes/corporate.css",
       "raw": 2479
+    },
+    {
+      "file": "components/pagination.css",
+      "raw": 2471
     },
     {
       "file": "components/skeleton.css",
@@ -343,10 +347,6 @@
     {
       "file": "components/spinner.css",
       "raw": 1504
-    },
-    {
-      "file": "components/pagination.css",
-      "raw": 1497
     },
     {
       "file": "layout/scroller.css",

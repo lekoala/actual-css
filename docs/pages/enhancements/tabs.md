@@ -14,9 +14,10 @@
 
 - Use real tab semantics when panels switch in place.
 - Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
-- On that link variant, `aria-current="page"` on the current link gets the same
+- On that link variant, `aria-current` on the current link gets the same
   color and underline treatment as `aria-selected="true"` on a widget tab;
-  `primary` tints it.
+  `primary` tints it. Remove the attribute from the other links rather than
+  setting it to `"false"`.
 - Tab selection never changes text metrics: the active tab keeps the shared
   weight and is marked by color and the indicator line.
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
@@ -85,6 +86,49 @@ JavaScript involved:
   </ul>
 </nav>
 ```
+
+## Too many tabs
+
+A horizontal strip is one row and never wraps, nor does a label: a second line
+no longer matches the Left/Right keys and reads as a nested level. When the tabs
+do not fit (narrow screen, mobile, long translations), the strip scrolls
+horizontally and keyboard focus scrolls the active tab into view. A vertical
+strip (`aria-orientation="vertical"`) keeps wrapping its labels.
+
+Scrolling is the fallback, not a responsive design. If a strip regularly
+overflows, shorten the labels, group sections, or switch to a vertical rail.
+
+## Tab with a flyout
+
+In navigation tabs, a `.tab` can be a [flyout](flyout.md) trigger for a group of
+pages. Mark the trigger with `aria-current="true"` when the current page is in
+its panel; the link to that page carries `aria-current="page"`.
+
+```html demo
+<nav aria-label="Account">
+  <ul class="tabs">
+    <li><a class="tab" href="#profile">Profile</a></li>
+    <li><a class="tab" href="#security">Security</a></li>
+    <li class="flyout-trigger">
+      <button class="tab"
+              type="button"
+              data-enhance="flyout"
+              aria-current="true"
+              aria-expanded="false"
+              aria-controls="billing-menu">
+        Billing <i class="ti ti-chevron-down" aria-hidden="true"></i>
+      </button>
+      <ul class="flyout menu" id="billing-menu" hidden>
+        <li><a class="menu-item" href="#invoices" aria-current="page">Invoices</a></li>
+        <li><a class="menu-item" href="#payment">Payment methods</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+```
+
+Do not put a flyout trigger in a `role="tablist"`: a tablist holds only
+`role="tab"` items, and the arrow keys of the two widgets collide.
 
 ## CSS hooks
 
