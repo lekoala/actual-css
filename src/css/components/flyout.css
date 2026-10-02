@@ -50,6 +50,9 @@
   position: absolute;
   inset-block-start: calc(100% + var(--space-10));
   inset-inline-start: 0;
+  /* Anatomy, not a default to replace: `flyout grid-3` (mega menu) takes its
+     columns from the grid preset and keeps this tight gap, because each
+     section pads itself — the visible gutter is section padding + gap. */
   display: grid;
   gap: var(--space-10);
   inline-size: var(--flyout-inline-size, max-content);

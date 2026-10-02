@@ -50,7 +50,7 @@ Avoid putting semantic resets into layout primitives.
 If list chrome should be removed, use an explicit pattern.
 
 ```html demo
-<ul class="nav-list stack">
+<ul class="nav-list">
   <li><a href="/docs">Docs</a></li>
   <li><a href="/components">Components</a></li>
 </ul>

@@ -6,11 +6,13 @@
  *
  * Usage:
  *   bun scripts/multi-shot.js [page] [--widths 360,640,900,1280]
- *       [--scheme light|dark] [--out dir]
+ *       [--scheme light|dark] [--src-css] [--out dir]
  *
  *   page       path or URL to capture (default: demo/templates/kitchen-sink.html)
  *   --widths   comma-separated viewport widths (default: 360,640,900,1280)
  *   --scheme   prefers-color-scheme to emulate (default: browser default)
+ *   --src-css  render the page's built stylesheets (dist/, the demo themes
+ *              bundle) from their sources
  *   --out      output directory (default: tmp/multi-shot); each width writes
  *              <page basename>-<width>.png
  *
@@ -28,7 +30,9 @@ const {
   "--widths": widthsArg = "360,640,900,1280",
   "--scheme": scheme = "",
   "--out": outDir = join(ROOT, "tmp", "multi-shot"),
+  "--src-css": sourceCss,
 } = readFlags(args, {
+  "--src-css": { boolean: true },
   "--widths": { fallback: "360,640,900,1280" },
   "--scheme": { fallback: "" },
   "--out": { fallback: join(ROOT, "tmp", "multi-shot") },
@@ -45,7 +49,7 @@ const stem = basename(page).replace(/\.[^.]+$/, "");
 const saved = [];
 for (const width of widths) {
   const out = join(outDir, `${stem}-${width}.png`);
-  await capture(pageUrl, { out, mediaFeatures, width });
+  await capture(pageUrl, { out, mediaFeatures, width, sourceCss });
   saved.push(out);
 }
 

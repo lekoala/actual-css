@@ -26,7 +26,7 @@ or style `[aria-current]` yourself.
 
 ```html demo
 <nav class="scrollspy" data-enhance="scrollspy" aria-label="Page sections">
-  <ol class="nav-list stack">
+  <ol class="nav-list">
     <li><a class="nav-link" href="#overview" aria-current="location">Overview</a></li>
     <li><a class="nav-link" href="#tokens">Tokens</a></li>
     <li><a class="nav-link" href="#components">Components</a></li>

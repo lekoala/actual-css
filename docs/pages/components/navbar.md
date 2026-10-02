@@ -98,7 +98,7 @@ accessible name.
   </header>
 
   <nav>
-    <ul class="nav-list stack">
+    <ul class="nav-list">
       <li><a class="nav-link" href="#" aria-current="page">Home</a></li>
       <li><a class="nav-link" href="#">Docs</a></li>
       <li><a class="nav-link" href="#">Components</a></li>

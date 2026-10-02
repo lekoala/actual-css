@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Supported compositions fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>* { transition-duration: 0s !important; }</style>
+</head>
+<body>
+  <!-- Mega menu: the grid preset supplies the columns, the flyout keeps its
+       own gap (its sections pad themselves). -->
+  <div class="flyout grid-3 is-open" id="mega" style="position: static; --flyout-inline-size: 52rem; --flyout-max-inline-size: 52rem">
+    <section>Design</section>
+    <section>Build</section>
+    <section>Ship</section>
+  </div>
+
+  <!-- A replaceable default row yields to the primitive on the same element.
+       .topbar and .cluster share layout/, so at class weight file order alone
+       decided. The card slots are covered by card.test.js. -->
+  <header class="topbar cluster" id="topbar" style="position: static; --cluster-justify: space-between">
+    <strong>Title</strong>
+    <button type="button">Action</button>
+  </header>
+  <header class="topbar" id="topbar-default" style="position: static">
+    <strong>Title</strong>
+    <button type="button">Action</button>
+  </header>
+</body>
+</html>

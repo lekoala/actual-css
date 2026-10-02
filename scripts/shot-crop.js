@@ -7,7 +7,7 @@
  *   bun scripts/shot-crop.js [page] --selector <css> [--padding 40]
  *       [--scale 1.5] [--width 1280] [--scheme light|dark]
  *       [--force ".f:focus+focus-visible; .h:hover"] [--eval file.js]
- *       [--wait "expr"] [--top-layer] [--out file.png]
+ *       [--wait "expr"] [--top-layer] [--src-css] [--out file.png]
  *
  *   page        path or URL to capture (default: demo/templates/kitchen-sink.html)
  *   --selector  CSS selector of the element to crop (required)
@@ -23,7 +23,9 @@
  *   --wait      browser state to wait for (default: the selector exists)
  *   --top-layer capture with captureBeyondViewport off, for open popovers or
  *               modal dialogs (the flag on mis-composites top-layer content)
- *   --out       output file (default: tmp/crop-<page basename>.png)
+ *   --src-css   render the page's built stylesheets (dist/, the demo themes
+ *               bundle) from their sources
+ *   --out      output file (default: tmp/crop-<page basename>.png)
  */
 import { readFile } from "node:fs/promises";
 import { basename, join } from "node:path";
@@ -40,10 +42,10 @@ import {
 
 const ROOT = join(import.meta.dirname, "..");
 
-let args = process.argv.slice(2);
-const topLayer = args.includes("--top-layer");
-args = args.filter((arg) => arg !== "--top-layer");
+const args = process.argv.slice(2);
 const {
+  "--top-layer": topLayer,
+  "--src-css": sourceCss,
   "--selector": selector = "",
   "--padding": paddingArg = "40",
   "--scale": scaleArg = "1.5",
@@ -54,6 +56,8 @@ const {
   "--wait": waitArg = "",
   "--out": outArg = "",
 } = readFlags(args, {
+  "--top-layer": { boolean: true },
+  "--src-css": { boolean: true },
   "--selector": { fallback: "" },
   "--padding": { fallback: "40" },
   "--scale": { fallback: "1.5" },
@@ -114,6 +118,6 @@ await withBrowserPage(
     });
     await Bun.write(out, Buffer.from(data, "base64"));
   },
-  { mediaFeatures },
+  { mediaFeatures, sourceCss },
 );
 console.log(`Saved ${out} (${pageUrl}, ${selector})`);

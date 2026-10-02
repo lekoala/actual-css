@@ -113,10 +113,13 @@
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links.
    Links fill each row so the whole line is an interactive target; the
    horizontal .cluster links keep their intrinsic size. */
+/* A vertical nav reads as one list, not a stack of separate buttons: each row
+   is already a control-height target, so the rows sit a hair apart. The grid
+   is the component's own layout; for a horizontal row use .cluster instead. */
 .nav-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  --gap: var(--space-20);
+  --gap: var(--space-10);
   gap: var(--gap);
   margin: 0;
   padding: 0;
