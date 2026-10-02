@@ -254,8 +254,12 @@
 
 /* --- Search --- */
 
-.docs-search-dialog .stack {
-  min-inline-size: min(28rem, 90vw);
+/* Fill up to the modal's own cap so the panel does not resize while results
+   load; sizing the content instead overflowed the viewport gap on phones. */
+.docs-search-dialog {
+  --modal-size: 28rem;
+
+  inline-size: 100%;
 }
 
 .docs-search-title {
