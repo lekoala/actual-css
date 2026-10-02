@@ -171,6 +171,13 @@ test("the js entry split keeps the loader and built-ins separate", () => {
   const fullImports = imports(fullJs);
   expect(fullImports.slice(0, -1)).toEqual(builtins);
   expect(fullImports.at(-1)).toBe("./index.js");
+
+  // full.js is also the extension API: the same entry that enables every
+  // built-in exposes enhance() and friends from the same module graph.
+  expect(fullJs).toContain('from "./enhance.js"');
+  for (const name of ["enhance", "applyEnhancement", "registerEnhancement"]) {
+    expect(fullJs).toContain(name);
+  }
 });
 
 /*
