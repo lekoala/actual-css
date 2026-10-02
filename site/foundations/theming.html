@@ -343,14 +343,21 @@ controls and scrollbars.</p>
 <code>--primary</code>. Every neutral of the default theme — surfaces, text, border,
 <code>--neutral</code>, <code>--hover-overlay</code>, <code>--shadow-color</code> — is tinted toward the default
 primary and never derived from <code>--primary</code> at runtime, so a partial override
-leaves the default identity in the greys. <code>report:theme-contrast</code> checks
+leaves the default identity in the greys. <code>actual-css contrast</code> checks
 contrast, not a leftover tint.</p>
 <p>Soft ink is the other half. The default palette ships calibrated
 <code>--*-soft-fg</code> hooks; any other theme falls back to the <code>--soft-fg-mix</code>
 derivation, which is a single global percentage and therefore guarantees
-nothing about your intents. Verify with <code>bun run report:theme-contrast</code>, then
-lower <code>--soft-fg-mix</code> or declare the per-role hooks for the intents that miss.</p>
-<p>→ Foundations · Tokens (theme contract)</p>
+nothing about your intents. Measure it, then lower <code>--soft-fg-mix</code> or declare
+the per-role hooks for the intents that miss:</p>
+<pre><code class="language-sh">bunx actual-css contrast --theme src/theme.css
+</code></pre>
+<p>It reads the theme in headless Chrome, in every scheme it declares, and exits 1
+when a soft, focus, invalid-focus or inverse pair misses its threshold, so it
+can gate a CI job.</p>
+<p>Starting from a color scale (Tailwind <code>--color-zinc-*</code>, a brand ramp): map one
+step per role rather than importing the scale.</p>
+<p>→ Foundations · Tokens (theme contract) · Guides · Tailwind (Map the palette to theme roles)</p>
 <h3 id="use-or-adapt-a-preset-palette">Use or adapt a preset palette</h3>
 <p><code>src/css/themes/</code> holds example palettes (<code>ocean</code>, <code>spruce</code>, <code>neon</code>, <code>brutalist</code>, …) as
 reference material to copy into your own <code>[data-theme]</code> island — they are demo

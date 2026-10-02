@@ -485,6 +485,72 @@ framework class.</p>
 </code></pre>
 <p>Actual theme tokens should handle shared theme behavior. Local CSS remains appropriate for visual concepts that are specific to the application.</p>
 <p>This is particularly important when migrating a Tailwind application with a large custom color palette.</p>
+<h3 id="map-the-tailwind-palette-to-theme-roles">Map the Tailwind palette to theme roles</h3>
+<p>Tailwind's theme is a set of ramps: <code>--color-zinc-50</code> … <code>--color-zinc-950</code>,
+one per hue. Actual's theme contract is a set of roles: <code>--surface</code>,
+<code>--border</code>, <code>--text-muted</code>, <code>--primary</code>, <code>--focus</code>. Each element picks a
+step in Tailwind; Actual picks once per role, in the theme, and every
+component reads the role. Map one neutral family and one brand hue, then
+stop: the rest of the ramp has no consumer.</p>
+<p>A starting point for a zinc and blue application:</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Role</th><th>Light</th><th>Dark</th></tr>
+</thead>
+<tbody>
+<tr><td><code>--surface</code></td><td><code>white</code></td><td><code>zinc-950</code></td></tr>
+<tr><td><code>--surface-raised</code></td><td><code>white</code></td><td><code>zinc-900</code></td></tr>
+<tr><td><code>--surface-subtle</code></td><td><code>zinc-100</code></td><td><code>zinc-800</code></td></tr>
+<tr><td><code>--surface-solid</code></td><td><code>zinc-900</code></td><td><code>zinc-100</code></td></tr>
+<tr><td><code>--border</code></td><td><code>zinc-200</code></td><td><code>zinc-700</code></td></tr>
+<tr><td><code>--text</code></td><td><code>zinc-950</code></td><td><code>zinc-50</code></td></tr>
+<tr><td><code>--text-muted</code></td><td><code>zinc-600</code></td><td><code>zinc-400</code></td></tr>
+<tr><td><code>--text-subtle</code></td><td><code>zinc-500</code></td><td><code>zinc-500</code></td></tr>
+<tr><td><code>--neutral</code></td><td><code>zinc-600</code></td><td><code>zinc-400</code></td></tr>
+<tr><td><code>--primary</code></td><td><code>blue-600</code></td><td><code>blue-400</code></td></tr>
+<tr><td><code>--focus</code></td><td><code>blue-500</code></td><td><code>blue-500</code></td></tr>
+</tbody>
+</table></div>
+<p>Each scheme is one <code>light-dark()</code> pair on the role, instead of a <code>dark:</code>
+variant on every element:</p>
+<pre><code class="language-css">[data-theme=&quot;app&quot;] {
+  color-scheme: light dark;
+
+  --surface: light-dark(var(--color-white), var(--color-zinc-950));
+  --border: light-dark(var(--color-zinc-200), var(--color-zinc-700));
+  --primary: light-dark(var(--color-blue-600), var(--color-blue-400));
+  --primary-fg: light-dark(var(--color-white), var(--color-zinc-950));
+  --focus: var(--color-blue-500);
+  /* … the other roles of the table */
+}
+</code></pre>
+<p>Tailwind v4 emits only the theme variables your sources use; declare the
+palette with <code>@theme static</code> while the theme reads them, and replace them with
+their literal values before Tailwind leaves the build.</p>
+<p>What the ramp does not decide for you:</p>
+<ul>
+<li><strong>Foreground pairs.</strong> Tailwind has no <code>-fg</code> step. White on <code>blue-600</code> holds
+4.5:1, white on <code>blue-500</code> does not, so a dark-scheme primary lightened to
+<code>blue-400</code> needs a dark <code>--primary-fg</code>. Every intent needs its pair:
+<code>--warning-fg</code> on an amber is dark ink.</li>
+<li><strong>Focus.</strong> <code>--focus</code> must hold 3:1 on <code>--surface</code> and <code>--surface-solid</code> in
+both schemes, so it is a mid-tone, not the primary step. <code>blue-500</code> holds
+on <code>white</code>, <code>zinc-900</code>, <code>zinc-950</code> and <code>zinc-100</code>: one value covers both
+schemes.</li>
+<li><strong>Neutral temperature.</strong> <code>slate</code>, <code>gray</code>, <code>zinc</code>, <code>neutral</code> and <code>stone</code> are
+the same ramp at different temperatures; <code>neutral</code> is pure grey. Pick the
+family that leans toward your primary, and take every neutral role from it.</li>
+<li><strong>No subtle intent steps.</strong> Do not map <code>blue-50</code> / <code>blue-100</code> to tinted
+surfaces: <code>.soft</code> mixes the intent into the local surface, so there is no
+<code>--primary-subtle</code> to fill.</li>
+<li><strong>Shadow and hover ink.</strong> Tailwind shadows are black; Actual derives
+<code>--shadow</code> and <code>--shadow-popout</code> from one <code>--shadow-color</code>. Take it from the
+neutral family's darkest step, and <code>--hover-overlay</code> as a few percent of
+<code>--text</code>.</li>
+</ul>
+<p><code>bunx actual-css contrast --theme FILE</code> measures the focus, soft and inverse
+pairs in both schemes. Check the text tiers on <code>--surface-subtle</code> by hand:
+<code>zinc-500</code> holds 4.5:1 on <code>white</code> but not on <code>zinc-100</code>.</p>
 <h2 id="forms">Forms</h2>
 <p>Tailwind applications often construct form controls from utility combinations or use an additional forms plugin.</p>
 <p>Actual provides explicit form components:</p>
@@ -587,6 +653,7 @@ framework class.</p>
         <li><a class="nav-link" href="#arbitrary-values-move-back-into-css" data-docs-toc-item data-level="2">Arbitrary values move back into CSS</a></li>
         <li><a class="nav-link" href="#state-variants-move-into-component-behavior-or-css" data-docs-toc-item data-level="2">State variants move into component behavior or CSS</a></li>
         <li><a class="nav-link" href="#colors-and-dark-mode" data-docs-toc-item data-level="2">Colors and dark mode</a></li>
+        <li><a class="nav-link" href="#map-the-tailwind-palette-to-theme-roles" data-docs-toc-item data-level="3">Map the Tailwind palette to theme roles</a></li>
         <li><a class="nav-link" href="#forms" data-docs-toc-item data-level="2">Forms</a></li>
         <li><a class="nav-link" href="#third-party-tailwind-components" data-docs-toc-item data-level="2">Third-party Tailwind components</a></li>
         <li><a class="nav-link" href="#build-pipeline" data-docs-toc-item data-level="2">Build pipeline</a></li>
