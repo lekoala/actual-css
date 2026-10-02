@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- A bare heading in a `dialog.modal > header` drops its block margins, so the band no longer grows and the title centers on the close.
+
 ## [0.12.0] - 2026-10-02
 ### Breaking changes
 
