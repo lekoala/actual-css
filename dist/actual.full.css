@@ -73,7 +73,6 @@ select {
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-width: 100%;
-  --font-width-dense: 95%;
   --line-height: 1.5;
   --line-height-tight: 1.25;
   --line-height-relaxed: 1.75;
@@ -170,17 +169,24 @@ select {
 
      --control-pad-x is the opposite kind of token: a resolved geometry length,
      not an em ratio. Every part of one control must see the same horizontal
-     distance, so it is stated in the typographic tokens rather than an em
-     whose value would change on a descendant with its own font size (the
-     input-icon glyph, made larger by --input-icon-size). It mirrors
-     --control-font-size and is rebound beside it at the .sm/.lg and
-     .compact/.spacious boundaries (variants.css); declaring it only in :root would freeze the md value,
-     because a var() inside a custom property resolves where it is declared. */
+     distance, so it is stated in lengths rather than an em whose value would
+     change on a descendant with its own font size (the input-icon glyph, made
+     larger by --input-icon-size).
+
+     Like --control-size, it is a scale plus a selection: themes set the
+     -sm/-md/-lg steps, and :root, .sm/.lg and .compact/.spacious (variants.css)
+     pick one. A theme that wrote --control-pad-x itself would be overwritten
+     by every size and density boundary — bootstrap-v6's 12px became a wider
+     13px inside .compact. The selection is rebound at each boundary because a
+     var() inside a custom property resolves where it is declared. */
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
   --control-size-lg: 2.75rem;
   --control-size: var(--control-size-md);
-  --control-pad-x: var(--font-size-md);
+  --control-pad-x-sm: var(--font-size-xs);
+  --control-pad-x-md: var(--font-size-md);
+  --control-pad-x-lg: var(--font-size-lg);
+  --control-pad-x: var(--control-pad-x-md);
   --control-font-size: var(--font-size-md);
   --choice-control-size: 1.125em;
   --disabled-opacity: 0.65;
@@ -521,7 +527,7 @@ select {
  * Public hooks:
  * --link
  * --hr-space
- * --font-width / --font-width-dense (see variants.css for the dense application)
+ * --font-width (the document's font-stretch; a theme typography choice)
  */
 
 body {
@@ -671,23 +677,21 @@ small {
  *   components/badge.css   — .badge default soft behind explicit --ui-*
  *   components/alert.css   — .alert default soft behind explicit --ui-*
  *
- * .compact/.spacious set inherited density tokens: spacing rhythm and geometry
- * only, plus a slight typographic width bonus. Density never changes font size
- * or icon size. Controls consume --control-size and --control-pad-x, so a
- * compact control is shorter and narrower (a height change alone read as the
- * same control squashed); non-control components may consume --density-* when
- * the context should affect their local rhythm.
- * .compact applies --font-width-dense through font-stretch (a variable wdth
- * axis when available, otherwise normal width-face matching); layout must
- * never depend on the narrowing being available. .spacious restores
- * --font-width, so a spacious island inside a compact context returns to the
- * normal width exactly as it restores its own gap, spacing, and control size.
- * Themes whose typeface has no useful width axis opt out with
- * --font-width-dense: 100%.
+ * Three axes, each predictable on its own:
+ *   .sm/.lg            size    — typography + geometry, local to a component
+ *   .compact/.spacious density — rhythm + geometry, inherited by a region
+ *   .tight/.loose      rhythm  — --gap only, inherited by a region
  *
- * .tight/.loose set the inherited --gap only: rhythm between siblings, with
- * no padding, control size or font width. They reuse the density values so a
- * tight row and a compact one share one step.
+ * Density never touches typography: no font size, icon size or font width.
+ * A width bonus through font-stretch only showed on typefaces with a wdth axis,
+ * so .compact meant something different per OS and font; a condensed table is
+ * a typographic decision for the application. Controls consume --control-size
+ * and --control-pad-x, so a compact control is shorter and narrower (a height
+ * change alone read as the same control squashed); non-control components may
+ * consume --density-* when the context should affect their local rhythm.
+ *
+ * .tight/.loose reuse the density --gap steps, so a tight row and a compact
+ * one share one rhythm.
  *
  * .sm/.lg are local size roles, not shared measurements. Shared control
  * participants below map both typography and geometry; components with
@@ -730,16 +734,14 @@ small {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
-  --control-pad-x: var(--font-size-xs);
-  font-stretch: var(--font-width-dense);
+  --control-pad-x: var(--control-pad-x-sm);
 }
 
 .spacious {
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
-  --control-pad-x: var(--font-size-lg);
-  font-stretch: var(--font-width);
+  --control-pad-x: var(--control-pad-x-lg);
 }
 
 .tight {
@@ -776,7 +778,7 @@ small {
 ).sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
-  --control-pad-x: var(--font-size-sm);
+  --control-pad-x: var(--control-pad-x-sm);
 }
 
 :where(
@@ -800,7 +802,7 @@ small {
 ).lg {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
-  --control-pad-x: var(--font-size-lg);
+  --control-pad-x: var(--control-pad-x-lg);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable
@@ -5488,6 +5490,9 @@ picture.bleed > img {
   position: absolute;
   inset-block-start: calc(100% + var(--space-10));
   inset-inline-start: 0;
+  /* Anatomy, not a default to replace: `flyout grid-3` (mega menu) takes its
+     columns from the grid preset and keeps this tight gap, because each
+     section pads itself — the visible gutter is section padding + gap. */
   display: grid;
   gap: var(--space-10);
   inline-size: var(--flyout-inline-size, max-content);
@@ -7730,10 +7735,13 @@ a.avatar[aria-disabled="true"] {
 /* Nav list — a vertical navigation list. Used by .drawer for stacked links.
    Links fill each row so the whole line is an interactive target; the
    horizontal .cluster links keep their intrinsic size. */
+/* A vertical nav reads as one list, not a stack of separate buttons: each row
+   is already a control-height target, so the rows sit a hair apart. The grid
+   is the component's own layout; for a horizontal row use .cluster instead. */
 .nav-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  --gap: var(--space-20);
+  --gap: var(--space-10);
   gap: var(--gap);
   margin: 0;
   padding: 0;

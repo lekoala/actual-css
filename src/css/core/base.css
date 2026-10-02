@@ -7,7 +7,7 @@
  * Public hooks:
  * --link
  * --hr-space
- * --font-width / --font-width-dense (see variants.css for the dense application)
+ * --font-width (the document's font-stretch; a theme typography choice)
  */
 
 body {

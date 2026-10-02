@@ -1,12 +1,12 @@
 {
-  "totalRaw": 349538,
+  "totalRaw": 350153,
   "core": {
-    "minified": 11957,
-    "brotli": 2727
+    "minified": 12003,
+    "brotli": 2731
   },
   "full": {
-    "minified": 130768,
-    "brotli": 18777
+    "minified": 130814,
+    "brotli": 18817
   },
   "js": {
     "full": {
@@ -26,7 +26,7 @@
     },
     {
       "file": "core/tokens.css",
-      "raw": 10960
+      "raw": 11247
     },
     {
       "file": "forms/choice-card.css",
@@ -65,20 +65,16 @@
       "raw": 6445
     },
     {
+      "file": "components/flyout.css",
+      "raw": 5781
+    },
+    {
       "file": "components/avatar.css",
       "raw": 5698
     },
     {
       "file": "forms/range.css",
       "raw": 5632
-    },
-    {
-      "file": "components/flyout.css",
-      "raw": 5553
-    },
-    {
-      "file": "core/variants.css",
-      "raw": 5407
     },
     {
       "file": "typography/prose.css",
@@ -101,6 +97,10 @@
       "raw": 5164
     },
     {
+      "file": "core/variants.css",
+      "raw": 5157
+    },
+    {
       "file": "forms/otp.css",
       "raw": 5058
     },
@@ -110,7 +110,7 @@
     },
     {
       "file": "components/navbar.css",
-      "raw": 4721
+      "raw": 4958
     },
     {
       "file": "themes/gradient.css",
@@ -121,16 +121,16 @@
       "raw": 4446
     },
     {
+      "file": "themes/bootstrap-v6.css",
+      "raw": 4241
+    },
+    {
       "file": "themes/glass.css",
       "raw": 4238
     },
     {
       "file": "themes/edge.css",
       "raw": 4195
-    },
-    {
-      "file": "themes/bootstrap-v6.css",
-      "raw": 4119
     },
     {
       "file": "utilities/base.css",
@@ -210,7 +210,7 @@
     },
     {
       "file": "core/base.css",
-      "raw": 2772
+      "raw": 2763
     },
     {
       "file": "forms/validation.css",

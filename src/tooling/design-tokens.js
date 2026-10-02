@@ -97,7 +97,6 @@ export const NOT_EXPORTED = {
   "font stack; a design tool font token holds one family": ["font-sans", "font-mono"],
   "no design tool equivalent": [
     "font-width",
-    "font-width-dense",
     "line-height",
     "line-height-tight",
     "line-height-relaxed",
