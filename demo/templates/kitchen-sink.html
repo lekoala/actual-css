@@ -1020,9 +1020,8 @@
       applyFont(requestedFont);
     }
 
-    /* Density demonstrates the framework API (.compact applies
-       --font-width-dense); the width slider below is a demo-only lab that
-       writes --font-width directly and takes over from compact. */
+    /* Density demonstrates the framework API; the width slider below is a
+       demo-only lab that writes the theme's --font-width. */
     const densitySwitcher = document.getElementById("density-switcher");
 
     function applyDensity(value) {
@@ -1044,10 +1043,6 @@
       const value = `${widthLab.value}%`;
       widthLabValue.textContent = value;
       document.documentElement.style.setProperty("--font-width", value);
-      if (densitySwitcher) {
-        densitySwitcher.value = "";
-      }
-      applyDensity("");
     });
 
     const contextCard = document.getElementById("demo-context-card");

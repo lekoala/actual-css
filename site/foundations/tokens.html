@@ -397,7 +397,6 @@ derivation. A custom intent class provides the relay directly:</p>
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-width: 100%;
-  --font-width-dense: 95%;
 
   --line-height: 1.5;
   --font-weight-normal: 400;
@@ -421,17 +420,25 @@ Local <code>.sm</code>/<code>.lg</code> sizes map <code>--control-size</code>, <
   --control-size-md: 2.375rem;  /* 38px → default */
   --control-size-lg: 2.75rem;   /* 44px → .lg */
   --control-size: var(--control-size-md);
-  --control-pad-x: var(--font-size-md);
+  --control-pad-x-sm: var(--font-size-xs); /* .sm, .compact */
+  --control-pad-x-md: var(--font-size-md); /* default */
+  --control-pad-x-lg: var(--font-size-lg); /* .lg, .spacious */
+  --control-pad-x: var(--control-pad-x-md);
   --control-font-size: var(--font-size-md);
   --disabled-opacity: 0.65;
 }
 </code></pre>
-<p><code>--control-pad-x</code> is a resolved geometry length, stated in the typographic
-tokens rather than an <code>em</code>. Every part of one control must see the same
-horizontal distance; an <code>em</code> would change value on a descendant with its own
-font size, which is exactly what <code>--input-icon-size</code> does to the icon glyph. It
-mirrors <code>--control-font-size</code> and is rebound beside it at the <code>.sm</code>/<code>.lg</code>
-boundaries.</p>
+<p>A theme sets the steps (<code>--control-size-*</code>, <code>--control-pad-x-*</code>); <code>.sm</code>/<code>.lg</code>
+and <code>.compact</code>/<code>.spacious</code> select one. <code>--control-size</code> and <code>--control-pad-x</code>
+are the selected values: override them on one instance, never in a theme,
+where every size and density boundary would overwrite them. Set the steps in
+the root theme: the default selection reads them on <code>:root</code>, so a nested
+<code>data-theme</code> island that changes them only reaches its <code>.sm</code>, <code>.lg</code>,
+<code>.compact</code> and <code>.spacious</code> descendants.</p>
+<p><code>--control-pad-x</code> is a length, not an <code>em</code>: every part of one control must see
+the same horizontal distance, and an <code>em</code> would change value on a descendant
+with its own font size, which is exactly what <code>--input-icon-size</code> does to the
+icon glyph.</p>
 <ul>
 <li><code>.lg</code> — 44px control height</li>
 <li>default — 38px control height</li>
@@ -442,40 +449,28 @@ boundaries.</p>
 changing the font size.</p>
 <p>Disabled controls and disabled-prone components read <code>--disabled-opacity</code> for their dimmed state — buttons, tabs, menu items, badges, avatars, choice cards, native inputs, and range sliders.</p>
 <h3 id="density">Density</h3>
-<p>Density contexts swap shared spacing and geometry, plus a slight typographic
-width bonus:</p>
-<pre><code class="language-css">:root {
-  --font-width: 100%;
-  --font-width-dense: 95%;
-}
-
-.compact {
+<p>Density contexts swap shared rhythm and geometry, and never typography:</p>
+<pre><code class="language-css">.compact {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
-  --control-pad-x: var(--font-size-xs);
-  font-stretch: var(--font-width-dense);
+  --control-pad-x: var(--control-pad-x-sm);
 }
 
 .spacious {
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
-  --control-pad-x: var(--font-size-lg);
-  font-stretch: var(--font-width);
+  --control-pad-x: var(--control-pad-x-lg);
 }
 </code></pre>
-<p>Density never changes font size or icon size — it may only use the denser font
-width. <code>font-stretch</code> uses a variable <code>wdth</code> axis when available, or
-participates in normal width-face matching for families that expose multiple
-widths. Layout must never depend on the narrowing being available. Compact
-density may slightly narrow variable typefaces when they support a width axis.
-This is a density enhancement, not an overflow strategy: never condense a
-component just because its label overflows at some viewport — that hides a
-composition problem. A theme whose typeface has no useful width axis opts out
-with <code>--font-width-dense: 100%</code>.</p>
-<p><code>.tight</code> and <code>.loose</code> set the same two <code>--gap</code> steps without the rest of
-density: rhythm only, no padding, control size or font width.</p>
+<ul>
+<li><strong>Size</strong> (<code>.sm</code>, <code>.lg</code>) — typography + geometry, on one component.</li>
+<li><strong>Density</strong> (<code>.compact</code>, <code>.spacious</code>) — rhythm + geometry, on a region.</li>
+<li><strong>Rhythm</strong> (<code>.tight</code>, <code>.loose</code>) — <code>--gap</code> only, on a region.</li>
+</ul>
+<p>Font size, icon size and font width stay put under density. A condensed table
+or panel is a typographic choice: set <code>font-stretch</code> on it in the application.</p>
 <p>Participation is opt-in and selective: controls consume <code>--control-size</code>
 and <code>--control-pad-x</code> for geometry; spacing helpers and rhythms consume <code>--density-space</code> and <code>--gap</code>;
 components whose size is intrinsic (badge, avatar, spinner, rating, key, prose,
