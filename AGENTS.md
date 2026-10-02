@@ -34,6 +34,12 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   scripts), `clickSelector`/`tabUntil` for real dispatched input,
   `elementRect` for crops. Prefer `fixtureUrl` over a `tmp/` `Bun.serve`;
   serve only for fetch/CORS needs, via `scripts/serve.js`.
+- Demo templates link built CSS (`dist/actual.full.css`, the demo themes
+  bundle), which you do not rebuild — a probe of a demo measured the last
+  build and passed on stale evidence. Pass `--src-css` to `probe` and every
+  `shot:*` script (`sourceCss: true` for `withBrowserPage`/`capture`) to render
+  the working tree; it reports what it swapped. It covers CSS only:
+  `dist/actual.full.js` stays the built runtime.
 - Visual changes must be inspected once in the states they affect. Cover the
   meaningful extremes when the geometry is responsive, and exaggerate a tiny
   detail in the fixture rather than squinting at its production size.

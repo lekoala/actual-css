@@ -17,7 +17,7 @@ chrome too.
   </nav>
   <h2>Documentation</h2>
   <nav aria-label="Documentation">
-    <ul class="nav-list stack">
+    <ul class="nav-list">
       <li><a href="/docs/getting-started" aria-current="page">Getting started</a></li>
       <li><a href="/docs/tokens">Tokens</a></li>
       <li><a href="/docs/layout">Layout</a></li>
@@ -98,7 +98,7 @@ A project may add `.site-header` when it needs a visual shell.
   <aside class="shell-sidebar-nav" aria-label="Primary">
     <a class="navbar-brand" href="#"><span class="avatar primary"><abbr>AC</abbr></span> Product</a>
     <nav aria-label="Primary">
-      <ul class="nav-list stack">
+      <ul class="nav-list">
         <li><a class="nav-link" href="#" aria-current="page">Overview</a></li>
         <li><a class="nav-link" href="#">Settings</a></li>
       </ul>
@@ -159,7 +159,7 @@ Side navigation is usually a `.nav-list` composed with `.stack`.
 ```html demo
 <aside>
   <nav aria-label="Documentation">
-    <ul class="nav-list stack">
+    <ul class="nav-list">
       <li><a href="/docs/getting-started" aria-current="page">Getting started</a></li>
       <li><a href="/docs/tokens">Tokens</a></li>
       <li><a href="/docs/layout">Layout</a></li>
@@ -174,7 +174,7 @@ A project may add `.side-nav` only when it needs specific visual behavior such a
 ```html demo
 <aside class="side-nav">
   <nav aria-label="Documentation">
-    <ul class="nav-list stack">
+    <ul class="nav-list">
       <li><a href="/docs/getting-started" aria-current="page">Getting started</a></li>
       <li><a href="/docs/tokens">Tokens</a></li>
       <li><a href="/docs/layout">Layout</a></li>
@@ -202,4 +202,4 @@ A project may add `.side-nav` only when it needs specific visual behavior such a
 
 `.nav-link` gives a link its hit area, hover fill and `aria-current` state, in a
 `.cluster` row or a `.nav-list` (see [Navbar](../components/navbar.md)). Set
-`--gap` on a `.nav-list` to tighten its rows.
+`--gap` on a `.nav-list` to space its rows differently.

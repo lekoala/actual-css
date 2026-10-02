@@ -61,7 +61,7 @@ your intended target `autofocus`; otherwise the body claims initial focus.
   </header>
 
   <nav>
-    <ul class="nav-list stack">
+    <ul class="nav-list">
       <li><a href="#" aria-current="page">Home</a></li>
       <li><a href="#">Users</a></li>
       <li><a href="#">Settings</a></li>

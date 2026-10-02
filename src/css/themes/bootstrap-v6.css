@@ -39,7 +39,10 @@
   --radius: 0.5rem;
   --radius-sm: 0.25rem;
   --radius-lg: 0.75rem;
-  --control-pad-x: 0.75rem;
+  /* Bootstrap's .btn-sm / .btn / .btn-lg inline padding. */
+  --control-pad-x-sm: 0.5rem;
+  --control-pad-x-md: 0.75rem;
+  --control-pad-x-lg: 1rem;
   --control-hover-bg: var(--surface);
   --control-hover-border: #adb5bd;
 }

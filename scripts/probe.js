@@ -18,6 +18,10 @@
  * more reliable than --window-size alone: headless Chrome clamps the window
  * flag to a platform minimum (e.g. ~512px on Windows), which makes a
  * "360px" probe silently render at ~512px.
+ *
+ * --src-css swaps the page's built stylesheets (dist/, the demo themes bundle)
+ * for their sources before the program runs. Demo templates link dist/, so
+ * without it a probe of a demo measures the last build, not the working tree.
  */
 
 import { readFile } from "node:fs/promises";
@@ -30,6 +34,7 @@ const flags = readFlags(args, {
   "--expr": { fallback: undefined },
   "--settle": { fallback: "400" },
   "--width": { fallback: undefined },
+  "--src-css": { boolean: true },
 });
 
 const page = flags["--url"] ?? args[0] ?? "site/index.html";
@@ -70,7 +75,7 @@ try {
         process.exitCode = 1;
       }
     },
-    { settleMs },
+    { settleMs, sourceCss: flags["--src-css"] },
   );
 } catch (error) {
   console.error(error);

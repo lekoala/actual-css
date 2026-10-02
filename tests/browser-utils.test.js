@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { fixtureUrl } from "../scripts/utils/browser.js";
+import { fixtureUrl, readFlags } from "../scripts/utils/browser.js";
 
 const browserModule = new URL("../scripts/utils/browser.js", import.meta.url).href;
 
@@ -52,4 +52,16 @@ test("local browser fixtures need no HTTP server port", () => {
   const url = new URL(fixtureUrl("tests/browser/mobile-overflow.html"));
   expect(url.protocol).toBe("file:");
   expect(url.port).toBe("");
+});
+
+test("readFlags consumes boolean flags without eating the next argument", () => {
+  const args = ["page.html", "--src-css", "--width", "900"];
+  const flags = readFlags(args, {
+    "--src-css": { boolean: true },
+    "--top-layer": { boolean: true },
+    "--width": { fallback: "1280" },
+  });
+
+  expect(flags).toEqual({ "--src-css": true, "--top-layer": false, "--width": "900" });
+  expect(args).toEqual(["page.html"]);
 });
