@@ -130,6 +130,15 @@ test("topbar keeps its default row at zero specificity", () => {
   expect(css).not.toMatch(/^\.topbar \{[^}]*display:/m);
 });
 
+test("rhythm classes set --gap and nothing else", () => {
+  // Rhythm is not density: once .tight/.loose touch padding, control size or
+  // font width they become a second .compact/.spacious.
+  const css = readCss("src/css/core/variants.css");
+
+  expect(css).toMatch(/\.tight \{\s*--gap: var\(--space-20\);\s*\}/);
+  expect(css).toMatch(/\.loose \{\s*--gap: var\(--space-50\);\s*\}/);
+});
+
 test("picture bleed clips children", () => {
   const css = readCss("src/css/components/bleed.css");
 

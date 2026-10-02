@@ -39,7 +39,7 @@ gap.
 
     <p>Using the right HTML tags improves both SEO and accessibility. Lean on landmarks and live lists.</p>
 
-    <ul class="cluster compact" aria-label="Tags">
+    <ul class="cluster tight" aria-label="Tags">
       <li><span class="badge primary soft secondary">HTML</span></li>
       <li><span class="badge soft primary">Accessibility</span></li>
       <li><span class="badge outline">5 min read</span></li>

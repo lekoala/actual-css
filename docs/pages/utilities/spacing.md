@@ -48,9 +48,10 @@ Override the default gap from layout primitives (`.stack`, `.cluster`, `.grid`):
 - `.gap-none` → `gap: 0`
 
 `.gap-none` sets the element's own gap directly and does not change `--gap`
-for nested layouts. For a denser or roomier rhythm, use the `.compact` /
-`.spacious` density contexts, or set the `gap` property on the instance when the
-change must stop there.
+for nested layouts. For a tighter or looser rhythm alone — closer items, without
+smaller controls — use `.tight` / `.loose`; `.compact` / `.spacious` also change
+padding and control size. Set the `gap` property on the instance when the change
+must stop there.
 
 `--gap` defines the contextual rhythm; `.gap-context` applies that rhythm to a
 container that does not already consume `--gap`. The layout primitives

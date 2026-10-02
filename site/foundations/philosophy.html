@@ -311,8 +311,9 @@ though: components in the shared control scale set local <code>--control-size</c
 how <code>.field sm</code>, <code>.input-icon sm</code>, <code>.join sm</code>, and <code>.flyout sm</code> size the
 controls inside them, while a bare <code>.sm</code> on a plain element does nothing.</p>
 <p><code>.compact</code> and <code>.spacious</code> establish inherited density tokens. Density arranges
-how tightly UI sits — spacing and component geometry — while typography and
-icon size stay unchanged. Participation is opt-in, and a component only joins
+how tightly UI sits — spacing and component geometry — while font size and
+icon size stay unchanged. <code>.tight</code> and <code>.loose</code> change the rhythm (<code>--gap</code>)
+alone. Participation is opt-in, and a component only joins
 where density has an effect independent from its optical size: if the result is
 merely that the component looks smaller or larger, that is size, not density.</p>
 <p>Density participation takes three levels:</p>

@@ -277,9 +277,10 @@ and the <code>.spacious</code> context loosens it to <code>--space-50</code> (1.
 <li><code>.gap-none</code> → <code>gap: 0</code></li>
 </ul>
 <p><code>.gap-none</code> sets the element's own gap directly and does not change <code>--gap</code>
-for nested layouts. For a denser or roomier rhythm, use the <code>.compact</code> /
-<code>.spacious</code> density contexts, or set the <code>gap</code> property on the instance when the
-change must stop there.</p>
+for nested layouts. For a tighter or looser rhythm alone — closer items, without
+smaller controls — use <code>.tight</code> / <code>.loose</code>; <code>.compact</code> / <code>.spacious</code> also change
+padding and control size. Set the <code>gap</code> property on the instance when the change
+must stop there.</p>
 <p><code>--gap</code> defines the contextual rhythm; <code>.gap-context</code> applies that rhythm to a
 container that does not already consume <code>--gap</code>. The layout primitives
 (<code>.stack</code>, <code>.cluster</code>, <code>.grid</code>, …) read it on their own.</p>
