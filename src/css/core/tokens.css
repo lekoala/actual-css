@@ -127,10 +127,13 @@
      13px inside .compact. The selection is rebound at each boundary because a
      var() inside a custom property resolves where it is declared.
 
-     The boundaries also write --control-step-sm/-md/-lg (internal): which step
-     is selected, as 0/1 weights that mean the same under every theme. A
-     [data-theme] island rebuilds the selection from them below, so it reads its
-     own steps without resetting the density it sits in. */
+     The boundaries also write --control-step-sm/-md/-lg: which step is
+     selected, as 0/1 weights that mean the same under every theme. A theme
+     that sets its own steps rebuilds the selection from them in its own block
+     (bootstrap-v6.css), so a nested island of it reads its steps without
+     resetting the density it sits in. Never rebind on every [data-theme]: a
+     palette-only island then became a geometry boundary that an inherited
+     --control-size or --control-pad-x no longer crossed. */
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
   --control-size-lg: 2.75rem;
@@ -164,24 +167,6 @@
 
   /* Status dot ring — cuts the dot out of what it overlaps. */
   --indicator-ring: var(--surface-opaque);
-}
-
-/* Control selection on a nested theme island: the island's own steps, picked
-   by the step weights the island inherits from size and density. A plain
-   var(--control-pad-x-md) here would reset a .compact region around the
-   island to the default step. Zero specificity: a size or density class on
-   the same element keeps the last word. */
-:where([data-theme]) {
-  --control-size: calc(
-    (var(--control-size-sm) * var(--control-step-sm)) +
-    (var(--control-size-md) * var(--control-step-md)) +
-    (var(--control-size-lg) * var(--control-step-lg))
-  );
-  --control-pad-x: calc(
-    (var(--control-pad-x-sm) * var(--control-step-sm)) +
-    (var(--control-pad-x-md) * var(--control-step-md)) +
-    (var(--control-pad-x-lg) * var(--control-step-lg))
-  );
 }
 
 :root {

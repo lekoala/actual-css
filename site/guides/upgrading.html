@@ -246,11 +246,15 @@ actions is a <code>.cluster</code>; a vertical list is <code>stack list-reset</c
 &lt;ul class=&quot;stack list-reset&quot;&gt;…&lt;/ul&gt;
 </code></pre>
 <ul>
-<li>The row takes the framework <code>--gap</code> (0.75rem); <code>.actions</code> used 0.5rem. Add
-<code>.tight</code> to keep the tighter rhythm.</li>
+<li>The row takes the framework <code>--gap</code> (0.75rem). The former <code>.actions</code> used
+0.5rem: add <code>.tight</code> to keep it.</li>
+<li>The former <code>.navbar-nav</code> used <code>--space-10</code> (0.25rem), which no utility
+reproduces. If the tighter navbar rhythm matters, set
+<code>gap: var(--space-10)</code> on that row in application CSS.</li>
 <li><code>.form-actions</code> has no top margin and no <code>--form-actions-margin-block-start</code>:
 put <code>.stack</code> on the form. <code>--form-actions-justify</code> and <code>--form-actions-align</code>
-still apply.</li>
+still apply. In a modular build, import <code>layout/cluster</code> before
+<code>forms/form-actions</code>.</li>
 <li><code>.justify-content-*</code> aligns only its own element and no longer reaches a
 nested <code>.cluster</code>. Put the utility on the row it should align.</li>
 </ul>
@@ -262,17 +266,24 @@ the recipe is in <a href="../components/dialog.html">Dialog</a>.</li>
 <li>A <code>dialog.modal</code> body <code>&lt;footer&gt;</code> has no layout of its own: write
 <code>&lt;footer class=&quot;cluster justify-content-end&quot;&gt;</code>.</li>
 <li><code>--modal-header-bg</code> is removed: put a <code>.background-*</code> utility on the
-<code>dialog.modal &gt; header</code> band.</li>
+<code>dialog.modal &gt; header</code> band. Only that default fill has zero specificity;
+the header's layout keeps its structural rule.</li>
+<li>The confirmation recipe uses the regular 1rem modal inset where the former
+<code>.dialog-confirmation</code> used 1.5rem. Set <code>--modal-pad: var(--space-50)</code> on
+the dialog to keep the roomier treatment.</li>
 </ul>
 <h2 id="cards">Cards</h2>
-<p>A <code>.card</code> header or footer row has zero specificity. A <code>.media</code>, <code>.cluster</code>,
-<code>.form-actions</code> or <code>.justify-content-*</code> on that slot now replaces the default
-split row instead of losing to it; check slots that carried one of those
-classes by accident.</p>
+<p>The layout of a <code>.card</code> header or footer row is a zero-specificity default: any
+author rule that targets the slot replaces it, not only a <code>.media</code>, <code>.cluster</code>,
+<code>.form-actions</code> or <code>.justify-content-*</code> class. Check application CSS for bare
+element rules such as <code>header { … }</code> or <code>footer { … }</code>, which now win over the
+card's slot row.</p>
 <h2 id="themes-and-density">Themes and density</h2>
 <ul>
 <li>A theme sets <code>--control-pad-x-sm</code>, <code>--control-pad-x-md</code> and
-<code>--control-pad-x-lg</code> instead of <code>--control-pad-x</code>.</li>
+<code>--control-pad-x-lg</code> instead of <code>--control-pad-x</code>. Used as a nested island,
+it re-selects them in its own block; see
+<a href="../foundations/tokens.html">Tokens</a>.</li>
 <li><code>--font-width-dense</code> is removed, and <code>.compact</code> no longer condenses type: set
 <code>font-stretch</code> on the element that should render condensed.</li>
 </ul>

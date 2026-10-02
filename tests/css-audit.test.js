@@ -147,11 +147,19 @@ test("docs and demos never compose .nav-list with another layout", () => {
 test("themes set control steps, never the selected control values", () => {
   // --control-size / --control-pad-x are selections that every .sm/.lg and
   // .compact/.spacious boundary rebinds; a theme value there is overwritten
-  // and density stops ordering correctly. Themes write the -sm/-md/-lg steps.
+  // and density stops ordering correctly. Themes write the -sm/-md/-lg steps;
+  // the one selection they may write is the re-selection from the inherited
+  // --control-step-* weights that lets a nested island read its own steps.
   for (const entry of readdirSync("src/css/themes")) {
     if (!entry.endsWith(".css")) continue;
-    const css = readCss(`src/css/themes/${entry}`);
-    expect(css, entry).not.toMatch(/--control-(size|pad-x):/);
+    const css = readRules(`src/css/themes/${entry}`);
+    for (const [, token, value] of css.matchAll(/--control-(size|pad-x):([^;]*);/g)) {
+      for (const step of ["sm", "md", "lg"]) {
+        expect(value, `${entry} --control-${token}`).toContain(
+          `var(--control-${token}-${step}) * var(--control-step-${step})`,
+        );
+      }
+    }
   }
 });
 
