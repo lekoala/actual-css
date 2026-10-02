@@ -77,5 +77,31 @@
       <span>Aside region</span>
     </article>
   </section>
+
+  <!-- Slot rows are defaults: a primitive, role or utility on a direct
+       header/footer takes over. Fixed height keeps free space so the composed
+       footer must still anchor to the bottom. -->
+  <section id="slots" class="grid">
+    <article id="slot-default" class="card">
+      <header><h3>Default</h3><span>Badge</span></header>
+      <footer><span>Date</span><a class="btn sm">Read</a></footer>
+    </article>
+    <article id="slot-composed" class="card" style="block-size: 16rem">
+      <header class="media"><span aria-hidden="true">◎</span><h3>Media header</h3></header>
+      <footer class="cluster justify-content-end"><a class="btn sm">Go</a></footer>
+    </article>
+    <article id="slot-actions" class="card">
+      <header class="cluster"><h3>Cluster header</h3><span>Badge</span></header>
+      <footer class="cluster form-actions" style="--form-actions-justify: center"><a class="btn sm">Save</a></footer>
+    </article>
+  </section>
+
+  <!-- The rhythm between a bare card's children follows the context. -->
+  <section id="rhythm" class="grid compact">
+    <article id="rhythm-inherited" class="card">
+      <h3>Inherited compact</h3>
+      <p>Body.</p>
+    </article>
+  </section>
 </body>
 </html>

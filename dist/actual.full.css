@@ -1899,8 +1899,9 @@ small {
 /*
  * Sticky, frosted top bar shell for app/dashboard shells (persistent
  * sidebar + topbar layouts). Owns positioning, stacking, and the frosted
- * background only — row content (search, breadcrumb, actions) stays local
- * to the page.
+ * background; it also lays its children out as a default row that a layout
+ * primitive on the same element (such as .cluster) replaces. Row content
+ * (search, breadcrumb, actions) stays local to the page.
  *
  * Docs: docs/pages/layout/topbar.md
  *
@@ -1914,14 +1915,19 @@ small {
   inset-block-start: 0;
   z-index: var(--z-sticky);
   isolation: isolate;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--gap);
   padding-block: var(--space-30);
   padding-inline: var(--space-40);
   border-block-end: var(--border-width) solid var(--border);
   background: var(--surface);
+}
+
+/* The row is a default at zero specificity: .topbar and the primitives share
+   layout/, so at class weight their file order alone would pick the winner. */
+:where(.topbar) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--gap);
 }
 
 /* Both conditions are required: the translucent background contains var(),
@@ -4580,11 +4586,11 @@ a.badge[aria-disabled="true"] {
  * Docs: docs/pages/components/card.md
  *
  * Surface, border, radius, padding, density, and elevation stay local here.
- * Direct header/footer children are structural slots; a direct footer is
- * anchored to the card's bottom edge when extra block space is available (so
- * price/action rows align across equal-height cards in a grid). A bare card
- * owns its direct-child rhythm; a layout primitive on the same element takes
- * over that layout. Page layout remains the job of markup and layout
+ * Direct header/footer children are structural slots with a default split row;
+ * a direct footer is anchored to the card's bottom edge when extra block space
+ * is available (so price/action rows align across equal-height cards in a
+ * grid). A bare card owns its direct-child rhythm and its slot rows; a layout
+ * primitive on the card or on a slot takes over that layout. Page layout remains the job of markup and layout
  * primitives outside the card.
  *
  * Public hooks:
@@ -4622,7 +4628,9 @@ a.badge[aria-disabled="true"] {
 
 .card {
   --card-pad: var(--space-40);
-  --card-gap: var(--space-30);
+  /* Rhythm between direct children follows the context (.compact, .spacious,
+     local or inherited); the padding stays local anatomy. */
+  --card-gap: var(--gap);
   --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
   --card-bg: var(--ui-bg, var(--surface-raised));
@@ -4663,7 +4671,11 @@ a.badge[aria-disabled="true"] {
   margin-block: 0;
 }
 
-.card > :where(header, footer) {
+/* The slot row is a convenience default, not anatomy: like the root box it
+   lives at zero specificity, so a primitive, role or utility on the slot
+   (.cluster, .media, .form-actions, .justify-content-*) replaces it instead of
+   losing to components/ on source order. */
+:where(.card > header, .card > footer) {
   display: flex;
   flex-wrap: wrap;
   align-items: var(--items-align, center);
@@ -4672,13 +4684,13 @@ a.badge[aria-disabled="true"] {
   min-inline-size: 0;
 }
 
+:where(.card > header) {
+  align-items: var(--items-align, flex-start);
+}
+
 .card > :where(header, footer) > * {
   min-inline-size: 0;
   margin-block: 0;
-}
-
-.card > header {
-  align-items: var(--items-align, flex-start);
 }
 
 /* A direct footer is pinned to the bottom when the card has free space.
@@ -7641,12 +7653,6 @@ a.avatar[aria-disabled="true"] {
   border-radius: var(--radius-sm);
 }
 
-/* A cluster directly inside the bar takes the navbar's tight rhythm, at the
-   same specificity as .cluster so utilities (.gap-none) still win. */
-.navbar > :where(.cluster) {
-  gap: var(--space-10);
-}
-
 .nav-link {
   display: inline-flex;
   align-items: center;
@@ -8956,9 +8962,6 @@ a.list-item[aria-current]::before {
  * - utilities consume the current context instead of defining their own -sm/-lg scale.
  * - optional utilities extend core utilities, they do not re-express them.
  * - follow verbose .{property}-{value} naming.
- *
- * Internal:
- * --cluster-justify (local relay consumed by .cluster)
  */
 
 /* Display */
@@ -9033,23 +9036,22 @@ a.list-item[aria-current]::before {
   flex-wrap: nowrap;
 }
 
+/* The property is written directly, never relayed through the cluster hook:
+   a relay would inherit into every .cluster nested inside. Utilities load last,
+   so the direct declaration already beats .cluster at equal specificity. */
 .justify-content-start {
-  --cluster-justify: flex-start;
   justify-content: flex-start;
 }
 
 .justify-content-center {
-  --cluster-justify: center;
   justify-content: center;
 }
 
 .justify-content-end {
-  --cluster-justify: flex-end;
   justify-content: flex-end;
 }
 
 .justify-content-space-between {
-  --cluster-justify: space-between;
   justify-content: space-between;
 }
 

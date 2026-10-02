@@ -10,9 +10,6 @@
  * - utilities consume the current context instead of defining their own -sm/-lg scale.
  * - optional utilities extend core utilities, they do not re-express them.
  * - follow verbose .{property}-{value} naming.
- *
- * Internal:
- * --cluster-justify (local relay consumed by .cluster)
  */
 
 /* Display */
@@ -87,23 +84,22 @@
   flex-wrap: nowrap;
 }
 
+/* The property is written directly, never relayed through the cluster hook:
+   a relay would inherit into every .cluster nested inside. Utilities load last,
+   so the direct declaration already beats .cluster at equal specificity. */
 .justify-content-start {
-  --cluster-justify: flex-start;
   justify-content: flex-start;
 }
 
 .justify-content-center {
-  --cluster-justify: center;
   justify-content: center;
 }
 
 .justify-content-end {
-  --cluster-justify: flex-end;
   justify-content: flex-end;
 }
 
 .justify-content-space-between {
-  --cluster-justify: space-between;
   justify-content: space-between;
 }
 

@@ -53,6 +53,34 @@ gap.
 </div>
 ```
 
+## Slot rows
+
+A direct `<header>` or `<footer>` is a wrapping split row by default: title and
+badge, date and action, one left one right. A primitive, role or utility on the
+slot replaces that row — `.media` for an avatar beside a title, `.cluster` for a
+start-aligned group, `cluster form-actions` for a form's action row,
+`.justify-content-end` to push actions right. The footer stays anchored to the
+bottom either way.
+
+```html demo
+<div style="max-inline-size: 32rem">
+  <article class="card">
+    <header class="media">
+      <span class="avatar"><abbr>AM</abbr></span>
+      <hgroup>
+        <h3>Ada Meridian</h3>
+        <p class="muted">Design systems</p>
+      </hgroup>
+    </header>
+    <p>Reviews every token change before it ships.</p>
+    <footer class="cluster justify-content-end">
+      <button type="button" class="btn ghost">Dismiss</button>
+      <button type="button" class="btn primary">Follow</button>
+    </footer>
+  </article>
+</div>
+```
+
 ## Bleed
 
 Use `.bleed` on a direct child to bring an image or band to the card edge. See
@@ -155,4 +183,5 @@ treatments on either side of it.
 - `--card-radius` — corner radius.
 - `--card-max-inline-size` — maximum width.
 - `--card-pad` — inner padding, relayed to direct children for `.bleed`. `.compact` lowers it.
-- `--card-gap` — space between direct children of a bare card. A composed layout primitive owns its own gap instead.
+- `--card-gap` — space between direct children of a bare card; follows `--gap`, so `.compact` and `.spacious` reach it. A composed layout primitive owns its own gap instead.
+- `--items-align` — cross-axis alignment of the slot rows, set by the `.items-*` helpers on the card or the slot.

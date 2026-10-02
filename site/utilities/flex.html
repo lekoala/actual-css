@@ -240,10 +240,10 @@
 <tr><th>Class</th><th>Description</th></tr>
 </thead>
 <tbody>
-<tr><td><code>.justify-content-start</code></td><td><code>justify-content: flex-start</code> and <code>--cluster-justify</code>.</td></tr>
-<tr><td><code>.justify-content-center</code></td><td><code>justify-content: center</code> and <code>--cluster-justify</code>.</td></tr>
-<tr><td><code>.justify-content-end</code></td><td><code>justify-content: flex-end</code> and <code>--cluster-justify</code>.</td></tr>
-<tr><td><code>.justify-content-space-between</code></td><td><code>justify-content: space-between</code> and <code>--cluster-justify</code>.</td></tr>
+<tr><td><code>.justify-content-start</code></td><td><code>justify-content: flex-start</code> on the element itself.</td></tr>
+<tr><td><code>.justify-content-center</code></td><td><code>justify-content: center</code> on the element itself.</td></tr>
+<tr><td><code>.justify-content-end</code></td><td><code>justify-content: flex-end</code> on the element itself.</td></tr>
+<tr><td><code>.justify-content-space-between</code></td><td><code>justify-content: space-between</code> on the element itself.</td></tr>
 <tr><td><code>.flex-wrap</code></td><td><code>flex-wrap: wrap</code> on any flex container.</td></tr>
 <tr><td><code>.flex-nowrap</code></td><td><code>flex-wrap: nowrap</code> on any flex container.</td></tr>
 </tbody>
@@ -333,9 +333,9 @@ flex containers:</p>
 <ul>
 <li><code>.items-start</code> / <code>.items-center</code> / <code>.items-end</code> / <code>.items-baseline</code> set <code>--items-align</code>, read by <code>.alert</code> and <code>.card</code>.</li>
 <li><code>.text-start</code> / <code>.text-center</code> / <code>.text-end</code> set <code>--text-align</code>, read by <code>.table</code> cells.</li>
-<li><code>.justify-content-*</code> (utilities/extra) set <code>--cluster-justify</code>, read by <code>.cluster</code>.</li>
-<li><code>.flex-wrap</code> / <code>.flex-nowrap</code> (utilities/extra) set <code>flex-wrap</code> directly on any flex container.</li>
 </ul>
+<p><code>.justify-content-*</code> and <code>.flex-wrap</code> / <code>.flex-nowrap</code> (utilities/extra) set the property
+directly, so they never reach a nested <code>.cluster</code>.</p>
 <p>Set the property directly when you need a value the helpers do not ship.</p>
 <h2 id="metadata-separator">Metadata separator</h2>
 <blockquote>
@@ -377,7 +377,6 @@ flex containers:</p>
 <ul>
 <li><code>--items-align</code> — cross-axis alignment, set by the <code>.items-*</code> helpers.</li>
 <li><code>--text-align</code> — text alignment, set by <code>.text-start</code> / <code>.text-center</code> / <code>.text-end</code>.</li>
-<li><code>--cluster-justify</code> — main-axis distribution, set by the optional <code>.justify-content-*</code> helpers and read by <code>.cluster</code>.</li>
 </ul>
 
 </div>

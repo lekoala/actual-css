@@ -298,6 +298,53 @@ gap.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="slot-rows">Slot rows</h2>
+<p>A direct <code>&lt;header&gt;</code> or <code>&lt;footer&gt;</code> is a wrapping split row by default: title and
+badge, date and action, one left one right. A primitive, role or utility on the
+slot replaces that row — <code>.media</code> for an avatar beside a title, <code>.cluster</code> for a
+start-aligned group, <code>cluster form-actions</code> for a form's action row,
+<code>.justify-content-end</code> to push actions right. The footer stays anchored to the
+bottom either way.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div style="max-inline-size: 32rem">
+  <article class="card">
+    <header class="media">
+      <span class="avatar"><abbr>AM</abbr></span>
+      <hgroup>
+        <h3>Ada Meridian</h3>
+        <p class="muted">Design systems</p>
+      </hgroup>
+    </header>
+    <p>Reviews every token change before it ships.</p>
+    <footer class="cluster justify-content-end">
+      <button type="button" class="btn ghost">Dismiss</button>
+      <button type="button" class="btn primary">Follow</button>
+    </footer>
+  </article>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div style=&quot;max-inline-size: 32rem&quot;&gt;
+  &lt;article class=&quot;card&quot;&gt;
+    &lt;header class=&quot;media&quot;&gt;
+      &lt;span class=&quot;avatar&quot;&gt;&lt;abbr&gt;AM&lt;/abbr&gt;&lt;/span&gt;
+      &lt;hgroup&gt;
+        &lt;h3&gt;Ada Meridian&lt;/h3&gt;
+        &lt;p class=&quot;muted&quot;&gt;Design systems&lt;/p&gt;
+      &lt;/hgroup&gt;
+    &lt;/header&gt;
+    &lt;p&gt;Reviews every token change before it ships.&lt;/p&gt;
+    &lt;footer class=&quot;cluster justify-content-end&quot;&gt;
+      &lt;button type=&quot;button&quot; class=&quot;btn ghost&quot;&gt;Dismiss&lt;/button&gt;
+      &lt;button type=&quot;button&quot; class=&quot;btn primary&quot;&gt;Follow&lt;/button&gt;
+    &lt;/footer&gt;
+  &lt;/article&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="bleed">Bleed</h2>
 <p>Use <code>.bleed</code> on a direct child to bring an image or band to the card edge. See
 <a href="bleed.html">Bleed</a> for the shared surface contract and its modular import.</p>
@@ -471,7 +518,8 @@ treatments on either side of it.</p>
 <li><code>--card-radius</code> — corner radius.</li>
 <li><code>--card-max-inline-size</code> — maximum width.</li>
 <li><code>--card-pad</code> — inner padding, relayed to direct children for <code>.bleed</code>. <code>.compact</code> lowers it.</li>
-<li><code>--card-gap</code> — space between direct children of a bare card. A composed layout primitive owns its own gap instead.</li>
+<li><code>--card-gap</code> — space between direct children of a bare card; follows <code>--gap</code>, so <code>.compact</code> and <code>.spacious</code> reach it. A composed layout primitive owns its own gap instead.</li>
+<li><code>--items-align</code> — cross-axis alignment of the slot rows, set by the <code>.items-*</code> helpers on the card or the slot.</li>
 </ul>
 
 </div>
@@ -494,6 +542,7 @@ treatments on either side of it.</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#basic-usage" data-docs-toc-item data-level="2">Basic usage</a></li>
+        <li><a class="nav-link" href="#slot-rows" data-docs-toc-item data-level="2">Slot rows</a></li>
         <li><a class="nav-link" href="#bleed" data-docs-toc-item data-level="2">Bleed</a></li>
         <li><a class="nav-link" href="#in-grids" data-docs-toc-item data-level="2">In grids</a></li>
         <li><a class="nav-link" href="#surfaces" data-docs-toc-item data-level="2">Surfaces</a></li>

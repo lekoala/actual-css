@@ -6,7 +6,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Navigation List — Actual CSS</title>
-  <meta name="description" content="Use .nav-list for a semantic list of navigation links.">
+  <meta name="description" content="Use .nav-list for a vertical list of navigation links: it removes native list
+chrome, stacks the rows and stretches each .nav-link across the row. For a
+horizontal row of links, use .cluster on the list, which removes the list
+chrome too.">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -218,15 +221,17 @@
 
           <div class="prose docs-prose">
 <h1 id="navigation-list">Navigation List</h1>
-<p>Use <code>.nav-list</code> for a semantic list of navigation links.</p>
-<p>It removes native list chrome but does not force a direction. Combine it with layout primitives depending on context.</p>
+<p>Use <code>.nav-list</code> for a vertical list of navigation links: it removes native list
+chrome, stacks the rows and stretches each <code>.nav-link</code> across the row. For a
+horizontal row of links, use <code>.cluster</code> on the list, which removes the list
+chrome too.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <div class="stack">
   <h2>Navigation</h2>
   <nav aria-label="Main navigation">
-    <ul class="nav-list cluster">
+    <ul class="cluster">
       <li><a href="/docs">Docs</a></li>
       <li><a href="/components">Components</a></li>
       <li><a href="/examples">Examples</a></li>
@@ -247,7 +252,7 @@
     <pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
   &lt;h2&gt;Navigation&lt;/h2&gt;
   &lt;nav aria-label=&quot;Main navigation&quot;&gt;
-    &lt;ul class=&quot;nav-list cluster&quot;&gt;
+    &lt;ul class=&quot;cluster&quot;&gt;
       &lt;li&gt;&lt;a href=&quot;/docs&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;/components&quot;&gt;Components&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;/examples&quot;&gt;Examples&lt;/a&gt;&lt;/li&gt;
@@ -266,14 +271,6 @@
   </div>
 </div>
 <div class="prose docs-prose">
-<p>Use <code>.nav-list</code> for:</p>
-<ul>
-<li>header navigation</li>
-<li>side navigation</li>
-<li>footer navigation</li>
-<li>tab-like navigation lists</li>
-<li>documentation navigation</li>
-</ul>
 <p>Do not reset every list inside <code>nav</code>.</p>
 <pre><code class="language-css">/* Avoid */
 nav ul {
@@ -288,7 +285,7 @@ nav ul {
 <div class="docs-example">
   <div class="docs-preview">
 <nav aria-label="Footer">
-  <ul class="nav-list cluster">
+  <ul class="cluster">
     <li><a href="/privacy">Privacy</a></li>
     <li><a href="/terms">Terms</a></li>
     <li><a href="/contact">Contact</a></li>
@@ -297,7 +294,7 @@ nav ul {
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;nav aria-label=&quot;Footer&quot;&gt;
-  &lt;ul class=&quot;nav-list cluster&quot;&gt;
+  &lt;ul class=&quot;cluster&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;/privacy&quot;&gt;Privacy&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;/terms&quot;&gt;Terms&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;/contact&quot;&gt;Contact&lt;/a&gt;&lt;/li&gt;
@@ -316,7 +313,7 @@ nav ul {
     <a class="brand" href="/">Actual CSS</a>
 
     <nav aria-label="Main navigation">
-      <ul class="nav-list cluster">
+      <ul class="cluster">
         <li><a href="/docs">Docs</a></li>
         <li><a href="/components">Components</a></li>
         <li><a href="/examples">Examples</a></li>
@@ -331,7 +328,7 @@ nav ul {
     &lt;a class=&quot;brand&quot; href=&quot;/&quot;&gt;Actual CSS&lt;/a&gt;
 
     &lt;nav aria-label=&quot;Main navigation&quot;&gt;
-      &lt;ul class=&quot;nav-list cluster&quot;&gt;
+      &lt;ul class=&quot;cluster&quot;&gt;
         &lt;li&gt;&lt;a href=&quot;/docs&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href=&quot;/components&quot;&gt;Components&lt;/a&gt;&lt;/li&gt;
         &lt;li&gt;&lt;a href=&quot;/examples&quot;&gt;Examples&lt;/a&gt;&lt;/li&gt;
@@ -348,8 +345,7 @@ nav ul {
 <li><code>.center</code> constrains the content.</li>
 <li><code>.cluster</code> arranges the brand and navigation.</li>
 <li><code>nav</code> provides navigation semantics.</li>
-<li><code>.nav-list</code> normalizes the navigation list.</li>
-<li>the inner <code>.cluster</code> arranges navigation items horizontally.</li>
+<li>the inner <code>.cluster</code> removes the list chrome and arranges the links horizontally.</li>
 </ul>
 <p>A project may add <code>.site-header</code> when it needs a visual shell.</p>
 <pre><code class="language-css">.site-header {
@@ -482,29 +478,10 @@ nav ul {
   font-weight: 600;
 }
 </code></pre>
-<h3 id="optional-navigation-link-styling">Optional Navigation Link Styling</h3>
-<p><code>.nav-list</code> can stay purely structural. If the framework wants navigation links to have a default hit area and active state, this can be added as a lightweight visual pattern.</p>
-<pre><code class="language-css">.nav-list a {
-  display: flex;
-  align-items: center;
-  gap: var(--space-20);
-  min-block-size: 2rem;
-  padding-inline: var(--space-20);
-  border-radius: var(--radius-sm);
-  color: inherit;
-  text-decoration: none;
-}
-
-.nav-list a:hover {
-  background: var(--surface-subtle);
-}
-
-.nav-list a[aria-current=&quot;page&quot;] {
-  background: var(--surface-subtle);
-  font-weight: 600;
-}
-</code></pre>
-<p>Keep this separate from layout primitives. <code>.cluster</code> and <code>.stack</code> should not style links.</p>
+<h3 id="link-styling">Link Styling</h3>
+<p><code>.nav-link</code> gives a link its hit area, hover fill and <code>aria-current</code> state, in a
+<code>.cluster</code> row or a <code>.nav-list</code> (see <a href="../components/navbar.html">Navbar</a>). Set
+<code>--gap</code> on a <code>.nav-list</code> to tighten its rows.</p>
 
 </div>
 
@@ -527,7 +504,7 @@ nav ul {
         <li><a class="nav-link" href="#header-navigation" data-docs-toc-item data-level="3">Header Navigation</a></li>
         <li><a class="nav-link" href="#app-shell-with-sidebar" data-docs-toc-item data-level="3">App Shell With Sidebar</a></li>
         <li><a class="nav-link" href="#side-navigation" data-docs-toc-item data-level="3">Side Navigation</a></li>
-        <li><a class="nav-link" href="#optional-navigation-link-styling" data-docs-toc-item data-level="3">Optional Navigation Link Styling</a></li>
+        <li><a class="nav-link" href="#link-styling" data-docs-toc-item data-level="3">Link Styling</a></li>
           </ul>
         </nav>
       </aside>

@@ -17,14 +17,14 @@ Base utilities:
 
 Extra utilities:
 
-| Class                            | Description                                               |
-| -------------------------------- | --------------------------------------------------------- |
-| `.justify-content-start`         | `justify-content: flex-start` and `--cluster-justify`.    |
-| `.justify-content-center`        | `justify-content: center` and `--cluster-justify`.        |
-| `.justify-content-end`           | `justify-content: flex-end` and `--cluster-justify`.      |
-| `.justify-content-space-between` | `justify-content: space-between` and `--cluster-justify`. |
-| `.flex-wrap`                     | `flex-wrap: wrap` on any flex container.                  |
-| `.flex-nowrap`                   | `flex-wrap: nowrap` on any flex container.                |
+| Class                            | Description                                             |
+| -------------------------------- | ------------------------------------------------------- |
+| `.justify-content-start`         | `justify-content: flex-start` on the element itself.    |
+| `.justify-content-center`        | `justify-content: center` on the element itself.        |
+| `.justify-content-end`           | `justify-content: flex-end` on the element itself.      |
+| `.justify-content-space-between` | `justify-content: space-between` on the element itself. |
+| `.flex-wrap`                     | `flex-wrap: wrap` on any flex container.                |
+| `.flex-nowrap`                   | `flex-wrap: nowrap` on any flex container.              |
 
 ## Grow
 
@@ -82,8 +82,9 @@ flex containers:
 
 - `.items-start` / `.items-center` / `.items-end` / `.items-baseline` set `--items-align`, read by `.alert` and `.card`.
 - `.text-start` / `.text-center` / `.text-end` set `--text-align`, read by `.table` cells.
-- `.justify-content-*` (utilities/extra) set `--cluster-justify`, read by `.cluster`.
-- `.flex-wrap` / `.flex-nowrap` (utilities/extra) set `flex-wrap` directly on any flex container.
+
+`.justify-content-*` and `.flex-wrap` / `.flex-nowrap` (utilities/extra) set the property
+directly, so they never reach a nested `.cluster`.
 
 Set the property directly when you need a value the helpers do not ship.
 
@@ -119,4 +120,3 @@ Always mark it `aria-hidden="true"` — it is a visual separator, not content.
 
 - `--items-align` — cross-axis alignment, set by the `.items-*` helpers.
 - `--text-align` — text alignment, set by `.text-start` / `.text-center` / `.text-end`.
-- `--cluster-justify` — main-axis distribution, set by the optional `.justify-content-*` helpers and read by `.cluster`.
