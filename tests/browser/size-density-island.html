@@ -1,0 +1,38 @@
+<!doctype html>
+<!-- Nested theme islands: the root keeps the core theme, each island carries
+     its own control steps and must read them without dropping the density it
+     sits in. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Theme island size and density fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <link rel="stylesheet" href="../../src/css/themes/bootstrap-v6.css">
+  <style>body { padding: 1rem; }</style>
+</head>
+<body>
+  <section data-theme="bootstrap-v6">
+    <button class="btn" type="button" data-case="island">Default</button>
+    <button class="btn sm" type="button" data-case="island-sm">Small</button>
+  </section>
+  <div class="compact">
+    <section data-theme="bootstrap-v6">
+      <button class="btn" type="button" data-case="compact-island">Compact</button>
+    </section>
+  </div>
+  <div class="spacious">
+    <section data-theme="bootstrap-v6">
+      <button class="btn" type="button" data-case="spacious-island">Spacious</button>
+    </section>
+  </div>
+  <section data-theme="bootstrap-v6" style="--control-size-md: 3rem">
+    <button class="btn" type="button" data-case="island-size">Tall step</button>
+  </section>
+  <div class="compact">
+    <section data-theme="bootstrap-v6" style="--control-size-sm: 1.75rem">
+      <button class="btn" type="button" data-case="compact-island-size">Short step</button>
+    </section>
+  </div>
+</body>
+</html>
