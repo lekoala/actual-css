@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-10-02
 ### Breaking changes
 
 - `.actions` is removed; compose a `<menu>` (or `<ul>`) with `cluster` for a row, or `stack list-reset` for a vertical list.
