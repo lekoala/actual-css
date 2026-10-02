@@ -360,8 +360,8 @@ to keep that pair ≥ 4.5:1 in both color schemes, enforced by
 presets and custom <code>[data-theme]</code> islands keep the <code>--soft-fg-mix</code> derivation
 unless they declare the hooks themselves (the framework resets them outside
 the default boundary). A theme that overrides the soft palette is responsible
-for preserving sufficient text contrast; <code>bun run report:theme-contrast</code>
-reports every preset's resting and hovered pairs without failing the build.</p>
+for preserving sufficient text contrast; <code>bunx actual-css contrast --theme FILE</code>
+measures its resting and hovered pairs.</p>
 <p>A theme whose primary should read more muted than its statuses sets only
 <code>--primary-soft-fg</code>, and every soft <code>.primary</code> foreground follows it. Without a
 <code>--*-soft-fg</code> the recipe resolves byte-identically to the old <code>--soft-fg-mix</code>
@@ -604,10 +604,10 @@ undo that.</p>
 </ul>
 <h2 id="theme-contract">Theme contract</h2>
 <p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as <code>ocean</code>, <code>square</code>, <code>cyberpunk</code>, and <code>brutalist</code>.</p>
-<p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick <code>--focus</code> as a mid-tone that holds 3:1 against both <code>--surface</code> and <code>--surface-solid</code> in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. <code>bun run report:theme-contrast</code> measures both pairs.</p>
-<p>When overriding an intent color, review its paired <code>--*-fg</code> and <code>--*-soft-fg</code>. A theme that declares no hook falls back to the <code>--soft-fg-mix</code> derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. <code>bun run report:theme-contrast</code> prints the resting and hovered soft pair for every intent of every island, which is how a theme finds the roles that need a hook or a lower <code>--soft-fg-mix</code>.</p>
+<p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick <code>--focus</code> as a mid-tone that holds 3:1 against both <code>--surface</code> and <code>--surface-solid</code> in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. <code>bunx actual-css contrast --theme FILE</code> measures both pairs, and exits 1 when a pair misses.</p>
+<p>When overriding an intent color, review its paired <code>--*-fg</code> and <code>--*-soft-fg</code>. A theme that declares no hook falls back to the <code>--soft-fg-mix</code> derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. <code>actual-css contrast</code> prints the resting and hovered soft pair for every intent in every scheme the theme declares, which is how a theme finds the roles that need a hook or a lower <code>--soft-fg-mix</code>.</p>
 <p>The default palette's hooks apply to <code>:root</code> and to the <code>light</code>/<code>dark</code> boundaries only. Any other <code>data-theme</code> value resets them to the derivation, whether the attribute sits on <code>&lt;html&gt;</code> or on a nested island.</p>
-<p>Contrast is measured between opaque colors. A translucent <code>--surface</code> has no ratio until it is composited over its backdrop, so <code>report:theme-contrast</code> refuses such a theme, and <code>.soft</code> mixes over it come out more opaque and more saturated than the surface. A translucent theme owns both: it measures against its real backdrop and replaces any recipe that does not hold there.</p>
+<p>Contrast is measured between opaque colors. A translucent <code>--surface</code> has no ratio until it is composited over its backdrop, so <code>actual-css contrast</code> reports its pairs as n/a, and <code>.soft</code> mixes over it come out more opaque and more saturated than the surface. A translucent theme owns both: it measures against its real backdrop and replaces any recipe that does not hold there.</p>
 <p>Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.</p>
 <p>A full theme can override:</p>
 <ul>
@@ -643,7 +643,7 @@ undo that.</p>
   --text-muted: hsl(260 10% 42%);
   --text-subtle: hsl(260 8% 56%);
   --border: hsl(260 24% 84%);
-  --focus: var(--primary);
+  --focus: hsl(260 60% 62%);
   --hover-overlay: hsl(260 30% 10% / 0.04);
   --shadow-color: hsl(260 30% 10%);
   --soft-bg-mix: 84%;
