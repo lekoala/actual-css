@@ -229,6 +229,8 @@ packTest("packed tarball ships every critical public export", async () => {
       "package/src/css/actual.full.css", // measured by `actual-css design`
       "package/src/tooling/design-export.js", // actual-css design
       "package/src/tooling/penpot-plugin/plugin.js", // copied next to the export
+      "package/src/tooling/theme-contrast.js", // actual-css contrast
+      "package/src/tooling/color.js", // contrast math, shared with the reports
       "package/reserved-classes.json", // actual-css/reserved-classes.json
     ];
     for (const entry of critical) {
