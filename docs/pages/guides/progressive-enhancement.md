@@ -63,11 +63,30 @@ handle, and cleanup happens per element when an element leaves the DOM.
 
 ## The full runtime
 
-Loading `dist/actual.full.js` as a plain `<script>` (no `type="module"`, no
-bundler, no `import`) gets the full runtime. Static HTML that needs to trigger
-something from its own inline `<script>` dispatches the module's public event
-instead of calling into a global — `actual:status` for the status bar, for
-example:
+Import `actual-css/js/full` to enable the full runtime:
+
+```js
+import "actual-css/js/full";
+```
+
+The same entrypoint exposes the public enhancement API from the same runtime
+instance, for adopters that extend the runtime they already run:
+
+```js
+import { applyEnhancement, enhance, registerEnhancement } from "actual-css/js/full";
+
+registerEnhancement("autosubmit", (form) => {
+  // ...
+});
+```
+
+For anything beyond that extension API, keep using `actual-css/js/*`.
+
+The same entrypoint produces the `dist/actual.full.js` standalone for a
+classic `<script>`, where no global API is exposed. Static HTML that needs to
+trigger something from its own inline `<script>` dispatches the module's
+public event instead of calling into a global — `actual:status` for the
+status bar, for example:
 
 ```html
 <script src="actual.full.js"></script>

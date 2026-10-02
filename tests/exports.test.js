@@ -12,7 +12,7 @@ import { publicJsExports } from "./helpers/package-exports.js";
 // default are internals slated for triage before 1.0.
 const JS_EXPORT_INVENTORY = {
   "./js": [],
-  "./js/full": [],
+  "./js/full": ["applyEnhancement", "enhance", "registerEnhancement"],
   "./js/dismiss": [],
   "./js/filter": [],
   "./js/flyout": [],
