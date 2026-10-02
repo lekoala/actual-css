@@ -131,3 +131,42 @@ it("bare cards own their flow while layout primitives own composed layout", asyn
     { artifactName: "card-composition" },
   );
 });
+
+// Trap: components/ loads after layout/ and forms/, so a class-weight slot
+// rule silently beat `header.media`, `footer.cluster`, `.form-actions` and the
+// `.justify-content-*` utilities on source order alone.
+it("slot rows are defaults that a primitive, role or utility on the slot replaces", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        const style = (selector) => getComputedStyle(document.querySelector(selector));
+        const composed = document.querySelector("#slot-composed");
+        const pad = parseFloat(getComputedStyle(composed).paddingBottom);
+        const footer = composed.querySelector(":scope > footer");
+        return {
+          defaultHeader: [style("#slot-default > header").display, style("#slot-default > header").justifyContent],
+          defaultFooter: style("#slot-default > footer").justifyContent,
+          mediaHeader: style("#slot-composed > header").display,
+          endFooter: style("#slot-composed > footer").justifyContent,
+          footerAnchored:
+            Math.abs(composed.getBoundingClientRect().bottom - pad - footer.getBoundingClientRect().bottom) <= 1,
+          clusterHeader: style("#slot-actions > header").justifyContent,
+          actionsFooter: style("#slot-actions > footer").justifyContent,
+          inheritedGap: style("#rhythm-inherited").rowGap,
+        };
+      })()`);
+
+      expect(result.defaultHeader).toEqual(["flex", "space-between"]);
+      expect(result.defaultFooter).toBe("space-between");
+      expect(result.mediaHeader).toBe("grid");
+      expect(result.endFooter).toBe("flex-end");
+      expect(result.footerAnchored).toBe(true);
+      expect(result.clusterHeader).toBe("flex-start");
+      expect(result.actionsFooter).toBe("center");
+      // .compact on an ancestor reaches the bare card's child rhythm.
+      expect(result.inheritedGap).toBe("8px");
+    },
+    { artifactName: "card-slots" },
+  );
+});

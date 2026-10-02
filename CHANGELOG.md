@@ -5,12 +5,14 @@
 ### Breaking changes
 
 - `.actions` is removed; compose a `<menu>` (or `<ul>`) with `cluster` for a row, or `stack list-reset` for a vertical list.
-- `.navbar-nav` is removed; the horizontal link list is a `.cluster`, and `.navbar > :where(.cluster)` supplies the tighter navbar gap.
-- `.dialog-confirmation` is removed; compose `.media` with `.dialog-icon`, then `<footer class="bleed background-subtle justify-content-space-between">` (recipe in `docs/pages/components/dialog.md`).
+- `.navbar-nav` is removed; the horizontal link list is a `.cluster` with the framework `--gap`.
+- `.dialog-confirmation` is removed; compose `.media` with `.dialog-icon`, then `<footer class="bleed background-subtle cluster justify-content-space-between">` (recipe in `docs/pages/components/dialog.md`).
 - The `dialog.modal` body `<footer>` has no layout of its own; compose its row as `<footer class="cluster justify-content-end">`, as in the drawer.
 - `--modal-header-bg` is removed; put a `.background-*` utility on the `dialog.modal > header` band.
 - `.form-actions` no longer lays out its row; write `class="cluster form-actions"` (`--form-actions-justify` and `--form-actions-align` still apply).
 - `.form-actions` drops its top margin and `--form-actions-margin-block-start`; space it from the fields with `.stack` on the form.
+- `.justify-content-*` no longer sets `--cluster-justify`, so it aligns only its own element, never a nested `.cluster`.
+- `.card` header and footer rows drop to zero specificity: `.media`, `.cluster`, `.form-actions` and `.justify-content-*` on a slot now take over its layout.
 
 ### Added
 
@@ -22,6 +24,8 @@
 - `.cluster` removes the native list chrome (`margin`, `padding`, `list-style`) from a `ul`, `ol` or `menu` it is applied to; the element stays a list in the DOM.
 - A heading that is the first child beside a leading `.dialog-icon` in a `.media` row centers on the icon anywhere, not only in a dialog.
 - A `dialog.modal` or `.drawer` header gives back its corner-close room when the dialog contains no `.close`; without `:has()` the room stays.
+- `--card-gap` defaults to `--gap`, so `.compact` and `.spacious` (local or inherited) set the rhythm between a card's children.
+- `.topbar` lays out its default row at zero specificity, so `topbar cluster` hands the row to `.cluster`.
 
 ### Fixed
 

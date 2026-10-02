@@ -116,6 +116,20 @@ test("nav-list is self-laid out with grid gap", () => {
   expect(css).toMatch(/\.nav-list\s+\.nav-link\s*\{[^}]*inline-size:\s*100%/);
 });
 
+test("justify-content utilities write the property, never an inherited relay", () => {
+  // A --cluster-justify relay inherits into every nested .cluster.
+  expect(readCss("src/css/utilities/extra.css")).not.toContain("--cluster-justify");
+});
+
+test("topbar keeps its default row at zero specificity", () => {
+  // .topbar and the layout primitives share layout/; at class weight their
+  // file order alone would decide `topbar cluster`.
+  const css = readCss("src/css/layout/topbar.css");
+
+  expect(css).toMatch(/:where\(\.topbar\) \{[^}]*display: flex;/);
+  expect(css).not.toMatch(/^\.topbar \{[^}]*display:/m);
+});
+
 test("picture bleed clips children", () => {
   const css = readCss("src/css/components/bleed.css");
 
