@@ -24,12 +24,13 @@ function usage() {
     "",
     "design: export a theme's tokens for Figma and Penpot, plus Button, Input, Badge,",
     "Alert and Card measured in headless Chrome and a Penpot plugin that builds them.",
-    "Needs Bun (bunx actual-css design ...).",
+    "Needs Bun (bunx --bun actual-css design ...).",
     "",
     "contrast: measure the pairs a theme tunes by hand in headless Chrome, in every",
     "scheme it declares: soft ink on its resting and hovered fill, the focus line on",
     "--surface and --surface-solid, the invalid-field focus line, and the inverse",
-    "text. Exits 1 when a pair misses its threshold. Needs Bun.",
+    "text. Exits 1 when a pair misses its threshold. Needs Bun (bunx --bun actual-css",
+    "contrast ...).",
   ].join("\n");
 }
 
@@ -128,11 +129,13 @@ function parseThemeArgs(command, rest) {
 }
 
 /* Checked before the tooling import: under Node those modules do not even
-   parse (`await using`), and `bundle` must stay usable there. */
+   parse (`await using`), and `bundle` must stay usable there. The shebang is
+   Node for that reason, so plain `bunx` honors it and lands here: --bun is
+   what makes Bun run the script. */
 function requireBun(command) {
   if (typeof Bun === "undefined") {
     throw new Error(
-      `actual-css ${command} needs Bun: it reads the theme in headless Chrome through Bun.WebView. Run it with bunx.`,
+      `actual-css ${command} needs Bun: it reads the theme in headless Chrome through Bun.WebView. Run it with bunx --bun actual-css ${command} ...`,
     );
   }
 }

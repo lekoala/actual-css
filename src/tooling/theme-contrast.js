@@ -163,8 +163,9 @@ export function formatContrast(rows) {
   lines.push(`${"theme".padEnd(width)}  scheme  intent       rest     hover`);
   for (const row of rows) {
     for (const { intent, rest, hover } of row.soft) {
-      // The resting fill carries extra margin; the hovered one is the gate.
-      const cells = [cell(rest, 0), cell(hover, 4.5)];
+      // Both states gate: the hovered fill is usually the closer one, but a
+      // theme can invert that, and a 1:1 resting pair once passed silently.
+      const cells = [cell(rest, 4.5), cell(hover, 4.5)];
       lines.push(
         `${head(row)}  ${intent.padEnd(9)} ${cells[0].text.padStart(8)}  ${cells[1].text.padStart(8)}${flag(cells, 4.5)}`,
       );
