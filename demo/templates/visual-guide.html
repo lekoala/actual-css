@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Visual guide - Actual CSS</title>
-  <meta name="description" content="Illustrated figures explaining the spacing scale, the layout primitives, density contexts and local sizes.">
+  <meta name="description" content="Illustrated figures explaining the spacing scale, the layout primitives, rhythm, density contexts and local sizes.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../styles/demo.css">
@@ -303,9 +303,9 @@
       <p class="overline">Actual CSS</p>
       <h1>Visual guide</h1>
       <p class="lead muted measure">
-        Seventeen figures on the three things everything else is built from: the
-        spacing scale, the layout primitives, and the difference between a
-        density context and a local size. Every bar, gap and control height
+        Twenty figures on the three things everything else is built from: the
+        spacing scale, the layout primitives, and the difference between
+        rhythm, a density context and a local size. Every bar, gap and control height
         below is drawn from a live token, so switching the theme redraws the
         diagrams rather than invalidating them.
       </p>
@@ -609,12 +609,48 @@
           </div>
         </div>
 
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage">
+            <span class="overline">A list stays a list</span>
+            <ul class="cluster" aria-label="Sections">
+              <li><a class="btn neutral ghost" href="#">Home</a></li>
+              <li><a class="btn neutral ghost" href="#">Docs</a></li>
+              <li><a class="btn neutral ghost" href="#">Blog</a></li>
+            </ul>
+          </div>
+
+          <div class="card subtle vg-stage">
+            <span class="overline">One left, one right</span>
+            <div class="cluster justify-content-space-between">
+              <strong>Deployments</strong>
+              <button class="btn primary sm" type="button">New</button>
+            </div>
+          </div>
+
+          <div class="card subtle vg-stage">
+            <span class="overline">Mixed sizes, one baseline</span>
+            <p class="cluster items-baseline">
+              <strong style="font-size: 2rem;">$29</strong>
+              <span class="muted">/ month</span>
+            </p>
+          </div>
+        </div>
+
         <div class="stack muted measure vg-legend">
           <p>
-            Hooks: <code>--cluster-align</code>, <code>--cluster-justify</code>,
-            <code>--cluster-wrap</code>. A header with a title on one side and
-            actions on the other is a cluster with
-            <code>--cluster-justify: space-between</code>, not a new primitive.
+            The cluster is <em>the</em> row: actions, tags, a row of links. On a
+            <code>ul</code>, <code>ol</code> or <code>menu</code> it removes the
+            markers and the indent and keeps the list for assistive technology,
+            so no separate "actions" or "nav" class is needed.
+          </p>
+          <p>
+            Alignment is a utility on that one row —
+            <code>.justify-content-space-between</code> for a split,
+            <code>.items-baseline</code> when a price and its period should share
+            a text line rather than a box center. The hooks
+            (<code>--cluster-justify</code>, <code>--cluster-align</code>,
+            <code>--cluster-wrap</code>) are inherited: set one when every
+            cluster inside should follow, not to nudge a single row.
           </p>
         </div>
       </figure>
@@ -852,26 +888,160 @@
         </div>
       </figure>
 
+      <figure class="card raised vg-figure">
+        <figcaption class="stack">
+          <span class="overline pill primary vg-tag">Figure&nbsp;</span>
+          <h3>Components hand their rows to primitives</h3>
+          <p class="muted measure">
+            A component owns its anatomy — surface, padding, where a slot sits.
+            The row inside a slot is geometry, so a primitive on the slot lays
+            it out.
+          </p>
+        </figcaption>
+
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage">
+            <span class="overline">Card slots</span>
+            <article class="card">
+              <header class="media">
+                <span class="avatar"><span>AR</span></span>
+                <div class="stack gap-none">
+                  <strong>Avery Rhodes</strong>
+                  <span class="muted">Release manager</span>
+                </div>
+              </header>
+              <p>Owns the Thursday release train.</p>
+              <footer class="cluster justify-content-end">
+                <button class="btn neutral ghost" type="button">Dismiss</button>
+                <button class="btn primary" type="button">Follow</button>
+              </footer>
+            </article>
+          </div>
+
+          <div class="card subtle vg-stage">
+            <span class="overline">A role on a cluster</span>
+            <form class="stack">
+              <label class="field">
+                <span class="field-label">Project name</span>
+                <input class="input" value="Atlas">
+              </label>
+              <div class="cluster form-actions">
+                <button class="btn primary" type="button">Save</button>
+                <button class="btn neutral outline" type="reset">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="prose vg-code">
+          <pre><code>&lt;footer class="cluster justify-content-end"&gt;…&lt;/footer&gt;
+&lt;div class="cluster form-actions"&gt;…&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="stack muted measure vg-legend">
+          <p>
+            The card keeps its padding and pins its footer to the bottom; the
+            header becomes a <code>.media</code> row and the footer a
+            <code>.cluster</code> pushed to the end. A bare
+            <code>&lt;header&gt;</code> or <code>&lt;footer&gt;</code> still
+            gets a split row by default — it yields to whatever you put on it.
+          </p>
+          <p>
+            <code>.form-actions</code> is a role, not a layout: the cluster owns
+            the row, the role adds the form's alignment policy and its sticky
+            variant. The distance to the fields comes from the form's
+            <code>.stack</code>, never from a margin on the row.
+          </p>
+        </div>
+      </figure>
+
       <!-- ================= Chapter 3 ================= -->
       <section class="stack vg-chapter" id="density-and-size">
         <p class="overline">Chapter three</p>
-        <h2>Density and size</h2>
+        <h2>Rhythm, density and size</h2>
         <p class="muted measure">
-          Two mechanisms that look alike from the outside and behave nothing
-          alike. Density is an inherited context that changes how much room
-          things get. Size is a local role that changes what a single component
-          <em>is</em>.
+          Three mechanisms that look alike from the outside and behave nothing
+          alike. Rhythm is how close things sit. Density is how much room a
+          whole region gives everything in it. Size is a local role that changes
+          what a single component <em>is</em>.
         </p>
       </section>
 
       <figure class="card raised vg-figure">
         <figcaption class="stack">
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
+          <h3>Rhythm is the gap alone</h3>
+          <p class="muted measure">
+            The same fragment in all three columns, one class on the wrapper.
+            The buttons and the field never move; only the distance between
+            them does.
+          </p>
+        </figcaption>
+
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage">
+            <span class="overline">.tight</span>
+            <div class="tight stack">
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <button class="btn neutral outline" type="button">Cancel</button>
+              </div>
+              <input class="input" value="Project name">
+            </div>
+          </div>
+
+          <div class="card subtle vg-stage">
+            <span class="overline">default</span>
+            <div class="stack">
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <button class="btn neutral outline" type="button">Cancel</button>
+              </div>
+              <input class="input" value="Project name">
+            </div>
+          </div>
+
+          <div class="card subtle vg-stage">
+            <span class="overline">.loose</span>
+            <div class="loose stack">
+              <div class="cluster">
+                <button class="btn primary" type="button">Save</button>
+                <button class="btn neutral outline" type="button">Cancel</button>
+              </div>
+              <input class="input" value="Project name">
+            </div>
+          </div>
+        </div>
+
+        <div class="prose vg-code">
+          <pre><code>&lt;div class="tight stack"&gt;
+  &lt;div class="cluster"&gt;
+    &lt;button class="btn primary"&gt;Save&lt;/button&gt;
+    &lt;button class="btn neutral outline"&gt;Cancel&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;input class="input" value="Project name"&gt;
+&lt;/div&gt;</code></pre>
+        </div>
+
+        <div class="stack muted measure vg-legend">
+          <p>
+            <code>.tight</code> and <code>.loose</code> set <code>--gap</code> and
+            nothing else. The token is inherited, so the nested cluster closes
+            up too — the whole fragment keeps one rhythm. Put one rhythm class
+            on an element; a nested one wins, exactly like density.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised vg-figure">
+        <figcaption class="stack">
+          <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>Density is a context</h3>
           <p class="muted measure">
-            Byte-for-byte the same fragment in all three columns. The only
-            difference is one class on the wrapper — nothing is repeated on the
-            children.
+            Byte-for-byte the same fragment again, and still one class on the
+            wrapper. This time the controls answer as well: the gaps follow the
+            same two steps, and the buttons and the field change height and
+            inner padding with them.
           </p>
         </figcaption>
 
@@ -926,7 +1096,7 @@
           <span class="overline pill primary vg-tag">Figure&nbsp;</span>
           <h3>What the context actually sets</h3>
           <p class="muted measure">
-            Three tokens, and that is the whole mechanism. Components read
+            Four tokens, and that is the whole mechanism. Components read
             whichever of them makes sense for what they are.
           </p>
         </figcaption>
@@ -961,6 +1131,12 @@
                   <td>2.375rem</td>
                   <td>2.75rem</td>
                 </tr>
+                <tr>
+                  <th scope="row"><code>--control-pad-x</code></th>
+                  <td><code>--font-size-xs</code></td>
+                  <td><code>--font-size-md</code></td>
+                  <td><code>--font-size-lg</code></td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -986,10 +1162,63 @@
 
         <div class="stack muted measure vg-legend">
           <p>
-            Controls consume <code>--control-size</code>; the spacing helpers and
+            Controls consume <code>--control-size</code> and
+            <code>--control-pad-x</code>, so a compact button is shorter
+            <em>and</em> narrower; the spacing helpers and
             <code>.choice-card</code> consume <code>--density-space</code>; layout
-            primitives consume <code>--gap</code>. Nothing consumes a fourth
+            primitives consume <code>--gap</code>. Nothing consumes a fifth
             thing, which is why density stays predictable.
+          </p>
+          <p>
+            <code>.tight</code> and <code>.loose</code> write the first row of
+            this table and leave the others alone. That is the entire
+            difference between rhythm and density.
+          </p>
+        </div>
+      </figure>
+
+      <figure class="card raised vg-figure">
+        <figcaption class="stack">
+          <span class="overline pill primary vg-tag">Figure&nbsp;</span>
+          <h3>Closer, or denser?</h3>
+          <p class="muted measure">
+            Two toolbars that both ask for less space. The left one wants its
+            items closer together. The right one is a dense working region.
+          </p>
+        </figcaption>
+
+        <div class="grid vg-columns">
+          <div class="card subtle vg-stage">
+            <span class="overline">.cluster.tight — closer</span>
+            <div class="cluster tight">
+              <button class="btn neutral outline" type="button">Filter</button>
+              <button class="btn neutral outline" type="button">Sort</button>
+              <input class="input fit" value="Search">
+            </div>
+          </div>
+
+          <div class="card subtle vg-stage">
+            <span class="overline">.cluster.compact — denser</span>
+            <div class="cluster compact">
+              <button class="btn neutral outline" type="button">Filter</button>
+              <button class="btn neutral outline" type="button">Sort</button>
+              <input class="input fit" value="Search">
+            </div>
+          </div>
+        </div>
+
+        <div class="stack muted measure vg-legend">
+          <p>
+            Both rows sit on the same gap. Only the right one also shrinks its
+            controls, because density is a statement about the whole region,
+            not about the space between its items.
+          </p>
+          <p>
+            Ask what the design changed. Items closer together, everything else
+            as drawn: <code>.tight</code>. A denser workspace — toolbar, table
+            filters, an admin side panel: <code>.compact</code>. Reaching for
+            <code>.compact</code> to fix a gap is how buttons end up smaller
+            than anyone asked for.
           </p>
         </div>
       </figure>
@@ -1000,7 +1229,7 @@
           <h3>Density moves geometry. Size moves geometry <em>and</em> type.</h3>
           <p class="muted measure">
             This is the whole distinction. In the top row the buttons change
-            height and the label stays put. In the bottom row the label changes
+            height and padding and the label stays put. In the bottom row the label changes
             with them.
           </p>
         </figcaption>
@@ -1078,7 +1307,8 @@
           </p>
           <p>
             <strong>Rhythm only</strong> — content rows such as
-            <code>.list</code>: the size holds, the inner gap follows.
+            <code>.list</code>: the size holds, the inner gap follows. For
+            these, <code>.compact</code> and <code>.tight</code> look the same.
           </p>
           <p>
             <strong>No effect</strong> — badge, alert, card, dialog, table,
@@ -1163,9 +1393,11 @@
             and 19 all mean "a bit of space", and none of them will ever line up
             with anything else on the page. The right column has two, and the
             fact that the third gap is the larger one is the whole message.
+            Those two steps have names: <code>.tight</code> and
+            <code>.loose</code>.
           </p>
           <p>
-            Tune a dimension where it is consumed —
+            Tune a dimension where it is consumed — a rhythm class or
             <code>--gap</code> on the layout instance,
             <code>--density-space</code> on the spacing helper — rather than
             writing a raw value or adding one more family of utility classes for

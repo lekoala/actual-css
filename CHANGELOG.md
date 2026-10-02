@@ -25,6 +25,7 @@
 - `.cluster` removes the native list chrome (`margin`, `padding`, `list-style`) from a `ul`, `ol` or `menu` it is applied to; the element stays a list in the DOM.
 - A heading that is the first child beside a leading `.dialog-icon` in a `.media` row centers on the icon anywhere, not only in a dialog.
 - A `dialog.modal` or `.drawer` header gives back its corner-close room when the dialog contains no `.close`; without `:has()` the room stays.
+- `.compact` and `.spacious` set `--control-pad-x` (`--font-size-xs` / `--font-size-lg`), so density controls get narrower or wider, not only shorter or taller.
 - `--card-gap` defaults to `--gap`, so `.compact` and `.spacious` (local or inherited) set the rhythm between a card's children.
 - `.topbar` lays out its default row at zero specificity, so `topbar cluster` hands the row to `.cluster`.
 
