@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Examples — Actual CSS</title>
   <meta name="description" content="Real pages built with Actual CSS to see the primitives, components, and patterns composed the way they are meant to be used.">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#52396F">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="../../scripts/docs/assets/docs.css">
@@ -34,8 +36,16 @@
     <header class="docs-header">
       <div class="center cluster docs-header-inner">
         <a class="navbar-brand" href="../index.html">
-          <span class="docs-brand-mark" aria-hidden="true"></span>
-          Actual CSS
+          <!-- Mark inlined from docs/brand/mark.svg (C2PA-free copy of the
+               supplied master). Fills follow the docs theme via --text/--primary,
+               so the mark stays legible on every preset instead of tracking
+               only the OS scheme. -->
+          <svg class="docs-brand-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><title>Actual</title>
+            <style>.ring { fill: var(--text, #52396F); } .bar { fill: var(--primary, #9B7BCB); } }</style>
+            <path class="ring" fill-rule="evenodd" d="M124.7,451.9 L475.4,451.9 L300.1,71.9ZM406.6,407.9 L193.5,407.9 L300.1,177.0Z"/>
+            <path class="bar" d="M36.6,451.9 L85.1,451.9 L241.7,112.6 L217.4,60.1Z"/>
+          </svg>
+          <span class="docs-brand-text">Actual CSS</span>
         </a>
 
         <div class="cluster">

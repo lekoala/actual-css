@@ -178,7 +178,12 @@ select {
      pick one. A theme that wrote --control-pad-x itself would be overwritten
      by every size and density boundary — bootstrap-v6's 12px became a wider
      13px inside .compact. The selection is rebound at each boundary because a
-     var() inside a custom property resolves where it is declared. */
+     var() inside a custom property resolves where it is declared.
+
+     The boundaries also write --control-step-sm/-md/-lg (internal): which step
+     is selected, as 0/1 weights that mean the same under every theme. A
+     [data-theme] island rebuilds the selection from them below, so it reads its
+     own steps without resetting the density it sits in. */
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
   --control-size-lg: 2.75rem;
@@ -187,6 +192,9 @@ select {
   --control-pad-x-md: var(--font-size-md);
   --control-pad-x-lg: var(--font-size-lg);
   --control-pad-x: var(--control-pad-x-md);
+  --control-step-sm: 0;
+  --control-step-md: 1;
+  --control-step-lg: 0;
   --control-font-size: var(--font-size-md);
   --choice-control-size: 1.125em;
   --disabled-opacity: 0.65;
@@ -209,6 +217,24 @@ select {
 
   /* Status dot ring — cuts the dot out of what it overlaps. */
   --indicator-ring: var(--surface-opaque);
+}
+
+/* Control selection on a nested theme island: the island's own steps, picked
+   by the step weights the island inherits from size and density. A plain
+   var(--control-pad-x-md) here would reset a .compact region around the
+   island to the default step. Zero specificity: a size or density class on
+   the same element keeps the last word. */
+:where([data-theme]) {
+  --control-size: calc(
+    (var(--control-size-sm) * var(--control-step-sm)) +
+    (var(--control-size-md) * var(--control-step-md)) +
+    (var(--control-size-lg) * var(--control-step-lg))
+  );
+  --control-pad-x: calc(
+    (var(--control-pad-x-sm) * var(--control-step-sm)) +
+    (var(--control-pad-x-md) * var(--control-step-md)) +
+    (var(--control-pad-x-lg) * var(--control-step-lg))
+  );
 }
 
 :root {
@@ -730,11 +756,17 @@ small {
   --ui-border: var(--border);
 }
 
+/* Each boundary selects a control step twice: the values, resolved here, and
+   the 0/1 step weights a nested [data-theme] island rebuilds them from
+   (tokens.css). */
 .compact {
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
   --control-pad-x: var(--control-pad-x-sm);
+  --control-step-sm: 1;
+  --control-step-md: 0;
+  --control-step-lg: 0;
 }
 
 .spacious {
@@ -742,6 +774,9 @@ small {
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
   --control-pad-x: var(--control-pad-x-lg);
+  --control-step-sm: 0;
+  --control-step-md: 0;
+  --control-step-lg: 1;
 }
 
 .tight {
@@ -779,6 +814,9 @@ small {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
   --control-pad-x: var(--control-pad-x-sm);
+  --control-step-sm: 1;
+  --control-step-md: 0;
+  --control-step-lg: 0;
 }
 
 :where(
@@ -803,6 +841,9 @@ small {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
   --control-pad-x: var(--control-pad-x-lg);
+  --control-step-sm: 0;
+  --control-step-md: 0;
+  --control-step-lg: 1;
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable

@@ -32,12 +32,15 @@ const CHROME = join(__dirname, "docs", "assets");
 const DIST = join(ROOT, "dist");
 const THEMES_SOURCE = join(ROOT, "demo", "assets", "actual-themes.min.css");
 const THEMES_BUNDLE = join(ASSETS, "actual-themes.min.css");
+const BRAND = join(ROOT, "docs", "brand");
+const BRAND_FILES = ["favicon.svg"];
 
 // The docs site previews the framework from its source locations: pages link
 // src/css/*.css (so CSS edits are visible without a compile step) and the dist
 // bundles the site depends on — both committed, so they resolve when the repo
 // is served as-is. assets/ holds the generated files the site must carry
-// itself: search-index.js and the theme palettes bundle. The site chrome
+// itself: search-index.js, the theme palettes bundle, and the brand files
+// (favicon) copied from docs/brand/. The site chrome
 // (docs.css, docs.js) is edited in scripts/docs/assets/ and referenced in
 // place, so site/ never stores a copy.
 //
@@ -199,6 +202,9 @@ export function buildDocs() {
   requireAssets();
   mkdirSync(ASSETS, { recursive: true });
   copyFileSync(THEMES_SOURCE, THEMES_BUNDLE);
+  for (const file of BRAND_FILES) {
+    copyFileSync(join(BRAND, file), join(ASSETS, file));
+  }
   writePages(navigation, rendered, themes);
   writeSearchIndex(navigation, rendered);
   writeHome(navigation, themes);
