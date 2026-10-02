@@ -16,11 +16,12 @@
 
 ### Added
 
+- `.tight` and `.loose` set the inherited `--gap` to `--space-20` / `--space-50` alone, without the padding, control size or font width of `.compact` / `.spacious`.
 - `.items-baseline` aligns children on their first text baseline and sets `--items-align`, completing the `.items-*` series.
 
 ### Changed
 
-- An action row composed from `.cluster` inherits the framework `--gap` (0.75rem); the removed `.actions` set 0.5rem. Use `.compact` for the tighter rhythm.
+- An action row composed from `.cluster` inherits the framework `--gap` (0.75rem); the removed `.actions` set 0.5rem. Use `.tight` for the tighter rhythm.
 - `.cluster` removes the native list chrome (`margin`, `padding`, `list-style`) from a `ul`, `ol` or `menu` it is applied to; the element stays a list in the DOM.
 - A heading that is the first child beside a leading `.dialog-icon` in a `.media` row centers on the icon anywhere, not only in a dialog.
 - A `dialog.modal` or `.drawer` header gives back its corner-close room when the dialog contains no `.close`; without `:has()` the room stays.
