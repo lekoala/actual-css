@@ -276,9 +276,28 @@ Local `.sm`/`.lg` sizes map `--control-size`, `--control-font-size`, and
 A theme sets the steps (`--control-size-*`, `--control-pad-x-*`); `.sm`/`.lg`
 and `.compact`/`.spacious` select one. `--control-size` and `--control-pad-x`
 are the selected values: override them on one instance, never in a theme,
-where every size and density boundary would overwrite them. A nested
-`data-theme` island may set its own steps: its controls pick them up and keep
-the size or density they sit in.
+where every size and density boundary would overwrite them.
+
+A `data-theme` island inherits the selected values, so an override set above it
+crosses it. A theme that changes the steps and is used as a nested island must
+re-select them in its own block, from the step weights that size and density
+classes set, so the island keeps the density around it:
+
+```css
+[data-theme="brand"] {
+  --control-pad-x-sm: 0.5rem;
+  --control-pad-x-md: 0.75rem;
+  --control-pad-x-lg: 1rem;
+  --control-pad-x: calc(
+    (var(--control-pad-x-sm) * var(--control-step-sm)) +
+    (var(--control-pad-x-md) * var(--control-step-md)) +
+    (var(--control-pad-x-lg) * var(--control-step-lg))
+  );
+}
+```
+
+Re-select only the token whose steps the theme changes: the same rule for
+`--control-size` would stop an inherited `--control-size` at the island.
 
 `--control-pad-x` is a length, not an `em`: every part of one control must see
 the same horizontal distance, and an `em` would change value on a descendant

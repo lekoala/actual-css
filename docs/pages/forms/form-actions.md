@@ -8,6 +8,10 @@
 policy for form actions and the sticky behaviour. The space before the row
 belongs to the parent layout: put `.stack` on the form.
 
+`.form-actions` refines `.cluster` with alignment rules of equal specificity,
+so it wins on import order. In a modular build, import `layout/cluster` before
+`forms/form-actions`; the family entries and the full bundle already do.
+
 ```html demo
 <form class="stack" novalidate>
   <label class="field">
