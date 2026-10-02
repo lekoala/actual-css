@@ -17,6 +17,9 @@
 ### Fixed
 
 - `actual-css contrast --theme FILE` and `actual-css design --theme FILE` accept a theme written on `:root` and measure its own values, not the default palette.
+- A default `.btn.outline` in a field `.join` takes `--border-control` like the field, not `--border`.
+- The scrolling body of a `dialog.modal.scrollable` and a `dialog.drawer` keeps the focus line of its first and last controls inside its clip.
+- `actual-css contrast` and `actual-css design` detect a theme written `[data-theme = "brand"]` or `[data-theme=brand]`, and ignore selectors quoted in comments.
 - `actual-css contrast` and `actual-css design` reject a `--name` the theme file does not declare as `[data-theme]`, instead of measuring the framework defaults.
 - A bare heading in a `dialog.modal > header` drops its block margins, so the band no longer grows and the title centers on the close.
 

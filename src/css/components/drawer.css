@@ -144,12 +144,14 @@
   );
 
   min-block-size: 0;
-  /* Keep focus paint inside the clip without moving the body off the fixed
-     header and footer edges. The reserve covers the thicker of the two
-     outside indicators: the :focus baseline (2 × border) and the component
-     line (--focus-ring-width, 3px in bootstrap-v6). */
-  margin-inline: calc(var(--drawer-focus-bleed) * -1);
-  padding-inline: var(--drawer-focus-bleed);
+  /* Keep focus paint inside the clip, on all four sides (overflow: auto clips
+     both axes), without moving the content. The reserve covers the thicker
+     of the two outside indicators: the :focus baseline (2 × border) and the
+     component line (--focus-ring-width, 3px in bootstrap-v6). On the block
+     axis it reaches into the slot gap, which is wider, so the scrollport never
+     slides under the header or footer. */
+  margin: calc(var(--drawer-focus-bleed) * -1);
+  padding: var(--drawer-focus-bleed);
   overflow: auto;
   overscroll-behavior: contain;
 }
