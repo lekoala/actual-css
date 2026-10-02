@@ -31,7 +31,7 @@ const PLUGIN = fileURLToPath(new URL("./penpot-plugin/", import.meta.url));
  */
 export async function exportDesign({ themeFile, name, out }) {
   const themeCss = themeFile ? await inlineImports(themeFile) : "";
-  const theme = themeFile ? (name ?? themeNameOf(themeCss)) : null;
+  const theme = themeFile ? themeNameOf(themeCss, name) : null;
   const css = `${await inlineImports(FRAMEWORK)}\n${themeCss}`;
 
   const resolved = await resolveTokens({

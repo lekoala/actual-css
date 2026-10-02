@@ -187,11 +187,18 @@ export function aliasCandidates(...sources) {
 
 /* The one data-theme value a theme file declares, light/dark excluded. null
    when it declares none: the theme is written on :root, the application's
-   own sheet rather than an island. */
-export function themeNameOf(css) {
+   own sheet rather than an island. An explicit name must be one the file
+   declares: an island no rule matches would measure the framework defaults
+   and report them as the theme (a typo passed silently). */
+export function themeNameOf(css, explicit) {
   const names = new Set(
     [...css.matchAll(THEME_NAME_RE)].map((m) => m[2]).filter((n) => n !== "light" && n !== "dark"),
   );
+  if (explicit != null) {
+    if (names.has(explicit)) return explicit;
+    const found = names.size ? `it declares ${[...names].join(", ")}` : "it declares none";
+    throw new Error(`The theme declares no [data-theme="${explicit}"]; ${found}.`);
+  }
   if (names.size > 1) {
     throw new Error(
       `Expected one [data-theme="…"] name in the theme, found ${[...names].join(", ")}; pass the name explicitly.`,

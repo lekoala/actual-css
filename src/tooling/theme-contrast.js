@@ -142,7 +142,7 @@ export async function measureContrast({ css, themes, label = "default" }) {
  */
 export async function measureThemeFile({ themeFile, name }) {
   const themeCss = themeFile ? await inlineImports(themeFile) : "";
-  const theme = themeFile ? (name ?? themeNameOf(themeCss)) : null;
+  const theme = themeFile ? themeNameOf(themeCss, name) : null;
   const css = `${await inlineImports(FRAMEWORK)}\n${themeCss}`;
   return measureContrast({ css, themes: [theme], label: themeFile ? ":root" : "default" });
 }
