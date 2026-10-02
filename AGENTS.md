@@ -58,6 +58,11 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   timed wait only when elapsed time is part of the contract (for example,
   sampling halfway through a transition), and say why in the test. A slow test
   should identify which operation needs time before increasing a timeout.
+- Browser fixtures never pit a fixed length against text width. CI runs on
+  Ubuntu, where `system-ui` falls back to a wider font than Segoe UI, so a
+  rail of `8rem` that held "Notification" locally overflowed in CI. Size the
+  container from its content (`min-content`, `max-content`) or assert a
+  relation between rects, not a width the label happens to fit.
 - Do not screenshot top-layer content with `shot:page` or `capture`: they pass
   `captureBeyondViewport: true`, which mis-composites an open popover or modal
   dialog — the panel came out translucent and painted *under* a sibling button
