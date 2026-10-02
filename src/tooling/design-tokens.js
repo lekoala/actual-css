@@ -163,8 +163,9 @@ const ROLE_OF = new Map(
 
 const DECLARATION_RE = /(?<![-\w])--([a-z0-9-]+)\s*:\s*([^;{}]*);/gi;
 const ALIAS_RE = /^var\(\s*--([a-z0-9-]+)\s*\)$/i;
-// Both quote styles: a missed name now falls back to the :root theme silently.
-const THEME_NAME_RE = /\[data-theme=(["'])([^"']+)\1\]/g;
+// Every valid spelling — either quote, a bare ident, whitespace inside the
+// brackets, an i/s flag: a missed name falls back to the :root theme silently.
+const THEME_NAME_RE = /\[\s*data-theme\s*=\s*(?:(["'])([^"']+)\1|([-\w]+))\s*(?:[is]\s*)?\]/gi;
 
 export function declaredTokens(css) {
   return new Set([...stripComments(css).matchAll(DECLARATION_RE)].map((m) => m[1]));
@@ -192,7 +193,10 @@ export function aliasCandidates(...sources) {
    and report them as the theme (a typo passed silently). */
 export function themeNameOf(css, explicit) {
   const names = new Set(
-    [...css.matchAll(THEME_NAME_RE)].map((m) => m[2]).filter((n) => n !== "light" && n !== "dark"),
+    // Comments stripped: a selector quoted in a doc comment is not a theme.
+    [...stripComments(css).matchAll(THEME_NAME_RE)]
+      .map((m) => m[2] ?? m[3])
+      .filter((n) => n !== "light" && n !== "dark"),
   );
   if (explicit != null) {
     if (names.has(explicit)) return explicit;

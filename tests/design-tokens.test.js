@@ -54,6 +54,16 @@ describe("source reading", () => {
     expect(themeNameOf(":root { --primary: red; } [data-theme='dark'] {}")).toBeNull();
   });
 
+  test("theme name reads every valid selector spelling and ignores comments", () => {
+    expect(themeNameOf('[data-theme = "brand"] {}')).toBe("brand");
+    expect(themeNameOf("[data-theme=brand] {}")).toBe("brand");
+    expect(themeNameOf('[ data-theme="brand" i ] {}')).toBe("brand");
+    // A selector quoted in a comment is documentation, not a second theme.
+    expect(themeNameOf('/* Example: [data-theme="example"] */ [data-theme="brand"] {}')).toBe(
+      "brand",
+    );
+  });
+
   test("an explicit theme name must be one the file declares", () => {
     const css = '[data-theme="a"] {} [data-theme="b"] {}';
     expect(themeNameOf(css, "b")).toBe("b");

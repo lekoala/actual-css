@@ -27,6 +27,13 @@
     <button class="btn danger outline" id="join-danger" type="button">Delete</button>
   </div>
 
+  <!-- A control edge themed apart from --border: the action follows the
+       field, not the structural border. -->
+  <div class="join" role="group" style="--border-control: rgb(255 0 0)">
+    <input class="input" id="join-control-input" value="x">
+    <button class="btn outline" id="join-control-default" type="button">Clear</button>
+  </div>
+
   <div class="join" role="group">
     <input class="input">
     <button class="btn neutral outline" id="join-neutral" type="button">Other</button>

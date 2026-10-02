@@ -2,7 +2,7 @@
  * Real-browser join outline-border contract, driven over Bun.WebView.
  *
  * Inside a field join, a default outline button adopts the field border
- * (--border via the --intent fallback), while an explicit intent (.danger,
+ * (--border-control via the --intent fallback), while an explicit intent (.danger,
  * .neutral) keeps its own outline color. The three cases guard the
  * "no intent" vs ".neutral" distinction.
  */
@@ -31,10 +31,14 @@ it("default outline in a field join matches the field border; intents keep their
           default: border("#join-default"),
           danger: border("#join-danger"),
           neutral: border("#join-neutral"),
+          controlInput: border("#join-control-input"),
+          controlDefault: border("#join-control-default"),
         };
       })()`);
 
       expect(result.default).toBe(result.input);
+      expect(result.controlInput).toBe("rgb(255, 0, 0)");
+      expect(result.controlDefault).toBe(result.controlInput);
       expect(result.danger).not.toBe(result.input);
       expect(result.neutral).not.toBe(result.input);
     },

@@ -145,5 +145,5 @@
    The second :has() covers a control nested one wrapper level deep. */
 .join:has(> :is(.input, .textarea, .select)) > .btn.outline,
 .join:has(> * > :is(.input, .textarea, .select)) > .btn.outline {
-  --btn-border-color: var(--intent, var(--border));
+  --btn-border-color: var(--intent, var(--border-control));
 }
