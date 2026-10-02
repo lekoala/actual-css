@@ -300,31 +300,36 @@ section titles, a pinned account footer, and the native current state.</p>
 <p>There is no collapse/toggler mechanism. For a responsive navigation, keep the
 horizontal <code>.navbar</code> for the desktop bar and compose the mobile experience from
 a <code>.drawer</code> with a vertical <code>.nav-list</code>, opened by a <code>command=&quot;show-modal&quot;</code> /
-<code>commandfor</code> trigger. Keep that trigger outside the <code>&lt;nav&gt;</code> subtree you hide at
-narrow widths, or hiding the nav hides the control that opens it.</p>
+<code>commandfor</code> trigger. Keep that trigger in the bar but outside the <code>&lt;nav&gt;</code>
+subtree you hide at narrow widths, or hiding the nav hides the control that
+opens it: the bar is then the <code>&lt;header&gt;</code>, and the links get their own <code>&lt;nav&gt;</code>.</p>
 <p>When the compact layout drops labels, keep that text in the DOM and hide it
 visually instead of replacing it with <code>aria-label</code> strings: one source for the
 accessible name.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
-<nav class="navbar" aria-label="Main">
+<header class="navbar">
   <a class="navbar-brand" href="/">Actual CSS</a>
-  <ul class="cluster">
-    <li><a class="nav-link" href="/" aria-current="page">Home</a></li>
-    <li><a class="nav-link" href="/docs">Docs</a></li>
-  </ul>
-</nav>
+  <div class="cluster">
+    <nav class="site-links" aria-label="Main">
+      <ul class="cluster">
+        <li><a class="nav-link" href="/" aria-current="page">Home</a></li>
+        <li><a class="nav-link" href="/docs">Docs</a></li>
+      </ul>
+    </nav>
 
-<button class="btn ghost"
-        type="button"
-        command="show-modal"
-        commandfor="site-nav"
-        aria-haspopup="dialog"
-        aria-controls="site-nav"
-        aria-label="Open menu">
-  <i class="ti ti-menu-2" aria-hidden="true"></i>
-</button>
+    <button class="btn ghost site-menu"
+            type="button"
+            command="show-modal"
+            commandfor="site-nav"
+            aria-haspopup="dialog"
+            aria-controls="site-nav"
+            aria-label="Open menu">
+      <i class="ti ti-menu-2" aria-hidden="true"></i>
+    </button>
+  </div>
+</header>
 
 <dialog class="drawer"
         id="site-nav"
@@ -348,23 +353,27 @@ accessible name.</p>
 </dialog>
   </div>
   <div class="docs-code">
-    <pre><code class="language-html">&lt;nav class=&quot;navbar&quot; aria-label=&quot;Main&quot;&gt;
+    <pre><code class="language-html">&lt;header class=&quot;navbar&quot;&gt;
   &lt;a class=&quot;navbar-brand&quot; href=&quot;/&quot;&gt;Actual CSS&lt;/a&gt;
-  &lt;ul class=&quot;cluster&quot;&gt;
-    &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/&quot; aria-current=&quot;page&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
-    &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/docs&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/nav&gt;
+  &lt;div class=&quot;cluster&quot;&gt;
+    &lt;nav class=&quot;site-links&quot; aria-label=&quot;Main&quot;&gt;
+      &lt;ul class=&quot;cluster&quot;&gt;
+        &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/&quot; aria-current=&quot;page&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a class=&quot;nav-link&quot; href=&quot;/docs&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
 
-&lt;button class=&quot;btn ghost&quot;
-        type=&quot;button&quot;
-        command=&quot;show-modal&quot;
-        commandfor=&quot;site-nav&quot;
-        aria-haspopup=&quot;dialog&quot;
-        aria-controls=&quot;site-nav&quot;
-        aria-label=&quot;Open menu&quot;&gt;
-  &lt;i class=&quot;ti ti-menu-2&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
-&lt;/button&gt;
+    &lt;button class=&quot;btn ghost site-menu&quot;
+            type=&quot;button&quot;
+            command=&quot;show-modal&quot;
+            commandfor=&quot;site-nav&quot;
+            aria-haspopup=&quot;dialog&quot;
+            aria-controls=&quot;site-nav&quot;
+            aria-label=&quot;Open menu&quot;&gt;
+      &lt;i class=&quot;ti ti-menu-2&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+    &lt;/button&gt;
+  &lt;/div&gt;
+&lt;/header&gt;
 
 &lt;dialog class=&quot;drawer&quot;
         id=&quot;site-nav&quot;
@@ -389,6 +398,19 @@ accessible name.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<p>The demo shows both controls; the application picks one per width:</p>
+<pre><code class="language-css">@media (width &lt; 40rem) {
+  .site-links {
+    display: none;
+  }
+}
+
+@media (width &gt;= 40rem) {
+  .site-menu {
+    display: none;
+  }
+}
+</code></pre>
 <p>The drawer can be hidden until opened: give the <code>dialog</code> the <code>hidden</code> attribute
 in the HTML and let the command runtime manage it, or rely on the drawer being
 rendered only on the mobile layout. <code>command</code> and <code>commandfor</code> work without
