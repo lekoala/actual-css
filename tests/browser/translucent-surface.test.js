@@ -12,7 +12,7 @@
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
-import { RASTERIZE } from "../../scripts/utils/color.js";
+import { RASTERIZE } from "../../src/tooling/color.js";
 
 const FIXTURE = "tests/browser/translucent-surface.html";
 const TIMEOUT = 60_000;

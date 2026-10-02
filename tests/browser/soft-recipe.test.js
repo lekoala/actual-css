@@ -22,7 +22,7 @@
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
-import { contrast, hueDistance, oklch, RASTERIZE } from "../../scripts/utils/color.js";
+import { contrast, hueDistance, oklch, RASTERIZE } from "../../src/tooling/color.js";
 
 const FIXTURE = "tests/browser/soft-recipe.html";
 const TIMEOUT = 60_000;

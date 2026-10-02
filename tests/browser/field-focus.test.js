@@ -12,7 +12,7 @@ import {
   waitForBrowser,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
-import { contrast, RASTERIZE } from "../../scripts/utils/color.js";
+import { contrast, RASTERIZE } from "../../src/tooling/color.js";
 
 const FIXTURE = "tests/browser/field-focus.html";
 const TIMEOUT = 60_000;

@@ -380,6 +380,76 @@ Actual theme tokens should handle shared theme behavior. Local CSS remains appro
 
 This is particularly important when migrating a Tailwind application with a large custom color palette.
 
+### Map the Tailwind palette to theme roles
+
+Tailwind's theme is a set of ramps: `--color-zinc-50` … `--color-zinc-950`,
+one per hue. Actual's theme contract is a set of roles: `--surface`,
+`--border`, `--text-muted`, `--primary`, `--focus`. Each element picks a
+step in Tailwind; Actual picks once per role, in the theme, and every
+component reads the role. Map one neutral family and one brand hue, then
+stop: the rest of the ramp has no consumer.
+
+A starting point for a zinc and blue application:
+
+| Role               | Light      | Dark       |
+| ------------------ | ---------- | ---------- |
+| `--surface`        | `white`    | `zinc-950` |
+| `--surface-raised` | `white`    | `zinc-900` |
+| `--surface-subtle` | `zinc-100` | `zinc-800` |
+| `--surface-solid`  | `zinc-900` | `zinc-100` |
+| `--border`         | `zinc-200` | `zinc-700` |
+| `--text`           | `zinc-950` | `zinc-50`  |
+| `--text-muted`     | `zinc-600` | `zinc-400` |
+| `--text-subtle`    | `zinc-500` | `zinc-500` |
+| `--neutral`        | `zinc-600` | `zinc-400` |
+| `--primary`        | `blue-600` | `blue-400` |
+| `--focus`          | `blue-500` | `blue-500` |
+
+Each scheme is one `light-dark()` pair on the role, instead of a `dark:`
+variant on every element:
+
+```css
+[data-theme="app"] {
+  color-scheme: light dark;
+
+  --surface: light-dark(var(--color-white), var(--color-zinc-950));
+  --border: light-dark(var(--color-zinc-200), var(--color-zinc-700));
+  --primary: light-dark(var(--color-blue-600), var(--color-blue-400));
+  --primary-fg: light-dark(var(--color-white), var(--color-zinc-950));
+  --focus: var(--color-blue-500);
+  /* … the other roles of the table */
+}
+```
+
+Tailwind v4 emits only the theme variables your sources use; declare the
+palette with `@theme static` while the theme reads them, and replace them with
+their literal values before Tailwind leaves the build.
+
+What the ramp does not decide for you:
+
+- **Foreground pairs.** Tailwind has no `-fg` step. White on `blue-600` holds
+  4.5:1, white on `blue-500` does not, so a dark-scheme primary lightened to
+  `blue-400` needs a dark `--primary-fg`. Every intent needs its pair:
+  `--warning-fg` on an amber is dark ink.
+- **Focus.** `--focus` must hold 3:1 on `--surface` and `--surface-solid` in
+  both schemes, so it is a mid-tone, not the primary step. `blue-500` holds
+  on `white`, `zinc-900`, `zinc-950` and `zinc-100`: one value covers both
+  schemes.
+- **Neutral temperature.** `slate`, `gray`, `zinc`, `neutral` and `stone` are
+  the same ramp at different temperatures; `neutral` is pure grey. Pick the
+  family that leans toward your primary, and take every neutral role from it.
+- **No subtle intent steps.** Do not map `blue-50` / `blue-100` to tinted
+  surfaces: `.soft` mixes the intent into the local surface, so there is no
+  `--primary-subtle` to fill.
+- **Shadow and hover ink.** Tailwind shadows are black; Actual derives
+  `--shadow` and `--shadow-popout` from one `--shadow-color`. Take it from the
+  neutral family's darkest step, and `--hover-overlay` as a few percent of
+  `--text`.
+
+`bunx actual-css contrast --theme FILE` measures the focus, soft and inverse
+pairs in both schemes. Check the text tiers on `--surface-subtle` by hand:
+`zinc-500` holds 4.5:1 on `white` but not on `zinc-100`.
+
 ## Forms
 
 Tailwind applications often construct form controls from utility combinations or use an additional forms plugin.
