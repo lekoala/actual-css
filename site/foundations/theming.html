@@ -351,7 +351,7 @@ contrast, not a leftover tint.</p>
 derivation, which is a single global percentage and therefore guarantees
 nothing about your intents. Measure it, then lower <code>--soft-fg-mix</code> or declare
 the per-role hooks for the intents that miss:</p>
-<pre><code class="language-sh">bunx actual-css contrast --theme src/theme.css
+<pre><code class="language-sh">bunx --bun actual-css contrast --theme src/theme.css
 </code></pre>
 <p>It reads the theme in headless Chrome, in every scheme it declares, and exits 1
 when a soft, focus, invalid-focus or inverse pair misses its threshold, so it

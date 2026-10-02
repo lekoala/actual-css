@@ -230,9 +230,9 @@
           <div class="prose docs-prose">
 <h1 id="design-tools-figma-penpot">Design tools (Figma, Penpot)</h1>
 <p><code>actual-css design</code> exports a theme to design tools: its tokens for Figma and Penpot, and a Penpot plugin that builds Button, Input, Badge, Alert and Card bound to those tokens. Use it to hand designers the same palette, scale and components the code ships — a design kit, a UI kit, a Figma or Penpot library generated from your theme.</p>
-<pre><code class="language-sh">bunx actual-css design --theme src/theme.css --out design/
+<pre><code class="language-sh">bunx --bun actual-css design --theme src/theme.css --out design/
 </code></pre>
-<p><code>--theme</code> is a file declaring one <code>[data-theme=&quot;…&quot;]</code> block (see <a href="../foundations/theming.html">Theming</a>); without it the default theme is exported. The command needs Bun: it reads the theme in headless Chrome, so every <code>light-dark()</code>, <code>color-mix()</code> and <code>var()</code> chain resolves exactly as the browser paints it.</p>
+<p><code>--theme</code> is a file declaring one <code>[data-theme=&quot;…&quot;]</code> block (see <a href="../foundations/theming.html">Theming</a>); without it the default theme is exported. The command needs Bun, and <code>--bun</code> makes <code>bunx</code> run it under Bun instead of the CLI's Node shebang: it reads the theme in headless Chrome, so every <code>light-dark()</code>, <code>color-mix()</code> and <code>var()</code> chain resolves exactly as the browser paints it.</p>
 <h2 id="what-is-exported">What is exported</h2>
 <div class="table-wrap"><table class="table">
 <thead>
