@@ -54,3 +54,22 @@ buttons — they are decorative, not actionable.
   </ol>
 </nav>
 ```
+
+## Narrow screens
+
+Pagination is one ordered row and never wraps. When the items do not fit, the
+row scrolls horizontally; that is the fallback, not the mobile design. For a
+phone or a narrow column (responsive, mobile, small screen), render a shorter
+range — the server knows which pages matter around the current one:
+
+```html demo
+<nav aria-label="Pagination">
+  <ol class="pagination sm">
+    <li><a href="?page=7" class="btn ghost" rel="prev"><i class="ti ti-chevron-left" aria-hidden="true"></i> Previous</a></li>
+    <li><a href="?page=7" class="btn ghost" aria-label="Page 7">7</a></li>
+    <li><a href="?page=8" class="btn ghost" aria-current="page" aria-label="Page 8">8</a></li>
+    <li><a href="?page=9" class="btn ghost" aria-label="Page 9">9</a></li>
+    <li><a href="?page=9" class="btn ghost" rel="next">Next <i class="ti ti-chevron-right" aria-hidden="true"></i></a></li>
+  </ol>
+</nav>
+```

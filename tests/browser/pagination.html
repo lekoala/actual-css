@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pagination overflow fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+
+    /* No gutter: the list sits flush on the viewport edges, the case where a
+       negative inline margin would scroll the page. */
+    body { margin: 0; }
+  </style>
+</head>
+<body>
+  <nav aria-label="Pagination">
+    <ol class="pagination" id="pagination">
+      <li><a href="#" class="btn ghost" rel="prev" id="first">Previous</a></li>
+      <li><a href="#" class="btn ghost">1</a></li>
+      <li><span class="muted" aria-hidden="true">…</span></li>
+      <li><a href="#" class="btn ghost">7</a></li>
+      <li><a href="#" class="btn ghost" aria-current="page">8</a></li>
+      <li><a href="#" class="btn ghost">9</a></li>
+      <li><span class="muted" aria-hidden="true">…</span></li>
+      <li><a href="#" class="btn ghost">20</a></li>
+      <li><a href="#" class="btn ghost" rel="next">Next</a></li>
+    </ol>
+  </nav>
+</body>
+</html>
