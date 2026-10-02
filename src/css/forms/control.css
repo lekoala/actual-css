@@ -30,7 +30,7 @@
 .input,
 .textarea,
 .select {
-  --control-border: var(--border);
+  --control-border: var(--border-control);
   --control-bg: var(--surface);
   --control-fg: var(--text);
   --control-cursor: auto;
