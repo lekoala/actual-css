@@ -1283,7 +1283,8 @@ test("application lists provide optional regions without owning their controls",
   expect(css).toMatch(/\.list-item-content \{[^}]*flex: 1 1 0;/);
   expect(css).toMatch(/\.list-item-trailing \{[^}]*margin-inline-start: auto;/);
   expect(rules).not.toContain("justify-self");
-  expect(css).toContain("align-items: start;");
+  // Read through --items-align: a literal value would outrank .items-start.
+  expect(css).toContain("align-items: var(--items-align, center);");
   expect(css).toContain("min-block-size: var(--list-item-min-size);");
   expect(css).toContain("border-block-start: var(--list-divider);");
   expect(css).not.toContain("border-block: var(--list-divider);");

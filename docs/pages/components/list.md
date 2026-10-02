@@ -39,14 +39,10 @@ gap: `.list-item-content` always takes the row's free space and
 leading region or not. A settings row — a label, a description, and one
 control on the end edge — is the two-region form.
 
-Regions align to the row's first line: the leading check or avatar, the title,
-and the trailing metadata or control sit on one horizontal line while
-supporting text wraps beneath — a structured row, not a centered button. For a
-shared two-line arrangement where leading and trailing truly need to center,
-the app composes the alignment itself rather than switching this default.
-A pure traversal affordance such as a trailing caret can opt out of the
-first-line rule on its own item with `align-self: center`, keeping metadata
-rows unaffected.
+Regions center on the row. When supporting text runs to three lines or more,
+add `.items-start` to the row, or to the `.list` for every row, so the leading
+avatar and the trailing control stay on the title line instead of floating
+mid-paragraph (top-align, align to first line).
 
 ```html demo
 <ul class="list">
@@ -83,7 +79,7 @@ For a navigable row, keep the list semantics and put `.list-item` on the link:
         <strong class="list-item-title">Profile</strong>
         <span class="list-item-text">Name, photo, and contact details</span>
       </span>
-      <i class="ti ti-chevron-right list-item-trailing" style="align-self: center" aria-hidden="true"></i>
+      <i class="ti ti-chevron-right list-item-trailing" aria-hidden="true"></i>
     </a>
   </li>
 </ul>

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+
+- `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
+
 ### Fixed
 
 - A bare heading in a `dialog.modal > header` drops its block margins, so the band no longer grows and the title centers on the close.

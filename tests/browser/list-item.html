@@ -59,5 +59,40 @@
       </span>
     </li>
   </ul>
+
+  <!-- Alignment: centered by default; .items-start on the row or on the list
+       moves every region to the top. The description wraps over several lines
+       so a centered region and a top-aligned one land far apart. -->
+  <ul class="list">
+    <li class="list-item" id="align-default">
+      <span class="avatar sm"><abbr>AM</abbr></span>
+      <span class="list-item-content">
+        <strong class="list-item-title">Centered</strong>
+        <span class="list-item-text">Line one<br>Line two<br>Line three</span>
+      </span>
+      <span class="list-item-trailing"><span class="badge">Badge</span></span>
+    </li>
+    <li class="list-item items-start" id="align-row">
+      <span class="avatar sm"><abbr>AM</abbr></span>
+      <span class="list-item-content">
+        <strong class="list-item-title">Row opt-out</strong>
+        <span class="list-item-text">Line one<br>Line two<br>Line three</span>
+      </span>
+      <span class="list-item-trailing"><span class="badge">Badge</span></span>
+    </li>
+  </ul>
+
+  <ul class="list items-start">
+    <li>
+      <a class="list-item" href="#align-list" id="align-list">
+        <span class="avatar sm"><abbr>AM</abbr></span>
+        <span class="list-item-content">
+          <strong class="list-item-title">List opt-out</strong>
+          <span class="list-item-text">Line one<br>Line two<br>Line three</span>
+        </span>
+        <span class="list-item-trailing"><span class="badge">Badge</span></span>
+      </a>
+    </li>
+  </ul>
 </body>
 </html>

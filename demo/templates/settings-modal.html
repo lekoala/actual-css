@@ -106,13 +106,6 @@
       padding: var(--space-40) var(--space-50) var(--space-50);
     }
 
-    /* Documented escape hatch, per the .list contract: regions align to the
-       row's first line, and a two-line row centers its trailing control only
-       when the app says so. */
-    .settings-row-center > .list-item-trailing {
-      align-self: center;
-    }
-
     /* A 12px round preview next to a picker is not a framework primitive. If
        it turns up in a palette, a theme selector and a status dot as well, it
        earns one. */
@@ -295,7 +288,7 @@
                 </select>
               </span>
             </li>
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-routing">
                 <span class="list-item-title">Smarter model routing</span>
                 <span class="list-item-text">
@@ -307,7 +300,7 @@
                 <input class="switch" type="checkbox" role="switch" id="pref-routing" aria-checked="true" checked>
               </span>
             </li>
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-dictation">
                 <span class="list-item-title">Voice dictation</span>
                 <span class="list-item-text">Dictate straight into the composer.</span>
@@ -334,7 +327,7 @@
                 </select>
               </span>
             </li>
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-reminders">
                 <span class="list-item-title">Task reminders</span>
                 <span class="list-item-text">Ping me when a scheduled task finishes.</span>
@@ -366,7 +359,7 @@
             <span class="field-help">Applied at the start of every new conversation.</span>
           </div>
           <ul class="list">
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-memory">
                 <span class="list-item-title">Memory</span>
                 <span class="list-item-text">Remember details across conversations.</span>
@@ -382,7 +375,7 @@
                  tabindex="-1" hidden>
           <h2>Connectors</h2>
           <ul class="list">
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-connectors">
                 <span class="list-item-title">Allow connectors</span>
                 <span class="list-item-text">Let conversations read from connected apps.</span>
@@ -391,7 +384,7 @@
                 <input class="switch" type="checkbox" role="switch" id="pref-connectors" aria-checked="true" checked>
               </span>
             </li>
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-beta">
                 <span class="list-item-title">Beta connectors</span>
                 <span class="list-item-text">Unreleased integrations. Expect breakage.</span>
@@ -424,7 +417,7 @@
                 </select>
               </span>
             </li>
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-autoplay">
                 <span class="list-item-title">Autoplay replies</span>
                 <span class="list-item-text">Read answers aloud as they arrive.</span>
@@ -447,7 +440,7 @@
                 <button class="btn sm outline" type="button">Change plan</button>
               </span>
             </li>
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <span class="list-item-content">
                 <span class="list-item-title">Payment method</span>
                 <span class="list-item-text">Visa ending 4242 · expires 09/28</span>
@@ -493,7 +486,7 @@
                  tabindex="-1" hidden>
           <h2>Data controls</h2>
           <ul class="list">
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-training">
                 <span class="list-item-title">Improve the model for everyone</span>
                 <span class="list-item-text">Allow new conversations to be used for training.</span>
@@ -502,7 +495,7 @@
                 <input class="switch" type="checkbox" role="switch" id="pref-training" aria-checked="false">
               </span>
             </li>
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <span class="list-item-content">
                 <span class="list-item-title">Export data</span>
                 <span class="list-item-text">A download link is emailed to you.</span>
@@ -511,7 +504,7 @@
                 <button class="btn sm outline" type="button">Request export</button>
               </span>
             </li>
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <span class="list-item-content">
                 <span class="list-item-title">Delete account</span>
                 <span class="list-item-text">Permanent. Conversations cannot be restored.</span>
@@ -527,7 +520,7 @@
                  tabindex="-1" hidden>
           <h2>Security</h2>
           <ul class="list">
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-2fa">
                 <span class="list-item-title">Two-factor authentication</span>
                 <span class="list-item-text">Ask for a code from an authenticator app.</span>
@@ -536,7 +529,7 @@
                 <input class="switch" type="checkbox" role="switch" id="pref-2fa" aria-checked="true" checked>
               </span>
             </li>
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <span class="list-item-content">
                 <span class="list-item-title">Active sessions</span>
                 <span class="list-item-text">4 devices signed in.</span>
@@ -558,7 +551,7 @@
                  tabindex="-1" hidden>
           <h2>Parental controls</h2>
           <ul class="list">
-            <li class="list-item settings-row-center">
+            <li class="list-item">
               <label class="list-item-content" for="pref-restricted">
                 <span class="list-item-title">Restricted mode</span>
                 <span class="list-item-text">Hide mature topics from this account.</span>
