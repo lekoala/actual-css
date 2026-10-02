@@ -318,6 +318,37 @@ buttons — they are decorative, not actionable.</p>
 &lt;/nav&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
+<h2 id="narrow-screens">Narrow screens</h2>
+<p>Pagination is one ordered row and never wraps. When the items do not fit, the
+row scrolls horizontally; that is the fallback, not the mobile design. For a
+phone or a narrow column (responsive, mobile, small screen), render a shorter
+range — the server knows which pages matter around the current one:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<nav aria-label="Pagination">
+  <ol class="pagination sm">
+    <li><a href="?page=7" class="btn ghost" rel="prev"><i class="ti ti-chevron-left" aria-hidden="true"></i> Previous</a></li>
+    <li><a href="?page=7" class="btn ghost" aria-label="Page 7">7</a></li>
+    <li><a href="?page=8" class="btn ghost" aria-current="page" aria-label="Page 8">8</a></li>
+    <li><a href="?page=9" class="btn ghost" aria-label="Page 9">9</a></li>
+    <li><a href="?page=9" class="btn ghost" rel="next">Next <i class="ti ti-chevron-right" aria-hidden="true"></i></a></li>
+  </ol>
+</nav>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;nav aria-label=&quot;Pagination&quot;&gt;
+  &lt;ol class=&quot;pagination sm&quot;&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=7&quot; class=&quot;btn ghost&quot; rel=&quot;prev&quot;&gt;&lt;i class=&quot;ti ti-chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt; Previous&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=7&quot; class=&quot;btn ghost&quot; aria-label=&quot;Page 7&quot;&gt;7&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=8&quot; class=&quot;btn ghost&quot; aria-current=&quot;page&quot; aria-label=&quot;Page 8&quot;&gt;8&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=9&quot; class=&quot;btn ghost&quot; aria-label=&quot;Page 9&quot;&gt;9&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href=&quot;?page=9&quot; class=&quot;btn ghost&quot; rel=&quot;next&quot;&gt;Next &lt;i class=&quot;ti ti-chevron-right&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/a&gt;&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/nav&gt;</code></pre>
+  </div>
+</div>
 
 
           <div class="cluster docs-source-links">
@@ -339,6 +370,7 @@ buttons — they are decorative, not actionable.</p>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#basic-usage" data-docs-toc-item data-level="2">Basic usage</a></li>
         <li><a class="nav-link" href="#truncated-ranges" data-docs-toc-item data-level="2">Truncated ranges</a></li>
+        <li><a class="nav-link" href="#narrow-screens" data-docs-toc-item data-level="2">Narrow screens</a></li>
           </ul>
         </nav>
       </aside>
