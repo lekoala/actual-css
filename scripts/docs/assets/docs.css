@@ -53,13 +53,13 @@
   padding-block: var(--space-30);
 }
 
+/* Mark inlined from docs/brand/mark.svg (C2PA-free copy of the supplied
+   master). The SVG carries theme-aware fills (--text/--primary), so this rule
+   only sizes. The brand text beside it drops out on narrow screens. */
 .docs-brand-mark {
-  inline-size: 1rem;
-  block-size: 1rem;
-  border-radius: var(--radius-sm);
-  background:
-    radial-gradient(circle at 30% 30%, var(--secondary), transparent 60%),
-    var(--primary);
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  flex: none;
 }
 
 .docs-theme-field .select {
@@ -301,6 +301,15 @@
   padding-block: calc(var(--space-60) * 1.5) var(--space-60);
 }
 
+/* Wordmark inlined from docs/brand/logo.svg. Capped width keeps the 7:1
+   wordmark inside the hero measure; height follows the intrinsic ratio. */
+.docs-hero-logo {
+  display: block;
+  inline-size: min(22rem, 100%);
+  block-size: auto;
+  margin-inline: auto;
+}
+
 .docs-hero-title {
   max-inline-size: 12ch;
   margin-inline: auto;
@@ -515,6 +524,12 @@
 @media (max-width: 33rem) {
   .docs-header-inner {
     --gap: var(--space-10);
+  }
+
+  /* Narrow header keeps the mark only; the wordmark text would squeeze
+     Search and Menu off the single row. */
+  .docs-header-inner .docs-brand-text {
+    display: none;
   }
 
   .docs-header-inner .btn {
