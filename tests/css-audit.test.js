@@ -715,12 +715,11 @@ test("tabs include vertical orientation styling without spending specificity on 
   expect(css).toMatch(/\.tab\s*\{[^}]*font-weight:\s*var\(--font-weight-semibold\)/s);
   expect(css).not.toMatch(/\.tab\[aria-selected="true"\]\s*\{[^}]*font-weight:/s);
 
-  /* The link variant marks aria-current="page" exactly like the widget state:
-     same tint, same underline, no extra aria-current semantics. */
-  expect(css).toMatch(/\.tab\[aria-selected="true"\],\s*\.tab\[aria-current="page"\]\s*\{/s);
-  expect(css).toMatch(
-    /\.tab\[aria-selected="true"\]::after,\s*\.tab\[aria-current="page"\]::after\s*\{/s,
-  );
+  /* The link variant marks aria-current exactly like the widget state: same
+     tint, same underline. Presence is the contract, so a flyout trigger can
+     carry "true" for the current section while its panel link carries "page". */
+  expect(css).toMatch(/\.tab\[aria-selected="true"\],\s*\.tab\[aria-current\]\s*\{/s);
+  expect(css).toMatch(/\.tab\[aria-selected="true"\]::after,\s*\.tab\[aria-current\]::after\s*\{/s);
 
   /* Keeping aria-orientation out of the cascade is a repo-wide invariant, so
      check:architecture owns the negative assertion for every stylesheet.

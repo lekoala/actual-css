@@ -43,6 +43,8 @@ const DOC_DEMO_CLASSES = new Set([
   "shell-sidebar-nav",
   "side-nav",
   "site-header",
+  "site-links",
+  "site-menu",
   "tertiary",
 ]);
 

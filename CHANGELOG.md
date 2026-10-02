@@ -10,6 +10,8 @@
 
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
 - `.pagination` never wraps: a row that does not fit scrolls horizontally, with room for its items' focus line.
+- A horizontal `.tabs` strip never wraps, nor do its labels: a strip that does not fit scrolls horizontally.
+- `.tab` shows the current state for any `aria-current` value, so a navigation flyout trigger can mark the current section with `aria-current="true"`.
 - The current `.nav-list` link trait sits inside the row's inline padding with rounded ends, instead of flush on its rounded edge.
 
 ### Fixed

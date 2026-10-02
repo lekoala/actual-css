@@ -315,7 +315,9 @@ select {
  * Derived: "Theme-derived aliases", Tone subsystem, Backdrop fill — reference
  * other tokens; hard-coded overrides on a custom theme will break the intent.
  * Exception: --surface-opaque and --surface-solid-fg are public; a theme with
- * translucent surfaces overrides them with opaque values.
+ * translucent surfaces overrides them with opaque values. --border-control is
+ * public too: the resting edge of a neutral control, apart from structural
+ * separators.
  * Internal: --hgroup-gap.
  */
 :root {
@@ -417,6 +419,9 @@ select {
      never a fill. --surface-solid-fg is the ink on --surface-solid. */
   --surface-opaque: var(--surface);
   --surface-solid-fg: var(--surface);
+  /* The edge that tells a control apart from the surface, where --border only
+     separates surfaces: fields, choices, switch, OTP cells, choice cards. */
+  --border-control: var(--border);
 }
 
 /* Soft foreground hooks — the soft ink is the intent rebated toward the local
@@ -2107,7 +2112,7 @@ small {
 .input,
 .textarea,
 .select {
-  --control-border: var(--border);
+  --control-border: var(--border-control);
   --control-bg: var(--surface);
   --control-fg: var(--text);
   --control-cursor: auto;
@@ -2333,7 +2338,7 @@ small {
 /* Control geometry. --choice-* are the per-state tokens. */
 .check,
 .radio {
-  --choice-border: var(--border);
+  --choice-border: var(--border-control);
   --choice-bg: var(--surface);
   --choice-mark: var(--primary-fg);
 
@@ -2521,7 +2526,7 @@ small {
     calc((var(--control-size) - 1lh - 2 * var(--border-width)) / 2)
   );
   padding-inline: var(--space-20);
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--border-control);
   border-radius: var(--radius-sm);
   background: var(--surface-subtle);
   color: var(--text);
@@ -2555,7 +2560,7 @@ small {
   inline-size: var(--control-size);
   block-size: var(--control-size);
   padding: var(--border-width);
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--border-control);
   border-radius: var(--radius);
   background: var(--surface);
   cursor: pointer;
@@ -2852,7 +2857,7 @@ small {
 
 .switch {
   --switch-bg: var(--border);
-  --switch-border: var(--border);
+  --switch-border: var(--border-control);
   --switch-knob: var(--surface-raised);
   --switch-block-size: calc(var(--choice-control-size) + 0.125em);
   --switch-width: calc(var(--switch-block-size) * 1.8);
@@ -3189,7 +3194,7 @@ small {
   --choice-card-pad: var(--density-space, var(--space-40));
   --choice-card-gap: var(--space-30);
   --choice-card-radius: var(--radius);
-  --choice-card-border: var(--border);
+  --choice-card-border: var(--border-control);
   --choice-card-bg: var(--surface);
   --choice-card-check-size: 1.25em;
 
@@ -3649,7 +3654,7 @@ small {
   --otp-cell-size: var(--control-size);
   --otp-gap: var(--space-10);
   --otp-font-size: 1.5em;
-  --otp-cell-border: var(--border);
+  --otp-cell-border: var(--border-control);
   --otp-cell-bg: var(--surface);
   --otp-caret-space: calc((var(--otp-cell-size) - 1ch) / 2 + var(--otp-gap) + 1px);
 
@@ -4894,6 +4899,12 @@ a.badge[aria-disabled="true"] {
    alignment. */
 :where(dialog.modal > header) {
   background: var(--surface-subtle);
+}
+
+/* The chrome header is a centered row, so prose margins on a bare title only
+   push the band taller and pull the title off the close axis. */
+:where(dialog).modal > header > :is(h1, h2, h3, h4, h5, h6) {
+  margin-block: 0;
 }
 
 :where(dialog).modal > header > .media {
@@ -7795,13 +7806,16 @@ a.avatar[aria-disabled="true"] {
    follows the forced palette without a forced-colors block and never touches
    the row separators. Navbar horizontal links keep color + surface only. The
    positioning context lives on every row link, so becoming current never moves
-   an app-positioned decoration to a new containing block. */
+   an app-positioned decoration to a new containing block.
+   The trait sits centered in the link's inline padding with rounded ends: flush
+   on the edge, a square line read as pasted onto the rounded fill. */
 .nav-list .nav-link[aria-current]::before {
   content: "";
   position: absolute;
   inset-block: var(--space-20);
-  inset-inline-start: 0;
+  inset-inline-start: calc((var(--space-20) - 2px) / 2);
   border-inline-start: 2px solid currentColor;
+  border-radius: var(--radius-full);
 }
 
 /*
@@ -7867,15 +7881,35 @@ a.avatar[aria-disabled="true"] {
  * Truncated ranges are plain text (`.muted`, `aria-hidden="true"`), not .btn
  * — they are decorative, not actionable. They still get the same box sizing
  * as .btn below so the row stays visually aligned.
+ *
+ * One ordered sequence on one axis: it never wraps, since a second line reads
+ * as a detached piece. The rendered range is the application's to keep
+ * compact; horizontal scroll is the fallback when it does not fit.
+ *
+ * Internal:
+ * --pagination-focus-bleed
  */
 .pagination {
+  /* The scrollport clips on both axes (overflow-x: auto computes overflow-y
+     to auto), so the padding keeps the outer focus line of every item inside
+     it. The block axis gives the room back with a negative margin; the inline
+     axis does not, or the list would grow past its container and scroll the
+     page on a phone. */
+  --pagination-focus-bleed: calc(
+    var(--focus-outline-offset) +
+    max(var(--focus-ring-width), var(--border-width) * 2)
+  );
+
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: var(--space-10);
   margin: 0;
-  padding: 0;
+  margin-block: calc(var(--pagination-focus-bleed) * -1);
+  padding: var(--pagination-focus-bleed);
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
   list-style: none;
   font-size: var(--control-font-size);
 
@@ -7883,6 +7917,11 @@ a.avatar[aria-disabled="true"] {
      system: equal digit widths keep the row from re-flowing as numbers grow
      (98 → 99 → 100). */
   font-variant-numeric: tabular-nums;
+}
+
+/* Items keep their size and the row scrolls instead. */
+.pagination > li {
+  flex: none;
 }
 
 .pagination .btn {
@@ -7916,6 +7955,11 @@ a.avatar[aria-disabled="true"] {
  * author class can then adjust a vertical strip without restating the
  * attribute to reach its specificity.
  *
+ * A horizontal strip is one axis of navigation, so it never wraps: a second
+ * line no longer matches the Left/Right model and reads as a nested level.
+ * When the tabs do not fit, the strip scrolls; focus scrolls the active tab
+ * into view.
+ *
  * Public hooks:
  * --tab-gap
  */
@@ -7928,16 +7972,31 @@ a.avatar[aria-disabled="true"] {
 .tabs {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--space-10);
   margin: 0;
   padding: 0;
+  /* Block overflow is hidden, not auto: overflow-x: auto alone computes the
+     block axis to auto, so a sub-pixel line box would add a vertical
+     scrollbar inside the strip. Nothing paints outside it: the focus outline
+     is inset and the indicator sits inside the tab. */
+  overflow: auto hidden;
+  overscroll-behavior-inline: contain;
+  /* Focus scrolls a tab in with room to spare, hinting at the next one. */
+  scroll-padding-inline: var(--space-30);
   border-block-end: var(--border-width) solid var(--border);
   list-style: none;
 }
 
+/* Items keep their size and the strip scrolls instead. Covers both
+   anatomies: .tab directly in a tablist, or <li> in a navigation list. */
+.tabs > * {
+  flex: none;
+}
+
 .tabs:where([aria-orientation="vertical"]) {
   display: grid;
+  overflow: visible;
   align-content: start;
   justify-items: stretch;
   border-block-end: 0;
@@ -7962,12 +8021,18 @@ a.avatar[aria-disabled="true"] {
      the strip. The active state is carried by color and the indicator line. */
   font-weight: var(--font-weight-semibold);
   text-decoration: none;
+  /* A label breaking inside a one-line strip is the same defect as the strip
+     wrapping. */
+  white-space: nowrap;
   cursor: pointer;
 }
 
+/* A vertical strip has no inline axis to protect: long labels wrap within the
+   rail instead of overflowing it. */
 .tabs:where([aria-orientation="vertical"]) .tab {
   justify-content: flex-start;
   padding-inline-end: var(--space-40);
+  white-space: normal;
 }
 
 .tab:is(:disabled, [aria-disabled="true"]) {
@@ -7998,8 +8063,12 @@ a.avatar[aria-disabled="true"] {
   border-end-end-radius: 0;
 }
 
+/* Presence is the current contract, as for .list-item and .nav-link: the
+   attribute is removed, never serialized as "false". The value stays free, so
+   a navigation flyout trigger can mark the current section with "true" while
+   the link inside its panel carries "page". */
 .tab[aria-selected="true"],
-.tab[aria-current="page"] {
+.tab[aria-current] {
   color: var(--intent, var(--state-selected));
 }
 
@@ -8008,7 +8077,7 @@ a.avatar[aria-disabled="true"] {
    forced colors and erase the distinction. currentColor follows the palette the
    UA forces, so no forced-colors block is needed. */
 .tab[aria-selected="true"]::after,
-.tab[aria-current="page"]::after {
+.tab[aria-current]::after {
   content: "";
   position: absolute;
   inset-inline: 0;
@@ -8017,7 +8086,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after,
-.tabs:where([aria-orientation="vertical"]) .tab[aria-current="page"]::after {
+.tabs:where([aria-orientation="vertical"]) .tab[aria-current]::after {
   inset-block: 0;
   inset-inline: auto 0;
   border-block-end: 0;
@@ -8149,9 +8218,10 @@ a.avatar[aria-disabled="true"] {
 .list > :where(.list-item),
 .list > li > .list-item {
   display: flex;
-  /* Regions align to the first line, so leading, title, and trailing controls
-     share one horizontal line while supporting text wraps beneath. */
-  align-items: start;
+  /* Centered fits the short rows lists mostly hold. Read through
+     --items-align so .items-start on the row or the list wins without
+     outranking this selector — the opt-out for long supporting text. */
+  align-items: var(--items-align, center);
   gap: var(--list-item-gap);
   min-block-size: var(--list-item-min-size);
   padding-block: var(--list-item-pad-block);
@@ -8456,7 +8526,7 @@ a.list-item[aria-current]::before {
 }
 
 .join-addon {
-  --control-border: var(--border);
+  --control-border: var(--border-control);
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-muted);
 

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tabs overflow fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+  <style>
+    * { transition-duration: 0s !important; }
+
+    /* No gutter: the strip sits flush on the viewport edges, where any
+       overflow it fails to contain would scroll the page. */
+    body { margin: 0; }
+
+    /* A narrow rail with a label longer than it. */
+    #rail { inline-size: 8rem; }
+  </style>
+</head>
+<body>
+  <div class="tabs" id="widget" data-enhance="tabs" role="tablist" aria-label="Settings">
+    <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="p1" id="t1">General</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="p2" id="t2" tabindex="-1">Security settings</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="p3" id="t3" tabindex="-1">Notifications</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="p4" id="t4" tabindex="-1">Billing history</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="p5" id="t5" tabindex="-1">Integrations</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="p6" id="t6" tabindex="-1">Advanced</button>
+  </div>
+  <section role="tabpanel" id="p1" aria-labelledby="t1">One</section>
+  <section role="tabpanel" id="p2" aria-labelledby="t2" hidden>Two</section>
+  <section role="tabpanel" id="p3" aria-labelledby="t3" hidden>Three</section>
+  <section role="tabpanel" id="p4" aria-labelledby="t4" hidden>Four</section>
+  <section role="tabpanel" id="p5" aria-labelledby="t5" hidden>Five</section>
+  <section role="tabpanel" id="p6" aria-labelledby="t6" hidden>Six</section>
+
+  <nav aria-label="Account">
+    <ul class="tabs" id="nav">
+      <li><a class="tab" href="#profile">Profile</a></li>
+      <li><a class="tab" href="#security" id="nav-plain">Security</a></li>
+      <li class="flyout-trigger">
+        <button class="tab" type="button" id="nav-trigger"
+                data-enhance="flyout" aria-current="true"
+                aria-expanded="false" aria-controls="billing-menu">
+          Billing
+          <i class="ti ti-chevron-down" aria-hidden="true"></i>
+        </button>
+        <ul class="flyout menu" id="billing-menu" hidden>
+          <li><a class="menu-item" href="#invoices" aria-current="page">Invoices</a></li>
+          <li><a class="menu-item" href="#methods">Payment methods</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="tabs" id="rail" data-enhance="tabs" role="tablist" aria-orientation="vertical" aria-label="Sections">
+    <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="r1" id="rail-long">Notification preferences</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="r2" tabindex="-1">Other</button>
+  </div>
+  <section role="tabpanel" id="r1" aria-labelledby="rail-long">One</section>
+  <section role="tabpanel" id="r2" hidden>Two</section>
+</body>
+</html>
