@@ -78,6 +78,32 @@ it("orders a theme's own padding scale through size and density", async () => {
   });
 });
 
+// Trap: the default selection resolved on :root only, so a nested theme island
+// kept the outer 16px padding. Re-selecting the default step on the island
+// instead would reset a .compact region around it; the island rebuilds the
+// selection from the inherited step weights.
+it("selects a nested theme island's own steps under inherited density", async () => {
+  await withBrowserPage(fixtureUrl("tests/browser/size-density-island.html"), async (view) => {
+    const result = await view.evaluate(`(() => Object.fromEntries(
+      [...document.querySelectorAll("[data-case]")].map((el) => [
+        el.dataset.case,
+        {
+          pad: parseFloat(getComputedStyle(el).paddingInlineStart),
+          height: el.getBoundingClientRect().height,
+        },
+      ]),
+    ))()`);
+
+    // bootstrap-v6 steps: 8 / 12 / 16px.
+    expect(result.island.pad).toBe(12);
+    expect(result["island-sm"].pad).toBe(8);
+    expect(result["compact-island"].pad).toBe(8);
+    expect(result["spacious-island"].pad).toBe(16);
+    expect(result["island-size"].height).toBe(48);
+    expect(result["compact-island-size"].height).toBe(28);
+  });
+});
+
 it("scales input icons once with their control family", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
     const result = await view.evaluate(`(() => {

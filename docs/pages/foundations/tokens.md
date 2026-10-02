@@ -276,10 +276,9 @@ Local `.sm`/`.lg` sizes map `--control-size`, `--control-font-size`, and
 A theme sets the steps (`--control-size-*`, `--control-pad-x-*`); `.sm`/`.lg`
 and `.compact`/`.spacious` select one. `--control-size` and `--control-pad-x`
 are the selected values: override them on one instance, never in a theme,
-where every size and density boundary would overwrite them. Set the steps in
-the root theme: the default selection reads them on `:root`, so a nested
-`data-theme` island that changes them only reaches its `.sm`, `.lg`,
-`.compact` and `.spacious` descendants.
+where every size and density boundary would overwrite them. A nested
+`data-theme` island may set its own steps: its controls pick them up and keep
+the size or density they sit in.
 
 `--control-pad-x` is a length, not an `em`: every part of one control must see
 the same horizontal distance, and an `em` would change value on a descendant
