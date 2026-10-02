@@ -167,7 +167,7 @@ to keep that pair ≥ 4.5:1 in both color schemes, enforced by
 presets and custom `[data-theme]` islands keep the `--soft-fg-mix` derivation
 unless they declare the hooks themselves (the framework resets them outside
 the default boundary). A theme that overrides the soft palette is responsible
-for preserving sufficient text contrast; `bunx actual-css contrast --theme FILE`
+for preserving sufficient text contrast; `bunx --bun actual-css contrast --theme FILE`
 measures its resting and hovered pairs.
 
 A theme whose primary should read more muted than its statuses sets only
@@ -503,7 +503,7 @@ Rules:
 
 Themes override tokens, not selectors. The themes in `src/css/themes/` are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as `ocean`, `square`, `cyberpunk`, and `brutalist`.
 
-A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick `--focus` as a mid-tone that holds 3:1 against both `--surface` and `--surface-solid` in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. `bunx actual-css contrast --theme FILE` measures both pairs, and exits 1 when a pair misses.
+A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick `--focus` as a mid-tone that holds 3:1 against both `--surface` and `--surface-solid` in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. `bunx --bun actual-css contrast --theme FILE` measures both pairs, and exits 1 when a pair misses.
 
 When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. A theme that declares no hook falls back to the `--soft-fg-mix` derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. `actual-css contrast` prints the resting and hovered soft pair for every intent in every scheme the theme declares, which is how a theme finds the roles that need a hook or a lower `--soft-fg-mix`.
 

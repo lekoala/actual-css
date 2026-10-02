@@ -41,6 +41,8 @@
 
 ### Fixed
 
+- `actual-css contrast` counts a resting soft pair under 4.5:1 as a miss; it only gated the hovered pair.
+- The `design` and `contrast` examples run `bunx --bun actual-css`: plain `bunx` honors the CLI's Node shebang and stops on "needs Bun".
 - `dialog.modal.scrollable` lays the body wrapper out as a flex column: a structural header or footer keeps its size and every other region scrolls, so a modal with an external `dialog > header` no longer collapses its footer to zero.
 - `--dialog-icon-size` and `--dialog-icon-glyph-size` are read, not declared, on `.dialog-icon`, so an override on the icon's media row or the dialog moves the circle and the heading beside it together.
 - An `.avatar-stack` avatar layers its fill over `--surface-opaque`, so a translucent fill no longer shows the neighbour it overlaps.
