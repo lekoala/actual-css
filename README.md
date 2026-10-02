@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-dark.svg">
+  <img src="docs/brand/logo-light.svg" alt="Actual CSS" width="380">
+</picture>
+
 # Actual CSS
 
 Plain CSS component framework for new projects. Semantic classes, shared variants, small tokens, theme hooks, and progressive enhancement.

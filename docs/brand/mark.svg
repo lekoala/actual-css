@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><title>Actual</title>
+  <!-- Docs adaptation: fills follow the site theme via --text/--primary, with the
+       brand hex as fallback for standalone rendering. The OS-scheme override
+       is dropped on purpose: the docs theme picker owns the scheme. -->
+  <style>
+    .ring { fill: var(--text, #52396F); }
+    .bar { fill: var(--primary, #9B7BCB); }
+  </style>
+  <path class="ring" fill-rule="evenodd" d="M124.7,451.9 L475.4,451.9 L300.1,71.9ZM406.6,407.9 L193.5,407.9 L300.1,177.0Z"/>
+  <path class="bar" d="M36.6,451.9 L85.1,451.9 L241.7,112.6 L217.4,60.1Z"/>
+</svg>
