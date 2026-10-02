@@ -2,12 +2,17 @@
 
 ## [Unreleased]
 
+### Added
+
+- `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs, apart from `--border`; it defaults to `--border`.
+
 ### Changed
 
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
 
 ### Fixed
 
+- `actual-css contrast --theme FILE` and `actual-css design --theme FILE` accept a theme written on `:root` and measure its own values, not the default palette.
 - A bare heading in a `dialog.modal > header` drops its block margins, so the band no longer grows and the title centers on the close.
 
 ## [0.12.0] - 2026-10-02

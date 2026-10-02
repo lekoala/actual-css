@@ -12,7 +12,7 @@ function usage() {
     "",
     "  -o, --out FILE   write the bundle to FILE / the export to DIR (required)",
     "      --minify     collapse comments and whitespace",
-    "      --theme FILE read this [data-theme] file instead of the default theme",
+    "      --theme FILE read this theme file ([data-theme] or :root) over the default",
     "      --name NAME  the data-theme name, when the file declares several",
     "  -h, --help       show this message",
     "      --version    print the actual-css version",
