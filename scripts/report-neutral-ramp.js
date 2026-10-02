@@ -36,8 +36,8 @@
 
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { hueDistance, luminance, oklch, RASTERIZE } from "../src/tooling/color.js";
 import { fixtureUrl, withBrowserPage } from "./utils/browser.js";
-import { hueDistance, luminance, oklch, RASTERIZE } from "./utils/color.js";
 
 const ROOT = join(import.meta.dirname, "..");
 const THEMES_DIR = join(ROOT, "src", "css", "themes");
