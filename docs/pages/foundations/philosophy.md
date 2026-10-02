@@ -127,7 +127,8 @@ affect the same dimension:
 </div>
 ```
 
-The density tokens are `--gap`, `--density-space`, and `--control-size`.
+The density tokens are `--gap`, `--density-space`, `--control-size`, and
+`--control-pad-x`.
 Components consume the dimensions that make sense for them and opt out of the
 rest. The absolute `--space-*` scale is not rebound by density scopes.
 Components with bespoke geometry (`.badge`, `.avatar`,
