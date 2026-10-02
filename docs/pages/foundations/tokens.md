@@ -324,6 +324,9 @@ component just because its label overflows at some viewport — that hides a
 composition problem. A theme whose typeface has no useful width axis opts out
 with `--font-width-dense: 100%`.
 
+`.tight` and `.loose` set the same two `--gap` steps without the rest of
+density: rhythm only, no padding, control size or font width.
+
 Participation is opt-in and selective: controls consume `--control-size`
 for geometry; spacing helpers and rhythms consume `--density-space` and `--gap`;
 components whose size is intrinsic (badge, avatar, spinner, rating, key, prose,

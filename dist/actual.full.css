@@ -682,6 +682,10 @@ small {
  * Themes whose typeface has no useful width axis opt out with
  * --font-width-dense: 100%.
  *
+ * .tight/.loose set the inherited --gap only: rhythm between siblings, with
+ * no padding, control size or font width. They reuse the density values so a
+ * tight row and a compact one share one step.
+ *
  * .sm/.lg are local size roles, not shared measurements. Shared control
  * participants below map both typography and geometry; components with
  * bespoke geometry (badge, spinner, avatar, rating, key, prose) own those
@@ -731,6 +735,14 @@ small {
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
   font-stretch: var(--font-width);
+}
+
+.tight {
+  --gap: var(--space-20);
+}
+
+.loose {
+  --gap: var(--space-50);
 }
 
 /* Shared control scale. Wrappers are listed when their descendants form one

@@ -80,8 +80,9 @@ how `.field sm`, `.input-icon sm`, `.join sm`, and `.flyout sm` size the
 controls inside them, while a bare `.sm` on a plain element does nothing.
 
 `.compact` and `.spacious` establish inherited density tokens. Density arranges
-how tightly UI sits — spacing and component geometry — while typography and
-icon size stay unchanged. Participation is opt-in, and a component only joins
+how tightly UI sits — spacing and component geometry — while font size and
+icon size stay unchanged. `.tight` and `.loose` change the rhythm (`--gap`)
+alone. Participation is opt-in, and a component only joins
 where density has an effect independent from its optical size: if the result is
 merely that the component looks smaller or larger, that is size, not density.
 
