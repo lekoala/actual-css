@@ -54,6 +54,14 @@ describe("source reading", () => {
     expect(themeNameOf(":root { --primary: red; } [data-theme='dark'] {}")).toBeNull();
   });
 
+  test("an explicit theme name must be one the file declares", () => {
+    const css = '[data-theme="a"] {} [data-theme="b"] {}';
+    expect(themeNameOf(css, "b")).toBe("b");
+    // A typo would otherwise measure the framework defaults as the theme.
+    expect(() => themeNameOf(css, "c")).toThrow(/"c".*a, b/);
+    expect(() => themeNameOf(":root { --primary: red; }", "brand")).toThrow(/declares none/);
+  });
+
   test("computed srgb colors parse with and without alpha, clamped to gamut", () => {
     expect(parseSrgb("color(srgb 0.5 0.25 1)")).toEqual({ components: [0.5, 0.25, 1], alpha: 1 });
     expect(parseSrgb("color(srgb 1.02 -0.01 0.123456 / 0.04)")).toEqual({
