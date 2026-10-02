@@ -10,7 +10,8 @@
         "progressive-enhancement",
         "bootstrap",
         "tailwind",
-        "design-tools"
+        "design-tools",
+        "upgrading"
       ]
     },
     {

@@ -7,6 +7,8 @@
 
 Plain CSS component framework for new projects. Semantic classes, shared variants, small tokens, theme hooks, and progressive enhancement.
 
+Documentation: <https://lekoala.github.io/actual-css/>
+
 Actual CSS claims a documented set of global class names; the package publishes
 it as [`actual-css/reserved-classes.json`](reserved-classes.json).
 
@@ -82,8 +84,7 @@ Variants such as `.solid`, `.soft`, `.outline`, and `.surface` are shared by com
 
 Size variants `.sm` and `.lg` scale typography and participating component
 geometry consistently. Density contexts `.compact` and `.spacious` change
-spacing and geometry without changing font size or icons; `.compact` may
-slightly narrow typefaces that support a width axis.
+spacing and geometry without changing font size, font width or icons.
 
 ## Public Class Grammar
 
@@ -168,6 +169,20 @@ Modern syntax such as `light-dark()`, `color-mix()`, `@container`, `:has()`, `10
 Actual CSS does not currently ship a separate compatibility build. It is designed as progressive enhancement: modern features are guarded with `@supports` where needed, while older browsers still receive the core styles and the layout, forms, and components.
 
 For more conservative fallbacks, import and compose the source entrypoints directly.
+
+## Versioning
+
+Actual CSS is before 1.0:
+
+* A minor release (`0.11` → `0.12`) may remove or rename classes and hooks. Each
+  one ships an upgrade guide; the current one is
+  [Upgrading to 0.12](docs/pages/guides/upgrading.md).
+* A patch release (`0.11.0` → `0.11.1`) keeps every class and hook. It fixes
+  bugs and may add hooks, so a fix can still move a rendering by a few pixels.
+
+The floating `@0.11` CDN path takes patches automatically. Pin the exact
+version (`actual-css@0.11.1`) when the rendering must not change without a
+review.
 
 ## Browser support
 

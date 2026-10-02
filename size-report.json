@@ -1,12 +1,12 @@
 {
-  "totalRaw": 352149,
+  "totalRaw": 352238,
   "core": {
     "minified": 12720,
     "brotli": 2812
   },
   "full": {
-    "minified": 131643,
-    "brotli": 18862
+    "minified": 131677,
+    "brotli": 18886
   },
   "js": {
     "full": {
@@ -118,7 +118,7 @@
     },
     {
       "file": "components/card.css",
-      "raw": 4446
+      "raw": 4535
     },
     {
       "file": "themes/bootstrap-v6.css",
