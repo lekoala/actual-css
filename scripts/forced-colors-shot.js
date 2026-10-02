@@ -4,10 +4,13 @@
  * a plain --forced-colors CLI flag does not trigger) and saves a full-page PNG.
  *
  * Usage:
- *   bun scripts/forced-colors-shot.js [page] [--scheme light|dark] [--out file.png]
+ *   bun scripts/forced-colors-shot.js [page] [--scheme light|dark] [--src-css]
+ *       [--out file.png]
  *
  *   page      path or URL to capture (default: demo/templates/kitchen-sink.html)
  *   --scheme  prefers-color-scheme to emulate alongside (default: light)
+ *   --src-css render the page's built stylesheets (dist/, the demo themes
+ *             bundle) from their sources
  *   --out     output file (default: tmp/forced-colors-<scheme>.png)
  */
 import { join } from "node:path";
@@ -19,7 +22,9 @@ const args = process.argv.slice(2);
 const {
   "--scheme": scheme = "light",
   "--out": out = join(ROOT, "tmp", `forced-colors-${scheme}.png`),
+  "--src-css": sourceCss,
 } = readFlags(args, {
+  "--src-css": { boolean: true },
   "--scheme": { fallback: "light" },
   "--out": { fallback: "" },
 });
@@ -29,6 +34,7 @@ const pageUrl = fixtureUrl(page);
 
 const saved = await capture(pageUrl, {
   out: out || join(ROOT, "tmp", `forced-colors-${resolvedScheme}.png`),
+  sourceCss,
   mediaFeatures: [
     { name: "forced-colors", value: "active" },
     { name: "prefers-color-scheme", value: resolvedScheme },

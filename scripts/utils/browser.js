@@ -41,17 +41,63 @@ export function fixtureUrl(page, cwd = process.cwd()) {
 }
 
 /*
- * Consumes `--flag value` pairs out of `args` (in place) and returns them keyed
- * by flag, falling back to `fallback` when the flag is absent.
+ * Consumes flags out of `args` (in place) and returns them keyed by flag.
+ * A `--flag value` pair falls back to `fallback` when absent; a
+ * `{ boolean: true }` flag takes no value and reads as true or false.
  */
 export function readFlags(args, spec) {
   const values = {};
-  for (const [flag, { fallback }] of Object.entries(spec)) {
+  for (const [flag, { fallback, boolean = false }] of Object.entries(spec)) {
     const index = args.indexOf(flag);
+    if (boolean) {
+      values[flag] = index !== -1;
+      if (index !== -1) args.splice(index, 1);
+      continue;
+    }
     values[flag] = index === -1 ? fallback : args[index + 1];
     if (index !== -1) args.splice(index, 2);
   }
   return values;
+}
+
+/*
+ * Built stylesheets and their sources. Demo pages link dist/ and the demo
+ * themes bundle, which agents do not rebuild, so a probe or shot of a demo
+ * silently measured stale CSS. CSS only: dist/actual.full.js maps to an ES
+ * module entry, a different load model and execution timing.
+ */
+const SOURCE_CSS = [
+  [/\/dist\/actual\.full(?:\.min)?\.css$/, "/src/css/actual.full.css"],
+  [/\/(?:demo|site)\/assets\/actual-themes\.min\.css$/, "/src/css/themes/index.css"],
+];
+
+/*
+ * Points every built stylesheet link of the loaded page at its source and
+ * resolves once each replacement (imports included) has loaded, so the caller
+ * never reads a style computed between the two sheets. Returns the swaps.
+ * Page scripts have already run against the built CSS; measure after them.
+ */
+export async function useSourceCss(view) {
+  const map = SOURCE_CSS.map(([pattern, source]) => [pattern.source, source]);
+  return view.evaluate(`(async () => {
+    const map = ${JSON.stringify(map)};
+    const swaps = [];
+    const loads = [];
+    for (const link of document.querySelectorAll('link[rel~="stylesheet"][href]')) {
+      const built = new URL(link.href);
+      const entry = map.find(([pattern]) => new RegExp(pattern).test(built.pathname));
+      if (!entry) continue;
+      const source = new URL(built.pathname.replace(new RegExp(entry[0]), entry[1]), built);
+      loads.push(new Promise((resolve, reject) => {
+        link.addEventListener("load", resolve, { once: true });
+        link.addEventListener("error", () => reject(new Error("--src-css could not load " + source.href)), { once: true });
+      }));
+      link.href = source.href;
+      swaps.push(decodeURI(built.pathname) + " -> " + decodeURI(source.pathname));
+    }
+    await Promise.all(loads);
+    return swaps;
+  })()`);
 }
 
 let available;
@@ -73,7 +119,9 @@ export async function browserAvailable(createView = () => new Bun.WebView({ back
  * Resolves to the value returned by `run`. The tab is closed on the way out.
  *
  * `mediaFeatures` (e.g. prefers-reduced-motion) are emulated before fixture
- * navigation so the page sees them from the first render. Page `console.*`
+ * navigation so the page sees them from the first render. `sourceCss` swaps
+ * built stylesheets for their sources before `run` (see useSourceCss) and
+ * reports the swaps on stderr. Page `console.*`
  * calls are captured; on failure they are appended to the error and, when
  * `artifactName` is set, a screenshot is written under `artifactsDir`.
  */
@@ -85,6 +133,7 @@ export async function withBrowserPage(
     height = 900,
     mediaFeatures = [],
     settleMs = 0,
+    sourceCss = false,
     artifactName,
     artifactsDir = "tmp/0.4/screenshots",
   } = {},
@@ -104,6 +153,14 @@ export async function withBrowserPage(
     await view.cdp("Emulation.setEmulatedMedia", { features: mediaFeatures });
   }
   await view.navigate(url);
+  if (sourceCss) {
+    const swaps = await useSourceCss(view);
+    console.error(
+      swaps.length > 0
+        ? `--src-css:\n  ${swaps.join("\n  ")}`
+        : "--src-css: no built stylesheet on this page; it already renders its sources",
+    );
+  }
   if (settleMs > 0) await wait(settleMs);
 
   try {
@@ -135,7 +192,7 @@ export async function withBrowserPage(
  */
 export async function capture(
   pageUrl,
-  { out, mediaFeatures = [], settleMs = 400, width, beforeShot } = {},
+  { out, mediaFeatures = [], settleMs = 400, width, beforeShot, sourceCss = false } = {},
 ) {
   await withBrowserPage(
     pageUrl,
@@ -151,7 +208,7 @@ export async function capture(
       await mkdir(dirname(out), { recursive: true });
       await writeFile(out, Buffer.from(shot.data, "base64"));
     },
-    { mediaFeatures, settleMs },
+    { mediaFeatures, settleMs, sourceCss },
   );
   return out;
 }

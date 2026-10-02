@@ -6,7 +6,7 @@
  *          (stack / cluster / grid / frame / card / navbar / btn / badge /
  *          field / choice-card / tabs / drawer / aura).
  *
- * Cyberpunk accents are deliberately small utilities — .cut, .chip,
+ * Cyberpunk accents are deliberately small utilities — .cut, .neon-chip,
  * .signal, .ticker — so pages stay declarative.
  */
 
@@ -213,8 +213,9 @@ img { filter: saturate(1.06) contrast(1.03); }
 
 
 
-/* Floating status chips over hero media. */
-.chip {
+/* Floating status chips over hero media. Not .chip: that is the framework's
+   .choice-card modifier, and a demo should not reuse a framework name. */
+.neon-chip {
   position: absolute;
   z-index: 1;
   display: inline-flex;
@@ -233,13 +234,13 @@ img { filter: saturate(1.06) contrast(1.03); }
   white-space: nowrap;
 }
 
-.chip b { color: var(--text); }
-.chip.one { inset-block-start: 1rem; inset-inline-start: -0.75rem; }
-.chip.two { inset-block-end: 1rem; inset-inline-end: -0.75rem; }
+.neon-chip b { color: var(--text); }
+.neon-chip.one { inset-block-start: 1rem; inset-inline-start: -0.75rem; }
+.neon-chip.two { inset-block-end: 1rem; inset-inline-end: -0.75rem; }
 
 @media (max-width: 30rem) {
-  .chip.one { inset-inline-start: 0.5rem; }
-  .chip.two { inset-inline-end: 0.5rem; }
+  .neon-chip.one { inset-inline-start: 0.5rem; }
+  .neon-chip.two { inset-inline-end: 0.5rem; }
 }
 
 /* Live signal caption pinned inside a frame. */
@@ -709,7 +710,8 @@ img { filter: saturate(1.06) contrast(1.03); }
 }
 
 /* ------------------------------------------------------------------ steps */
-.steps { --grid-min: 14rem; --gap: 1rem; }
+/* Not .steps: that is the framework's stepper, whose flex row beats .grid. */
+.pickup-steps { --grid-min: 14rem; --gap: 1rem; }
 
 .step {
   padding-block-start: 1rem;

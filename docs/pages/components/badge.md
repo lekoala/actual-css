@@ -126,15 +126,9 @@ Regular
 <span class="badge success lg">Large</span>
 ```
 
-## Density
-
-Density changes the pill geometry without scaling its label or icon.
-
-```html demo
-<span class="compact"><span class="badge success">Compact</span></span>
-<span><span class="badge success">Default</span></span>
-<span class="spacious"><span class="badge success">Spacious</span></span>
-```
+A badge keeps its size inside a `.compact` or `.spacious` context: its
+geometry is intrinsic to its label. Use `.sm` / `.lg` for a smaller or larger
+badge.
 
 ## With an icon
 

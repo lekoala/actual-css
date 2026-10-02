@@ -6,7 +6,8 @@
  * Usage:
  *   bun scripts/shot-states.js [page] [--states motion,reduced,forced,contrast]
  *       [--width 700] [--scheme light|dark]
- *       [--force ".f:focus+focus-visible"] [--eval file.js] [--out dir]
+ *       [--force ".f:focus+focus-visible"] [--eval file.js] [--src-css]
+ *       [--out dir]
  *
  *   page       path or URL to capture (default: demo/templates/kitchen-sink.html)
  *   --states   comma-separated states (default: motion,reduced,forced)
@@ -18,6 +19,8 @@
  *              (selectors with `:has()` use the `sel=pseudos` form)
  *   --eval     JS file evaluated in the page before each capture (e.g. theme
  *              switch, frozen animations)
+ *   --src-css  render the page's built stylesheets (dist/, the demo themes
+ *              bundle) from their sources
  *   --out      output directory (default: tmp/shot-states); each state writes
  *              <page basename>-<state>.png
  */
@@ -42,7 +45,9 @@ const {
   "--force": forceArg = "",
   "--eval": evalFile = "",
   "--out": outDir = join(ROOT, "tmp", "shot-states"),
+  "--src-css": sourceCss,
 } = readFlags(args, {
+  "--src-css": { boolean: true },
   "--states": { fallback: "motion,reduced,forced" },
   "--width": { fallback: "" },
   "--scheme": { fallback: "" },
@@ -92,6 +97,7 @@ for (const state of states) {
   await capture(pageUrl, {
     out,
     width,
+    sourceCss,
     mediaFeatures: [...MEDIA_STATES[state], ...schemeFeatures],
     beforeShot:
       program || Object.keys(forceEntries).length > 0
