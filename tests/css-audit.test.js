@@ -1183,6 +1183,29 @@ test("optional FAB preserves DOM order", () => {
   expect(css).not.toContain("@media print");
 });
 
+test("FAB speed dial triggers carry no authored icon", () => {
+  // The markers are FAB's own: an icon in the summary stacks under the close
+  // glyph once open (the kitchen sink kept the old rotated-plus markup).
+  const root = join(import.meta.dir, "..");
+  const sources = ["demo/templates", "demo/sites", "docs/pages"].flatMap((dir) =>
+    [...new Bun.Glob("**/*.{html,md}").scanSync(join(root, dir))].map((path) => join(dir, path)),
+  );
+  const offenders = [];
+  let triggers = 0;
+  for (const path of sources) {
+    const source = readFileSync(join(root, path), "utf8");
+    for (const [, body] of source.matchAll(
+      /<details class="fab"[^>]*>\s*<summary[^>]*>([\s\S]*?)<\/summary>/g,
+    )) {
+      triggers++;
+      if (body.trim()) offenders.push(path);
+    }
+  }
+  // Guards the pattern itself: a markup reshape must not make this vacuous.
+  expect(triggers).toBeGreaterThan(0);
+  expect(offenders).toEqual([]);
+});
+
 test("app navigation stays semantic and app-layout owns its adaptive geometry", () => {
   const navCss = readCss("src/css/components/app-nav.css");
   const layoutCss = readCss("src/css/layout/app-layout.css");
