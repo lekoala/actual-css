@@ -453,6 +453,7 @@ width bonus:</p>
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
+  --control-pad-x: var(--font-size-xs);
   font-stretch: var(--font-width-dense);
 }
 
@@ -460,6 +461,7 @@ width bonus:</p>
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
+  --control-pad-x: var(--font-size-lg);
   font-stretch: var(--font-width);
 }
 </code></pre>
@@ -475,7 +477,7 @@ with <code>--font-width-dense: 100%</code>.</p>
 <p><code>.tight</code> and <code>.loose</code> set the same two <code>--gap</code> steps without the rest of
 density: rhythm only, no padding, control size or font width.</p>
 <p>Participation is opt-in and selective: controls consume <code>--control-size</code>
-for geometry; spacing helpers and rhythms consume <code>--density-space</code> and <code>--gap</code>;
+and <code>--control-pad-x</code> for geometry; spacing helpers and rhythms consume <code>--density-space</code> and <code>--gap</code>;
 components whose size is intrinsic (badge, avatar, spinner, rating, key, prose,
 inline choice/switch) keep their own scales. A local component size overrides
 inherited density for the dimensions they share.</p>
