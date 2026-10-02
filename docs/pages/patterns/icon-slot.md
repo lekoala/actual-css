@@ -55,7 +55,7 @@ your own:
 ```html demo
 <div class="media">
   <span class="avatar primary"><abbr>AM</abbr></span>
-  <div class="stack">
+  <div class="stack gap-none">
     <strong>Ada Meridian</strong>
     <span class="muted">Senior designer.</span>
   </div>
