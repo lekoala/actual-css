@@ -139,11 +139,14 @@
    follows the forced palette without a forced-colors block and never touches
    the row separators. Navbar horizontal links keep color + surface only. The
    positioning context lives on every row link, so becoming current never moves
-   an app-positioned decoration to a new containing block. */
+   an app-positioned decoration to a new containing block.
+   The trait sits centered in the link's inline padding with rounded ends: flush
+   on the edge, a square line read as pasted onto the rounded fill. */
 .nav-list .nav-link[aria-current]::before {
   content: "";
   position: absolute;
   inset-block: var(--space-20);
-  inset-inline-start: 0;
+  inset-inline-start: calc((var(--space-20) - 2px) / 2);
   border-inline-start: 2px solid currentColor;
+  border-radius: var(--radius-full);
 }

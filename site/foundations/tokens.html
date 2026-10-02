@@ -299,6 +299,13 @@
 <li><code>--surface-opaque</code> — an opaque neutral used where a component must hide or separate what is painted beneath it: the status-dot and avatar-stack rings, range-thumb and meter separators, step markers, the mask under an <code>.aura</code> child. It is not a surface fill; paint panels with <code>--surface-*</code>.</li>
 </ul>
 <p>A theme with translucent surfaces overrides both with opaque values.</p>
+<p><code>--border</code> separates surfaces: cards, tables, dividers, panels. <code>--border-control</code>
+is the resting edge that tells a control apart from the surface — fields,
+checkboxes and radios, switches, OTP cells, choice cards, join addons, the color
+and file inputs. It defaults to <code>--border</code>; set it alone to make controls
+stand out (input border, field outline, form control contrast) without
+darkening every separator. Hover, checked, invalid and disabled states keep
+their own colors.</p>
 <p>Use <code>*-fg</code> pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.</p>
 <p>Focus styling is outline-first. A global focus baseline applies <code>--focus-outline</code> and <code>--focus-outline-offset</code>: older browsers show it on <code>:focus</code>, while modern browsers limit it to <code>:focus-visible</code>. The baseline is a <code>currentColor</code> line, so text-like elements (links, <code>summary</code>, nav and menu items) follow whatever surface the application painted. Boxed components draw a solid <code>--focus-ring-width</code> line in <code>--focus</code>: inside the border box on text fields (<code>.input</code>, <code>.textarea</code>, <code>.select</code>), outside at <code>--focus-outline-offset</code> on actions (<code>.btn</code>, <code>.close</code>, choices, switches). The color never follows an intent or a local surface, so <code>--focus</code> must hold 3:1 against both <code>--surface</code> and <code>--surface-solid</code> — the page, fields and a solid band all rely on it. Both lines are <code>--focus-ring-width</code> wide. Under <code>forced-colors: active</code>, outlines map to the system focus color.</p>
 <pre><code class="language-css">:root {
@@ -620,7 +627,7 @@ undo that.</p>
 </ul>
 <h2 id="theme-contract">Theme contract</h2>
 <p>Themes override tokens, not selectors. The themes in <code>src/css/themes/</code> are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as <code>ocean</code>, <code>square</code>, <code>cyberpunk</code>, and <code>brutalist</code>.</p>
-<p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick <code>--focus</code> as a mid-tone that holds 3:1 against both <code>--surface</code> and <code>--surface-solid</code> in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. <code>bunx --bun actual-css contrast --theme FILE</code> measures both pairs, and exits 1 when a pair misses.</p>
+<p>A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick <code>--focus</code> as a mid-tone that holds 3:1 against both <code>--surface</code> and <code>--surface-solid</code> in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. <code>bunx --bun actual-css contrast --theme FILE</code> measures both pairs, and exits 1 when a pair misses. The file may declare a <code>[data-theme]</code> island or set the tokens on <code>:root</code>; the tool reads each scheme through <code>color-scheme</code>, so write dark values with <code>light-dark()</code> — a <code>prefers-color-scheme</code> media block is not measured.</p>
 <p>When overriding an intent color, review its paired <code>--*-fg</code> and <code>--*-soft-fg</code>. A theme that declares no hook falls back to the <code>--soft-fg-mix</code> derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. <code>actual-css contrast</code> prints the resting and hovered soft pair for every intent in every scheme the theme declares, which is how a theme finds the roles that need a hook or a lower <code>--soft-fg-mix</code>.</p>
 <p>The default palette's hooks apply to <code>:root</code> and to the <code>light</code>/<code>dark</code> boundaries only. Any other <code>data-theme</code> value resets them to the derivation, whether the attribute sits on <code>&lt;html&gt;</code> or on a nested island.</p>
 <p>Contrast is measured between opaque colors. A translucent <code>--surface</code> has no ratio until it is composited over its backdrop, so <code>actual-css contrast</code> reports its pairs as n/a, and <code>.soft</code> mixes over it come out more opaque and more saturated than the surface. A translucent theme owns both: it measures against its real backdrop and replaces any recipe that does not hold there.</p>
@@ -630,6 +637,7 @@ undo that.</p>
 <li>intent colors and foreground pairs</li>
 <li>surface, text, border, focus, and overlay colors</li>
 <li><code>--surface-opaque</code> and <code>--surface-solid-fg</code>, when surfaces are translucent</li>
+<li><code>--border-control</code>, when controls need a stronger edge than separators</li>
 <li>radius tokens</li>
 <li>optional shadow, motion, typography, and soft-variant mix tokens</li>
 </ul>
