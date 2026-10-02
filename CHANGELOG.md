@@ -18,6 +18,7 @@
 
 ### Added
 
+- `actual-css contrast [--theme FILE]` (Bun) measures a theme's soft, focus, invalid-focus and inverse pairs in each declared scheme, and exits 1 on a miss.
 - `.tight` and `.loose` set the inherited `--gap` to `--space-20` / `--space-50` alone, without the padding, control size or font width of `.compact` / `.spacious`.
 - `.items-baseline` aligns children on their first text baseline and sets `--items-align`, completing the `.items-*` series.
 
@@ -33,6 +34,8 @@
 - `--card-gap` defaults to `--gap`, so `.compact` and `.spacious` (local or inherited) set the rhythm between a card's children.
 - `.nav-list` rows sit `--space-10` apart instead of `--space-20`, so a vertical nav reads as one list.
 - `.topbar` lays out its default row at zero specificity, so `topbar cluster` hands the row to `.cluster`.
+- The WCAG and OKLCH color math moves from `scripts/utils/color.js` to `src/tooling/color.js`.
+- `report:theme-contrast` labels a dark-only preset (`dim`, `glass`, `indigo`, `neon`) as dark instead of light.
 
 ### Fixed
 

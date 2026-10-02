@@ -1,5 +1,6 @@
 /*
- * sRGB color math shared by the contrast reports and the browser tests.
+ * sRGB color math shared by `actual-css contrast`, the repository reports and
+ * the browser tests.
  * Colors are [r, g, b, a] byte arrays as returned by RASTERIZE in the page;
  * plain [r, g, b] triplets are accepted and treated as opaque.
  */

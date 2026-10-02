@@ -167,8 +167,8 @@ to keep that pair ≥ 4.5:1 in both color schemes, enforced by
 presets and custom `[data-theme]` islands keep the `--soft-fg-mix` derivation
 unless they declare the hooks themselves (the framework resets them outside
 the default boundary). A theme that overrides the soft palette is responsible
-for preserving sufficient text contrast; `bun run report:theme-contrast`
-reports every preset's resting and hovered pairs without failing the build.
+for preserving sufficient text contrast; `bunx actual-css contrast --theme FILE`
+measures its resting and hovered pairs.
 
 A theme whose primary should read more muted than its statuses sets only
 `--primary-soft-fg`, and every soft `.primary` foreground follows it. Without a
@@ -484,13 +484,13 @@ Rules:
 
 Themes override tokens, not selectors. The themes in `src/css/themes/` are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as `ocean`, `square`, `cyberpunk`, and `brutalist`.
 
-A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick `--focus` as a mid-tone that holds 3:1 against both `--surface` and `--surface-solid` in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. `bun run report:theme-contrast` measures both pairs.
+A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick `--focus` as a mid-tone that holds 3:1 against both `--surface` and `--surface-solid` in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. `bunx actual-css contrast --theme FILE` measures both pairs, and exits 1 when a pair misses.
 
-When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. A theme that declares no hook falls back to the `--soft-fg-mix` derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. `bun run report:theme-contrast` prints the resting and hovered soft pair for every intent of every island, which is how a theme finds the roles that need a hook or a lower `--soft-fg-mix`.
+When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. A theme that declares no hook falls back to the `--soft-fg-mix` derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. `actual-css contrast` prints the resting and hovered soft pair for every intent in every scheme the theme declares, which is how a theme finds the roles that need a hook or a lower `--soft-fg-mix`.
 
 The default palette's hooks apply to `:root` and to the `light`/`dark` boundaries only. Any other `data-theme` value resets them to the derivation, whether the attribute sits on `<html>` or on a nested island.
 
-Contrast is measured between opaque colors. A translucent `--surface` has no ratio until it is composited over its backdrop, so `report:theme-contrast` refuses such a theme, and `.soft` mixes over it come out more opaque and more saturated than the surface. A translucent theme owns both: it measures against its real backdrop and replaces any recipe that does not hold there.
+Contrast is measured between opaque colors. A translucent `--surface` has no ratio until it is composited over its backdrop, so `actual-css contrast` reports its pairs as n/a, and `.soft` mixes over it come out more opaque and more saturated than the surface. A translucent theme owns both: it measures against its real backdrop and replaces any recipe that does not hold there.
 
 Shape, shadow, motion, typography, and soft-variant mix tokens are optional knobs. Override them only when the theme actually changes that part of the system.
 
@@ -530,7 +530,7 @@ A minimal recolor theme (illustrative, not a shipped theme):
   --text-muted: hsl(260 10% 42%);
   --text-subtle: hsl(260 8% 56%);
   --border: hsl(260 24% 84%);
-  --focus: var(--primary);
+  --focus: hsl(260 60% 62%);
   --hover-overlay: hsl(260 30% 10% / 0.04);
   --shadow-color: hsl(260 30% 10%);
   --soft-bg-mix: 84%;

@@ -184,16 +184,27 @@ Override the whole minimal recolor set (Tokens · Theme contract), not just
 `--primary`. Every neutral of the default theme — surfaces, text, border,
 `--neutral`, `--hover-overlay`, `--shadow-color` — is tinted toward the default
 primary and never derived from `--primary` at runtime, so a partial override
-leaves the default identity in the greys. `report:theme-contrast` checks
+leaves the default identity in the greys. `actual-css contrast` checks
 contrast, not a leftover tint.
 
 Soft ink is the other half. The default palette ships calibrated
 `--*-soft-fg` hooks; any other theme falls back to the `--soft-fg-mix`
 derivation, which is a single global percentage and therefore guarantees
-nothing about your intents. Verify with `bun run report:theme-contrast`, then
-lower `--soft-fg-mix` or declare the per-role hooks for the intents that miss.
+nothing about your intents. Measure it, then lower `--soft-fg-mix` or declare
+the per-role hooks for the intents that miss:
 
-→ Foundations · Tokens (theme contract)
+```sh
+bunx actual-css contrast --theme src/theme.css
+```
+
+It reads the theme in headless Chrome, in every scheme it declares, and exits 1
+when a soft, focus, invalid-focus or inverse pair misses its threshold, so it
+can gate a CI job.
+
+Starting from a color scale (Tailwind `--color-zinc-*`, a brand ramp): map one
+step per role rather than importing the scale.
+
+→ Foundations · Tokens (theme contract) · Guides · Tailwind (Map the palette to theme roles)
 
 ### Use or adapt a preset palette
 

@@ -8,10 +8,11 @@ function usage() {
   return [
     "actual-css bundle INPUT --out FILE [--minify]",
     "actual-css design [--theme FILE] [--name NAME] --out DIR",
+    "actual-css contrast [--theme FILE] [--name NAME]",
     "",
     "  -o, --out FILE   write the bundle to FILE / the export to DIR (required)",
     "      --minify     collapse comments and whitespace",
-    "      --theme FILE export this [data-theme] file instead of the default theme",
+    "      --theme FILE read this [data-theme] file instead of the default theme",
     "      --name NAME  the data-theme name, when the file declares several",
     "  -h, --help       show this message",
     "      --version    print the actual-css version",
@@ -24,6 +25,11 @@ function usage() {
     "design: export a theme's tokens for Figma and Penpot, plus Button, Input, Badge,",
     "Alert and Card measured in headless Chrome and a Penpot plugin that builds them.",
     "Needs Bun (bunx actual-css design ...).",
+    "",
+    "contrast: measure the pairs a theme tunes by hand in headless Chrome, in every",
+    "scheme it declares: soft ink on its resting and hovered fill, the focus line on",
+    "--surface and --surface-solid, the invalid-field focus line, and the inverse",
+    "text. Exits 1 when a pair misses its threshold. Needs Bun.",
   ].join("\n");
 }
 
@@ -43,8 +49,8 @@ function parseArgs(argv) {
     return { version: true };
   }
 
-  if (command === "design") {
-    return parseDesignArgs(rest);
+  if (command === "design" || command === "contrast") {
+    return parseThemeArgs(command, rest);
   }
 
   if (command !== "bundle") {
@@ -101,9 +107,10 @@ function parseArgs(argv) {
   return { help: false, command: "bundle", input, out, minify };
 }
 
-function parseDesignArgs(rest) {
-  const options = { help: false, command: "design", themeFile: null, name: null, out: "" };
-  const valued = { "--theme": "themeFile", "--name": "name", "--out": "out", "-o": "out" };
+function parseThemeArgs(command, rest) {
+  const options = { help: false, command, themeFile: null, name: null, out: "" };
+  const valued = { "--theme": "themeFile", "--name": "name" };
+  if (command === "design") Object.assign(valued, { "--out": "out", "-o": "out" });
 
   for (let i = 0; i < rest.length; i += 1) {
     const arg = rest[i];
@@ -116,21 +123,36 @@ function parseDesignArgs(rest) {
     i += 1;
   }
 
-  if (!options.out) throw new Error("Missing required --out DIR option.");
+  if (command === "design" && !options.out) throw new Error("Missing required --out DIR option.");
   return options;
 }
 
-async function design({ themeFile, name, out }) {
-  // Checked before the import: under Node the module does not even parse
-  // (`await using`), and `bundle` must stay usable there.
+/* Checked before the tooling import: under Node those modules do not even
+   parse (`await using`), and `bundle` must stay usable there. */
+function requireBun(command) {
   if (typeof Bun === "undefined") {
     throw new Error(
-      "actual-css design needs Bun: it reads the theme in headless Chrome through Bun.WebView. Run it with bunx.",
+      `actual-css ${command} needs Bun: it reads the theme in headless Chrome through Bun.WebView. Run it with bunx.`,
     );
   }
+}
+
+async function design({ themeFile, name, out }) {
+  requireBun("design");
   const { exportDesign } = await import("../tooling/design-export.js");
   const written = await exportDesign({ themeFile, name, out: resolve(out) });
   console.log(`Exported ${written.length} files to ${resolve(out)}`);
+}
+
+async function contrast({ themeFile, name }) {
+  requireBun("contrast");
+  const { formatContrast, measureThemeFile } = await import("../tooling/theme-contrast.js");
+  const { text, misses } = formatContrast(await measureThemeFile({ themeFile, name }));
+  console.log(text);
+  if (misses > 0) {
+    console.error(`\n${misses} pair${misses === 1 ? "" : "s"} under threshold.`);
+    process.exitCode = 1;
+  }
 }
 
 async function bundle({ input, out, minify }) {
@@ -167,7 +189,8 @@ async function main() {
     return;
   }
 
-  await (args.command === "design" ? design(args) : bundle(args));
+  const commands = { bundle, contrast, design };
+  await commands[args.command](args);
 }
 
 main().catch((error) => {
