@@ -23,8 +23,7 @@ Patterns often compose with layout primitives.
 
 ```html
 <menu class="cluster">...</menu>
-<ul class="nav-list cluster">...</ul>
-<ul class="nav-list stack">...</ul>
+<ul class="nav-list">...</ul>
 <section class="grid">...</section>
 ```
 

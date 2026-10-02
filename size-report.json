@@ -1,12 +1,12 @@
 {
-  "totalRaw": 348387,
+  "totalRaw": 348985,
   "core": {
     "minified": 11811,
     "brotli": 2715
   },
   "full": {
-    "minified": 130765,
-    "brotli": 18774
+    "minified": 130622,
+    "brotli": 18772
   },
   "js": {
     "full": {
@@ -81,16 +81,16 @@
       "raw": 5274
     },
     {
+      "file": "utilities/extra.css",
+      "raw": 5265
+    },
+    {
       "file": "components/accordion.css",
       "raw": 5262
     },
     {
       "file": "forms/switch.css",
       "raw": 5251
-    },
-    {
-      "file": "utilities/extra.css",
-      "raw": 5231
     },
     {
       "file": "components/join.css",
@@ -105,16 +105,20 @@
       "raw": 4960
     },
     {
-      "file": "components/navbar.css",
-      "raw": 4925
-    },
-    {
       "file": "core/variants.css",
       "raw": 4916
     },
     {
+      "file": "components/navbar.css",
+      "raw": 4721
+    },
+    {
       "file": "themes/gradient.css",
       "raw": 4667
+    },
+    {
+      "file": "components/card.css",
+      "raw": 4446
     },
     {
       "file": "themes/glass.css",
@@ -131,10 +135,6 @@
     {
       "file": "utilities/base.css",
       "raw": 4037
-    },
-    {
-      "file": "components/card.css",
-      "raw": 3972
     },
     {
       "file": "layout/grid.css",
@@ -293,6 +293,10 @@
       "raw": 2052
     },
     {
+      "file": "layout/topbar.css",
+      "raw": 1834
+    },
+    {
       "file": "core/intents.css",
       "raw": 1806
     },
@@ -331,10 +335,6 @@
     {
       "file": "core/focus.css",
       "raw": 1630
-    },
-    {
-      "file": "layout/topbar.css",
-      "raw": 1540
     },
     {
       "file": "typography/overline.css",

@@ -4,7 +4,7 @@ Sticky, frosted top bar shell for app/dashboard layouts with a persistent sideba
 
 > **Module** — import `actual-css/css/layout/topbar` or `actual-css/css/layout`.
 
-Use `.topbar` for the structural shell of an app-shell header: sticky positioning, stacking, and a frosted background. Row content — search, breadcrumb, actions — stays local to the page.
+Use `.topbar` for the structural shell of an app-shell header: sticky positioning, stacking, and a frosted background. Its children sit in a centered row by default; a layout primitive on the same element, such as `topbar cluster`, replaces that row. Row content — search, breadcrumb, actions — stays local to the page.
 
 ```html demo
 <header class="topbar">

@@ -53,12 +53,6 @@
   border-radius: var(--radius-sm);
 }
 
-/* A cluster directly inside the bar takes the navbar's tight rhythm, at the
-   same specificity as .cluster so utilities (.gap-none) still win. */
-.navbar > :where(.cluster) {
-  gap: var(--space-10);
-}
-
 .nav-link {
   display: inline-flex;
   align-items: center;

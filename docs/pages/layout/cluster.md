@@ -72,8 +72,9 @@ wraps to several lines — set `--cluster-align`.
 ```
 
 The optional utility layer ships `.justify-content-start`, `.justify-content-center`,
-`.justify-content-end` and `.justify-content-space-between`, which set
-`--cluster-justify` for you. See the utilities page.
+`.justify-content-end` and `.justify-content-space-between`. They set
+`justify-content` on that one row; `--cluster-justify` inherits, so a nested
+`.cluster` follows it too. See the utilities page.
 
 ## Controls inside a wrapping cluster
 
