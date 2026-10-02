@@ -21,6 +21,7 @@ it("keeps size local and density typographically inert", async () => {
         return {
           font: parseFloat(style.fontSize),
           height: element.getBoundingClientRect().height,
+          pad: parseFloat(style.paddingInlineStart),
         };
       };
       return {
@@ -33,6 +34,8 @@ it("keeps size local and density typographically inert", async () => {
         densityDefault: measure("density-default"),
         spacious: measure("density-spacious"),
         localLarge: measure("local-large"),
+        fieldCompact: measure("field-compact"),
+        fieldDefault: measure("field-default"),
       };
     })()`);
 
@@ -46,6 +49,11 @@ it("keeps size local and density typographically inert", async () => {
     expect(result.compact.height).toBe(result.sm.height);
     expect(result.densityDefault.height).toBe(result.def.height);
     expect(result.spacious.height).toBe(result.lg.height);
+    // Density moves the inline padding too: a height change alone read as the
+    // same control squashed. Buttons and fields share the token.
+    expect(result.compact.pad).toBeLessThan(result.densityDefault.pad);
+    expect(result.densityDefault.pad).toBeLessThan(result.spacious.pad);
+    expect(result.fieldCompact.pad).toBeLessThan(result.fieldDefault.pad);
     expect(result.localLarge).toEqual(result.lg);
   });
 });

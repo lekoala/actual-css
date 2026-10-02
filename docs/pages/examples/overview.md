@@ -14,7 +14,7 @@ rest show it composed, isolated, or under stress.
 
 ### Start here
 
-- [Visual guide](../../demo/templates/visual-guide.html) - seventeen illustrated figures on the spacing scale, the layout primitives, and density versus local size
+- [Visual guide](../../demo/templates/visual-guide.html) - twenty illustrated figures on the spacing scale, the layout primitives, and rhythm versus density versus local size
 - [Color guide](../../demo/templates/color-guide.html) - theming principles measured live on `ocean` and `sunset`, in light and dark, as `data-theme` islands
 - [Kitchen sink](../../demo/templates/kitchen-sink.html) - one-screen test bed for themes, scopes, variants and interactions
 

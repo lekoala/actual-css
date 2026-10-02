@@ -104,8 +104,9 @@
   --bar-height: 0.65rem;
 
   /* Controls — inputs and buttons share --control-size so heights always match.
-     .compact/.spacious (variants.css) switch geometry without changing
-     --control-font-size. Local .sm/.lg component sizes switch all three.
+     .compact/.spacious (variants.css) switch geometry (--control-size,
+     --control-pad-x) without changing --control-font-size. Local .sm/.lg
+     component sizes switch all three.
 
      Inline choices (checkbox, radio, switch) are typographic, not field-sized:
      they sit on a line of text, so they follow --control-font-size through
@@ -119,8 +120,8 @@
      distance, so it is stated in the typographic tokens rather than an em
      whose value would change on a descendant with its own font size (the
      input-icon glyph, made larger by --input-icon-size). It mirrors
-     --control-font-size and is rebound beside it at the .sm/.lg boundaries
-     (variants.css); declaring it only in :root would freeze the md value,
+     --control-font-size and is rebound beside it at the .sm/.lg and
+     .compact/.spacious boundaries (variants.css); declaring it only in :root would freeze the md value,
      because a var() inside a custom property resolves where it is declared. */
   --control-size-sm: 2rem;
   --control-size-md: 2.375rem;
