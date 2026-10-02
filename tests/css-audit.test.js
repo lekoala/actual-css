@@ -121,13 +121,38 @@ test("justify-content utilities write the property, never an inherited relay", (
   expect(readCss("src/css/utilities/extra.css")).not.toContain("--cluster-justify");
 });
 
-test("topbar keeps its default row at zero specificity", () => {
-  // .topbar and the layout primitives share layout/; at class weight their
-  // file order alone would decide `topbar cluster`.
-  const css = readCss("src/css/layout/topbar.css");
+test("docs and demos never compose .nav-list with another layout", () => {
+  // .nav-list's vertical grid is its anatomy and wins over any primitive, so
+  // `nav-list cluster` rendered a column and `nav-list stack` only taught a
+  // composition that does nothing. Horizontal links are a `.cluster`.
+  const walk = (dir) =>
+    readdirSync(dir).flatMap((entry) => {
+      const path = `${dir}/${entry}`;
+      if (statSync(path).isDirectory()) return walk(path);
+      return /\.(html|md)$/.test(entry) ? [path] : [];
+    });
+  const offenders = ["demo", "docs/pages", "skills"].flatMap(walk).flatMap((path) =>
+    [...readFileSync(path, "utf8").matchAll(/class="([^"]*)"/g)]
+      .map((match) => match[1].split(/\s+/))
+      .filter((classes) => classes.includes("nav-list"))
+      .filter((classes) =>
+        classes.some((name) => /^(stack|cluster|grid(-\d+)?|switcher)$/.test(name)),
+      )
+      .map((classes) => `${path}: ${classes.join(" ")}`),
+  );
 
-  expect(css).toMatch(/:where\(\.topbar\) \{[^}]*display: flex;/);
-  expect(css).not.toMatch(/^\.topbar \{[^}]*display:/m);
+  expect(offenders).toEqual([]);
+});
+
+test("themes set control steps, never the selected control values", () => {
+  // --control-size / --control-pad-x are selections that every .sm/.lg and
+  // .compact/.spacious boundary rebinds; a theme value there is overwritten
+  // and density stops ordering correctly. Themes write the -sm/-md/-lg steps.
+  for (const entry of readdirSync("src/css/themes")) {
+    if (!entry.endsWith(".css")) continue;
+    const css = readCss(`src/css/themes/${entry}`);
+    expect(css, entry).not.toMatch(/--control-(size|pad-x):/);
+  }
 });
 
 test("rhythm classes set --gap and nothing else", () => {

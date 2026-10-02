@@ -128,14 +128,6 @@ center.
     I'm a surface alert — theme chrome, intent in the ink
   </div>
 
-  <div class="alert danger compact" role="alert">
-    I'm an error in a compact context
-  </div>
-
-  <div class="alert danger spacious" role="alert">
-    I'm an error in a spacious context
-  </div>
-
   <div class="alert danger outline" role="alert">
     I'm an outline error <a href="#">with a link</a>
   </div>

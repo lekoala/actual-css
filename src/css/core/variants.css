@@ -70,7 +70,7 @@
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
-  --control-pad-x: var(--font-size-xs);
+  --control-pad-x: var(--control-pad-x-sm);
   font-stretch: var(--font-width-dense);
 }
 
@@ -78,7 +78,7 @@
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
-  --control-pad-x: var(--font-size-lg);
+  --control-pad-x: var(--control-pad-x-lg);
   font-stretch: var(--font-width);
 }
 
@@ -116,7 +116,7 @@
 ).sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
-  --control-pad-x: var(--font-size-sm);
+  --control-pad-x: var(--control-pad-x-sm);
 }
 
 :where(
@@ -140,7 +140,7 @@
 ).lg {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
-  --control-pad-x: var(--font-size-lg);
+  --control-pad-x: var(--control-pad-x-lg);
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable

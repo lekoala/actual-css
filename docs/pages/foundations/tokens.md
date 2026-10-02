@@ -265,18 +265,27 @@ Local `.sm`/`.lg` sizes map `--control-size`, `--control-font-size`, and
   --control-size-md: 2.375rem;  /* 38px → default */
   --control-size-lg: 2.75rem;   /* 44px → .lg */
   --control-size: var(--control-size-md);
-  --control-pad-x: var(--font-size-md);
+  --control-pad-x-sm: var(--font-size-xs); /* .sm, .compact */
+  --control-pad-x-md: var(--font-size-md); /* default */
+  --control-pad-x-lg: var(--font-size-lg); /* .lg, .spacious */
+  --control-pad-x: var(--control-pad-x-md);
   --control-font-size: var(--font-size-md);
   --disabled-opacity: 0.65;
 }
 ```
 
-`--control-pad-x` is a resolved geometry length, stated in the typographic
-tokens rather than an `em`. Every part of one control must see the same
-horizontal distance; an `em` would change value on a descendant with its own
-font size, which is exactly what `--input-icon-size` does to the icon glyph. It
-mirrors `--control-font-size` and is rebound beside it at the `.sm`/`.lg`
-boundaries.
+A theme sets the steps (`--control-size-*`, `--control-pad-x-*`); `.sm`/`.lg`
+and `.compact`/`.spacious` select one. `--control-size` and `--control-pad-x`
+are the selected values: override them on one instance, never in a theme,
+where every size and density boundary would overwrite them. Set the steps in
+the root theme: the default selection reads them on `:root`, so a nested
+`data-theme` island that changes them only reaches its `.sm`, `.lg`,
+`.compact` and `.spacious` descendants.
+
+`--control-pad-x` is a length, not an `em`: every part of one control must see
+the same horizontal distance, and an `em` would change value on a descendant
+with its own font size, which is exactly what `--input-icon-size` does to the
+icon glyph.
 
 - `.lg` — 44px control height
 - default — 38px control height
@@ -303,7 +312,7 @@ width bonus:
   --gap: var(--space-20);
   --density-space: var(--space-20);
   --control-size: var(--control-size-sm);
-  --control-pad-x: var(--font-size-xs);
+  --control-pad-x: var(--control-pad-x-sm);
   font-stretch: var(--font-width-dense);
 }
 
@@ -311,7 +320,7 @@ width bonus:
   --gap: var(--space-50);
   --density-space: var(--space-50);
   --control-size: var(--control-size-lg);
-  --control-pad-x: var(--font-size-lg);
+  --control-pad-x: var(--control-pad-x-lg);
   font-stretch: var(--font-width);
 }
 ```

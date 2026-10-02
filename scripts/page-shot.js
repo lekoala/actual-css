@@ -5,7 +5,7 @@
  *
  * Usage:
  *   bun scripts/page-shot.js [page] [--width 1280] [--scheme light|dark]
- *       [--out file.png]
+ *       [--src-css] [--out file.png]
  *
  *   page      path or URL to capture (default: demo/templates/kitchen-sink.html)
  *   --width   exact layout viewport width, forced with device metrics (as in
@@ -13,6 +13,8 @@
  *             platform minimum, so the flag is the only reliable way to pin a
  *             width; without it the capture uses the default window size.
  *   --scheme  prefers-color-scheme to emulate (default: browser default)
+ *   --src-css render the page's built stylesheets (dist/, the demo themes
+ *             bundle) from their sources
  *   --out     output file (default: tmp/page-shot.png)
  */
 import { join } from "node:path";
@@ -25,7 +27,9 @@ const {
   "--scheme": scheme = "",
   "--out": out = join(ROOT, "tmp", "page-shot.png"),
   "--width": widthArg = "",
+  "--src-css": sourceCss,
 } = readFlags(args, {
+  "--src-css": { boolean: true },
   "--scheme": { fallback: "" },
   "--out": { fallback: join(ROOT, "tmp", "page-shot.png") },
   "--width": { fallback: "" },
@@ -41,7 +45,7 @@ const pageUrl = fixtureUrl(page);
 const mediaFeatures =
   scheme === "light" || scheme === "dark" ? [{ name: "prefers-color-scheme", value: scheme }] : [];
 
-const saved = await capture(pageUrl, { out, mediaFeatures, width });
+const saved = await capture(pageUrl, { out, mediaFeatures, width, sourceCss });
 console.log(
   `Saved ${saved} (${pageUrl}${width ? `, ${width}px` : ""}${scheme ? `, ${scheme}` : ""})`,
 );

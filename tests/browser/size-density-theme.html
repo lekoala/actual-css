@@ -1,0 +1,23 @@
+<!doctype html>
+<!-- The theme sits on the root, as an adopter's single theme does: the control
+     steps are root tokens that :root's selection and every size and density
+     boundary read. -->
+<html lang="en" data-theme="bootstrap-v6">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Themed size and density fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <link rel="stylesheet" href="../../src/css/themes/bootstrap-v6.css">
+  <style>body { padding: 1rem; }</style>
+</head>
+<body>
+  <div class="cluster">
+    <button class="btn sm" type="button" data-pad="sm">Small</button>
+    <button class="btn" type="button" data-pad="default">Default</button>
+    <button class="btn lg" type="button" data-pad="lg">Large</button>
+    <span class="compact"><button class="btn" type="button" data-pad="compact">Compact</button></span>
+    <span class="spacious"><button class="btn" type="button" data-pad="spacious">Spacious</button></span>
+  </div>
+</body>
+</html>
