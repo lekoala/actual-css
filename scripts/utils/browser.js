@@ -121,7 +121,7 @@ export async function browserAvailable(createView = () => new Bun.WebView({ back
  * `mediaFeatures` (e.g. prefers-reduced-motion) are emulated before fixture
  * navigation so the page sees them from the first render. `sourceCss` swaps
  * built stylesheets for their sources before `run` (see useSourceCss) and
- * reports the swaps on stderr. Page `console.*`
+ * reports the swaps on stderr outside `bun test`. Page `console.*`
  * calls are captured; on failure they are appended to the error and, when
  * `artifactName` is set, a screenshot is written under `artifactsDir`.
  */
@@ -155,11 +155,16 @@ export async function withBrowserPage(
   await view.navigate(url);
   if (sourceCss) {
     const swaps = await useSourceCss(view);
-    console.error(
-      swaps.length > 0
-        ? `--src-css:\n  ${swaps.join("\n  ")}`
-        : "--src-css: no built stylesheet on this page; it already renders its sources",
-    );
+    // The report is for a person reading a probe or shot; stderr keeps probe's
+    // stdout pure JSON. A test asserts the swap itself, so the report would
+    // only print red noise into the suite (bun test sets NODE_ENV=test).
+    if (process.env.NODE_ENV !== "test") {
+      console.error(
+        swaps.length > 0
+          ? `--src-css:\n  ${swaps.join("\n  ")}`
+          : "--src-css: no built stylesheet on this page; it already renders its sources",
+      );
+    }
   }
   if (settleMs > 0) await wait(settleMs);
 

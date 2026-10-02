@@ -183,5 +183,5 @@ treatments on either side of it.
 - `--card-radius` — corner radius.
 - `--card-max-inline-size` — maximum width.
 - `--card-pad` — inner padding, relayed to direct children for `.bleed`. `.compact` lowers it.
-- `--card-gap` — space between direct children of a bare card; follows `--gap`, so `.compact` and `.spacious` reach it. A composed layout primitive owns its own gap instead.
+- `--card-gap` — space between direct children of a bare card. `.compact` lowers it; a parent's `--gap` and an inherited density do not reach it. A composed layout primitive owns its own gap instead.
 - `--items-align` — cross-axis alignment of the slot rows, set by the `.items-*` helpers on the card or the slot.
