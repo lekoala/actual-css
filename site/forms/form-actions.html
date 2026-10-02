@@ -239,6 +239,9 @@ sticky variant (see Sticky Actions).</p>
 <p><code>.cluster</code> owns the row: flex, wrap and gap. <code>.form-actions</code> adds the alignment
 policy for form actions and the sticky behaviour. The space before the row
 belongs to the parent layout: put <code>.stack</code> on the form.</p>
+<p><code>.form-actions</code> refines <code>.cluster</code> with alignment rules of equal specificity,
+so it wins on import order. In a modular build, import <code>layout/cluster</code> before
+<code>forms/form-actions</code>; the family entries and the full bundle already do.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

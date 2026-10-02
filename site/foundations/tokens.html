@@ -442,9 +442,24 @@ Local <code>.sm</code>/<code>.lg</code> sizes map <code>--control-size</code>, <
 <p>A theme sets the steps (<code>--control-size-*</code>, <code>--control-pad-x-*</code>); <code>.sm</code>/<code>.lg</code>
 and <code>.compact</code>/<code>.spacious</code> select one. <code>--control-size</code> and <code>--control-pad-x</code>
 are the selected values: override them on one instance, never in a theme,
-where every size and density boundary would overwrite them. A nested
-<code>data-theme</code> island may set its own steps: its controls pick them up and keep
-the size or density they sit in.</p>
+where every size and density boundary would overwrite them.</p>
+<p>A <code>data-theme</code> island inherits the selected values, so an override set above it
+crosses it. A theme that changes the steps and is used as a nested island must
+re-select them in its own block, from the step weights that size and density
+classes set, so the island keeps the density around it:</p>
+<pre><code class="language-css">[data-theme=&quot;brand&quot;] {
+  --control-pad-x-sm: 0.5rem;
+  --control-pad-x-md: 0.75rem;
+  --control-pad-x-lg: 1rem;
+  --control-pad-x: calc(
+    (var(--control-pad-x-sm) * var(--control-step-sm)) +
+    (var(--control-pad-x-md) * var(--control-step-md)) +
+    (var(--control-pad-x-lg) * var(--control-step-lg))
+  );
+}
+</code></pre>
+<p>Re-select only the token whose steps the theme changes: the same rule for
+<code>--control-size</code> would stop an inherited <code>--control-size</code> at the island.</p>
 <p><code>--control-pad-x</code> is a length, not an <code>em</code>: every part of one control must see
 the same horizontal distance, and an <code>em</code> would change value on a descendant
 with its own font size, which is exactly what <code>--input-icon-size</code> does to the
