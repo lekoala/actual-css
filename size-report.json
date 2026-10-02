@@ -1,12 +1,12 @@
 {
-  "totalRaw": 348985,
+  "totalRaw": 349266,
   "core": {
-    "minified": 11811,
-    "brotli": 2715
+    "minified": 11881,
+    "brotli": 2730
   },
   "full": {
-    "minified": 130622,
-    "brotli": 18772
+    "minified": 130692,
+    "brotli": 18786
   },
   "js": {
     "full": {
@@ -93,6 +93,10 @@
       "raw": 5251
     },
     {
+      "file": "core/variants.css",
+      "raw": 5197
+    },
+    {
       "file": "components/join.css",
       "raw": 5164
     },
@@ -103,10 +107,6 @@
     {
       "file": "components/tooltip.css",
       "raw": 4960
-    },
-    {
-      "file": "core/variants.css",
-      "raw": 4916
     },
     {
       "file": "components/navbar.css",

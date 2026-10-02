@@ -29,7 +29,7 @@ one line (`.badge`). To stop a layout primitive from wrapping — for example to
 force a `.cluster` onto a single row — set `--cluster-wrap: nowrap`.
 
 ```html demo
-<div class="cluster compact" style="--cluster-wrap: nowrap;">
+<div class="cluster tight" style="--cluster-wrap: nowrap;">
   <select class="select sm fit" aria-label="Segment">
     <option>All segments</option>
   </select>
