@@ -101,9 +101,9 @@ table width before the wrapper scrolls horizontally.
 ## Compact tables
 
 `.compact` lowers cell padding and establishes compact density for controls or
-spacing helpers inside cells. Font size and icons stay unchanged; the framework's
-denser font width may apply when the typeface supports it. It is the
-same vocabulary as `.card.compact`.
+spacing helpers inside cells. The text stays as set; a data-heavy table that
+also wants condensed type sets `font-stretch` on itself. It is the same
+vocabulary as `.card.compact`.
 
 ```html demo
 <div class="table-wrap">

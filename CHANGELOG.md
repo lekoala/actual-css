@@ -13,6 +13,7 @@
 - `.form-actions` drops its top margin and `--form-actions-margin-block-start`; space it from the fields with `.stack` on the form.
 - `.justify-content-*` no longer sets `--cluster-justify`, so it aligns only its own element, never a nested `.cluster`.
 - `.card` header and footer rows drop to zero specificity: `.media`, `.cluster`, `.form-actions` and `.justify-content-*` on a slot now take over its layout.
+- `--font-width-dense` is removed; set `font-stretch` on an element that should render condensed.
 - A theme sets `--control-pad-x-sm` / `-md` / `-lg` instead of `--control-pad-x`, which `.sm`/`.lg` and `.compact`/`.spacious` now select from.
 
 ### Added
@@ -26,6 +27,7 @@
 - `.cluster` removes the native list chrome (`margin`, `padding`, `list-style`) from a `ul`, `ol` or `menu` it is applied to; the element stays a list in the DOM.
 - A heading that is the first child beside a leading `.dialog-icon` in a `.media` row centers on the icon anywhere, not only in a dialog.
 - A `dialog.modal` or `.drawer` header gives back its corner-close room when the dialog contains no `.close`; without `:has()` the room stays.
+- `.compact` and `.spacious` no longer set `font-stretch`: density changes rhythm and geometry, never typography.
 - `.compact` and `.spacious` select `--control-pad-x-sm` / `-lg`, so density controls get narrower or wider, not only shorter or taller.
 - `.sm` controls use the shared `--control-pad-x-sm` step: 13px of inline padding instead of 14px.
 - `--card-gap` defaults to `--gap`, so `.compact` and `.spacious` (local or inherited) set the rhythm between a card's children.

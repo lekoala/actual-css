@@ -155,6 +155,16 @@ test("themes set control steps, never the selected control values", () => {
   }
 });
 
+test("density contexts set rhythm and geometry, never typography", () => {
+  // A font-stretch width bonus only showed on typefaces with a wdth axis, so
+  // .compact meant something different per OS and font. Size owns typography.
+  const css = readCss("src/css/core/variants.css");
+  for (const name of ["compact", "spacious"]) {
+    const body = css.match(new RegExp(`\\.${name} \\{([^}]*)\\}`))[1];
+    expect(body, name).not.toMatch(/font|--control-font-size/);
+  }
+});
+
 test("rhythm classes set --gap and nothing else", () => {
   // Rhythm is not density: once .tight/.loose touch padding, control size or
   // font width they become a second .compact/.spacious.
