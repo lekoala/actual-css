@@ -87,6 +87,21 @@ JavaScript involved:
 </nav>
 ```
 
+## Equal-width tabs
+
+To make a few tabs share the strip's width (segmented, full-width, fill), set
+`--tab-flex: 1 1 0` on the strip. `.switcher` does not apply here: a tab strip
+never wraps, so it could never stack.
+
+```html demo
+<nav aria-label="Pricing sections">
+  <ul class="tabs" style="--tab-flex: 1 1 0">
+    <li><a class="tab primary" href="#reasons" aria-current="page">Reasons</a></li>
+    <li><a class="tab" href="#rates">Rates</a></li>
+  </ul>
+</nav>
+```
+
 ## Too many tabs
 
 A horizontal strip is one row and never wraps, nor does a label: a second line
@@ -138,4 +153,6 @@ Do not put a flyout trigger in a `role="tablist"`: a tablist holds only
 
 ## CSS hooks
 
+- `--tab-flex` — flex of each item; set `1 1 0` on the strip for equal-width tabs
+  (segmented, fill the width). A strip that cannot fit its labels still scrolls.
 - `--tab-gap` — space between an icon and the label text (default `0.375em`).

@@ -11,6 +11,7 @@
 ### Added
 
 - `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the full runtime instance.
+- `--tab-flex` on `.tabs` sets each tab's flex; `1 1 0` gives equal-width tabs.
 - `data-enhance="reveal-current"` (`actual-css/js/reveal-current`) scrolls an overflowing strip (`.breadcrumb`, `.pagination`, `.steps-horizontal`, link `.tabs`) to its `aria-current` item at connect.
 - `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs, apart from `--border`; it defaults to `--border`.
 

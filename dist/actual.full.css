@@ -8045,6 +8045,7 @@ a.avatar[aria-disabled="true"] {
  * into view.
  *
  * Public hooks:
+ * --tab-flex
  * --tab-gap
  */
 /* Intent boundary — inherited intents do not tint this component.
@@ -8082,9 +8083,12 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* Items keep their size and the strip scrolls instead. Covers both
-   anatomies: .tab directly in a tablist, or <li> in a navigation list. */
+   anatomies: .tab directly in a tablist, or <li> in a navigation list.
+   --tab-flex: 1 1 0 shares the width equally; an item still never shrinks
+   below its label (flex items keep min-content), so a strip that cannot fit
+   scrolls as before. */
 .tabs > * {
-  flex: none;
+  flex: var(--tab-flex, none);
 }
 
 .tabs:where([aria-orientation="vertical"]) {
@@ -8101,6 +8105,9 @@ a.avatar[aria-disabled="true"] {
   position: relative;
   display: inline-flex;
   align-items: center;
+  /* A tab wider than its label (--tab-flex) centers it; at natural width this
+     changes nothing, and a vertical rail resets it to the start below. */
+  justify-content: center;
   gap: var(--tab-gap, 0.375em);
   min-block-size: var(--control-size);
   padding-inline: var(--space-30);
@@ -8184,6 +8191,12 @@ a.avatar[aria-disabled="true"] {
   inset-inline: auto 0;
   border-block-end: 0;
   border-inline-end: 2px solid currentColor;
+}
+
+/* A shared width (--tab-flex) lands on the <li> of a link tab; the tab fills
+   it, so the indicator and the hit area span the whole share. */
+.tabs > li > .tab {
+  inline-size: 100%;
 }
 
 /*

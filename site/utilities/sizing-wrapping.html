@@ -402,7 +402,9 @@ pagination on one <code>.cluster</code>: a <code>&lt;nav&gt;</code> directly aro
 &lt;/div&gt;
 </code></pre>
 <p>The fade is a mask over the whole region, so on a bordered region such as
-<code>.table-wrap</code> it also fades the side borders while there is more to scroll.</p>
+<code>.table-wrap</code> it also fades the side borders while there is more to scroll.
+It runs as an animation, so on an element with its own <code>animation</code> one of the
+two loses: put <code>.scroller</code> on the inner element that scrolls instead.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--scroller-track</code> — scrollbar track color.</li>

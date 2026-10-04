@@ -1,12 +1,12 @@
 {
-  "totalRaw": 360524,
+  "totalRaw": 361098,
   "core": {
     "minified": 12327,
     "brotli": 2755
   },
   "full": {
-    "minified": 132182,
-    "brotli": 19064
+    "minified": 132265,
+    "brotli": 19075
   },
   "js": {
     "full": {
@@ -65,6 +65,10 @@
       "raw": 6445
     },
     {
+      "file": "components/tab.css",
+      "raw": 6136
+    },
+    {
       "file": "components/flyout.css",
       "raw": 5768
     },
@@ -79,10 +83,6 @@
     {
       "file": "core/variants.css",
       "raw": 5615
-    },
-    {
-      "file": "components/tab.css",
-      "raw": 5562
     },
     {
       "file": "typography/prose.css",

@@ -53,6 +53,18 @@
     </nav>
   </div>
 
+  <!-- Equal-width tabs, in both anatomies: buttons in a tablist, links in a nav. -->
+  <div role="tablist" aria-label="Equal" class="tabs" id="equal-buttons" style="--tab-flex: 1 1 0">
+    <button class="tab" role="tab" aria-selected="true">Reasons</button>
+    <button class="tab" role="tab" aria-selected="false">Rates and fees</button>
+  </div>
+  <nav aria-label="Equal links">
+    <ul class="tabs" id="equal-links" style="--tab-flex: 1 1 0">
+      <li><a class="tab" href="#r" aria-current="page">Reasons</a></li>
+      <li><a class="tab" href="#f">Rates and fees</a></li>
+    </ul>
+  </nav>
+
   <!-- Alignment at rest: the first item lines up with the heading above. -->
   <section id="aligned">
     <h2 id="heading">Heading</h2>

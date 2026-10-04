@@ -374,6 +374,30 @@ JavaScript involved:</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="equal-width-tabs">Equal-width tabs</h2>
+<p>To make a few tabs share the strip's width (segmented, full-width, fill), set
+<code>--tab-flex: 1 1 0</code> on the strip. <code>.switcher</code> does not apply here: a tab strip
+never wraps, so it could never stack.</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<nav aria-label="Pricing sections">
+  <ul class="tabs" style="--tab-flex: 1 1 0">
+    <li><a class="tab primary" href="#reasons" aria-current="page">Reasons</a></li>
+    <li><a class="tab" href="#rates">Rates</a></li>
+  </ul>
+</nav>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;nav aria-label=&quot;Pricing sections&quot;&gt;
+  &lt;ul class=&quot;tabs&quot; style=&quot;--tab-flex: 1 1 0&quot;&gt;
+    &lt;li&gt;&lt;a class=&quot;tab primary&quot; href=&quot;#reasons&quot; aria-current=&quot;page&quot;&gt;Reasons&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a class=&quot;tab&quot; href=&quot;#rates&quot;&gt;Rates&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/nav&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="too-many-tabs">Too many tabs</h2>
 <p>A horizontal strip is one row and never wraps, nor does a label: a second line
 no longer matches the Left/Right keys and reads as a nested level. When the tabs
@@ -444,6 +468,8 @@ its panel; the link to that page carries <code>aria-current=&quot;page&quot;</co
 <code>role=&quot;tab&quot;</code> items, and the arrow keys of the two widgets collide.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
+<li><code>--tab-flex</code> — flex of each item; set <code>1 1 0</code> on the strip for equal-width tabs
+(segmented, fill the width). A strip that cannot fit its labels still scrolls.</li>
 <li><code>--tab-gap</code> — space between an icon and the label text (default <code>0.375em</code>).</li>
 </ul>
 
@@ -467,6 +493,7 @@ its panel; the link to that page carries <code>aria-current=&quot;page&quot;</co
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#usage" data-docs-toc-item data-level="2">Usage</a></li>
+        <li><a class="nav-link" href="#equal-width-tabs" data-docs-toc-item data-level="2">Equal-width tabs</a></li>
         <li><a class="nav-link" href="#too-many-tabs" data-docs-toc-item data-level="2">Too many tabs</a></li>
         <li><a class="nav-link" href="#tab-with-a-flyout" data-docs-toc-item data-level="2">Tab with a flyout</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>

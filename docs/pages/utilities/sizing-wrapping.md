@@ -157,6 +157,8 @@ pagination on one `.cluster`: a `<nav>` directly around `.breadcrumb`,
 
 The fade is a mask over the whole region, so on a bordered region such as
 `.table-wrap` it also fades the side borders while there is more to scroll.
+It runs as an animation, so on an element with its own `animation` one of the
+two loses: put `.scroller` on the inner element that scrolls instead.
 
 ## CSS hooks
 
