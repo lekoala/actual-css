@@ -8,10 +8,6 @@
 policy for form actions and the sticky behaviour. The space before the row
 belongs to the parent layout: put `.stack` on the form.
 
-`.form-actions` refines `.cluster` with alignment rules of equal specificity,
-so it wins on import order. In a modular build, import `layout/cluster` before
-`forms/form-actions`; the family entries and the full bundle already do.
-
 ```html demo
 <form class="stack" novalidate>
   <label class="field">
@@ -65,8 +61,9 @@ In application CSS, the same policy is one declaration on the region:
 }
 ```
 
-On a form action row, `--cluster-justify` and `--cluster-align` have no effect;
-use the hooks above, or a `.justify-content-*` / `.items-*` utility on one row.
+On a form action row, use the hooks above rather than `--cluster-justify` /
+`--cluster-align`: the role writes those from its own hooks. For one row, a
+`.justify-content-*` / `.items-*` utility also works.
 A split pair keeps the dismissive action at the leading edge and the committing
 one at the trailing edge:
 

@@ -259,6 +259,29 @@
   padding: var(--card-pad, var(--space-40));
 }
 </code></pre>
+<h3 id="which-hooks-inherit">Which hooks inherit</h3>
+<p>A hook either describes one element's own layout, or a policy its context
+hands down. Instance geometry stops at every new instance; policy inherits.</p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Kind</th><th>Examples</th><th>Inherits</th></tr>
+</thead>
+<tbody>
+<tr><td>Palette, theme</td><td><code>--text</code>, <code>--primary</code></td><td>yes</td></tr>
+<tr><td>Rhythm, density</td><td><code>--gap</code>, <code>--control-size</code></td><td>yes</td></tr>
+<tr><td>Page policy</td><td><code>--center-size</code>, <code>--measure</code></td><td>yes</td></tr>
+<tr><td>Role policy</td><td><code>--form-actions-justify</code>, <code>--frame-ratio</code></td><td>yes</td></tr>
+<tr><td>Instance geometry</td><td><code>--cluster-justify</code>, <code>--grid-columns</code></td><td>no</td></tr>
+</tbody>
+</table></div>
+<p>Set instance geometry on the element itself (a class or inline style), and
+select nested instances to change them (<code>.toolbar &gt; .cluster</code>). Set a policy
+once on the region or on <code>:root</code> that owns it. A new hook follows the same
+test: &quot;how this element lays out&quot; stops at the element, &quot;what this context
+hands down&quot; inherits. The stop needs the instance to read its own hook:
+<code>.switcher</code> and <code>.sidebar-layout</code> hooks are read by their children, and a
+nested instance that is itself such a child still needs its parent's value,
+so those keep inheriting.</p>
 <h3 id="color">Color</h3>
 <p>Intent tokens are used by <code>.primary</code>, <code>.secondary</code>, <code>.success</code>, <code>.warning</code>, <code>.danger</code>, and <code>.neutral</code>. They are curated color/foreground pairs. Actual CSS does not compute foregrounds automatically in the core theme contract.</p>
 <p>The values below are the light fallback. In browsers with <code>light-dark()</code> support, the default theme re-declares the same tokens as light/dark pairs so dark mode follows the OS automatically; without support, browsers receive the light fallback.</p>
@@ -730,6 +753,7 @@ undo that.</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#public-surface" data-docs-toc-item data-level="2">Public surface</a></li>
         <li><a class="nav-link" href="#where-a-token-is-declared" data-docs-toc-item data-level="3">Where a token is declared</a></li>
+        <li><a class="nav-link" href="#which-hooks-inherit" data-docs-toc-item data-level="3">Which hooks inherit</a></li>
         <li><a class="nav-link" href="#color" data-docs-toc-item data-level="3">Color</a></li>
         <li><a class="nav-link" href="#palette-coherence" data-docs-toc-item data-level="3">Palette coherence</a></li>
         <li><a class="nav-link" href="#default-theme-philosophy" data-docs-toc-item data-level="3">Default theme philosophy</a></li>

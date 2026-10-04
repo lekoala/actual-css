@@ -17,6 +17,9 @@
  * visual, reading and keyboard order all agree — the role rules swap so the
  * aside still takes its preferred width and the main still reclaims the row.
  */
+/* No instance reset, unlike .cluster and .grid: the regions read the hooks,
+   and a layout nested as a region takes its own size from its parent's
+   values, so the hooks must reach it. */
 .sidebar-layout {
   display: flex;
   flex-direction: row;

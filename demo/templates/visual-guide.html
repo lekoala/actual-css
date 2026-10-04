@@ -649,8 +649,9 @@
             <code>.items-baseline</code> when a price and its period should share
             a text line rather than a box center. The hooks
             (<code>--cluster-justify</code>, <code>--cluster-align</code>,
-            <code>--cluster-wrap</code>) are inherited: set one when every
-            cluster inside should follow, not to nudge a single row.
+            <code>--cluster-wrap</code>) belong to the row they are set on and
+            stop at every nested cluster: set one on a recipe class composed
+            onto that row.
           </p>
         </div>
       </figure>

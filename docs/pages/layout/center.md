@@ -15,7 +15,8 @@ Constrain readable content and center it in the viewport, with width and padding
 </main>
 ```
 
-Tune width and side padding with local variables.
+Tune width and side padding with `--center-size` and `--center-pad`. Both
+inherit: set them on `:root` for the site's content width, or on one region.
 
 ```css
 .docs-page {

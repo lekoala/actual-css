@@ -74,8 +74,11 @@ wraps to several lines — set `--cluster-align`.
 The optional utility layer ships `.justify-content-start`, `.justify-content-center`,
 `.justify-content-end` and `.justify-content-space-between`. They set
 `justify-content` on that one row only; a nested `.cluster` keeps its own
-alignment. `--cluster-justify` is inherited, so setting it on a region reaches
-nested clusters too. See the utilities page.
+alignment. The `--cluster-*` hooks behave the same way: each cluster resets
+them, so a value applies to the cluster it is set on and never to a nested
+one. To align nested rows, select them (`.toolbar > .cluster`). `--gap` keeps
+inheriting, so a density context still reaches every nested cluster. See the
+utilities page.
 
 ## Controls inside a wrapping cluster
 

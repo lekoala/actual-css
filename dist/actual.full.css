@@ -1352,7 +1352,21 @@ small {
  *
  * Child contract: direct-child margins are reset, spacing comes from --gap.
  * A ul/ol/menu keeps its semantics but loses list chrome (see below).
+ *
+ * The hooks describe this row's own geometry, so they stop at each cluster:
+ * set them on the cluster itself, or target nested rows with a selector. The
+ * gap token is context rhythm and keeps inheriting.
  */
+
+/* Instance boundary: an ancestor's value never reaches a nested cluster.
+   Zero specificity, so any class or inline style on the cluster wins without
+   depending on import order; `initial` makes the var() fallbacks apply. */
+:where(.cluster) {
+  --cluster-align: initial;
+  --cluster-justify: initial;
+  --cluster-wrap: initial;
+}
+
 .cluster {
   display: flex;
   flex-direction: row;
@@ -1385,6 +1399,8 @@ small {
  * --center-size
  * --center-pad
  */
+/* The hooks inherit on purpose: a site's content width is page policy, so a
+   theme sets them once on :root for every .center. */
 .center {
   box-sizing: content-box;
   inline-size: calc(100% - var(--center-pad, 1rem) * 2);
@@ -1557,6 +1573,9 @@ small {
  *
  * Child contract: every direct child is a peer; the flex-basis applies to all.
  */
+/* No instance reset, unlike .cluster and .grid: the children read the hook,
+   and a switcher nested as a direct child takes its own flex-basis from its
+   parent's value, so the hook must reach it. */
 .switcher {
   display: flex;
   flex-direction: row;
@@ -1589,6 +1608,9 @@ small {
  * visual, reading and keyboard order all agree — the role rules swap so the
  * aside still takes its preferred width and the main still reclaims the row.
  */
+/* No instance reset, unlike .cluster and .grid: the regions read the hooks,
+   and a layout nested as a region takes its own size from its parent's
+   values, so the hooks must reach it. */
 .sidebar-layout {
   display: flex;
   flex-direction: row;
@@ -1649,6 +1671,13 @@ small {
  * docs/pages/layout/grid.md. Why divisors, why a *named* container, and how
  * the thresholds were arrived at: docs/design-notes/grid.md.
  */
+
+/* Instance boundary: a nested grid never takes its parent's track template.
+   Zero specificity, so a class or inline style on the grid itself wins. */
+:where(.grid) {
+  --grid-columns: initial;
+  --grid-min: initial;
+}
 
 /* --grid-columns replaces the intrinsic auto-fit template: once set, the grid
    no longer collapses on its own and the author owns narrow-container
@@ -2714,15 +2743,12 @@ small {
  * --form-actions-sticky-padding (owned by .form-actions.sticky)
  */
 
-/* The policy hooks write the properties themselves rather than relaying
-   --cluster-*: a relay would inherit into any .cluster nested in the row.
-   These are equal-specificity overrides of .cluster, so they win only because
-   forms load after layout in the official bundle (tests/css-audit.test.js
-   guards the order); utilities load later and keep the author's last word. On
-   this row --cluster-justify/--cluster-align have no effect. */
+/* The role relays its policy into the row's cluster hooks. Cluster hooks stop
+   at every nested .cluster, so the relay cannot leak, and this class beats the
+   cluster's zero-specificity reset in any import order. */
 .form-actions {
-  align-items: var(--form-actions-align, center);
-  justify-content: var(--form-actions-justify, flex-start);
+  --cluster-align: var(--form-actions-align, center);
+  --cluster-justify: var(--form-actions-justify, flex-start);
 }
 
 /* Opt-in sticky variant. When the bar is not stuck (at rest) the translucent
@@ -9218,9 +9244,9 @@ a.list-item[aria-current]::before {
   flex-wrap: nowrap;
 }
 
-/* The property is written directly, never relayed through the cluster hook:
-   a relay would inherit into every .cluster nested inside. Utilities load last,
-   so the direct declaration already beats .cluster at equal specificity. */
+/* The property is written directly, so the utility works on any flex row, not
+   only a .cluster. Utilities load last, so the direct declaration beats
+   .cluster at equal specificity. */
 .justify-content-start {
   justify-content: flex-start;
 }

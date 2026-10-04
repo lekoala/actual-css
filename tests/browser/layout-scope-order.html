@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form actions import order fixture</title>
+  <!-- Inverted modular order on purpose: the role loads before the primitive
+       it refines, which the relay must not care about. -->
+  <link rel="stylesheet" href="../../src/css/forms/form-actions.css">
+  <link rel="stylesheet" href="../../src/css/layout/cluster.css">
+  <style>
+    .checkout { --form-actions-justify: flex-end; --form-actions-align: start; }
+  </style>
+</head>
+<body>
+  <section class="checkout">
+    <div class="cluster form-actions" id="actions">
+      <button type="button">Save</button>
+      <div class="cluster" id="inside-actions"><span>D</span></div>
+    </div>
+  </section>
+</body>
+</html>

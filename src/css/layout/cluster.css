@@ -10,7 +10,21 @@
  *
  * Child contract: direct-child margins are reset, spacing comes from --gap.
  * A ul/ol/menu keeps its semantics but loses list chrome (see below).
+ *
+ * The hooks describe this row's own geometry, so they stop at each cluster:
+ * set them on the cluster itself, or target nested rows with a selector. The
+ * gap token is context rhythm and keeps inheriting.
  */
+
+/* Instance boundary: an ancestor's value never reaches a nested cluster.
+   Zero specificity, so any class or inline style on the cluster wins without
+   depending on import order; `initial` makes the var() fallbacks apply. */
+:where(.cluster) {
+  --cluster-align: initial;
+  --cluster-justify: initial;
+  --cluster-wrap: initial;
+}
+
 .cluster {
   display: flex;
   flex-direction: row;

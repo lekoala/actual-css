@@ -18,3 +18,5 @@ independently.
 ### Hooks
 
 - `--switcher-threshold` controls the space needed before all peers share a row.
+  The children read it, so it also reaches the children of a nested
+  switcher; set it on the nested switcher to give it its own threshold.

@@ -370,23 +370,16 @@ test("form-actions is a role on .cluster: policy hooks and sticky, no row, no ou
   const base = css.slice(css.indexOf(".form-actions {"));
   const baseRule = base.slice(0, base.indexOf("}"));
 
-  expect(css).toContain("align-items: var(--form-actions-align, center);");
-  expect(css).toContain("justify-content: var(--form-actions-justify, flex-start);");
+  // Relayed into the cluster hooks, which stop at nested clusters: no leak and
+  // no import-order dependency (tests/browser/layout-scope.test.js renders it).
+  expect(css).toContain("--cluster-align: var(--form-actions-align, center);");
+  expect(css).toContain("--cluster-justify: var(--form-actions-justify, flex-start);");
   // .cluster owns the row; a second flex declaration here would be a duplicate.
   expect(baseRule).not.toMatch(/display:|flex-wrap:|gap:/);
   // Like .field-group: the distance to siblings belongs to the parent layout.
   expect(css).not.toContain("margin-block-start");
   expect(css).toContain(".form-actions.sticky {");
   expect(css).toContain("position: sticky;");
-});
-
-test("forms load after layout so .form-actions refines the .cluster it composes", () => {
-  const css = readCss("src/css/actual.full.css");
-  const layoutIndex = css.indexOf("./layout/index.css");
-  const formsIndex = css.indexOf("./forms/index.css");
-
-  expect(layoutIndex).toBeGreaterThan(-1);
-  expect(formsIndex).toBeGreaterThan(layoutIndex);
 });
 
 test("stack resets block margins, cluster resets all margins", () => {

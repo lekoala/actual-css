@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layout hook scope fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    /* Set on the outer cluster through a class, the way a recipe would. */
+    .outer {
+      --cluster-justify: space-between;
+      --cluster-align: start;
+      --cluster-wrap: nowrap;
+      --gap: 13px;
+    }
+
+    /* A region carrying role policy for every form action row inside it. */
+    .checkout { --form-actions-justify: flex-end; }
+
+    /* Page policy, the way a theme sets it. */
+    :root { --center-size: 50rem; }
+  </style>
+</head>
+<body>
+  <div class="cluster outer" id="outer">
+    <span>A</span>
+    <div class="cluster" id="inherits-nothing"><span>B</span></div>
+    <div class="cluster" id="own-hook" style="--cluster-justify: center"><span>C</span></div>
+  </div>
+
+  <div class="grid" id="outer-grid" style="--grid-columns: 100px 1fr; --grid-min: 5rem">
+    <div class="grid" id="inner-grid"><span>A</span></div>
+  </div>
+
+  <!-- Direct nesting: a switcher or sidebar-layout that is itself a child of
+       the same primitive must still size like its siblings. -->
+  <div class="switcher" style="--switcher-threshold: 20rem">
+    <div id="switcher-sibling">B</div>
+    <div class="switcher" id="switcher-nested"><div>C</div></div>
+  </div>
+
+  <div class="sidebar-layout" style="--sidebar-layout-size: 10rem">
+    <div>Main</div>
+    <div class="sidebar-layout" id="sidebar-nested-aside"><div>Main</div><div>Aside</div></div>
+  </div>
+
+  <div class="center"><div class="center" id="inner-center">C</div></div>
+
+  <section class="checkout">
+    <div class="cluster form-actions" id="actions">
+      <button type="button">Save</button>
+      <div class="cluster" id="inside-actions"><span>D</span></div>
+    </div>
+  </section>
+</body>
+</html>

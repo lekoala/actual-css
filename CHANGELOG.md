@@ -4,6 +4,8 @@
 
 ### Breaking changes
 
+- `--cluster-justify`, `--cluster-align` and `--cluster-wrap` no longer inherit into nested `.cluster` rows; set them on the row itself or select nested rows.
+- `--grid-columns` and `--grid-min` no longer inherit into a nested `.grid`.
 - `.avatar-stack` no longer infers its size from child `.avatar.sm`/`.lg`; set `.sm`/`.lg` on the stack and omit size classes on its avatars.
 
 ### Added
@@ -14,6 +16,7 @@
 
 ### Changed
 
+- `forms/form-actions` no longer has to load after `layout/cluster`: `.form-actions` relays its hooks into the row's `--cluster-*`.
 - An overflowing horizontal `.tabs` strip starts with its selected tab in view, scrolling the strip only.
 - A scrolled `.breadcrumb` fades its inline start too, in engines with scroll-driven animations; at rest the root stays unfaded.
 - `.breadcrumb` declares its end fade as `scroll-padding-inline-end`, so keyboard focus never leaves a link under the fade.

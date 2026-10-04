@@ -256,7 +256,9 @@ partial row such as two items followed by one orphan.</p>
 independently.</p>
 <h3 id="hooks">Hooks</h3>
 <ul>
-<li><code>--switcher-threshold</code> controls the space needed before all peers share a row.</li>
+<li><code>--switcher-threshold</code> controls the space needed before all peers share a row.
+The children read it, so it also reaches the children of a nested
+switcher; set it on the nested switcher to give it its own threshold.</li>
 </ul>
 
 </div>
