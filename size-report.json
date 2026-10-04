@@ -1,12 +1,12 @@
 {
-  "totalRaw": 361098,
+  "totalRaw": 361225,
   "core": {
     "minified": 12327,
     "brotli": 2755
   },
   "full": {
-    "minified": 132265,
-    "brotli": 19075
+    "minified": 132234,
+    "brotli": 19085
   },
   "js": {
     "full": {
@@ -169,16 +169,16 @@
       "raw": 3517
     },
     {
+      "file": "layout/scroller.css",
+      "raw": 3262
+    },
+    {
       "file": "components/rating.css",
       "raw": 3240
     },
     {
       "file": "components/status-bar.css",
       "raw": 3239
-    },
-    {
-      "file": "layout/scroller.css",
-      "raw": 3135
     },
     {
       "file": "components/pagination.css",

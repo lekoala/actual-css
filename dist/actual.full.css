@@ -1908,8 +1908,9 @@ small {
     animation-timeline: scroll(self inline);
   }
 
-  /* Gradient keywords are physical. */
-  :where([dir="rtl"]) .scroller,
+  /* Gradient keywords are physical. :dir() alone, not [dir="rtl"] ancestry:
+     it follows the element's own direction, so an LTR island inside an RTL
+     page keeps its fade on the right side. */
   .scroller:dir(rtl) {
     --scroller-fade-dir: to left;
   }
