@@ -5,24 +5,83 @@
  *
  * Inline list separated by "/". Mark the current page with `aria-current="page"`
  * either on the item or on the current link.
+ *
+ * Breadcrumbs are a single navigation hierarchy. Wrapping makes hierarchy look
+ * like separate rows and causes unstable header height.
+ *
+ * A trail that overflows fades at the inline end, so clipped text reads as
+ * "there is more" rather than a clipping bug. The fade is permanent: a
+ * scroll-state query can only style a scroller's descendants, never the
+ * scrollport itself, so a conditional fade needs a wrapper or JS and waits
+ * for the fit/overflow work. The terminal space below equals the fade length,
+ * so at rest and at scroll end the fade covers empty padding and the last
+ * item stays fully inked. A mask (not an overlay) keeps the fade
+ * background-agnostic: the trail sits on pages, cards, and frosted topbars.
+ *
+ * Internal:
+ * --breadcrumb-bleed
+ * --breadcrumb-fade
+ * --breadcrumb-fade-dir
  */
 .breadcrumb {
+  /* The scrollport clips on both axes (overflow-x: auto computes overflow-y
+     to auto), so the padding keeps the text-link outline of every item inside
+     it. The block axis gives the room back with a negative margin; the inline
+     axis does not, or the list would grow past its container and scroll the
+     page on a phone. */
+  --breadcrumb-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
+  --breadcrumb-fade: var(--space-40);
+  /* Gradient keywords are physical, so RTL mirrors through this hook. */
+  --breadcrumb-fade-dir: to right;
+
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: var(--space-10);
   margin: 0;
-  padding: 0;
+  margin-block: calc(var(--breadcrumb-bleed) * -1);
+  padding: var(--breadcrumb-bleed);
+  padding-inline-end: calc(var(--breadcrumb-bleed) + var(--breadcrumb-fade));
+  /* One axis of navigation, so it never wraps: a second line reads as a
+     nested level. When the trail does not fit, the strip scrolls. */
+  overflow: auto hidden;
+  overscroll-behavior-inline: contain;
+  /* Permanent overflow affordance. Both declarations are safe-drop: an engine
+     that knows neither draws no fade and the strip still scrolls. */
+  -webkit-mask-image: linear-gradient(
+    var(--breadcrumb-fade-dir),
+    #000 0,
+    #000 calc(100% - var(--breadcrumb-fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    var(--breadcrumb-fade-dir),
+    #000 0,
+    #000 calc(100% - var(--breadcrumb-fade)),
+    transparent 100%
+  );
   color: var(--text-subtle);
   font-size: var(--font-size-sm);
   list-style: none;
 }
 
+/* Mirror of --breadcrumb-fade-dir, following the range fill pattern:
+   the gradient below cannot use flow-relative keywords. */
+:where([dir="rtl"]) .breadcrumb,
+.breadcrumb:dir(rtl) {
+  --breadcrumb-fade-dir: to left;
+}
+
+/* Items keep their size and the strip scrolls instead. White-space on the
+   item inherits to its text, so labels never break inside the one-line strip
+   regardless of the link markup. */
 .breadcrumb li {
   display: inline-flex;
+  flex: none;
   align-items: center;
   gap: var(--space-10);
+  white-space: nowrap;
 }
 
 .breadcrumb li + li::before {

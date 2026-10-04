@@ -141,6 +141,11 @@
     "classes": [
       "breadcrumb"
     ],
+    "internalHooks": [
+      "--breadcrumb-bleed",
+      "--breadcrumb-fade",
+      "--breadcrumb-fade-dir"
+    ],
     "states": [
       "aria-current"
     ]
