@@ -50,7 +50,7 @@ for (const [label, mediaFeatures] of [
         const supported = await view.evaluate(`CSS.supports("animation-timeline", "scroll()")`);
         expect(supported, "test engine must run scroll-driven animations").toBe(true);
 
-        for (const id of ["ltr", "rtl"]) {
+        for (const id of ["ltr", "rtl", "ltr-in-rtl"]) {
           expect(await view.evaluate(edgesOf(id)), `${id} at rest`).toBe("end");
           await view.evaluate(scrollTo(id, 0.5));
           await waitForBrowser(view, `${edgesOf(id)} === "start+end"`);
@@ -61,6 +61,10 @@ for (const [label, mediaFeatures] of [
         expect(
           await view.evaluate(`getComputedStyle(document.getElementById("rtl")).maskImage`),
         ).toContain("to left");
+        // The fade follows the strip's own direction, not an outer [dir="rtl"].
+        expect(
+          await view.evaluate(`getComputedStyle(document.getElementById("ltr-in-rtl")).maskImage`),
+        ).toContain("to right");
 
         expect(await view.evaluate(edgesOf("fits"))).toBe("none");
         expect(await view.evaluate(edgesOf("vertical"))).toBe("none");

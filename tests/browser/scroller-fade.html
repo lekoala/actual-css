@@ -33,6 +33,18 @@
     </ol>
   </div>
 
+  <!-- An LTR island inside an RTL region fades like any LTR strip. -->
+  <div dir="rtl">
+    <div class="box" dir="ltr">
+      <ol class="breadcrumb scroller" id="ltr-in-rtl">
+        <li><a href="#a">Home</a></li>
+        <li><a href="#b">Projects</a></li>
+        <li><a href="#c">Documentation</a></li>
+        <li><a href="#e" aria-current="page">Components</a></li>
+      </ol>
+    </div>
+  </div>
+
   <ol class="pagination scroller" id="fits">
     <li><a class="btn ghost" href="#1" aria-current="page">1</a></li>
   </ol>
