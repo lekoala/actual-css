@@ -12,8 +12,10 @@
  * even a Recommended engine may lack it. Engines that ignore both declarations
  * draw their native scrollbar — the intended fallback, not a broken state.
  *
- * Styles the scrollbar only; it does not create the overflow. Pair it with
- * .overflow-auto or a component that already scrolls.
+ * Styles the scrollbar and fades the edges of a region that scrolls inline;
+ * it does not create the overflow. Pair it with .overflow-auto or a component
+ * that already scrolls (the one-row strips: breadcrumb, pagination, tabs,
+ * horizontal steps).
  *
  * Public hooks:
  * --scroller-track
@@ -36,5 +38,55 @@
 @supports (color: color-mix(in oklch, red, white)) {
   .scroller {
     --scroller-thumb: color-mix(in oklch, var(--text-muted), transparent 55%);
+  }
+}
+
+/* Edge fade: a region that scrolls inline fades the edges it can still
+   scroll toward, the overflow cue where an overlay scrollbar hides at rest.
+   It runs on the region's own inline timeline, so a region that does not
+   scroll inline stays unmasked. Keep the @supports: without scroll timelines
+   the animation would end at once and pin its last mask. It follows the
+   reader's scroll, not time, so reduced motion keeps it. scroll-padding
+   matches the fade, so focus and reveal-current land an item clear of it. */
+@supports (animation-timeline: scroll()) {
+  .scroller {
+    --scroller-fade-dir: to right;
+
+    scroll-padding-inline: var(--space-40);
+    animation: actual-scroller-fade linear both;
+    animation-timeline: scroll(self inline);
+  }
+
+  /* Gradient keywords are physical. */
+  :where([dir="rtl"]) .scroller,
+  .scroller:dir(rtl) {
+    --scroller-fade-dir: to left;
+  }
+}
+
+/* mask-image does not interpolate, so each mask holds until halfway to the
+   next keyframe: a fade appears within the first pixels of scroll and the end
+   fade drops at the very end. */
+@keyframes actual-scroller-fade {
+  0% {
+    mask-image: linear-gradient(
+      var(--scroller-fade-dir),
+      #000 calc(100% - var(--space-40)),
+      transparent
+    );
+  }
+
+  1%,
+  99% {
+    mask-image: linear-gradient(
+      var(--scroller-fade-dir),
+      transparent,
+      #000 var(--space-40) calc(100% - var(--space-40)),
+      transparent
+    );
+  }
+
+  100% {
+    mask-image: linear-gradient(var(--scroller-fade-dir), transparent, #000 var(--space-40));
   }
 }

@@ -18,13 +18,12 @@
 
 - `forms/form-actions` no longer has to load after `layout/cluster`: `.form-actions` relays its hooks into the row's `--cluster-*`.
 - An overflowing horizontal `.tabs` strip starts with its selected tab in view, scrolling the strip only.
-- A scrolled `.breadcrumb` fades its inline start too, in engines with scroll-driven animations; at rest the root stays unfaded.
-- `.breadcrumb` declares its end fade as `scroll-padding-inline-end`, so keyboard focus never leaves a link under the fade.
+- `.scroller` fades the edges an inline-scrolling region can still scroll toward, in engines with scroll-driven animations.
 - `.floating-field` accepts its `.field-label` before or after the control; state is read through `:has()` on the cell.
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
 - `.pagination` never wraps: a row that does not fit scrolls horizontally, with room for its items' focus line.
 - A horizontal `.tabs` strip never wraps, nor do its labels: a strip that does not fit scrolls horizontally.
-- `.breadcrumb` never wraps, nor do its labels: a trail that does not fit scrolls horizontally, fading at the inline end to signal continuation.
+- `.breadcrumb` never wraps, nor do its labels: a trail that does not fit scrolls horizontally.
 - `.tab` shows the current state for any `aria-current` value, so a navigation flyout trigger can mark the current section with `aria-current="true"`.
 - The current `.nav-list` link trait sits inside the row's inline padding with rounded ends, instead of flush on its rounded edge.
 

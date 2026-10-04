@@ -142,10 +142,7 @@
       "breadcrumb"
     ],
     "internalHooks": [
-      "--breadcrumb-bleed",
-      "--breadcrumb-fade",
-      "--breadcrumb-fade-dir",
-      "--breadcrumb-fade-start"
+      "--breadcrumb-bleed"
     ],
     "states": [
       "aria-current"

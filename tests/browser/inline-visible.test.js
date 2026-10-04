@@ -79,7 +79,7 @@ it("overflowing strips start on their selected or current item", async () => {
       }
       // Mid-strip, the scroll-padding is honoured: room to spare at the edge.
       expect(strips["tabs-middle"]).toMatchObject({ scrolled: true, clear: true });
-      // The trail's end padding equals its fade, so the current page clears it.
+      // The current page lands fully inside the trail.
       expect(strips["trail-long"]).toMatchObject({ scrolled: true, clear: true });
       // The same token serves any strip with an aria-current item.
       expect(strips["steps-row"]).toMatchObject({ scrolled: true, inBox: true });

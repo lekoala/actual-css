@@ -763,26 +763,28 @@ test("breadcrumb stays a single-line strip", () => {
   expect(css).toMatch(/\.breadcrumb li\s*\{[^}]*white-space:\s*nowrap/s);
 });
 
-test("breadcrumb fades at the inline end instead of clipping silently", () => {
-  const css = readCss("src/css/components/breadcrumb.css");
-  const rules = readRules("src/css/components/breadcrumb.css");
+test("the strip edge fade lives once, in .scroller, behind its gate", () => {
+  /* One composition owns the overflow cue: no strip module carries its own. */
+  for (const path of [
+    "src/css/components/breadcrumb.css",
+    "src/css/components/pagination.css",
+    "src/css/components/tab.css",
+    "src/css/components/steps.css",
+  ]) {
+    expect(readRules(path), path).not.toContain("mask-image");
+  }
+  /* Without scroll timelines the animation would end at once and pin its last
+     mask on a region at rest, so the animation stays gated. */
+  const scroller = readRules("src/css/layout/scroller.css");
+  const gate = scroller.indexOf("@supports (animation-timeline: scroll())");
+  expect(gate).toBeGreaterThan(-1);
+  expect(scroller.indexOf("animation: actual-scroller-fade")).toBeGreaterThan(gate);
 
-  /* Permanent mask, not an overlay: background-agnostic across pages, cards,
-     and frosted topbars. The prefixed declaration extends the fade to older
-     WebKit; both are safe-drop, so no gate is needed. */
-  expect(css).toMatch(/\.breadcrumb\s*\{[^}]*mask-image:\s*linear-gradient\(/s);
-  expect(css).toMatch(/\.breadcrumb\s*\{[^}]*-webkit-mask-image:\s*linear-gradient\(/s);
-  /* Terminal space equals the fade length: at rest and at scroll end the fade
-     covers empty padding, never the last item. */
-  expect(css).toMatch(
-    /\.breadcrumb\s*\{[^}]*padding-inline-end:\s*calc\(var\(--breadcrumb-bleed\)\s*\+\s*var\(--breadcrumb-fade\)\)/s,
-  );
-  /* Physical gradient keywords mirror through the hook, following range. */
-  expect(css).toMatch(/--breadcrumb-fade-dir:\s*to right/);
-  expect(css).toMatch(/--breadcrumb-fade-dir:\s*to left/);
-  /* A fade says "there is more"; an arrow would say "action". */
-  expect(rules).not.toMatch(/\.breadcrumb::(before|after)\s*\{[^}]*content:/s);
-  expect(css.includes("scrollbar-width: none")).toBe(false);
+  /* A fade says "there is more"; an arrow would say "action". The scrollbar
+     stays: on a strip it is the only visible control for a mouse. */
+  const breadcrumb = readRules("src/css/components/breadcrumb.css");
+  expect(breadcrumb).not.toMatch(/\.breadcrumb::(before|after)\s*\{[^}]*content:/s);
+  expect(breadcrumb.includes("scrollbar-width: none")).toBe(false);
 });
 
 test("prose styles native kbd elements", () => {

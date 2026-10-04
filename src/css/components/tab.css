@@ -47,7 +47,9 @@
 
 /* The landmark around link tabs is not a scroll container, so as a flex or
    grid item it would keep the strip's full width and push the page into
-   scrolling. Letting it shrink hands the overflow back to the strip. */
+   scrolling. Letting it shrink hands the overflow back to the strip.
+   Without :has() the landmark keeps its width; min-inline-size: 0 on the
+   wrapper is the fallback. */
 :where(nav:has(> .tabs)) {
   min-inline-size: 0;
 }

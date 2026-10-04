@@ -7,7 +7,7 @@
 - Use `aria-current="page"` for the current page.
 - Separators are generated with CSS (`li + li::before`).
 - Breadcrumbs remain on a single line and scroll horizontally when space is insufficient. Actual does not automatically truncate or collapse hierarchy levels.
-- An overflowing trail fades at the inline end to signal continuation; the last item rests outside the fade once scrolled into view.
+- Compose `.scroller` to fade the edges an overflowing trail can still scroll toward.
 - Add `data-enhance="reveal-current"` to start an overflowing trail on its current item instead of the root. The placement happens once at connect, on a visible trail.
 - Add `.scroller` for a thin, theme-coloured scrollbar; see [one-row strips](../utilities/sizing-wrapping.md#one-row-strips).
 
