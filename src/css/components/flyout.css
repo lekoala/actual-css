@@ -93,7 +93,6 @@
 .flyout[popover] {
   position: fixed;
   inset: auto;
-  margin: 0;
 }
 
 /* A presentation class may own its *visible* display type, but must not

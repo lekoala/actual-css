@@ -107,10 +107,9 @@
   --otp-cell-border: var(--danger);
 }
 
-@supports selector(:user-invalid) {
-  .needs-validation .otp > input:user-invalid ~ span {
-    --otp-cell-border: var(--danger);
-  }
+/* biome-ignore lint/style/noDescendingSpecificity: all invalid routes write the same border, so their order cannot change the state. Keep :user-invalid separate so unsupported engines retain the other routes. */
+.needs-validation .otp > input:user-invalid ~ span {
+  --otp-cell-border: var(--danger);
 }
 
 .otp > input:disabled {

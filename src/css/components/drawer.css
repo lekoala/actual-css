@@ -25,6 +25,7 @@
  * --drawer-close-reserve (header room for a corner close; zero without a close)
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
  *   changes in one place; entry state redefines it longer)
+ * --drawer-motion-ease (panel easing owned by the open/closed state)
  */
 :where(dialog).drawer {
   --drawer-size: 20rem;
@@ -39,6 +40,7 @@
   /* Exit is shorter than entry so the panel clears quickly; the scrim reads
      the same variable through inheritance and never lags the panel. */
   --drawer-motion-duration: var(--duration);
+  --drawer-motion-ease: var(--ease-exit);
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button.
@@ -70,21 +72,21 @@
   box-shadow: var(--shadow);
   opacity: 0;
   transform: translateX(var(--drawer-closed-translate));
-  transition:
-    opacity var(--drawer-motion-duration) var(--ease-exit),
-    transform var(--drawer-motion-duration) var(--ease-exit);
+  /* Unsupported discrete behavior drops alone, preserving opacity/transform. */
+  transition-property: opacity, transform, overlay, display;
+  transition-duration: var(--drawer-motion-duration);
+  transition-timing-function: var(--drawer-motion-ease);
+  transition-behavior: allow-discrete;
 }
 
 :where(dialog).drawer[open] {
   --drawer-motion-duration: var(--duration-slow);
+  --drawer-motion-ease: var(--ease-enter);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: var(--space-40);
   opacity: 1;
   transform: translateX(0);
-  transition:
-    opacity var(--drawer-motion-duration) var(--ease-enter),
-    transform var(--drawer-motion-duration) var(--ease-enter);
 }
 
 /* A form is the drawer's content wrapper when actions need method="dialog".
@@ -104,7 +106,10 @@
   opacity: 0;
   /* Scrim curve stays neutral `ease`; only the panel's character curves
      apply. Duration follows --drawer-motion-duration through inheritance. */
-  transition: opacity var(--drawer-motion-duration) ease;
+  transition-property: opacity, overlay, display;
+  transition-duration: var(--drawer-motion-duration);
+  transition-timing-function: ease;
+  transition-behavior: allow-discrete;
 }
 
 :where(dialog).drawer[data-side="end"] {
@@ -154,31 +159,6 @@
   padding: var(--drawer-focus-bleed);
   overflow: auto;
   overscroll-behavior: contain;
-}
-
-@supports (transition-behavior: allow-discrete) {
-  :where(dialog).drawer {
-    transition:
-      opacity var(--drawer-motion-duration) var(--ease-exit),
-      transform var(--drawer-motion-duration) var(--ease-exit),
-      overlay var(--drawer-motion-duration) allow-discrete,
-      display var(--drawer-motion-duration) allow-discrete;
-  }
-
-  :where(dialog).drawer[open] {
-    transition:
-      opacity var(--drawer-motion-duration) var(--ease-enter),
-      transform var(--drawer-motion-duration) var(--ease-enter),
-      overlay var(--drawer-motion-duration) allow-discrete,
-      display var(--drawer-motion-duration) allow-discrete;
-  }
-
-  :where(dialog).drawer::backdrop {
-    transition:
-      opacity var(--drawer-motion-duration) ease,
-      overlay var(--drawer-motion-duration) allow-discrete,
-      display var(--drawer-motion-duration) allow-discrete;
-  }
 }
 
 /* Safari before 16.4 does not support :dir(); keep the ancestor-attribute

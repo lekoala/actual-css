@@ -289,7 +289,8 @@
       "--drawer-closed-translate",
       "--drawer-focus-bleed",
       "--drawer-close-reserve",
-      "--drawer-motion-duration"
+      "--drawer-motion-duration",
+      "--drawer-motion-ease"
     ],
     "states": [
       "open"

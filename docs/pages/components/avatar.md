@@ -79,6 +79,9 @@ is suppressed inside the avatar.
 
 ## Avatar stack
 
+Set `.sm` or `.lg` on `.avatar-stack` to size the group; its avatars inherit
+that size without their own size classes. Child sizes do not resize the stack.
+
 ```html demo
 <div class="avatar-stack" role="group" aria-label="Team members">
   <div class="avatar" role="img" aria-label="John Doe" style="--avatar-bg:#E5EEE4">
@@ -93,7 +96,7 @@ is suppressed inside the avatar.
 </div>
 ```
 
-## CSS hooks
+### Hooks
 
 - `--avatar-size` — inline and block size.
 - `--avatar-radius` — corner radius; set a smaller value for squared avatars.

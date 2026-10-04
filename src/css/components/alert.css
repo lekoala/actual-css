@@ -142,45 +142,43 @@
 
 /* Grid anatomy — activated by a leading icon, a trailing dismiss button, or
    both. Icon and dismiss are pinned to the outer columns; anything else (the
-   message content) flows into the remaining text column. */
-@supports selector(.alert:has(> *)) {
-  .alert:has(> .alert-icon, > .close) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-items: var(--items-align, start);
-    column-gap: var(--space-30);
-  }
-
-  .alert:has(> .alert-icon) {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-
-  .alert:has(> .alert-icon) > .alert-icon {
-    grid-column: 1;
-    grid-row: 1 / -1;
-    display: inline-grid;
-    place-items: center;
-    margin-block-start: 0.125em;
-  }
-
-  .alert:has(> .alert-icon) > :not(.alert-icon, .close) {
-    grid-column: 2;
-  }
-
-  .alert:has(> .close) {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .alert:has(> .alert-icon):has(> .close) {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-  }
-
-  .alert:has(> .close) > .close {
-    grid-column: -2 / -1;
-    grid-row: 1;
-  }
+   message content) flows into the remaining text column. Without :has(), the
+   grid rules drop together and the alert keeps ordinary block flow. */
+.alert:has(> .alert-icon, > .close) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: var(--items-align, start);
+  column-gap: var(--space-30);
 }
 
+.alert:has(> .alert-icon) {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.alert:has(> .alert-icon) > .alert-icon {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  display: inline-grid;
+  place-items: center;
+  margin-block-start: 0.125em;
+}
+
+.alert:has(> .alert-icon) > :not(.alert-icon, .close) {
+  grid-column: 2;
+}
+
+.alert:has(> .close) {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.alert:has(> .alert-icon):has(> .close) {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.alert:has(> .close) > .close {
+  grid-column: -2 / -1;
+  grid-row: 1;
+}
 /* Links */
 .alert :where(a:not(.btn)) {
   color: inherit;

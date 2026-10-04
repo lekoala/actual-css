@@ -143,7 +143,8 @@ const JUSTIFIED =
  * the same commit as the source comment that documents the fallback.
  */
 const PROGRESSIVE = {
-  "src/css/components/avatar.css": [":has()"],
+  "src/css/components/alert.css": [":has()", ":not() selector lists"],
+  "src/css/forms/validation.css": [":has()"],
   "src/css/components/join.css": [":has()"],
   "src/css/effects/aura.css": [":has()"],
   "src/css/components/modal.css": [":has()"],

@@ -5,6 +5,8 @@
  *
  * Imported by default through forms/index.css. Custom builds may omit this
  * file when an app wants to own validation styling completely.
+ * Without :has(), automatic error display and choice-card borders drop;
+ * native control states and the explicit .field.danger route stay available.
  *
  * State coverage (which states each component ships) is audited in
  * tests/validation.test.js and summarized in docs/pages/forms/validation.md —
@@ -26,11 +28,14 @@
   display: block;
 }
 
-@supports selector(:has(*)) {
-  .field:has([aria-invalid="true"]) > .field-error,
-  .needs-validation.was-validated .field:has(:invalid) > .field-error {
-    display: block;
-  }
+.field:has([aria-invalid="true"]) > .field-error,
+.needs-validation.was-validated .field:has(:invalid) > .field-error {
+  display: block;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: every invalid route reveals the error; keep :user-invalid separate so unsupported engines retain the other routes. */
+.needs-validation .field:has(:user-invalid) > .field-error {
+  display: block;
 }
 
 :where(.input, .textarea, .select, .check, .radio, .switch)[aria-invalid="true"],
@@ -54,39 +59,27 @@
   --switch-bg: var(--danger);
 }
 
-@supports selector(:user-invalid) {
-  .needs-validation .check:is(:checked, :indeterminate):user-invalid,
-  .needs-validation .radio:checked:user-invalid {
-    --choice-bg: var(--danger);
-  }
+.needs-validation .check:is(:checked, :indeterminate):user-invalid,
+.needs-validation .radio:checked:user-invalid {
+  --choice-bg: var(--danger);
+}
 
-  .needs-validation .switch:checked:user-invalid {
-    --switch-bg: var(--danger);
-  }
+.needs-validation .switch:checked:user-invalid {
+  --switch-bg: var(--danger);
 }
 
 /* Choice cards hide their native input, so invalid state must surface on the
    card itself. Sets the same --form-invalid-border hook the card's border
    consumes. */
-@supports selector(:has(*)) {
-  .choice-card:has([aria-invalid="true"]),
-  .needs-validation.was-validated .choice-card:has(:invalid) {
-    --form-invalid-border: var(--danger);
-  }
+.choice-card:has([aria-invalid="true"]),
+.needs-validation.was-validated .choice-card:has(:invalid) {
+  --form-invalid-border: var(--danger);
 }
 
-@supports selector(:user-invalid) {
-  .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
-    --form-invalid-border: var(--danger);
-  }
+.needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
+  --form-invalid-border: var(--danger);
 }
 
-@supports selector(:has(:user-invalid)) {
-  .needs-validation .field:has(:user-invalid) > .field-error {
-    display: block;
-  }
-
-  .needs-validation .choice-card:has(:user-invalid) {
-    --form-invalid-border: var(--danger);
-  }
+.needs-validation .choice-card:has(:user-invalid) {
+  --form-invalid-border: var(--danger);
 }
