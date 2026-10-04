@@ -129,8 +129,12 @@ sit under a short strip. Put `.scroller` on the strip itself — the element
 that scrolls — for a thin, theme-coloured bar:
 
 ```html
-<ol class="breadcrumb scroller" data-enhance="breadcrumb" aria-label="Breadcrumb">
+<ol class="breadcrumb scroller" data-enhance="reveal-current" aria-label="Breadcrumb">
 ```
+
+A strip whose current item can render off-screen at rest (breadcrumb,
+pagination, horizontal steps, link tabs) takes `data-enhance="reveal-current"`:
+at connect it scrolls the first `aria-current` item into view, once.
 
 There is no class that hides the scrollbar: on a strip it is the only visible
 scroll control for a mouse without a horizontal wheel. Apply `.scroller` to

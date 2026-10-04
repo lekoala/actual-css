@@ -1,7 +1,8 @@
 /*
- * Strips that overflow start on their selected (tabs) or current (breadcrumb)
- * item: one placement at connect, inside the strip's own scrollport, clear of
- * its scroll-padding, never moving the page.
+ * Strips that overflow start on their selected (tabs) or `aria-current`
+ * (reveal-current: breadcrumb, steps, pagination) item: one placement at
+ * connect, inside the strip's own scrollport, clear of its scroll-padding,
+ * never moving the page.
  */
 import { expect, test } from "bun:test";
 import {
@@ -45,8 +46,8 @@ const READ = `(() => {
   for (const list of document.querySelectorAll('[role="tablist"]')) {
     strips[list.id] = read(list, list.querySelector('[aria-selected="true"]'));
   }
-  for (const list of document.querySelectorAll(".breadcrumb")) {
-    strips[list.id] = read(list, list.querySelector('[aria-current="page"]'));
+  for (const list of document.querySelectorAll(".breadcrumb, .steps, .pagination")) {
+    strips[list.id] = read(list, list.querySelector("[aria-current]"));
   }
   return { strips, pageY: window.scrollY };
 })()`;
@@ -57,17 +58,19 @@ it("overflowing strips start on their selected or current item", async () => {
     async (view) => {
       const before = await view.evaluate(READ);
       // The fixture must overflow with the target hidden, or the pass is vacuous.
-      for (const id of ["tabs-end", "tabs-middle", "tabs-rtl", "tabs-below", "trail-long"]) {
+      const hidden = ["tabs-end", "tabs-middle", "tabs-rtl", "tabs-below", "trail-long"];
+      for (const id of [...hidden, "steps-row", "pager"]) {
         expect(before.strips[id], id).toMatchObject({ overflows: true, inBox: false });
       }
+      expect(before.strips["trail-hidden-current"].overflows).toBe(true);
 
       await view.evaluate(`(() => { ${source} })()`);
       // A tablist has initialized once its unselected tabs left the roving
-      // sequence; the breadcrumb has placed itself once it scrolled.
+      // sequence; a reveal-current strip has placed itself once it scrolled.
       await waitForBrowser(
         view,
         `[...document.querySelectorAll('[role="tablist"]')].every((list) => list.querySelector('[tabindex="-1"]')) &&
-         document.getElementById("trail-long").scrollLeft !== 0`,
+         ["trail-long", "steps-row", "pager"].every((id) => document.getElementById(id).scrollLeft !== 0)`,
       );
       const { strips, pageY } = await view.evaluate(READ);
 
@@ -78,6 +81,11 @@ it("overflowing strips start on their selected or current item", async () => {
       expect(strips["tabs-middle"]).toMatchObject({ scrolled: true, clear: true });
       // The trail's end padding equals its fade, so the current page clears it.
       expect(strips["trail-long"]).toMatchObject({ scrolled: true, clear: true });
+      // The same token serves any strip with an aria-current item.
+      expect(strips["steps-row"]).toMatchObject({ scrolled: true, inBox: true });
+      expect(strips.pager).toMatchObject({ scrolled: true, inBox: true });
+      // A current item without a box (inside a hidden item) moves nothing.
+      expect(strips["trail-hidden-current"].scrolled).toBe(false);
       // Already visible: nothing moves.
       expect(strips["tabs-start"]).toMatchObject({ overflows: true, scrolled: false, inBox: true });
       expect(strips["trail-short"]).toMatchObject({ scrolled: false, inBox: true });

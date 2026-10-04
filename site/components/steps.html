@@ -402,10 +402,11 @@ width. If a labelled row does not fit its space, it scrolls — and the honest
 answers to that are more room, fewer stages, or <code>.steps-vertical</code>.</p>
 <p>Since scrolling is the fallback, a labelled row is worth pairing with
 <code>.scroller</code>, which gives the native scrollbar the theme's density and colour
-instead of the OS default:</p>
-<pre><code class="language-html">&lt;ol class=&quot;steps steps-horizontal scroller&quot;&gt;
+instead of the OS default, and with <code>data-enhance=&quot;reveal-current&quot;</code>, which
+starts a scrolling row on its <code>aria-current=&quot;step&quot;</code> instead of step 1:</p>
+<pre><code class="language-html">&lt;ol class=&quot;steps steps-horizontal scroller&quot; data-enhance=&quot;reveal-current&quot;&gt;
 </code></pre>
-<p>Steps does not apply it for you; see
+<p>Steps applies neither for you; see
 <a href="../utilities/sizing-wrapping.html#one-row-strips">one-row strips</a> for the
 page-wide rule and the hooks.</p>
 <p>Do not add <code>.stable-gutter</code> here. It reserves gutter on the inline axis, for a

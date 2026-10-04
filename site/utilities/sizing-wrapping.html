@@ -381,8 +381,11 @@ the part of a custom scrollbar that never held up.</p>
 leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
 sit under a short strip. Put <code>.scroller</code> on the strip itself — the element
 that scrolls — for a thin, theme-coloured bar:</p>
-<pre><code class="language-html">&lt;ol class=&quot;breadcrumb scroller&quot; data-enhance=&quot;breadcrumb&quot; aria-label=&quot;Breadcrumb&quot;&gt;
+<pre><code class="language-html">&lt;ol class=&quot;breadcrumb scroller&quot; data-enhance=&quot;reveal-current&quot; aria-label=&quot;Breadcrumb&quot;&gt;
 </code></pre>
+<p>A strip whose current item can render off-screen at rest (breadcrumb,
+pagination, horizontal steps, link tabs) takes <code>data-enhance=&quot;reveal-current&quot;</code>:
+at connect it scrolls the first <code>aria-current</code> item into view, once.</p>
 <p>There is no class that hides the scrollbar: on a strip it is the only visible
 scroll control for a mouse without a horizontal wheel. Apply <code>.scroller</code> to
 every scrolling strip of a page, or to none, so the bars stay consistent.</p>
