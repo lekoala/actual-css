@@ -63,20 +63,13 @@
       display: none;
     }
 
+    /* The trail yields room to the topbar actions and scrolls inside it
+       (framework overflow); the breadcrumb enhancement starts it on the
+       current page, so a narrow topbar shows where you are, not the root. */
     .dashboard-topbar .breadcrumb {
-      display: flex;
       flex: 0 1 auto;
       min-inline-size: 0;
       max-inline-size: 24rem;
-      overflow: hidden;
-    }
-
-    .dashboard-topbar .breadcrumb li {
-      flex: 0 0 auto;
-    }
-
-    .dashboard-topbar .breadcrumb li[aria-current="page"] {
-      flex: 1 1 auto;
     }
 
     .dashboard-nav .nav-link {
@@ -193,10 +186,6 @@
       .dashboard-search.dashboard-hide-mobile {
         display: block;
       }
-
-      .dashboard-topbar .breadcrumb.dashboard-hide-mobile {
-        display: flex;
-      }
     }
 
     @media (min-width: 72rem) {
@@ -312,10 +301,11 @@
           <i class="ti ti-menu-2" aria-hidden="true"></i>
         </button>
 
-        <ol class="breadcrumb text-nowrap dashboard-hide-mobile" aria-label="Breadcrumb">
+        <ol class="breadcrumb scroller" data-enhance="breadcrumb" aria-label="Breadcrumb">
           <li><a href="#overview">Actual Cloud</a></li>
           <li><a href="#revenue">Revenue</a></li>
-          <li class="truncate" aria-current="page">Overview</li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li aria-current="page">Overview</li>
         </ol>
 
         <div class="grow"></div>
@@ -452,7 +442,7 @@
                 </div>
               </header>
 
-              <div class="table-wrap" role="region" aria-labelledby="accounts-table" tabindex="0">
+              <div class="table-wrap scroller" role="region" aria-labelledby="accounts-table" tabindex="0">
                 <table class="table" style="--table-min: 58rem;">
                   <caption id="accounts-table" class="sr-only">Priority accounts</caption>
                   <thead>
@@ -566,7 +556,7 @@
               <footer>
                 <span class="muted">Showing 4 of 28 priority accounts</span>
                 <nav aria-label="Account pages">
-                  <ol class="pagination sm text-nowrap">
+                  <ol class="pagination sm scroller">
                     <li>
                       <button disabled class="btn ghost" aria-label="Previous page">
                         <i class="ti ti-chevron-left" aria-hidden="true"></i>

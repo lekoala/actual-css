@@ -8,10 +8,12 @@
 - Separators are generated with CSS (`li + li::before`).
 - Breadcrumbs remain on a single line and scroll horizontally when space is insufficient. Actual does not automatically truncate or collapse hierarchy levels.
 - An overflowing trail fades at the inline end to signal continuation; the last item rests outside the fade once scrolled into view.
+- Add `data-enhance="breadcrumb"` to start an overflowing trail on its current item instead of the root. The placement happens once at connect, on a visible trail.
+- Add `.scroller` for a thin, theme-coloured scrollbar; see [one-row strips](../utilities/sizing-wrapping.md#one-row-strips).
 
 ```html demo
 <nav aria-label="Breadcrumb">
-  <ol class="breadcrumb">
+  <ol class="breadcrumb" data-enhance="breadcrumb">
     <li><a href="/home">Home</a></li>
     <li><a href="/projects">Projects</a></li>
     <li><a href="/projects/docs">Docs</a></li>

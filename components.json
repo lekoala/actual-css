@@ -144,10 +144,15 @@
     "internalHooks": [
       "--breadcrumb-bleed",
       "--breadcrumb-fade",
-      "--breadcrumb-fade-dir"
+      "--breadcrumb-fade-dir",
+      "--breadcrumb-fade-start"
     ],
     "states": [
       "aria-current"
+    ],
+    "jsImport": "actual-css/js/breadcrumb",
+    "enhancements": [
+      "breadcrumb"
     ]
   },
   {

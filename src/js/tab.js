@@ -9,6 +9,7 @@
  *            ArrowUp/Down for aria-orientation="vertical"
  *            ArrowDown (focus selected panel)
  *            [hidden], disabled and panel-less tabs are skipped
+ * Overflow:  a horizontal strip scrolls its selected tab into view at connect
  *
  * Self-registers via registerEnhancement: injected tablists wire automatically.
  * The tab→panel map is rebuilt from the live tablist on each interaction,
@@ -17,6 +18,7 @@
  */
 
 import { registerEnhancement } from "./enhance.js";
+import { ensureInlineVisible } from "./inline-visible.js";
 import { itemForKey, shouldIgnoreKey } from "./keys.js";
 
 const TABLIST_SELECTOR = '[data-enhance~="tabs"]';
@@ -96,6 +98,10 @@ function initialize(list) {
   if (!tabs.length) return;
   const selected = tabs.find((tab) => tab.getAttribute("aria-selected") === "true") || tabs[0];
   activate(selected);
+  // Connect only: a server-selected tab may render off-screen in an
+  // overflowing strip. Clicks and arrow keys already focus their tab, and the
+  // native focus scroll owns those paths.
+  if (list.getAttribute("aria-orientation") !== "vertical") ensureInlineVisible(list, selected);
 }
 
 function onKeydown(e) {

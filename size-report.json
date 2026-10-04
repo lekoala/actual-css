@@ -1,17 +1,17 @@
 {
-  "totalRaw": 358430,
+  "totalRaw": 359151,
   "core": {
-    "minified": 12366,
-    "brotli": 2766
+    "minified": 12327,
+    "brotli": 2755
   },
   "full": {
-    "minified": 132742,
-    "brotli": 19005
+    "minified": 132065,
+    "brotli": 19059
   },
   "js": {
     "full": {
-      "bytes": 60746,
-      "brotli": 17742
+      "bytes": 61249,
+      "brotli": 17901
     }
   },
   "fileCount": 113,
@@ -37,12 +37,12 @@
       "raw": 8856
     },
     {
-      "file": "components/drawer.css",
-      "raw": 8714
+      "file": "components/alert.css",
+      "raw": 8190
     },
     {
-      "file": "components/alert.css",
-      "raw": 8200
+      "file": "components/drawer.css",
+      "raw": 8135
     },
     {
       "file": "components/button.css",
@@ -58,19 +58,19 @@
     },
     {
       "file": "components/badge.css",
-      "raw": 6872
+      "raw": 6841
     },
     {
       "file": "effects/aura.css",
       "raw": 6445
     },
     {
-      "file": "components/avatar.css",
-      "raw": 6107
+      "file": "components/flyout.css",
+      "raw": 5768
     },
     {
-      "file": "components/flyout.css",
-      "raw": 5781
+      "file": "components/avatar.css",
+      "raw": 5652
     },
     {
       "file": "forms/range.css",
@@ -97,6 +97,10 @@
       "raw": 5259
     },
     {
+      "file": "forms/otp.css",
+      "raw": 5235
+    },
+    {
       "file": "components/tab.css",
       "raw": 5186
     },
@@ -109,8 +113,8 @@
       "raw": 5176
     },
     {
-      "file": "forms/otp.css",
-      "raw": 5066
+      "file": "components/breadcrumb.css",
+      "raw": 5082
     },
     {
       "file": "components/tooltip.css",
@@ -137,6 +141,10 @@
       "raw": 4195
     },
     {
+      "file": "forms/floating-field.css",
+      "raw": 4074
+    },
+    {
       "file": "utilities/base.css",
       "raw": 4037
     },
@@ -145,16 +153,8 @@
       "raw": 3907
     },
     {
-      "file": "forms/floating-field.css",
-      "raw": 3895
-    },
-    {
       "file": "components/menu.css",
       "raw": 3857
-    },
-    {
-      "file": "components/breadcrumb.css",
-      "raw": 3665
     },
     {
       "file": "forms/control.css",
@@ -189,6 +189,10 @@
       "raw": 2849
     },
     {
+      "file": "forms/validation.css",
+      "raw": 2822
+    },
+    {
       "file": "themes/ocean.css",
       "raw": 2799
     },
@@ -215,10 +219,6 @@
     {
       "file": "core/base.css",
       "raw": 2763
-    },
-    {
-      "file": "forms/validation.css",
-      "raw": 2733
     },
     {
       "file": "components/progress.css",
@@ -342,7 +342,7 @@
     },
     {
       "file": "core/focus.css",
-      "raw": 1630
+      "raw": 1585
     },
     {
       "file": "typography/overline.css",

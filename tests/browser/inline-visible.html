@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inline visibility fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    /* Narrow boxes overflow on any font: many labels against a few words of
+       room. Assertions compare rects, never a label width. */
+    .box { inline-size: 12rem; margin-block: 1rem; }
+    .spacer { block-size: 150vh; }
+  </style>
+</head>
+<body>
+  <div class="box" data-strip="tabs-end"></div>
+  <div class="box" data-strip="tabs-start"></div>
+  <div class="box" data-strip="tabs-middle"></div>
+  <div class="box" dir="rtl" data-strip="tabs-rtl"></div>
+  <div hidden><div class="box" data-strip="tabs-hidden"></div></div>
+
+  <div class="box">
+    <nav aria-label="Long trail">
+      <ol class="breadcrumb" data-enhance="breadcrumb" id="trail-long">
+        <li><a href="#a">Home</a></li>
+        <li><a href="#b">Projects</a></li>
+        <li><a href="#c">Documentation</a></li>
+        <li><a href="#d">Components</a></li>
+        <li><a href="#e" aria-current="page">Breadcrumb</a></li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- Not enhanced: stays at rest for the start-fade test. -->
+  <div class="box" dir="rtl">
+    <nav aria-label="RTL trail">
+      <ol class="breadcrumb" id="trail-rtl">
+        <li><a href="#a">Home</a></li>
+        <li><a href="#b">Projects</a></li>
+        <li><a href="#c">Documentation</a></li>
+        <li><a href="#d">Components</a></li>
+        <li><a href="#e" aria-current="page">Breadcrumb</a></li>
+      </ol>
+    </nav>
+  </div>
+
+  <nav aria-label="Short trail">
+    <ol class="breadcrumb" data-enhance="breadcrumb" id="trail-short">
+      <li><a href="#a">Home</a></li>
+      <li><a href="#e" aria-current="page">Here</a></li>
+    </ol>
+  </nav>
+
+  <div class="spacer"></div>
+  <!-- Below the fold: placing its tab must not scroll the page. -->
+  <div class="box" data-strip="tabs-below"></div>
+
+  <script>
+    // Selected index per strip; -1 selects the last tab.
+    const selected = { "tabs-end": -1, "tabs-start": 0, "tabs-middle": 3, "tabs-rtl": -1, "tabs-hidden": -1, "tabs-below": -1 };
+    const labels = ["General", "Security", "Billing", "Notifications", "Integrations", "Advanced"];
+    for (const box of document.querySelectorAll("[data-strip]")) {
+      const name = box.dataset.strip;
+      const pick = selected[name] < 0 ? labels.length - 1 : selected[name];
+      const tabs = labels.map((label, i) =>
+        `<button class="tab" type="button" role="tab" id="${name}-${i}" aria-controls="${name}-p${i}" aria-selected="${i === pick}">${label}</button>`).join("");
+      const panels = labels.map((_, i) => `<div role="tabpanel" id="${name}-p${i}"></div>`).join("");
+      box.innerHTML = `<div class="tabs" data-enhance="tabs" role="tablist" aria-label="${name}" id="${name}">${tabs}</div>${panels}`;
+    }
+  </script>
+</body>
+</html>

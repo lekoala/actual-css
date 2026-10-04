@@ -48,6 +48,7 @@
     "./css/utilities/*": "./src/css/utilities/*.css",
     "./js": "./src/js/index.js",
     "./js/full": "./src/js/full.js",
+    "./js/breadcrumb": "./src/js/breadcrumb.js",
     "./js/command": "./src/js/command.js",
     "./js/context-menu": "./src/js/context-menu.js",
     "./js/dialog": "./src/js/dialog.js",

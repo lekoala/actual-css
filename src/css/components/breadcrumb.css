@@ -10,19 +10,33 @@
  * like separate rows and causes unstable header height.
  *
  * A trail that overflows fades at the inline end, so clipped text reads as
- * "there is more" rather than a clipping bug. The fade is permanent: a
- * scroll-state query can only style a scroller's descendants, never the
- * scrollport itself, so a conditional fade needs a wrapper or JS and waits
- * for the fit/overflow work. The terminal space below equals the fade length,
- * so at rest and at scroll end the fade covers empty padding and the last
- * item stays fully inked. A mask (not an overlay) keeps the fade
- * background-agnostic: the trail sits on pages, cards, and frosted topbars.
+ * "there is more" rather than a clipping bug. The end fade is permanent: the
+ * terminal space below equals the fade length, so at rest and at scroll end
+ * the fade covers empty padding and the last item stays fully inked. A mask
+ * (not an overlay) keeps the fade background-agnostic: the trail sits on
+ * pages, cards, and frosted topbars.
+ *
+ * The start fade appears only once the trail has scrolled (by hand, or by
+ * the breadcrumb enhancement starting it on the current page), so a trail at
+ * rest keeps its root aligned and fully inked. A scroll-state query cannot
+ * style the scrollport itself, but a scroll-driven animation on its own
+ * timeline can. Progressive: without scroll-driven animations the start
+ * stop stays at 0 and only the end fades.
  *
  * Internal:
  * --breadcrumb-bleed
  * --breadcrumb-fade
  * --breadcrumb-fade-dir
+ * --breadcrumb-fade-start
  */
+
+/* Registered so the animation interpolates the stop as a length. */
+@property --breadcrumb-fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 .breadcrumb {
   /* The scrollport clips on both axes (overflow-x: auto computes overflow-y
      to auto), so the padding keeps the text-link outline of every item inside
@@ -43,6 +57,9 @@
   margin-block: calc(var(--breadcrumb-bleed) * -1);
   padding: var(--breadcrumb-bleed);
   padding-inline-end: calc(var(--breadcrumb-bleed) + var(--breadcrumb-fade));
+  /* The fade masks the end of the scrollport, so focus scrolling (and the
+     breadcrumb enhancement) must treat it as outside the visible area. */
+  scroll-padding-inline-end: var(--breadcrumb-fade);
   /* One axis of navigation, so it never wraps: a second line reads as a
      nested level. When the trail does not fit, the strip scrolls. */
   overflow: auto hidden;
@@ -51,19 +68,40 @@
      that knows neither draws no fade and the strip still scrolls. */
   -webkit-mask-image: linear-gradient(
     var(--breadcrumb-fade-dir),
-    #000 0,
+    transparent 0,
+    #000 var(--breadcrumb-fade-start),
     #000 calc(100% - var(--breadcrumb-fade)),
     transparent 100%
   );
   mask-image: linear-gradient(
     var(--breadcrumb-fade-dir),
-    #000 0,
+    transparent 0,
+    #000 var(--breadcrumb-fade-start),
     #000 calc(100% - var(--breadcrumb-fade)),
     transparent 100%
   );
   color: var(--text-subtle);
   font-size: var(--font-size-sm);
   list-style: none;
+}
+
+/* The start fade grows over the first fade-length of scroll, on the trail's
+   own inline timeline (logical, so RTL starts at the right). Keep the
+   @supports: without scroll timelines, the animation would end instantly and
+   leave the start faded even at rest. It follows the reader's scroll, not
+   time, so reduced motion does not disable it. */
+@supports (animation-timeline: scroll()) {
+  .breadcrumb {
+    animation: actual-breadcrumb-fade-start linear both;
+    animation-timeline: scroll(self inline);
+    animation-range: 0 var(--breadcrumb-fade);
+  }
+}
+
+@keyframes actual-breadcrumb-fade-start {
+  to {
+    --breadcrumb-fade-start: var(--breadcrumb-fade);
+  }
 }
 
 /* Mirror of --breadcrumb-fade-dir, following the range fill pattern:
