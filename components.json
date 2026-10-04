@@ -149,10 +149,6 @@
     ],
     "states": [
       "aria-current"
-    ],
-    "jsImport": "actual-css/js/breadcrumb",
-    "enhancements": [
-      "breadcrumb"
     ]
   },
   {

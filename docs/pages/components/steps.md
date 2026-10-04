@@ -150,13 +150,14 @@ answers to that are more room, fewer stages, or `.steps-vertical`.
 
 Since scrolling is the fallback, a labelled row is worth pairing with
 `.scroller`, which gives the native scrollbar the theme's density and colour
-instead of the OS default:
+instead of the OS default, and with `data-enhance="reveal-current"`, which
+starts a scrolling row on its `aria-current="step"` instead of step 1:
 
 ```html
-<ol class="steps steps-horizontal scroller">
+<ol class="steps steps-horizontal scroller" data-enhance="reveal-current">
 ```
 
-Steps does not apply it for you; see
+Steps applies neither for you; see
 [one-row strips](../utilities/sizing-wrapping.md#one-row-strips) for the
 page-wide rule and the hooks.
 

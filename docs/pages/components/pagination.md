@@ -58,9 +58,10 @@ buttons — they are decorative, not actionable.
 ## Narrow screens
 
 Pagination is one ordered row and never wraps. When the items do not fit, the
-row scrolls horizontally (add `.scroller` for a thin, theme-coloured scrollbar;
-see [one-row strips](../utilities/sizing-wrapping.md#one-row-strips)); that is
-the fallback, not the mobile design. For a
+row scrolls horizontally; that is the fallback, not the mobile design. Add
+`data-enhance="reveal-current"` so the current page starts in view, and
+`.scroller` for a thin scrollbar; see
+[one-row strips](../utilities/sizing-wrapping.md#one-row-strips). For a
 phone or a narrow column (responsive, mobile, small screen), render a shorter
 range — the server knows which pages matter around the current one:
 

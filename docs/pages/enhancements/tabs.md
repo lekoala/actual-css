@@ -97,7 +97,9 @@ selected in the markup starts in view too, when the strip is visible at
 connect; the placement moves the strip only, never the page. A vertical
 strip (`aria-orientation="vertical"`) keeps wrapping its labels. Add
 `.scroller` to the strip for a thin, theme-coloured scrollbar; see
-[one-row strips](../utilities/sizing-wrapping.md#one-row-strips).
+[one-row strips](../utilities/sizing-wrapping.md#one-row-strips). Link tabs
+have no tabs runtime: add `data-enhance="reveal-current"` to the list so the
+`aria-current` link starts in view.
 
 Scrolling is the fallback, not a responsive design. If a strip regularly
 overflows, shorten the labels, group sections, or switch to a vertical rail.

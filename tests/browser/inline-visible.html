@@ -21,7 +21,7 @@
 
   <div class="box">
     <nav aria-label="Long trail">
-      <ol class="breadcrumb" data-enhance="breadcrumb" id="trail-long">
+      <ol class="breadcrumb" data-enhance="reveal-current" id="trail-long">
         <li><a href="#a">Home</a></li>
         <li><a href="#b">Projects</a></li>
         <li><a href="#c">Documentation</a></li>
@@ -45,11 +45,46 @@
   </div>
 
   <nav aria-label="Short trail">
-    <ol class="breadcrumb" data-enhance="breadcrumb" id="trail-short">
+    <ol class="breadcrumb" data-enhance="reveal-current" id="trail-short">
       <li><a href="#a">Home</a></li>
       <li><a href="#e" aria-current="page">Here</a></li>
     </ol>
   </nav>
+
+  <!-- A labelled row keeps a reading width per step, so five overflow the box. -->
+  <div class="box">
+    <ol class="steps steps-horizontal" data-enhance="reveal-current" id="steps-row">
+      <li class="step-complete"><span class="step-label">Account</span></li>
+      <li class="step-complete"><span class="step-label">Profile</span></li>
+      <li class="step-complete"><span class="step-label">Delivery</span></li>
+      <li aria-current="step"><span class="step-label">Payment</span></li>
+      <li><span class="step-label">Confirmation</span></li>
+    </ol>
+  </div>
+
+  <div class="box">
+    <ol class="pagination" data-enhance="reveal-current" id="pager">
+      <li><a class="btn ghost" href="#1">First</a></li>
+      <li><a class="btn ghost" href="#1">Previous</a></li>
+      <li><a class="btn ghost" href="#7">7</a></li>
+      <li><a class="btn ghost" href="#8">8</a></li>
+      <li><a class="btn ghost" href="#9" aria-current="page">9</a></li>
+      <li><a class="btn ghost" href="#10">Next</a></li>
+    </ol>
+  </div>
+
+  <!-- The current item has no box (hidden), so nothing may move. RTL, because
+       an empty rect sits at x=0, and only there is "left of the box" a
+       direction the strip can actually scroll. -->
+  <div class="box" dir="rtl">
+    <ol class="breadcrumb" data-enhance="reveal-current" id="trail-hidden-current">
+      <li><a href="#a">Home</a></li>
+      <li><a href="#b">Projects</a></li>
+      <li><a href="#c">Documentation</a></li>
+      <li><a href="#d">Components</a></li>
+      <li hidden><a href="#e" aria-current="page">Breadcrumb</a></li>
+    </ol>
+  </div>
 
   <div class="spacer"></div>
   <!-- Below the fold: placing its tab must not scroll the page. -->

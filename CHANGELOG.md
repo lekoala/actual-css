@@ -9,7 +9,7 @@
 ### Added
 
 - `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the full runtime instance.
-- `data-enhance="breadcrumb"` (`actual-css/js/breadcrumb`) scrolls an overflowing `.breadcrumb` to its `aria-current="page"` item at connect.
+- `data-enhance="reveal-current"` (`actual-css/js/reveal-current`) scrolls an overflowing strip (`.breadcrumb`, `.pagination`, `.steps-horizontal`, link `.tabs`) to its `aria-current` item at connect.
 - `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs, apart from `--border`; it defaults to `--border`.
 
 ### Changed
