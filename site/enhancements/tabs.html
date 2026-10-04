@@ -378,8 +378,12 @@ JavaScript involved:</p>
 <p>A horizontal strip is one row and never wraps, nor does a label: a second line
 no longer matches the Left/Right keys and reads as a nested level. When the tabs
 do not fit (narrow screen, mobile, long translations), the strip scrolls
-horizontally and keyboard focus scrolls the active tab into view. A vertical
-strip (<code>aria-orientation=&quot;vertical&quot;</code>) keeps wrapping its labels.</p>
+horizontally and keyboard focus scrolls the active tab into view. A tab
+selected in the markup starts in view too, when the strip is visible at
+connect; the placement moves the strip only, never the page. A vertical
+strip (<code>aria-orientation=&quot;vertical&quot;</code>) keeps wrapping its labels. Add
+<code>.scroller</code> to the strip for a thin, theme-coloured scrollbar; see
+<a href="../utilities/sizing-wrapping.html#one-row-strips">one-row strips</a>.</p>
 <p>Scrolling is the fallback, not a responsive design. If a strip regularly
 overflows, shorten the labels, group sections, or switch to a vertical rail.</p>
 <h2 id="tab-with-a-flyout">Tab with a flyout</h2>

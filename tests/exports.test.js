@@ -13,6 +13,7 @@ import { publicJsExports } from "./helpers/package-exports.js";
 const JS_EXPORT_INVENTORY = {
   "./js": [],
   "./js/full": ["applyEnhancement", "enhance", "registerEnhancement"],
+  "./js/breadcrumb": [],
   "./js/dismiss": [],
   "./js/filter": [],
   "./js/flyout": [],

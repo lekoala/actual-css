@@ -887,10 +887,8 @@ small {
   outline-offset: var(--focus-outline-offset);
 }
 
-@supports selector(:focus-visible) {
-  :focus:not(:focus-visible) {
-    outline: none;
-  }
+:focus:not(:focus-visible) {
+  outline: none;
 }
 
 @media print {
@@ -2614,6 +2612,8 @@ small {
  *
  * Imported by default through forms/index.css. Custom builds may omit this
  * file when an app wants to own validation styling completely.
+ * Without :has(), automatic error display and choice-card borders drop;
+ * native control states and the explicit .field.danger route stay available.
  *
  * State coverage (which states each component ships) is audited in
  * tests/validation.test.js and summarized in docs/pages/forms/validation.md —
@@ -2635,11 +2635,14 @@ small {
   display: block;
 }
 
-@supports selector(:has(*)) {
-  .field:has([aria-invalid="true"]) > .field-error,
-  .needs-validation.was-validated .field:has(:invalid) > .field-error {
-    display: block;
-  }
+.field:has([aria-invalid="true"]) > .field-error,
+.needs-validation.was-validated .field:has(:invalid) > .field-error {
+  display: block;
+}
+
+/* biome-ignore lint/style/noDescendingSpecificity: every invalid route reveals the error; keep :user-invalid separate so unsupported engines retain the other routes. */
+.needs-validation .field:has(:user-invalid) > .field-error {
+  display: block;
 }
 
 :where(.input, .textarea, .select, .check, .radio, .switch)[aria-invalid="true"],
@@ -2663,41 +2666,29 @@ small {
   --switch-bg: var(--danger);
 }
 
-@supports selector(:user-invalid) {
-  .needs-validation .check:is(:checked, :indeterminate):user-invalid,
-  .needs-validation .radio:checked:user-invalid {
-    --choice-bg: var(--danger);
-  }
+.needs-validation .check:is(:checked, :indeterminate):user-invalid,
+.needs-validation .radio:checked:user-invalid {
+  --choice-bg: var(--danger);
+}
 
-  .needs-validation .switch:checked:user-invalid {
-    --switch-bg: var(--danger);
-  }
+.needs-validation .switch:checked:user-invalid {
+  --switch-bg: var(--danger);
 }
 
 /* Choice cards hide their native input, so invalid state must surface on the
    card itself. Sets the same --form-invalid-border hook the card's border
    consumes. */
-@supports selector(:has(*)) {
-  .choice-card:has([aria-invalid="true"]),
-  .needs-validation.was-validated .choice-card:has(:invalid) {
-    --form-invalid-border: var(--danger);
-  }
+.choice-card:has([aria-invalid="true"]),
+.needs-validation.was-validated .choice-card:has(:invalid) {
+  --form-invalid-border: var(--danger);
 }
 
-@supports selector(:user-invalid) {
-  .needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
-    --form-invalid-border: var(--danger);
-  }
+.needs-validation :is(.input, .textarea, .select, .check, .radio, .switch):user-invalid {
+  --form-invalid-border: var(--danger);
 }
 
-@supports selector(:has(:user-invalid)) {
-  .needs-validation .field:has(:user-invalid) > .field-error {
-    display: block;
-  }
-
-  .needs-validation .choice-card:has(:user-invalid) {
-    --form-invalid-border: var(--danger);
-  }
+.needs-validation .choice-card:has(:user-invalid) {
+  --form-invalid-border: var(--danger);
 }
 
 /*
@@ -3530,10 +3521,13 @@ small {
  * messages stay in the surrounding .field, not inside the cell, so the
  * resting label can center on the control alone.
  *
- * The control must precede the label: the float is driven by the general
- * sibling combinator and :placeholder-shown. Injected nodes may appear between
- * the control and the label (password managers, extension wrappers); the cell
- * contract stays a single control plus one label. Every .input/.textarea needs
+ * The cell reads its control's state through :has(), so the label may come
+ * before or after the control (a form theme rendering label then widget needs
+ * no reordering). Injected sibling nodes are tolerated (password managers,
+ * extension wrappers) as long as the control stays a direct child; the cell
+ * contract stays a single control plus one label, since a second control
+ * would float the label on either one's state.
+ * Every .input/.textarea needs
  * placeholder=" " to expose a reliable empty state — without it the label
  * only reacts to focus.
  *
@@ -3583,23 +3577,22 @@ small {
 }
 
 /* Single-line controls rest in the middle until they receive a value. */
-.floating-field > :is(.input, .select) ~ .field-label {
+.floating-field:has(> :is(.input, .select)) > .field-label {
   inset-block-start: 50%;
   transform: translateY(-50%);
 }
 
 /* An empty textarea label follows the control's normal first-line position;
    the control itself keeps the extra headroom reserved for its floated state. */
-.floating-field > .textarea ~ .field-label {
+.floating-field:has(> .textarea) > .field-label {
   inset-block-start: calc(1em + var(--border-width));
   transform: none;
 }
 
 /* :autofill covers prefilled values before interaction, when the browser may
    not have propagated the value to the placeholder state yet. */
-.floating-field
-  > :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown))
-  ~ .field-label {
+.floating-field:has(> :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown)))
+> .field-label {
   inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
@@ -3609,16 +3602,16 @@ small {
 /* Controls without a dependable :placeholder-shown empty state stay floated:
    select always, and date/time inputs whose placeholder rendering is
    inconsistent across engines (Firefox shows none). */
-.floating-field
+.floating-field:has(
   > :is(
-    .select,
-    .input[type="date"],
-    .input[type="time"],
-    .input[type="datetime-local"],
-    .input[type="month"],
-    .input[type="week"]
-  )
-  ~ .field-label {
+      .select,
+      .input[type="date"],
+      .input[type="time"],
+      .input[type="datetime-local"],
+      .input[type="month"],
+      .input[type="week"]
+    )
+) > .field-label {
   inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
@@ -3740,10 +3733,9 @@ small {
   --otp-cell-border: var(--danger);
 }
 
-@supports selector(:user-invalid) {
-  .needs-validation .otp > input:user-invalid ~ span {
-    --otp-cell-border: var(--danger);
-  }
+/* biome-ignore lint/style/noDescendingSpecificity: all invalid routes write the same border, so their order cannot change the state. Keep :user-invalid separate so unsupported engines retain the other routes. */
+.needs-validation .otp > input:user-invalid ~ span {
+  --otp-cell-border: var(--danger);
 }
 
 .otp > input:disabled {
@@ -4269,7 +4261,6 @@ a.btn[aria-disabled="true"] {
   --badge-size: var(--badge-dot-size);
   --badge-bg: var(--intent, var(--neutral));
   --badge-fg: var(--intent-fg, var(--neutral-fg));
-  --badge-border: transparent;
   padding: 0;
   border: 0;
   inline-size: var(--badge-size);
@@ -4504,45 +4495,43 @@ a.badge[aria-disabled="true"] {
 
 /* Grid anatomy — activated by a leading icon, a trailing dismiss button, or
    both. Icon and dismiss are pinned to the outer columns; anything else (the
-   message content) flows into the remaining text column. */
-@supports selector(.alert:has(> *)) {
-  .alert:has(> .alert-icon, > .close) {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    align-items: var(--items-align, start);
-    column-gap: var(--space-30);
-  }
-
-  .alert:has(> .alert-icon) {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-
-  .alert:has(> .alert-icon) > .alert-icon {
-    grid-column: 1;
-    grid-row: 1 / -1;
-    display: inline-grid;
-    place-items: center;
-    margin-block-start: 0.125em;
-  }
-
-  .alert:has(> .alert-icon) > :not(.alert-icon, .close) {
-    grid-column: 2;
-  }
-
-  .alert:has(> .close) {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .alert:has(> .alert-icon):has(> .close) {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-  }
-
-  .alert:has(> .close) > .close {
-    grid-column: -2 / -1;
-    grid-row: 1;
-  }
+   message content) flows into the remaining text column. Without :has(), the
+   grid rules drop together and the alert keeps ordinary block flow. */
+.alert:has(> .alert-icon, > .close) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: var(--items-align, start);
+  column-gap: var(--space-30);
 }
 
+.alert:has(> .alert-icon) {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.alert:has(> .alert-icon) > .alert-icon {
+  grid-column: 1;
+  grid-row: 1 / -1;
+  display: inline-grid;
+  place-items: center;
+  margin-block-start: 0.125em;
+}
+
+.alert:has(> .alert-icon) > :not(.alert-icon, .close) {
+  grid-column: 2;
+}
+
+.alert:has(> .close) {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.alert:has(> .alert-icon):has(> .close) {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.alert:has(> .close) > .close {
+  grid-column: -2 / -1;
+  grid-row: 1;
+}
 /* Links */
 .alert :where(a:not(.btn)) {
   color: inherit;
@@ -5189,6 +5178,7 @@ html.has-modal-open.had-scrollbar {
  * --drawer-close-reserve (header room for a corner close; zero without a close)
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
  *   changes in one place; entry state redefines it longer)
+ * --drawer-motion-ease (panel easing owned by the open/closed state)
  */
 :where(dialog).drawer {
   --drawer-size: 20rem;
@@ -5203,6 +5193,7 @@ html.has-modal-open.had-scrollbar {
   /* Exit is shorter than entry so the panel clears quickly; the scrim reads
      the same variable through inheritance and never lags the panel. */
   --drawer-motion-duration: var(--duration);
+  --drawer-motion-ease: var(--ease-exit);
 
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button.
@@ -5234,21 +5225,21 @@ html.has-modal-open.had-scrollbar {
   box-shadow: var(--shadow);
   opacity: 0;
   transform: translateX(var(--drawer-closed-translate));
-  transition:
-    opacity var(--drawer-motion-duration) var(--ease-exit),
-    transform var(--drawer-motion-duration) var(--ease-exit);
+  /* Unsupported discrete behavior drops alone, preserving opacity/transform. */
+  transition-property: opacity, transform, overlay, display;
+  transition-duration: var(--drawer-motion-duration);
+  transition-timing-function: var(--drawer-motion-ease);
+  transition-behavior: allow-discrete;
 }
 
 :where(dialog).drawer[open] {
   --drawer-motion-duration: var(--duration-slow);
+  --drawer-motion-ease: var(--ease-enter);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: var(--space-40);
   opacity: 1;
   transform: translateX(0);
-  transition:
-    opacity var(--drawer-motion-duration) var(--ease-enter),
-    transform var(--drawer-motion-duration) var(--ease-enter);
 }
 
 /* A form is the drawer's content wrapper when actions need method="dialog".
@@ -5268,7 +5259,10 @@ html.has-modal-open.had-scrollbar {
   opacity: 0;
   /* Scrim curve stays neutral `ease`; only the panel's character curves
      apply. Duration follows --drawer-motion-duration through inheritance. */
-  transition: opacity var(--drawer-motion-duration) ease;
+  transition-property: opacity, overlay, display;
+  transition-duration: var(--drawer-motion-duration);
+  transition-timing-function: ease;
+  transition-behavior: allow-discrete;
 }
 
 :where(dialog).drawer[data-side="end"] {
@@ -5318,31 +5312,6 @@ html.has-modal-open.had-scrollbar {
   padding: var(--drawer-focus-bleed);
   overflow: auto;
   overscroll-behavior: contain;
-}
-
-@supports (transition-behavior: allow-discrete) {
-  :where(dialog).drawer {
-    transition:
-      opacity var(--drawer-motion-duration) var(--ease-exit),
-      transform var(--drawer-motion-duration) var(--ease-exit),
-      overlay var(--drawer-motion-duration) allow-discrete,
-      display var(--drawer-motion-duration) allow-discrete;
-  }
-
-  :where(dialog).drawer[open] {
-    transition:
-      opacity var(--drawer-motion-duration) var(--ease-enter),
-      transform var(--drawer-motion-duration) var(--ease-enter),
-      overlay var(--drawer-motion-duration) allow-discrete,
-      display var(--drawer-motion-duration) allow-discrete;
-  }
-
-  :where(dialog).drawer::backdrop {
-    transition:
-      opacity var(--drawer-motion-duration) ease,
-      overlay var(--drawer-motion-duration) allow-discrete,
-      display var(--drawer-motion-duration) allow-discrete;
-  }
 }
 
 /* Safari before 16.4 does not support :dir(); keep the ancestor-attribute
@@ -5576,7 +5545,6 @@ picture.bleed > img {
 .flyout[popover] {
   position: fixed;
   inset: auto;
-  margin: 0;
 }
 
 /* A presentation class may own its *visible* display type, but must not
@@ -6629,14 +6597,11 @@ picture.bleed > img {
 
 .avatar > img,
 .avatar > picture > img {
+  display: block;
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
   border-radius: inherit;
-}
-
-.avatar > picture > img {
-  display: block;
 }
 
 button.avatar {
@@ -6728,19 +6693,6 @@ a.avatar[aria-disabled="true"] {
 }
 
 .avatar-stack.lg {
-  --avatar-stack-size: 3rem;
-  --avatar-stack-font-size: var(--font-size-lg);
-}
-
-/* Infer the stack scale from its avatars. Progressive: without :has() the
-   explicit .avatar-stack.sm/.lg classes and the default size still size the
-   group, only the inference is lost. */
-.avatar-stack:has(> .avatar.sm) {
-  --avatar-stack-size: 1.75rem;
-  --avatar-stack-font-size: var(--font-size-xs);
-}
-
-.avatar-stack:has(> .avatar.lg) {
   --avatar-stack-size: 3rem;
   --avatar-stack-font-size: var(--font-size-lg);
 }
@@ -7834,19 +7786,33 @@ a.avatar[aria-disabled="true"] {
  * like separate rows and causes unstable header height.
  *
  * A trail that overflows fades at the inline end, so clipped text reads as
- * "there is more" rather than a clipping bug. The fade is permanent: a
- * scroll-state query can only style a scroller's descendants, never the
- * scrollport itself, so a conditional fade needs a wrapper or JS and waits
- * for the fit/overflow work. The terminal space below equals the fade length,
- * so at rest and at scroll end the fade covers empty padding and the last
- * item stays fully inked. A mask (not an overlay) keeps the fade
- * background-agnostic: the trail sits on pages, cards, and frosted topbars.
+ * "there is more" rather than a clipping bug. The end fade is permanent: the
+ * terminal space below equals the fade length, so at rest and at scroll end
+ * the fade covers empty padding and the last item stays fully inked. A mask
+ * (not an overlay) keeps the fade background-agnostic: the trail sits on
+ * pages, cards, and frosted topbars.
+ *
+ * The start fade appears only once the trail has scrolled (by hand, or by
+ * the breadcrumb enhancement starting it on the current page), so a trail at
+ * rest keeps its root aligned and fully inked. A scroll-state query cannot
+ * style the scrollport itself, but a scroll-driven animation on its own
+ * timeline can. Progressive: without scroll-driven animations the start
+ * stop stays at 0 and only the end fades.
  *
  * Internal:
  * --breadcrumb-bleed
  * --breadcrumb-fade
  * --breadcrumb-fade-dir
+ * --breadcrumb-fade-start
  */
+
+/* Registered so the animation interpolates the stop as a length. */
+@property --breadcrumb-fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 .breadcrumb {
   /* The scrollport clips on both axes (overflow-x: auto computes overflow-y
      to auto), so the padding keeps the text-link outline of every item inside
@@ -7867,6 +7833,9 @@ a.avatar[aria-disabled="true"] {
   margin-block: calc(var(--breadcrumb-bleed) * -1);
   padding: var(--breadcrumb-bleed);
   padding-inline-end: calc(var(--breadcrumb-bleed) + var(--breadcrumb-fade));
+  /* The fade masks the end of the scrollport, so focus scrolling (and the
+     breadcrumb enhancement) must treat it as outside the visible area. */
+  scroll-padding-inline-end: var(--breadcrumb-fade);
   /* One axis of navigation, so it never wraps: a second line reads as a
      nested level. When the trail does not fit, the strip scrolls. */
   overflow: auto hidden;
@@ -7875,19 +7844,40 @@ a.avatar[aria-disabled="true"] {
      that knows neither draws no fade and the strip still scrolls. */
   -webkit-mask-image: linear-gradient(
     var(--breadcrumb-fade-dir),
-    #000 0,
+    transparent 0,
+    #000 var(--breadcrumb-fade-start),
     #000 calc(100% - var(--breadcrumb-fade)),
     transparent 100%
   );
   mask-image: linear-gradient(
     var(--breadcrumb-fade-dir),
-    #000 0,
+    transparent 0,
+    #000 var(--breadcrumb-fade-start),
     #000 calc(100% - var(--breadcrumb-fade)),
     transparent 100%
   );
   color: var(--text-subtle);
   font-size: var(--font-size-sm);
   list-style: none;
+}
+
+/* The start fade grows over the first fade-length of scroll, on the trail's
+   own inline timeline (logical, so RTL starts at the right). Keep the
+   @supports: without scroll timelines, the animation would end instantly and
+   leave the start faded even at rest. It follows the reader's scroll, not
+   time, so reduced motion does not disable it. */
+@supports (animation-timeline: scroll()) {
+  .breadcrumb {
+    animation: actual-breadcrumb-fade-start linear both;
+    animation-timeline: scroll(self inline);
+    animation-range: 0 var(--breadcrumb-fade);
+  }
+}
+
+@keyframes actual-breadcrumb-fade-start {
+  to {
+    --breadcrumb-fade-start: var(--breadcrumb-fade);
+  }
 }
 
 /* Mirror of --breadcrumb-fade-dir, following the range fill pattern:

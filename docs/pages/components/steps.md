@@ -156,12 +156,9 @@ instead of the OS default:
 <ol class="steps steps-horizontal scroller">
 ```
 
-Steps does not apply it for you, because scrollbar treatment is an app-wide
-decision rather than a per-component one. Every other scroll container —
-`.table`, a `.flyout`, a scrolling `dialog` — leaves the scrollbar alone too,
-so a page that thinned only its stepper would show two kinds of scrollbar. Put
-`.scroller` on whatever scrolls, once. See the sizing and wrapping page for its
-hooks.
+Steps does not apply it for you; see
+[one-row strips](../utilities/sizing-wrapping.md#one-row-strips) for the
+page-wide rule and the hooks.
 
 Do not add `.stable-gutter` here. It reserves gutter on the inline axis, for a
 vertical scrollbar this row never draws, so it narrows the row instead of

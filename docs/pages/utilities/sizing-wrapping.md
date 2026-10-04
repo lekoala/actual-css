@@ -120,6 +120,22 @@ Thickness is not a hook: `scrollbar-width` takes `thin` or `auto`, not a length.
 Hover is left to the engine — it varies by platform, and matching it by hand was
 the part of a custom scrollbar that never held up.
 
+### One-row strips
+
+Components that never wrap scroll horizontally when they do not fit: `.tabs`,
+`.breadcrumb`, `.pagination`, `.steps-horizontal`, and `.table-wrap`. They
+leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
+sit under a short strip. Put `.scroller` on the strip itself — the element
+that scrolls — for a thin, theme-coloured bar:
+
+```html
+<ol class="breadcrumb scroller" data-enhance="breadcrumb" aria-label="Breadcrumb">
+```
+
+There is no class that hides the scrollbar: on a strip it is the only visible
+scroll control for a mouse without a horizontal wheel. Apply `.scroller` to
+every scrolling strip of a page, or to none, so the bars stay consistent.
+
 ## CSS hooks
 
 - `--scroller-track` — scrollbar track color.

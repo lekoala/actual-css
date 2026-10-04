@@ -236,11 +236,12 @@
 the label rests inside the control and floats to the top when the control is
 focused or filled. It composes the existing <code>.field</code> layout and the text
 controls (<code>.input</code>, <code>.textarea</code>, <code>.select</code>) with zero JavaScript.</p>
-<p>The cell holds exactly one control and its label, with the control before the
-label. Label placement is linked through the general sibling combinator, so an
-injected node between the two (a password manager, an extension wrapper) is
-tolerated. Help and error messages stay in the surrounding <code>.field</code>, otherwise
-the resting label centers on the whole field instead of the control.</p>
+<p>The cell holds exactly one control and its label, in either order: a form
+theme that renders the label before the widget needs no reordering. An
+injected sibling (a password manager, an extension wrapper) is tolerated as
+long as the control stays a direct child of the cell. Help and error messages
+stay in the surrounding <code>.field</code>, otherwise the resting label centers on the
+whole field instead of the control.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -267,6 +268,27 @@ the resting label centers on the whole field instead of the control.</p>
 can detect emptiness — the space keeps the placeholder invisible while making
 the state detectable. <code>:autofill</code> is covered too, so a password manager that
 prefills a field still lifts the label.</p>
+<p>The same cell with the label first, as a label-then-widget form theme renders it:</p>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<div class="field">
+  <label class="floating-field">
+    <span class="field-label">Full name</span>
+    <input class="input" type="text" autocomplete="name" placeholder=" " />
+  </label>
+</div>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;div class=&quot;field&quot;&gt;
+  &lt;label class=&quot;floating-field&quot;&gt;
+    &lt;span class=&quot;field-label&quot;&gt;Full name&lt;/span&gt;
+    &lt;input class=&quot;input&quot; type=&quot;text&quot; autocomplete=&quot;name&quot; placeholder=&quot; &quot; /&gt;
+  &lt;/label&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
 <h2 id="textarea">Textarea</h2>
 <p>A textarea's empty label starts at the control's normal first-line position,
 then floats to the same top anchor as the other controls when focused or
@@ -354,8 +376,10 @@ line.</li>
 <p>Validation and focus come from the existing form contracts: the control's
 border and focus ring flip through <code>--form-invalid-border</code> and the shared
 control focus rules. Coloring the label itself on focus or invalid state is
-left to the surrounding recipe — the joined floating form in the
-<a href="../../demo/templates/blocks.html">blocks demo</a> shows one such recipe.</p>
+left to the surrounding recipe; select the label through the cell
+(<code>.floating-field:has(&gt; :focus) &gt; .field-label</code>) so it holds in both orders.
+The joined floating form in the <a href="../../demo/templates/blocks.html">blocks demo</a>
+shows one such recipe.</p>
 <blockquote>
 <p>Not currently compatible with <code>.input-icon</code>; use standard labels when an
 embedded leading icon is required.</p>

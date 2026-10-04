@@ -9,10 +9,14 @@
 ### Added
 
 - `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the full runtime instance.
+- `data-enhance="breadcrumb"` (`actual-css/js/breadcrumb`) scrolls an overflowing `.breadcrumb` to its `aria-current="page"` item at connect.
 - `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs, apart from `--border`; it defaults to `--border`.
 
 ### Changed
 
+- An overflowing horizontal `.tabs` strip starts with its selected tab in view, scrolling the strip only.
+- A scrolled `.breadcrumb` fades its inline start too, in engines with scroll-driven animations; at rest the root stays unfaded.
+- `.breadcrumb` declares its end fade as `scroll-padding-inline-end`, so keyboard focus never leaves a link under the fade.
 - `.floating-field` accepts its `.field-label` before or after the control; state is read through `:has()` on the cell.
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
 - `.pagination` never wraps: a row that does not fit scrolls horizontally, with room for its items' focus line.

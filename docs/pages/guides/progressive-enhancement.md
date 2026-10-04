@@ -106,6 +106,7 @@ status bar, for example:
 | `actual-css/js/dialog`             | Native `<dialog>` behavior, focus management, dismissal     |
 | `actual-css/js/dismiss`            | The generic `--dismiss` command                             |
 | `actual-css/js/tab`                | Tab panels and arrow-key navigation (token `tabs`)          |
+| `actual-css/js/breadcrumb`         | Current item scrolled into view (token `breadcrumb`)        |
 | `actual-css/js/tooltip`            | Tooltips on `data-tooltip`                                  |
 | `actual-css/js/scrollspy`          | Scroll-driven nav highlighting (token `scrollspy`)          |
 | `actual-css/js/filter`             | Input value filtering on `data-filter`                      |
@@ -129,7 +130,8 @@ needed.
 The JS is designed to run on its own, without Actual's stylesheet.
 
 - **`data-enhance` tokens** register named behaviors. The runtime discovers
-  components through `data-enhance="tabs"`, `data-enhance="flyout"`,
+  components through `data-enhance="tabs"`, `data-enhance="breadcrumb"`,
+  `data-enhance="flyout"`,
   `data-enhance="range"`, `data-enhance="scrollspy"`, and
   `data-enhance="validation"` — no Actual presentation class needed.
   Self-describing attributes (`data-mask`, `data-tooltip`,

@@ -375,6 +375,17 @@ by module reaches it directly:</p>
 <p>Thickness is not a hook: <code>scrollbar-width</code> takes <code>thin</code> or <code>auto</code>, not a length.
 Hover is left to the engine — it varies by platform, and matching it by hand was
 the part of a custom scrollbar that never held up.</p>
+<h3 id="one-row-strips">One-row strips</h3>
+<p>Components that never wrap scroll horizontally when they do not fit: <code>.tabs</code>,
+<code>.breadcrumb</code>, <code>.pagination</code>, <code>.steps-horizontal</code>, and <code>.table-wrap</code>. They
+leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
+sit under a short strip. Put <code>.scroller</code> on the strip itself — the element
+that scrolls — for a thin, theme-coloured bar:</p>
+<pre><code class="language-html">&lt;ol class=&quot;breadcrumb scroller&quot; data-enhance=&quot;breadcrumb&quot; aria-label=&quot;Breadcrumb&quot;&gt;
+</code></pre>
+<p>There is no class that hides the scrollbar: on a strip it is the only visible
+scroll control for a mouse without a horizontal wheel. Apply <code>.scroller</code> to
+every scrolling strip of a page, or to none, so the bars stay consistent.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--scroller-track</code> — scrollbar track color.</li>
@@ -401,6 +412,7 @@ the part of a custom scrollbar that never held up.</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#class-reference" data-docs-toc-item data-level="2">Class reference</a></li>
         <li><a class="nav-link" href="#scroller" data-docs-toc-item data-level="2">Scroller</a></li>
+        <li><a class="nav-link" href="#one-row-strips" data-docs-toc-item data-level="3">One-row strips</a></li>
         <li><a class="nav-link" href="#css-hooks" data-docs-toc-item data-level="2">CSS hooks</a></li>
           </ul>
         </nav>

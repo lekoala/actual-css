@@ -321,6 +321,7 @@ status bar, for example:</p>
 <tr><td><code>actual-css/js/dialog</code></td><td>Native <code>&lt;dialog&gt;</code> behavior, focus management, dismissal</td></tr>
 <tr><td><code>actual-css/js/dismiss</code></td><td>The generic <code>--dismiss</code> command</td></tr>
 <tr><td><code>actual-css/js/tab</code></td><td>Tab panels and arrow-key navigation (token <code>tabs</code>)</td></tr>
+<tr><td><code>actual-css/js/breadcrumb</code></td><td>Current item scrolled into view (token <code>breadcrumb</code>)</td></tr>
 <tr><td><code>actual-css/js/tooltip</code></td><td>Tooltips on <code>data-tooltip</code></td></tr>
 <tr><td><code>actual-css/js/scrollspy</code></td><td>Scroll-driven nav highlighting (token <code>scrollspy</code>)</td></tr>
 <tr><td><code>actual-css/js/filter</code></td><td>Input value filtering on <code>data-filter</code></td></tr>
@@ -342,7 +343,8 @@ needed.</p>
 <p>The JS is designed to run on its own, without Actual's stylesheet.</p>
 <ul>
 <li><strong><code>data-enhance</code> tokens</strong> register named behaviors. The runtime discovers
-components through <code>data-enhance=&quot;tabs&quot;</code>, <code>data-enhance=&quot;flyout&quot;</code>,
+components through <code>data-enhance=&quot;tabs&quot;</code>, <code>data-enhance=&quot;breadcrumb&quot;</code>,
+<code>data-enhance=&quot;flyout&quot;</code>,
 <code>data-enhance=&quot;range&quot;</code>, <code>data-enhance=&quot;scrollspy&quot;</code>, and
 <code>data-enhance=&quot;validation&quot;</code> — no Actual presentation class needed.
 Self-describing attributes (<code>data-mask</code>, <code>data-tooltip</code>,

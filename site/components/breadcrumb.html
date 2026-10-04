@@ -239,12 +239,14 @@
 <li>Separators are generated with CSS (<code>li + li::before</code>).</li>
 <li>Breadcrumbs remain on a single line and scroll horizontally when space is insufficient. Actual does not automatically truncate or collapse hierarchy levels.</li>
 <li>An overflowing trail fades at the inline end to signal continuation; the last item rests outside the fade once scrolled into view.</li>
+<li>Add <code>data-enhance=&quot;breadcrumb&quot;</code> to start an overflowing trail on its current item instead of the root. The placement happens once at connect, on a visible trail.</li>
+<li>Add <code>.scroller</code> for a thin, theme-coloured scrollbar; see <a href="../utilities/sizing-wrapping.html#one-row-strips">one-row strips</a>.</li>
 </ul>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <nav aria-label="Breadcrumb">
-  <ol class="breadcrumb">
+  <ol class="breadcrumb" data-enhance="breadcrumb">
     <li><a href="/home">Home</a></li>
     <li><a href="/projects">Projects</a></li>
     <li><a href="/projects/docs">Docs</a></li>
@@ -254,7 +256,7 @@
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;nav aria-label=&quot;Breadcrumb&quot;&gt;
-  &lt;ol class=&quot;breadcrumb&quot;&gt;
+  &lt;ol class=&quot;breadcrumb&quot; data-enhance=&quot;breadcrumb&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;/home&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;/projects&quot;&gt;Projects&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;/projects/docs&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
