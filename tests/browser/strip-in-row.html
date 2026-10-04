@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Strips inside flex rows fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    /* Flush to the viewport on purpose: no gutter hides a page overflow. */
+    body { margin: 0; }
+  </style>
+</head>
+<body>
+  <!-- The common composition: a counter and a pagination on one row. -->
+  <div class="cluster" style="--cluster-justify: space-between">
+    <span>Showing 4 of 28 priority accounts</span>
+    <nav aria-label="Pages">
+      <ol class="pagination" id="pager">
+        <li><a class="btn ghost" href="#p">Previous</a></li>
+        <li><a class="btn ghost" href="#1">1</a></li>
+        <li><a class="btn ghost" href="#2" aria-current="page">2</a></li>
+        <li><a class="btn ghost" href="#3">3</a></li>
+        <li><a class="btn ghost" href="#4">4</a></li>
+        <li><a class="btn ghost" href="#5">5</a></li>
+        <li><a class="btn ghost" href="#6">6</a></li>
+        <li><a class="btn ghost" href="#n">Next</a></li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="cluster">
+    <span>Location</span>
+    <nav aria-label="Breadcrumb">
+      <ol class="breadcrumb" id="trail">
+        <li><a href="#a">Actual Cloud</a></li>
+        <li><a href="#b">Revenue operations</a></li>
+        <li><a href="#c">Portfolio health</a></li>
+        <li><a href="#d">Enterprise renewals</a></li>
+        <li><a href="#e" aria-current="page">Northstar Logistics</a></li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="cluster">
+    <span>Sections</span>
+    <nav aria-label="Account sections">
+      <ul class="tabs" id="link-tabs">
+        <li><a class="tab" href="#1" aria-current="page">Availability</a></li>
+        <li><a class="tab" href="#2">Extra availability</a></li>
+        <li><a class="tab" href="#3">Unavailability</a></li>
+        <li><a class="tab" href="#4">Notifications</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Alignment at rest: the first item lines up with the heading above. -->
+  <section id="aligned">
+    <h2 id="heading">Heading</h2>
+    <nav aria-label="Breadcrumb"><ol class="breadcrumb" id="aligned-trail">
+      <li><a href="#a">Home</a></li>
+      <li><a href="#e" aria-current="page">Here</a></li>
+    </ol></nav>
+    <nav aria-label="Pages"><ol class="pagination" id="aligned-pager">
+      <li><a class="btn ghost" href="#1" aria-current="page">1</a></li>
+      <li><a class="btn ghost" href="#2">2</a></li>
+    </ol></nav>
+  </section>
+</body>
+</html>

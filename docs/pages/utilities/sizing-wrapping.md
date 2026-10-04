@@ -140,6 +140,22 @@ There is no class that hides the scrollbar: on a strip it is the only visible
 scroll control for a mouse without a horizontal wheel. Apply `.scroller` to
 every scrolling strip of a page, or to none, so the bars stay consistent.
 
+A strip keeps scrolling inside a flex or grid row, such as a counter and a
+pagination on one `.cluster`: a `<nav>` directly around `.breadcrumb`,
+`.pagination` or `.tabs` shrinks with the row. Any other wrapper needs
+`min-inline-size: 0`, or the row pushes the whole page into scrolling.
+
+```html
+<div class="cluster" style="--cluster-justify: space-between">
+  <span>Showing 4 of 28</span>
+  <nav aria-label="Pages"><ol class="pagination">…</ol></nav>
+</div>
+```
+
+On touch screens the scrollbar overlays the strip and stays hidden at rest.
+Only `.breadcrumb` fades its edges, so a clipped tab or page number is the
+remaining overflow cue there.
+
 ## CSS hooks
 
 - `--scroller-track` — scrollbar track color.
