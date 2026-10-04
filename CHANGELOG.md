@@ -13,6 +13,7 @@
 
 ### Changed
 
+- `.floating-field` accepts its `.field-label` before or after the control; state is read through `:has()` on the cell.
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
 - `.pagination` never wraps: a row that does not fit scrolls horizontally, with room for its items' focus line.
 - A horizontal `.tabs` strip never wraps, nor do its labels: a strip that does not fit scrolls horizontally.

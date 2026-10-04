@@ -7,11 +7,12 @@ the label rests inside the control and floats to the top when the control is
 focused or filled. It composes the existing `.field` layout and the text
 controls (`.input`, `.textarea`, `.select`) with zero JavaScript.
 
-The cell holds exactly one control and its label, with the control before the
-label. Label placement is linked through the general sibling combinator, so an
-injected node between the two (a password manager, an extension wrapper) is
-tolerated. Help and error messages stay in the surrounding `.field`, otherwise
-the resting label centers on the whole field instead of the control.
+The cell holds exactly one control and its label, in either order: a form
+theme that renders the label before the widget needs no reordering. An
+injected sibling (a password manager, an extension wrapper) is tolerated as
+long as the control stays a direct child of the cell. Help and error messages
+stay in the surrounding `.field`, otherwise the resting label centers on the
+whole field instead of the control.
 
 ```html demo
 <div class="field">
@@ -27,6 +28,17 @@ Every `.input` and `.textarea` needs `placeholder=" "` so `:placeholder-shown`
 can detect emptiness — the space keeps the placeholder invisible while making
 the state detectable. `:autofill` is covered too, so a password manager that
 prefills a field still lifts the label.
+
+The same cell with the label first, as a label-then-widget form theme renders it:
+
+```html demo
+<div class="field">
+  <label class="floating-field">
+    <span class="field-label">Full name</span>
+    <input class="input" type="text" autocomplete="name" placeholder=" " />
+  </label>
+</div>
+```
 
 ## Textarea
 
@@ -89,8 +101,10 @@ line on top of the control's minimum size.
 Validation and focus come from the existing form contracts: the control's
 border and focus ring flip through `--form-invalid-border` and the shared
 control focus rules. Coloring the label itself on focus or invalid state is
-left to the surrounding recipe — the joined floating form in the
-[blocks demo](../../demo/templates/blocks.html) shows one such recipe.
+left to the surrounding recipe; select the label through the cell
+(`.floating-field:has(> :focus) > .field-label`) so it holds in both orders.
+The joined floating form in the [blocks demo](../../demo/templates/blocks.html)
+shows one such recipe.
 
 > Not currently compatible with `.input-icon`; use standard labels when an
 > embedded leading icon is required.
