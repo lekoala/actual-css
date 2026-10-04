@@ -758,6 +758,41 @@ test('breadcrumb marks a single aria-current="page" state', () => {
   expect(css.includes("pointer-events: none")).toBe(false);
 });
 
+test("breadcrumb stays a single-line strip", () => {
+  const css = readCss("src/css/components/breadcrumb.css");
+  const rules = readRules("src/css/components/breadcrumb.css");
+
+  /* The core invariant: a breadcrumb is a linear strip, never a wrapped
+     second row that reads as a nested hierarchy level. */
+  expect(css).toMatch(/\.breadcrumb\s*\{[^}]*flex-wrap:\s*nowrap/s);
+  expect(rules).not.toMatch(/\.breadcrumb\s*\{[^}]*flex-wrap:\s*wrap/s);
+  expect(css).toMatch(/\.breadcrumb\s*\{[^}]*overflow:\s*auto hidden/s);
+  expect(css).toMatch(/\.breadcrumb li\s*\{[^}]*flex:\s*none/s);
+  expect(css).toMatch(/\.breadcrumb li\s*\{[^}]*white-space:\s*nowrap/s);
+});
+
+test("breadcrumb fades at the inline end instead of clipping silently", () => {
+  const css = readCss("src/css/components/breadcrumb.css");
+  const rules = readRules("src/css/components/breadcrumb.css");
+
+  /* Permanent mask, not an overlay: background-agnostic across pages, cards,
+     and frosted topbars. The prefixed declaration extends the fade to older
+     WebKit; both are safe-drop, so no gate is needed. */
+  expect(css).toMatch(/\.breadcrumb\s*\{[^}]*mask-image:\s*linear-gradient\(/s);
+  expect(css).toMatch(/\.breadcrumb\s*\{[^}]*-webkit-mask-image:\s*linear-gradient\(/s);
+  /* Terminal space equals the fade length: at rest and at scroll end the fade
+     covers empty padding, never the last item. */
+  expect(css).toMatch(
+    /\.breadcrumb\s*\{[^}]*padding-inline-end:\s*calc\(var\(--breadcrumb-bleed\)\s*\+\s*var\(--breadcrumb-fade\)\)/s,
+  );
+  /* Physical gradient keywords mirror through the hook, following range. */
+  expect(css).toMatch(/--breadcrumb-fade-dir:\s*to right/);
+  expect(css).toMatch(/--breadcrumb-fade-dir:\s*to left/);
+  /* A fade says "there is more"; an arrow would say "action". */
+  expect(rules).not.toMatch(/\.breadcrumb::(before|after)\s*\{[^}]*content:/s);
+  expect(css.includes("scrollbar-width: none")).toBe(false);
+});
+
 test("prose styles native kbd elements", () => {
   const css = readCss("src/css/typography/prose.css");
 

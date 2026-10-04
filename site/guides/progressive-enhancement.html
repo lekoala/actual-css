@@ -285,11 +285,23 @@ the element leaves the DOM.</p>
 DOM. The runtime remains active until the page unloads; there is no teardown
 handle, and cleanup happens per element when an element leaves the DOM.</p>
 <h2 id="the-full-runtime">The full runtime</h2>
-<p>Loading <code>dist/actual.full.js</code> as a plain <code>&lt;script&gt;</code> (no <code>type=&quot;module&quot;</code>, no
-bundler, no <code>import</code>) gets the full runtime. Static HTML that needs to trigger
-something from its own inline <code>&lt;script&gt;</code> dispatches the module's public event
-instead of calling into a global — <code>actual:status</code> for the status bar, for
-example:</p>
+<p>Import <code>actual-css/js/full</code> to enable the full runtime:</p>
+<pre><code class="language-js">import &quot;actual-css/js/full&quot;;
+</code></pre>
+<p>The same entrypoint exposes the public enhancement API from the same runtime
+instance, for adopters that extend the runtime they already run:</p>
+<pre><code class="language-js">import { applyEnhancement, enhance, registerEnhancement } from &quot;actual-css/js/full&quot;;
+
+registerEnhancement(&quot;autosubmit&quot;, (form) =&gt; {
+  // ...
+});
+</code></pre>
+<p>For anything beyond that extension API, keep using <code>actual-css/js/*</code>.</p>
+<p>The same entrypoint produces the <code>dist/actual.full.js</code> standalone for a
+classic <code>&lt;script&gt;</code>, where no global API is exposed. Static HTML that needs to
+trigger something from its own inline <code>&lt;script&gt;</code> dispatches the module's
+public event instead of calling into a global — <code>actual:status</code> for the
+status bar, for example:</p>
 <pre><code class="language-html">&lt;script src=&quot;actual.full.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
   document.dispatchEvent(new CustomEvent(&quot;actual:status&quot;, {
