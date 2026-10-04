@@ -47,3 +47,6 @@ When the layout stacks (narrow space), the aside stays on top.
 
 - `--sidebar-layout-size` sets the aside's preferred width.
 - `--sidebar-content-min` sets the main region's minimum viable width.
+
+The regions read both, so they also reach the regions of a nested
+`.sidebar-layout`; set them on the nested layout to give it its own sizes.

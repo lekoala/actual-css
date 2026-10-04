@@ -12,6 +12,9 @@
  *
  * Child contract: every direct child is a peer; the flex-basis applies to all.
  */
+/* No instance reset, unlike .cluster and .grid: the children read the hook,
+   and a switcher nested as a direct child takes its own flex-basis from its
+   parent's value, so the hook must reach it. */
 .switcher {
   display: flex;
   flex-direction: row;

@@ -21,15 +21,12 @@
  * --form-actions-sticky-padding (owned by .form-actions.sticky)
  */
 
-/* The policy hooks write the properties themselves rather than relaying
-   --cluster-*: a relay would inherit into any .cluster nested in the row.
-   These are equal-specificity overrides of .cluster, so they win only because
-   forms load after layout in the official bundle (tests/css-audit.test.js
-   guards the order); utilities load later and keep the author's last word. On
-   this row --cluster-justify/--cluster-align have no effect. */
+/* The role relays its policy into the row's cluster hooks. Cluster hooks stop
+   at every nested .cluster, so the relay cannot leak, and this class beats the
+   cluster's zero-specificity reset in any import order. */
 .form-actions {
-  align-items: var(--form-actions-align, center);
-  justify-content: var(--form-actions-justify, flex-start);
+  --cluster-align: var(--form-actions-align, center);
+  --cluster-justify: var(--form-actions-justify, flex-start);
 }
 
 /* Opt-in sticky variant. When the bar is not stuck (at rest) the translucent

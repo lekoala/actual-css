@@ -1,12 +1,12 @@
 {
-  "totalRaw": 359151,
+  "totalRaw": 360179,
   "core": {
     "minified": 12327,
     "brotli": 2755
   },
   "full": {
-    "minified": 132065,
-    "brotli": 19059
+    "minified": 132235,
+    "brotli": 19071
   },
   "js": {
     "full": {
@@ -85,10 +85,6 @@
       "raw": 5274
     },
     {
-      "file": "utilities/extra.css",
-      "raw": 5265
-    },
-    {
       "file": "components/accordion.css",
       "raw": 5262
     },
@@ -99,6 +95,10 @@
     {
       "file": "forms/otp.css",
       "raw": 5235
+    },
+    {
+      "file": "utilities/extra.css",
+      "raw": 5219
     },
     {
       "file": "components/tab.css",
@@ -141,16 +141,16 @@
       "raw": 4195
     },
     {
+      "file": "layout/grid.css",
+      "raw": 4129
+    },
+    {
       "file": "forms/floating-field.css",
       "raw": 4074
     },
     {
       "file": "utilities/base.css",
       "raw": 4037
-    },
-    {
-      "file": "layout/grid.css",
-      "raw": 3907
     },
     {
       "file": "components/menu.css",
@@ -225,10 +225,6 @@
       "raw": 2728
     },
     {
-      "file": "forms/form-actions.css",
-      "raw": 2677
-    },
-    {
       "file": "themes/sunset.css",
       "raw": 2677
     },
@@ -255,6 +251,10 @@
     {
       "file": "components/pagination.css",
       "raw": 2471
+    },
+    {
+      "file": "forms/form-actions.css",
+      "raw": 2456
     },
     {
       "file": "components/skeleton.css",
@@ -301,6 +301,10 @@
       "raw": 2052
     },
     {
+      "file": "layout/sidebar-layout.css",
+      "raw": 1960
+    },
+    {
       "file": "layout/topbar.css",
       "raw": 1834
     },
@@ -311,10 +315,6 @@
     {
       "file": "themes/brutalist.css",
       "raw": 1778
-    },
-    {
-      "file": "layout/sidebar-layout.css",
-      "raw": 1769
     },
     {
       "file": "effects/shimmer.css",
@@ -353,6 +353,10 @@
       "raw": 1504
     },
     {
+      "file": "layout/cluster.css",
+      "raw": 1481
+    },
+    {
       "file": "layout/scroller.css",
       "raw": 1454
     },
@@ -381,16 +385,16 @@
       "raw": 1091
     },
     {
-      "file": "layout/cluster.css",
-      "raw": 934
-    },
-    {
       "file": "components/scrollspy.css",
       "raw": 932
     },
     {
       "file": "layout/stack.css",
       "raw": 830
+    },
+    {
+      "file": "layout/switcher.css",
+      "raw": 817
     },
     {
       "file": "core/reset.css",
@@ -401,16 +405,16 @@
       "raw": 684
     },
     {
-      "file": "layout/switcher.css",
-      "raw": 614
-    },
-    {
       "file": "forms/index.css",
       "raw": 544
     },
     {
       "file": "actual.full.css",
       "raw": 500
+    },
+    {
+      "file": "layout/center.css",
+      "raw": 491
     },
     {
       "file": "layout/media.css",
@@ -423,10 +427,6 @@
     {
       "file": "core/print.css",
       "raw": 382
-    },
-    {
-      "file": "layout/center.css",
-      "raw": 359
     },
     {
       "file": "typography/lead.css",

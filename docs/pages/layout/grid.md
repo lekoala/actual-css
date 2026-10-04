@@ -172,3 +172,5 @@ stacked, prefer `.switcher`.
 - `--grid-min` tunes the minimum item width of the intrinsic `.grid` recipe.
   It does not apply to `.grid-N`.
 - `--grid-columns` replaces that recipe with an author-owned template.
+
+Both stop at a nested `.grid`: set them on the grid itself.

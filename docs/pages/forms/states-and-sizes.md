@@ -26,8 +26,8 @@ together. Density contexts leave both unchanged.
 <form class="stack" novalidate>
   <fieldset class="field-group">
     <legend class="field-label">Text control states</legend>
-    <div class="stack" style="--grid-min: 14rem;">
-      <div class="grid items-start">
+    <div class="stack">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="field">
           <span class="field-label">Editable</span>
           <input class="input" type="text" value="Ocean Beach Clinic" />
@@ -46,7 +46,7 @@ together. Density contexts leave both unchanged.
         </label>
       </div>
 
-      <div class="grid items-start">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="field">
           <span class="field-label">Editable notes</span>
           <textarea class="textarea">Patient asked for an invoice copy.</textarea>
@@ -67,8 +67,8 @@ together. Density contexts leave both unchanged.
 
   <fieldset class="field-group">
     <legend class="field-label">Choice and select states</legend>
-    <div class="stack" style="--grid-min: 14rem;">
-      <div class="grid items-start">
+    <div class="stack">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="field">
           <span class="field-label">Editable select</span>
           <select class="select">
@@ -98,7 +98,7 @@ together. Density contexts leave both unchanged.
         </label>
       </div>
 
-      <div class="grid items-start">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="choice">
           <input class="check" type="checkbox" />
           <span>
@@ -140,7 +140,7 @@ together. Density contexts leave both unchanged.
         </label>
       </div>
 
-      <div class="grid items-start">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="choice">
           <input class="radio" type="radio" name="demo-radio-state" />
           <span>
@@ -174,7 +174,7 @@ together. Density contexts leave both unchanged.
         </label>
       </div>
 
-      <div class="grid items-start">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="choice">
           <input class="switch" type="checkbox" role="switch" />
           <span>
@@ -212,8 +212,8 @@ together. Density contexts leave both unchanged.
 
   <fieldset class="field-group">
     <legend class="field-label">Control sizes</legend>
-    <div class="stack" style="--grid-min: 14rem;">
-      <div class="grid items-start">
+    <div class="stack">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="field sm">
           <span class="field-label">Small field</span>
           <input class="input" type="text" value="sm" />
@@ -230,7 +230,7 @@ together. Density contexts leave both unchanged.
         </label>
       </div>
 
-      <div class="grid items-start">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="field sm">
           <span class="field-label">Small select</span>
           <select class="select">
@@ -253,7 +253,7 @@ together. Density contexts leave both unchanged.
         </label>
       </div>
 
-      <div class="grid items-start">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="field sm">
           <span class="field-label">Small textarea</span>
           <textarea class="textarea" rows="2">Short note</textarea>
@@ -270,14 +270,14 @@ together. Density contexts leave both unchanged.
         </label>
       </div>
 
-      <div class="grid items-start">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <button class="btn outline sm" type="button">Small</button>
         <button class="btn outline" type="button">Default</button>
         <button class="btn outline lg" type="button">Large</button>
       </div>
 
       <!-- Size belongs on the choice wrapper so label and control move together. -->
-      <div class="grid items-start">
+      <div class="grid items-start" style="--grid-min: 14rem;">
         <label class="choice sm">
           <input class="check" type="checkbox" checked />
           <span>Small checkbox</span>
@@ -297,7 +297,7 @@ together. Density contexts leave both unchanged.
       </div>
 
       <!-- The underlying typography hook remains available for custom scales. -->
-      <div class="grid items-start" style="--control-font-size: var(--font-size-sm);">
+      <div class="grid items-start" style="--grid-min: 14rem; --control-font-size: var(--font-size-sm);">
         <label class="choice">
           <input class="check" type="checkbox" checked />
           <span>Smaller type</span>

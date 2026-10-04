@@ -35,6 +35,28 @@ Global tokens are the ones to reach for in application CSS. Write a relay only t
 }
 ```
 
+### Which hooks inherit
+
+A hook either describes one element's own layout, or a policy its context
+hands down. Instance geometry stops at every new instance; policy inherits.
+
+| Kind              | Examples                                  | Inherits |
+| ----------------- | ----------------------------------------- | -------- |
+| Palette, theme    | `--text`, `--primary`                     | yes      |
+| Rhythm, density   | `--gap`, `--control-size`                 | yes      |
+| Page policy       | `--center-size`, `--measure`              | yes      |
+| Role policy       | `--form-actions-justify`, `--frame-ratio` | yes      |
+| Instance geometry | `--cluster-justify`, `--grid-columns`     | no       |
+
+Set instance geometry on the element itself (a class or inline style), and
+select nested instances to change them (`.toolbar > .cluster`). Set a policy
+once on the region or on `:root` that owns it. A new hook follows the same
+test: "how this element lays out" stops at the element, "what this context
+hands down" inherits. The stop needs the instance to read its own hook:
+`.switcher` and `.sidebar-layout` hooks are read by their children, and a
+nested instance that is itself such a child still needs its parent's value,
+so those keep inheriting.
+
 ### Color
 
 Intent tokens are used by `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`. They are curated color/foreground pairs. Actual CSS does not compute foregrounds automatically in the core theme contract.

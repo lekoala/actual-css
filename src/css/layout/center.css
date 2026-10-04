@@ -7,6 +7,8 @@
  * --center-size
  * --center-pad
  */
+/* The hooks inherit on purpose: a site's content width is page policy, so a
+   theme sets them once on :root for every .center. */
 .center {
   box-sizing: content-box;
   inline-size: calc(100% - var(--center-pad, 1rem) * 2);

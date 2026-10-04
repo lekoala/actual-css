@@ -84,9 +84,9 @@
   flex-wrap: nowrap;
 }
 
-/* The property is written directly, never relayed through the cluster hook:
-   a relay would inherit into every .cluster nested inside. Utilities load last,
-   so the direct declaration already beats .cluster at equal specificity. */
+/* The property is written directly, so the utility works on any flex row, not
+   only a .cluster. Utilities load last, so the direct declaration beats
+   .cluster at equal specificity. */
 .justify-content-start {
   justify-content: flex-start;
 }

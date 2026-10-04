@@ -22,6 +22,13 @@
  * the thresholds were arrived at: docs/design-notes/grid.md.
  */
 
+/* Instance boundary: a nested grid never takes its parent's track template.
+   Zero specificity, so a class or inline style on the grid itself wins. */
+:where(.grid) {
+  --grid-columns: initial;
+  --grid-min: initial;
+}
+
 /* --grid-columns replaces the intrinsic auto-fit template: once set, the grid
    no longer collapses on its own and the author owns narrow-container
    collapse. */
