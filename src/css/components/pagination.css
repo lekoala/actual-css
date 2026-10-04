@@ -53,7 +53,9 @@
 
 /* The landmark around the row is not a scroll container, so as a flex or
    grid item it would keep the row's full width and push the page into
-   scrolling. Letting it shrink hands the overflow back to the row. */
+   scrolling. Letting it shrink hands the overflow back to the row.
+   Without :has() the landmark keeps its width; min-inline-size: 0 on the
+   wrapper is the fallback. */
 :where(nav:has(> .pagination)) {
   min-inline-size: 0;
 }

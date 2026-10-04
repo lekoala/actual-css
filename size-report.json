@@ -1,12 +1,12 @@
 {
-  "totalRaw": 360179,
+  "totalRaw": 360524,
   "core": {
     "minified": 12327,
     "brotli": 2755
   },
   "full": {
-    "minified": 132235,
-    "brotli": 19071
+    "minified": 132182,
+    "brotli": 19064
   },
   "js": {
     "full": {
@@ -81,6 +81,10 @@
       "raw": 5615
     },
     {
+      "file": "components/tab.css",
+      "raw": 5562
+    },
+    {
       "file": "typography/prose.css",
       "raw": 5274
     },
@@ -101,20 +105,12 @@
       "raw": 5219
     },
     {
-      "file": "components/tab.css",
-      "raw": 5186
-    },
-    {
       "file": "components/join.css",
       "raw": 5180
     },
     {
       "file": "components/navbar.css",
       "raw": 5176
-    },
-    {
-      "file": "components/breadcrumb.css",
-      "raw": 5082
     },
     {
       "file": "components/tooltip.css",
@@ -181,6 +177,14 @@
       "raw": 3239
     },
     {
+      "file": "layout/scroller.css",
+      "raw": 3135
+    },
+    {
+      "file": "components/pagination.css",
+      "raw": 3041
+    },
+    {
       "file": "forms/native.css",
       "raw": 2996
     },
@@ -191,6 +195,10 @@
     {
       "file": "forms/validation.css",
       "raw": 2822
+    },
+    {
+      "file": "components/breadcrumb.css",
+      "raw": 2800
     },
     {
       "file": "themes/ocean.css",
@@ -247,10 +255,6 @@
     {
       "file": "themes/corporate.css",
       "raw": 2479
-    },
-    {
-      "file": "components/pagination.css",
-      "raw": 2471
     },
     {
       "file": "forms/form-actions.css",
@@ -355,10 +359,6 @@
     {
       "file": "layout/cluster.css",
       "raw": 1481
-    },
-    {
-      "file": "layout/scroller.css",
-      "raw": 1454
     },
     {
       "file": "components/data-list.css",

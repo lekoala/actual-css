@@ -321,10 +321,9 @@ force a <code>.cluster</code> onto a single row — set <code>--cluster-wrap: no
 }
 </code></pre>
 <h2 id="scroller">Scroller</h2>
-<p>Use <code>.scroller</code> to apply optional framework scrollbar treatment to a scroll container. It styles the scrollbar only; pair it with <code>.overflow-auto</code> or a component that already creates overflow.</p>
-<p>The utility is two standard declarations and nothing else — the engine keeps
-drawing the scrollbar, <code>.scroller</code> only hands it a density and a colour that
-follow the theme. There is no <code>::-webkit-scrollbar</code> chrome: rebuilding a thumb
+<p>Use <code>.scroller</code> to apply optional framework overflow treatment to a scroll container: a quieter scrollbar, and faded edges where the region scrolls inline. It does not create overflow; pair it with <code>.overflow-auto</code> or a component that already creates overflow.</p>
+<p>The engine keeps drawing the scrollbar; <code>.scroller</code> only hands it a density
+and a colour that follow the theme. There is no <code>::-webkit-scrollbar</code> chrome: rebuilding a thumb
 by hand means re-implementing the hover, the corner and the light/dark
 adaptation that <code>color-scheme</code> already provides, and the hand-built version
 never quite matches the native one anyway.</p>
@@ -379,8 +378,12 @@ the part of a custom scrollbar that never held up.</p>
 <p>Components that never wrap scroll horizontally when they do not fit: <code>.tabs</code>,
 <code>.breadcrumb</code>, <code>.pagination</code>, <code>.steps-horizontal</code>, and <code>.table-wrap</code>. They
 leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
-sit under a short strip. Put <code>.scroller</code> on the strip itself — the element
-that scrolls — for a thin, theme-coloured bar:</p>
+sit under a short strip, and on touch screens it overlays the strip and hides
+at rest, leaving a clipped item as the only cue. Put <code>.scroller</code> on the strip
+itself — the element that scrolls — for a thin, theme-coloured bar and faded
+edges: the edge it can still scroll toward fades, so a strip at rest shows
+its first item unfaded and a strip at its end shows its last. The fade needs
+scroll-driven animations; elsewhere the strip simply scrolls.</p>
 <pre><code class="language-html">&lt;ol class=&quot;breadcrumb scroller&quot; data-enhance=&quot;reveal-current&quot; aria-label=&quot;Breadcrumb&quot;&gt;
 </code></pre>
 <p>A strip whose current item can render off-screen at rest (breadcrumb,
@@ -389,6 +392,17 @@ at connect it scrolls the first <code>aria-current</code> item into view, once.<
 <p>There is no class that hides the scrollbar: on a strip it is the only visible
 scroll control for a mouse without a horizontal wheel. Apply <code>.scroller</code> to
 every scrolling strip of a page, or to none, so the bars stay consistent.</p>
+<p>A strip keeps scrolling inside a flex or grid row, such as a counter and a
+pagination on one <code>.cluster</code>: a <code>&lt;nav&gt;</code> directly around <code>.breadcrumb</code>,
+<code>.pagination</code> or <code>.tabs</code> shrinks with the row. Any other wrapper needs
+<code>min-inline-size: 0</code>, or the row pushes the whole page into scrolling.</p>
+<pre><code class="language-html">&lt;div class=&quot;cluster&quot; style=&quot;--cluster-justify: space-between&quot;&gt;
+  &lt;span&gt;Showing 4 of 28&lt;/span&gt;
+  &lt;nav aria-label=&quot;Pages&quot;&gt;&lt;ol class=&quot;pagination&quot;&gt;…&lt;/ol&gt;&lt;/nav&gt;
+&lt;/div&gt;
+</code></pre>
+<p>The fade is a mask over the whole region, so on a bordered region such as
+<code>.table-wrap</code> it also fades the side borders while there is more to scroll.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--scroller-track</code> — scrollbar track color.</li>

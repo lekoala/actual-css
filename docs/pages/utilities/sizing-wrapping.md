@@ -66,11 +66,10 @@ Use `.truncate` on the flexible item that should ellipsize inside a constrained 
 
 ## Scroller
 
-Use `.scroller` to apply optional framework scrollbar treatment to a scroll container. It styles the scrollbar only; pair it with `.overflow-auto` or a component that already creates overflow.
+Use `.scroller` to apply optional framework overflow treatment to a scroll container: a quieter scrollbar, and faded edges where the region scrolls inline. It does not create overflow; pair it with `.overflow-auto` or a component that already creates overflow.
 
-The utility is two standard declarations and nothing else — the engine keeps
-drawing the scrollbar, `.scroller` only hands it a density and a colour that
-follow the theme. There is no `::-webkit-scrollbar` chrome: rebuilding a thumb
+The engine keeps drawing the scrollbar; `.scroller` only hands it a density
+and a colour that follow the theme. There is no `::-webkit-scrollbar` chrome: rebuilding a thumb
 by hand means re-implementing the hover, the corner and the light/dark
 adaptation that `color-scheme` already provides, and the hand-built version
 never quite matches the native one anyway.
@@ -125,8 +124,12 @@ the part of a custom scrollbar that never held up.
 Components that never wrap scroll horizontally when they do not fit: `.tabs`,
 `.breadcrumb`, `.pagination`, `.steps-horizontal`, and `.table-wrap`. They
 leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
-sit under a short strip. Put `.scroller` on the strip itself — the element
-that scrolls — for a thin, theme-coloured bar:
+sit under a short strip, and on touch screens it overlays the strip and hides
+at rest, leaving a clipped item as the only cue. Put `.scroller` on the strip
+itself — the element that scrolls — for a thin, theme-coloured bar and faded
+edges: the edge it can still scroll toward fades, so a strip at rest shows
+its first item unfaded and a strip at its end shows its last. The fade needs
+scroll-driven animations; elsewhere the strip simply scrolls.
 
 ```html
 <ol class="breadcrumb scroller" data-enhance="reveal-current" aria-label="Breadcrumb">
@@ -152,9 +155,8 @@ pagination on one `.cluster`: a `<nav>` directly around `.breadcrumb`,
 </div>
 ```
 
-On touch screens the scrollbar overlays the strip and stays hidden at rest.
-Only `.breadcrumb` fades its edges, so a clipped tab or page number is the
-remaining overflow cue there.
+The fade is a mask over the whole region, so on a bordered region such as
+`.table-wrap` it also fades the side borders while there is more to scroll.
 
 ## CSS hooks
 

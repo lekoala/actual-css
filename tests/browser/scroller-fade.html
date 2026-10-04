@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scroller edge fade fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    /* Narrow boxes overflow on any font: many labels against a little room. */
+    .box { inline-size: 12rem; margin-block: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <ol class="breadcrumb scroller" id="ltr">
+      <li><a href="#a">Home</a></li>
+      <li><a href="#b">Projects</a></li>
+      <li><a href="#c">Documentation</a></li>
+      <li><a href="#d">Components</a></li>
+      <li><a href="#e" aria-current="page">Breadcrumb</a></li>
+    </ol>
+  </div>
+
+  <div class="box" dir="rtl">
+    <ol class="pagination scroller" id="rtl">
+      <li><a class="btn ghost" href="#1">1</a></li>
+      <li><a class="btn ghost" href="#2">2</a></li>
+      <li><a class="btn ghost" href="#3">3</a></li>
+      <li><a class="btn ghost" href="#4">4</a></li>
+      <li><a class="btn ghost" href="#5">5</a></li>
+      <li><a class="btn ghost" href="#6">6</a></li>
+      <li><a class="btn ghost" href="#7">7</a></li>
+    </ol>
+  </div>
+
+  <ol class="pagination scroller" id="fits">
+    <li><a class="btn ghost" href="#1" aria-current="page">1</a></li>
+  </ol>
+
+  <!-- Scrolls on the block axis only: the inline fade must stay off. -->
+  <div class="overflow-auto scroller" id="vertical" style="max-block-size: 4rem">
+    <p>One</p><p>Two</p><p>Three</p><p>Four</p>
+  </div>
+</body>
+</html>
