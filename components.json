@@ -644,6 +644,7 @@
       "tabs"
     ],
     "publicHooks": [
+      "--tab-flex",
       "--tab-gap"
     ],
     "states": [

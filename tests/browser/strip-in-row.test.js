@@ -33,6 +33,13 @@ const READ = `(() => {
     heading: edge(rect("heading")),
     trailFirst: edge(first("aligned-trail")),
     pagerFirst: edge(first("aligned-pager")),
+    // Each tab's share of its strip, for --tab-flex: 1 1 0.
+    equal: ["equal-buttons", "equal-links"].map((id) => {
+      const strip = document.getElementById(id);
+      return [...strip.querySelectorAll(".tab")].map((tab) =>
+        Math.round((tab.getBoundingClientRect().width / strip.clientWidth) * 100),
+      );
+    }),
   };
 })()`;
 
@@ -51,6 +58,13 @@ for (const dir of ["ltr", "rtl"]) {
         // The first item sits on the same inline-start edge as the heading.
         expect(Math.abs(state.trailFirst - state.heading)).toBeLessThanOrEqual(1);
         expect(Math.abs(state.pagerFirst - state.heading)).toBeLessThanOrEqual(1);
+        // --tab-flex: 1 1 0 splits the strip evenly, whatever the label lengths,
+        // with each link tab filling its <li>.
+        for (const [a, b] of state.equal) {
+          expect(a).toBe(b);
+          // The strip's gap takes the rest.
+          expect(a + b).toBeGreaterThanOrEqual(97);
+        }
       },
       { width: 390, height: 800, artifactName: `strip-in-row-${dir}` },
     );
