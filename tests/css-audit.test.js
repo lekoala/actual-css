@@ -651,9 +651,8 @@ test("native flyout and tooltip popovers neutralize conflicting UA geometry", ()
   const flyout = readCss("src/css/components/flyout.css");
   const tooltip = readCss("src/css/components/tooltip.css");
 
-  expect(flyout).toMatch(
-    /\.flyout\[popover\]\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*auto;[^}]*margin:\s*0;/,
-  );
+  expect(flyout).toMatch(/\.flyout\[popover\]\s*\{[^}]*position:\s*fixed;[^}]*inset:\s*auto;/);
+  expect(flyout).toMatch(/\.flyout\s*\{[^}]*margin:\s*0;/);
   expect(flyout).toContain(":popover-open");
   // The floating panel owns its ink like modal and drawer do.
   expect(flyout).toMatch(/\.flyout \{[^}]*color: var\(--text\);/);
@@ -1883,7 +1882,7 @@ test("motion tokens: presence pair exists, no generic easing leaks, exceptions h
   expect(tokensCss).toContain("--ease-exit: cubic-bezier(0.4, 0, 1, 1);");
 
   /* Presence semantics spread only where open and closed states own separate
-     transition declarations (status-bar, modal, drawer). */
+     easing values (status-bar, modal, drawer). */
   for (const file of ["status-bar.css", "modal.css", "drawer.css"]) {
     expect(cssFiles.get(file)).toContain("var(--ease-enter)");
     expect(cssFiles.get(file)).toContain("var(--ease-exit)");

@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Breaking changes
+
+- `.avatar-stack` no longer infers its size from child `.avatar.sm`/`.lg`; set `.sm`/`.lg` on the stack and omit size classes on its avatars.
+
 ### Added
 
 - `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the full runtime instance.

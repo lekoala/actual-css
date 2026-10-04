@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Component simplification</title>
+<link rel="stylesheet" href="../../src/css/actual.full.css">
+<style>
+  body { padding: 2rem; }
+  main { display: grid; gap: 2rem; }
+</style>
+<main>
+  <div class="avatar-stack sm" id="small" aria-label="Small team">
+    <span class="avatar"><abbr title="Ada Morgan">AM</abbr></span>
+    <span class="avatar"><abbr title="Jon Bell">JB</abbr></span>
+  </div>
+  <div class="avatar-stack sm" id="mixed" aria-label="Small team with a local size override">
+    <span class="avatar"><abbr title="Ada Morgan">AM</abbr></span>
+    <span class="avatar lg"><abbr title="Jon Bell">JB</abbr></span>
+  </div>
+  <div class="avatar-stack lg" id="large" aria-label="Large team">
+    <span class="avatar"><abbr title="Ada Morgan">AM</abbr></span>
+    <span class="avatar"><abbr title="Jon Bell">JB</abbr></span>
+  </div>
+</main>
+<dialog class="drawer" id="drawer" aria-label="Navigation">
+  <header>Navigation</header>
+  <nav><a href="#">Account settings</a></nav>
+  <footer>Team workspace</footer>
+</dialog>
+</html>
