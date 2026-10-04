@@ -17,8 +17,8 @@
  * pages, cards, and frosted topbars.
  *
  * The start fade appears only once the trail has scrolled (by hand, or by
- * the breadcrumb enhancement starting it on the current page), so a trail at
- * rest keeps its root aligned and fully inked. A scroll-state query cannot
+ * the reveal-current enhancement starting it on the current page), so a trail
+ * at rest keeps its root unfaded. A scroll-state query cannot
  * style the scrollport itself, but a scroll-driven animation on its own
  * timeline can. Progressive: without scroll-driven animations the start
  * stop stays at 0 and only the end fades.
@@ -40,9 +40,10 @@
 .breadcrumb {
   /* The scrollport clips on both axes (overflow-x: auto computes overflow-y
      to auto), so the padding keeps the text-link outline of every item inside
-     it. The block axis gives the room back with a negative margin; the inline
-     axis does not, or the list would grow past its container and scroll the
-     page on a phone. */
+     it. Negative margins give the room back on the block axis and at the
+     inline start, so the root aligns with the content around it: overflow
+     toward the start is never scrollable. The inline end keeps it, or the
+     list would grow past its container and scroll the page on a phone. */
   --breadcrumb-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
   --breadcrumb-fade: var(--space-40);
   /* Gradient keywords are physical, so RTL mirrors through this hook. */
@@ -55,6 +56,7 @@
   gap: var(--space-10);
   margin: 0;
   margin-block: calc(var(--breadcrumb-bleed) * -1);
+  margin-inline-start: calc(var(--breadcrumb-bleed) * -1);
   padding: var(--breadcrumb-bleed);
   padding-inline-end: calc(var(--breadcrumb-bleed) + var(--breadcrumb-fade));
   /* The fade masks the end of the scrollport, so focus scrolling (and the
@@ -114,6 +116,13 @@
 /* Items keep their size and the strip scrolls instead. White-space on the
    item inherits to its text, so labels never break inside the one-line strip
    regardless of the link markup. */
+/* The landmark around the trail is not a scroll container, so as a flex or
+   grid item it would keep the trail's full width and push the page into
+   scrolling. Letting it shrink hands the overflow back to the trail. */
+:where(nav:has(> .breadcrumb)) {
+  min-inline-size: 0;
+}
+
 .breadcrumb li {
   display: inline-flex;
   flex: none;

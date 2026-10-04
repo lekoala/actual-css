@@ -36,6 +36,8 @@
 - `actual-css contrast` and `actual-css design` detect a theme written `[data-theme = "brand"]` or `[data-theme=brand]`, and ignore selectors quoted in comments.
 - `actual-css contrast` and `actual-css design` reject a `--name` the theme file does not declare as `[data-theme]`, instead of measuring the framework defaults.
 - A bare heading in a `dialog.modal > header` drops its block margins, so the band no longer grows and the title centers on the close.
+- A `<nav>` around `.breadcrumb`, `.pagination` or `.tabs` shrinks inside a flex or grid row, so the strip scrolls instead of the page.
+- The first item of `.breadcrumb` and `.pagination` aligns with the surrounding content at rest; the focus bleed is given back at the inline start.
 
 ## [0.12.0] - 2026-10-02
 ### Breaking changes

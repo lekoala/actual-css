@@ -21,9 +21,11 @@
 .pagination {
   /* The scrollport clips on both axes (overflow-x: auto computes overflow-y
      to auto), so the padding keeps the outer focus line of every item inside
-     it. The block axis gives the room back with a negative margin; the inline
-     axis does not, or the list would grow past its container and scroll the
-     page on a phone. */
+     it. Negative margins give the room back on the block axis and at the
+     inline start, so the first item aligns with the content around it:
+     overflow toward the start is never scrollable. The inline end keeps it,
+     or the list would grow past its container and scroll the page on a
+     phone. */
   --pagination-focus-bleed: calc(
     var(--focus-outline-offset) +
     max(var(--focus-ring-width), var(--border-width) * 2)
@@ -36,6 +38,7 @@
   gap: var(--space-10);
   margin: 0;
   margin-block: calc(var(--pagination-focus-bleed) * -1);
+  margin-inline-start: calc(var(--pagination-focus-bleed) * -1);
   padding: var(--pagination-focus-bleed);
   overflow-x: auto;
   overscroll-behavior-inline: contain;
@@ -46,6 +49,13 @@
      system: equal digit widths keep the row from re-flowing as numbers grow
      (98 → 99 → 100). */
   font-variant-numeric: tabular-nums;
+}
+
+/* The landmark around the row is not a scroll container, so as a flex or
+   grid item it would keep the row's full width and push the page into
+   scrolling. Letting it shrink hands the overflow back to the row. */
+:where(nav:has(> .pagination)) {
+  min-inline-size: 0;
 }
 
 /* Items keep their size and the row scrolls instead. */

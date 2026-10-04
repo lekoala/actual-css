@@ -45,6 +45,13 @@
   list-style: none;
 }
 
+/* The landmark around link tabs is not a scroll container, so as a flex or
+   grid item it would keep the strip's full width and push the page into
+   scrolling. Letting it shrink hands the overflow back to the strip. */
+:where(nav:has(> .tabs)) {
+  min-inline-size: 0;
+}
+
 /* Items keep their size and the strip scrolls instead. Covers both
    anatomies: .tab directly in a tablist, or <li> in a navigation list. */
 .tabs > * {
