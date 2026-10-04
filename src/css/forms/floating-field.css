@@ -9,10 +9,13 @@
  * messages stay in the surrounding .field, not inside the cell, so the
  * resting label can center on the control alone.
  *
- * The control must precede the label: the float is driven by the general
- * sibling combinator and :placeholder-shown. Injected nodes may appear between
- * the control and the label (password managers, extension wrappers); the cell
- * contract stays a single control plus one label. Every .input/.textarea needs
+ * The cell reads its control's state through :has(), so the label may come
+ * before or after the control (a form theme rendering label then widget needs
+ * no reordering). Injected sibling nodes are tolerated (password managers,
+ * extension wrappers) as long as the control stays a direct child; the cell
+ * contract stays a single control plus one label, since a second control
+ * would float the label on either one's state.
+ * Every .input/.textarea needs
  * placeholder=" " to expose a reliable empty state — without it the label
  * only reacts to focus.
  *
@@ -62,23 +65,22 @@
 }
 
 /* Single-line controls rest in the middle until they receive a value. */
-.floating-field > :is(.input, .select) ~ .field-label {
+.floating-field:has(> :is(.input, .select)) > .field-label {
   inset-block-start: 50%;
   transform: translateY(-50%);
 }
 
 /* An empty textarea label follows the control's normal first-line position;
    the control itself keeps the extra headroom reserved for its floated state. */
-.floating-field > .textarea ~ .field-label {
+.floating-field:has(> .textarea) > .field-label {
   inset-block-start: calc(1em + var(--border-width));
   transform: none;
 }
 
 /* :autofill covers prefilled values before interaction, when the browser may
    not have propagated the value to the placeholder state yet. */
-.floating-field
-  > :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown))
-  ~ .field-label {
+.floating-field:has(> :is(.input, .textarea):is(:focus, :autofill, :not(:placeholder-shown)))
+> .field-label {
   inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);
@@ -88,16 +90,16 @@
 /* Controls without a dependable :placeholder-shown empty state stay floated:
    select always, and date/time inputs whose placeholder rendering is
    inconsistent across engines (Firefox shows none). */
-.floating-field
+.floating-field:has(
   > :is(
-    .select,
-    .input[type="date"],
-    .input[type="time"],
-    .input[type="datetime-local"],
-    .input[type="month"],
-    .input[type="week"]
-  )
-  ~ .field-label {
+      .select,
+      .input[type="date"],
+      .input[type="time"],
+      .input[type="datetime-local"],
+      .input[type="month"],
+      .input[type="week"]
+    )
+) > .field-label {
   inset-block-start: var(--floating-label-top);
   transform: none;
   font-size: var(--font-size-xs);

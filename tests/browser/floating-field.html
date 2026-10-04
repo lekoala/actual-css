@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Floating field order fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+    body { display: grid; grid-template-columns: repeat(2, 20rem); gap: 1rem; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <!-- Each pair renders one state twice: control first, then label first. -->
+  <label class="floating-field" data-case="empty"><input class="input" placeholder=" "><span class="field-label">Empty</span></label>
+  <label class="floating-field" data-case="empty"><span class="field-label">Empty</span><input class="input" placeholder=" "></label>
+
+  <label class="floating-field" data-case="filled"><input class="input" placeholder=" " value="Ada"><span class="field-label">Filled</span></label>
+  <label class="floating-field" data-case="filled"><span class="field-label">Filled</span><input class="input" placeholder=" " value="Ada"></label>
+
+  <label class="floating-field" data-case="focus"><input class="input" id="focus-after" placeholder=" "><span class="field-label">Focus</span></label>
+  <label class="floating-field" data-case="focus"><span class="field-label">Focus</span><input class="input" id="focus-before" placeholder=" "></label>
+
+  <label class="floating-field" data-case="textarea"><textarea class="textarea" rows="3" placeholder=" "></textarea><span class="field-label">Textarea</span></label>
+  <label class="floating-field" data-case="textarea"><span class="field-label">Textarea</span><textarea class="textarea" rows="3" placeholder=" "></textarea></label>
+
+  <label class="floating-field" data-case="textarea-filled"><textarea class="textarea" rows="3" placeholder=" ">Hi</textarea><span class="field-label">Textarea</span></label>
+  <label class="floating-field" data-case="textarea-filled"><span class="field-label">Textarea</span><textarea class="textarea" rows="3" placeholder=" ">Hi</textarea></label>
+
+  <label class="floating-field" data-case="select"><select class="select"><option value=""></option></select><span class="field-label">Select</span></label>
+  <label class="floating-field" data-case="select"><span class="field-label">Select</span><select class="select"><option value=""></option></select></label>
+
+  <label class="floating-field" data-case="date"><input class="input" type="date"><span class="field-label">Date</span></label>
+  <label class="floating-field" data-case="date"><span class="field-label">Date</span><input class="input" type="date"></label>
+
+  <!-- An injected sibling between label and control must not break either order. -->
+  <label class="floating-field" data-case="injected"><input class="input" placeholder=" " value="x"><span></span><span class="field-label">Injected</span></label>
+  <label class="floating-field" data-case="injected"><span class="field-label">Injected</span><span></span><input class="input" placeholder=" " value="x"></label>
+</body>
+</html>
