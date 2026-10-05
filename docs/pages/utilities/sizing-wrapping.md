@@ -129,7 +129,10 @@ at rest, leaving a clipped item as the only cue. Put `.scroller` on the strip
 itself — the element that scrolls — for a thin, theme-coloured bar and faded
 edges: the edge it can still scroll toward fades, so a strip at rest shows
 its first item unfaded and a strip at its end shows its last. The fade needs
-scroll-driven animations; elsewhere the strip simply scrolls.
+scroll-driven animations; elsewhere the strip simply scrolls. It follows the
+strip's own direction, so an LTR strip inside an RTL page fades on the right.
+Keyboard focus and `reveal-current` stop an item clear of the fade, its focus
+line included.
 
 ```html
 <ol class="breadcrumb scroller" data-enhance="reveal-current" aria-label="Breadcrumb">
@@ -164,3 +167,4 @@ two loses: put `.scroller` on the inner element that scrolls instead.
 
 - `--scroller-track` — scrollbar track color.
 - `--scroller-thumb` — scrollbar thumb color.
+- `--scroller-fade-size` — width of the edge fade; the scroll-padding follows it.

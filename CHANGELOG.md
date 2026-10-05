@@ -13,6 +13,7 @@
 - `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the full runtime instance.
 - `--tab-flex` on `.tabs` sets each tab's flex; `1 1 0` gives equal-width tabs.
 - `data-enhance="reveal-current"` (`actual-css/js/reveal-current`) scrolls an overflowing strip (`.breadcrumb`, `.pagination`, `.steps-horizontal`, link `.tabs`) to its `aria-current` item at connect.
+- `--scroller-fade-size` on `.scroller` sets the edge fade width and the scroll-padding that keeps a focused item clear of it.
 - `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs, apart from `--border`; it defaults to `--border`.
 
 ### Changed
@@ -20,6 +21,7 @@
 - `forms/form-actions` no longer has to load after `layout/cluster`: `.form-actions` relays its hooks into the row's `--cluster-*`.
 - An overflowing horizontal `.tabs` strip starts with its selected tab in view, scrolling the strip only.
 - `.scroller` fades the edges an inline-scrolling region can still scroll toward, in engines with scroll-driven animations.
+- The `.scroller` fade follows the strip's own direction (`:dir()`): an RTL strip fades its left edge, an LTR island in an RTL page its right.
 - `.floating-field` accepts its `.field-label` before or after the control; state is read through `:has()` on the cell.
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
 - `.pagination` never wraps: a row that does not fit scrolls horizontally, with room for its items' focus line.

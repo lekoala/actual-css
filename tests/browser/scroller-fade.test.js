@@ -73,3 +73,34 @@ for (const [label, mediaFeatures] of [
     );
   });
 }
+
+// scroll-padding sits outside the scroll-timeline @supports, so this holds in
+// every engine, fade or not.
+it("scroll-padding clears the fade and the outside focus line", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const pads = await view
+        .evaluate(`(() => {
+          const root = getComputedStyle(document.documentElement);
+          const pad = (id) =>
+            parseFloat(getComputedStyle(document.getElementById(id)).scrollPaddingInlineStart);
+          return JSON.stringify({
+            focus:
+              parseFloat(root.getPropertyValue("--focus-outline-offset")) +
+              parseFloat(root.getPropertyValue("--focus-ring-width")),
+            rem: parseFloat(root.fontSize),
+            ltr: pad("ltr"),
+            compact: pad("compact"),
+            tabs: pad("tabs"),
+          });
+        })()`)
+        .then(JSON.parse);
+
+      expect(pads.ltr).toBe(pads.rem + pads.focus);
+      expect(pads.compact).toBe(0.5 * pads.rem + pads.focus);
+      expect(pads.tabs).toBe(pads.ltr);
+    },
+    { width: 800, height: 600, artifactName: "scroller-padding" },
+  );
+});

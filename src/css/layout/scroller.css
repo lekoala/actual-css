@@ -20,13 +20,26 @@
  * Public hooks:
  * --scroller-track
  * --scroller-thumb
+ * --scroller-fade-size
+ *
+ * Internal:
+ * --scroller-fade-dir (read inside @keyframes, so it resolves per element)
  */
 .scroller {
   --scroller-track: transparent;
   --scroller-thumb: var(--border);
+  --scroller-fade-size: var(--space-40);
 
   scrollbar-color: var(--scroller-thumb) var(--scroller-track);
   scrollbar-width: thin;
+  /* Focus and reveal-current land an item clear of the fade, its outside
+     focus line included. Outside the @supports below: the inset an engine
+     scrolls to must not depend on whether it draws the fade. */
+  scroll-padding-inline: calc(
+    var(--scroller-fade-size) +
+    var(--focus-outline-offset) +
+    var(--focus-ring-width)
+  );
 }
 
 /* Opt-in gutter: reserves space so the layout does not shift when
@@ -46,13 +59,11 @@
    It runs on the region's own inline timeline, so a region that does not
    scroll inline stays unmasked. Keep the @supports: without scroll timelines
    the animation would end at once and pin its last mask. It follows the
-   reader's scroll, not time, so reduced motion keeps it. scroll-padding
-   matches the fade, so focus and reveal-current land an item clear of it. */
+   reader's scroll, not time, so reduced motion keeps it. */
 @supports (animation-timeline: scroll()) {
   .scroller {
     --scroller-fade-dir: to right;
 
-    scroll-padding-inline: var(--space-40);
     animation: actual-scroller-fade linear both;
     animation-timeline: scroll(self inline);
   }
@@ -72,7 +83,7 @@
   0% {
     mask-image: linear-gradient(
       var(--scroller-fade-dir),
-      #000 calc(100% - var(--space-40)),
+      #000 calc(100% - var(--scroller-fade-size)),
       transparent
     );
   }
@@ -82,12 +93,16 @@
     mask-image: linear-gradient(
       var(--scroller-fade-dir),
       transparent,
-      #000 var(--space-40) calc(100% - var(--space-40)),
+      #000 var(--scroller-fade-size) calc(100% - var(--scroller-fade-size)),
       transparent
     );
   }
 
   100% {
-    mask-image: linear-gradient(var(--scroller-fade-dir), transparent, #000 var(--space-40));
+    mask-image: linear-gradient(
+      var(--scroller-fade-dir),
+      transparent,
+      #000 var(--scroller-fade-size)
+    );
   }
 }
