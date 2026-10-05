@@ -1,6 +1,102 @@
 # Philosophy
 
-How components, intents, variants, and density compose — and what each layer is responsible for.
+Actual CSS is a composition-first component framework: let HTML and the
+cascade do the work, compose layout separately from components, and add an
+abstraction only for a real, repeated need. The outlook is close to
+[CUBE CSS](https://cube.fyi/), without adopting its methodology or naming.
+
+**Related terms:** principles, architecture, CUBE, BEM, naming, methodology, guidelines.
+
+## Layers
+
+| Layer     | In Actual                         | Owns                                |
+| --------- | --------------------------------- | ----------------------------------- |
+| Baseline  | reset, tokens, themes, base       | HTML defaults, cascade, inheritance |
+| Layout    | `.stack`, `.cluster`, `.grid`, …  | space between children              |
+| Utility   | `.list-reset`, `.measure`, …      | one reusable adjustment             |
+| Component | `.card`, `.btn`, form controls, … | intrinsic anatomy and appearance    |
+| State     | native attributes, ARIA, `data-*` | what the element is doing           |
+
+## Principles
+
+**Components own their inside; compositions own the space between them.** A
+card sets its padding, surface and slots. Where it sits, and how far it is from
+the next card, belongs to the layout around it:
+
+```html
+<section class="stack">
+  <article class="card">…</article>
+  <article class="card">…</article>
+</section>
+```
+
+A rule such as `.card + .card { margin-block-start: 2rem }` moves page layout
+into the component; put a composition around the cards instead.
+
+**A composition on a component takes over its default layout.** A component's
+own layout sits at zero specificity, so `<article class="card media">` lays out
+as a `.media` without an override, whatever the import order.
+
+**State uses the most semantic attribute; classes choose presentation.**
+
+| Kind             | Mechanism      | Examples                                     |
+| ---------------- | -------------- | -------------------------------------------- |
+| Native state     | HTML attribute | `disabled`, `open`, `checked`                |
+| Accessible state | ARIA           | `aria-current`, `aria-expanded`, `aria-busy` |
+| Runtime state    | `data-*`       | no native or ARIA equivalent                 |
+| Presentation     | class          | `.soft`, `.outline`, `.sm`, `.compact`       |
+
+Write `<a class="nav-link" aria-current="page">`, not `.nav-link.active`. The
+few `.is-*` classes (`.is-open`, `.is-static`) are written by the runtime: never
+author them in markup. `data-enhance` activates behavior and is never a styling
+hook.
+
+**A utility does one thing.** A class that sets a surface, a border, padding and
+type together is a component: give it a name in application CSS.
+
+**Configure before overriding.** Documented public hooks (`--grid-min`,
+`--card-pad`, `--cluster-justify`) are the API. Other custom properties are
+internal and may change.
+
+## Before adding CSS
+
+Go down the layers and stop at the first that answers the need:
+
+1. Does HTML already express it, or the browser already do it?
+2. Is it a relationship between children? Use a composition.
+3. Is it one small adjustment? Use a utility.
+4. Is it the anatomy of a component? Use the component and its hooks.
+5. Is it a state of that component? Use the attribute that names the state.
+
+What remains is product-specific: write it as application CSS, as described in
+[Building with Actual CSS](../guides/integrating-actual-css.md).
+
+## Class grammar
+
+A component takes optional intent, variant and size classes:
+`<button class="btn primary soft sm">`. The sections below describe each axis.
+
+### Flat names, not BEM
+
+A modifier is a separate class that combines with others (`.btn.primary.soft`,
+not `.btn--primary`), and a part gets a prefixed class (`.alert-icon`,
+`.list-item-title`) only when its element does not already say what it is.
+There is no `__` or `--` in Actual's names, because:
+
+- **Modifiers are shared axes.** `.primary`, `.soft` and `.sm` mean the same
+  thing on every component that supports them, so one class serves `.btn`,
+  `.badge` and `.alert`. BEM names a modifier per block, which multiplies the
+  vocabulary and keeps a custom intent such as `.tertiary` from working
+  everywhere at once.
+- **State is not a modifier.** `disabled`, `aria-current` and `open` already
+  name the state; a `--disabled` or `--active` class would duplicate them and
+  drift out of sync.
+- **Elements come from HTML.** A card's `header` and `footer`, an avatar's
+  `<img>` need no `__element` class; a prefixed class is kept for the parts
+  HTML cannot name.
+
+Application CSS can use any convention, BEM included, alongside Actual's
+classes: `<article class="card pricing-plan pricing-plan--featured">`.
 
 ## Components
 

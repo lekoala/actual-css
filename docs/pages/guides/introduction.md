@@ -22,7 +22,8 @@ cascade layers, import order, or a project-owned build-time prefix transform.
 The distinction is structural, not stylistic: presentation lives in classes,
 JavaScript behavior opts in through `data-enhance` tokens, semantics come from
 ARIA and native HTML, and per-widget configuration uses self-describing
-`data-*` attributes.
+`data-*` attributes. [Philosophy](../foundations/philosophy.md) lays out the
+layers and the order to follow before adding CSS.
 
 ## Install
 
