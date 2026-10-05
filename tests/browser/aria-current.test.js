@@ -1,8 +1,10 @@
 /*
- * ARIA reads aria-current="false" and aria-current="" as not current, and React
- * and Vue serialize a false binding as "false". The generic current state of
- * .tab, .nav-link and .list-item, and reveal-current, must treat both like an
- * absent attribute.
+ * Current states name their aria-current value: "page" or "true" (a flyout
+ * section) on .tab, "page" or "location" on .nav-link, "page" or "true" (a
+ * master/detail item) on .list-item.
+ * Any other value — including the "false" React and Vue serialize for a false
+ * binding — renders like an absent attribute, and reveal-current skips the
+ * values its strips do not paint.
  */
 import { expect, test } from "bun:test";
 import {
@@ -23,7 +25,7 @@ const bundle = await Bun.build({ entrypoints: ["src/js/full.js"], format: "iife"
 if (!bundle.success) throw new AggregateError(bundle.logs, "Runtime test bundle failed");
 const source = await bundle.outputs[0].text();
 
-it('"false" and "" render like an item without aria-current', async () => {
+it("only the supported values paint the current state", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
@@ -34,22 +36,31 @@ it('"false" and "" render like an item without aria-current', async () => {
           const after = getComputedStyle(el, "::after");
           return [own.color, own.backgroundColor, before.content, after.content].join(" | ");
         };
-        const read = (id) => [...document.getElementById(id).querySelectorAll("a")].map(paint);
+        const read = (id) => {
+          const links = [...document.getElementById(id).querySelectorAll("a")];
+          const none = paint(links.find((a) => a.hasAttribute("data-reference")));
+          return links
+            .filter((a) => a.hasAttribute("aria-current"))
+            .map((a) => ({
+              value: a.getAttribute("aria-current"),
+              supported: a.hasAttribute("data-current"),
+              painted: paint(a) !== none,
+            }));
+        };
         return { tabs: read("tabs"), nav: read("nav"), list: read("list") };
       })()`);
 
-      for (const [name, [current, falseValue, empty, none]] of Object.entries(groups)) {
-        // The fixture must paint a current state, or the pass is vacuous.
-        expect(current, name).not.toBe(none);
-        expect(falseValue, name).toBe(none);
-        expect(empty, name).toBe(none);
+      for (const [name, items] of Object.entries(groups)) {
+        for (const { value, supported, painted } of items) {
+          expect(painted, `${name} aria-current="${value}"`).toBe(supported);
+        }
       }
     },
     { width: 800, height: 600, artifactName: "aria-current" },
   );
 });
 
-it('reveal-current skips "false" and "" items', async () => {
+it("reveal-current skips values its strips do not paint", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {

@@ -4,15 +4,15 @@
 
 Scrollspy is a behavior hook, not a visual component. It marks a navigation
 region for the JavaScript enhancement. Pair it with `.nav-list` and `.nav-link`,
-or style `[aria-current]` yourself.
+or style `[aria-current="location"]` yourself.
 
 ## Class reference
 
-| Class        | Kind        | Description                                                     |
-| ------------ | ----------- | --------------------------------------------------------------- |
-| `.scrollspy` | Component   | Marks the nav region for the enhancer; adds no visual styles.   |
-| `.nav-list`  | Composition | Vertical list of navigation links.                              |
-| `.nav-link`  | Component   | Navigation link whose active state comes from `[aria-current]`. |
+| Class        | Kind        | Description                                                   |
+| ------------ | ----------- | ------------------------------------------------------------- |
+| `.scrollspy` | Component   | Marks the nav region for the enhancer; adds no visual styles. |
+| `.nav-list`  | Composition | Vertical list of navigation links.                            |
+| `.nav-link`  | Component   | Navigation link, current on `aria-current="location"`.        |
 
 ## Usage
 

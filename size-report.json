@@ -1,17 +1,17 @@
 {
-  "totalRaw": 363515,
+  "totalRaw": 363748,
   "core": {
     "minified": 12310,
     "brotli": 2758
   },
   "full": {
-    "minified": 132641,
-    "brotli": 19112
+    "minified": 132974,
+    "brotli": 19128
   },
   "js": {
     "full": {
-      "bytes": 61817,
-      "brotli": 18042
+      "bytes": 61842,
+      "brotli": 18049
     }
   },
   "fileCount": 113,
@@ -66,7 +66,7 @@
     },
     {
       "file": "components/tab.css",
-      "raw": 6136
+      "raw": 6288
     },
     {
       "file": "components/flyout.css",
@@ -93,6 +93,10 @@
       "raw": 5262
     },
     {
+      "file": "components/navbar.css",
+      "raw": 5260
+    },
+    {
       "file": "forms/switch.css",
       "raw": 5259
     },
@@ -107,10 +111,6 @@
     {
       "file": "components/join.css",
       "raw": 5180
-    },
-    {
-      "file": "components/navbar.css",
-      "raw": 5176
     },
     {
       "file": "components/tooltip.css",
@@ -146,7 +146,7 @@
     },
     {
       "file": "components/breadcrumb.css",
-      "raw": 4059
+      "raw": 4066
     },
     {
       "file": "utilities/base.css",
@@ -166,7 +166,7 @@
     },
     {
       "file": "components/list.css",
-      "raw": 3646
+      "raw": 3625
     },
     {
       "file": "components/close.css",
@@ -386,7 +386,7 @@
     },
     {
       "file": "components/scrollspy.css",
-      "raw": 932
+      "raw": 943
     },
     {
       "file": "layout/stack.css",

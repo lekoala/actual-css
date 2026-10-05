@@ -23,18 +23,21 @@
   background: var(--surface);
 }
 
-.admini-sidebar {
-  /* Theme-derived dark chrome. The sidebar stays structurally dark but takes
-     its chromatic character from the active theme: pinning the light scheme
-     resolves every token in this subtree to its branded-dark face
-     (--surface-solid is the preset's dark surface on the light branch). */
+/* Theme-derived dark chrome, shared by the desktop sidebar and the mobile
+   drawer. It stays structurally dark but takes its chromatic character from
+   the active theme: pinning the light scheme resolves every token in this
+   subtree to its branded-dark face (--surface-solid is the preset's dark
+   surface on the light branch). The dialog close corner would paint a light
+   --surface-subtle block with dark ink on that branch, so it takes the rail's
+   translucent wash and ink instead. Edges take the same wash: --border is a
+   light line on that branch (the drawer's 1px white edge). */
+.admini-rail {
+  --close-bg: rgb(255 255 255 / 0.08);
+  --close-color: var(--surface);
+  --close-hover-color: var(--surface);
+
   color-scheme: light;
-  display: none;
-  flex-direction: column;
-  gap: var(--space-40);
-  inline-size: 17rem;
-  padding: var(--space-40);
-  border-inline-end: var(--border-width) solid var(--border);
+  border-color: rgb(255 255 255 / 0.08);
   background: var(--surface-solid);
   color: var(--surface);
 }
@@ -42,12 +45,21 @@
 /* A breath of the active primary in the chrome so each theme tints its rail.
    The plain surface above is the no-color-mix fallback. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .admini-sidebar {
+  .admini-rail {
     background: color-mix(in oklch, var(--surface-solid) 90%, var(--primary));
   }
 }
 
-.admini-sidebar .navbar-brand {
+.admini-sidebar {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-40);
+  inline-size: 17rem;
+  padding: var(--space-40);
+  border-inline-end: var(--border-width) solid var(--border);
+}
+
+.admini-rail .navbar-brand {
   color: var(--surface);
 }
 
@@ -97,11 +109,10 @@
   padding-inline: var(--space-30);
 }
 
-/* Dark-rail ink: scoped to the sidebar so the mobile drawer keeps the
-   framework's theme-aware text colors. The framework recipe derives link
-   ink from --text-muted/--text, whose light-branch values are dark and
-   unreadable on the dark rail. */
-.admini-sidebar .admini-nav .nav-link {
+/* Dark-rail ink. The framework recipe derives link ink from
+   --text-muted/--text, whose light-branch values are dark and unreadable on
+   the dark rail. */
+.admini-rail .admini-nav .nav-link {
   color: var(--surface);
 }
 
@@ -112,30 +123,29 @@
 
 /* Neutral translucent hover on the dark rail; the framework's
    --surface-subtle pill would read as a light block here. */
-.admini-sidebar .nav-link:hover:not([aria-current="page"]) {
+.admini-rail .nav-link:hover:not([aria-current="page"]) {
   background: rgb(255 255 255 / 0.08);
   color: var(--surface);
 }
 
-/* Active item is a selected pill on the dark rail: scoped to the sidebar
-   so the drawer keeps the framework's current style. State tokens keep
+/* Active item is a selected pill on the dark rail. State tokens keep
    forced-colors support instead of pinning --primary directly. */
-.admini-sidebar .admini-nav .nav-link[aria-current="page"] {
+.admini-rail .admini-nav .nav-link[aria-current="page"] {
   background: var(--state-selected);
   color: var(--state-selected-fg);
 }
 
-.admini-sidebar .admini-nav .nav-link[aria-current="page"] i {
+.admini-rail .admini-nav .nav-link[aria-current="page"] i {
   color: inherit;
 }
 
 /* The pill already carries selection; the framework's inset current trait
    would double it. */
-.admini-sidebar .nav-list .nav-link[aria-current]::before {
+.admini-rail .nav-list .nav-link[aria-current="page"]::before {
   content: none;
 }
 
-.admini-sidebar .admini-nav .nav-link[aria-current="page"]:hover {
+.admini-rail .admini-nav .nav-link[aria-current="page"]:hover {
   color: var(--state-selected-fg);
 }
 
@@ -487,34 +497,18 @@
   display: flex;
 }
 
-.admini-chat-item {
-  --gap: var(--space-30);
-
-  padding: var(--space-30) var(--space-40);
-  border: 0;
-  background: none;
-  text-align: start;
-  cursor: pointer;
+/* Conversation rows are framework .list-item links, current on
+   aria-current="true"; only the gutter is local. No stable scrollbar gutter on
+   the list: the row fills would stop short of it. */
+.admini-chat-list .list {
+  --list-item-pad-inline: var(--space-40);
 }
 
-.admini-chat-item[aria-current="true"] {
-  background: var(--surface-subtle);
-}
-
-.admini-chat-item:hover {
-  background: var(--surface-subtle);
-}
-
-.admini-chat-item-body {
-  display: grid;
-  gap: 0.125rem;
-  min-inline-size: 0;
-}
-
-.admini-chat-item-top {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-20);
+/* The open conversation is carried by its fill and the thread beside it; the
+   framework's inset trait would add a third signal. Matches the framework
+   selector's weight (0,2,2) and loads after it. */
+.admini-chat-list a.list-item::before {
+  content: none;
 }
 
 .admini-chat-thread {
@@ -628,8 +622,12 @@
   text-overflow: ellipsis;
 }
 
+/* The badge sets line-height: 1, so a clipping label box is one em tall and
+   cuts descenders (the g of "Design"). A tight line height fits within the
+   badge's own minimum height. */
 .admini-calendar-event-label {
   overflow: hidden;
+  line-height: var(--line-height-tight);
   text-overflow: ellipsis;
 }
 

@@ -19,9 +19,9 @@ Serve the repository root over HTTP and open `demo/sites/admini/index.html`.
 - dashboard body: `sidebar-layout` instead of a local breakpoint/grid implementation
 - activity/chat rows: `media` instead of local two-column recipes
 - scroll regions: `scroller` / `stable-gutter` layered on app-owned overflow
-- navigation: the desktop sidebar is theme-derived dark chrome (pinned `color-scheme: light`
-  resolves `--surface-solid` to the active preset's branded-dark face); the mobile drawer
-  keeps a fixed `data-theme="dim"` island
+- navigation: the desktop sidebar and the mobile drawer share `.admini-rail`, theme-derived
+  dark chrome (pinned `color-scheme: light` resolves `--surface-solid` to the active preset's
+  branded-dark face)
 - layout overrides use public hooks such as `--gap`, `--cluster-align`, and `--cluster-justify`
 - viewport-height rules use `--viewport-block`
 - theme persistence is applied before paint and tolerates unavailable `localStorage`

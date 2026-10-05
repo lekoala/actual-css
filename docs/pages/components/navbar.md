@@ -6,10 +6,9 @@
 - `.navbar-brand` is the brand link at the inline start.
 - Horizontal links live in a `.cluster`; its items are `.nav-link`.
 - `.nav-list` is the shared vertical navigation list, reused by `.drawer` for stacked links.
-- Mark the current page with `aria-current="page"` on the active `.nav-link`.
-- Any `aria-current` value marks the link current except `false` and an empty
-  value, so a framework binding that writes `"false"` stays inactive. Scrollspy
-  sets `aria-current="location"`.
+- Mark the current page with `aria-current="page"` on the active `.nav-link`,
+  or the current section of the page with `aria-current="location"` (what
+  scrollspy sets). Any other value is inert.
 
 For a public or normally scrolling page, `.navbar` belongs inside the semantic
 site header. Do not use `.topbar` or `.app-layout` unless the page actually has

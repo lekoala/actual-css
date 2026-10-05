@@ -7,38 +7,42 @@
   <link rel="stylesheet" href="../../src/css/actual.full.css">
 </head>
 <body>
-  <!-- Each group: a current item, then the values ARIA reads as not current
-       ("false", ""), then an item without the attribute as the reference. -->
+  <!-- Each group: the current value(s) the component supports, then values it
+       must leave inert, then an item without the attribute as the reference. -->
   <ul class="tabs" id="tabs">
-    <li><a class="tab" href="#a" aria-current="page">Current</a></li>
-    <li><a class="tab" href="#b" aria-current="false">False</a></li>
-    <li><a class="tab" href="#c" aria-current="">Empty</a></li>
-    <li><a class="tab" href="#d">None</a></li>
+    <li><a class="tab" href="#a" aria-current="page" data-current>Page</a></li>
+    <li><a class="tab" href="#b" aria-current="true" data-current>True</a></li>
+    <li><a class="tab" href="#c" aria-current="false">False</a></li>
+    <li><a class="tab" href="#d" aria-current="">Empty</a></li>
+    <li><a class="tab" href="#e" data-reference>None</a></li>
   </ul>
 
   <ul class="nav-list" id="nav">
-    <li><a class="nav-link" href="#a" aria-current="page">Current</a></li>
-    <li><a class="nav-link" href="#b" aria-current="false">False</a></li>
-    <li><a class="nav-link" href="#c" aria-current="">Empty</a></li>
-    <li><a class="nav-link" href="#d">None</a></li>
+    <li><a class="nav-link" href="#a" aria-current="page" data-current>Page</a></li>
+    <li><a class="nav-link" href="#b" aria-current="location" data-current>Location</a></li>
+    <li><a class="nav-link" href="#c" aria-current="true">True</a></li>
+    <li><a class="nav-link" href="#d" aria-current="false">False</a></li>
+    <li><a class="nav-link" href="#e" aria-current="">Empty</a></li>
+    <li><a class="nav-link" href="#f" data-reference>None</a></li>
   </ul>
 
   <div class="list" id="list">
-    <a class="list-item" href="#a" aria-current="page">Current</a>
-    <a class="list-item" href="#b" aria-current="false">False</a>
-    <a class="list-item" href="#c" aria-current="">Empty</a>
-    <a class="list-item" href="#d">None</a>
+    <a class="list-item" href="#a" aria-current="page" data-current>Page</a>
+    <a class="list-item" href="#b" aria-current="true" data-current>True</a>
+    <a class="list-item" href="#c" aria-current="false">False</a>
+    <a class="list-item" href="#d" aria-current="">Empty</a>
+    <a class="list-item" href="#e" data-reference>None</a>
   </div>
 
-  <!-- Overflowing strips for reveal-current. The control holds a real current
-       page near its end; the other only "false" and "" near its end, so it
-       must stay at its start. Items are written by the script below. -->
+  <!-- Overflowing strips for reveal-current. The control holds a current page
+       near its end; the other only values reveal-current must skip, so it
+       stays at its start. Items are written by the script below. -->
   <ol class="pagination" id="strip-control" data-enhance="reveal-current"></ol>
   <ol class="pagination" id="strip-not-current" data-enhance="reveal-current"></ol>
   <script>
     for (const [id, marks] of [
       ["strip-control", { 25: "page" }],
-      ["strip-not-current", { 25: "false", 28: "" }],
+      ["strip-not-current", { 22: "location", 25: "false", 28: "" }],
     ]) {
       const strip = document.getElementById(id);
       for (let n = 1; n <= 30; n++) {
