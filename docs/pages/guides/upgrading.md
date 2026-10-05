@@ -55,9 +55,11 @@ add `.items-start` to the row or to the `.list` to keep them top-aligned.
 
 ### Rendering changes without an edit
 
-- `.breadcrumb`, `.pagination` and a horizontal `.tabs` strip never wrap: a
-  strip that does not fit scrolls horizontally. Add `.scroller` for a thin
-  scrollbar.
+- `.pagination` and a horizontal `.tabs` strip never wrap: a strip that does
+  not fit scrolls horizontally. Add `.scroller` for a thin scrollbar.
+- `.breadcrumb` never wraps either: a trail that does not fit truncates its
+  labels with an ellipsis, ancestors first. Ancestor labels need an `<a>` or
+  `<span>`.
 - The focus reserve of `.pagination` and of a scrolling dialog or drawer body
   no longer grows with `--border-width`: 1px narrower under
   `prefers-contrast: more`.

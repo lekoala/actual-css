@@ -1871,7 +1871,7 @@ small {
  *
  * Styles the scrollbar only; it does not create the overflow. Pair it with
  * .overflow-auto or a component that already scrolls (the one-row strips:
- * breadcrumb, pagination, tabs, horizontal steps). No edge fade: a mask would
+ * pagination, tabs, horizontal steps). No edge fade: a mask would
  * dictate the strip's scroll-padding and focus geometry for a decorative cue,
  * and an item clipped at the edge already says the strip continues.
  *
@@ -7862,71 +7862,96 @@ a.avatar[aria-disabled="true"] {
  * Docs: docs/pages/components/breadcrumb.md
  *
  * Inline list separated by "/". Mark the current page with `aria-current="page"`
- * either on the item or on the current link.
+ * either on the item or on the current link. Ancestor labels sit in an <a> or a
+ * <span>, the box that truncates.
  *
  * Breadcrumbs are a single navigation hierarchy. Wrapping makes hierarchy look
- * like separate rows and causes unstable header height.
- *
- * Compose .scroller for a thin, theme-coloured scrollbar, like every one-row
- * strip.
- *
- * Internal:
- * --breadcrumb-bleed
+ * like separate rows and causes unstable header height, and scrolling hides the
+ * root behind a scrollbar. A trail that does not fit truncates instead:
+ * ancestors first, the current page last, each label behind an ellipsis.
  */
 
 .breadcrumb {
-  /* The scrollport clips on both axes, so the padding keeps the text-link
-     outline of every item inside it. Negative margins give the room back on
-     the block axis and at the inline start, so the root aligns with the
-     content around it: overflow toward the start is never scrollable. The
-     inline end keeps it, or the list would grow past its container and scroll
-     the page on a phone. */
-  --breadcrumb-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
-
   display: flex;
-  flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
   gap: var(--space-10);
+  min-inline-size: 0;
   margin: 0;
-  margin-block: calc(var(--breadcrumb-bleed) * -1);
-  margin-inline-start: calc(var(--breadcrumb-bleed) * -1);
-  padding: var(--breadcrumb-bleed);
-  /* One axis of navigation, so it never wraps: a second line reads as a
-     nested level. When the trail does not fit, the strip scrolls. */
-  overflow: auto hidden;
-  overscroll-behavior-inline: contain;
-  /* Mid-trail there is no padding to spare: focus and reveal-current stop an
-     item one outline short of the clip. */
-  scroll-padding-inline: var(--breadcrumb-bleed);
+  padding: 0;
   color: var(--text-subtle);
   font-size: var(--font-size-sm);
   list-style: none;
 }
 
-/* The landmark around the trail is not a scroll container, so as a flex or
-   grid item it would keep the trail's full width and push the page into
-   scrolling. Letting it shrink hands the overflow back to the trail.
+/* The landmark around the trail must shrink with it in a flex or grid row, or
+   it keeps the trail's full width and the labels never get to truncate.
    Without :has() the landmark keeps its width; min-inline-size: 0 on the
    wrapper is the fallback. */
 :where(nav:has(> .breadcrumb)) {
   min-inline-size: 0;
 }
 
-/* Items keep their size and the strip scrolls instead. White-space on the
-   item inherits to its text, so labels never break inside the one-line strip
-   regardless of the link markup. */
+/* Grid, not flex: under a min-content constraint a grid track keeps its base
+   size, which is the label's minimum below, so the item's own minimum is
+   separator + label floor without anyone measuring a "/". A flex item would
+   report the full label as its minimum and never shrink.
+
+   Ancestors take the shrink before the current page, so the location is the
+   last thing to lose characters. The ratio is deliberately huge: at 1000 the
+   current page still took a fraction of a pixel, enough to trigger its
+   ellipsis while ancestors had room. Its own factor stays 1, because flex
+   distributes only a share of the deficit when the unfrozen factors sum below
+   one. Keyed on the last item, the current page by convention, so the order
+   holds without :has(). */
 .breadcrumb > li {
-  display: inline-flex;
-  flex: none;
+  display: inline-grid;
+  flex: 0 1000000 auto;
+  grid-auto-flow: column;
   align-items: center;
-  gap: var(--space-10);
   white-space: nowrap;
 }
 
+.breadcrumb > li:last-child {
+  flex-shrink: 1;
+}
+
+/* A margin rather than a grid gap, so the separator keeps its space when the
+   current page below lays it out inline. The weight stays normal there, where
+   it would inherit the current page's. */
 .breadcrumb > li + li::before {
-  content: "/";
+  margin-inline-end: var(--space-10);
   color: var(--text-subtle);
+  font-weight: var(--font-weight-normal);
+  content: "/";
+}
+
+/* The ellipsis lives on the label, not on the item: an element never clips
+   its own outline, but an overflow-hidden item would clip its link's focus
+   line, which sits outside the link box.
+
+   The floor keeps a truncated label readable as a step ("Po…") instead of
+   collapsing to its separator. calc-size() lets a shorter label keep its own
+   width; without it, the plain 2em floor leaves a label under 2em a little
+   trailing room. */
+.breadcrumb > li > :is(a, span) {
+  min-inline-size: 2em;
+  min-inline-size: calc-size(max-content, min(size, 2em));
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The current page written as bare text has no label box, so its item
+   truncates itself. Only with no element inside: an aria-current item that
+   holds a link would clip that link's focus line, and keeps the label rule
+   above instead. Its own rule, never merged with the one above: a browser
+   without :has() drops it alone, and bare text then keeps its full width. */
+.breadcrumb > li[aria-current]:not(:has(> *)) {
+  display: block;
+  min-inline-size: 2em;
+  min-inline-size: calc-size(max-content, min(size, 2em));
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .breadcrumb a {

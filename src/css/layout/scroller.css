@@ -14,7 +14,7 @@
  *
  * Styles the scrollbar only; it does not create the overflow. Pair it with
  * .overflow-auto or a component that already scrolls (the one-row strips:
- * breadcrumb, pagination, tabs, horizontal steps). No edge fade: a mask would
+ * pagination, tabs, horizontal steps). No edge fade: a mask would
  * dictate the strip's scroll-padding and focus geometry for a decorative cue,
  * and an item clipped at the edge already says the strip continues.
  *

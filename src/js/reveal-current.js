@@ -4,12 +4,11 @@
  * The `reveal-current` enhancement token is the opt-in, on the element that
  * scrolls:
  *
- *   <ol class="breadcrumb" data-enhance="reveal-current">…</ol>
  *   <ol class="steps steps-horizontal" data-enhance="reveal-current">…</ol>
  *   <ol class="pagination" data-enhance="reveal-current">…</ol>
  *
  * A one-row strip that does not fit scrolls, and its current item — the
- * breadcrumb's page, the flow's step, the selected page number — may render
+ * flow's step, the selected page number, the current link tab — may render
  * off-screen at rest. At connect, once the document is parsed so the current
  * item exists, the strip scrolls just enough to show the
  * first rendered `aria-current` item clear of its scroll-padding (the strip

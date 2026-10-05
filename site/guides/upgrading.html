@@ -268,9 +268,11 @@ layout.</p>
 add <code>.items-start</code> to the row or to the <code>.list</code> to keep them top-aligned.</p>
 <h3 id="rendering-changes-without-an-edit">Rendering changes without an edit</h3>
 <ul>
-<li><code>.breadcrumb</code>, <code>.pagination</code> and a horizontal <code>.tabs</code> strip never wrap: a
-strip that does not fit scrolls horizontally. Add <code>.scroller</code> for a thin
-scrollbar.</li>
+<li><code>.pagination</code> and a horizontal <code>.tabs</code> strip never wrap: a strip that does
+not fit scrolls horizontally. Add <code>.scroller</code> for a thin scrollbar.</li>
+<li><code>.breadcrumb</code> never wraps either: a trail that does not fit truncates its
+labels with an ellipsis, ancestors first. Ancestor labels need an <code>&lt;a&gt;</code> or
+<code>&lt;span&gt;</code>.</li>
 <li>The focus reserve of <code>.pagination</code> and of a scrolling dialog or drawer body
 no longer grows with <code>--border-width</code>: 1px narrower under
 <code>prefers-contrast: more</code>.</li>

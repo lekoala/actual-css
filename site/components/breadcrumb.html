@@ -235,17 +235,17 @@
 <ul>
 <li>Use a semantic <code>&lt;nav&gt;</code> landmark.</li>
 <li>Put <code>.breadcrumb</code> on the ordered list.</li>
-<li>Use <code>aria-current=&quot;page&quot;</code> for the current page.</li>
+<li>Use <code>aria-current=&quot;page&quot;</code> for the current page, on its link or on its <code>&lt;li&gt;</code>,
+and keep it last.</li>
 <li>Separators are generated with CSS (<code>&gt; li + li::before</code>).</li>
-<li>Breadcrumbs remain on a single line and scroll horizontally when space is insufficient. Actual does not automatically truncate or collapse hierarchy levels.</li>
-<li>Add <code>data-enhance=&quot;reveal-current&quot;</code> to start an overflowing trail on its current item instead of the root. The placement happens once at connect, on a visible trail.</li>
-<li>Add <code>.scroller</code> for a thin, theme-coloured scrollbar; see <a href="../utilities/sizing-wrapping.html#one-row-strips">one-row strips</a>.</li>
+<li>Put each ancestor label in an <code>&lt;a&gt;</code> or a <code>&lt;span&gt;</code>: that box carries the
+ellipsis. The current page may be bare text in an <code>&lt;li aria-current=&quot;page&quot;&gt;</code>.</li>
 </ul>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
 <nav aria-label="Breadcrumb">
-  <ol class="breadcrumb" data-enhance="reveal-current">
+  <ol class="breadcrumb">
     <li><a href="/home">Home</a></li>
     <li><a href="/projects">Projects</a></li>
     <li><a href="/projects/docs">Docs</a></li>
@@ -255,7 +255,7 @@
   </div>
   <div class="docs-code">
     <pre><code class="language-html">&lt;nav aria-label=&quot;Breadcrumb&quot;&gt;
-  &lt;ol class=&quot;breadcrumb&quot; data-enhance=&quot;reveal-current&quot;&gt;
+  &lt;ol class=&quot;breadcrumb&quot;&gt;
     &lt;li&gt;&lt;a href=&quot;/home&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;/projects&quot;&gt;Projects&lt;/a&gt;&lt;/li&gt;
     &lt;li&gt;&lt;a href=&quot;/projects/docs&quot;&gt;Docs&lt;/a&gt;&lt;/li&gt;
@@ -264,7 +264,17 @@
 &lt;/nav&gt;</code></pre>
   </div>
 </div>
+<div class="prose docs-prose">
+<h2 id="narrow-space">Narrow space</h2>
+<p>A trail stays on one line and never scrolls. When it does not fit, labels
+truncate with an ellipsis: ancestors first, down to a couple of characters
+each, then the current page. A link keeps its full text as its accessible
+name; add a <code>title</code> if pointer users should see it on hover.</p>
+<p>Truncation does not remove levels. For a deep hierarchy on a phone, collapse
+it in markup — keep the root and the current page, and replace the middle
+levels with a <code>…</code> item, or render only a link to the parent page.</p>
 
+</div>
 
           <div class="cluster docs-source-links">
             <a class="btn sm ghost" href="https://github.com/lekoala/actual-css/edit/master/docs/pages/components/breadcrumb.md" rel="noopener noreferrer">Edit on GitHub</a>
@@ -282,7 +292,7 @@
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-
+        <li><a class="nav-link" href="#narrow-space" data-docs-toc-item data-level="2">Narrow space</a></li>
           </ul>
         </nav>
       </aside>

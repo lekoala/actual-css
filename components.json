@@ -141,9 +141,6 @@
     "classes": [
       "breadcrumb"
     ],
-    "internalHooks": [
-      "--breadcrumb-bleed"
-    ],
     "states": [
       "aria-current"
     ]

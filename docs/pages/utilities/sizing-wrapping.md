@@ -122,7 +122,8 @@ the part of a custom scrollbar that never held up.
 ### One-row strips
 
 Components that never wrap scroll horizontally when they do not fit: `.tabs`,
-`.breadcrumb`, `.pagination`, `.steps-horizontal`, and `.table-wrap`. They
+`.pagination`, `.steps-horizontal`, and `.table-wrap`. (`.breadcrumb` truncates
+its labels instead; see [Breadcrumb](../components/breadcrumb.md).) They
 leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
 sit under a short strip, and on touch screens it overlays the strip and hides
 at rest, leaving a clipped item as the cue that the strip continues. Put
@@ -132,11 +133,11 @@ clipped item already says there is more. Keyboard focus and `reveal-current`
 stop an item with its focus line inside the strip.
 
 ```html
-<ol class="breadcrumb scroller" data-enhance="reveal-current" aria-label="Breadcrumb">
+<ol class="pagination scroller" data-enhance="reveal-current">
 ```
 
-A strip whose current item can render off-screen at rest (breadcrumb,
-pagination, horizontal steps, link tabs) takes `data-enhance="reveal-current"`:
+A strip whose current item can render off-screen at rest (pagination,
+horizontal steps, link tabs) takes `data-enhance="reveal-current"`:
 at connect it scrolls the first `aria-current` item into view, once.
 
 There is no class that hides the scrollbar: on a strip it is the only visible
@@ -144,8 +145,8 @@ scroll control for a mouse without a horizontal wheel. Apply `.scroller` to
 every scrolling strip of a page, or to none, so the bars stay consistent.
 
 A strip keeps scrolling inside a flex or grid row, such as a counter and a
-pagination on one `.cluster`: a `<nav>` directly around `.breadcrumb`,
-`.pagination` or `.tabs` shrinks with the row. Any other wrapper needs
+pagination on one `.cluster`: a `<nav>` directly around `.pagination` or
+`.tabs` shrinks with the row (and around `.breadcrumb`, which then truncates). Any other wrapper needs
 `min-inline-size: 0`, or the row pushes the whole page into scrolling.
 
 ```html

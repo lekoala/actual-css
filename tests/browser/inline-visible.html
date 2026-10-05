@@ -23,36 +23,36 @@
   <div hidden><div class="box" data-strip="tabs-hidden"></div></div>
 
   <div class="box">
-    <nav aria-label="Long trail">
-      <ol class="breadcrumb" data-enhance="reveal-current" id="trail-long">
-        <li><a href="#a">Home</a></li>
-        <li><a href="#b">Projects</a></li>
-        <li><a href="#c">Documentation</a></li>
-        <li><a href="#d">Components</a></li>
-        <li><a href="#e" aria-current="page">Breadcrumb</a></li>
+    <nav aria-label="Long pages">
+      <ol class="pagination" data-enhance="reveal-current" id="pages-long">
+        <li><a class="btn ghost" href="#a">First</a></li>
+        <li><a class="btn ghost" href="#b">Previous</a></li>
+        <li><a class="btn ghost" href="#c">Page 11</a></li>
+        <li><a class="btn ghost" href="#d">Page 12</a></li>
+        <li><a class="btn ghost" href="#e" aria-current="page">Page 13</a></li>
       </ol>
     </nav>
   </div>
 
-  <!-- The current page sits mid-trail, so the strip stops short of its end
+  <!-- The current page sits mid-strip, so the strip stops short of its end
        padding: only scroll-padding keeps the item's focus line in the clip. -->
   <div class="box">
-    <nav aria-label="Mid trail">
-      <ol class="breadcrumb" data-enhance="reveal-current" id="trail-mid">
-        <li><a href="#a">Home</a></li>
-        <li><a href="#b">Projects</a></li>
-        <li><a href="#c">Documentation</a></li>
-        <li><a href="#d" aria-current="page">Components</a></li>
-        <li><a href="#e">Breadcrumb</a></li>
-        <li><a href="#f">Examples</a></li>
+    <nav aria-label="Mid pages">
+      <ol class="pagination" data-enhance="reveal-current" id="pages-mid">
+        <li><a class="btn ghost" href="#a">First</a></li>
+        <li><a class="btn ghost" href="#b">Previous</a></li>
+        <li><a class="btn ghost" href="#c">Page 11</a></li>
+        <li><a class="btn ghost" href="#d" aria-current="page">Page 12</a></li>
+        <li><a class="btn ghost" href="#e">Page 13</a></li>
+        <li><a class="btn ghost" href="#f">Next</a></li>
       </ol>
     </nav>
   </div>
 
-  <nav aria-label="Short trail">
-    <ol class="breadcrumb" data-enhance="reveal-current" id="trail-short">
-      <li><a href="#a">Home</a></li>
-      <li><a href="#e" aria-current="page">Here</a></li>
+  <nav aria-label="Short pages">
+    <ol class="pagination" data-enhance="reveal-current" id="pages-short">
+      <li><a class="btn ghost" href="#a">1</a></li>
+      <li><a class="btn ghost" href="#e" aria-current="page">2</a></li>
     </ol>
   </nav>
 
@@ -91,25 +91,25 @@
        an empty rect sits at x=0, and only there is "left of the box" a
        direction the strip can actually scroll. -->
   <div class="box" dir="rtl">
-    <ol class="breadcrumb" data-enhance="reveal-current" id="trail-hidden-current">
-      <li><a href="#a">Home</a></li>
-      <li><a href="#b">Projects</a></li>
-      <li><a href="#c">Documentation</a></li>
-      <li><a href="#d">Components</a></li>
-      <li hidden><a href="#e" aria-current="page">Breadcrumb</a></li>
+    <ol class="pagination" data-enhance="reveal-current" id="pages-hidden-current">
+      <li><a class="btn ghost" href="#a">First</a></li>
+      <li><a class="btn ghost" href="#b">Previous</a></li>
+      <li><a class="btn ghost" href="#c">Page 11</a></li>
+      <li><a class="btn ghost" href="#d">Page 12</a></li>
+      <li hidden><a class="btn ghost" href="#e" aria-current="page">Page 13</a></li>
     </ol>
   </div>
 
   <!-- A boxless current item first (a responsive duplicate) must not hide the
        rendered one: the strip still starts on it. -->
   <div class="box">
-    <ol class="breadcrumb" data-enhance="reveal-current" id="trail-duplicate-current">
-      <li hidden><a href="#e" aria-current="page">Breadcrumb</a></li>
-      <li><a href="#a">Home</a></li>
-      <li><a href="#b">Projects</a></li>
-      <li><a href="#c">Documentation</a></li>
-      <li><a href="#d">Components</a></li>
-      <li><a href="#e" aria-current="page">Breadcrumb</a></li>
+    <ol class="pagination" data-enhance="reveal-current" id="pages-duplicate-current">
+      <li hidden><a class="btn ghost" href="#e" aria-current="page">Page 13</a></li>
+      <li><a class="btn ghost" href="#a">First</a></li>
+      <li><a class="btn ghost" href="#b">Previous</a></li>
+      <li><a class="btn ghost" href="#c">Page 11</a></li>
+      <li><a class="btn ghost" href="#d">Page 12</a></li>
+      <li><a class="btn ghost" href="#e" aria-current="page">Page 13</a></li>
     </ol>
   </div>
 

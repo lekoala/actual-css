@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Breadcrumb truncation fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    /* The test sizes each box from its trail's own width, never from a
+       length a label happens to fit. */
+    .box { margin: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="box" id="ancestors-box">
+    <nav aria-label="Ancestors">
+      <ol class="breadcrumb" id="ancestors">
+        <li><a href="#a">Actual Cloud</a></li>
+        <li><a href="#b" id="truncated-link">Revenue operations</a></li>
+        <li><a href="#c">Portfolio health</a></li>
+        <li><a href="#d" aria-current="page">Northstar Logistics</a></li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- Ancestors too short to give anything back: the current page, written
+       as bare text on its item, is the one that truncates. -->
+  <div class="box" id="bare-box">
+    <nav aria-label="Bare current">
+      <ol class="breadcrumb" id="bare">
+        <li><a href="#a">A</a></li>
+        <li><a href="#b">B</a></li>
+        <li aria-current="page">Designing with quiet defaults</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- aria-current on the item, around a link: the item must not truncate,
+       or it clips the link's focus line. -->
+  <div class="box" id="item-current-box">
+    <nav aria-label="Current on item">
+      <ol class="breadcrumb" id="item-current">
+        <li><a href="#a">Actual Cloud</a></li>
+        <li><a href="#b">Revenue operations</a></li>
+        <li aria-current="page"><a href="#c" id="item-current-link">Northstar Logistics</a></li>
+      </ol>
+    </nav>
+  </div>
+
+  <div class="box">
+    <nav aria-label="Short">
+      <ol class="breadcrumb" id="short">
+        <li><a href="#a" id="short-label">A</a></li>
+        <li><span aria-current="page">Here</span></li>
+      </ol>
+    </nav>
+  </div>
+</body>
+</html>

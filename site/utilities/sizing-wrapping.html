@@ -376,7 +376,8 @@ Hover is left to the engine — it varies by platform, and matching it by hand w
 the part of a custom scrollbar that never held up.</p>
 <h3 id="one-row-strips">One-row strips</h3>
 <p>Components that never wrap scroll horizontally when they do not fit: <code>.tabs</code>,
-<code>.breadcrumb</code>, <code>.pagination</code>, <code>.steps-horizontal</code>, and <code>.table-wrap</code>. They
+<code>.pagination</code>, <code>.steps-horizontal</code>, and <code>.table-wrap</code>. (<code>.breadcrumb</code> truncates
+its labels instead; see <a href="../components/breadcrumb.html">Breadcrumb</a>.) They
 leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
 sit under a short strip, and on touch screens it overlays the strip and hides
 at rest, leaving a clipped item as the cue that the strip continues. Put
@@ -384,17 +385,17 @@ at rest, leaving a clipped item as the cue that the strip continues. Put
 theme-coloured bar. There is no edge fade (overflow shadow, scroll hint): the
 clipped item already says there is more. Keyboard focus and <code>reveal-current</code>
 stop an item with its focus line inside the strip.</p>
-<pre><code class="language-html">&lt;ol class=&quot;breadcrumb scroller&quot; data-enhance=&quot;reveal-current&quot; aria-label=&quot;Breadcrumb&quot;&gt;
+<pre><code class="language-html">&lt;ol class=&quot;pagination scroller&quot; data-enhance=&quot;reveal-current&quot;&gt;
 </code></pre>
-<p>A strip whose current item can render off-screen at rest (breadcrumb,
-pagination, horizontal steps, link tabs) takes <code>data-enhance=&quot;reveal-current&quot;</code>:
+<p>A strip whose current item can render off-screen at rest (pagination,
+horizontal steps, link tabs) takes <code>data-enhance=&quot;reveal-current&quot;</code>:
 at connect it scrolls the first <code>aria-current</code> item into view, once.</p>
 <p>There is no class that hides the scrollbar: on a strip it is the only visible
 scroll control for a mouse without a horizontal wheel. Apply <code>.scroller</code> to
 every scrolling strip of a page, or to none, so the bars stay consistent.</p>
 <p>A strip keeps scrolling inside a flex or grid row, such as a counter and a
-pagination on one <code>.cluster</code>: a <code>&lt;nav&gt;</code> directly around <code>.breadcrumb</code>,
-<code>.pagination</code> or <code>.tabs</code> shrinks with the row. Any other wrapper needs
+pagination on one <code>.cluster</code>: a <code>&lt;nav&gt;</code> directly around <code>.pagination</code> or
+<code>.tabs</code> shrinks with the row (and around <code>.breadcrumb</code>, which then truncates). Any other wrapper needs
 <code>min-inline-size: 0</code>, or the row pushes the whole page into scrolling.</p>
 <pre><code class="language-html">&lt;div class=&quot;cluster&quot; style=&quot;--cluster-justify: space-between&quot;&gt;
   &lt;span&gt;Showing 4 of 28&lt;/span&gt;

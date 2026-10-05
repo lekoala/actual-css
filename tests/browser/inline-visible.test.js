@@ -1,6 +1,6 @@
 /*
  * Strips that overflow start on their selected (tabs) or `aria-current`
- * (reveal-current: breadcrumb, steps, pagination) item: one placement at
+ * (reveal-current: steps, pagination) item: one placement at
  * connect, inside the strip's own scrollport, clear of its scroll-padding,
  * never moving the page.
  */
@@ -59,7 +59,7 @@ const READ = `(() => {
   for (const list of document.querySelectorAll('[role="tablist"]')) {
     strips[list.id] = read(list, list.querySelector('[aria-selected="true"]'));
   }
-  for (const list of document.querySelectorAll(".breadcrumb, .steps, .pagination")) {
+  for (const list of document.querySelectorAll(".steps, .pagination")) {
     strips[list.id] = read(list, current(list));
   }
   return { strips, pageY: window.scrollY };
@@ -76,14 +76,14 @@ it("overflowing strips start on their selected or current item", async () => {
         "tabs-middle",
         "tabs-rtl",
         "tabs-below",
-        "trail-long",
-        "trail-mid",
-        "trail-duplicate-current",
+        "pages-long",
+        "pages-mid",
+        "pages-duplicate-current",
       ];
       for (const id of [...hidden, "steps-row", "pager"]) {
         expect(before.strips[id], id).toMatchObject({ overflows: true, inBox: false });
       }
-      expect(before.strips["trail-hidden-current"].overflows).toBe(true);
+      expect(before.strips["pages-hidden-current"].overflows).toBe(true);
       expect(before.strips["steps-fit"]).toMatchObject({ overflows: false, inBox: true });
 
       await view.evaluate(`(() => { ${source} })()`);
@@ -92,7 +92,7 @@ it("overflowing strips start on their selected or current item", async () => {
       await waitForBrowser(
         view,
         `[...document.querySelectorAll('[role="tablist"]')].every((list) => list.querySelector('[tabindex="-1"]')) &&
-         ["trail-long", "trail-mid", "trail-duplicate-current", "steps-row", "pager"].every((id) => document.getElementById(id).scrollLeft !== 0)`,
+         ["pages-long", "pages-mid", "pages-duplicate-current", "steps-row", "pager"].every((id) => document.getElementById(id).scrollLeft !== 0)`,
       );
       const { strips, pageY } = await view.evaluate(READ);
 
@@ -101,21 +101,21 @@ it("overflowing strips start on their selected or current item", async () => {
       }
       // Mid-strip, the scroll-padding is honoured: room to spare at the edge.
       expect(strips["tabs-middle"]).toMatchObject({ scrolled: true, clear: true });
-      // The current page lands fully inside the trail.
-      expect(strips["trail-long"]).toMatchObject({ scrolled: true, clear: true });
+      // The current page lands fully inside the strip.
+      expect(strips["pages-long"]).toMatchObject({ scrolled: true, clear: true });
       // The same token serves any strip with an aria-current item.
       expect(strips["steps-row"]).toMatchObject({ scrolled: true, inBox: true });
       expect(strips.pager).toMatchObject({ scrolled: true, inBox: true, ringClear: true });
       // Mid-strip the end padding is scrolled away: the strip's scroll-padding
       // is what keeps the item's focus line inside the clip.
-      expect(strips["trail-mid"]).toMatchObject({ scrolled: true, ringClear: true });
+      expect(strips["pages-mid"]).toMatchObject({ scrolled: true, ringClear: true });
       // A boxless current item before the rendered one is skipped.
-      expect(strips["trail-duplicate-current"]).toMatchObject({ scrolled: true, clear: true });
+      expect(strips["pages-duplicate-current"]).toMatchObject({ scrolled: true, clear: true });
       // A current item without a box (inside a hidden item) moves nothing.
-      expect(strips["trail-hidden-current"].scrolled).toBe(false);
+      expect(strips["pages-hidden-current"].scrolled).toBe(false);
       // Already visible: nothing moves.
       expect(strips["tabs-start"]).toMatchObject({ overflows: true, scrolled: false, inBox: true });
-      expect(strips["trail-short"]).toMatchObject({ scrolled: false, inBox: true });
+      expect(strips["pages-short"]).toMatchObject({ scrolled: false, inBox: true });
       expect(strips["steps-fit"]).toMatchObject({ overflows: false, scrolled: false, inBox: true });
       // Hidden at connect: a no-op, not a guess from empty rects.
       expect(strips["tabs-hidden"].scrolled).toBe(false);
@@ -178,12 +178,12 @@ await Bun.write(
   <script src="./full.js"></script>
 </head>
 <body>
-  <ol class="breadcrumb" data-enhance="reveal-current" id="streamed" style="inline-size: 12rem">
-    <li><a href="#a">Home</a></li>
+  <ol class="pagination" data-enhance="reveal-current" id="streamed" style="inline-size: 12rem">
+    <li><a class="btn ghost" href="#a">First</a></li>
     <script>window.parserCheckpoint = true;</script>
-    <li><a href="#b">Projects</a></li>
-    <li><a href="#c">Documentation</a></li>
-    <li><a href="#d" aria-current="page">Components</a></li>
+    <li><a class="btn ghost" href="#b">Previous</a></li>
+    <li><a class="btn ghost" href="#c">Page 11</a></li>
+    <li><a class="btn ghost" href="#d" aria-current="page">Page 12</a></li>
   </ol>
   <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Streamed" id="streamed-tabs">
     <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="p1" id="st1">One</button>
@@ -232,7 +232,7 @@ it("placement waits for parsing, reads percentages and follows a scale", async (
         };
       })()`);
 
-      // Trap: the current item was not parsed yet when the trail connected.
+      // Trap: the current item was not parsed yet when the strip connected.
       expect(state.streamed.scrolled).toBe(true);
       expect(state.streamed.end).toBeLessThanOrEqual(state.streamed.width + 1);
       // Trap: the tablist connected with no tabs and never set its roving tabindex.
