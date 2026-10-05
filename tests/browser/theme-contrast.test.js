@@ -37,3 +37,20 @@ it("a :root theme is measured with its own colors in both schemes", async () => 
   // White on white: the dark side of the application's light-dark() applied.
   expect(dark.focusSurface).toBe(1);
 });
+
+// Trap: the name, read from the file by a regex, was concatenated into the
+// island markup, so a character reference in it was decoded and the island no
+// longer matched its own theme.
+it("a theme name is set verbatim, never parsed as markup", async () => {
+  const name = "a&amp;<b>";
+  const theme = `[data-theme="${name}"] {
+    color-scheme: light;
+    --surface: white;
+    --surface-solid: white;
+    --focus: black;
+  }`;
+  const [row] = await measureContrast({ css: `${framework}\n${theme}`, themes: [name] });
+
+  expect(row.theme).toBe(name);
+  expect(row.focusSurface).toBe(21);
+});

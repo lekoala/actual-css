@@ -759,8 +759,8 @@ test("breadcrumb stays a single-line strip", () => {
   expect(css).toMatch(/\.breadcrumb\s*\{[^}]*flex-wrap:\s*nowrap/s);
   expect(rules).not.toMatch(/\.breadcrumb\s*\{[^}]*flex-wrap:\s*wrap/s);
   expect(css).toMatch(/\.breadcrumb\s*\{[^}]*overflow:\s*auto hidden/s);
-  expect(css).toMatch(/\.breadcrumb li\s*\{[^}]*flex:\s*none/s);
-  expect(css).toMatch(/\.breadcrumb li\s*\{[^}]*white-space:\s*nowrap/s);
+  expect(css).toMatch(/\.breadcrumb > li\s*\{[^}]*flex:\s*none/s);
+  expect(css).toMatch(/\.breadcrumb > li\s*\{[^}]*white-space:\s*nowrap/s);
 });
 
 test("the strip edge fade lives once, in .scroller, behind its gate", () => {
