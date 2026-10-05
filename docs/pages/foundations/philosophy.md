@@ -47,8 +47,8 @@ as a `.media` without an override, whatever the import order.
 | Presentation     | class          | `.soft`, `.outline`, `.sm`, `.compact`       |
 
 Write `<a class="nav-link" aria-current="page">`, not `.nav-link.active`. The
-few `.is-*` classes (`.is-open`, `.is-static`) are written by the runtime: never
-author them in markup. `data-enhance` activates behavior and is never a styling
+few `.is-*` classes (`.is-open`, `.is-static`) are runtime internals: neither
+set nor select them. `data-enhance` activates behavior and is never a styling
 hook.
 
 **A utility does one thing.** A class that sets a surface, a border, padding and
