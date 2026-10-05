@@ -630,7 +630,7 @@ so an author who lowers `--step-min` below `--step-size` narrows the scroll
 budget without collapsing items behind their own markers.
 
 The cost of scrolling is that clipping happens at the padding edge, and a focus
-ring is drawn outside its element's border box — `--focus-outline` is
+ring is drawn outside its element's border box — the generic outline is
 `--focus-ring-width` wide at `--focus-outline-offset`, so 4px past a label that sits
 flush with the bottom of a stacked row. A navigable row therefore reserves
 exactly that much `padding-block`, gated on `.steps-horizontal:has(a[href])`. An

@@ -38,6 +38,9 @@
   padding: var(--pagination-focus-bleed);
   overflow: auto hidden;
   overscroll-behavior-inline: contain;
+  /* Mid-row there is no padding to spare: focus and reveal-current stop an
+     item one focus line short of the clip. */
+  scroll-padding-inline: var(--pagination-focus-bleed);
   list-style: none;
   font-size: var(--control-font-size);
 

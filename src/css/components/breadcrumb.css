@@ -9,8 +9,8 @@
  * Breadcrumbs are a single navigation hierarchy. Wrapping makes hierarchy look
  * like separate rows and causes unstable header height.
  *
- * Compose .scroller to fade the edges an overflowing trail can still scroll
- * toward, like every one-row strip.
+ * Compose .scroller for a thin, theme-coloured scrollbar, like every one-row
+ * strip.
  *
  * Internal:
  * --breadcrumb-bleed
@@ -38,6 +38,9 @@
      nested level. When the trail does not fit, the strip scrolls. */
   overflow: auto hidden;
   overscroll-behavior-inline: contain;
+  /* Mid-trail there is no padding to spare: focus and reveal-current stop an
+     item one outline short of the clip. */
+  scroll-padding-inline: var(--breadcrumb-bleed);
   color: var(--text-subtle);
   font-size: var(--font-size-sm);
   list-style: none;

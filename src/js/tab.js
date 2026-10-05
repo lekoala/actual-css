@@ -87,10 +87,19 @@ function activate(tab) {
   }
 }
 
-function activateAndFocus(tab) {
+/* An overflowing horizontal strip shows the whole tab. At connect a
+   server-selected tab may render off-screen; on arrow keys and clicks the
+   native focus scroll is not enough: Chrome skips a tab already partly inside
+   the scrollport, so one showing a sliver at the edge stayed clipped. */
+function reveal(list, tab) {
+  if (list.getAttribute("aria-orientation") !== "vertical") ensureInlineVisible(list, tab);
+}
+
+function activateAndFocus(list, tab) {
   if (!tab) return;
   activate(tab);
   tab.focus();
+  reveal(list, tab);
 }
 
 function initialize(list) {
@@ -98,10 +107,7 @@ function initialize(list) {
   if (!tabs.length) return;
   const selected = tabs.find((tab) => tab.getAttribute("aria-selected") === "true") || tabs[0];
   activate(selected);
-  // Connect only: a server-selected tab may render off-screen in an
-  // overflowing strip. Clicks and arrow keys already focus their tab, and the
-  // native focus scroll owns those paths.
-  if (list.getAttribute("aria-orientation") !== "vertical") ensureInlineVisible(list, selected);
+  reveal(list, selected);
 }
 
 function onKeydown(e) {
@@ -139,7 +145,7 @@ function onKeydown(e) {
   if (!target) return;
 
   e.preventDefault();
-  activateAndFocus(target);
+  activateAndFocus(list, target);
 }
 
 function onClick(e) {
@@ -152,8 +158,7 @@ function onClick(e) {
   }
   e.preventDefault();
   if (tab.getAttribute("aria-selected") === "true") return;
-  activate(tab);
-  tab.focus();
+  activateAndFocus(list, tab);
 }
 
 registerEnhancement("tabs", (list) => {

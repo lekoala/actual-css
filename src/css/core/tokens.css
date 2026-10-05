@@ -81,9 +81,11 @@
      without a component ring (links, summary, plain items). Components draw
      the themed ring instead: --focus-ring-width solid --focus. See focus.css
      for the two contracts. Both share --focus-ring-width: they differ in
-     color only. */
+     color only. No --focus-outline alias here: declared on :root it would be
+     inherited already computed, so a theme island or a region setting
+     --focus-ring-width would not reach it. focus.css composes the line on the
+     focused element instead. */
   --focus-outline-color: currentColor;
-  --focus-outline: var(--focus-ring-width) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
   --focus-ring-width: 2px;
 

@@ -763,25 +763,29 @@ test("breadcrumb stays a single-line strip", () => {
   expect(css).toMatch(/\.breadcrumb > li\s*\{[^}]*white-space:\s*nowrap/s);
 });
 
-test("the strip edge fade lives once, in .scroller, behind its gate", () => {
-  /* One composition owns the overflow cue: no strip module carries its own. */
+test("strips reserve their focus line, not a decorative edge", () => {
+  /* No edge fade anywhere: a mask dictated the strips' scroll-padding and
+     focus geometry for a cue a clipped item already gives. */
   for (const path of [
     "src/css/components/breadcrumb.css",
     "src/css/components/pagination.css",
     "src/css/components/tab.css",
     "src/css/components/steps.css",
+    "src/css/layout/scroller.css",
   ]) {
     expect(readRules(path), path).not.toContain("mask-image");
   }
-  /* Without scroll timelines the animation would end at once and pin its last
-     mask on a region at rest, so the animation stays gated. */
-  const scroller = readRules("src/css/layout/scroller.css");
-  const gate = scroller.indexOf("@supports (animation-timeline: scroll())");
-  expect(gate).toBeGreaterThan(-1);
-  expect(scroller.indexOf("animation: actual-scroller-fade")).toBeGreaterThan(gate);
+  /* Mid-strip the padding has scrolled away, so scroll-padding is what keeps a
+     focused item's outer line inside the clip (tests/browser/strip-focus). */
+  expect(readCss("src/css/components/breadcrumb.css")).toContain(
+    "scroll-padding-inline: var(--breadcrumb-bleed);",
+  );
+  expect(readCss("src/css/components/pagination.css")).toContain(
+    "scroll-padding-inline: var(--pagination-focus-bleed);",
+  );
 
-  /* A fade says "there is more"; an arrow would say "action". The scrollbar
-     stays: on a strip it is the only visible control for a mouse. */
+  /* An arrow would say "action". The scrollbar stays: on a strip it is the
+     only visible control for a mouse. */
   const breadcrumb = readRules("src/css/components/breadcrumb.css");
   expect(breadcrumb).not.toMatch(/\.breadcrumb::(before|after)\s*\{[^}]*content:/s);
   expect(breadcrumb.includes("scrollbar-width: none")).toBe(false);
@@ -1790,7 +1794,7 @@ test("every framework outline is one of the two focus contracts", () => {
     "var(--focus-ring-width) solid var(--focus)",
     "var(--focus-ring-width) solid var(--form-invalid-border, var(--focus))",
     // Generic fallback and its pointer-focus removal.
-    "var(--focus-outline)",
+    "var(--focus-outline, var(--focus-ring-width) solid var(--focus-outline-color))",
     "none",
     // Forced-colors carriers: the ring itself is a shadow or a Canvas gap.
     "2px solid transparent",
@@ -1820,8 +1824,8 @@ test("every framework outline is one of the two focus contracts", () => {
     expect(prop, `${file}: ${prop}: ${value}`).toBe("outline");
     expect(ALLOWED.has(value), `${file}: outline: ${value}`).toBe(true);
   }
-  // Only the baseline reads the fallback token.
-  expect(found.filter((f) => f.value === "var(--focus-outline)").map((f) => f.file)).toEqual([
+  // Only the baseline reads the fallback hook.
+  expect(found.filter((f) => f.value.includes("--focus-outline,")).map((f) => f.file)).toEqual([
     "focus.css",
   ]);
 });

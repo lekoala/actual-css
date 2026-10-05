@@ -37,6 +37,17 @@ layout.
 </div>
 ```
 
+### Focus outline
+
+`--focus-outline` has no default value any more. Search application CSS for
+`var(--focus-outline)` and write the generic line instead:
+
+```css
+outline: var(--focus-ring-width) solid var(--focus-outline-color);
+```
+
+Setting `--focus-outline` still replaces the generic line.
+
 ### List rows
 
 `.list-item` regions center on the row. For rows with long supporting text,
@@ -45,8 +56,8 @@ add `.items-start` to the row or to the `.list` to keep them top-aligned.
 ### Rendering changes without an edit
 
 - `.breadcrumb`, `.pagination` and a horizontal `.tabs` strip never wrap: a
-  strip that does not fit scrolls horizontally. Add `.scroller` to fade its
-  edges.
+  strip that does not fit scrolls horizontally. Add `.scroller` for a thin
+  scrollbar.
 - The focus reserve of `.pagination` and of a scrolling dialog or drawer body
   no longer grows with `--border-width`: 1px narrower under
   `prefers-contrast: more`.

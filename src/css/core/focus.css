@@ -21,9 +21,13 @@
    Documented exception: an invalid field focuses in --form-invalid-border
    (danger), so the error stays visible at the point of correction. The border
    carries the same hook; report:theme-contrast measures that line at 3:1
-   against the field's background alongside --focus. */
+   against the field's background alongside --focus.
+
+   Public hooks:
+   --focus-outline (fallback-only: replaces the whole generic line)
+*/
 :focus {
-  outline: var(--focus-outline);
+  outline: var(--focus-outline, var(--focus-ring-width) solid var(--focus-outline-color));
   outline-offset: var(--focus-outline-offset);
 }
 

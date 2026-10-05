@@ -177,7 +177,7 @@
        back; inverted offset keeps it inside the cell. */
     @media (forced-colors: active) {
       .block-float-form :is(.input, .textarea, .select):focus-visible {
-        outline: var(--focus-outline);
+        outline: var(--focus-ring-width) solid var(--focus-outline-color);
         outline-offset: calc(var(--focus-outline-offset) * -1);
       }
     }

@@ -7,21 +7,19 @@
 - `--cluster-justify`, `--cluster-align` and `--cluster-wrap` no longer inherit into nested `.cluster` rows; set them on the row itself or select nested rows.
 - `--grid-columns` and `--grid-min` no longer inherit into a nested `.grid`.
 - `.avatar-stack` no longer infers its size from child `.avatar.sm`/`.lg`; set `.sm`/`.lg` on the stack and omit size classes on its avatars.
+- `--focus-outline` has no default value: it is a fallback-only hook that replaces the generic focus line; read `var(--focus-ring-width) solid var(--focus-outline-color)` instead.
 
 ### Added
 
 - `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the full runtime instance.
 - `--tab-flex` on `.tabs` sets each tab's flex; `1 1 0` gives equal-width tabs.
 - `data-enhance="reveal-current"` (`actual-css/js/reveal-current`) scrolls an overflowing strip (`.breadcrumb`, `.pagination`, `.steps-horizontal`, link `.tabs`) to its `aria-current` item at connect.
-- `--scroller-fade-size` on `.scroller` sets the edge fade width and the scroll-padding that keeps a focused item clear of it.
 - `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs, apart from `--border`; it defaults to `--border`.
 
 ### Changed
 
 - `forms/form-actions` no longer has to load after `layout/cluster`: `.form-actions` relays its hooks into the row's `--cluster-*`.
-- An overflowing horizontal `.tabs` strip starts with its selected tab in view, scrolling the strip only.
-- `.scroller` fades the edges an inline-scrolling region can still scroll toward, in engines with scroll-driven animations.
-- The `.scroller` fade follows the strip's own direction (`:dir()`): an RTL strip fades its left edge, an LTR island in an RTL page its right.
+- An overflowing horizontal `.tabs` strip shows its selected tab in full, at connect and on every arrow key or click, scrolling the strip only.
 - `.floating-field` accepts its `.field-label` before or after the control; state is read through `:has()` on the cell.
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
 - `.pagination` never wraps: a row that does not fit scrolls horizontally, with room for its items' focus line.
@@ -41,6 +39,7 @@
 - A bare heading in a `dialog.modal > header` drops its block margins, so the band no longer grows and the title centers on the close.
 - A `<nav>` around `.breadcrumb`, `.pagination` or `.tabs` shrinks inside a flex or grid row, so the strip scrolls instead of the page.
 - The first item of `.breadcrumb` and `.pagination` aligns with the surrounding content at rest; the focus bleed is given back at the inline start.
+- The generic focus line of links, `summary` and nav items follows a `--focus-ring-width` set on a `[data-theme]` island or any region, like the `.btn` ring beside it.
 - The focus reserve of `.pagination` and of a scrolling dialog or drawer body is `--focus-outline-offset` + `--focus-ring-width`, no longer widened by `2 × --border-width`.
 
 ## [0.12.0] - 2026-10-02

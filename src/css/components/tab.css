@@ -40,15 +40,10 @@
      is inset and the indicator sits inside the tab. */
   overflow: auto hidden;
   overscroll-behavior-inline: contain;
+  /* Focus scrolls a tab in with room to spare, hinting at the next one. */
+  scroll-padding-inline: var(--space-30);
   border-block-end: var(--border-width) solid var(--border);
   list-style: none;
-}
-
-/* Focus scrolls a tab in with room to spare, hinting at the next one. Zero
-   specificity, so a composed .scroller sets the inset its fade needs whatever
-   the import order. */
-:where(.tabs) {
-  scroll-padding-inline: var(--space-30);
 }
 
 /* The landmark around link tabs is not a scroll container, so as a flex or

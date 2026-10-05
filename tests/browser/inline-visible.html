@@ -13,6 +13,9 @@
   </style>
 </head>
 <body>
+  <!-- First in tab order. The test sizes it from its tabs so the next one
+       shows only a sliver at the edge. -->
+  <div class="box" data-strip="tabs-sliver"></div>
   <div class="box" data-strip="tabs-end"></div>
   <div class="box" data-strip="tabs-start"></div>
   <div class="box" data-strip="tabs-middle"></div>
@@ -27,6 +30,21 @@
         <li><a href="#c">Documentation</a></li>
         <li><a href="#d">Components</a></li>
         <li><a href="#e" aria-current="page">Breadcrumb</a></li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- The current page sits mid-trail, so the strip stops short of its end
+       padding: only scroll-padding keeps the item's focus line in the clip. -->
+  <div class="box">
+    <nav aria-label="Mid trail">
+      <ol class="breadcrumb" data-enhance="reveal-current" id="trail-mid">
+        <li><a href="#a">Home</a></li>
+        <li><a href="#b">Projects</a></li>
+        <li><a href="#c">Documentation</a></li>
+        <li><a href="#d" aria-current="page">Components</a></li>
+        <li><a href="#e">Breadcrumb</a></li>
+        <li><a href="#f">Examples</a></li>
       </ol>
     </nav>
   </div>
@@ -92,7 +110,7 @@
 
   <script>
     // Selected index per strip; -1 selects the last tab.
-    const selected = { "tabs-end": -1, "tabs-start": 0, "tabs-middle": 3, "tabs-rtl": -1, "tabs-hidden": -1, "tabs-below": -1 };
+    const selected = { "tabs-sliver": 0, "tabs-end": -1, "tabs-start": 0, "tabs-middle": 3, "tabs-rtl": -1, "tabs-hidden": -1, "tabs-below": -1 };
     const labels = ["General", "Security", "Billing", "Notifications", "Integrations", "Advanced"];
     for (const box of document.querySelectorAll("[data-strip]")) {
       const name = box.dataset.strip;
