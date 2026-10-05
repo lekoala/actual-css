@@ -1466,13 +1466,14 @@ test("steps sizing follows content, and never hides a label", () => {
   );
 
   /* Every rule keyed on the row and gated on a label, spelled the same way
-     three times. Pinned as text because the formatter owns where these wrap,
+     throughout the query. Pinned as text because the formatter owns where these wrap,
      and a break landing outside the parens would turn a compound boundary into
      a descendant combinator — a `.steps-horizontal` inside a
      `.steps-horizontal`, which matches nothing and fails silently. Keying one
      on the shared `.steps` instead would reach a column that never asked to be
      measured. */
   expect([...block.matchAll(/(\.steps[^{}]*)\{/g)].map(([, sel]) => sel.trim())).toEqual([
+    ".steps-horizontal:has(.step-label)",
     ".steps-horizontal:has(.step-label) > li",
     ".steps-horizontal:has(.step-label) > li::after",
     ".steps-horizontal:has(.step-label) > li:last-child",
@@ -1492,15 +1493,16 @@ test("steps sizing follows content, and never hides a label", () => {
   /* The compact form, asked of the item's own content, and small in both
      orientations: a marker's width instead of a reading width, aligned to the
      start of its share so the track runs edge to edge, and a final step with
-     no share to fill. Pinned declaration by declaration — an `:empty` rule
-     that grows means a base rule has started describing a labelled step
-     rather than a step. */
+     no share to fill. The connector must keep full shares even when mobile
+     labelled end cells shrink to half shares. */
   expect(css).toMatch(
     /\n\.steps-horizontal > li:empty \{\n {2}flex: 1 1 0;\n {2}justify-items: start;\n {2}min-inline-size: var\(--step-size\);\n\}/,
   );
-  expect(css).toMatch(
-    /\n\.steps-horizontal > li:empty::after \{\n {2}inset-inline-start: var\(--step-size\);\n\}/,
-  );
+  const emptyConnector = readRules("src/css/components/steps.css").match(
+    /\.steps-horizontal > li:empty::after \{([^}]*)\}/,
+  )[1];
+  expect(emptyConnector).toContain("inset-inline-start: var(--step-size);");
+  expect(emptyConnector).toContain("inline-size: calc(100% - var(--step-size) + var(--step-gap));");
   expect(css).toMatch(/\n\.steps-horizontal > li:empty:last-child \{\n {2}flex: 0 0 auto;\n\}/);
   expect(css).toMatch(
     /\n\.steps-vertical > li:empty \{\n {2}grid-template-columns: var\(--step-size\);\n\}/,

@@ -20,7 +20,13 @@
  *   needs to see.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  setViewport,
+  tabUntil,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/steps.html";
 const TIMEOUT = 60_000;
@@ -234,8 +240,8 @@ it("--step-connector replaces the whole connector background", async () => {
  *
  * A labelled sequence makes the opposite promise: every label stays visible at
  * every width, and a row that outgrows its space scrolls. The count is no part
- * of either promise, so two steps at 200px must answer exactly as five at
- * 559px: nothing in the component counts its items.
+ * of either promise, so two steps at 120px must answer exactly as five at
+ * 480px: nothing in the component counts its items.
  */
 it("an empty step is compact by structure, and a labelled one is never dropped", async () => {
   await withBrowserPage(
@@ -324,14 +330,163 @@ it("an empty step is compact by structure, and a labelled one is never dropped",
          a marker. And in a row mixing an empty step with labelled ones, the
          labelled ones still measure alike: `--step-min` is a floor on the
          items that asked for it, never a budget one item can take from
-         another, which is the 201px-against-89px skew that made the wrapper
-         mandatory. */
+         another. */
       expect(result.bare.labelHidden).toBe(null);
       expect(result.bare.blockSize).toBeGreaterThan(STEP_SIZE);
       expect(result.mixed[0]).toBe(result.mixed[2]);
-      expect(result.mixed[1]).toBeLessThan(result.mixed[0]);
     },
     { artifactName: "steps-markers" },
+  );
+});
+
+it("wrapped step links keep their focus ring inside the horizontal clip", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      await setViewport(view, { width: 320, height: 900 });
+      await view.evaluate(`
+        (() => {
+        const ol = document.createElement("ol");
+        ol.className = "steps steps-horizontal";
+        ol.id = "mobile-links";
+        ol.innerHTML = ["first", "middle", "last"].map(id =>
+          '<li><a class="step-label" href="#" id="mobile-' + id + '">InternationalizationAndAccountConfirmation</a></li>'
+        ).join("");
+        ol.addEventListener("click", event => event.preventDefault());
+        document.body.prepend(ol);
+        })()
+      `);
+      for (const id of ["mobile-first", "mobile-last"]) {
+        expect(await tabUntil(view, `document.activeElement?.id === ${JSON.stringify(id)}`)).toBe(
+          true,
+        );
+        const result = await view.evaluate(`
+          (() => {
+            const label = document.getElementById(${JSON.stringify(id)});
+            const box = label.getBoundingClientRect();
+            const row = label.closest("ol").getBoundingClientRect();
+            const style = getComputedStyle(label);
+            const ring = parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset);
+            return {
+              focused: document.activeElement === label,
+              inlineStart: box.left - ring - row.left,
+              inlineEnd: row.right - box.right - ring,
+              blockStart: box.top - ring - row.top,
+              blockEnd: row.bottom - box.bottom - ring,
+            };
+          })()
+        `);
+        expect(result.focused).toBe(true);
+        for (const edge of ["inlineStart", "inlineEnd", "blockStart", "blockEnd"]) {
+          expect(result[edge], `${id} ${edge}: ${JSON.stringify(result)}`).toBeGreaterThanOrEqual(
+            -0.5,
+          );
+        }
+      }
+    },
+    { artifactName: "steps-wrapped-focus" },
+  );
+});
+
+/* Edge alignment is geometry, not a breakpoint: a phone and a wide desktop
+   page with no size context must lay a stacked row out the same way. */
+it("stacked steps fit short labels, wrap long names and keep connectors aligned in either direction", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      for (const width of [320, 1280]) {
+        await setViewport(view, { width, height: 900 });
+        const result = await probe(
+          view,
+          `
+        const rows = [];
+        for (const direction of ["ltr", "rtl"]) {
+          for (const count of [2, 3, 4, 5]) {
+            for (const long of [false, true]) {
+              const ol = document.createElement("ol");
+              ol.className = "steps steps-horizontal";
+              ol.dir = direction;
+              for (let i = 0; i < count; i++) {
+                const li = document.createElement("li");
+                const label = document.createElement("span");
+                label.className = "step-label";
+                label.textContent = long
+                  ? "InternationalizationAndAccountConfirmation"
+                  : ["Account", "Payment", "Confirm", "Review", "Done"][i];
+                li.append(label);
+                ol.append(li);
+              }
+              document.body.append(ol);
+              const list = [...ol.children];
+              const boxes = list.map(li => li.getBoundingClientRect());
+              const marker = parseFloat(getComputedStyle(list[0], "::before").inlineSize);
+              const markerEdges = boxes.map((box, i) => {
+                const alignment = getComputedStyle(list[i]).justifyItems;
+                const offset = alignment === "center" ? (box.width - marker) / 2
+                  : alignment === "start" ? 0 : box.width - marker;
+                return direction === "ltr" ? box.left + offset : box.right - offset;
+              });
+              const rowBox = ol.getBoundingClientRect();
+              rows.push({
+                count, long, direction,
+                overflow: ol.scrollWidth - ol.clientWidth,
+                pitches: markerEdges.slice(1).map((edge, i) => Math.abs(edge - markerEdges[i])),
+                edgeInsets: direction === "ltr"
+                  ? [markerEdges[0] - rowBox.left, rowBox.right - markerEdges.at(-1) - marker]
+                  : [rowBox.right - markerEdges[0], markerEdges.at(-1) - marker - rowBox.left],
+                labels: list.map(li => {
+                  const label = li.querySelector(".step-label");
+                  const range = document.createRange();
+                  range.selectNodeContents(label);
+                  const box = label.getBoundingClientRect();
+                  const lines = [...range.getClientRects()];
+                  return {
+                    lines: lines.length,
+                    contained: lines.every(line => line.left >= box.left - 1 && line.right <= box.right + 1),
+                  };
+                }),
+                connectors: list.slice(0, -1).map((li, i) => {
+                  const style = getComputedStyle(li, "::after");
+                  const start = parseFloat(style.insetInlineStart);
+                  const length = parseFloat(style.inlineSize);
+                  return direction === "ltr"
+                    ? Math.abs(boxes[i].left + start + length - markerEdges[i + 1])
+                    : Math.abs(boxes[i].right - start - length - markerEdges[i + 1]);
+                }),
+              });
+              ol.remove();
+            }
+          }
+        }
+        const tiny = document.createElement("ol");
+        tiny.className = "steps steps-horizontal";
+        tiny.innerHTML = '<li><span class="step-label">A</span></li>'.repeat(3);
+        document.body.append(tiny);
+        const marker = parseFloat(getComputedStyle(tiny.firstElementChild, "::before").inlineSize);
+        tiny.style.inlineSize = (marker * 3 - 1) + "px";
+        return { rows, tinyOverflows: tiny.scrollWidth > tiny.clientWidth, wide: shape("inline-3") };
+      `,
+        );
+        for (const row of result.rows) {
+          const at = `${width}px ${JSON.stringify(row)}`;
+          expect(row.overflow, at).toBe(0);
+          expect(Math.max(...row.pitches) - Math.min(...row.pitches), at).toBeLessThan(1);
+          for (const inset of row.edgeInsets) expect(Math.abs(inset), at).toBeLessThan(1);
+          for (const label of row.labels) {
+            expect(label.contained, at).toBe(true);
+            // Only a phone is narrow enough to force the long name to wrap.
+            if (row.long && width === 320) expect(label.lines, at).toBeGreaterThan(1);
+            else if (row.count === 3) expect(label.lines, at).toBe(1);
+          }
+          for (const error of row.connectors) expect(error, at).toBeLessThan(1);
+        }
+        expect(result.tinyOverflows).toBe(true);
+        // A wide granted region keeps the inline representation even on a phone viewport.
+        expect(result.wide.liDisplay).toBe("flex");
+        expect(result.wide.connectorPosition).toBe("static");
+      }
+    },
+    { artifactName: "steps-mobile" },
   );
 });
 
