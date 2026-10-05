@@ -695,6 +695,18 @@
   }
 }
 
+/* -------------------------------------------------------- table footer */
+
+/* Count and pager split the card footer on one line. Once they stack, a
+   left-aligned pager reads as indented (ghost buttons pad their glyphs), so
+   both centre. Flexbox cannot tell a wrapped line apart, hence the width. */
+@media (max-width: 40rem) {
+  .admini-table-footer {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
 /* ------------------------------------------------------------- invoice */
 
 .admini-invoice {
