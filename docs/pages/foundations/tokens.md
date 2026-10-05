@@ -117,18 +117,23 @@ their own colors.
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 
-Focus styling is outline-first. A global focus baseline applies `--focus-outline` and `--focus-outline-offset`: older browsers show it on `:focus`, while modern browsers limit it to `:focus-visible`. The baseline is a `currentColor` line, so text-like elements (links, `summary`, nav and menu items) follow whatever surface the application painted. Boxed components draw a solid `--focus-ring-width` line in `--focus`: inside the border box on text fields (`.input`, `.textarea`, `.select`), outside at `--focus-outline-offset` on actions (`.btn`, `.close`, choices, switches). The color never follows an intent or a local surface, so `--focus` must hold 3:1 against both `--surface` and `--surface-solid` — the page, fields and a solid band all rely on it. Both lines are `--focus-ring-width` wide. Under `forced-colors: active`, outlines map to the system focus color.
+Focus styling is outline-first. A global focus baseline draws a `--focus-ring-width` line in `--focus-outline-color`, offset by `--focus-outline-offset`: older browsers show it on `:focus`, while modern browsers limit it to `:focus-visible`. The baseline is a `currentColor` line, so text-like elements (links, `summary`, nav and menu items) follow whatever surface the application painted. Boxed components draw a solid `--focus-ring-width` line in `--focus`: inside the border box on text fields (`.input`, `.textarea`, `.select`), outside at `--focus-outline-offset` on actions (`.btn`, `.close`, choices, switches). The color never follows an intent or a local surface, so `--focus` must hold 3:1 against both `--surface` and `--surface-solid` — the page, fields and a solid band all rely on it. Both lines are `--focus-ring-width` wide. Under `forced-colors: active`, outlines map to the system focus color.
 
 ```css
 :root {
   --focus: hsl(268 30% 55%);
 
   --focus-outline-color: currentColor;
-  --focus-outline: var(--focus-ring-width) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
   --focus-ring-width: 2px;
 }
 ```
+
+The line is composed on the focused element, so a theme island or a region
+that sets `--focus-ring-width` widens links and buttons alike. Set
+`--focus-outline` to replace the whole generic line (`4px dashed currentColor`);
+it has no default value. Application CSS that draws the generic line itself
+writes `var(--focus-ring-width) solid var(--focus-outline-color)`.
 
 ### Palette coherence
 

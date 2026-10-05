@@ -66,7 +66,7 @@ Use `.truncate` on the flexible item that should ellipsize inside a constrained 
 
 ## Scroller
 
-Use `.scroller` to apply optional framework overflow treatment to a scroll container: a quieter scrollbar, and faded edges where the region scrolls inline. It does not create overflow; pair it with `.overflow-auto` or a component that already creates overflow.
+Use `.scroller` to apply optional framework overflow treatment to a scroll container: a quieter scrollbar. It does not create overflow; pair it with `.overflow-auto` or a component that already creates overflow.
 
 The engine keeps drawing the scrollbar; `.scroller` only hands it a density
 and a colour that follow the theme. There is no `::-webkit-scrollbar` chrome: rebuilding a thumb
@@ -125,14 +125,11 @@ Components that never wrap scroll horizontally when they do not fit: `.tabs`,
 `.breadcrumb`, `.pagination`, `.steps-horizontal`, and `.table-wrap`. They
 leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
 sit under a short strip, and on touch screens it overlays the strip and hides
-at rest, leaving a clipped item as the only cue. Put `.scroller` on the strip
-itself — the element that scrolls — for a thin, theme-coloured bar and faded
-edges: the edge it can still scroll toward fades, so a strip at rest shows
-its first item unfaded and a strip at its end shows its last. The fade needs
-scroll-driven animations; elsewhere the strip simply scrolls. It follows the
-strip's own direction, so an LTR strip inside an RTL page fades on the right.
-Keyboard focus and `reveal-current` stop an item clear of the fade, its focus
-line included.
+at rest, leaving a clipped item as the cue that the strip continues. Put
+`.scroller` on the strip itself — the element that scrolls — for a thin,
+theme-coloured bar. There is no edge fade (overflow shadow, scroll hint): the
+clipped item already says there is more. Keyboard focus and `reveal-current`
+stop an item with its focus line inside the strip.
 
 ```html
 <ol class="breadcrumb scroller" data-enhance="reveal-current" aria-label="Breadcrumb">
@@ -158,13 +155,7 @@ pagination on one `.cluster`: a `<nav>` directly around `.breadcrumb`,
 </div>
 ```
 
-The fade is a mask over the whole region, so on a bordered region such as
-`.table-wrap` it also fades the side borders while there is more to scroll.
-It runs as an animation, so on an element with its own `animation` one of the
-two loses: put `.scroller` on the inner element that scrolls instead.
-
 ## CSS hooks
 
 - `--scroller-track` — scrollbar track color.
 - `--scroller-thumb` — scrollbar thumb color.
-- `--scroller-fade-size` — width of the edge fade; the scroll-padding follows it.

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Focus line width fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    /* A theme island and a plain region each set the ring width; the generic
+       line must follow both, like the boxed ring. */
+    [data-theme="thick"] { --focus-ring-width: 3px; }
+    .local { --focus-ring-width: 6px; }
+    .custom { --focus-outline: 5px dashed currentColor; }
+  </style>
+</head>
+<body>
+  <a href="#root" id="root-link">Root link</a>
+  <button class="btn" type="button" id="root-btn">Root button</button>
+  <div data-theme="thick">
+    <a href="#island" id="island-link">Island link</a>
+    <button class="btn" type="button" id="island-btn">Island button</button>
+    <div class="local">
+      <a href="#local" id="local-link">Local link</a>
+      <button class="btn" type="button" id="local-btn">Local button</button>
+    </div>
+  </div>
+  <div class="custom">
+    <a href="#custom" id="custom-link">Custom link</a>
+  </div>
+</body>
+</html>
