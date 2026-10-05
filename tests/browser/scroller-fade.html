@@ -49,6 +49,15 @@
     <li><a class="btn ghost" href="#1" aria-current="page">1</a></li>
   </ol>
 
+  <!-- scroll-padding follows --scroller-fade-size, and .scroller sets it on a
+       composed .tabs whatever the import order. -->
+  <ol class="breadcrumb scroller" id="compact" style="--scroller-fade-size: 0.5rem">
+    <li><a href="#a">Home</a></li>
+  </ol>
+  <div class="tabs scroller" id="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true">One</button>
+  </div>
+
   <!-- Scrolls on the block axis only: the inline fade must stay off. -->
   <div class="overflow-auto scroller" id="vertical" style="max-block-size: 4rem">
     <p>One</p><p>Two</p><p>Three</p><p>Four</p>
