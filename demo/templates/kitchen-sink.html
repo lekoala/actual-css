@@ -61,14 +61,29 @@
 
     body { padding: 2rem; }
     section { margin-block: 2rem; }
-    section h2 {
-      font-size: var(--font-size-lg);
+    /* Section titles keep the UA h2 size so they outrank the h3 sub-groups,
+       which read as quiet labels rather than competing headings. */
+    section > h2 {
       font-weight: var(--font-weight-semibold);
       margin-block-end: var(--space-30);
       border-block-end: var(--border-width) solid var(--border);
       padding-block-end: var(--space-20);
     }
+    section > h3 {
+      margin-block: var(--space-40) var(--space-20);
+      color: var(--text-muted);
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-semibold);
+    }
     .sink-col { display: grid; gap: var(--space-20); }
+    .sink-form { display: grid; gap: var(--space-40); align-content: start; }
+    /* Label column + specimen row, for sections that compare one axis. */
+    .sink-rows {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      align-items: center;
+      gap: var(--space-30) var(--space-40);
+    }
     /* A data-theme island recomputes its tokens but paints nothing: without
        its own surface, its ink lands on the page theme's background (a light
        island under neon wrote dark labels on the dark page). */
@@ -103,7 +118,8 @@
   </select>
 
   <label class="cluster tight" title="Demo-only lab control: explores the typeface width axis, not a framework utility.">
-    <input class="range" type="range" id="width-lab" min="75" max="100" step="1" value="100" aria-label="Width lab (demo only)">
+    <!-- A range fills its line by default; a fixed track keeps its label beside it. -->
+    <input class="range" type="range" id="width-lab" min="75" max="100" step="1" value="100" aria-label="Width lab (demo only)" style="inline-size:10rem">
     <span>Width <span id="width-lab-value">100%</span> (demo only)</span>
   </label>
   </div>
@@ -173,42 +189,51 @@
   <!-- 2. Badges -->
   <section>
     <h2>Badges</h2>
-    <div class="cluster items-start">
-      <div class="sink-col">
+    <!-- One row per style, intents in the same order on every row. Soft is
+         the default style, so the first row needs no modifier. -->
+    <div class="sink-rows">
+      <span class="muted">Soft</span>
+      <div class="cluster">
         <span class="badge">Default</span>
         <span class="badge primary">Primary</span>
         <span class="badge success">Success</span>
         <span class="badge warning">Warning</span>
         <span class="badge danger">Danger</span>
       </div>
-      <!-- soft is default, no change -->
-      <div class="sink-col">
-        <span class="badge soft primary">Soft</span>
-        <span class="badge soft success">Soft</span>
-        <span class="badge soft warning">Soft</span>
-        <span class="badge soft danger">Soft</span>
+      <span class="muted">Solid</span>
+      <div class="cluster">
+        <span class="badge solid">Default</span>
+        <span class="badge solid primary">Primary</span>
+        <span class="badge solid success">Success</span>
+        <span class="badge solid warning">Warning</span>
+        <span class="badge solid danger">Danger</span>
       </div>
-      <div class="sink-col">
-        <span class="badge solid primary">Solid</span>
-        <span class="badge solid success">Solid</span>
-        <span class="badge solid warning">Solid</span>
-        <span class="badge solid danger">Solid</span>
+      <span class="muted">Outline</span>
+      <div class="cluster">
+        <span class="badge outline">Default</span>
+        <span class="badge outline primary">Primary</span>
+        <span class="badge outline success">Success</span>
+        <span class="badge outline warning">Warning</span>
+        <span class="badge outline danger">Danger</span>
       </div>
-      <div class="sink-col">
-        <span class="badge outline primary">Outline</span>
-        <span class="badge outline success">Outline</span>
-      </div>
-      <div class="sink-col">
+      <span class="muted">Sizes</span>
+      <div class="cluster">
         <span class="badge sm primary">Small</span>
+        <span class="badge primary">Regular</span>
         <span class="badge lg primary">Large</span>
       </div>
-      <div class="sink-col">
+      <span class="muted">Dots</span>
+      <div class="cluster">
         <span class="badge primary" style="--badge-dot-size:0.5rem"></span>
         <span class="badge success" style="--badge-dot-size:0.5rem"></span>
+        <span class="badge warning" style="--badge-dot-size:0.5rem"></span>
         <span class="badge danger" style="--badge-dot-size:0.5rem"></span>
       </div>
-      <a class="badge primary" href="#">Link badge</a>
-      <button class="badge primary">Button badge</button>
+      <span class="muted">Interactive</span>
+      <div class="cluster">
+        <a class="badge primary" href="#">Link badge</a>
+        <button class="badge primary">Button badge</button>
+      </div>
     </div>
   </section>
 
@@ -305,7 +330,10 @@
   <!-- 6. Forms -->
   <section>
     <h2>Forms</h2>
-    <div style="max-inline-size:30rem;display:grid;gap:var(--space-40)">
+    <!-- Text entry on one side, choices on the other: two columns once both
+         fit, one column on a phone. -->
+    <div class="grid" style="--grid-min:26rem;gap:var(--space-40) var(--space-60)">
+    <div class="sink-form">
       <div class="field">
         <label class="field-label" for="name">Name</label>
         <input class="input" id="name" type="text" placeholder="Enter your name">
@@ -348,6 +376,50 @@
         </select>
         <span class="field-help">.native disables the enhanced picker</span>
       </div>
+      <div class="field danger">
+        <label class="field-label" for="danger">Danger field</label>
+        <input class="input" id="danger" type="text" value="Invalid value">
+        <span class="field-error">This field has an error</span>
+      </div>
+      <div class="input-icon">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input class="input" type="search" placeholder="Search with icon">
+      </div>
+      <div class="input-icon">
+        <input class="input" type="email" placeholder="Email with trailing icon">
+        <i class="ti ti-mail" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="sink-form">
+      <div class="field">
+        <label class="field-label" for="vol">Range slider</label>
+        <input class="range" id="vol" type="range" min="0" max="100" value="65">
+      </div>
+      <div class="field">
+        <label class="field-label" for="disabled-range">Range disabled</label>
+        <input class="range" id="disabled-range" type="range" min="0" max="100" value="30" disabled>
+      </div>
+      <div class="field">
+        <label class="field-label" for="otp">OTP code</label>
+        <div class="otp">
+          <input id="otp" type="text" inputmode="numeric" maxlength="4">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="cluster">
+        <span class="field-label">Rating</span>
+        <span class="rating" role="radiogroup" aria-label="Rating">
+          <input type="radio" name="rating-demo" value="1">
+          <input type="radio" name="rating-demo" value="2" checked>
+          <input type="radio" name="rating-demo" value="3">
+          <input type="radio" name="rating-demo" value="4">
+          <input type="radio" name="rating-demo" value="5">
+        </span>
+      </div>
+      <div class="cluster">
+        <label class="field-label" for="color">Color picker</label>
+        <input class="color" id="color" type="color" value="#7048e8">
+      </div>
       <label class="choice">
         <input class="check" type="checkbox" checked>
         Remember me
@@ -368,11 +440,6 @@
         <input class="check" type="checkbox" disabled>
         Disabled option
       </label>
-      <div class="field danger">
-        <label class="field-label" for="danger">Danger field</label>
-        <input class="input" id="danger" type="text" value="Invalid value">
-        <span class="field-error">This field has an error</span>
-      </div>
       <div class="field">
         <label class="field-label">Choice cards</label>
         <form class="grid grid-3">
@@ -418,26 +485,11 @@
           </div>
         </fieldset>
       </div>
-      <div class="field">
-        <label class="field-label" for="vol">Range slider</label>
-        <input class="range" id="vol" type="range" min="0" max="100" value="65">
-      </div>
-      <div class="field">
-        <label class="field-label" for="disabled-range">Range disabled</label>
-        <input class="range" id="disabled-range" type="range" min="0" max="100" value="30" disabled>
-      </div>
-      <div class="input-icon">
-        <i class="ti ti-search" aria-hidden="true"></i>
-        <input class="input" type="search" placeholder="Search with icon">
-      </div>
-      <div class="input-icon">
-        <input class="input" type="email" placeholder="Email with trailing icon">
-        <i class="ti ti-mail" aria-hidden="true"></i>
-      </div>
-      <div class="cluster form-actions">
-        <button class="btn primary">Submit</button>
-        <button class="btn">Cancel</button>
-      </div>
+    </div>
+    </div>
+    <div class="cluster form-actions" style="margin-block-start:var(--space-40)">
+      <button class="btn primary">Submit</button>
+      <button class="btn">Cancel</button>
     </div>
   </section>
 
@@ -611,33 +663,29 @@
     </div>
   </section>
 
-  <!-- 13. Spinner -->
+  <!-- 13. Loading -->
   <section>
-    <h2>Spinner</h2>
-    <div class="cluster items-start">
-      <span class="spinner"></span>
+    <h2>Loading</h2>
+    <h3>Spinner</h3>
+    <div class="cluster">
       <span class="spinner sm primary"></span>
+      <span class="spinner"></span>
       <span class="spinner lg danger"></span>
-    </div>
-    <div class="cluster items-start" style="margin-block-start:var(--space-20)">
       <button class="btn primary" type="button" aria-busy="true" disabled>
         <span class="spinner" aria-hidden="true"></span>
         Saving…
       </button>
-      <article class="card" style="max-inline-size:18rem" aria-busy="true" aria-label="Loading card">
+    </div>
+    <h3>Busy card and skeleton</h3>
+    <!-- Same width side by side: the two ways to show a card that is not
+         ready yet. Placeholders take no width of their own, so the skeleton
+         card needs one, or the wrapping row shrinks it to the avatar. -->
+    <div class="cluster items-start">
+      <article class="card" style="inline-size:min(100%, 20rem)" aria-busy="true" aria-label="Loading card">
         <hgroup><h3>Card loading</h3><p class="muted">Please wait</p></hgroup>
         <p>Content obscured while loading.</p>
         <span class="spinner lg" aria-hidden="true"></span>
       </article>
-    </div>
-  </section>
-
-  <!-- 14. Skeleton -->
-  <section>
-    <h2>Skeleton</h2>
-    <div class="cluster items-start">
-      <!-- Placeholders take no width of their own: the card needs one here,
-           or the wrapping row shrinks it to the avatar. -->
       <article class="card" style="inline-size:min(100%, 20rem)" role="status" aria-label="Loading article">
         <div class="skeleton" data-shape="box" aria-hidden="true"></div>
         <div class="skeleton" data-shape="title" aria-hidden="true"></div>
@@ -660,16 +708,21 @@
   <!-- 15. Progress / Meter -->
   <section>
     <h2>Progress / Meter</h2>
-    <div style="display:grid;gap:var(--space-30);max-inline-size:20rem">
-      <progress class="progress" value="60" max="100"></progress>
-      <progress class="progress" value="30" max="100"></progress>
-      <progress class="progress primary" value="85" max="100"></progress>
-      <progress class="progress"></progress>
-    </div>
-    <div style="display:grid;gap:var(--space-20);max-inline-size:16rem;margin-block-start:var(--space-30)">
-      <meter class="meter" min="0" max="100" value="25" low="33" optimum="80" high="66"></meter>
-      <meter class="meter" min="0" max="100" value="50" low="33" optimum="80" high="66"></meter>
-      <meter class="meter" min="0" max="100" value="85" low="33" optimum="80" high="66"></meter>
+    <!-- Progress is a task moving toward done; meter is a measurement whose
+         low / high / optimum bands pick the intent. -->
+    <div class="sink-rows" style="max-inline-size:32rem">
+      <label class="muted" for="p-60">Progress 60%</label>
+      <progress class="progress" id="p-60" value="60" max="100"></progress>
+      <label class="muted" for="p-85">Primary 85%</label>
+      <progress class="progress primary" id="p-85" value="85" max="100"></progress>
+      <label class="muted" for="p-indet">Indeterminate</label>
+      <progress class="progress" id="p-indet"></progress>
+      <label class="muted" for="m-low">Meter, low</label>
+      <meter class="meter" id="m-low" min="0" max="100" value="25" low="33" optimum="80" high="66"></meter>
+      <label class="muted" for="m-mid">Meter, medium</label>
+      <meter class="meter" id="m-mid" min="0" max="100" value="50" low="33" optimum="80" high="66"></meter>
+      <label class="muted" for="m-high">Meter, optimum</label>
+      <meter class="meter" id="m-high" min="0" max="100" value="85" low="33" optimum="80" high="66"></meter>
     </div>
   </section>
 
@@ -678,13 +731,16 @@
     <h2>Steps</h2>
     <!-- Forced colors flattens complete and upcoming to the same ringed disc;
          --step-complete-mark is the documented way to keep them apart. -->
-    <div class="cluster items-start">
-      <ol class="steps steps-horizontal" style="flex:1 1 22rem">
+    <!-- A wide row only reads well inline, which needs a size context: the
+         first row has one, capped just above the 60rem inline threshold. The
+         second is held to a stacked width. -->
+    <div class="stack" style="gap:var(--space-50)">
+      <ol class="steps steps-horizontal container-query" style="max-inline-size:64rem">
         <li class="step-complete"><span class="step-label">Account</span></li>
         <li aria-current="step"><span class="step-label">Payment</span></li>
         <li><span class="step-label">Confirm</span></li>
       </ol>
-      <ol class="steps steps-horizontal" style="flex:1 1 22rem;--step-complete-mark:'✓'">
+      <ol class="steps steps-horizontal" style="max-inline-size:28rem;--step-complete-mark:'✓'">
         <li class="step-complete"><span class="step-label">Account</span></li>
         <li aria-current="step"><span class="step-label">Payment</span></li>
         <li><span class="step-label">Confirm</span></li>
@@ -713,8 +769,8 @@
   <!-- 18. Breadcrumb -->
   <section>
     <h2>Breadcrumb</h2>
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-      <ol>
+    <nav aria-label="Breadcrumb">
+      <ol class="breadcrumb">
         <li><a href="#">Home</a></li>
         <li><a href="#">Components</a></li>
         <li><span aria-current="page">Breadcrumb</span></li>
@@ -811,20 +867,34 @@
     </div>
   </section>
 
-  <!-- 24. Dark mode -->
+  <!-- 24. Themes & scopes -->
   <section>
-    <h2>Dark mode</h2>
-    <p>Use the theme selector at the top to switch <code>data-theme</code>.</p>
-  </section>
+    <h2>Themes &amp; scopes</h2>
+    <p>The selector at the top switches the page's <code>data-theme</code>.
+      Each block below sets one scope on its container; nothing inside
+      restates it.</p>
 
-  <!-- 25. Theme island -->
-  <section>
-    <h2>Theme island</h2>
-    <p>A nested <code>[data-theme="forest"]</code> island must recompute the
-      theme-derived aliases from its own tokens, not inherit the parent's
-      resolved values: pressed button, selected/disabled choices, card shadow,
-      focus ring, and text selection should all follow the island's green
-      palette.</p>
+    <h3>Dark island</h3>
+    <!-- data-theme recomputes every token below it: fields and intents too. -->
+    <div data-theme="dark" class="stack sink-island">
+      <p>Everything here follows the dark palette.</p>
+      <div class="cluster">
+        <button class="btn" type="button">Button</button>
+        <button class="btn primary outline" type="button">Primary outline</button>
+        <span class="badge">Badge</span>
+        <a href="#">Link</a>
+        <input class="input" aria-label="Island input" placeholder="Island input" style="max-inline-size:12rem">
+      </div>
+      <article class="card stack" style="max-inline-size:20rem">
+        <p>A card takes the island's raised surface.</p>
+      </article>
+    </div>
+
+    <h3>Forest island</h3>
+    <!-- A nested island recomputes the theme-derived aliases from its own
+         tokens instead of inheriting the parent's resolved values. -->
+    <p>Pressed button, selected and disabled choices, card shadow, focus ring
+      and text selection all follow the green palette.</p>
     <div class="cluster items-start sink-island" data-theme="forest">
       <button class="btn" type="button" aria-pressed="false">Toggle</button>
       <button class="btn" type="button" aria-pressed="true">Toggle</button>
@@ -846,47 +916,25 @@
         <p>Its shadow follows the island's <code>--shadow-color</code>.</p>
       </article>
     </div>
-  </section>
-
-  <!-- 26. Scopes -->
-  <section>
-    <h2>Scopes</h2>
-    <p>Three contexts that reach components by inheritance. Each block sets one
-      scope on its container; nothing inside restates it.</p>
-
-    <h3>Theme island</h3>
-    <!-- data-theme recomputes every token below it: fields and intents too. -->
-    <div data-theme="dark" class="stack" style="padding:var(--space-40); background:var(--surface); color:var(--text)">
-      <p>Everything here follows the dark palette.</p>
-      <div class="cluster">
-        <button class="btn" type="button">Button</button>
-        <button class="btn primary outline" type="button">Primary outline</button>
-        <span class="badge">Badge</span>
-        <a href="#">Link</a>
-        <input class="input" aria-label="Island input" style="max-inline-size:12rem">
-      </div>
-      <article class="card stack" style="max-inline-size:20rem">
-        <p>A card takes the island's raised surface.</p>
-      </article>
-    </div>
 
     <h3>Density</h3>
-    <!-- Density belongs on the container, never on the controls. -->
+    <!-- Density belongs on the container, never on the controls. Class names
+         stay in <code>: an overline would uppercase them. -->
     <div class="cluster items-start">
       <div class="compact sink-col">
-        <p class="overline">.compact</p>
+        <p><code>.compact</code></p>
         <button class="btn primary" type="button">Button</button>
         <input class="input" aria-label="Compact input">
         <span class="badge">Badge</span>
       </div>
       <div class="sink-col">
-        <p class="overline">default</p>
+        <p class="muted">default</p>
         <button class="btn primary" type="button">Button</button>
         <input class="input" aria-label="Default input">
         <span class="badge">Badge</span>
       </div>
       <div class="spacious sink-col">
-        <p class="overline">.spacious</p>
+        <p><code>.spacious</code></p>
         <button class="btn primary" type="button">Button</button>
         <input class="input" aria-label="Spacious input">
         <span class="badge">Badge</span>
@@ -906,9 +954,10 @@
     </article>
   </section>
 
-  <!-- 27. Disabled & special states -->
+  <!-- 25. Disabled states — enabled counterparts live in their own sections. -->
   <section>
-    <h2>Disabled &amp; special states</h2>
+    <h2>Disabled states</h2>
+    <h3>Controls</h3>
     <div class="cluster items-start">
       <div class="sink-col">
         <span class="badge" aria-disabled="true">Disabled badge</span>
@@ -936,24 +985,20 @@
         <button class="tab" type="button" role="tab" aria-selected="false" aria-disabled="true">Unavailable</button>
       </div>
     </div>
-    <div style="max-inline-size:30rem;display:grid;gap:var(--space-40)">
-      <div class="field"><label class="field-label" for="d-input">Disabled input</label><input class="input" id="d-input" type="text" value="Disabled" disabled></div>
-      <div class="field"><label class="field-label" for="d-select">Disabled select</label><select class="select" id="d-select" disabled><option>One</option></select></div>
-      <div class="field"><label class="field-label" for="d-textarea">Disabled textarea</label><textarea class="textarea" id="d-textarea" disabled>Disabled</textarea></div>
-    </div>
-    <div style="margin-block-start:var(--space-40);display:grid;gap:var(--space-40)">
-      <div class="cluster">
-        <span class="field-label">Rating</span>
-        <span class="rating" role="radiogroup" aria-label="Rating">
-          <input type="radio" name="rating-demo" value="1">
-          <input type="radio" name="rating-demo" value="2" checked>
-          <input type="radio" name="rating-demo" value="3">
-          <input type="radio" name="rating-demo" value="4">
-          <input type="radio" name="rating-demo" value="5">
-        </span>
+    <h3>Fields</h3>
+    <div class="grid items-start" style="--grid-min:16rem">
+      <div class="field"><label class="field-label" for="d-input">Input</label><input class="input" id="d-input" type="text" value="Disabled" disabled></div>
+      <div class="field"><label class="field-label" for="d-select">Select</label><select class="select" id="d-select" disabled><option>One</option></select></div>
+      <div class="field"><label class="field-label" for="d-textarea">Textarea</label><textarea class="textarea" id="d-textarea" disabled>Disabled</textarea></div>
+      <div class="field">
+        <label class="field-label" for="d-otp">OTP code</label>
+        <div class="otp">
+          <input id="d-otp" type="text" inputmode="numeric" maxlength="4" disabled>
+          <span></span><span></span><span></span><span></span>
+        </div>
       </div>
-      <div class="cluster">
-        <span class="field-label">Rating (disabled)</span>
+      <div class="field">
+        <span class="field-label">Rating</span>
         <span class="rating" role="radiogroup" aria-label="Rating disabled">
           <input type="radio" name="rating-demo-d" value="1" disabled>
           <input type="radio" name="rating-demo-d" value="2" disabled>
@@ -962,27 +1007,9 @@
           <input type="radio" name="rating-demo-d" value="5" disabled>
         </span>
       </div>
-      <div class="cluster">
-        <span class="field-label">OTP code</span>
-        <div class="otp" aria-label="Code">
-          <input type="text" inputmode="numeric" maxlength="4" aria-label="One-time code">
-          <span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-      <div class="cluster">
-        <span class="field-label">OTP code (disabled)</span>
-        <div class="otp" aria-label="Code disabled">
-          <input type="text" inputmode="numeric" maxlength="4" disabled aria-label="One-time code disabled">
-          <span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-      <div class="cluster">
-        <span class="field-label">Color picker</span>
-        <input class="color" type="color" value="#7048e8" aria-label="Color picker">
-      </div>
-      <div class="cluster">
-        <span class="field-label">Color picker (disabled)</span>
-        <input class="color" type="color" value="#7048e8" disabled aria-label="Color picker disabled">
+      <div class="field">
+        <label class="field-label" for="d-color">Color picker</label>
+        <input class="color" id="d-color" type="color" value="#7048e8" disabled>
       </div>
     </div>
   </section>

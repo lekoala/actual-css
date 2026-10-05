@@ -96,6 +96,13 @@ export async function useSourceCss(view) {
       swaps.push(decodeURI(built.pathname) + " -> " + decodeURI(source.pathname));
     }
     await Promise.all(loads);
+    /* The swap is a style change, so every transitioned property starts
+       animating from the built sheet's value: a shot then caught filled
+       buttons half-faded, which no visitor sees. getAnimations() flushes
+       style, so the transitions exist by now; settle them at their end. */
+    for (const animation of document.getAnimations()) {
+      if (animation instanceof CSSTransition) animation.finish();
+    }
     return swaps;
   })()`);
 }
