@@ -23,6 +23,8 @@
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
 - Left/Right select tabs and wrap at the ends. Home/End jump to first/last. Down moves focus into the selected panel.
 - A tab list needs both `.tabs` and `role="tablist"`; `.tab` styles each trigger.
+  A tab belongs to its closest `role="tablist"`. `data-enhance="tabs"` on an
+  element without that role wires nothing and warns in the console.
 - Naming follows the container/item convention (like `menu` / `menu-item`):
   `.tabs` is the strip, `.tab` is one trigger. The JS module
   (`actual-css/js/tab`) is named for the file; the behavior token
