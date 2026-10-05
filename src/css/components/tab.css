@@ -136,15 +136,13 @@
   border-end-end-radius: 0;
 }
 
-/* Any aria-current value marks the current tab except "false" and "", which
-   ARIA reads as not current (React and Vue serialize a false binding that
-   way), as for .list-item and .nav-link. The value stays free, so a navigation
-   flyout trigger can mark the current section with "true" while the link
-   inside its panel carries "page". The exclusion sits in :where() so it adds
-   no specificity, and chains single :not()s, since a :not() list is invalid
-   below the floor and would drop the whole rule. */
+/* A link tab is current on aria-current="page". "true" is for the one place
+   where no page token fits: a navigation flyout trigger whose panel holds the
+   current page. State selectors name their values, never the attribute's
+   presence, so "false" (what React and Vue serialize for a false binding)
+   stays inert. */
 .tab[aria-selected="true"],
-.tab[aria-current]:where(:not([aria-current="false"]):not([aria-current=""])) {
+.tab:is([aria-current="page"], [aria-current="true"]) {
   color: var(--intent, var(--state-selected));
 }
 
@@ -153,7 +151,7 @@
    forced colors and erase the distinction. currentColor follows the palette the
    UA forces, so no forced-colors block is needed. */
 .tab[aria-selected="true"]::after,
-.tab[aria-current]:where(:not([aria-current="false"]):not([aria-current=""]))::after {
+.tab:is([aria-current="page"], [aria-current="true"])::after {
   content: "";
   position: absolute;
   inset-inline: 0;
@@ -163,7 +161,7 @@
 
 .tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after,
 .tabs:where([aria-orientation="vertical"])
-  .tab[aria-current]:where(:not([aria-current="false"]):not([aria-current=""]))::after {
+  .tab:is([aria-current="page"], [aria-current="true"])::after {
   inset-block: 0;
   inset-inline: auto 0;
   border-block-end: 0;

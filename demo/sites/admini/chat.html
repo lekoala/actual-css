@@ -18,7 +18,7 @@
 <body>
   <div class="admini-shell">
     <!-- admini-shell:sidebar -->
-    <aside class="admini-sidebar scroller stable-gutter" aria-label="Primary navigation">
+    <aside class="admini-sidebar admini-rail scroller stable-gutter" aria-label="Primary navigation">
       <a class="navbar-brand" href="index.html">
         <span class="avatar primary"><abbr>AD</abbr></span>
         <span>Admini</span>
@@ -191,57 +191,61 @@
       <!-- /admini-shell:topbar -->
 
     <main class="admini-chat-shell" id="chat-shell">
-        <section class="admini-chat-list scroller stable-gutter" aria-label="Conversations">
-          <button class="media admini-chat-item" type="button" aria-current="true" data-chat-item>
-            <span class="avatar primary"><abbr>AM</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Ada Morgan</strong>
-                <span class="muted" style="font-size: var(--font-size-xs);">09:41</span>
-              </span>
-              <span class="muted truncate">Sounds good, see you then!</span>
-            </span>
-          </button>
-          <button class="media admini-chat-item" type="button" data-chat-item>
-            <span class="avatar success"><abbr>JT</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Jacob Thornton</strong>
-                <span class="badge primary sm solid">2</span>
-              </span>
-              <span class="muted truncate">Pushed the fix, can you review?</span>
-            </span>
-          </button>
-          <button class="media admini-chat-item" type="button" data-chat-item>
-            <span class="avatar warning"><abbr>LB</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Larry the Bird</strong>
-                <span class="muted" style="font-size: var(--font-size-xs);">Yesterday</span>
-              </span>
-              <span class="muted truncate">Thanks for the update.</span>
-            </span>
-          </button>
-          <button class="media admini-chat-item" type="button" data-chat-item>
-            <span class="avatar"><abbr>RM</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Rin Moreau</strong>
-                <span class="badge primary sm solid">1</span>
-              </span>
-              <span class="muted truncate">Typing…</span>
-            </span>
-          </button>
-          <button class="media admini-chat-item" type="button" data-chat-item>
-            <span class="avatar neutral"><abbr>TS</abbr></span>
-            <span class="admini-chat-item-body">
-              <span class="admini-chat-item-top">
-                <strong>Theo Silva</strong>
-                <span class="muted" style="font-size: var(--font-size-xs);">3d</span>
-              </span>
-              <span class="muted truncate">Let's sync tomorrow morning.</span>
-            </span>
-          </button>
+        <section class="admini-chat-list scroller" aria-label="Conversations">
+          <!-- The open conversation is the current item of this master/detail
+               view, not a page of its own: aria-current="true". -->
+          <ul class="list items-start">
+            <li>
+              <a class="list-item" href="#ada-morgan" aria-current="true" data-chat-item>
+                <span class="avatar primary"><abbr>AM</abbr></span>
+                <span class="list-item-content">
+                  <strong class="list-item-title">Ada Morgan</strong>
+                  <span class="list-item-text truncate">Sounds good, see you then!</span>
+                </span>
+                <small class="list-item-trailing muted">09:41</small>
+              </a>
+            </li>
+            <li>
+              <a class="list-item" href="#jacob-thornton" data-chat-item>
+                <span class="avatar success"><abbr>JT</abbr></span>
+                <span class="list-item-content">
+                  <strong class="list-item-title">Jacob Thornton</strong>
+                  <span class="list-item-text truncate">Pushed the fix, can you review?</span>
+                </span>
+                <span class="list-item-trailing badge primary sm solid">2</span>
+              </a>
+            </li>
+            <li>
+              <a class="list-item" href="#larry-the-bird" data-chat-item>
+                <span class="avatar warning"><abbr>LB</abbr></span>
+                <span class="list-item-content">
+                  <strong class="list-item-title">Larry the Bird</strong>
+                  <span class="list-item-text truncate">Thanks for the update.</span>
+                </span>
+                <small class="list-item-trailing muted">Yesterday</small>
+              </a>
+            </li>
+            <li>
+              <a class="list-item" href="#rin-moreau" data-chat-item>
+                <span class="avatar"><abbr>RM</abbr></span>
+                <span class="list-item-content">
+                  <strong class="list-item-title">Rin Moreau</strong>
+                  <span class="list-item-text truncate">Typing…</span>
+                </span>
+                <span class="list-item-trailing badge primary sm solid">1</span>
+              </a>
+            </li>
+            <li>
+              <a class="list-item" href="#theo-silva" data-chat-item>
+                <span class="avatar neutral"><abbr>TS</abbr></span>
+                <span class="list-item-content">
+                  <strong class="list-item-title">Theo Silva</strong>
+                  <span class="list-item-text truncate">Let's sync tomorrow morning.</span>
+                </span>
+                <small class="list-item-trailing muted">3d</small>
+              </a>
+            </li>
+          </ul>
         </section>
 
         <section class="admini-chat-thread" aria-label="Conversation with Ada Morgan">
@@ -315,7 +319,7 @@
     </div>
   </div>
 
-  <dialog class="drawer" data-theme="dim" id="navigation-drawer" aria-label="Navigation">
+  <dialog class="drawer admini-rail" id="navigation-drawer" aria-label="Navigation">
     <header>
       <strong>Admini</strong>
       <form method="dialog">
@@ -350,7 +354,9 @@
     const chatShell = document.getElementById("chat-shell");
 
     chatShell.querySelectorAll("[data-chat-item]").forEach((item) => {
-      item.addEventListener("click", () => {
+      item.addEventListener("click", (event) => {
+        // Stands in for the app's router: no real route behind the hash.
+        event.preventDefault();
         chatShell.querySelectorAll("[data-chat-item]").forEach((el) => el.removeAttribute("aria-current"));
         item.setAttribute("aria-current", "true");
         item.querySelector(".badge")?.remove();

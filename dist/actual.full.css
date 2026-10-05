@@ -7776,8 +7776,7 @@ a.avatar[aria-disabled="true"] {
 
 /* nav-link serves two contracts: plain page navigation (aria-current="page")
    and scrollspy, which toggles aria-current="location" on the active link.
-   Presence is the contract: the attribute is set on the current link and
-   removed everywhere else, never serialized as aria-current="false".
+   Those two values are the contract; any other, "false" included, is inert.
    Selection never changes text metrics: the shared medium weight is kept and
    the current link is carried by the selected accent. */
 .nav-link:hover {
@@ -7788,7 +7787,7 @@ a.avatar[aria-disabled="true"] {
 /* Current last, equal specificity to :hover (0,2,0): a hovered current link
    keeps the selected accent instead of dropping to --text. The surface fill is
    shared with the hover rule above. */
-.nav-link[aria-current] {
+.nav-link:is([aria-current="page"], [aria-current="location"]) {
   background: var(--surface-subtle);
   color: var(--state-selected);
 }
@@ -7801,7 +7800,7 @@ a.avatar[aria-disabled="true"] {
    above keeps the light chip where color-mix is missing, with ink that is
    legible on it. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .nav-link:is(:hover, [aria-current]) {
+  .nav-link:is(:hover, [aria-current="page"], [aria-current="location"]) {
     background: color-mix(in oklch, currentColor 10%, transparent);
   }
 
@@ -7810,7 +7809,7 @@ a.avatar[aria-disabled="true"] {
   }
 
   /* After :hover so a hovered current link keeps the selected accent. */
-  .nav-link[aria-current] {
+  .nav-link:is([aria-current="page"], [aria-current="location"]) {
     color: var(--ui-fg, var(--state-selected));
   }
 }
@@ -7847,7 +7846,7 @@ a.avatar[aria-disabled="true"] {
    an app-positioned decoration to a new containing block.
    The trait sits centered in the link's inline padding with rounded ends: flush
    on the edge, a square line read as pasted onto the rounded fill. */
-.nav-list .nav-link[aria-current]::before {
+.nav-list .nav-link:is([aria-current="page"], [aria-current="location"])::before {
   content: "";
   position: absolute;
   inset-block: var(--space-20);
@@ -7946,7 +7945,7 @@ a.avatar[aria-disabled="true"] {
    holds a link would clip that link's focus line, and keeps the label rule
    above instead. Its own rule, never merged with the one above: a browser
    without :has() drops it alone, and bare text then keeps its full width. */
-.breadcrumb > li[aria-current]:not(:has(> *)) {
+.breadcrumb > li[aria-current="page"]:not(:has(> *)) {
   display: block;
   min-inline-size: 2em;
   min-inline-size: calc-size(max-content, min(size, 2em));
@@ -8194,12 +8193,13 @@ a.avatar[aria-disabled="true"] {
   border-end-end-radius: 0;
 }
 
-/* Presence is the current contract, as for .list-item and .nav-link: the
-   attribute is removed, never serialized as "false". The value stays free, so
-   a navigation flyout trigger can mark the current section with "true" while
-   the link inside its panel carries "page". */
+/* A link tab is current on aria-current="page". "true" is for the one place
+   where no page token fits: a navigation flyout trigger whose panel holds the
+   current page. State selectors name their values, never the attribute's
+   presence, so "false" (what React and Vue serialize for a false binding)
+   stays inert. */
 .tab[aria-selected="true"],
-.tab[aria-current] {
+.tab:is([aria-current="page"], [aria-current="true"]) {
   color: var(--intent, var(--state-selected));
 }
 
@@ -8208,7 +8208,7 @@ a.avatar[aria-disabled="true"] {
    forced colors and erase the distinction. currentColor follows the palette the
    UA forces, so no forced-colors block is needed. */
 .tab[aria-selected="true"]::after,
-.tab[aria-current]::after {
+.tab:is([aria-current="page"], [aria-current="true"])::after {
   content: "";
   position: absolute;
   inset-inline: 0;
@@ -8217,7 +8217,8 @@ a.avatar[aria-disabled="true"] {
 }
 
 .tabs:where([aria-orientation="vertical"]) .tab[aria-selected="true"]::after,
-.tabs:where([aria-orientation="vertical"]) .tab[aria-current]::after {
+.tabs:where([aria-orientation="vertical"])
+  .tab:is([aria-current="page"], [aria-current="true"])::after {
   inset-block: 0;
   inset-inline: auto 0;
   border-block-end: 0;
@@ -8240,7 +8241,7 @@ a.avatar[aria-disabled="true"] {
  * <nav class="scrollspy">
  * containing <a href="#section"> links and toggles aria-current="location" on
  * the link whose target is in view. Pair with .nav-list and .nav-link, or style
- * [aria-current] yourself.
+ * [aria-current="location"] yourself.
  *
  * Progressive enhancement: on browsers that support :target-current,
  * this file enables the native target group and marks the active link.
@@ -8380,21 +8381,20 @@ a.list-item:hover {
   background: var(--surface-subtle);
 }
 
-/* Current row in a navigational list (master/detail). Generic by design: the
-   visual treatment only cares that the row is current, so presence is the
-   contract — the attribute is set on the current row and removed everywhere
-   else, never serialized as aria-current="false". The value (page, location,
-   …) stays free for assistive technology.
+/* Current row in a navigational list: aria-current="page" when the row opens
+   a page, "true" when it is the current item of a master/detail view (a
+   conversation, a thread, a record) that is no page of its own. Any other
+   value, "false" included, is inert.
    Calm by design: the row keeps its normal text metrics and color on a subtle
    surface, and the selected accent lives on an inset inline-start trait only.
    The trait is a real border, so it survives forced colors without a repaint
    block. The positioning context lives on every row link, so becoming current
    never moves an app-positioned decoration to a new containing block. */
-a.list-item[aria-current] {
+a.list-item:is([aria-current="page"], [aria-current="true"]) {
   background: var(--surface-subtle);
 }
 
-a.list-item[aria-current]::before {
+a.list-item:is([aria-current="page"], [aria-current="true"])::before {
   content: "";
   position: absolute;
   inset-block: var(--list-item-pad-block);

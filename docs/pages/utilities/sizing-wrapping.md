@@ -138,7 +138,8 @@ stop an item with its focus line inside the strip.
 
 A strip whose current item can render off-screen at rest (pagination,
 horizontal steps, link tabs) takes `data-enhance="reveal-current"`:
-at connect it scrolls the first `aria-current` item into view, once.
+at connect it scrolls its current page, step or flyout section into view,
+once.
 
 There is no class that hides the scrollbar: on a strip it is the only visible
 scroll control for a mouse without a horizontal wheel. Apply `.scroller` to

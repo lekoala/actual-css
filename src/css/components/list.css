@@ -68,20 +68,20 @@ a.list-item:hover {
   background: var(--surface-subtle);
 }
 
-/* Current row in a navigational list (master/detail). Generic by design: the
-   visual treatment only cares that the row is current, so any value marks it
-   except "false" and "" (not current in ARIA; see .tab). The value (page,
-   location, …) stays free for assistive technology.
+/* Current row in a navigational list: aria-current="page" when the row opens
+   a page, "true" when it is the current item of a master/detail view (a
+   conversation, a thread, a record) that is no page of its own. Any other
+   value, "false" included, is inert.
    Calm by design: the row keeps its normal text metrics and color on a subtle
    surface, and the selected accent lives on an inset inline-start trait only.
    The trait is a real border, so it survives forced colors without a repaint
    block. The positioning context lives on every row link, so becoming current
    never moves an app-positioned decoration to a new containing block. */
-a.list-item[aria-current]:where(:not([aria-current="false"]):not([aria-current=""])) {
+a.list-item:is([aria-current="page"], [aria-current="true"]) {
   background: var(--surface-subtle);
 }
 
-a.list-item[aria-current]:where(:not([aria-current="false"]):not([aria-current=""]))::before {
+a.list-item:is([aria-current="page"], [aria-current="true"])::before {
   content: "";
   position: absolute;
   inset-block: var(--list-item-pad-block);

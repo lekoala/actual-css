@@ -193,11 +193,11 @@ await Bun.write(
   <div role="tabpanel" id="p1" hidden></div>
   <div role="tabpanel" id="p2"></div>
   <div class="strip" data-enhance="reveal-current" id="percent" style="scroll-padding-inline: 20%">
-    <div style="inline-size: 250px"></div><div aria-current="true" style="inline-size: 50px"></div><div style="inline-size: 250px"></div>
+    <div style="inline-size: 250px"></div><div aria-current="page" style="inline-size: 50px"></div><div style="inline-size: 250px"></div>
   </div>
   <div style="transform: scale(0.5); transform-origin: 0 0">
     <div class="strip" data-enhance="reveal-current" id="scaled">
-      <div style="inline-size: 250px"></div><div aria-current="true" style="inline-size: 50px"></div><div style="inline-size: 250px"></div>
+      <div style="inline-size: 250px"></div><div aria-current="page" style="inline-size: 50px"></div><div style="inline-size: 250px"></div>
     </div>
   </div>
 </body>

@@ -13,8 +13,8 @@
   <style>
     /* Canonical sectioned-sidebar specimen: the sidebar owns only its own
        geometry (sticky full-height rail, scrollable body, pinned footer).
-       Row states stay framework-owned — .nav-link[aria-current] and
-       a.list-item[aria-current] carry surface, accent, and indicator with
+       Row states stay framework-owned — .nav-link and a.list-item with
+       aria-current="page" carry surface, accent, and indicator with
        constant metrics, so nothing here repaints them. */
     .ws-shell {
       display: grid;
@@ -63,7 +63,7 @@
     /* Same release as the dashboard specimen: the idle icon tone outranks
        the link color on specificity, so the current icon follows the accent
        via currentColor instead of redefining the state. */
-    .ws-nav .nav-link[aria-current] i {
+    .ws-nav .nav-link[aria-current="page"] i {
       color: currentColor;
     }
 

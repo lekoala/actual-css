@@ -8,7 +8,7 @@
  * <nav class="scrollspy">
  * containing <a href="#section"> links and toggles aria-current="location" on
  * the link whose target is in view. Pair with .nav-list and .nav-link, or style
- * [aria-current] yourself.
+ * [aria-current="location"] yourself.
  *
  * Progressive enhancement: on browsers that support :target-current,
  * this file enables the native target group and marks the active link.

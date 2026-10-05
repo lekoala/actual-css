@@ -268,6 +268,18 @@ centers its glyph, and clips overflow:</p>
   background: var(--surface-subtle);
 }
 </code></pre>
+<h2 id="webfont-glyphs">Webfont glyphs</h2>
+<p>An icon font draws nothing measurable until it loads, so a button or nav link
+shifts when the glyph arrives. Reserve a <code>1em</code> square on the icon library's
+class in application CSS; it follows the surrounding font size:</p>
+<pre><code class="language-css">.ti {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  inline-size: 1em;
+  block-size: 1em;
+}
+</code></pre>
 <h2 id="reuse-the-existing-icon-slots">Reuse the existing icon slots</h2>
 <p>Several components already embody this slot — reach for them before composing
 your own:</p>
@@ -317,6 +329,7 @@ your own:</p>
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#the-contract" data-docs-toc-item data-level="2">The contract</a></li>
+        <li><a class="nav-link" href="#webfont-glyphs" data-docs-toc-item data-level="2">Webfont glyphs</a></li>
         <li><a class="nav-link" href="#reuse-the-existing-icon-slots" data-docs-toc-item data-level="2">Reuse the existing icon slots</a></li>
           </ul>
         </nav>

@@ -61,6 +61,10 @@ separate `.split` or `.spread` primitive; this is the same relationship.
 </div>
 ```
 
+Once the row wraps, `space-between` puts an item alone on its line at the
+start. To keep the end item on the end edge when it wraps, add
+`.margin-inline-start-auto` to it.
+
 To align a row to its top edge instead of centering it — useful when one item
 wraps to several lines — set `--cluster-align` on the cluster itself.
 

@@ -266,6 +266,19 @@ layout.</p>
 <h3 id="list-rows">List rows</h3>
 <p><code>.list-item</code> regions center on the row. For rows with long supporting text,
 add <code>.items-start</code> to the row or to the <code>.list</code> to keep them top-aligned.</p>
+<h3 id="step-rows">Step rows</h3>
+<p><code>.steps-horizontal</code> budgets each step from its marker instead of <code>7rem</code>, so a
+row fits narrower widths before it scrolls. To keep the previous budget on a
+row, set <code>--step-min: 7rem</code> on it.</p>
+<h3 id="current-links-and-rows">Current links and rows</h3>
+<p><code>.nav-link</code> shows its current state only for <code>aria-current=&quot;page&quot;</code> or
+<code>aria-current=&quot;location&quot;</code>, and <code>a.list-item</code> only for <code>aria-current=&quot;page&quot;</code> or
+<code>aria-current=&quot;true&quot;</code>. Search markup for other values on these classes and
+use the matching one.</p>
+<h3 id="tabs">Tabs</h3>
+<p><code>data-enhance=&quot;tabs&quot;</code> only wires an element that also carries
+<code>role=&quot;tablist&quot;</code>. Search markup for the token and add the role where it is
+missing; the console names each list it skipped.</p>
 <h3 id="rendering-changes-without-an-edit">Rendering changes without an edit</h3>
 <ul>
 <li><code>.pagination</code> and a horizontal <code>.tabs</code> strip never wrap: a strip that does
@@ -273,9 +286,8 @@ not fit scrolls horizontally. Add <code>.scroller</code> for a thin scrollbar.</
 <li><code>.breadcrumb</code> never wraps either: a trail that does not fit truncates its
 labels with an ellipsis, ancestors first. Ancestor labels need an <code>&lt;a&gt;</code> or
 <code>&lt;span&gt;</code>.</li>
-<li>The focus reserve of <code>.pagination</code> and of a scrolling dialog or drawer body
-no longer grows with <code>--border-width</code>: 1px narrower under
-<code>prefers-contrast: more</code>.</li>
+<li>The focus reserve of a scrolling dialog or drawer body no longer grows with
+<code>--border-width</code>: 1px narrower under <code>prefers-contrast: more</code>.</li>
 </ul>
 <h2 id="011-to-012">0.11 to 0.12</h2>
 <h3 id="action-rows">Action rows</h3>
@@ -362,6 +374,9 @@ or taller.</li>
         <li><a class="nav-link" href="#avatar-stacks" data-docs-toc-item data-level="3">Avatar stacks</a></li>
         <li><a class="nav-link" href="#focus-outline" data-docs-toc-item data-level="3">Focus outline</a></li>
         <li><a class="nav-link" href="#list-rows" data-docs-toc-item data-level="3">List rows</a></li>
+        <li><a class="nav-link" href="#step-rows" data-docs-toc-item data-level="3">Step rows</a></li>
+        <li><a class="nav-link" href="#current-links-and-rows" data-docs-toc-item data-level="3">Current links and rows</a></li>
+        <li><a class="nav-link" href="#tabs" data-docs-toc-item data-level="3">Tabs</a></li>
         <li><a class="nav-link" href="#rendering-changes-without-an-edit" data-docs-toc-item data-level="3">Rendering changes without an edit</a></li>
         <li><a class="nav-link" href="#011-to-012" data-docs-toc-item data-level="2">0.11 to 0.12</a></li>
         <li><a class="nav-link" href="#action-rows" data-docs-toc-item data-level="3">Action rows</a></li>

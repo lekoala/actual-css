@@ -88,9 +88,10 @@ For a navigable row, keep the list semantics and put `.list-item` on the link:
 Do not attach click JavaScript to the entire row. Use a link for navigation and
 a button or native control for actions.
 
-In a master/detail navigation, mark the current row with `aria-current` on its
-link, using the value that matches the semantics (`page`, `location`, …).
-`aria-current="false"` or an empty value leaves a row inactive. The [Workspaces example](../examples/overview.md)
+Mark the current row on its link with `aria-current="page"` when the row opens
+a page, or `aria-current="true"` when it is the current item of a master/detail
+view (a conversation, a thread, a record) that is not a page of its own. Any
+other value is inert. The [Workspaces example](../examples/overview.md)
 shows a current row with trailing actions and a flyout. Navigable rows usually
 want a non-zero `--list-item-pad-inline`: without that gutter, the current
 indicator touches the leading region and the trailing touches the row edge.

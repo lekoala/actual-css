@@ -50,7 +50,7 @@ import "actual-css/js/tooltip";
 ```
 
 `actual-css/js/reveal-current` has no component page: it starts an overflowing
-strip on its `aria-current` item (see
+strip on its current page, step or flyout section (see
 [one-row strips](../utilities/sizing-wrapping.md#one-row-strips)).
 
 Enhancer modules self-register when imported. They do not require init calls and

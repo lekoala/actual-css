@@ -59,6 +59,13 @@ add `.items-start` to the row or to the `.list` to keep them top-aligned.
 row fits narrower widths before it scrolls. To keep the previous budget on a
 row, set `--step-min: 7rem` on it.
 
+### Current links and rows
+
+`.nav-link` shows its current state only for `aria-current="page"` or
+`aria-current="location"`, and `a.list-item` only for `aria-current="page"` or
+`aria-current="true"`. Search markup for other values on these classes and
+use the matching one.
+
 ### Tabs
 
 `data-enhance="tabs"` only wires an element that also carries

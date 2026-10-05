@@ -14,10 +14,10 @@
 
 - Use real tab semantics when panels switch in place.
 - Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
-- On that link variant, `aria-current` on the current link gets the same
-  color and underline treatment as `aria-selected="true"` on a widget tab;
-  `primary` tints it. Remove the attribute from the other links rather than
-  setting it to `"false"`.
+- On that link variant, `aria-current="page"` gets the same color and
+  underline treatment as `aria-selected="true"` on a widget tab; `primary`
+  tints it. A flyout trigger takes `"true"` (see below); any other value is
+  inert.
 - Tab selection never changes text metrics: the active tab keeps the shared
   weight and is marked by color and the indicator line.
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
@@ -116,7 +116,7 @@ strip (`aria-orientation="vertical"`) keeps wrapping its labels. Add
 `.scroller` to the strip for a thin, theme-coloured scrollbar; see
 [one-row strips](../utilities/sizing-wrapping.md#one-row-strips). Link tabs
 have no tabs runtime: add `data-enhance="reveal-current"` to the list so the
-`aria-current` link starts in view.
+current link (or flyout trigger) starts in view.
 
 Scrolling is the fallback, not a responsive design. If a strip regularly
 overflows, shorten the labels, group sections, or switch to a vertical rail.
@@ -124,8 +124,10 @@ overflows, shorten the labels, group sections, or switch to a vertical rail.
 ## Tab with a flyout
 
 In navigation tabs, a `.tab` can be a [flyout](flyout.md) trigger for a group of
-pages. Mark the trigger with `aria-current="true"` when the current page is in
-its panel; the link to that page carries `aria-current="page"`.
+pages. The link to the current page inside its panel carries
+`aria-current="page"`. The trigger is not a page, so it takes
+`aria-current="true"` while its panel holds the current page: the section is
+the current item of the strip. This is the only place a `.tab` takes `true`.
 
 ```html demo
 <nav aria-label="Account">
