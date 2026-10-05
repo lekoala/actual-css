@@ -96,7 +96,7 @@
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
-        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading to 0.12</a></li>
+        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">
@@ -321,7 +321,7 @@ force a <code>.cluster</code> onto a single row — set <code>--cluster-wrap: no
 }
 </code></pre>
 <h2 id="scroller">Scroller</h2>
-<p>Use <code>.scroller</code> to apply optional framework overflow treatment to a scroll container: a quieter scrollbar, and faded edges where the region scrolls inline. It does not create overflow; pair it with <code>.overflow-auto</code> or a component that already creates overflow.</p>
+<p>Use <code>.scroller</code> to apply optional framework overflow treatment to a scroll container: a quieter scrollbar. It does not create overflow; pair it with <code>.overflow-auto</code> or a component that already creates overflow.</p>
 <p>The engine keeps drawing the scrollbar; <code>.scroller</code> only hands it a density
 and a colour that follow the theme. There is no <code>::-webkit-scrollbar</code> chrome: rebuilding a thumb
 by hand means re-implementing the hover, the corner and the light/dark
@@ -379,11 +379,11 @@ the part of a custom scrollbar that never held up.</p>
 <code>.breadcrumb</code>, <code>.pagination</code>, <code>.steps-horizontal</code>, and <code>.table-wrap</code>. They
 leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
 sit under a short strip, and on touch screens it overlays the strip and hides
-at rest, leaving a clipped item as the only cue. Put <code>.scroller</code> on the strip
-itself — the element that scrolls — for a thin, theme-coloured bar and faded
-edges: the edge it can still scroll toward fades, so a strip at rest shows
-its first item unfaded and a strip at its end shows its last. The fade needs
-scroll-driven animations; elsewhere the strip simply scrolls.</p>
+at rest, leaving a clipped item as the cue that the strip continues. Put
+<code>.scroller</code> on the strip itself — the element that scrolls — for a thin,
+theme-coloured bar. There is no edge fade (overflow shadow, scroll hint): the
+clipped item already says there is more. Keyboard focus and <code>reveal-current</code>
+stop an item with its focus line inside the strip.</p>
 <pre><code class="language-html">&lt;ol class=&quot;breadcrumb scroller&quot; data-enhance=&quot;reveal-current&quot; aria-label=&quot;Breadcrumb&quot;&gt;
 </code></pre>
 <p>A strip whose current item can render off-screen at rest (breadcrumb,
@@ -401,10 +401,6 @@ pagination on one <code>.cluster</code>: a <code>&lt;nav&gt;</code> directly aro
   &lt;nav aria-label=&quot;Pages&quot;&gt;&lt;ol class=&quot;pagination&quot;&gt;…&lt;/ol&gt;&lt;/nav&gt;
 &lt;/div&gt;
 </code></pre>
-<p>The fade is a mask over the whole region, so on a bordered region such as
-<code>.table-wrap</code> it also fades the side borders while there is more to scroll.
-It runs as an animation, so on an element with its own <code>animation</code> one of the
-two loses: put <code>.scroller</code> on the inner element that scrolls instead.</p>
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--scroller-track</code> — scrollbar track color.</li>
@@ -491,7 +487,7 @@ two loses: put <code>.scroller</code> on the inner element that scrolls instead.
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
-        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading to 0.12</a></li>
+        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">

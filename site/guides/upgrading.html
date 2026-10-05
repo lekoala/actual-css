@@ -5,10 +5,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Upgrading to 0.12 — Actual CSS</title>
+  <title>Upgrading — Actual CSS</title>
   <meta name="description" content="Each step below is a search for a removed class or hook and its replacement.
 The changelog
-lists every change; this page keeps the ones that need an edit.">
+lists every change; this page keeps the ones that need an edit. Apply the
+sections in order when skipping a release.">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#52396F">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
@@ -98,7 +99,7 @@ lists every change; this page keeps the ones that need an edit.">
         <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
         <li><a class="nav-link" href="design-tools.html">Design tools (Figma, Penpot)</a></li>
-        <li><a class="nav-link" href="upgrading.html" aria-current="page">Upgrading to 0.12</a></li>
+        <li><a class="nav-link" href="upgrading.html" aria-current="page">Upgrading</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">
@@ -225,17 +226,57 @@ lists every change; this page keeps the ones that need an edit.">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
               <li><a href="../index.html">Docs</a></li>
-              <li><span aria-current="page">Upgrading to 0.12</span></li>
+              <li><span aria-current="page">Upgrading</span></li>
             </ol>
           </nav>
 
           <div class="prose docs-prose">
-<h1 id="upgrading-to-012">Upgrading to 0.12</h1>
+<h1 id="upgrading">Upgrading</h1>
 <p>Each step below is a search for a removed class or hook and its replacement.
 The <a href="https://github.com/lekoala/actual-css/blob/master/CHANGELOG.md">changelog</a>
-lists every change; this page keeps the ones that need an edit.</p>
+lists every change; this page keeps the ones that need an edit. Apply the
+sections in order when skipping a release.</p>
 <p><strong>Related terms:</strong> migration, breaking changes, update, version.</p>
-<h2 id="action-rows">Action rows</h2>
+<h2 id="012-to-013">0.12 to 0.13</h2>
+<h3 id="layout-hooks-stop-at-each-layout">Layout hooks stop at each layout</h3>
+<p><code>--cluster-justify</code>, <code>--cluster-align</code> and <code>--cluster-wrap</code> are reset on every
+<code>.cluster</code>, and <code>--grid-columns</code> and <code>--grid-min</code> on every <code>.grid</code>. A value set
+on an ancestor, including an outer cluster or grid, no longer reaches the
+layout inside it. Search application CSS and inline styles for these hooks on
+anything but the layout itself, then set them on the row or grid, or select it:</p>
+<pre><code class="language-css">.toolbar &gt; .cluster {
+  --cluster-justify: space-between;
+}
+</code></pre>
+<p><code>--gap</code> still inherits, so a density context keeps reaching every nested
+layout.</p>
+<h3 id="avatar-stacks">Avatar stacks</h3>
+<p><code>.avatar-stack</code> no longer takes its size from a child <code>.avatar.sm</code> or
+<code>.avatar.lg</code>. Move the size class to the stack and drop it from its avatars:</p>
+<pre><code class="language-html">&lt;div class=&quot;avatar-stack sm&quot; role=&quot;group&quot; aria-label=&quot;Team members&quot;&gt;
+  &lt;div class=&quot;avatar&quot; role=&quot;img&quot; aria-label=&quot;John Doe&quot;&gt;…&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<h3 id="focus-outline">Focus outline</h3>
+<p><code>--focus-outline</code> has no default value any more. Search application CSS for
+<code>var(--focus-outline)</code> and write the generic line instead:</p>
+<pre><code class="language-css">outline: var(--focus-ring-width) solid var(--focus-outline-color);
+</code></pre>
+<p>Setting <code>--focus-outline</code> still replaces the generic line.</p>
+<h3 id="list-rows">List rows</h3>
+<p><code>.list-item</code> regions center on the row. For rows with long supporting text,
+add <code>.items-start</code> to the row or to the <code>.list</code> to keep them top-aligned.</p>
+<h3 id="rendering-changes-without-an-edit">Rendering changes without an edit</h3>
+<ul>
+<li><code>.breadcrumb</code>, <code>.pagination</code> and a horizontal <code>.tabs</code> strip never wrap: a
+strip that does not fit scrolls horizontally. Add <code>.scroller</code> for a thin
+scrollbar.</li>
+<li>The focus reserve of <code>.pagination</code> and of a scrolling dialog or drawer body
+no longer grows with <code>--border-width</code>: 1px narrower under
+<code>prefers-contrast: more</code>.</li>
+</ul>
+<h2 id="011-to-012">0.11 to 0.12</h2>
+<h3 id="action-rows">Action rows</h3>
 <p><code>.actions</code>, <code>.navbar-nav</code> and the layout of <code>.form-actions</code> are gone. A row of
 actions is a <code>.cluster</code>; a vertical list is <code>stack list-reset</code>. Replace
 <code>class=&quot;actions&quot;</code> and <code>class=&quot;navbar-nav&quot;</code> with <code>class=&quot;cluster&quot;</code>, and
@@ -253,12 +294,11 @@ reproduces. If the tighter navbar rhythm matters, set
 <code>gap: var(--space-10)</code> on that row in application CSS.</li>
 <li><code>.form-actions</code> has no top margin and no <code>--form-actions-margin-block-start</code>:
 put <code>.stack</code> on the form. <code>--form-actions-justify</code> and <code>--form-actions-align</code>
-still apply. In a modular build, import <code>layout/cluster</code> before
-<code>forms/form-actions</code>.</li>
+still apply. In a modular build, also import <code>layout/cluster</code>.</li>
 <li><code>.justify-content-*</code> aligns only its own element and no longer reaches a
 nested <code>.cluster</code>. Put the utility on the row it should align.</li>
 </ul>
-<h2 id="dialogs">Dialogs</h2>
+<h3 id="dialogs">Dialogs</h3>
 <ul>
 <li><code>.dialog-confirmation</code> is removed. Compose <code>.media</code> with <code>.dialog-icon</code>, then
 a <code>&lt;footer class=&quot;bleed background-subtle cluster justify-content-space-between&quot;&gt;</code>;
@@ -272,13 +312,13 @@ the header's layout keeps its structural rule.</li>
 <code>.dialog-confirmation</code> used 1.5rem. Set <code>--modal-pad: var(--space-50)</code> on
 the dialog to keep the roomier treatment.</li>
 </ul>
-<h2 id="cards">Cards</h2>
+<h3 id="cards">Cards</h3>
 <p>The layout of a <code>.card</code> header or footer row is a zero-specificity default: any
 author rule that targets the slot replaces it, not only a <code>.media</code>, <code>.cluster</code>,
 <code>.form-actions</code> or <code>.justify-content-*</code> class. Check application CSS for bare
 element rules such as <code>header { … }</code> or <code>footer { … }</code>, which now win over the
 card's slot row.</p>
-<h2 id="themes-and-density">Themes and density</h2>
+<h3 id="themes-and-density">Themes and density</h3>
 <ul>
 <li>A theme sets <code>--control-pad-x-sm</code>, <code>--control-pad-x-md</code> and
 <code>--control-pad-x-lg</code> instead of <code>--control-pad-x</code>. Used as a nested island,
@@ -287,7 +327,7 @@ it re-selects them in its own block; see
 <li><code>--font-width-dense</code> is removed, and <code>.compact</code> no longer condenses type: set
 <code>font-stretch</code> on the element that should render condensed.</li>
 </ul>
-<h2 id="rendering-changes-without-an-edit">Rendering changes without an edit</h2>
+<h3 id="rendering-changes-without-an-edit-1">Rendering changes without an edit</h3>
 <p>These need no markup change; compare the affected screens.</p>
 <ul>
 <li><code>.sm</code> controls have 13px of inline padding instead of 14px.</li>
@@ -315,11 +355,18 @@ or taller.</li>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
-        <li><a class="nav-link" href="#action-rows" data-docs-toc-item data-level="2">Action rows</a></li>
-        <li><a class="nav-link" href="#dialogs" data-docs-toc-item data-level="2">Dialogs</a></li>
-        <li><a class="nav-link" href="#cards" data-docs-toc-item data-level="2">Cards</a></li>
-        <li><a class="nav-link" href="#themes-and-density" data-docs-toc-item data-level="2">Themes and density</a></li>
-        <li><a class="nav-link" href="#rendering-changes-without-an-edit" data-docs-toc-item data-level="2">Rendering changes without an edit</a></li>
+        <li><a class="nav-link" href="#012-to-013" data-docs-toc-item data-level="2">0.12 to 0.13</a></li>
+        <li><a class="nav-link" href="#layout-hooks-stop-at-each-layout" data-docs-toc-item data-level="3">Layout hooks stop at each layout</a></li>
+        <li><a class="nav-link" href="#avatar-stacks" data-docs-toc-item data-level="3">Avatar stacks</a></li>
+        <li><a class="nav-link" href="#focus-outline" data-docs-toc-item data-level="3">Focus outline</a></li>
+        <li><a class="nav-link" href="#list-rows" data-docs-toc-item data-level="3">List rows</a></li>
+        <li><a class="nav-link" href="#rendering-changes-without-an-edit" data-docs-toc-item data-level="3">Rendering changes without an edit</a></li>
+        <li><a class="nav-link" href="#011-to-012" data-docs-toc-item data-level="2">0.11 to 0.12</a></li>
+        <li><a class="nav-link" href="#action-rows" data-docs-toc-item data-level="3">Action rows</a></li>
+        <li><a class="nav-link" href="#dialogs" data-docs-toc-item data-level="3">Dialogs</a></li>
+        <li><a class="nav-link" href="#cards" data-docs-toc-item data-level="3">Cards</a></li>
+        <li><a class="nav-link" href="#themes-and-density" data-docs-toc-item data-level="3">Themes and density</a></li>
+        <li><a class="nav-link" href="#rendering-changes-without-an-edit-1" data-docs-toc-item data-level="3">Rendering changes without an edit</a></li>
           </ul>
         </nav>
       </aside>
@@ -378,7 +425,7 @@ or taller.</li>
         <li><a class="nav-link" href="bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
         <li><a class="nav-link" href="design-tools.html">Design tools (Figma, Penpot)</a></li>
-        <li><a class="nav-link" href="upgrading.html" aria-current="page">Upgrading to 0.12</a></li>
+        <li><a class="nav-link" href="upgrading.html" aria-current="page">Upgrading</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">

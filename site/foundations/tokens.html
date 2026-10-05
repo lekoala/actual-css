@@ -96,7 +96,7 @@
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
-        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading to 0.12</a></li>
+        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">
@@ -330,16 +330,20 @@ stand out (input border, field outline, form control contrast) without
 darkening every separator. Hover, checked, invalid and disabled states keep
 their own colors.</p>
 <p>Use <code>*-fg</code> pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.</p>
-<p>Focus styling is outline-first. A global focus baseline applies <code>--focus-outline</code> and <code>--focus-outline-offset</code>: older browsers show it on <code>:focus</code>, while modern browsers limit it to <code>:focus-visible</code>. The baseline is a <code>currentColor</code> line, so text-like elements (links, <code>summary</code>, nav and menu items) follow whatever surface the application painted. Boxed components draw a solid <code>--focus-ring-width</code> line in <code>--focus</code>: inside the border box on text fields (<code>.input</code>, <code>.textarea</code>, <code>.select</code>), outside at <code>--focus-outline-offset</code> on actions (<code>.btn</code>, <code>.close</code>, choices, switches). The color never follows an intent or a local surface, so <code>--focus</code> must hold 3:1 against both <code>--surface</code> and <code>--surface-solid</code> — the page, fields and a solid band all rely on it. Both lines are <code>--focus-ring-width</code> wide. Under <code>forced-colors: active</code>, outlines map to the system focus color.</p>
+<p>Focus styling is outline-first. A global focus baseline draws a <code>--focus-ring-width</code> line in <code>--focus-outline-color</code>, offset by <code>--focus-outline-offset</code>: older browsers show it on <code>:focus</code>, while modern browsers limit it to <code>:focus-visible</code>. The baseline is a <code>currentColor</code> line, so text-like elements (links, <code>summary</code>, nav and menu items) follow whatever surface the application painted. Boxed components draw a solid <code>--focus-ring-width</code> line in <code>--focus</code>: inside the border box on text fields (<code>.input</code>, <code>.textarea</code>, <code>.select</code>), outside at <code>--focus-outline-offset</code> on actions (<code>.btn</code>, <code>.close</code>, choices, switches). The color never follows an intent or a local surface, so <code>--focus</code> must hold 3:1 against both <code>--surface</code> and <code>--surface-solid</code> — the page, fields and a solid band all rely on it. Both lines are <code>--focus-ring-width</code> wide. Under <code>forced-colors: active</code>, outlines map to the system focus color.</p>
 <pre><code class="language-css">:root {
   --focus: hsl(268 30% 55%);
 
   --focus-outline-color: currentColor;
-  --focus-outline: var(--focus-ring-width) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
   --focus-ring-width: 2px;
 }
 </code></pre>
+<p>The line is composed on the focused element, so a theme island or a region
+that sets <code>--focus-ring-width</code> widens links and buttons alike. Set
+<code>--focus-outline</code> to replace the whole generic line (<code>4px dashed currentColor</code>);
+it has no default value. Application CSS that draws the generic line itself
+writes <code>var(--focus-ring-width) solid var(--focus-outline-color)</code>.</p>
 <h3 id="palette-coherence">Palette coherence</h3>
 <p>A coherent palette treats surfaces, text, borders, intents, and shadows as related roles rather than isolated colors.</p>
 <p>Coherence does not mean that every token must be chromatic. Pure or near-pure whites and blacks remain legitimate where their role calls for them; what matters is that the surrounding neutral ramp and derived treatments belong to the same visual family.</p>
@@ -830,7 +834,7 @@ undo that.</p>
         <li><a class="nav-link" href="../guides/bootstrap.html">Migrating from Bootstrap to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/tailwind.html">Migrating from Tailwind CSS to Actual CSS</a></li>
         <li><a class="nav-link" href="../guides/design-tools.html">Design tools (Figma, Penpot)</a></li>
-        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading to 0.12</a></li>
+        <li><a class="nav-link" href="../guides/upgrading.html">Upgrading</a></li>
       </ul>
       <p class="docs-nav-group">Foundations</p>
       <ul class="nav-list">

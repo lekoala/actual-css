@@ -134,9 +134,11 @@ select {
      without a component ring (links, summary, plain items). Components draw
      the themed ring instead: --focus-ring-width solid --focus. See focus.css
      for the two contracts. Both share --focus-ring-width: they differ in
-     color only. */
+     color only. No --focus-outline alias here: declared on :root it would be
+     inherited already computed, so a theme island or a region setting
+     --focus-ring-width would not reach it. focus.css composes the line on the
+     focused element instead. */
   --focus-outline-color: currentColor;
-  --focus-outline: var(--focus-ring-width) solid var(--focus-outline-color);
   --focus-outline-offset: 2px;
   --focus-ring-width: 2px;
 
@@ -881,9 +883,13 @@ small {
    Documented exception: an invalid field focuses in --form-invalid-border
    (danger), so the error stays visible at the point of correction. The border
    carries the same hook; report:theme-contrast measures that line at 3:1
-   against the field's background alongside --focus. */
+   against the field's background alongside --focus.
+
+   Public hooks:
+   --focus-outline (fallback-only: replaces the whole generic line)
+*/
 :focus {
-  outline: var(--focus-outline);
+  outline: var(--focus-outline, var(--focus-ring-width) solid var(--focus-outline-color));
   outline-offset: var(--focus-outline-offset);
 }
 
@@ -1863,10 +1869,11 @@ small {
  * even a Recommended engine may lack it. Engines that ignore both declarations
  * draw their native scrollbar — the intended fallback, not a broken state.
  *
- * Styles the scrollbar and fades the edges of a region that scrolls inline;
- * it does not create the overflow. Pair it with .overflow-auto or a component
- * that already scrolls (the one-row strips: breadcrumb, pagination, tabs,
- * horizontal steps).
+ * Styles the scrollbar only; it does not create the overflow. Pair it with
+ * .overflow-auto or a component that already scrolls (the one-row strips:
+ * breadcrumb, pagination, tabs, horizontal steps). No edge fade: a mask would
+ * dictate the strip's scroll-padding and focus geometry for a decorative cue,
+ * and an item clipped at the edge already says the strip continues.
  *
  * Public hooks:
  * --scroller-track
@@ -1889,57 +1896,6 @@ small {
 @supports (color: color-mix(in oklch, red, white)) {
   .scroller {
     --scroller-thumb: color-mix(in oklch, var(--text-muted), transparent 55%);
-  }
-}
-
-/* Edge fade: a region that scrolls inline fades the edges it can still
-   scroll toward, the overflow cue where an overlay scrollbar hides at rest.
-   It runs on the region's own inline timeline, so a region that does not
-   scroll inline stays unmasked. Keep the @supports: without scroll timelines
-   the animation would end at once and pin its last mask. It follows the
-   reader's scroll, not time, so reduced motion keeps it. scroll-padding
-   matches the fade, so focus and reveal-current land an item clear of it. */
-@supports (animation-timeline: scroll()) {
-  .scroller {
-    --scroller-fade-dir: to right;
-
-    scroll-padding-inline: var(--space-40);
-    animation: actual-scroller-fade linear both;
-    animation-timeline: scroll(self inline);
-  }
-
-  /* Gradient keywords are physical. :dir() alone, not [dir="rtl"] ancestry:
-     it follows the element's own direction, so an LTR island inside an RTL
-     page keeps its fade on the right side. */
-  .scroller:dir(rtl) {
-    --scroller-fade-dir: to left;
-  }
-}
-
-/* mask-image does not interpolate, so each mask holds until halfway to the
-   next keyframe: a fade appears within the first pixels of scroll and the end
-   fade drops at the very end. */
-@keyframes actual-scroller-fade {
-  0% {
-    mask-image: linear-gradient(
-      var(--scroller-fade-dir),
-      #000 calc(100% - var(--space-40)),
-      transparent
-    );
-  }
-
-  1%,
-  99% {
-    mask-image: linear-gradient(
-      var(--scroller-fade-dir),
-      transparent,
-      #000 var(--space-40) calc(100% - var(--space-40)),
-      transparent
-    );
-  }
-
-  100% {
-    mask-image: linear-gradient(var(--scroller-fade-dir), transparent, #000 var(--space-40));
   }
 }
 
@@ -4539,10 +4495,11 @@ a.badge[aria-disabled="true"] {
   }
 }
 
-/* Decorative leading icon — use .alert-icon on the icon element. */
+/* Decorative leading icon — use .alert-icon on the icon element. display and
+   vertical-align are the no-:has() layout (Degraded tier: the icon sits inline
+   before the text); the grid anatomy below replaces them. */
 .alert > .alert-icon {
   display: inline-block;
-  flex: none;
   inline-size: var(--alert-icon-size);
   block-size: var(--alert-icon-size);
   font-size: var(--alert-icon-size);
@@ -4578,7 +4535,8 @@ a.badge[aria-disabled="true"] {
    grid rules drop together and the alert keeps ordinary block flow. */
 .alert:has(> .alert-icon, > .close) {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  /* No grid-template-columns: the icon and close branches below always set
+     it, since one of them is what matched. */
   align-items: var(--items-align, start);
   column-gap: var(--space-30);
 }
@@ -5038,19 +4996,18 @@ a.badge[aria-disabled="true"] {
 
 :where(dialog).modal.scrollable > form > :not(:is(header, footer)),
 :where(dialog).modal.scrollable > .stack > :not(:is(header, footer)) {
-  --dialog-focus-bleed: calc(
-    var(--focus-outline-offset) +
-    max(var(--focus-ring-width), var(--border-width) * 2)
-  );
+  /* Declared here, not as a :root alias: an inherited alias arrives already
+     computed, so a --focus-ring-width override on the dialog would not reach
+     it. */
+  --dialog-focus-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 
   flex: 1 1 auto;
   min-block-size: 0;
   /* Keep focus paint inside the clip, on all four sides (overflow: auto clips
-     both axes), without moving the content. The reserve covers the thicker
-     of the two outside indicators: the :focus baseline (2 × border) and the
-     component line (--focus-ring-width, 3px in bootstrap-v6). On the block
-     axis it reaches into the slot gap, which is wider, so the scrollport never
-     slides under the header or footer. */
+     both axes), without moving the content. Every outside indicator is
+     --focus-ring-width wide (core/focus.css). On the block axis the reserve
+     reaches into the slot gap, which is wider, so the scrollport never slides
+     under the header or footer. */
   margin: calc(var(--dialog-focus-bleed) * -1);
   padding: var(--dialog-focus-bleed);
   overflow: auto;
@@ -5375,18 +5332,17 @@ html.has-modal-open.had-scrollbar {
    exclusion list is easier to trust than its `position: absolute`. */
 :where(dialog).drawer > :not(:is(header, footer, form, .close)),
 :where(dialog).drawer > form > :not(:is(header, footer, .close)) {
-  --drawer-focus-bleed: calc(
-    var(--focus-outline-offset) +
-    max(var(--focus-ring-width), var(--border-width) * 2)
-  );
+  /* Declared here, not as a :root alias: an inherited alias arrives already
+     computed, so a --focus-ring-width override on the drawer would not reach
+     it. */
+  --drawer-focus-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 
   min-block-size: 0;
   /* Keep focus paint inside the clip, on all four sides (overflow: auto clips
-     both axes), without moving the content. The reserve covers the thicker
-     of the two outside indicators: the :focus baseline (2 × border) and the
-     component line (--focus-ring-width, 3px in bootstrap-v6). On the block
-     axis it reaches into the slot gap, which is wider, so the scrollport never
-     slides under the header or footer. */
+     both axes), without moving the content. Every outside indicator is
+     --focus-ring-width wide (core/focus.css). On the block axis the reserve
+     reaches into the slot gap, which is wider, so the scrollport never slides
+     under the header or footer. */
   margin: calc(var(--drawer-focus-bleed) * -1);
   padding: var(--drawer-focus-bleed);
   overflow: auto;
@@ -6592,13 +6548,13 @@ picture.bleed > img {
  * --avatar-size
  * --avatar-radius
  * --avatar-font-size
+ * --avatar-bg
  * --avatar-stack-size
  * --avatar-stack-font-size
  * --avatar-stack-overlap
  * --avatar-stack-ring
  *
  * Internal:
- * --avatar-bg
  * --avatar-fg
  * --avatar-status-translate-x
  */
@@ -7430,10 +7386,12 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* A scroll container clips at the padding edge, so a navigable row reserves the
-   focus ring's own width and offset. Only this composition scrolls, and only a
-   link has a ring to protect. */
+   focus ring's own width and offset, and focus scrolls a link in that far from
+   the inline clip. Only this composition scrolls, and only a link has a ring to
+   protect. */
 .steps-horizontal:has(a[href]) {
   padding-block: calc(var(--focus-outline-offset) + var(--focus-ring-width));
+  scroll-padding-inline: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 }
 
 /* One explicit row, the marker's: a `.step-label` is auto-placed into an
@@ -7864,20 +7822,20 @@ a.avatar[aria-disabled="true"] {
  * Breadcrumbs are a single navigation hierarchy. Wrapping makes hierarchy look
  * like separate rows and causes unstable header height.
  *
- * Compose .scroller to fade the edges an overflowing trail can still scroll
- * toward, like every one-row strip.
+ * Compose .scroller for a thin, theme-coloured scrollbar, like every one-row
+ * strip.
  *
  * Internal:
  * --breadcrumb-bleed
  */
 
 .breadcrumb {
-  /* The scrollport clips on both axes (overflow-x: auto computes overflow-y
-     to auto), so the padding keeps the text-link outline of every item inside
-     it. Negative margins give the room back on the block axis and at the
-     inline start, so the root aligns with the content around it: overflow
-     toward the start is never scrollable. The inline end keeps it, or the
-     list would grow past its container and scroll the page on a phone. */
+  /* The scrollport clips on both axes, so the padding keeps the text-link
+     outline of every item inside it. Negative margins give the room back on
+     the block axis and at the inline start, so the root aligns with the
+     content around it: overflow toward the start is never scrollable. The
+     inline end keeps it, or the list would grow past its container and scroll
+     the page on a phone. */
   --breadcrumb-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 
   display: flex;
@@ -7893,6 +7851,9 @@ a.avatar[aria-disabled="true"] {
      nested level. When the trail does not fit, the strip scrolls. */
   overflow: auto hidden;
   overscroll-behavior-inline: contain;
+  /* Mid-trail there is no padding to spare: focus and reveal-current stop an
+     item one outline short of the clip. */
+  scroll-padding-inline: var(--breadcrumb-bleed);
   color: var(--text-subtle);
   font-size: var(--font-size-sm);
   list-style: none;
@@ -7910,7 +7871,7 @@ a.avatar[aria-disabled="true"] {
 /* Items keep their size and the strip scrolls instead. White-space on the
    item inherits to its text, so labels never break inside the one-line strip
    regardless of the link markup. */
-.breadcrumb li {
+.breadcrumb > li {
   display: inline-flex;
   flex: none;
   align-items: center;
@@ -7918,7 +7879,7 @@ a.avatar[aria-disabled="true"] {
   white-space: nowrap;
 }
 
-.breadcrumb li + li::before {
+.breadcrumb > li + li::before {
   content: "/";
   color: var(--text-subtle);
 }
@@ -7963,17 +7924,13 @@ a.avatar[aria-disabled="true"] {
  * --pagination-focus-bleed
  */
 .pagination {
-  /* The scrollport clips on both axes (overflow-x: auto computes overflow-y
-     to auto), so the padding keeps the outer focus line of every item inside
-     it. Negative margins give the room back on the block axis and at the
-     inline start, so the first item aligns with the content around it:
-     overflow toward the start is never scrollable. The inline end keeps it,
-     or the list would grow past its container and scroll the page on a
-     phone. */
-  --pagination-focus-bleed: calc(
-    var(--focus-outline-offset) +
-    max(var(--focus-ring-width), var(--border-width) * 2)
-  );
+  /* The scrollport clips on both axes, so the padding keeps the outer focus
+     line of every item inside it. Negative margins give the room back on the
+     block axis and at the inline start, so the first item aligns with the
+     content around it: overflow toward the start is never scrollable. The
+     inline end keeps it, or the list would grow past its container and scroll
+     the page on a phone. */
+  --pagination-focus-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 
   display: flex;
   flex-direction: row;
@@ -7984,8 +7941,11 @@ a.avatar[aria-disabled="true"] {
   margin-block: calc(var(--pagination-focus-bleed) * -1);
   margin-inline-start: calc(var(--pagination-focus-bleed) * -1);
   padding: var(--pagination-focus-bleed);
-  overflow-x: auto;
+  overflow: auto hidden;
   overscroll-behavior-inline: contain;
+  /* Mid-row there is no padding to spare: focus and reveal-current stop an
+     item one focus line short of the clip. */
+  scroll-padding-inline: var(--pagination-focus-bleed);
   list-style: none;
   font-size: var(--control-font-size);
 
