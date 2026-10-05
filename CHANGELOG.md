@@ -39,7 +39,8 @@
 - A bare heading in a `dialog.modal > header` drops its block margins, so the band no longer grows and the title centers on the close.
 - A `<nav>` around `.breadcrumb`, `.pagination` or `.tabs` shrinks inside a flex or grid row, so the strip scrolls instead of the page.
 - The first item of `.breadcrumb` and `.pagination` aligns with the surrounding content at rest; the focus bleed is given back at the inline start.
-- A `[data-enhance~="tabs"]` tablist sets its roving tabindex when a classic script in `<head>` connects it before its tabs are parsed.
+- An enhanced tablist no longer operates the tabs of a nested `role="tablist"` that has no `data-enhance="tabs"`.
+- A tablist with `data-enhance="tabs"` sets its roving tabindex when a classic script in `<head>` connects it before its tabs are parsed.
 - The generic focus line of links, `summary` and nav items follows a `--focus-ring-width` set on a `[data-theme]` island or any region, like the `.btn` ring beside it.
 - The focus reserve of `.pagination` and of a scrolling dialog or drawer body is `--focus-outline-offset` + `--focus-ring-width`, no longer widened by `2 × --border-width`.
 

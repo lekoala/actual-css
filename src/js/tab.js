@@ -23,7 +23,9 @@ import { ensureInlineVisible } from "./inline-visible.js";
 import { itemForKey, shouldIgnoreKey } from "./keys.js";
 import { afterParse } from "./parsed.js";
 
-const TABLIST_SELECTOR = '[data-enhance~="tabs"]';
+// Ownership follows the ARIA structure, not the activation token: a tab
+// belongs to its closest role="tablist", enhanced or not.
+const TABLIST_SELECTOR = '[role="tablist"]';
 
 // A tablist owns only the tabs directly beneath it, not those of a nested
 // tablist. Filtering by closest owner keeps the outer list from operating on
@@ -164,6 +166,12 @@ function onClick(e) {
 }
 
 registerEnhancement("tabs", (list) => {
+  // Tabs find their list through role="tablist"; without it nothing would
+  // respond, so say why instead of wiring a dead strip.
+  if (list.getAttribute("role") !== "tablist") {
+    console.warn('data-enhance="tabs" needs role="tablist" on the same element', list);
+    return;
+  }
   const controller = new AbortController();
   // Once parsed: a tablist connected mid-parse had no tabs yet, so the roving
   // tabindex and the selected tab's placement were skipped for good.

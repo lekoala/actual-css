@@ -1,4 +1,4 @@
-import { afterEach, expect, test } from "bun:test";
+import { afterEach, expect, spyOn, test } from "bun:test";
 import { cleanupDOM, click, nextMicrotask, press, setupDOM } from "./helpers/dom.js";
 
 let importId = 0;
@@ -54,6 +54,36 @@ test("a nested tablist is operated independently of its outer tablist", async ()
   // The outer tablist is untouched by the inner interaction.
   expect(outerA.getAttribute("aria-selected")).toBe("true");
   expect(outerB.getAttribute("aria-selected")).toBe("false");
+});
+
+// Trap: ownership read the activation token, so an outer tablist claimed the
+// tabs of a nested role="tablist" without it: it set their tabindex and moved
+// selection across them.
+test("an outer tablist leaves a nested tablist without the token alone", async () => {
+  await loadTabs(`
+    <div class="tabs" data-enhance="tabs" role="tablist">
+      <button id="outer-a" role="tab" aria-controls="outer-panel-a" aria-selected="true">A</button>
+      <button id="outer-b" role="tab" aria-controls="outer-panel-b">B</button>
+      <section id="outer-panel-a" role="tabpanel">
+        <div role="tablist">
+          <button id="inner-a" role="tab" aria-controls="inner-panel-a" aria-selected="true">1</button>
+          <button id="inner-b" role="tab" aria-controls="inner-panel-b">2</button>
+        </div>
+        <section id="inner-panel-a" role="tabpanel">Inner 1</section>
+        <section id="inner-panel-b" role="tabpanel">Inner 2</section>
+      </section>
+      <section id="outer-panel-b" role="tabpanel">B panel</section>
+    </div>
+  `);
+  const innerA = document.getElementById("inner-a");
+  const innerB = document.getElementById("inner-b");
+
+  expect(innerA.hasAttribute("tabindex")).toBe(false);
+  expect(innerB.hasAttribute("tabindex")).toBe(false);
+
+  press(innerA, "ArrowRight");
+  expect(innerA.getAttribute("aria-selected")).toBe("true");
+  expect(document.getElementById("outer-a").getAttribute("aria-selected")).toBe("true");
 });
 
 test("clicking a tab selects it and reveals its panel", async () => {
@@ -243,6 +273,19 @@ test("ignores a tablist without the data-enhance token", async () => {
 
   expect(tabA.getAttribute("aria-selected")).toBe("true");
   expect(tabB.getAttribute("aria-selected")).toBe(null);
+});
+
+test("warns and wires nothing when the token sits on an element without role=tablist", async () => {
+  const warn = spyOn(console, "warn").mockImplementation(() => {});
+  try {
+    await loadTabs(tabsMarkup().replace(' role="tablist"', ""));
+    const list = document.querySelector('[data-enhance~="tabs"]');
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][1]).toBe(list);
+    expect(document.getElementById("tab-b").hasAttribute("tabindex")).toBe(false);
+  } finally {
+    warn.mockRestore();
+  }
 });
 
 test("token without presentation class still works", async () => {
