@@ -11,10 +11,12 @@ Use `.topbar` for the structural shell of an app-shell header: sticky positionin
   <button class="btn neutral ghost" type="button" aria-label="Open navigation">
     <i class="ti ti-menu-2" aria-hidden="true"></i>
   </button>
-  <ol class="breadcrumb" aria-label="Breadcrumb">
-    <li><a href="#">Overview</a></li>
-    <li aria-current="page">Accounts</li>
-  </ol>
+  <nav aria-label="Breadcrumb">
+    <ol class="breadcrumb">
+      <li><a href="#">Overview</a></li>
+      <li aria-current="page">Accounts</li>
+    </ol>
+  </nav>
   <div class="grow"></div>
   <span class="avatar sm"><abbr>LW</abbr></span>
 </header>

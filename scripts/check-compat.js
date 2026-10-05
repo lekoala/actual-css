@@ -130,6 +130,9 @@ const FEATURES = [
     kind: "safe-drop",
     tier: "optional",
   },
+  /* Chromium-only for now; every use follows a plain declaration of the same
+     property, which the engines without it keep. */
+  { name: "calc-size()", pattern: /calc-size\(/gi, kind: "safe-drop", tier: "optional" },
 ];
 
 const JUSTIFIED =

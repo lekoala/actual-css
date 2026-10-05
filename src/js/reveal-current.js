@@ -25,9 +25,12 @@ import { afterParse } from "./parsed.js";
 
 registerEnhancement("reveal-current", (strip) =>
   afterParse(strip, () => {
-    const current = [...strip.querySelectorAll('[aria-current]:not([aria-current="false"])')].find(
-      (item) => item.getClientRects().length,
-    );
+    // "false" and "" are not current in ARIA, as in the CSS state rules.
+    const current = [
+      ...strip.querySelectorAll(
+        '[aria-current]:not([aria-current="false"]):not([aria-current=""])',
+      ),
+    ].find((item) => item.getClientRects().length);
     ensureInlineVisible(strip, current);
   }),
 );

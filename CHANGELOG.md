@@ -8,13 +8,14 @@
 - `--grid-columns` and `--grid-min` no longer inherit into a nested `.grid`.
 - `.avatar-stack` no longer infers its size from child `.avatar.sm`/`.lg`; set `.sm`/`.lg` on the stack and omit size classes on its avatars.
 - `--focus-outline` has no default value: it is a fallback-only hook that replaces the generic focus line; read `var(--focus-ring-width) solid var(--focus-outline-color)` instead.
+- `data-enhance="tabs"` needs `role="tablist"` on the same element; without it the runtime warns and wires nothing.
 
 ### Added
 
-- `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the full runtime instance.
+- `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the same runtime that registers the built-ins.
 - `--tab-flex` on `.tabs` sets each tab's flex; `1 1 0` gives equal-width tabs.
 - `data-enhance="reveal-current"` (`actual-css/js/reveal-current`) scrolls an overflowing strip (`.pagination`, `.steps-horizontal`, link `.tabs`) to its `aria-current` item at connect.
-- `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs, apart from `--border`; it defaults to `--border`.
+- `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs; it defaults to `--border`, which keeps separating surfaces.
 
 ### Changed
 
@@ -28,7 +29,7 @@
 - A horizontal `.tabs` strip never wraps, nor do its labels: a strip that does not fit scrolls horizontally.
 - `.breadcrumb` never wraps: a trail that does not fit truncates its labels with an ellipsis, ancestors before the current page.
 - `.breadcrumb` ancestor labels truncate on their `<a>` or `<span>`; the current page also truncates as bare text in an `<li aria-current>`.
-- `.tab` shows the current state for any `aria-current` value, so a navigation flyout trigger can mark the current section with `aria-current="true"`.
+- `.tab` shows the current state for any `aria-current` value except `false` or empty, so a navigation flyout trigger can mark the current section with `aria-current="true"`.
 - The current `.nav-list` link trait sits inside the row's inline padding with rounded ends, instead of flush on its rounded edge.
 
 ### Fixed
@@ -45,7 +46,8 @@
 - An enhanced tablist no longer operates the tabs of a nested `role="tablist"` that has no `data-enhance="tabs"`.
 - A tablist with `data-enhance="tabs"` sets its roving tabindex when a classic script in `<head>` connects it before its tabs are parsed.
 - The generic focus line of links, `summary` and nav items follows a `--focus-ring-width` set on a `[data-theme]` island or any region, like the `.btn` ring beside it.
-- The focus reserve of `.pagination` and of a scrolling dialog or drawer body is `--focus-outline-offset` + `--focus-ring-width`, no longer widened by `2 × --border-width`.
+- The focus reserve of a scrolling dialog or drawer body is `--focus-outline-offset` + `--focus-ring-width`, no longer widened by `2 × --border-width`.
+- `aria-current="false"` and `aria-current=""` never paint the current state of `.tab`, `.nav-link`, `.list-item` or `.breadcrumb`, nor count for `data-enhance="reveal-current"`.
 
 ## [0.12.0] - 2026-10-02
 ### Breaking changes

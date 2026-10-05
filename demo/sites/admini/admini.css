@@ -55,6 +55,17 @@
   min-inline-size: 0;
 }
 
+/* Tabler webfont glyphs reserve their square before the font loads, so
+   buttons and nav links do not shift when it arrives. inline-grid, not
+   inline: sizes do not apply to an inline box outside a flex row. */
+.ti {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  inline-size: 1em;
+  block-size: 1em;
+}
+
 /* Region rhythm goes on `gap`, not on --gap: this element is itself a .stack,
    and --gap is inherited — setting it here would re-space every nested stack,
    cluster and grid down to the radio lists inside a field-group. */

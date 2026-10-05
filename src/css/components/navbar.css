@@ -71,9 +71,8 @@
 
 /* nav-link serves two contracts: plain page navigation (aria-current="page")
    and scrollspy, which toggles aria-current="location" on the active link.
-   Presence is the contract: the attribute is set on the current link and
-   removed everywhere else, never serialized as aria-current="false".
-   Selection never changes text metrics: the shared medium weight is kept and
+   Any value marks the current link except "false" and "" (not current in
+   ARIA; see .tab). Selection never changes text metrics: the shared medium weight is kept and
    the current link is carried by the selected accent. */
 .nav-link:hover {
   background: var(--surface-subtle);
@@ -83,7 +82,7 @@
 /* Current last, equal specificity to :hover (0,2,0): a hovered current link
    keeps the selected accent instead of dropping to --text. The surface fill is
    shared with the hover rule above. */
-.nav-link[aria-current] {
+.nav-link[aria-current]:where(:not([aria-current="false"]):not([aria-current=""])) {
   background: var(--surface-subtle);
   color: var(--state-selected);
 }
@@ -96,7 +95,7 @@
    above keeps the light chip where color-mix is missing, with ink that is
    legible on it. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .nav-link:is(:hover, [aria-current]) {
+  .nav-link:is(:hover, [aria-current]:where(:not([aria-current="false"]):not([aria-current=""]))) {
     background: color-mix(in oklch, currentColor 10%, transparent);
   }
 
@@ -105,7 +104,7 @@
   }
 
   /* After :hover so a hovered current link keeps the selected accent. */
-  .nav-link[aria-current] {
+  .nav-link[aria-current]:where(:not([aria-current="false"]):not([aria-current=""])) {
     color: var(--ui-fg, var(--state-selected));
   }
 }
@@ -142,7 +141,8 @@
    an app-positioned decoration to a new containing block.
    The trait sits centered in the link's inline padding with rounded ends: flush
    on the edge, a square line read as pasted onto the rounded fill. */
-.nav-list .nav-link[aria-current]::before {
+.nav-list
+.nav-link[aria-current]:where(:not([aria-current="false"]):not([aria-current=""]))::before {
   content: "";
   position: absolute;
   inset-block: var(--space-20);

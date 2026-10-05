@@ -53,6 +53,18 @@ Setting `--focus-outline` still replaces the generic line.
 `.list-item` regions center on the row. For rows with long supporting text,
 add `.items-start` to the row or to the `.list` to keep them top-aligned.
 
+### Step rows
+
+`.steps-horizontal` budgets each step from its marker instead of `7rem`, so a
+row fits narrower widths before it scrolls. To keep the previous budget on a
+row, set `--step-min: 7rem` on it.
+
+### Tabs
+
+`data-enhance="tabs"` only wires an element that also carries
+`role="tablist"`. Search markup for the token and add the role where it is
+missing; the console names each list it skipped.
+
 ### Rendering changes without an edit
 
 - `.pagination` and a horizontal `.tabs` strip never wrap: a strip that does
@@ -60,9 +72,8 @@ add `.items-start` to the row or to the `.list` to keep them top-aligned.
 - `.breadcrumb` never wraps either: a trail that does not fit truncates its
   labels with an ellipsis, ancestors first. Ancestor labels need an `<a>` or
   `<span>`.
-- The focus reserve of `.pagination` and of a scrolling dialog or drawer body
-  no longer grows with `--border-width`: 1px narrower under
-  `prefers-contrast: more`.
+- The focus reserve of a scrolling dialog or drawer body no longer grows with
+  `--border-width`: 1px narrower under `prefers-contrast: more`.
 
 ## 0.11 to 0.12
 

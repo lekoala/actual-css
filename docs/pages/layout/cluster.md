@@ -62,10 +62,10 @@ separate `.split` or `.spread` primitive; this is the same relationship.
 ```
 
 To align a row to its top edge instead of centering it — useful when one item
-wraps to several lines — set `--cluster-align`.
+wraps to several lines — set `--cluster-align` on the cluster itself.
 
 ```css
-.filters {
+.cluster.filters {
   --cluster-align: start;
   --cluster-justify: space-between;
 }

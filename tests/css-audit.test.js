@@ -14,6 +14,13 @@ function readRules(path) {
   return readCss(path).replace(/\/\*[\s\S]*?\*\//g, "");
 }
 
+/* The generic current state: any aria-current value but "false" and "", which
+   ARIA reads as not current. Zero-specificity, and single :not()s, since a
+   :not() list drops the whole rule below the floor. CURRENT_RE is its regex
+   source, for patterns that go on to match the declaration block. */
+const CURRENT = '[aria-current]:where(:not([aria-current="false"]):not([aria-current=""]))';
+const CURRENT_RE = CURRENT.replace(/[[\]():.]/g, "\\$&");
+
 function mediaBodies(source, query) {
   const bodies = [];
   const start = new RegExp(`@media\\s+${query}\\s*\\{`, "g");
@@ -482,6 +489,27 @@ test("no class pretends to invert a subtree", () => {
   }
 });
 
+test('a generic [aria-current] state never matches "false" or ""', () => {
+  // React and Vue serialize a false binding as aria-current="false", which
+  // ARIA reads as not current. A bare [aria-current] painted every inactive
+  // link as current; value selectors such as [aria-current="page"] are safe.
+  const cssRoot = join(import.meta.dir, "..", "src", "css");
+  const walk = (dir) =>
+    readdirSync(dir).flatMap((entry) => {
+      const full = join(dir, entry);
+      return statSync(full).isDirectory() ? walk(full) : /\.css$/.test(entry) ? [full] : [];
+    });
+  for (const file of walk(cssRoot)) {
+    const rules = readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    const bare =
+      rules
+        .split(CURRENT)
+        .join("")
+        .match(/\[aria-current\][^;{}]*/g) ?? [];
+    expect(bare, file).toEqual([]);
+  }
+});
+
 test("card derives contextual tokens from the surface it owns", () => {
   const css = readCss("src/css/components/card.css");
 
@@ -553,24 +581,26 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   // tests/browser/surface-context.test.js.
   expect(rules).not.toContain("--ui-hover-bg");
   expect(css).toMatch(
-    /\.nav-link:is\(:hover, \[aria-current\]\) \{[^}]*background: color-mix\(in oklch, currentColor 10%, transparent\);/,
+    new RegExp(
+      `\\.nav-link:is\\(:hover, ${CURRENT_RE}\\) \\{[^}]*background: color-mix\\(in oklch, currentColor 10%, transparent\\);`,
+    ),
   );
   // nav-link is deliberately multi-value: page navigation and scrollspy
-  // ("location") share the presence trigger. Presence is the contract — the
-  // attribute is removed when inactive, never serialized as "false".
-  expect(css).toContain(".nav-link[aria-current]");
-  expect(rules).not.toContain('aria-current="false"');
+  // ("location") share the generic current state.
   // Selection never changes text metrics: the current link shares the base
   // weight and is carried by the selected accent plus, in .nav-list, an inset
   // inline-start trait (CONTRIBUTING.md "Forced colors invariant").
-  expect(css).toMatch(/\.nav-link\[aria-current\] \{[^}]*color: var\(--state-selected\);/);
+  expect(css).toMatch(
+    new RegExp(`\\.nav-link${CURRENT_RE} \\{[^}]*color: var\\(--state-selected\\);`),
+  );
   expect(css).not.toMatch(/\.nav-link\[aria-current\][^{]*\{[^}]*font-weight:/);
   // A hovered current link keeps the selected accent by source order: the
-  // [aria-current] rule follows :hover at equal specificity. The rendered
-  // result is asserted in tests/browser/surface-context.test.js.
-  expect(css).toContain(".nav-list .nav-link[aria-current]");
+  // current rule follows :hover at equal specificity, which the :where() keeps.
+  // The rendered result is asserted in tests/browser/surface-context.test.js.
   expect(css).toMatch(
-    /\.nav-list \.nav-link\[aria-current\]::before \{[^}]*border-inline-start: 2px solid currentColor;/,
+    new RegExp(
+      `\\.nav-list\\s+\\.nav-link${CURRENT_RE}::before \\{[^}]*border-inline-start: 2px solid currentColor;`,
+    ),
   );
   // The positioning context lives on every row link, so becoming current never
   // moves an app-positioned decoration to a new containing block.
@@ -708,10 +738,14 @@ test("tabs include vertical orientation styling without spending specificity on 
   expect(css).not.toMatch(/\.tab\[aria-selected="true"\]\s*\{[^}]*font-weight:/s);
 
   /* The link variant marks aria-current exactly like the widget state: same
-     tint, same underline. Presence is the contract, so a flyout trigger can
+     tint, same underline. Any current value counts, so a flyout trigger can
      carry "true" for the current section while its panel link carries "page". */
-  expect(css).toMatch(/\.tab\[aria-selected="true"\],\s*\.tab\[aria-current\]\s*\{/s);
-  expect(css).toMatch(/\.tab\[aria-selected="true"\]::after,\s*\.tab\[aria-current\]::after\s*\{/s);
+  expect(css).toMatch(
+    new RegExp(`\\.tab\\[aria-selected="true"\\],\\s*\\.tab${CURRENT_RE}\\s*\\{`),
+  );
+  expect(css).toMatch(
+    new RegExp(`\\.tab\\[aria-selected="true"\\]::after,\\s*\\.tab${CURRENT_RE}::after\\s*\\{`),
+  );
 
   /* Keeping aria-orientation out of the cascade is a repo-wide invariant, so
      check:architecture owns the negative assertion for every stylesheet.
@@ -746,7 +780,7 @@ test('breadcrumb marks a single aria-current="page" state', () => {
 
   expect(css).toContain('.breadcrumb a:not([aria-current="page"]):hover');
   expect(css).toContain('.breadcrumb :where(li, a, span)[aria-current="page"]');
-  expect(css).not.toContain('aria-current="false"');
+  expect(css).toMatch(new RegExp(`\\.breadcrumb\\s+> li${CURRENT_RE}:not\\(:has\\(> \\*\\)\\)`));
   expect(css.includes("pointer-events: none")).toBe(false);
 });
 
@@ -1331,14 +1365,16 @@ test("application lists provide optional regions without owning their controls",
   // Long content wraps instead of pushing the grid track: title and text share
   // the anywhere wrap, and an explicit .truncate stays the opt-in single line.
   expect(css).toMatch(/\.list-item-title,\s*\.list-item-text \{[^}]*overflow-wrap: anywhere;/);
-  // Navigational current row: generic presence contract, calm surface,
-  // normal text, inset selected trait. Presence is the contract, never "false".
-  // The value (page, location, …) stays free for assistive technology.
-  expect(css).toContain("a.list-item[aria-current]");
-  expect(rules).not.toContain('aria-current="false"');
-  expect(css).toMatch(/a\.list-item\[aria-current\] \{[^}]*background: var\(--surface-subtle\);/);
+  // Navigational current row: generic current state, calm surface, normal
+  // text, inset selected trait. The value (page, location, …) stays free for
+  // assistive technology.
   expect(css).toMatch(
-    /a\.list-item\[aria-current\]::before \{[^}]*border-inline-start: 2px solid var\(--state-selected\);/,
+    new RegExp(`a\\.list-item${CURRENT_RE} \\{[^}]*background: var\\(--surface-subtle\\);`),
+  );
+  expect(css).toMatch(
+    new RegExp(
+      `a\\.list-item${CURRENT_RE}::before \\{[^}]*border-inline-start: 2px solid var\\(--state-selected\\);`,
+    ),
   );
   expect(css).not.toMatch(/a\.list-item\[aria-current[^}]*\{[^}]*font-weight:/);
   // Same containing-block rule as nav-list: every row link owns the context.
