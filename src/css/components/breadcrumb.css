@@ -18,10 +18,11 @@
 
 .breadcrumb {
   /* The scrollport clips on both axes, so the padding keeps the text-link
-     outline of every item inside it. Negative margins give the room back on the block axis and at the
-     inline start, so the root aligns with the content around it: overflow
-     toward the start is never scrollable. The inline end keeps it, or the
-     list would grow past its container and scroll the page on a phone. */
+     outline of every item inside it. Negative margins give the room back on
+     the block axis and at the inline start, so the root aligns with the
+     content around it: overflow toward the start is never scrollable. The
+     inline end keeps it, or the list would grow past its container and scroll
+     the page on a phone. */
   --breadcrumb-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 
   display: flex;
@@ -54,7 +55,7 @@
 /* Items keep their size and the strip scrolls instead. White-space on the
    item inherits to its text, so labels never break inside the one-line strip
    regardless of the link markup. */
-.breadcrumb li {
+.breadcrumb > li {
   display: inline-flex;
   flex: none;
   align-items: center;
@@ -62,7 +63,7 @@
   white-space: nowrap;
 }
 
-.breadcrumb li + li::before {
+.breadcrumb > li + li::before {
   content: "/";
   color: var(--text-subtle);
 }

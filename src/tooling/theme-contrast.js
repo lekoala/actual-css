@@ -24,11 +24,13 @@ const FRAMEWORK = fileURLToPath(new URL("../css/actual.full.css", import.meta.ur
 export const INTENTS = ["primary", "secondary", "success", "warning", "danger", "neutral"];
 
 /* Badges state .soft explicitly: a theme may fill badges by default
-   (bootstrap-v6), which would measure a solid pair against the soft hover. */
-function islandMarkup(id, attribute, scheme) {
-  const theme = attribute ? ` data-theme="${attribute}"` : "";
+   (bootstrap-v6), which would measure a solid pair against the soft hover.
+   The theme name is read from a file by a regex, so it never enters this
+   markup: measureContrast() sets it through dataset. `scheme` is only ever
+   "light" or "dark". */
+function islandMarkup(id, scheme) {
   const style = scheme ? ` style="color-scheme: ${scheme}"` : "";
-  return `<div${theme}${style} id="${id}">
+  return `<div${style} id="${id}">
     ${INTENTS.map((i) => `<span class="badge soft ${i}" data-badge="${i}">t</span>`).join("")}
     ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
     <span data-pair="focus-surface" style="color: var(--focus); background: var(--surface)"></span>
@@ -75,10 +77,14 @@ export async function measureContrast({ css, themes, label = "default" }) {
     );
   })(${JSON.stringify(css)}, ${JSON.stringify(themes)}, ${JSON.stringify(label)})`);
 
-  const markup = islands
-    .map((island, i) => islandMarkup(`island-${i}`, island.attribute, island.scheme))
-    .join("\n");
-  await view.evaluate(`document.body.insertAdjacentHTML("beforeend", ${JSON.stringify(markup)})`);
+  const markup = islands.map((island, i) => islandMarkup(`island-${i}`, island.scheme)).join("\n");
+  const attributes = islands.map((island) => island.attribute);
+  await view.evaluate(`((markup, attributes) => {
+    document.body.insertAdjacentHTML("beforeend", markup);
+    attributes.forEach((attribute, i) => {
+      if (attribute) document.getElementById("island-" + i).dataset.theme = attribute;
+    });
+  })(${JSON.stringify(markup)}, ${JSON.stringify(attributes)})`);
 
   await view.cdp("DOM.enable");
   await view.cdp("CSS.enable");

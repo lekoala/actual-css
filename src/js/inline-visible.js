@@ -11,9 +11,11 @@
  *   than the visible area that covers it on both sides stays put too.
  * - The visible area is the scrollport minus its computed scroll-padding, the
  *   native vocabulary also honoured by focus scrolling: a component that
- *   masks an edge (the breadcrumb fade) declares it there, not here.
+ *   masks an edge (the .scroller fade) declares it there, not here.
  * - The delta comes from physical rects and goes through scrollBy(), so RTL
  *   needs no scrollLeft sign convention.
+ * - Inline axis only: the block scroll position is left as it is. Callers are
+ *   one-row strips whose block axis does not scroll.
  * - Requires a laid-out, visible container and target. A strip hidden at
  *   connect (inside a closed dialog or drawer) or a target without a box (a
  *   current link inside a closed flyout) gets a no-op, not a deferred retry.

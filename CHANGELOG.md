@@ -36,6 +36,7 @@
 - A default `.btn.outline` in a field `.join` takes `--border-control` like the field, not `--border`.
 - The scrolling body of a `dialog.modal.scrollable` and a `dialog.drawer` keeps the focus line of its first and last controls inside its clip.
 - `actual-css contrast` and `actual-css design` detect a theme written `[data-theme = "brand"]` or `[data-theme=brand]`, and ignore selectors quoted in comments.
+- `actual-css contrast` measures a theme whose name contains `&` or `<` under its own name, instead of an island the name had broken.
 - `actual-css contrast` and `actual-css design` reject a `--name` the theme file does not declare as `[data-theme]`, instead of measuring the framework defaults.
 - A bare heading in a `dialog.modal > header` drops its block margins, so the band no longer grows and the title centers on the close.
 - A `<nav>` around `.breadcrumb`, `.pagination` or `.tabs` shrinks inside a flex or grid row, so the strip scrolls instead of the page.

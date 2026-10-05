@@ -73,6 +73,19 @@
     </ol>
   </div>
 
+  <!-- A boxless current item first (a responsive duplicate) must not hide the
+       rendered one: the strip still starts on it. -->
+  <div class="box">
+    <ol class="breadcrumb" data-enhance="reveal-current" id="trail-duplicate-current">
+      <li hidden><a href="#e" aria-current="page">Breadcrumb</a></li>
+      <li><a href="#a">Home</a></li>
+      <li><a href="#b">Projects</a></li>
+      <li><a href="#c">Documentation</a></li>
+      <li><a href="#d">Components</a></li>
+      <li><a href="#e" aria-current="page">Breadcrumb</a></li>
+    </ol>
+  </div>
+
   <div class="spacer"></div>
   <!-- Below the fold: placing its tab must not scroll the page. -->
   <div class="box" data-strip="tabs-below"></div>

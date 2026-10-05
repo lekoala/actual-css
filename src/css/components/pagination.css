@@ -20,11 +20,11 @@
  */
 .pagination {
   /* The scrollport clips on both axes, so the padding keeps the outer focus
-     line of every item inside it. Negative margins give the room back on the block axis and at the
-     inline start, so the first item aligns with the content around it:
-     overflow toward the start is never scrollable. The inline end keeps it,
-     or the list would grow past its container and scroll the page on a
-     phone. */
+     line of every item inside it. Negative margins give the room back on the
+     block axis and at the inline start, so the first item aligns with the
+     content around it: overflow toward the start is never scrollable. The
+     inline end keeps it, or the list would grow past its container and scroll
+     the page on a phone. */
   --pagination-focus-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 
   display: flex;

@@ -42,12 +42,17 @@ const READ = `(() => {
       clear: rect.left >= left + padLeft - 1 && rect.right <= right - padRight + 1,
     };
   };
+  // The rendered current item, or the first one when none has a box.
+  const current = (list) => {
+    const items = [...list.querySelectorAll("[aria-current]")];
+    return items.find((item) => item.getClientRects().length) ?? items[0];
+  };
   const strips = {};
   for (const list of document.querySelectorAll('[role="tablist"]')) {
     strips[list.id] = read(list, list.querySelector('[aria-selected="true"]'));
   }
   for (const list of document.querySelectorAll(".breadcrumb, .steps, .pagination")) {
-    strips[list.id] = read(list, list.querySelector("[aria-current]"));
+    strips[list.id] = read(list, current(list));
   }
   return { strips, pageY: window.scrollY };
 })()`;
@@ -58,7 +63,14 @@ it("overflowing strips start on their selected or current item", async () => {
     async (view) => {
       const before = await view.evaluate(READ);
       // The fixture must overflow with the target hidden, or the pass is vacuous.
-      const hidden = ["tabs-end", "tabs-middle", "tabs-rtl", "tabs-below", "trail-long"];
+      const hidden = [
+        "tabs-end",
+        "tabs-middle",
+        "tabs-rtl",
+        "tabs-below",
+        "trail-long",
+        "trail-duplicate-current",
+      ];
       for (const id of [...hidden, "steps-row", "pager"]) {
         expect(before.strips[id], id).toMatchObject({ overflows: true, inBox: false });
       }
@@ -70,7 +82,7 @@ it("overflowing strips start on their selected or current item", async () => {
       await waitForBrowser(
         view,
         `[...document.querySelectorAll('[role="tablist"]')].every((list) => list.querySelector('[tabindex="-1"]')) &&
-         ["trail-long", "steps-row", "pager"].every((id) => document.getElementById(id).scrollLeft !== 0)`,
+         ["trail-long", "trail-duplicate-current", "steps-row", "pager"].every((id) => document.getElementById(id).scrollLeft !== 0)`,
       );
       const { strips, pageY } = await view.evaluate(READ);
 
@@ -84,6 +96,8 @@ it("overflowing strips start on their selected or current item", async () => {
       // The same token serves any strip with an aria-current item.
       expect(strips["steps-row"]).toMatchObject({ scrolled: true, inBox: true });
       expect(strips.pager).toMatchObject({ scrolled: true, inBox: true });
+      // A boxless current item before the rendered one is skipped.
+      expect(strips["trail-duplicate-current"]).toMatchObject({ scrolled: true, clear: true });
       // A current item without a box (inside a hidden item) moves nothing.
       expect(strips["trail-hidden-current"].scrolled).toBe(false);
       // Already visible: nothing moves.
