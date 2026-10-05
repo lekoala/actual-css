@@ -10,7 +10,8 @@
  *
  * A one-row strip that does not fit scrolls, and its current item — the
  * breadcrumb's page, the flow's step, the selected page number — may render
- * off-screen at rest. At connect the strip scrolls just enough to show the
+ * off-screen at rest. At connect, once the document is parsed so the current
+ * item exists, the strip scrolls just enough to show the
  * first rendered `aria-current` item clear of its scroll-padding (the strip
  * reserves its focus line there). A current item without a box (a responsive
  * duplicate, a link in a closed flyout) is skipped, not taken as the target
@@ -21,10 +22,13 @@
 
 import { registerEnhancement } from "./enhance.js";
 import { ensureInlineVisible } from "./inline-visible.js";
+import { afterParse } from "./parsed.js";
 
-registerEnhancement("reveal-current", (strip) => {
-  const current = [...strip.querySelectorAll('[aria-current]:not([aria-current="false"])')].find(
-    (item) => item.getClientRects().length,
-  );
-  ensureInlineVisible(strip, current);
-});
+registerEnhancement("reveal-current", (strip) =>
+  afterParse(strip, () => {
+    const current = [...strip.querySelectorAll('[aria-current]:not([aria-current="false"])')].find(
+      (item) => item.getClientRects().length,
+    );
+    ensureInlineVisible(strip, current);
+  }),
+);

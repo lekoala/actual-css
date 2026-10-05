@@ -9,7 +9,8 @@
  *            ArrowUp/Down for aria-orientation="vertical"
  *            ArrowDown (focus selected panel)
  *            [hidden], disabled and panel-less tabs are skipped
- * Overflow:  a horizontal strip scrolls its selected tab into view at connect
+ * Overflow:  a horizontal strip shows its whole selected tab, at connect and
+ *            on every selection
  *
  * Self-registers via registerEnhancement: injected tablists wire automatically.
  * The tab→panel map is rebuilt from the live tablist on each interaction,
@@ -20,6 +21,7 @@
 import { registerEnhancement } from "./enhance.js";
 import { ensureInlineVisible } from "./inline-visible.js";
 import { itemForKey, shouldIgnoreKey } from "./keys.js";
+import { afterParse } from "./parsed.js";
 
 const TABLIST_SELECTOR = '[data-enhance~="tabs"]';
 
@@ -163,8 +165,13 @@ function onClick(e) {
 
 registerEnhancement("tabs", (list) => {
   const controller = new AbortController();
-  initialize(list);
+  // Once parsed: a tablist connected mid-parse had no tabs yet, so the roving
+  // tabindex and the selected tab's placement were skipped for good.
+  const cancelInit = afterParse(list, () => initialize(list));
   list.addEventListener("click", onClick, { signal: controller.signal });
   list.addEventListener("keydown", onKeydown, { signal: controller.signal });
-  return () => controller.abort();
+  return () => {
+    cancelInit();
+    controller.abort();
+  };
 });

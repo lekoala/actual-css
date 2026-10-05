@@ -14,6 +14,10 @@
  *   keeps an edge clear (a strip's focus line) declares it there, not here.
  * - The delta comes from physical rects and goes through scrollBy(), so RTL
  *   needs no scrollLeft sign convention.
+ * - Rects are in transformed pixels; clientWidth, scroll-padding and scrollBy()
+ *   are in layout pixels. The strip's own scale converts between them, so a
+ *   strip under transform: scale() reveals the same item. Rotation is out of
+ *   scope.
  * - Inline axis only: the block scroll position is left as it is. Callers are
  *   one-row strips whose block axis does not scroll.
  * - Requires a laid-out, visible container and target. A strip hidden at
@@ -24,20 +28,27 @@
 // Sub-pixel layout must not read as overflow and nudge an aligned strip.
 const TOLERANCE = 1;
 
-// scroll-padding computes to `auto` or a length; auto adds no inset here.
-const inset = (value) => Number.parseFloat(value) || 0;
+// scroll-padding computes to `auto`, a length, or a percentage of the
+// scrollport; auto adds no inset. A calc() mixing the two reads as none.
+const inset = (value, scrollport) =>
+  value.endsWith("%")
+    ? (Number.parseFloat(value) * scrollport) / 100
+    : Number.parseFloat(value) || 0;
 
 export function ensureInlineVisible(container, target) {
-  if (!container?.clientWidth || !target?.getClientRects().length) return;
+  const width = container?.clientWidth;
+  if (!width || !target?.getClientRects().length) return;
   const style = getComputedStyle(container);
   const box = container.getBoundingClientRect();
-  const left = box.left + container.clientLeft + inset(style.scrollPaddingLeft);
-  const right =
-    box.left + container.clientLeft + container.clientWidth - inset(style.scrollPaddingRight);
+  const scale = box.width / container.offsetWidth || 1;
+  const start = box.left + (container.clientLeft + inset(style.scrollPaddingLeft, width)) * scale;
+  const end =
+    box.left + (container.clientLeft + width - inset(style.scrollPaddingRight, width)) * scale;
   const rect = target.getBoundingClientRect();
-  const before = rect.left < left - TOLERANCE;
-  const after = rect.right > right + TOLERANCE;
+  const before = rect.left < start - TOLERANCE;
+  const after = rect.right > end + TOLERANCE;
   if (before === after) return;
-  // Initial placement, so it must not animate under scroll-behavior: smooth.
-  container.scrollBy({ left: before ? rect.left - left : rect.right - right, behavior: "instant" });
+  const delta = before ? rect.left - start : rect.right - end;
+  // A placement, not a transition: it must not animate under scroll-behavior: smooth.
+  container.scrollBy({ left: delta / scale, behavior: "instant" });
 }
