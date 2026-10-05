@@ -331,48 +331,12 @@
   max-inline-size: 28rem;
 }
 
-.admini-settings-tabs {
-  flex-direction: row;
-  overflow-x: auto;
-  border-block-end: var(--border-width) solid var(--border);
-}
-
-.admini-settings-tabs .tab {
-  flex: 0 0 auto;
-}
-
+/* The tab list is a scrolling strip above the panel, then a side column.
+   settings.html switches aria-orientation at the same width, so the framework
+   draws each form and the arrow keys follow it; nothing here restyles tabs. */
 @media (min-width: 56rem) {
   .admini-settings {
     grid-template-columns: 14rem minmax(0, 1fr);
-  }
-
-  .admini-settings-tabs {
-    flex-direction: column;
-    align-items: stretch;
-    overflow-x: visible;
-    border-block-end: 0;
-    border-inline-end: var(--border-width) solid var(--border);
-    padding-inline-end: var(--space-30);
-  }
-
-  .admini-settings-tabs .tab {
-    justify-content: flex-start;
-    gap: var(--space-20);
-    border-block-end: 0;
-    border-inline-start: 2px solid transparent;
-    border-radius: 0;
-  }
-
-  /* Matches the framework's vertical-tab accent rule (.tabs[attr] .tab[attr])
-     so this can turn its inline-end accent off: this composition keeps exactly
-     one accent bar (inline start) so the active item is not flanked by the
-     structural column separator. */
-  .tabs.admini-settings-tabs .tab[aria-selected="true"] {
-    border-inline-end-color: transparent;
-  }
-
-  .admini-settings-tabs .tab[aria-selected="true"] {
-    border-inline-start-color: var(--intent, var(--primary));
   }
 }
 

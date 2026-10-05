@@ -388,6 +388,18 @@
   <script src="../../../dist/actual.full.js" defer></script>
 
   <script>
+    // The section list is a side column on wide screens and a scrolling strip
+    // above the panel otherwise. aria-orientation follows the layout, because
+    // the framework styles each form from it and the arrow keys read it.
+    // Runs before the deferred runtime, so the strip reveals its selected tab.
+    // The width matches the column breakpoint in admini.css.
+    const settingsTabs = document.querySelector(".admini-settings-tabs");
+    const wide = matchMedia("(min-width: 56rem)");
+    const orient = () =>
+      settingsTabs.setAttribute("aria-orientation", wide.matches ? "vertical" : "horizontal");
+    orient();
+    wide.addEventListener("change", orient);
+
     // The validation enhancement blocks invalid submits; this only handles
     // the valid path, where a real app would call the server.
     document.querySelector("#panel-security form").addEventListener("submit", (e) => {

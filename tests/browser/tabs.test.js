@@ -22,6 +22,7 @@ const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
 const ARROW_RIGHT = { code: "ArrowRight", windowsVirtualKeyCode: 39 };
+const ARROW_DOWN = { code: "ArrowDown", windowsVirtualKeyCode: 40 };
 
 // Lines of a label: its text height over the line height, not the tab box,
 // which min-block-size keeps taller than one line.
@@ -141,5 +142,55 @@ it("a vertical rail wraps long labels instead of scrolling", async () => {
       expect(rail.lines).toBeGreaterThan(1);
     },
     { artifactName: "tabs-vertical" },
+  );
+});
+
+/*
+ * aria-orientation is the one switch between the rail and the strip, so a page
+ * that changes layout flips it and owes no tab styling of its own. A demo
+ * restyled the vertical form into a strip instead; when the framework moved
+ * the rail to grid and its accent to ::after, the strip came back stacked and
+ * the desktop rail grew a second accent bar. Each form must read the current
+ * attribute: layout, one indicator on the right edge, and the arrow keys.
+ */
+it("a tablist that flips aria-orientation takes each form and its keys", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const read = `(() => {
+        const list = document.getElementById("flip");
+        const tabs = [...list.querySelectorAll(".tab")];
+        const selected = list.querySelector('[aria-selected="true"]');
+        const after = getComputedStyle(selected, "::after");
+        return {
+          rows: new Set(tabs.map((tab) => Math.round(tab.getBoundingClientRect().top))).size,
+          end: after.borderInlineEndWidth,
+          bottom: after.borderBlockEndWidth,
+          start: getComputedStyle(selected).borderInlineStartWidth,
+        };
+      })()`;
+
+      const vertical = await view.evaluate(read);
+      expect(vertical.rows).toBe(3);
+      expect(vertical).toMatchObject({ end: "2px", bottom: "0px", start: "0px" });
+      expect(await tabUntil(view, `document.activeElement?.id === "flip-1"`)).toBe(true);
+      await pressKey(view, "ArrowDown", ARROW_DOWN);
+      expect(await waitForBrowser(view, `document.activeElement?.id === "flip-2"`)).toBe(true);
+
+      await view.evaluate(
+        `document.getElementById("flip").setAttribute("aria-orientation", "horizontal")`,
+      );
+      const horizontal = await view.evaluate(read);
+      expect(horizontal.rows).toBe(1);
+      expect(horizontal).toMatchObject({ end: "0px", bottom: "2px", start: "0px" });
+      await pressKey(view, "ArrowRight", ARROW_RIGHT);
+      expect(await waitForBrowser(view, `document.activeElement?.id === "flip-3"`)).toBe(true);
+      expect(
+        await view.evaluate(
+          `document.getElementById("flip-3").getAttribute("aria-selected") === "true"`,
+        ),
+      ).toBe(true);
+    },
+    { artifactName: "tabs-flip" },
   );
 });

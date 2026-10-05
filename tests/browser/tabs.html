@@ -60,5 +60,16 @@
   </div>
   <section role="tabpanel" id="r1" aria-labelledby="rail-long">One</section>
   <section role="tabpanel" id="r2" hidden>Two</section>
+
+  <!-- A page flips aria-orientation with its layout (admini settings: a side
+       column on wide screens, a strip above the panel on phones). -->
+  <div class="tabs" id="flip" data-enhance="tabs" role="tablist" aria-orientation="vertical" aria-label="Flip">
+    <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="f1" id="flip-1">Profile</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="f2" id="flip-2" tabindex="-1">Account</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="f3" id="flip-3" tabindex="-1">Security</button>
+  </div>
+  <section role="tabpanel" id="f1" aria-labelledby="flip-1">One</section>
+  <section role="tabpanel" id="f2" aria-labelledby="flip-2" hidden>Two</section>
+  <section role="tabpanel" id="f3" aria-labelledby="flip-3" hidden>Three</section>
 </body>
 </html>
