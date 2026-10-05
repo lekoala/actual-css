@@ -179,8 +179,8 @@ Actual CSS is before 1.0:
 * A patch release (`0.12.0` → `0.12.1`) keeps every class and hook. It fixes
   bugs and may add hooks, so a fix can still move a rendering by a few pixels.
 
-The floating `@0.11` CDN path takes patches automatically. Pin the exact
-version (`actual-css@0.12.1`) when the rendering must not change without a
+The floating `actual-css@0.12` CDN path takes patches automatically. Pin the exact
+version (`actual-css@0.12.0`) when the rendering must not change without a
 review.
 
 ## Browser support

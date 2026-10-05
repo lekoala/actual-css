@@ -114,10 +114,12 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Temp files can be created in `./tmp`
 - If code and docs disagree, treat code as the API source and update the smallest doc that explains the decision
 - Release tags carry no `v` prefix: `0.7.0`, never `v0.7.0`. Ship a release
-  with `bun run release <patch|minor|major>` — the only entry point: it moves
+  with `bun run release <patch|minor|major>` — the only preparation entry point: it moves
   CDN pins to the new minor, dates `[Unreleased]`, bumps `package.json`, runs
-  `build:all`, then creates the version commit and the bare tag. Do not bump,
-  tag, or publish to npm by hand. Read the format from
+  `build:all`, then creates the version commit and the bare tag. Do not bump
+  or tag by hand. The maintainer publishes to npm manually with `npm publish`
+  from the release commit after the tag's CI passes; agents must not publish
+  without an explicit request. Read the format from
   `git ls-remote --tags github`, not from the local tag list, which can hold
   a stray a push never carried. Pushing the tag is what publishes the GitHub
   release (CI job `release`); `bun run release:notes` previews the notes

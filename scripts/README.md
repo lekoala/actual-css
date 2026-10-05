@@ -31,6 +31,17 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 | `shot:forced` | `forced-colors-shot.js` | Same, with forced-colors emulation (DevTools pipeline). |
 | `probe` | `probe.js` | Run a JS program inside a headless-Chrome page and print its return value as JSON. |
 
+## Releases
+
+Run `bun run release <patch|minor|major>` from a clean worktree to prepare
+the version commit and tag, then preview the notes with `bun run release:notes`.
+Push the branch and tag with the command printed by the release script.
+
+Once the tag's CI passes, the maintainer runs `npm publish` from that release
+commit. Its `prepublishOnly` script runs `build:all`. The CI `release` job
+creates the GitHub release and attaches `dist/`; npm publication is separate
+and makes the new version available to npm-backed CDNs.
+
 ## Git hooks
 
 Run `bun run hooks:install` once per clone to enable the versioned hooks in
