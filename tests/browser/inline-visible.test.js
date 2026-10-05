@@ -156,3 +156,92 @@ it("arrow keys reveal a tab that only shows a sliver", async () => {
     { width: 800, height: 600, artifactName: "inline-visible-sliver" },
   );
 });
+
+// A page that loads the runtime as a classic script in <head>, so enhancers
+// connect while the parser is still inserting their children. Boxes, not
+// text, so every width is the fixture's own.
+const PARSED_PAGE = "tmp/browser-runtime/inline-visible-parse.html";
+await Bun.write("tmp/browser-runtime/full.js", source);
+await Bun.write(
+  PARSED_PAGE,
+  `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    .strip { display: flex; inline-size: 200px; overflow: auto hidden; }
+    .strip > * { flex: none; block-size: 1rem; }
+  </style>
+  <script src="./full.js"></script>
+</head>
+<body>
+  <ol class="breadcrumb" data-enhance="reveal-current" id="streamed" style="inline-size: 12rem">
+    <li><a href="#a">Home</a></li>
+    <script>window.parserCheckpoint = true;</script>
+    <li><a href="#b">Projects</a></li>
+    <li><a href="#c">Documentation</a></li>
+    <li><a href="#d" aria-current="page">Components</a></li>
+  </ol>
+  <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Streamed" id="streamed-tabs">
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="p1" id="st1">One</button>
+    <script>window.parserCheckpoint = true;</script>
+    <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="p2" id="st2">Two</button>
+  </div>
+  <div role="tabpanel" id="p1" hidden></div>
+  <div role="tabpanel" id="p2"></div>
+  <div class="strip" data-enhance="reveal-current" id="percent" style="scroll-padding-inline: 20%">
+    <div style="inline-size: 250px"></div><div aria-current="true" style="inline-size: 50px"></div><div style="inline-size: 250px"></div>
+  </div>
+  <div style="transform: scale(0.5); transform-origin: 0 0">
+    <div class="strip" data-enhance="reveal-current" id="scaled">
+      <div style="inline-size: 250px"></div><div aria-current="true" style="inline-size: 50px"></div><div style="inline-size: 250px"></div>
+    </div>
+  </div>
+</body>
+</html>
+`,
+);
+
+it("placement waits for parsing, reads percentages and follows a scale", async () => {
+  await withBrowserPage(
+    fixtureUrl(PARSED_PAGE),
+    async (view) => {
+      await waitForBrowser(view, `document.readyState !== "loading"`);
+      const state = await view.evaluate(`(() => {
+        // Layout-pixel offsets of the current item inside its strip.
+        const place = (id) => {
+          const strip = document.getElementById(id);
+          const box = strip.getBoundingClientRect();
+          const scale = box.width / strip.offsetWidth;
+          const rect = strip.querySelector("[aria-current]").getBoundingClientRect();
+          return {
+            scrolled: strip.scrollLeft !== 0,
+            end: (rect.right - box.left) / scale,
+            width: strip.clientWidth,
+          };
+        };
+        const tab = (id) => document.getElementById(id).getAttribute("tabindex");
+        return {
+          streamed: place("streamed"),
+          percent: place("percent"),
+          scaled: place("scaled"),
+          tabs: [tab("st1"), tab("st2")],
+        };
+      })()`);
+
+      // Trap: the current item was not parsed yet when the trail connected.
+      expect(state.streamed.scrolled).toBe(true);
+      expect(state.streamed.end).toBeLessThanOrEqual(state.streamed.width + 1);
+      // Trap: the tablist connected with no tabs and never set its roving tabindex.
+      expect(state.tabs).toEqual(["-1", "0"]);
+      // Trap: 20% read as 20px; it is 20% of the scrollport.
+      expect(state.percent.scrolled).toBe(true);
+      expect(state.percent.end).toBeLessThanOrEqual(state.percent.width * 0.8 + 1);
+      // Trap: transformed rects against layout widths saw the item as visible.
+      expect(state.scaled.scrolled).toBe(true);
+      expect(state.scaled.end).toBeLessThanOrEqual(state.scaled.width + 1);
+    },
+    { width: 800, height: 600, artifactName: "inline-visible-parse" },
+  );
+});
