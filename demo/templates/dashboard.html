@@ -63,9 +63,8 @@
       display: none;
     }
 
-    /* The trail yields room to the topbar actions and scrolls inside it
-       (framework overflow); the breadcrumb enhancement starts it on the
-       current page, so a narrow topbar shows where you are, not the root. */
+    /* The trail yields room to the topbar actions; past this width its
+       labels truncate. */
     .dashboard-topbar .breadcrumb {
       max-inline-size: 24rem;
     }
@@ -299,12 +298,14 @@
           <i class="ti ti-menu-2" aria-hidden="true"></i>
         </button>
 
-        <ol class="breadcrumb" aria-label="Breadcrumb">
-          <li><a href="#overview">Actual Cloud</a></li>
-          <li><a href="#revenue">Revenue</a></li>
-          <li><a href="#portfolio">Portfolio</a></li>
-          <li aria-current="page">Overview</li>
-        </ol>
+        <nav aria-label="Breadcrumb">
+          <ol class="breadcrumb">
+            <li><a href="#overview">Actual Cloud</a></li>
+            <li><a href="#revenue">Revenue</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li aria-current="page">Overview</li>
+          </ol>
+        </nav>
 
         <div class="grow"></div>
 

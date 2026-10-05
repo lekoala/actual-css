@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>aria-current values fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <!-- Each group: a current item, then the values ARIA reads as not current
+       ("false", ""), then an item without the attribute as the reference. -->
+  <ul class="tabs" id="tabs">
+    <li><a class="tab" href="#a" aria-current="page">Current</a></li>
+    <li><a class="tab" href="#b" aria-current="false">False</a></li>
+    <li><a class="tab" href="#c" aria-current="">Empty</a></li>
+    <li><a class="tab" href="#d">None</a></li>
+  </ul>
+
+  <ul class="nav-list" id="nav">
+    <li><a class="nav-link" href="#a" aria-current="page">Current</a></li>
+    <li><a class="nav-link" href="#b" aria-current="false">False</a></li>
+    <li><a class="nav-link" href="#c" aria-current="">Empty</a></li>
+    <li><a class="nav-link" href="#d">None</a></li>
+  </ul>
+
+  <div class="list" id="list">
+    <a class="list-item" href="#a" aria-current="page">Current</a>
+    <a class="list-item" href="#b" aria-current="false">False</a>
+    <a class="list-item" href="#c" aria-current="">Empty</a>
+    <a class="list-item" href="#d">None</a>
+  </div>
+
+  <!-- Overflowing strips for reveal-current. The control holds a real current
+       page near its end; the other only "false" and "" near its end, so it
+       must stay at its start. Items are written by the script below. -->
+  <ol class="pagination" id="strip-control" data-enhance="reveal-current"></ol>
+  <ol class="pagination" id="strip-not-current" data-enhance="reveal-current"></ol>
+  <script>
+    for (const [id, marks] of [
+      ["strip-control", { 25: "page" }],
+      ["strip-not-current", { 25: "false", 28: "" }],
+    ]) {
+      const strip = document.getElementById(id);
+      for (let n = 1; n <= 30; n++) {
+        const current = n in marks ? ` aria-current="${marks[n]}"` : "";
+        strip.insertAdjacentHTML("beforeend", `<li><a class="btn ghost" href="#p${n}"${current}>${n}</a></li>`);
+      }
+    }
+  </script>
+</body>
+</html>

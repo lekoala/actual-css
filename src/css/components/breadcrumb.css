@@ -88,7 +88,8 @@
    holds a link would clip that link's focus line, and keeps the label rule
    above instead. Its own rule, never merged with the one above: a browser
    without :has() drops it alone, and bare text then keeps its full width. */
-.breadcrumb > li[aria-current]:not(:has(> *)) {
+.breadcrumb
+> li[aria-current]:where(:not([aria-current="false"]):not([aria-current=""])):not(:has(> *)) {
   display: block;
   min-inline-size: 2em;
   min-inline-size: calc-size(max-content, min(size, 2em));

@@ -6,7 +6,7 @@
 bunx --bun actual-css design --theme src/theme.css --out design/
 ```
 
-`--theme` is a file declaring one `[data-theme="…"]` block (see [Theming](../foundations/theming.md)); without it the default theme is exported. The command needs Bun, and `--bun` makes `bunx` run it under Bun instead of the CLI's Node shebang: it reads the theme in headless Chrome, so every `light-dark()`, `color-mix()` and `var()` chain resolves exactly as the browser paints it.
+`--theme` is a file declaring one theme, on `:root` or in a `[data-theme="…"]` block (see [Theming](../foundations/theming.md)); without it the default theme is exported. The command needs Bun, and `--bun` makes `bunx` run it under Bun instead of the CLI's Node shebang: it reads the theme in headless Chrome, so every `light-dark()`, `color-mix()` and `var()` chain resolves exactly as the browser paints it.
 
 ## What is exported
 

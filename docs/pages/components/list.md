@@ -90,8 +90,7 @@ a button or native control for actions.
 
 In a master/detail navigation, mark the current row with `aria-current` on its
 link, using the value that matches the semantics (`page`, `location`, …).
-Presence is the contract: set the attribute on the current row and remove it
-elsewhere, never `aria-current="false"`. The [Workspaces example](../examples/overview.md)
+`aria-current="false"` or an empty value leaves a row inactive. The [Workspaces example](../examples/overview.md)
 shows a current row with trailing actions and a flyout. Navigable rows usually
 want a non-zero `--list-item-pad-inline`: without that gutter, the current
 indicator touches the leading region and the trailing touches the row edge.

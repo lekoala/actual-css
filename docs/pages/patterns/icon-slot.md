@@ -42,6 +42,22 @@ For a round disc, add the `.circle` utility — it supplies the `border-radius`:
 }
 ```
 
+## Webfont glyphs
+
+An icon font draws nothing measurable until it loads, so a button or nav link
+shifts when the glyph arrives. Reserve a `1em` square on the icon library's
+class in application CSS; it follows the surrounding font size:
+
+```css
+.ti {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  inline-size: 1em;
+  block-size: 1em;
+}
+```
+
 ## Reuse the existing icon slots
 
 Several components already embody this slot — reach for them before composing
