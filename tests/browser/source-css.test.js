@@ -52,6 +52,11 @@ baseTest(
               .flatMap((link) => imports(link.sheet))
               .filter((rule) => !rule.styleSheet?.cssRules.length)
               .map((rule) => rule.href),
+            // The swap restyles the page; a shot taken mid-transition showed
+            // filled buttons half-faded.
+            running: document
+              .getAnimations()
+              .filter((a) => a instanceof CSSTransition && a.playState === "running").length,
           };
         })()`),
       { sourceCss: true },
@@ -60,6 +65,7 @@ baseTest(
     expect(result.sheets).toEqual(["/src/css/actual.full.css", "/src/css/themes/index.css"]);
     for (const count of result.imports) expect(count).toBeGreaterThan(1);
     expect(result.unloaded).toEqual([]);
+    expect(result.running).toBe(0);
   },
   60_000,
 );
