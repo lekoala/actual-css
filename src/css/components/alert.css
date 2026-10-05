@@ -107,10 +107,11 @@
   }
 }
 
-/* Decorative leading icon — use .alert-icon on the icon element. */
+/* Decorative leading icon — use .alert-icon on the icon element. display and
+   vertical-align are the no-:has() layout (Degraded tier: the icon sits inline
+   before the text); the grid anatomy below replaces them. */
 .alert > .alert-icon {
   display: inline-block;
-  flex: none;
   inline-size: var(--alert-icon-size);
   block-size: var(--alert-icon-size);
   font-size: var(--alert-icon-size);
@@ -146,7 +147,8 @@
    grid rules drop together and the alert keeps ordinary block flow. */
 .alert:has(> .alert-icon, > .close) {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  /* No grid-template-columns: the icon and close branches below always set
+     it, since one of them is what matched. */
   align-items: var(--items-align, start);
   column-gap: var(--space-30);
 }
