@@ -271,10 +271,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
             parseFloat(controlStyle.outlineWidth) + parseFloat(controlStyle.outlineOffset);
           const expectedReserve =
             parseFloat(style.getPropertyValue("--focus-outline-offset")) +
-            Math.max(
-              parseFloat(style.getPropertyValue("--focus-ring-width")),
-              parseFloat(style.getPropertyValue("--border-width")) * 2,
-            );
+            parseFloat(style.getPropertyValue("--focus-ring-width"));
           return JSON.stringify({
             active: document.activeElement === control,
             focusVisible: control.matches(":focus-visible"),
@@ -331,10 +328,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
             parseFloat(controlStyle.outlineWidth) + parseFloat(controlStyle.outlineOffset);
           const expectedReserve =
             parseFloat(bodyStyle.getPropertyValue("--focus-outline-offset")) +
-            Math.max(
-              parseFloat(bodyStyle.getPropertyValue("--focus-ring-width")),
-              parseFloat(bodyStyle.getPropertyValue("--border-width")) * 2,
-            );
+            parseFloat(bodyStyle.getPropertyValue("--focus-ring-width"));
           const contentStart =
             drawerRect.left +
             parseFloat(drawerStyle.borderLeftWidth) +
@@ -375,11 +369,10 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
       expect(Math.abs(drawer.startDrift)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(drawer.endDrift)).toBeLessThanOrEqual(0.5);
 
-      // A theme with a thicker component line (bootstrap-v6: 3px) must still
-      // fit: the reserve takes the thicker of the two outside indicators, not
-      // the 2 × border baseline alone (which clipped 1px of a button line).
-      // Opened from the keyboard, so the dialog's initial focus is
-      // keyboard-modal and matches :focus-visible.
+      // A --focus-ring-width override on the dialog alone must reach its
+      // reserve: the bleed is computed on the consumer, so a thicker line
+      // (bootstrap-v6: 3px) still fits. Opened from the keyboard, so the
+      // dialog's initial focus is keyboard-modal and matches :focus-visible.
       await closeDialogAndWait(view, "drawer");
       await view.evaluate('document.getElementById("open-thick").focus()');
       await view.press("Enter");

@@ -143,18 +143,17 @@
    exclusion list is easier to trust than its `position: absolute`. */
 :where(dialog).drawer > :not(:is(header, footer, form, .close)),
 :where(dialog).drawer > form > :not(:is(header, footer, .close)) {
-  --drawer-focus-bleed: calc(
-    var(--focus-outline-offset) +
-    max(var(--focus-ring-width), var(--border-width) * 2)
-  );
+  /* Declared here, not as a :root alias: an inherited alias arrives already
+     computed, so a --focus-ring-width override on the drawer would not reach
+     it. */
+  --drawer-focus-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 
   min-block-size: 0;
   /* Keep focus paint inside the clip, on all four sides (overflow: auto clips
-     both axes), without moving the content. The reserve covers the thicker
-     of the two outside indicators: the :focus baseline (2 × border) and the
-     component line (--focus-ring-width, 3px in bootstrap-v6). On the block
-     axis it reaches into the slot gap, which is wider, so the scrollport never
-     slides under the header or footer. */
+     both axes), without moving the content. Every outside indicator is
+     --focus-ring-width wide (core/focus.css). On the block axis the reserve
+     reaches into the slot gap, which is wider, so the scrollport never slides
+     under the header or footer. */
   margin: calc(var(--drawer-focus-bleed) * -1);
   padding: var(--drawer-focus-bleed);
   overflow: auto;

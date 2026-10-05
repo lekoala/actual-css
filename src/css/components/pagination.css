@@ -26,10 +26,7 @@
      overflow toward the start is never scrollable. The inline end keeps it,
      or the list would grow past its container and scroll the page on a
      phone. */
-  --pagination-focus-bleed: calc(
-    var(--focus-outline-offset) +
-    max(var(--focus-ring-width), var(--border-width) * 2)
-  );
+  --pagination-focus-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 
   display: flex;
   flex-direction: row;
