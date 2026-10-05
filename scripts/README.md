@@ -31,6 +31,16 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 | `shot:forced` | `forced-colors-shot.js` | Same, with forced-colors emulation (DevTools pipeline). |
 | `probe` | `probe.js` | Run a JS program inside a headless-Chrome page and print its return value as JSON. |
 
+## Git hooks
+
+Run `bun run hooks:install` once per clone to enable the versioned hooks in
+`.githooks/`. The `commit-msg` hook rejects `Co-Authored-By:` lines regardless
+of case or author name. Remove the line and retry the commit.
+
+The installer preserves a different existing `core.hooksPath`; integrate
+`.githooks/commit-msg` into that setup instead. Hooks require Bun on `PATH`
+and can be bypassed with Git's `--no-verify` option.
+
 ## Visual checks
 
 `shot:page` renders a page in headless Chrome and saves a full-page PNG —

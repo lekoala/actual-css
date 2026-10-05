@@ -113,6 +113,7 @@
     "node": ">=18"
   },
   "scripts": {
+    "hooks:install": "bun scripts/install-hooks.js",
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "build:docs": "bun run build:themes && bun scripts/build-docs.js",
