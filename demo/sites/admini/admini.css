@@ -676,6 +676,11 @@
 .admini-invoice {
   --card-max-inline-size: 52rem;
 
+  /* Auto margins in the column make the card fit-content, floored at its
+     min-content — which includes the 32rem line-item table inside its
+     scroller. On a phone the card overflowed the page instead of letting the
+     table scroll. A definite width keeps the floor out. */
+  inline-size: 100%;
   margin-inline: auto;
 }
 
