@@ -56,14 +56,23 @@
     </ol>
   </nav>
 
-  <!-- A labelled row keeps a reading width per step, so five overflow the box. -->
+  <!-- An authored item floor guarantees overflow independently of label wrapping. -->
   <div class="box">
-    <ol class="steps steps-horizontal" data-enhance="reveal-current" id="steps-row">
+    <ol class="steps steps-horizontal" data-enhance="reveal-current" id="steps-row" style="--step-min: 7rem">
       <li class="step-complete"><span class="step-label">Account</span></li>
       <li class="step-complete"><span class="step-label">Profile</span></li>
       <li class="step-complete"><span class="step-label">Delivery</span></li>
       <li aria-current="step"><span class="step-label">Payment</span></li>
       <li><span class="step-label">Confirmation</span></li>
+    </ol>
+  </div>
+
+  <!-- Short names fit without an authored floor: connecting must not scroll. -->
+  <div class="box">
+    <ol class="steps steps-horizontal" data-enhance="reveal-current" id="steps-fit">
+      <li class="step-complete"><span class="step-label">Account</span></li>
+      <li aria-current="step"><span class="step-label">Payment</span></li>
+      <li><span class="step-label">Confirm</span></li>
     </ol>
   </div>
 

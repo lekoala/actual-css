@@ -7237,7 +7237,8 @@ a.avatar[aria-disabled="true"] {
  * destinations. Anything else focusable in a step is out of contract.
  *
  * The framework never hides an authored label to solve a layout problem. A
- * labelled row that outgrows its space scrolls. An `actual-container` size
+ * labelled row wraps its labels, then scrolls if its markers or authored item
+ * minimum outgrow the available space. An `actual-container` size
  * context buys it one thing: the wide representation, marker beside label.
  *
  * See docs/design-notes/steps.md for the threshold, the selector shapes, the
@@ -7373,10 +7374,11 @@ a.avatar[aria-disabled="true"] {
 /* Horizontal ------------------------------------------------------------- */
 
 .steps-horizontal {
-  --step-min: 7rem;
+  --step-min: var(--step-size);
   --step-gap: var(--space-20);
 
   inline-size: 100%;
+  column-gap: var(--step-gap);
   overflow-x: auto;
   /* Stated, never left to `overflow-x` alone: one scrolling axis computes the
      other to `auto`, and a row hugs fractional content closely enough that a
@@ -7390,6 +7392,8 @@ a.avatar[aria-disabled="true"] {
    the inline clip. Only this composition scrolls, and only a link has a ring to
    protect. */
 .steps-horizontal:has(a[href]) {
+  /* Wrapped names can fill their cell right up to either inline clip edge. */
+  padding-inline: calc(var(--focus-outline-offset) + var(--focus-ring-width));
   padding-block: calc(var(--focus-outline-offset) + var(--focus-ring-width));
   scroll-padding-inline: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 }
@@ -7403,6 +7407,8 @@ a.avatar[aria-disabled="true"] {
 .steps-horizontal > li {
   display: grid;
   flex: 1 0 var(--step-min);
+  /* Bound each label to its share so it cannot change the marker pitch. */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: var(--step-size);
   gap: var(--step-gap);
   justify-items: center;
@@ -7410,9 +7416,42 @@ a.avatar[aria-disabled="true"] {
   text-align: center;
 }
 
-/* An empty step is a marker and nothing else, so it needs a marker's width
-   rather than a reading width. That is what lets five of them fit a phone with
-   no size context and no variant class.
+.steps-horizontal .step-label {
+  /* Even an unbroken name must fit its share instead of overlapping a peer.
+     Hyphenation, when `lang` allows it, is tried before an arbitrary break. */
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* Half end cells put the outer markers on the row's edges without changing
+   their pitch, so the track lines up with the text around it, as the compact
+   and inline forms do. The marker's half-width keeps the first connector equal
+   to its peers.
+
+   Source order is load-bearing: these tie the `:empty` rules below and the
+   inline query on specificity, and both must win over them. */
+.steps-horizontal > li:is(:first-child, :last-child) {
+  flex: 0.5 0 calc((var(--step-min) + var(--step-size)) / 2);
+  min-inline-size: max(var(--step-size), calc((var(--step-min) + var(--step-size)) / 2));
+}
+
+.steps-horizontal > li:first-child {
+  justify-items: start;
+  text-align: start;
+}
+
+.steps-horizontal > li:first-child::after {
+  inset-inline-start: var(--step-size);
+  inline-size: calc(200% - var(--step-size) * 2 + var(--step-gap));
+}
+
+.steps-horizontal > li:last-child {
+  justify-items: end;
+  text-align: end;
+}
+
+/* An empty step ignores any authored reading-width floor and needs only its
+   marker. That lets five of them fit a phone without a size context.
 
    `justify-items` is not an override of the row's centring: the marker is
    centred because a label sits under it and the two share a centre, and with no
@@ -7422,9 +7461,8 @@ a.avatar[aria-disabled="true"] {
    the text around it, the way the inline representation does.
 
    `:empty` says exactly what the markup says, the way `.badge:empty` does, and
-   it reads the item's own content: bare text in an `<li>` keeps a reading width
-   like its wrapped peers, where `> li:has(.step-label)` would give it a marker
-   floor and skew the row. `:empty` also keeps the compact form reachable on the
+   it reads the item's own content: bare text keeps the same authored floor as
+   its wrapped peers. `:empty` also keeps the compact form reachable on the
    Degraded tier, where only the inline bonus needs `:has()`. */
 .steps-horizontal > li:empty {
   flex: 1 1 0;
@@ -7434,6 +7472,8 @@ a.avatar[aria-disabled="true"] {
 
 .steps-horizontal > li:empty::after {
   inset-inline-start: var(--step-size);
+  /* Marker-only end cells keep full shares, unlike labelled end cells. */
+  inline-size: calc(100% - var(--step-size) + var(--step-gap));
 }
 
 .steps-horizontal > li:empty:last-child {
@@ -7441,12 +7481,12 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* The pseudo-element is marker-height so --step-connector may be any complete
-   background value. */
+   background value; its length also crosses the gap to the next equal track. */
 .steps-horizontal > li::after {
   position: absolute;
   inset-block-start: 0;
   inset-inline-start: calc(50% + var(--step-size) / 2);
-  inline-size: calc(100% - var(--step-size));
+  inline-size: calc(100% - var(--step-size) + var(--step-gap));
   block-size: var(--step-size);
   background: var(
     --step-connector,
@@ -7465,6 +7505,11 @@ a.avatar[aria-disabled="true"] {
  * written — a row out of contract is not owed a curated fallback.
  */
 @container actual-container (inline-size >= 60rem) {
+  .steps-horizontal:has(.step-label) {
+    /* Inline connectors already own the spacing between marker-label groups. */
+    column-gap: 0;
+  }
+
   .steps-horizontal:has(.step-label) > li {
     display: flex;
     flex: 1 1 auto;

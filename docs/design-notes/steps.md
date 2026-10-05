@@ -82,7 +82,7 @@ and upcoming is the absence of both, because the platform already spells those.
 
 Out of contract — a step name belongs in a `.step-label` — and it degrades in
 the right direction. `:empty` reads an item's own content, so `<li>Account</li>`
-is not empty: it takes the reading width a wrapped label would, and only the
+is not empty: it takes the same authored item floor as a wrapped label, and only the
 placing and aligning that `.step-label` rules provide are missing. It lays out
 and does not fall apart, which is all an out-of-contract markup is owed.
 
@@ -90,11 +90,8 @@ This is the case that makes bare text expensive to support as a first-class
 form, and it is worth stating precisely, because a component that sizes steps
 *per label* pays for it twice.
 
-In behaviour: a row mixing wrapped and unwrapped steps compacts only the
-wrapped ones. Measured at five steps in a 559px region, the unwrapped step
-holds 201px while its four peers shrink to 89px. That skew is what
-`> li:has(.step-label)` produces — bare text has no label, so it takes a
-marker-wide floor while its wrapped peers keep `--step-min`.
+In behaviour: sizing by `> li:has(.step-label)` would give bare text and
+wrapped labels different floors whenever an author sets `--step-min`.
 
 In bytes: the only valid way to express "every step is wrapped" is to enumerate
 positions (see "`:has()` cannot be nested"), which grows the selector for each
@@ -105,7 +102,7 @@ supported count.
 a link and bare text.
 
 The row-level alternative, `.steps-horizontal:not(:has(.step-label)) > li`,
-avoids the skew differently: it makes every step reading-width, so an empty
+avoids the skew differently: it gives every step the authored floor, so an empty
 step in a mixed row becomes a wide gap rather than a marker. It also puts the
 compact form itself behind `:has()`, above the Degraded tier, for a shape that
 needs no modern selector at all.
@@ -155,6 +152,32 @@ stay in the stacked layout.
 **The threshold is literal rem.** `@container` cannot resolve a custom
 property, so overriding `--step-min` moves the scroll budget but not this
 query. Same trade as `--grid-min` in `grid.css`.
+
+## Even marker pitch and wrapping labels
+
+Stacked labelled steps keep an even marker pitch because each outgoing
+connector must reach the next marker's edge. Intrinsic per-label widths would
+move the markers unevenly and make that length depend on a neighbour's width.
+
+The first and last markers align with the row's edges at every width. Each
+end cell takes half a normal share plus half a marker; simply moving the marker
+inside a full cell would stretch the outer connectors. Labels follow the same
+start/end alignment, while the middle steps remain centred. The first connector
+crosses two end-cell widths minus both markers, plus the intervening gap.
+
+It is not behind a viewport query. Edge alignment is the row's geometry, the
+one the compact and inline forms already have, and a breakpoint on the viewport
+would lay out the same 600px row differently on a phone and in a desktop card.
+
+The marker sets the default item floor. A `minmax(0, 1fr)` grid column keeps a
+long label from widening its step; `hyphens: auto` breaks a long word where the
+page's `lang` allows, and `overflow-wrap: anywhere` still lets an unbroken name
+fit when it does not. `--step-gap` separates both the marker from its label and
+one step from the next, so wrapped names cannot run together.
+
+Authors can raise `--step-min` when wrapping costs too much height. The row
+then scrolls once those floors and the intervening gaps outgrow its region.
+This budget changes neither orientation nor the wide inline threshold.
 
 ## The compact form
 
@@ -235,8 +258,7 @@ having no share to fill — is only as wide as its own marker.
 
 The result is a track flush with both ends of the row, which is what lets it
 line up with the heading or paragraph that names the step. Keeping the centred
-geometry leaves half-cell margins at both ends: measured on five empty steps in
-a 736px row, 60px of dead space on each side, with the first marker floating
+geometry leaves half-cell margins at both ends, with the first marker floating
 inward of a left-aligned heading.
 
 It also matches the inline representation, whose `:last-child { flex: 0 0 auto }`
@@ -244,7 +266,7 @@ is the same declaration for the same reason.
 
 The connector follows from the alignment rather than being tuned to it. The
 base geometry starts a connector at `50% + --step-size / 2` — the right edge of
-a centred marker — and runs it `100% - --step-size`, to the next marker's left
+a centred marker — and runs it `100% - --step-size + --step-gap`, to the next marker's left
 edge. Move the marker to the start of the share and that origin becomes
 `--step-size`; the width is unchanged, and the connector still lands exactly on
 the next marker. Measured at 736px and at 200px: zero gap either side.
@@ -265,7 +287,7 @@ leave in a component whose whole claim is that sizing follows content.
 ### Why `:empty` rather than `:has()`
 
 It says what the markup says, and it reads the item's own content, which is
-what keeps bare text off a marker-wide floor (see "Bare text in an `<li>`").
+what keeps bare text on the same authored floor as labelled peers (see "Bare text in an `<li>`").
 
 It also predates `:has()` by a decade, so the compact form reaches the Degraded
 tier. `:has(.step-label)` appears only in the wide container query, where
@@ -412,7 +434,7 @@ The contract is one sentence. A step label may be a link, a marker never is, and
 anything else focusable in a step is out of contract.
 
 The one `:has(a[href])` in the file is unrelated: a navigable row reserves
-`padding-block` for its focus ring, because the scroll container clips at the
+padding on both axes for its focus ring, because the scroll container clips at the
 padding edge. See "Scrolling on one axis".
 
 A link needs no styling rule of its own to go with it. `color: inherit` sits in
@@ -442,13 +464,9 @@ with `.sr-only` on `.step-label`, so the text stays in the accessibility tree
 while its box disappears. Or the same rules behind a public class, so the author
 picks the representation instead of a width picking it.
 
-The threshold is not the weak part. Items hold at `flex: 1 0 var(--step-min)`,
-so a row's intrinsic width is `count × --step-min` — 35rem for five steps — and
-the query fires exactly where a five-step stacked row starts to scroll. Four
-steps share that threshold rather than getting their own at 28rem, so between
-448px and 560px they compact although stacked would still fit; splitting the
-difference at 32rem is worse, handing five-step rows a scrolling band instead
-(40px of overflow at 520px, 20px at 540px).
+A fixed hiding threshold cannot reflect the authored item floor or the actual
+length of a label. Wrapping uses the available share directly, without removing
+content or introducing a per-count breakpoint.
 
 ### Why the premise fails
 
@@ -469,7 +487,7 @@ So the question is not "how narrow before labels must go?" but "does this
 sequence carry names at all?", and that one is the author's to answer in
 markup. An unlabelled sequence is compact because it has nothing to show; a
 labelled one keeps everything it was given. When a labelled row does not fit,
-the honest answers are scrolling, more space, or `.steps-vertical`.
+the available answers are wrapping, scrolling, more space, or `.steps-vertical`.
 
 ### What the rule is worth, concretely
 
@@ -611,7 +629,7 @@ retuning surface is `--scroller-thumb` and `--scroller-track`, which belong to
 `.scroller`. Copying those into Steps duplicates the primitive; omitting them
 leaves a scrollbar no documented hook reaches.
 
-Measured on a five-step row in a 380px region, the pairing takes the scrollbar
+Measured on a five-step row with an authored `--step-min: 7rem` in a 380px region, the pairing takes the scrollbar
 from 15px to 10px and the row from 69px to 64px, with the thumb on
 `--text-muted` instead of the OS grey.
 
@@ -620,19 +638,18 @@ Its `.stable-gutter` variant, on the other hand, is a trap worth naming.
 scrollbar — and this row sets `overflow-y: hidden`, so there is never one to
 reserve for. It does not steady the row's height across the appearance of the
 horizontal scrollbar, which is what an author would reach for it to do:
-measured, the row is 54px when it fits and 64px when it scrolls either way,
-while the reserved inline gutter takes 10px off the row's width and pushes
-overflow from 36px to 46px. Strictly worse in both directions.
+the reserved inline gutter narrows the row without reserving space for a
+horizontal scrollbar, making horizontal overflow more likely.
 
 What makes the row scroll rather than squash is the item floor:
 `min-inline-size: max(var(--step-size), var(--step-min))`. The `max()` is there
-so an author who lowers `--step-min` below `--step-size` narrows the scroll
-budget without collapsing items behind their own markers.
+so an author who lowers `--step-min` below `--step-size` cannot collapse items
+behind their own markers.
 
 The cost of scrolling is that clipping happens at the padding edge, and a focus
 ring is drawn outside its element's border box — the generic outline is
 `--focus-ring-width` wide at `--focus-outline-offset`, so 4px past a label that sits
-flush with the bottom of a stacked row. A navigable row therefore reserves
+flush with the edge of a stacked row. A navigable row therefore reserves
 exactly that much `padding-block`, gated on `.steps-horizontal:has(a[href])`. An
 informational stepper — the common case, with no ring to protect — keeps its
 height, and so does a navigable column: the padding is compensation for the

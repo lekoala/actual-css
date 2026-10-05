@@ -398,9 +398,14 @@ names, or when a step should be navigable:</p>
 </div>
 <div class="prose docs-prose">
 <p><strong>Actual CSS never hides an authored step label.</strong> Labels stay visible at every
-width. If a labelled row does not fit its space, it scrolls — and the honest
-answers to that are more room, fewer stages, or <code>.steps-vertical</code>.</p>
-<p>Since scrolling is the fallback, a labelled row is worth pairing with
+width. Stacked steps keep their markers evenly spaced, and long names wrap
+inside their share, hyphenated when the page declares a <code>lang</code>. The first and
+last steps align with the row's edges, labels included, so the track lines up
+with the heading above it. Short labels fit a phone with no width budget.</p>
+<p>Set <code>--step-min</code> when names need a wider minimum share. If the markers or that
+minimum do not fit, the row scrolls; use <code>.steps-vertical</code> when every name must
+remain visible without horizontal scrolling.</p>
+<p>A row that raises <code>--step-min</code> can scroll, so it is worth pairing with
 <code>.scroller</code>, which gives the native scrollbar the theme's density and colour
 instead of the OS default, and with <code>data-enhance=&quot;reveal-current&quot;</code>, which
 starts a scrolling row on its <code>aria-current=&quot;step&quot;</code> instead of step 1:</p>
@@ -640,8 +645,9 @@ growing the stepper.</p>
 </ul>
 <p><code>.steps-horizontal</code> only:</p>
 <ul>
-<li><code>--step-min</code> — minimum item width in the stacked horizontal layout</li>
-<li><code>--step-gap</code> — marker-to-label space in the stacked horizontal layout</li>
+<li><code>--step-min</code> — minimum width budget for stacked steps; the first and last
+cells use half that budget plus half the marker width</li>
+<li><code>--step-gap</code> — marker-to-label and between-step space in the stacked layout</li>
 <li><code>--step-connector</code> — default horizontal connector background</li>
 <li><code>--step-inline-connector</code> — optional connector background for wide horizontal steps</li>
 </ul>
@@ -650,11 +656,10 @@ growing the stepper.</p>
 <li><code>--step-vertical-gap</code> — space between vertical steps</li>
 </ul>
 <h2 id="notes">Notes</h2>
-<p>Do not mix labelled and unlabelled steps in one sequence. Each step is sized on
-its own content, so a mixed sequence renders a narrow marker between reading-
-width steps — it lays out, but it reads as a gap rather than as progress.</p>
+<p>Do not mix labelled and unlabelled steps in one sequence. Empty steps align
+their markers to the start; labelled steps centre them over their names.</p>
 <p>A step name belongs in a <code>.step-label</code>. Bare text in an <code>&lt;li&gt;</code> is outside the
-contract: it is content, so it gets a reading width like a label, but no rule
+contract: it takes the same item floor as a label, but no rule
 places or aligns it.</p>
 <p>The <strong>2 to 5</strong> range applies to the horizontal orientation, and the inline
 threshold is calibrated for it. A longer horizontal sequence is out of
@@ -671,9 +676,8 @@ and an upcoming one both render as a ringed disc with a number. Set
 to stay distinguishable there. Steps deliberately ships no forced-colors
 override of its own: painting the marker <code>Highlight</code> makes the number or glyph
 inside it unreadable, which is worse than the ambiguity it removes.</p>
-<p>The inline threshold is calibrated to the default <code>--step-min</code>. Container
-queries cannot read custom properties, so changing <code>--step-min</code> moves the
-scroll budget but not the threshold.</p>
+<p>The inline threshold reserves connector space for five named stages. Changing
+<code>--step-min</code> moves the stacked scroll budget without moving that threshold.</p>
 <p>See <a href="https://github.com/lekoala/actual-css/blob/master/docs/design-notes/steps.md">Steps representations and thresholds</a>
 for why the contract is shaped this way, and which alternatives were measured
 and rejected.</p>

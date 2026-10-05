@@ -63,12 +63,11 @@
     </ol>
   </div>
 
-  <!-- Five labelled steps at 559px, one pixel under their own 35rem --step-min
-       budget, and granted a size context. The framework never hides an
-       authored label, so this keeps all five and scrolls — the honest fallback
-       for a row that was asked to show more than fits. -->
-  <div class="container-query" style="inline-size: 559px">
-    <ol class="steps steps-horizontal" id="labelled-narrow">
+  <!-- An authored item floor keeps five labelled steps wider than their region.
+       The size context never hides a label to meet that budget. Half end cells
+       make five 7rem floors 508px with their gaps, so the region sits below. -->
+  <div class="container-query" style="inline-size: 480px">
+    <ol class="steps steps-horizontal" id="labelled-narrow" style="--step-min: 7rem">
       <li class="step-complete"><span class="step-label">Identification</span></li>
       <li class="step-complete"><span class="step-label">Coordonnees</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -76,10 +75,9 @@
       <li><span class="step-label">Paiement</span></li>
     </ol>
   </div>
-  <!-- Two labelled steps at 200px: the same answer at the other end of the
-       count range. Nothing about the count changes what happens to a label. -->
-  <div class="container-query" style="inline-size: 200px">
-    <ol class="steps steps-horizontal" id="labelled-tiny">
+  <!-- The same authored floor at the other end of the supported count range. -->
+  <div class="container-query" style="inline-size: 120px">
+    <ol class="steps steps-horizontal" id="labelled-tiny" style="--step-min: 7rem">
       <li class="step-complete"><span class="step-label">Identification</span></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
     </ol>
@@ -161,9 +159,9 @@
   </div>
   <!-- A row mixing an empty step with labelled ones is also out of contract.
        Each item is read on its own content, so it lays out as what it says:
-       a narrow marker beside reading-width steps. -->
+       a start-aligned marker between labelled steps that measure alike. -->
   <div style="inline-size: 559px">
-    <ol class="steps steps-horizontal container-query" id="mixed">
+    <ol class="steps steps-horizontal container-query" id="mixed" style="--step-min: 7rem">
       <li class="step-complete"><span class="step-label">Identification</span></li>
       <li class="step-complete"></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -176,8 +174,8 @@
   <!-- Navigation is a labelled affair: only a .step-label can be a link, and a
        link is never hidden, so a navigable row keeps its labels and its scroll
        at a width where it does not fit. -->
-  <div class="container-query" style="inline-size: 559px">
-    <ol class="steps steps-horizontal" id="interactive">
+  <div class="container-query" style="inline-size: 480px">
+    <ol class="steps steps-horizontal" id="interactive" style="--step-min: 7rem">
       <li class="step-complete"><a class="step-label" href="#one">Identification</a></li>
       <li class="step-complete"><a class="step-label" href="#two">Coordonnees</a></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
@@ -187,8 +185,8 @@
   </div>
   <!-- Interactive labels in the inline representation, which moves them rather
        than touching their box. -->
-  <div style="inline-size: 961px">
-    <ol class="steps steps-horizontal container-query" id="interactive-inline">
+  <div class="container-query" style="inline-size: 961px">
+    <ol class="steps steps-horizontal" id="interactive-inline">
       <li class="step-complete"><a class="step-label" href="#a">Identification</a></li>
       <li aria-current="step"><span class="step-label">Motif</span></li>
       <li><span class="step-label">Paiement</span></li>

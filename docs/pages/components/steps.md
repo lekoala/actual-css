@@ -145,10 +145,16 @@ names, or when a step should be navigable:
 ```
 
 **Actual CSS never hides an authored step label.** Labels stay visible at every
-width. If a labelled row does not fit its space, it scrolls — and the honest
-answers to that are more room, fewer stages, or `.steps-vertical`.
+width. Stacked steps keep their markers evenly spaced, and long names wrap
+inside their share, hyphenated when the page declares a `lang`. The first and
+last steps align with the row's edges, labels included, so the track lines up
+with the heading above it. Short labels fit a phone with no width budget.
 
-Since scrolling is the fallback, a labelled row is worth pairing with
+Set `--step-min` when names need a wider minimum share. If the markers or that
+minimum do not fit, the row scrolls; use `.steps-vertical` when every name must
+remain visible without horizontal scrolling.
+
+A row that raises `--step-min` can scroll, so it is worth pairing with
 `.scroller`, which gives the native scrollbar the theme's density and colour
 instead of the OS default, and with `data-enhance="reveal-current"`, which
 starts a scrolling row on its `aria-current="step"` instead of step 1:
@@ -359,8 +365,9 @@ On `.steps`, so both orientations read them:
 
 `.steps-horizontal` only:
 
-- `--step-min` — minimum item width in the stacked horizontal layout
-- `--step-gap` — marker-to-label space in the stacked horizontal layout
+- `--step-min` — minimum width budget for stacked steps; the first and last
+  cells use half that budget plus half the marker width
+- `--step-gap` — marker-to-label and between-step space in the stacked layout
 - `--step-connector` — default horizontal connector background
 - `--step-inline-connector` — optional connector background for wide horizontal steps
 
@@ -370,12 +377,11 @@ On `.steps`, so both orientations read them:
 
 ## Notes
 
-Do not mix labelled and unlabelled steps in one sequence. Each step is sized on
-its own content, so a mixed sequence renders a narrow marker between reading-
-width steps — it lays out, but it reads as a gap rather than as progress.
+Do not mix labelled and unlabelled steps in one sequence. Empty steps align
+their markers to the start; labelled steps centre them over their names.
 
 A step name belongs in a `.step-label`. Bare text in an `<li>` is outside the
-contract: it is content, so it gets a reading width like a label, but no rule
+contract: it takes the same item floor as a label, but no rule
 places or aligns it.
 
 The **2 to 5** range applies to the horizontal orientation, and the inline
@@ -397,9 +403,8 @@ to stay distinguishable there. Steps deliberately ships no forced-colors
 override of its own: painting the marker `Highlight` makes the number or glyph
 inside it unreadable, which is worse than the ambiguity it removes.
 
-The inline threshold is calibrated to the default `--step-min`. Container
-queries cannot read custom properties, so changing `--step-min` moves the
-scroll budget but not the threshold.
+The inline threshold reserves connector space for five named stages. Changing
+`--step-min` moves the stacked scroll budget without moving that threshold.
 
 See [Steps representations and thresholds](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/steps.md)
 for why the contract is shaped this way, and which alternatives were measured

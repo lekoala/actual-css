@@ -18,6 +18,8 @@
 
 ### Changed
 
+- `.steps-horizontal` fits short labels on a phone, wraps (and hyphenates) long names, and aligns its outer stacked steps with the row's edges at every width.
+- `.steps-horizontal` `--step-min` defaults to the marker width and only sets a wider budget; `--step-gap` also separates adjacent steps.
 - `forms/form-actions` no longer has to load after `layout/cluster`: `.form-actions` relays its hooks into the row's `--cluster-*`.
 - An overflowing horizontal `.tabs` strip shows its selected tab in full, at connect and whenever selection changes, scrolling the strip only.
 - `.floating-field` accepts its `.field-label` before or after the control; state is read through `:has()` on the cell.

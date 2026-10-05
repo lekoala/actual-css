@@ -84,6 +84,7 @@ it("overflowing strips start on their selected or current item", async () => {
         expect(before.strips[id], id).toMatchObject({ overflows: true, inBox: false });
       }
       expect(before.strips["trail-hidden-current"].overflows).toBe(true);
+      expect(before.strips["steps-fit"]).toMatchObject({ overflows: false, inBox: true });
 
       await view.evaluate(`(() => { ${source} })()`);
       // A tablist has initialized once its unselected tabs left the roving
@@ -115,6 +116,7 @@ it("overflowing strips start on their selected or current item", async () => {
       // Already visible: nothing moves.
       expect(strips["tabs-start"]).toMatchObject({ overflows: true, scrolled: false, inBox: true });
       expect(strips["trail-short"]).toMatchObject({ scrolled: false, inBox: true });
+      expect(strips["steps-fit"]).toMatchObject({ overflows: false, scrolled: false, inBox: true });
       // Hidden at connect: a no-op, not a guess from empty rects.
       expect(strips["tabs-hidden"].scrolled).toBe(false);
       // The strip below the fold scrolled itself, not the page.
