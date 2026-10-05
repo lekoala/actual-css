@@ -99,7 +99,7 @@ cells, so they read as a list:
   base and extra utilities
 
 `.form-actions` composes with `.cluster`: a build that takes forms without the
-layout family imports `actual-css/css/layout/cluster` before the forms.
+layout family also imports `actual-css/css/layout/cluster`, in any order.
 
 Individual modules can be imported through their domain path:
 

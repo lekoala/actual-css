@@ -80,7 +80,7 @@ These helpers work by setting a custom property that participating components re
 so they also apply inside a component's own grid anatomy rather than only on plain
 flex containers:
 
-- `.items-start` / `.items-center` / `.items-end` / `.items-baseline` set `--items-align`, read by `.alert` and `.card`.
+- `.items-start` / `.items-center` / `.items-end` / `.items-baseline` set `--items-align`, read by `.alert`, `.card` and `.list-item`.
 - `.text-start` / `.text-center` / `.text-end` set `--text-align`, read by `.table` cells.
 
 `.justify-content-*` and `.flex-wrap` / `.flex-nowrap` (utilities/extra) set the property
