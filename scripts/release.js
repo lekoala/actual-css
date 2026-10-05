@@ -9,7 +9,8 @@
  * Pushing stays manual — pushing the tag is what publishes the GitHub
  * release (CI job `release`). After the script, preview with
  * `bun run release:notes`, then push the branch and the tag to the branch's
- * upstream remote (the script prints the exact command).
+ * upstream remote (the script prints the exact command). Once the tag's CI
+ * passes, the maintainer runs `npm publish` from the release commit.
  *
  * Usage:
  *   bun run release minor   # 0.11.0 -> 0.12.0 (pins move to @0.12)

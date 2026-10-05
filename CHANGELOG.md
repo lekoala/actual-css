@@ -19,7 +19,7 @@
 ### Changed
 
 - `forms/form-actions` no longer has to load after `layout/cluster`: `.form-actions` relays its hooks into the row's `--cluster-*`.
-- An overflowing horizontal `.tabs` strip shows its selected tab in full, at connect and on every arrow key or click, scrolling the strip only.
+- An overflowing horizontal `.tabs` strip shows its selected tab in full, at connect and whenever selection changes, scrolling the strip only.
 - `.floating-field` accepts its `.field-label` before or after the control; state is read through `:has()` on the cell.
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
 - `.pagination` never wraps: a row that does not fit scrolls horizontally, with room for its items' focus line.
