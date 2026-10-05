@@ -79,22 +79,6 @@
   display: none;
 }
 
-.admini-topbar .breadcrumb {
-  display: flex;
-  flex: 0 1 auto;
-  min-inline-size: 0;
-  max-inline-size: 20rem;
-  overflow: hidden;
-}
-
-.admini-topbar .breadcrumb li {
-  flex: 0 0 auto;
-}
-
-.admini-topbar .breadcrumb li[aria-current="page"] {
-  flex: 1 1 auto;
-}
-
 .admini-nav .nav-link {
   justify-content: flex-start;
   gap: var(--space-20);
@@ -158,10 +142,6 @@
 @media (min-width: 56rem) {
   .admini-hide-mobile {
     display: initial;
-  }
-
-  .admini-topbar .breadcrumb.admini-hide-mobile {
-    display: flex;
   }
 }
 

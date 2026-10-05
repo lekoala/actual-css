@@ -4,15 +4,15 @@
 
 - Use a semantic `<nav>` landmark.
 - Put `.breadcrumb` on the ordered list.
-- Use `aria-current="page"` for the current page.
+- Use `aria-current="page"` for the current page, on its link or on its `<li>`,
+  and keep it last.
 - Separators are generated with CSS (`> li + li::before`).
-- Breadcrumbs remain on a single line and scroll horizontally when space is insufficient. Actual does not automatically truncate or collapse hierarchy levels.
-- Add `data-enhance="reveal-current"` to start an overflowing trail on its current item instead of the root. The placement happens once at connect, on a visible trail.
-- Add `.scroller` for a thin, theme-coloured scrollbar; see [one-row strips](../utilities/sizing-wrapping.md#one-row-strips).
+- Put each ancestor label in an `<a>` or a `<span>`: that box carries the
+  ellipsis. The current page may be bare text in an `<li aria-current="page">`.
 
 ```html demo
 <nav aria-label="Breadcrumb">
-  <ol class="breadcrumb" data-enhance="reveal-current">
+  <ol class="breadcrumb">
     <li><a href="/home">Home</a></li>
     <li><a href="/projects">Projects</a></li>
     <li><a href="/projects/docs">Docs</a></li>
@@ -20,3 +20,14 @@
   </ol>
 </nav>
 ```
+
+## Narrow space
+
+A trail stays on one line and never scrolls. When it does not fit, labels
+truncate with an ellipsis: ancestors first, down to a couple of characters
+each, then the current page. A link keeps its full text as its accessible
+name; add a `title` if pointer users should see it on hover.
+
+Truncation does not remove levels. For a deep hierarchy on a phone, collapse
+it in markup — keep the root and the current page, and replace the middle
+levels with a `…` item, or render only a link to the parent page.

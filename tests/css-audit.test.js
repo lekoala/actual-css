@@ -750,24 +750,27 @@ test('breadcrumb marks a single aria-current="page" state', () => {
   expect(css.includes("pointer-events: none")).toBe(false);
 });
 
-test("breadcrumb stays a single-line strip", () => {
+test("breadcrumb stays on one line and truncates instead of scrolling", () => {
   const css = readCss("src/css/components/breadcrumb.css");
   const rules = readRules("src/css/components/breadcrumb.css");
 
-  /* The core invariant: a breadcrumb is a linear strip, never a wrapped
-     second row that reads as a nested hierarchy level. */
+  /* The core invariant: a breadcrumb is one line, never a wrapped second row
+     that reads as a nested hierarchy level, and never a scroller that hides
+     its root behind a scrollbar. */
   expect(css).toMatch(/\.breadcrumb\s*\{[^}]*flex-wrap:\s*nowrap/s);
   expect(rules).not.toMatch(/\.breadcrumb\s*\{[^}]*flex-wrap:\s*wrap/s);
-  expect(css).toMatch(/\.breadcrumb\s*\{[^}]*overflow:\s*auto hidden/s);
-  expect(css).toMatch(/\.breadcrumb > li\s*\{[^}]*flex:\s*none/s);
+  expect(rules).not.toMatch(/\.breadcrumb\s*\{[^}]*overflow/s);
   expect(css).toMatch(/\.breadcrumb > li\s*\{[^}]*white-space:\s*nowrap/s);
+  /* The ellipsis sits on the label: an overflow-hidden item would clip its
+     link's focus line, which is drawn outside the link box. */
+  expect(rules).toMatch(/\.breadcrumb > li > :is\(a, span\)[^{]*\{[^}]*text-overflow:\s*ellipsis/s);
+  expect(rules).not.toMatch(/\.breadcrumb > li\s*\{[^}]*overflow/s);
 });
 
 test("strips reserve their focus line, not a decorative edge", () => {
   /* No edge fade anywhere: a mask dictated the strips' scroll-padding and
      focus geometry for a cue a clipped item already gives. */
   for (const path of [
-    "src/css/components/breadcrumb.css",
     "src/css/components/pagination.css",
     "src/css/components/tab.css",
     "src/css/components/steps.css",
@@ -777,18 +780,15 @@ test("strips reserve their focus line, not a decorative edge", () => {
   }
   /* Mid-strip the padding has scrolled away, so scroll-padding is what keeps a
      focused item's outer line inside the clip (tests/browser/strip-focus). */
-  expect(readCss("src/css/components/breadcrumb.css")).toContain(
-    "scroll-padding-inline: var(--breadcrumb-bleed);",
-  );
   expect(readCss("src/css/components/pagination.css")).toContain(
     "scroll-padding-inline: var(--pagination-focus-bleed);",
   );
 
   /* An arrow would say "action". The scrollbar stays: on a strip it is the
      only visible control for a mouse. */
-  const breadcrumb = readRules("src/css/components/breadcrumb.css");
-  expect(breadcrumb).not.toMatch(/\.breadcrumb::(before|after)\s*\{[^}]*content:/s);
-  expect(breadcrumb.includes("scrollbar-width: none")).toBe(false);
+  const pagination = readRules("src/css/components/pagination.css");
+  expect(pagination).not.toMatch(/\.pagination::(before|after)\s*\{[^}]*content:/s);
+  expect(pagination.includes("scrollbar-width: none")).toBe(false);
 });
 
 test("prose styles native kbd elements", () => {

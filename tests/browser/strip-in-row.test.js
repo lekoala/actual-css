@@ -1,8 +1,8 @@
 /*
  * One-row strips keep their contract inside flex rows and at the page edge:
- * the <nav> landmark around a strip shrinks, so the strip scrolls instead of
- * the page, and the focus bleed is given back at the inline start, so the
- * first item aligns with the content around it in both directions.
+ * the <nav> landmark around a strip shrinks, so the strip scrolls (or the
+ * breadcrumb truncates) instead of the page, and the first item aligns with
+ * the content around it in both directions.
  */
 import { expect, test } from "bun:test";
 import {
@@ -30,6 +30,8 @@ const READ = `(() => {
   return {
     pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
     scrolls: { pager: strip("pager"), trail: strip("trail"), tabs: strip("link-tabs") },
+    // Labels cut by their own ellipsis, ancestors before the current page.
+    truncated: [...document.querySelectorAll("#trail a")].map((a) => a.scrollWidth > a.clientWidth),
     heading: edge(rect("heading")),
     trailFirst: edge(first("aligned-trail")),
     pagerFirst: edge(first("aligned-pager")),
@@ -54,7 +56,9 @@ for (const dir of ["ltr", "rtl"]) {
 
         // The strips absorb the overflow; the page never scrolls sideways.
         expect(state.pageOverflow).toBe(0);
-        expect(state.scrolls).toEqual({ pager: true, trail: true, tabs: true });
+        expect(state.scrolls).toEqual({ pager: true, trail: false, tabs: true });
+        expect(state.truncated.slice(0, -1)).toContain(true);
+        expect(state.truncated.at(-1)).toBe(false);
         // The first item sits on the same inline-start edge as the heading.
         expect(Math.abs(state.trailFirst - state.heading)).toBeLessThanOrEqual(1);
         expect(Math.abs(state.pagerFirst - state.heading)).toBeLessThanOrEqual(1);
