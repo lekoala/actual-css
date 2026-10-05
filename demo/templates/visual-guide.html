@@ -272,7 +272,8 @@
     /* Centered column diagram — an exact track template, which is what
        --grid-columns is for. */
     .vg-center-track {
-      --grid-columns: 1fr minmax(0, 24rem) 1fr;
+      /* Reserve the labels' width so narrow tracks cannot spill outside the stage. */
+      --grid-columns: minmax(max-content, 1fr) minmax(0, 24rem) minmax(max-content, 1fr);
 
       gap: 0;
     }
