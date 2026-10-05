@@ -8,7 +8,8 @@ In short: **use Actual for generic structure and behavior; add product-specific
 classes for brand and compositions rather than forcing a generic primitive.** A
 local rule is not a failure of Actual — overfitting the framework to a
 product-specific look is. Reach for an Actual primitive first, and write
-application CSS when the need is genuinely product-specific (see §6–7).
+application CSS when the need is genuinely product-specific (see §9–10). The
+principles behind this order are in [Philosophy](../foundations/philosophy.md).
 
 ## 1. Start with the theme
 
@@ -60,7 +61,29 @@ For example, three panels that must all stack together are a `.switcher`, not au
 
 If local CSS mainly makes one layout primitive behave like another, reconsider the primitive first.
 
-## 3. Tune before replacing
+## 3. Keep outer spacing in the layout
+
+Components own their internal rhythm; layout primitives own the space between
+components.
+
+```html
+<div class="stack">
+  <article class="card">…</article>
+  <article class="card">…</article>
+</div>
+```
+
+```css
+/* Avoid */
+.card + .card {
+  margin-block-start: var(--space-50);
+}
+```
+
+A card then moves between a stack, a grid or a sidebar without its outer
+spacing to undo.
+
+## 4. Tune before replacing
 
 Actual primitives expose public hooks for common adjustments.
 
@@ -97,7 +120,12 @@ over reimplementing their layout:
 
 **Rule:** tune the recipe before replacing the recipe.
 
-## 4. Reuse the existing vocabulary
+`--gap` is inherited: set on a region, it re-spaces every nested stack, cluster
+and grid too. Set it on the layout that reads it, as `.feature-grid` does above.
+For a region's own rhythm, set the `gap` property instead; see
+[Region rhythm](../layout/stack.md#region-rhythm-goes-on-gap-not-on-gap).
+
+## 5. Reuse the existing vocabulary
 
 Before introducing a generic application class, check whether Actual already expresses the idea.
 
@@ -113,7 +141,7 @@ Small alignment change    → existing utility
 
 Application classes should primarily describe product-specific concepts, not recreate generic framework utilities.
 
-## 5. Use structural component markup
+## 6. Use structural component markup
 
 When a component exposes meaningful structure, use it.
 
@@ -140,7 +168,44 @@ Connection restored.
 
 Persistent state such as metrics, availability, queue size or account information belongs in normal page content.
 
-## 6. Keep application CSS for application identity
+## 7. Style state through its attribute
+
+Use the native attribute or the ARIA state the markup already needs, then
+`data-*` for state with no equivalent. Classes stay for presentation.
+
+```html
+<a class="nav-link" aria-current="page">Settings</a>
+<button class="btn primary" disabled>Save</button>
+```
+
+```css
+.checkout-form[aria-busy="true"] { … }
+```
+
+Not `.nav-link.active` or `.is-disabled`: a state class duplicates the attribute
+and drifts from it. Two runtime markers are off limits too:
+
+- `data-enhance` turns behavior on; it is never a styling hook.
+- `.is-*` classes (`.is-open`, `.is-static`) are runtime internals: neither set
+  nor select them.
+
+## 8. Bring third-party widgets onto the tokens
+
+A date picker, rich text editor or data grid can come from a dedicated package.
+Map its public visual hooks to Actual tokens instead of restyling it:
+
+```css
+.third-party-picker {
+  --picker-bg: var(--surface-raised);
+  --picker-border: var(--border);
+  --picker-text: var(--text);
+  --picker-focus: var(--focus);
+}
+```
+
+The package keeps its behavior; the theme reaches it through the tokens.
+
+## 9. Keep application CSS for application identity
 
 Custom CSS is expected for things such as:
 
@@ -166,7 +231,7 @@ A better target is:
 
 > No duplicated framework behavior and no palette literals outside the token layer.
 
-## 7. Before adding a CSS rule
+## 10. Before adding a CSS rule
 
 Ask, in this order:
 
@@ -175,9 +240,10 @@ Ask, in this order:
 3. Can a public hook configure it?
 4. Does an existing utility express the adjustment?
 5. Can the color be derived from a theme token?
-6. Is this genuinely application-specific CSS?
+6. Does an attribute already name the state?
+7. Is this genuinely application-specific CSS?
 
-If the answer reaches step 6, write the CSS.
+If the answer reaches step 7, write the CSS.
 
 That is the intended integration model:
 

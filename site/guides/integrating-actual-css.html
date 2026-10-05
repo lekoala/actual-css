@@ -235,7 +235,8 @@
 classes for brand and compositions rather than forcing a generic primitive.</strong> A
 local rule is not a failure of Actual — overfitting the framework to a
 product-specific look is. Reach for an Actual primitive first, and write
-application CSS when the need is genuinely product-specific (see §6–7).</p>
+application CSS when the need is genuinely product-specific (see §9–10). The
+principles behind this order are in <a href="../foundations/philosophy.html">Philosophy</a>.</p>
 <h2 id="1-start-with-the-theme">1. Start with the theme</h2>
 <p>Define palette values once, then derive decorative colors from them.</p>
 <pre><code class="language-css">[data-theme=&quot;brand&quot;] {
@@ -272,7 +273,22 @@ Custom exact track template        → --grid-columns
 </code></pre>
 <p>For example, three panels that must all stack together are a <code>.switcher</code>, not automatically a <code>.grid-3</code>.</p>
 <p>If local CSS mainly makes one layout primitive behave like another, reconsider the primitive first.</p>
-<h2 id="3-tune-before-replacing">3. Tune before replacing</h2>
+<h2 id="3-keep-outer-spacing-in-the-layout">3. Keep outer spacing in the layout</h2>
+<p>Components own their internal rhythm; layout primitives own the space between
+components.</p>
+<pre><code class="language-html">&lt;div class=&quot;stack&quot;&gt;
+  &lt;article class=&quot;card&quot;&gt;…&lt;/article&gt;
+  &lt;article class=&quot;card&quot;&gt;…&lt;/article&gt;
+&lt;/div&gt;
+</code></pre>
+<pre><code class="language-css">/* Avoid */
+.card + .card {
+  margin-block-start: var(--space-50);
+}
+</code></pre>
+<p>A card then moves between a stack, a grid or a sidebar without its outer
+spacing to undo.</p>
+<h2 id="4-tune-before-replacing">4. Tune before replacing</h2>
 <p>Actual primitives expose public hooks for common adjustments.</p>
 <p>Prefer:</p>
 <pre><code class="language-css">.feature-grid {
@@ -299,7 +315,11 @@ CSS stays a local adjustment, not a reimplementation.</p>
 }
 </code></pre>
 <p><strong>Rule:</strong> tune the recipe before replacing the recipe.</p>
-<h2 id="4-reuse-the-existing-vocabulary">4. Reuse the existing vocabulary</h2>
+<p><code>--gap</code> is inherited: set on a region, it re-spaces every nested stack, cluster
+and grid too. Set it on the layout that reads it, as <code>.feature-grid</code> does above.
+For a region's own rhythm, set the <code>gap</code> property instead; see
+<a href="../layout/stack.html#region-rhythm-goes-on-gap-not-on-gap">Region rhythm</a>.</p>
+<h2 id="5-reuse-the-existing-vocabulary">5. Reuse the existing vocabulary</h2>
 <p>Before introducing a generic application class, check whether Actual already expresses the idea.</p>
 <p>Examples:</p>
 <pre><code class="language-text">Small uppercase label     → .overline
@@ -309,7 +329,7 @@ Simple separator/dot      → .dot
 Small alignment change    → existing utility
 </code></pre>
 <p>Application classes should primarily describe product-specific concepts, not recreate generic framework utilities.</p>
-<h2 id="5-use-structural-component-markup">5. Use structural component markup</h2>
+<h2 id="6-use-structural-component-markup">6. Use structural component markup</h2>
 <p>When a component exposes meaningful structure, use it.</p>
 <p>For cards, prefer semantic regions such as direct <code>header</code> and <code>footer</code> elements instead of reproducing their behavior inside arbitrary wrappers.</p>
 <p>For transient application feedback, use <code>.status-bar</code>.</p>
@@ -326,7 +346,33 @@ Item added.
 Connection restored.
 </code></pre>
 <p>Persistent state such as metrics, availability, queue size or account information belongs in normal page content.</p>
-<h2 id="6-keep-application-css-for-application-identity">6. Keep application CSS for application identity</h2>
+<h2 id="7-style-state-through-its-attribute">7. Style state through its attribute</h2>
+<p>Use the native attribute or the ARIA state the markup already needs, then
+<code>data-*</code> for state with no equivalent. Classes stay for presentation.</p>
+<pre><code class="language-html">&lt;a class=&quot;nav-link&quot; aria-current=&quot;page&quot;&gt;Settings&lt;/a&gt;
+&lt;button class=&quot;btn primary&quot; disabled&gt;Save&lt;/button&gt;
+</code></pre>
+<pre><code class="language-css">.checkout-form[aria-busy=&quot;true&quot;] { … }
+</code></pre>
+<p>Not <code>.nav-link.active</code> or <code>.is-disabled</code>: a state class duplicates the attribute
+and drifts from it. Two runtime markers are off limits too:</p>
+<ul>
+<li><code>data-enhance</code> turns behavior on; it is never a styling hook.</li>
+<li><code>.is-*</code> classes (<code>.is-open</code>, <code>.is-static</code>) are runtime internals: neither set
+nor select them.</li>
+</ul>
+<h2 id="8-bring-third-party-widgets-onto-the-tokens">8. Bring third-party widgets onto the tokens</h2>
+<p>A date picker, rich text editor or data grid can come from a dedicated package.
+Map its public visual hooks to Actual tokens instead of restyling it:</p>
+<pre><code class="language-css">.third-party-picker {
+  --picker-bg: var(--surface-raised);
+  --picker-border: var(--border);
+  --picker-text: var(--text);
+  --picker-focus: var(--focus);
+}
+</code></pre>
+<p>The package keeps its behavior; the theme reaches it through the tokens.</p>
+<h2 id="9-keep-application-css-for-application-identity">9. Keep application CSS for application identity</h2>
 <p>Custom CSS is expected for things such as:</p>
 <ul>
 <li>brand marks and decorative treatments;</li>
@@ -347,7 +393,7 @@ Connection restored.
 <blockquote>
 <p>No duplicated framework behavior and no palette literals outside the token layer.</p>
 </blockquote>
-<h2 id="7-before-adding-a-css-rule">7. Before adding a CSS rule</h2>
+<h2 id="10-before-adding-a-css-rule">10. Before adding a CSS rule</h2>
 <p>Ask, in this order:</p>
 <ol>
 <li>Is there already a suitable layout primitive?</li>
@@ -355,9 +401,10 @@ Connection restored.
 <li>Can a public hook configure it?</li>
 <li>Does an existing utility express the adjustment?</li>
 <li>Can the color be derived from a theme token?</li>
+<li>Does an attribute already name the state?</li>
 <li>Is this genuinely application-specific CSS?</li>
 </ol>
-<p>If the answer reaches step 6, write the CSS.</p>
+<p>If the answer reaches step 7, write the CSS.</p>
 <p>That is the intended integration model:</p>
 <pre><code class="language-text">Theme
   ↓
@@ -392,11 +439,14 @@ Add application identity
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#1-start-with-the-theme" data-docs-toc-item data-level="2">1. Start with the theme</a></li>
         <li><a class="nav-link" href="#2-choose-layout-by-relationship" data-docs-toc-item data-level="2">2. Choose layout by relationship</a></li>
-        <li><a class="nav-link" href="#3-tune-before-replacing" data-docs-toc-item data-level="2">3. Tune before replacing</a></li>
-        <li><a class="nav-link" href="#4-reuse-the-existing-vocabulary" data-docs-toc-item data-level="2">4. Reuse the existing vocabulary</a></li>
-        <li><a class="nav-link" href="#5-use-structural-component-markup" data-docs-toc-item data-level="2">5. Use structural component markup</a></li>
-        <li><a class="nav-link" href="#6-keep-application-css-for-application-identity" data-docs-toc-item data-level="2">6. Keep application CSS for application identity</a></li>
-        <li><a class="nav-link" href="#7-before-adding-a-css-rule" data-docs-toc-item data-level="2">7. Before adding a CSS rule</a></li>
+        <li><a class="nav-link" href="#3-keep-outer-spacing-in-the-layout" data-docs-toc-item data-level="2">3. Keep outer spacing in the layout</a></li>
+        <li><a class="nav-link" href="#4-tune-before-replacing" data-docs-toc-item data-level="2">4. Tune before replacing</a></li>
+        <li><a class="nav-link" href="#5-reuse-the-existing-vocabulary" data-docs-toc-item data-level="2">5. Reuse the existing vocabulary</a></li>
+        <li><a class="nav-link" href="#6-use-structural-component-markup" data-docs-toc-item data-level="2">6. Use structural component markup</a></li>
+        <li><a class="nav-link" href="#7-style-state-through-its-attribute" data-docs-toc-item data-level="2">7. Style state through its attribute</a></li>
+        <li><a class="nav-link" href="#8-bring-third-party-widgets-onto-the-tokens" data-docs-toc-item data-level="2">8. Bring third-party widgets onto the tokens</a></li>
+        <li><a class="nav-link" href="#9-keep-application-css-for-application-identity" data-docs-toc-item data-level="2">9. Keep application CSS for application identity</a></li>
+        <li><a class="nav-link" href="#10-before-adding-a-css-rule" data-docs-toc-item data-level="2">10. Before adding a CSS rule</a></li>
           </ul>
         </nav>
       </aside>

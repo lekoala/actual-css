@@ -6,7 +6,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Philosophy — Actual CSS</title>
-  <meta name="description" content="How components, intents, variants, and density compose — and what each layer is responsible for.">
+  <meta name="description" content="Actual CSS is a composition-first component framework: let HTML and the
+cascade do the work, compose layout separately from components, and add an
+abstraction only for a real, repeated need. The outlook is close to
+CUBE CSS, without adopting its methodology or naming.">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <meta name="theme-color" content="#52396F">
   <link rel="stylesheet" href="../../src/css/actual.full.css">
@@ -229,7 +232,93 @@
 
           <div class="prose docs-prose">
 <h1 id="philosophy">Philosophy</h1>
-<p>How components, intents, variants, and density compose — and what each layer is responsible for.</p>
+<p>Actual CSS is a composition-first component framework: let HTML and the
+cascade do the work, compose layout separately from components, and add an
+abstraction only for a real, repeated need. The outlook is close to
+<a href="https://cube.fyi/">CUBE CSS</a>, without adopting its methodology or naming.</p>
+<p><strong>Related terms:</strong> principles, architecture, CUBE, BEM, naming, methodology, guidelines.</p>
+<h2 id="layers">Layers</h2>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Layer</th><th>In Actual</th><th>Owns</th></tr>
+</thead>
+<tbody>
+<tr><td>Baseline</td><td>reset, tokens, themes, base</td><td>HTML defaults, cascade, inheritance</td></tr>
+<tr><td>Layout</td><td><code>.stack</code>, <code>.cluster</code>, <code>.grid</code>, …</td><td>space between children</td></tr>
+<tr><td>Utility</td><td><code>.list-reset</code>, <code>.measure</code>, …</td><td>one reusable adjustment</td></tr>
+<tr><td>Component</td><td><code>.card</code>, <code>.btn</code>, form controls, …</td><td>intrinsic anatomy and appearance</td></tr>
+<tr><td>State</td><td>native attributes, ARIA, <code>data-*</code></td><td>what the element is doing</td></tr>
+</tbody>
+</table></div>
+<h2 id="principles">Principles</h2>
+<p><strong>Components own their inside; compositions own the space between them.</strong> A
+card sets its padding, surface and slots. Where it sits, and how far it is from
+the next card, belongs to the layout around it:</p>
+<pre><code class="language-html">&lt;section class=&quot;stack&quot;&gt;
+  &lt;article class=&quot;card&quot;&gt;…&lt;/article&gt;
+  &lt;article class=&quot;card&quot;&gt;…&lt;/article&gt;
+&lt;/section&gt;
+</code></pre>
+<p>A rule such as <code>.card + .card { margin-block-start: 2rem }</code> moves page layout
+into the component; put a composition around the cards instead.</p>
+<p><strong>A composition on a component takes over its default layout.</strong> A component's
+own layout sits at zero specificity, so <code>&lt;article class=&quot;card media&quot;&gt;</code> lays out
+as a <code>.media</code> without an override, whatever the import order.</p>
+<p><strong>State uses the most semantic attribute; classes choose presentation.</strong></p>
+<div class="table-wrap"><table class="table">
+<thead>
+<tr><th>Kind</th><th>Mechanism</th><th>Examples</th></tr>
+</thead>
+<tbody>
+<tr><td>Native state</td><td>HTML attribute</td><td><code>disabled</code>, <code>open</code>, <code>checked</code></td></tr>
+<tr><td>Accessible state</td><td>ARIA</td><td><code>aria-current</code>, <code>aria-expanded</code>, <code>aria-busy</code></td></tr>
+<tr><td>Runtime state</td><td><code>data-*</code></td><td>no native or ARIA equivalent</td></tr>
+<tr><td>Presentation</td><td>class</td><td><code>.soft</code>, <code>.outline</code>, <code>.sm</code>, <code>.compact</code></td></tr>
+</tbody>
+</table></div>
+<p>Write <code>&lt;a class=&quot;nav-link&quot; aria-current=&quot;page&quot;&gt;</code>, not <code>.nav-link.active</code>. The
+few <code>.is-*</code> classes (<code>.is-open</code>, <code>.is-static</code>) are runtime internals: neither
+set nor select them. <code>data-enhance</code> activates behavior and is never a styling
+hook.</p>
+<p><strong>A utility does one thing.</strong> A class that sets a surface, a border, padding and
+type together is a component: give it a name in application CSS.</p>
+<p><strong>Configure before overriding.</strong> Documented public hooks (<code>--grid-min</code>,
+<code>--card-pad</code>, <code>--cluster-justify</code>) are the API. Other custom properties are
+internal and may change.</p>
+<h2 id="before-adding-css">Before adding CSS</h2>
+<p>Go down the layers and stop at the first that answers the need:</p>
+<ol>
+<li>Does HTML already express it, or the browser already do it?</li>
+<li>Is it a relationship between children? Use a composition.</li>
+<li>Is it one small adjustment? Use a utility.</li>
+<li>Is it the anatomy of a component? Use the component and its hooks.</li>
+<li>Is it a state of that component? Use the attribute that names the state.</li>
+</ol>
+<p>What remains is product-specific: write it as application CSS, as described in
+<a href="../guides/integrating-actual-css.html">Building with Actual CSS</a>.</p>
+<h2 id="class-grammar">Class grammar</h2>
+<p>A component takes optional intent, variant and size classes:
+<code>&lt;button class=&quot;btn primary soft sm&quot;&gt;</code>. The sections below describe each axis.</p>
+<h3 id="flat-names-not-bem">Flat names, not BEM</h3>
+<p>A modifier is a separate class that combines with others (<code>.btn.primary.soft</code>,
+not <code>.btn--primary</code>), and a part gets a prefixed class (<code>.alert-icon</code>,
+<code>.list-item-title</code>) only when its element does not already say what it is.
+There is no <code>__</code> or <code>--</code> in Actual's names, because:</p>
+<ul>
+<li><strong>Modifiers are shared axes.</strong> <code>.primary</code>, <code>.soft</code> and <code>.sm</code> mean the same
+thing on every component that supports them, so one class serves <code>.btn</code>,
+<code>.badge</code> and <code>.alert</code>. BEM names a modifier per block, which multiplies the
+vocabulary and keeps a custom intent such as <code>.tertiary</code> from working
+everywhere at once.</li>
+<li><strong>State is not a modifier.</strong> <code>disabled</code>, <code>aria-current</code> and <code>open</code> already
+name the state; a <code>--disabled</code> or <code>--active</code> class would duplicate them and
+drift out of sync.</li>
+<li><strong>Elements come from HTML.</strong> A card's <code>header</code> and <code>footer</code>, an avatar's
+<code>&lt;img&gt;</code> need no <code>__element</code> class; a prefixed class is kept for the parts
+HTML cannot name.</li>
+</ul>
+<p>Application CSS can use any convention, BEM included, alongside Actual's
+classes: <code>&lt;article class=&quot;card pricing-plan pricing-plan--featured&quot;&gt;</code>.</p>
 <h2 id="components">Components</h2>
 <p>Components are semantic boxes: <code>.btn</code>, <code>.badge</code>, <code>.alert</code>, <code>.card</code>, <code>.avatar</code>, etc. Each component owns its intrinsic layout and visual defaults.</p>
 <h2 id="intents">Intents</h2>
@@ -426,6 +515,11 @@ density context for descendants.</p>
         <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-offset="80" aria-label="On this page">
           <p class="docs-nav-group">On this page</p>
           <ul class="nav-list docs-toc-list" data-docs-toc>
+        <li><a class="nav-link" href="#layers" data-docs-toc-item data-level="2">Layers</a></li>
+        <li><a class="nav-link" href="#principles" data-docs-toc-item data-level="2">Principles</a></li>
+        <li><a class="nav-link" href="#before-adding-css" data-docs-toc-item data-level="2">Before adding CSS</a></li>
+        <li><a class="nav-link" href="#class-grammar" data-docs-toc-item data-level="2">Class grammar</a></li>
+        <li><a class="nav-link" href="#flat-names-not-bem" data-docs-toc-item data-level="3">Flat names, not BEM</a></li>
         <li><a class="nav-link" href="#components" data-docs-toc-item data-level="2">Components</a></li>
         <li><a class="nav-link" href="#intents" data-docs-toc-item data-level="2">Intents</a></li>
         <li><a class="nav-link" href="#variants" data-docs-toc-item data-level="2">Variants</a></li>
