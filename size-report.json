@@ -1,17 +1,17 @@
 {
-  "totalRaw": 361474,
+  "totalRaw": 360604,
   "core": {
-    "minified": 12327,
-    "brotli": 2755
+    "minified": 12310,
+    "brotli": 2758
   },
   "full": {
-    "minified": 132234,
-    "brotli": 19085
+    "minified": 131603,
+    "brotli": 18975
   },
   "js": {
     "full": {
-      "bytes": 61299,
-      "brotli": 17961
+      "bytes": 61381,
+      "brotli": 17938
     }
   },
   "fileCount": 113,
@@ -22,11 +22,11 @@
     },
     {
       "file": "components/steps.css",
-      "raw": 13112
+      "raw": 13260
     },
     {
       "file": "core/tokens.css",
-      "raw": 11831
+      "raw": 11995
     },
     {
       "file": "core/theme.css",
@@ -169,10 +169,6 @@
       "raw": 3517
     },
     {
-      "file": "layout/scroller.css",
-      "raw": 3262
-    },
-    {
       "file": "components/rating.css",
       "raw": 3240
     },
@@ -182,11 +178,15 @@
     },
     {
       "file": "components/pagination.css",
-      "raw": 2999
+      "raw": 3131
     },
     {
       "file": "forms/native.css",
       "raw": 2996
+    },
+    {
+      "file": "components/breadcrumb.css",
+      "raw": 2903
     },
     {
       "file": "themes/spruce.css",
@@ -195,10 +195,6 @@
     {
       "file": "forms/validation.css",
       "raw": 2822
-    },
-    {
-      "file": "components/breadcrumb.css",
-      "raw": 2800
     },
     {
       "file": "themes/ocean.css",
@@ -329,8 +325,16 @@
       "raw": 1731
     },
     {
+      "file": "core/focus.css",
+      "raw": 1729
+    },
+    {
       "file": "layout/index.css",
       "raw": 1707
+    },
+    {
+      "file": "layout/scroller.css",
+      "raw": 1701
     },
     {
       "file": "forms/form.css",
@@ -343,10 +347,6 @@
     {
       "file": "components/indicator.css",
       "raw": 1658
-    },
-    {
-      "file": "core/focus.css",
-      "raw": 1585
     },
     {
       "file": "typography/overline.css",
