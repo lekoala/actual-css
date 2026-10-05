@@ -174,10 +174,9 @@ For more conservative fallbacks, import and compose the source entrypoints direc
 
 Actual CSS is before 1.0:
 
-* A minor release (`0.11` → `0.12`) may remove or rename classes and hooks. Each
-  one ships an upgrade guide; the current one is
-  [Upgrading to 0.12](docs/pages/guides/upgrading.md).
-* A patch release (`0.11.0` → `0.11.1`) keeps every class and hook. It fixes
+* A minor release (`0.12` → `0.13`) may remove or rename classes and hooks. Each
+  one adds a section to [Upgrading](docs/pages/guides/upgrading.md).
+* A patch release (`0.12.0` → `0.12.1`) keeps every class and hook. It fixes
   bugs and may add hooks, so a fix can still move a rendering by a few pixels.
 
 The floating `@0.11` CDN path takes patches automatically. Pin the exact

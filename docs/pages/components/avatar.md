@@ -12,12 +12,12 @@
 
 ## Class reference
 
-| Class           | Kind        | Description                                  |
-| --------------- | ----------- | -------------------------------------------- |
-| `.avatar`       | Component   | Initials or image in a circular box.         |
-| `.avatar-stack` | Composition | Overlapping avatar group.                    |
-| `.badge:empty`  | Composition | Status dot, at the bottom-end corner.        |
-| `.sm` / `.lg`   | Size        | Optical size; also rescales `.avatar-stack`. |
+| Class           | Kind        | Description                            |
+| --------------- | ----------- | -------------------------------------- |
+| `.avatar`       | Component   | Initials or image in a circular box.   |
+| `.avatar-stack` | Composition | Overlapping avatar group.              |
+| `.badge:empty`  | Composition | Status dot, at the bottom-end corner.  |
+| `.sm` / `.lg`   | Size        | Optical size, on an avatar or a stack. |
 
 `.avatar` works on `div`, `a` and `button`. The status dot is an empty
 `.badge` inside an `.avatar`, and needs an `aria-label` of its own.
@@ -100,12 +100,15 @@ that size without their own size classes. Child sizes do not resize the stack.
 
 - `--avatar-size` — inline and block size.
 - `--avatar-radius` — corner radius; set a smaller value for squared avatars.
+- `--avatar-font-size` — initials size.
 - `--avatar-bg` — background; `data-tone` adjusts the derived foreground.
 - `--avatar-stack-size` — stack-scoped size that each avatar falls back to.
+- `--avatar-stack-font-size` — stack-scoped initials size, paired with `--avatar-stack-size`.
 - `--avatar-stack-overlap` — how far stacked avatars overlap.
 - `--avatar-stack-ring` — separating ring width inside `.avatar-stack`.
 
-Prefer intents for avatar colors. Inside `.avatar-stack`, `--avatar-size` falls
-back to a stack-scoped value so the whole group resizes together with `.sm`/`.lg`;
-set `--avatar-size` on an individual avatar to opt one out.
-`--avatar-stack-overlap` is derived from `--avatar-stack-size`, not `--avatar-size`.
+Prefer intents for avatar colors. Inside `.avatar-stack`, `--avatar-size` and
+`--avatar-font-size` fall back to the stack-scoped pair, which `.sm`/`.lg` on
+the stack set, so the whole group resizes together; set `--avatar-size` on an
+individual avatar to opt one out. `--avatar-stack-overlap` is derived from
+`--avatar-stack-size`, not `--avatar-size`.
