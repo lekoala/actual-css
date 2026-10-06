@@ -41,12 +41,11 @@
  * Recommended on some engine, or because it is capability-shaped rather than
  * version-shaped.
  *
- * If an optional structural capability ever returns to this table, it needs a
- * machine-checkable escape hatch rather than a prose one: a comment explaining
- * why a capability needs a gate reads, to a keyword matcher, exactly like a
- * comment excusing its absence, so isJustified() would wave through a rule
- * whose @supports had been deleted. The removed form was a "compat-ok:" pragma
- * on the rule's own comment; reinstate that, not a wider keyword list.
+ * An optional structural capability needs a machine-checkable escape hatch
+ * rather than a prose one: a comment explaining why a capability needs a gate
+ * reads, to a keyword matcher, exactly like a comment excusing its absence, so
+ * isJustified() would wave through a rule whose @supports had been deleted.
+ * Mark it `supportsOnly`: only an enclosing @supports excuses it.
  *
  * CSS floor (Degraded): Firefox 78 / Safari 14 / Chromium 88.
  */
@@ -133,6 +132,23 @@ const FEATURES = [
   /* Chromium-only for now; every use follows a plain declaration of the same
      property, which the engines without it keep. */
   { name: "calc-size()", pattern: /calc-size\(/gi, kind: "safe-drop", tier: "optional" },
+  /* Chromium-only: an engine without it starts the strip at its first item. */
+  {
+    name: "scroll-initial-target",
+    pattern: /scroll-initial-target\b/gi,
+    kind: "safe-drop",
+    tier: "optional",
+  },
+  /* Not a safe drop: the `animation` beside it would run on time instead,
+     end at once and pin its last keyframe. supportsOnly: only an @supports
+     excuses it, never prose — "without" in a file header would. */
+  {
+    name: "scroll-driven animations",
+    pattern: /animation-timeline\b/gi,
+    kind: "structural",
+    tier: "optional",
+    supportsOnly: true,
+  },
 ];
 
 const JUSTIFIED =
@@ -366,8 +382,7 @@ export function auditCss(css, name = "test.css") {
       const excused =
         feature.kind === "safe-drop" ||
         isGuarded(m.index, guarded) ||
-        grandfathered ||
-        isJustified(css, m.index);
+        (!feature.supportsOnly && (grandfathered || isJustified(css, m.index)));
       if (!excused) violations.push(entry);
       else if (feature.tier === "optional") optional.push(entry);
       else progressive.push(entry);

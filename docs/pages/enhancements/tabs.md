@@ -109,12 +109,13 @@ never wraps, so it could never stack.
 A horizontal strip is one row and never wraps, nor does a label: a second line
 would not match the Left/Right keys and reads as a nested level. When the tabs
 do not fit (narrow screen, mobile, long translations), the strip scrolls
-horizontally without a scrollbar; the edges it can still scroll toward fade
-out. Selecting or focusing the tab clipped at the edge scrolls it into view
-with the next one peeking, so a click, the arrow keys or a swipe move along the
-strip. A tab selected in the markup starts in view too, when the strip is
-visible at connect, and so does the current link tab (or flyout trigger),
-without the runtime; the placement moves the strip only, never the page. A
+horizontally without a scrollbar; in supporting browsers, the edges it can
+still scroll toward fade out. Selecting or focusing the tab clipped at the edge
+scrolls it into view with the next one peeking, so a click, the arrow keys or a
+swipe move along the strip. A tab selected in the markup starts in view too,
+when the strip is visible at connect; the placement moves the strip only, never
+the page. In supporting browsers, so does the current link tab (or flyout
+trigger), without the runtime; elsewhere the strip starts at its first tab. A
 vertical strip (`aria-orientation="vertical"`) keeps wrapping its labels.
 
 Scrolling is the fallback, not a responsive design. If a strip regularly

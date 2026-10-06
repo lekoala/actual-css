@@ -15,7 +15,7 @@
 
 - `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the same runtime that registers the built-ins.
 - `--tab-flex` on `.tabs` sets each tab's flex; `1 1 0` gives equal-width tabs.
-- An overflowing link `.tabs` strip or `.steps-horizontal` row starts scrolled to its `aria-current` item, with no runtime (`scroll-initial-target`).
+- In supporting browsers, an overflowing link `.tabs` strip or `.steps-horizontal` row starts scrolled to its `aria-current` item, with no runtime (`scroll-initial-target`).
 - `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs; it defaults to `--border`, which keeps separating surfaces.
 
 ### Changed
@@ -33,7 +33,7 @@
 - The current `.nav-list` link trait sits inside the row's inline padding with rounded ends, instead of flush on its rounded edge.
 - A horizontal `.tabs` strip hides its scrollbar; selecting or focusing the clipped tab scrolls it into view.
 - An overflowing horizontal `.tabs` strip fades the edges it can still scroll toward, where scroll-driven animations are supported.
-- `.scroller` styles the scrollbar under a fine pointer only; on touch screens the native overlay scrollbar, hidden at rest, stays.
+- `.scroller` no longer styles the scrollbar on touch screens, where the native overlay scrollbar, hidden at rest, stays.
 
 ### Fixed
 

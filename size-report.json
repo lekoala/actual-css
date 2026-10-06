@@ -1,12 +1,12 @@
 {
-  "totalRaw": 365815,
+  "totalRaw": 365995,
   "core": {
     "minified": 12310,
     "brotli": 2758
   },
   "full": {
-    "minified": 133489,
-    "brotli": 19261
+    "minified": 133503,
+    "brotli": 19255
   },
   "js": {
     "full": {
@@ -277,6 +277,10 @@
       "raw": 2357
     },
     {
+      "file": "layout/scroller.css",
+      "raw": 2264
+    },
+    {
       "file": "themes/cyberpunk.css",
       "raw": 2255
     },
@@ -287,10 +291,6 @@
     {
       "file": "components/chat.css",
       "raw": 2205
-    },
-    {
-      "file": "layout/scroller.css",
-      "raw": 2084
     },
     {
       "file": "forms/input-icon.css",
