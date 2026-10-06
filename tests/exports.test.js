@@ -19,7 +19,6 @@ const JS_EXPORT_INVENTORY = {
   "./js/mask": [],
   "./js/password": [],
   "./js/range": [],
-  "./js/reveal-current": [],
   "./js/tab": [],
   "./js/enhance": ["default", "applyEnhancement", "registerEnhancement"],
   "./js/escape": ["registerEscapeDismissal"],

@@ -74,9 +74,8 @@ missing; the console names each list it skipped.
 
 ### Rendering changes without an edit
 
-- `.pagination` and a horizontal `.tabs` strip never wrap: a strip that does
-  not fit scrolls horizontally. The tabs strip hides its scrollbar; add
-  `.scroller` to a pagination for a thin one.
+- A horizontal `.tabs` strip never wraps: a strip that does not fit scrolls
+  horizontally, with no scrollbar and faded edges.
 - `.breadcrumb` never wraps either: a trail that does not fit truncates its
   labels with an ellipsis, ancestors first. Ancestor labels need an `<a>` or
   `<span>`.

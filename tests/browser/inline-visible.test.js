@@ -1,8 +1,8 @@
 /*
- * Strips that overflow start on their selected (tabs) or `aria-current`
- * (reveal-current: steps, pagination) item: one placement at
- * connect, inside the strip's own scrollport, clear of its scroll-padding,
- * never moving the page.
+ * Strips that overflow start on their selected or current item, inside the
+ * strip's own scrollport, never moving the page: a tablist through the tabs
+ * runtime (one placement at connect, clear of its scroll-padding), link tabs
+ * and steps through CSS scroll-initial-target, with no runtime at all.
  */
 import { expect, test } from "bun:test";
 import {
@@ -59,40 +59,27 @@ const READ = `(() => {
   for (const list of document.querySelectorAll('[role="tablist"]')) {
     strips[list.id] = read(list, list.querySelector('[aria-selected="true"]'));
   }
-  for (const list of document.querySelectorAll(".steps, .pagination")) {
+  for (const list of document.querySelectorAll(".steps, ul.tabs")) {
     strips[list.id] = read(list, current(list));
   }
   return { strips, pageY: window.scrollY };
 })()`;
 
-it("overflowing strips start on their selected or current item", async () => {
+it("overflowing tablists start on their selected tab", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       const before = await view.evaluate(READ);
       // The fixture must overflow with the target hidden, or the pass is vacuous.
-      const hidden = [
-        "tabs-end",
-        "tabs-middle",
-        "tabs-rtl",
-        "tabs-below",
-        "pages-long",
-        "pages-mid",
-        "pages-duplicate-current",
-      ];
-      for (const id of [...hidden, "steps-row", "pager"]) {
+      for (const id of ["tabs-end", "tabs-middle", "tabs-rtl", "tabs-below"]) {
         expect(before.strips[id], id).toMatchObject({ overflows: true, inBox: false });
       }
-      expect(before.strips["pages-hidden-current"].overflows).toBe(true);
-      expect(before.strips["steps-fit"]).toMatchObject({ overflows: false, inBox: true });
 
       await view.evaluate(`(() => { ${source} })()`);
-      // A tablist has initialized once its unselected tabs left the roving
-      // sequence; a reveal-current strip has placed itself once it scrolled.
+      // A tablist has initialized once its unselected tabs left the roving sequence.
       await waitForBrowser(
         view,
-        `[...document.querySelectorAll('[role="tablist"]')].every((list) => list.querySelector('[tabindex="-1"]')) &&
-         ["pages-long", "pages-mid", "pages-duplicate-current", "steps-row", "pager"].every((id) => document.getElementById(id).scrollLeft !== 0)`,
+        `[...document.querySelectorAll('[role="tablist"]')].every((list) => list.querySelector('[tabindex="-1"]'))`,
       );
       const { strips, pageY } = await view.evaluate(READ);
 
@@ -101,28 +88,33 @@ it("overflowing strips start on their selected or current item", async () => {
       }
       // Mid-strip, the scroll-padding is honoured: room to spare at the edge.
       expect(strips["tabs-middle"]).toMatchObject({ scrolled: true, clear: true });
-      // The current page lands fully inside the strip.
-      expect(strips["pages-long"]).toMatchObject({ scrolled: true, clear: true });
-      // The same token serves any strip with an aria-current item.
-      expect(strips["steps-row"]).toMatchObject({ scrolled: true, inBox: true });
-      expect(strips.pager).toMatchObject({ scrolled: true, inBox: true, ringClear: true });
-      // Mid-strip the end padding is scrolled away: the strip's scroll-padding
-      // is what keeps the item's focus line inside the clip.
-      expect(strips["pages-mid"]).toMatchObject({ scrolled: true, ringClear: true });
-      // A boxless current item before the rendered one is skipped.
-      expect(strips["pages-duplicate-current"]).toMatchObject({ scrolled: true, clear: true });
-      // A current item without a box (inside a hidden item) moves nothing.
-      expect(strips["pages-hidden-current"].scrolled).toBe(false);
       // Already visible: nothing moves.
       expect(strips["tabs-start"]).toMatchObject({ overflows: true, scrolled: false, inBox: true });
-      expect(strips["pages-short"]).toMatchObject({ scrolled: false, inBox: true });
-      expect(strips["steps-fit"]).toMatchObject({ overflows: false, scrolled: false, inBox: true });
       // Hidden at connect: a no-op, not a guess from empty rects.
       expect(strips["tabs-hidden"].scrolled).toBe(false);
       // The strip below the fold scrolled itself, not the page.
       expect(pageY).toBe(0);
     },
     { width: 800, height: 600, artifactName: "inline-visible" },
+  );
+});
+
+it("link tabs and steps start on their current item without a runtime", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      // No runtime is injected: scroll-initial-target places them at load.
+      const { strips, pageY } = await view.evaluate(READ);
+      for (const id of ["links-mid", "links-below", "steps-row"]) {
+        expect(strips[id], id).toMatchObject({ overflows: true, scrolled: true, inBox: true });
+      }
+      // Mid-strip, the scroll-padding (the fade inset) keeps the tab clear of the fade.
+      expect(strips["links-mid"].clear).toBe(true);
+      expect(strips["steps-fit"]).toMatchObject({ overflows: false, scrolled: false, inBox: true });
+      // Neither the strip below the fold nor the vertical rail moved the page.
+      expect(pageY).toBe(0);
+    },
+    { width: 800, height: 600, artifactName: "inline-visible-initial" },
   );
 });
 
@@ -178,28 +170,23 @@ await Bun.write(
   <script src="./full.js"></script>
 </head>
 <body>
-  <ol class="pagination" data-enhance="reveal-current" id="streamed" style="inline-size: 12rem">
-    <li><a class="btn ghost" href="#a">First</a></li>
+  <div class="strip" data-enhance="tabs" role="tablist" aria-label="Streamed" id="streamed">
+    <button type="button" role="tab" aria-selected="false" aria-controls="sp1" id="st1" style="inline-size: 250px"></button>
     <script>window.parserCheckpoint = true;</script>
-    <li><a class="btn ghost" href="#b">Previous</a></li>
-    <li><a class="btn ghost" href="#c">Page 11</a></li>
-    <li><a class="btn ghost" href="#d" aria-current="page">Page 12</a></li>
-  </ol>
-  <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Streamed" id="streamed-tabs">
-    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="p1" id="st1">One</button>
-    <script>window.parserCheckpoint = true;</script>
-    <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="p2" id="st2">Two</button>
+    <button type="button" role="tab" aria-selected="true" aria-controls="sp2" id="st2" style="inline-size: 50px"></button>
+    <button type="button" role="tab" aria-selected="false" aria-controls="sp3" style="inline-size: 250px"></button>
   </div>
-  <div role="tabpanel" id="p1" hidden></div>
-  <div role="tabpanel" id="p2"></div>
-  <div class="strip" data-enhance="reveal-current" id="percent" style="scroll-padding-inline: 20%">
-    <div style="inline-size: 250px"></div><div aria-current="page" style="inline-size: 50px"></div><div style="inline-size: 250px"></div>
+  <div class="strip" data-enhance="tabs" role="tablist" aria-label="Percent" id="percent" style="scroll-padding-inline: 20%">
+    <button type="button" role="tab" aria-selected="false" aria-controls="pp1" style="inline-size: 250px"></button><button type="button" role="tab" aria-selected="true" aria-controls="pp2" style="inline-size: 50px"></button><button type="button" role="tab" aria-selected="false" aria-controls="pp3" style="inline-size: 250px"></button>
   </div>
   <div style="transform: scale(0.5); transform-origin: 0 0">
-    <div class="strip" data-enhance="reveal-current" id="scaled">
-      <div style="inline-size: 250px"></div><div aria-current="page" style="inline-size: 50px"></div><div style="inline-size: 250px"></div>
+    <div class="strip" data-enhance="tabs" role="tablist" aria-label="Scaled" id="scaled">
+      <button type="button" role="tab" aria-selected="false" aria-controls="cp1" style="inline-size: 250px"></button><button type="button" role="tab" aria-selected="true" aria-controls="cp2" style="inline-size: 50px"></button><button type="button" role="tab" aria-selected="false" aria-controls="cp3" style="inline-size: 250px"></button>
     </div>
   </div>
+  <div role="tabpanel" id="sp1"></div><div role="tabpanel" id="sp2"></div><div role="tabpanel" id="sp3"></div>
+  <div role="tabpanel" id="pp1"></div><div role="tabpanel" id="pp2"></div><div role="tabpanel" id="pp3"></div>
+  <div role="tabpanel" id="cp1"></div><div role="tabpanel" id="cp2"></div><div role="tabpanel" id="cp3"></div>
 </body>
 </html>
 `,
@@ -216,7 +203,7 @@ it("placement waits for parsing, reads percentages and follows a scale", async (
           const strip = document.getElementById(id);
           const box = strip.getBoundingClientRect();
           const scale = box.width / strip.offsetWidth;
-          const rect = strip.querySelector("[aria-current]").getBoundingClientRect();
+          const rect = strip.querySelector('[aria-selected="true"]').getBoundingClientRect();
           return {
             scrolled: strip.scrollLeft !== 0,
             end: (rect.right - box.left) / scale,
@@ -232,10 +219,10 @@ it("placement waits for parsing, reads percentages and follows a scale", async (
         };
       })()`);
 
-      // Trap: the current item was not parsed yet when the strip connected.
+      // Trap: the selected tab was not parsed yet when the strip connected.
       expect(state.streamed.scrolled).toBe(true);
       expect(state.streamed.end).toBeLessThanOrEqual(state.streamed.width + 1);
-      // Trap: the tablist connected with no tabs and never set its roving tabindex.
+      // Trap: the tablist connected with one tab and never set its roving tabindex.
       expect(state.tabs).toEqual(["-1", "0"]);
       // Trap: 20% read as 20px; it is 20% of the scrollport.
       expect(state.percent.scrolled).toBe(true);

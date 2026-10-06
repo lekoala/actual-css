@@ -67,7 +67,6 @@
     "./js/menu": "./src/js/menu.js",
     "./js/password": "./src/js/password.js",
     "./js/range": "./src/js/range.js",
-    "./js/reveal-current": "./src/js/reveal-current.js",
     "./js/scrollspy": "./src/js/scrollspy.js",
     "./js/selectors": "./src/js/selectors.js",
     "./js/tab": "./src/js/tab.js",

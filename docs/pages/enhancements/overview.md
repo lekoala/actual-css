@@ -49,10 +49,6 @@ import "actual-css/js/flyout";
 import "actual-css/js/tooltip";
 ```
 
-`actual-css/js/reveal-current` has no component page: it starts an overflowing
-strip on its current page, step or flyout section (see
-[one-row strips](../utilities/sizing-wrapping.md#one-row-strips)).
-
 Enhancer modules self-register when imported. They do not require init calls and
 are safe to import during server-side rendering: outside a browser, registration
 is a no-op until the module is loaded again with a DOM.

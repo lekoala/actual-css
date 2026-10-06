@@ -15,7 +15,7 @@
 
 - `actual-css/js/full` now exposes `enhance`, `applyEnhancement`, and `registerEnhancement` from the same runtime that registers the built-ins.
 - `--tab-flex` on `.tabs` sets each tab's flex; `1 1 0` gives equal-width tabs.
-- `data-enhance="reveal-current"` (`actual-css/js/reveal-current`) scrolls an overflowing strip (`.pagination`, `.steps-horizontal`, link `.tabs`) to its `aria-current` page, step or flyout section at connect.
+- An overflowing link `.tabs` strip or `.steps-horizontal` row starts scrolled to its `aria-current` item, with no runtime (`scroll-initial-target`).
 - `--border-control` sets the resting edge of fields, choices, switches, OTP cells, choice cards, `.join-addon` and the color and file inputs; it defaults to `--border`, which keeps separating surfaces.
 
 ### Changed
@@ -26,7 +26,6 @@
 - An overflowing horizontal `.tabs` strip shows its selected tab in full, at connect and whenever selection changes, scrolling the strip only.
 - `.floating-field` accepts its `.field-label` before or after the control; state is read through `:has()` on the cell.
 - `.list-item` regions center on the row by default; add `.items-start` to the row or the `.list` for rows with long supporting text.
-- `.pagination` never wraps: a row that does not fit scrolls horizontally, with room for its items' focus line.
 - A horizontal `.tabs` strip never wraps, nor do its labels: a strip that does not fit scrolls horizontally.
 - `.breadcrumb` never wraps: a trail that does not fit truncates its labels with an ellipsis, ancestors before the current page.
 - A navigation flyout `.tab` shows the current state with `aria-current="true"` while its panel holds the current page.
@@ -45,8 +44,7 @@
 - `actual-css contrast` measures a theme whose name contains `&` or `<` under its own name, instead of an island the name had broken.
 - `actual-css contrast` and `actual-css design` reject a `--name` the theme file does not declare as `[data-theme]`, instead of measuring the framework defaults.
 - A bare heading in a `dialog.modal > header` drops its block margins, so the band no longer grows and the title centers on the close.
-- A `<nav>` around `.breadcrumb`, `.pagination` or `.tabs` shrinks inside a flex or grid row, so the trail truncates or the strip scrolls instead of the page.
-- The first item of `.pagination` aligns with the surrounding content at rest; the focus bleed is given back at the inline start.
+- A `<nav>` around `.breadcrumb` or `.tabs` shrinks inside a flex or grid row, so the trail truncates or the strip scrolls instead of the page.
 - An enhanced tablist no longer operates the tabs of a nested `role="tablist"` that has no `data-enhance="tabs"`.
 - A tablist with `data-enhance="tabs"` sets its roving tabindex when a classic script in `<head>` connects it before its tabs are parsed.
 - The generic focus line of links, `summary` and nav items follows a `--focus-ring-width` set on a `[data-theme]` island or any region, like the `.btn` ring beside it.

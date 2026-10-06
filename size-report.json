@@ -1,24 +1,24 @@
 {
-  "totalRaw": 366244,
+  "totalRaw": 365815,
   "core": {
     "minified": 12310,
     "brotli": 2758
   },
   "full": {
-    "minified": 133710,
-    "brotli": 19257
+    "minified": 133489,
+    "brotli": 19261
   },
   "js": {
     "full": {
-      "bytes": 61842,
-      "brotli": 18049
+      "bytes": 61659,
+      "brotli": 18032
     }
   },
   "fileCount": 113,
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 15027
+      "raw": 15385
     },
     {
       "file": "components/modal.css",
@@ -27,6 +27,10 @@
     {
       "file": "core/tokens.css",
       "raw": 11995
+    },
+    {
+      "file": "components/tab.css",
+      "raw": 8974
     },
     {
       "file": "core/theme.css",
@@ -39,10 +43,6 @@
     {
       "file": "components/alert.css",
       "raw": 8409
-    },
-    {
-      "file": "components/tab.css",
-      "raw": 8389
     },
     {
       "file": "components/drawer.css",
@@ -181,10 +181,6 @@
       "raw": 3239
     },
     {
-      "file": "components/pagination.css",
-      "raw": 3131
-    },
-    {
       "file": "forms/native.css",
       "raw": 2996
     },
@@ -319,6 +315,10 @@
     {
       "file": "themes/brutalist.css",
       "raw": 1778
+    },
+    {
+      "file": "components/pagination.css",
+      "raw": 1759
     },
     {
       "file": "effects/shimmer.css",

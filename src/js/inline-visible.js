@@ -1,7 +1,7 @@
 /*
  * Brings a target into view inside one horizontal scrollport — internal, not
- * a package export. reveal-current calls it once at connect so a current item
- * rendered off-screen starts visible; tabs also call it on every selection.
+ * a package export. Tabs call it at connect, so a selected tab rendered
+ * off-screen starts visible, and on every selection.
  *
  * Contract:
  * - Scrolls `container` only. scrollIntoView() would also scroll ancestors and
