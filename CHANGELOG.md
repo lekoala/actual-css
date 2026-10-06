@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-06
 ### Breaking changes
 
 - `--cluster-justify`, `--cluster-align` and `--cluster-wrap` no longer inherit into nested `.cluster` rows; set them on the row itself or select nested rows.
