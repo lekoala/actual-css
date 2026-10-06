@@ -293,8 +293,10 @@
 <ul>
 <li><code>--scroll-snap-item-size</code> — item <code>flex</code> basis; set it for card rails.</li>
 <li><code>--scroll-snap-gap</code> — space between items.</li>
-<li><code>--scroll-snap-padding</code> — inline scroll padding, so a snapped item does not sit
-flush against the container edge. Not declared; falls back to <code>--scroll-snap-gap</code>.</li>
+<li><code>--scroll-snap-padding</code> — preferred inline scroll inset; defaults to
+<code>--scroll-snap-gap</code>. Use a length (<code>0px</code> for zero); conforming values stay at
+least large enough for the focus gutter, and the rail's edge items keep that
+gutter even at rest.</li>
 <li><code>--scroll-snap-align</code> — item snap alignment. Prefer <code>data-snap-align=&quot;center&quot;</code>
 over setting this directly.</li>
 </ul>

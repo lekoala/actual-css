@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scroll snap focus fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+    /* Fixed-width items so a 320px viewport always has a scrolling rail. */
+    .scroll-snap .btn { inline-size: 200px; }
+  </style>
+</head>
+<body>
+  <!-- The surrounding text the rail's content must stay aligned with. -->
+  <p id="marker">Reference line</p>
+
+  <!-- Undeclared --scroll-snap-padding: the gap fallback, raised to the focus
+       reserve only if the gap is smaller. -->
+  <div class="scroll-snap" id="rail">
+    <button class="btn" type="button" id="first">First action</button>
+    <button class="btn" type="button" id="middle">Middle action</button>
+    <button class="btn" type="button" id="last">Last action</button>
+  </div>
+
+  <!-- A conforming zero is raised to the focus reserve by the clamp. -->
+  <div class="scroll-snap" id="zero" style="--scroll-snap-padding: 0px">
+    <button class="btn" type="button">Zero one</button>
+    <button class="btn" type="button">Zero two</button>
+    <button class="btn" type="button">Zero three</button>
+  </div>
+
+  <!-- A larger request still wins over the reserve. -->
+  <div class="scroll-snap" id="wide" style="--scroll-snap-padding: 40px">
+    <button class="btn" type="button">Wide one</button>
+    <button class="btn" type="button">Wide two</button>
+    <button class="btn" type="button">Wide three</button>
+  </div>
+</body>
+</html>

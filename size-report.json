@@ -1,12 +1,12 @@
 {
-  "totalRaw": 365995,
+  "totalRaw": 367704,
   "core": {
     "minified": 12310,
     "brotli": 2758
   },
   "full": {
-    "minified": 133503,
-    "brotli": 19255
+    "minified": 133877,
+    "brotli": 19310
   },
   "js": {
     "full": {
@@ -171,6 +171,10 @@
     {
       "file": "components/close.css",
       "raw": 3517
+    },
+    {
+      "file": "layout/scroll-snap.css",
+      "raw": 3390
     },
     {
       "file": "components/rating.css",
@@ -339,10 +343,6 @@
     {
       "file": "forms/form.css",
       "raw": 1693
-    },
-    {
-      "file": "layout/scroll-snap.css",
-      "raw": 1681
     },
     {
       "file": "components/indicator.css",

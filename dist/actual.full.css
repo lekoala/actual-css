@@ -1927,16 +1927,36 @@ small {
  * --scroll-snap-align
  * --scroll-snap-item-size
  * --scroll-snap-padding
+ *
+ * Internal:
+ * --scroll-snap-focus-bleed
  */
 .scroll-snap {
   --scroll-snap-gap: var(--gap);
   --scroll-snap-align: start;
   --scroll-snap-item-size: auto;
+  /* Declared here, not as a :root alias: an inherited alias arrives already
+     computed, so a --focus-ring-width override on the rail would not reach it. */
+  --scroll-snap-focus-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
 
   display: flex;
   flex-direction: row;
   gap: var(--scroll-snap-gap);
+  /* Both axes clip: `auto` on one computes the other to `auto`, so a ring on
+     the top or bottom item would be lost too. Every side reserves the ring's
+     own width; the block reserve returns to the flow through a negative
+     margin, while the inline reserve stays as the rail's focus gutter.
+     Bleeding the inline reserve outward instead would make the border box
+     `containing block + 2 * reserve` wide, which at the viewport edge grows
+     the page: a rail cannot be flush with arbitrary surrounding content and
+     free of page overflow at once. */
+  margin-block: calc(var(--scroll-snap-focus-bleed) * -1);
+  padding-block: var(--scroll-snap-focus-bleed);
+  padding-inline: var(--scroll-snap-focus-bleed);
   overflow-x: auto;
+  /* One scroll axis, stated: a fractional content height could otherwise raise
+     a phantom vertical scrollbar under one font or zoom step. */
+  overflow-y: hidden;
 }
 
 .scroll-snap > * {
@@ -1946,7 +1966,17 @@ small {
 @supports (scroll-snap-type: x mandatory) {
   .scroll-snap {
     overscroll-behavior-inline: contain;
+    /* Fallback only, never the ring's protector: padding-inline above already
+       guarantees paint. A unitless `0` drops the clamp below but keeps this
+       declaration, so the worst case is a snapped item flush with the gutter,
+       not a clipped ring. */
     scroll-padding-inline: var(--scroll-snap-padding, var(--scroll-snap-gap));
+    /* A conforming <length> stays at least the focus reserve, so scroll and
+       snap stop with the gutter's air. */
+    scroll-padding-inline: max(
+      var(--scroll-snap-padding, var(--scroll-snap-gap)),
+      var(--scroll-snap-focus-bleed)
+    );
     /* x then inline: an engine that lacks the logical keyword keeps x.
        proximity is the default, so a short rail cannot trap the pointer. */
     scroll-snap-type: x proximity;

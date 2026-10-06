@@ -1,6 +1,9 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Fixed
+
+- `.scroll-snap` keeps a focused item's ring inside its own clip on all four sides.
 
 ## [0.13.0] - 2026-10-06
 ### Breaking changes

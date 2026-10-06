@@ -40,8 +40,10 @@ Items snap to the inline start edge by default, with `proximity` snapping so a s
 
 - `--scroll-snap-item-size` — item `flex` basis; set it for card rails.
 - `--scroll-snap-gap` — space between items.
-- `--scroll-snap-padding` — inline scroll padding, so a snapped item does not sit
-  flush against the container edge. Not declared; falls back to `--scroll-snap-gap`.
+- `--scroll-snap-padding` — preferred inline scroll inset; defaults to
+  `--scroll-snap-gap`. Use a length (`0px` for zero); conforming values stay at
+  least large enough for the focus gutter, and the rail's edge items keep that
+  gutter even at rest.
 - `--scroll-snap-align` — item snap alignment. Prefer `data-snap-align="center"`
   over setting this directly.
 
