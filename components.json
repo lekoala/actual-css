@@ -644,6 +644,10 @@
       "--tab-flex",
       "--tab-gap"
     ],
+    "internalHooks": [
+      "--tab-edge",
+      "--tab-fade-dir"
+    ],
     "states": [
       "aria-current",
       "aria-disabled",

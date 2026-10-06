@@ -792,16 +792,22 @@ test("breadcrumb stays on one line and truncates instead of scrolling", () => {
 });
 
 test("strips reserve their focus line, not a decorative edge", () => {
-  /* No edge fade anywhere: a mask dictated the strips' scroll-padding and
-     focus geometry for a cue a clipped item already gives. */
+  /* No shared edge fade: a mask on .scroller dictated every strip's
+     scroll-padding and focus geometry for a cue a clipped item and a
+     scrollbar already give. */
   for (const path of [
     "src/css/components/pagination.css",
-    "src/css/components/tab.css",
     "src/css/components/steps.css",
     "src/css/layout/scroller.css",
   ]) {
     expect(readRules(path), path).not.toContain("mask-image");
   }
+  /* Tabs are the exception: they hide their scrollbar, so the fade is the
+     cue. It follows the strip's geometry instead of setting it — one inset
+     for scroll-padding and the fade, so a revealed tab stays clear of it. */
+  const tabs = readRules("src/css/components/tab.css");
+  expect(tabs).toContain("scroll-padding-inline: var(--tab-edge);");
+  expect(tabs).toMatch(/mask-image:[^;]*var\(--tab-edge\)/s);
   /* Mid-strip the padding has scrolled away, so scroll-padding is what keeps a
      focused item's outer line inside the clip (tests/browser/strip-focus). */
   expect(readCss("src/css/components/pagination.css")).toContain(
