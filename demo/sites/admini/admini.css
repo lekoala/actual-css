@@ -166,13 +166,6 @@
   padding-block: var(--space-20);
 }
 
-/* why: .btn pads for one line of text; an avatar is taller than 1lh, so the
-   account trigger stood at 46px and set the bar's height. min-block-size
-   still holds it at the sm control size. */
-.admini-topbar .btn:has(> .avatar) {
-  padding-block: 0;
-}
-
 @media (min-width: 56rem) {
   .admini-hide-mobile {
     display: initial;
