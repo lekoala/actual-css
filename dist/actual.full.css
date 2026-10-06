@@ -1870,13 +1870,13 @@ small {
  * draw their native scrollbar — the intended fallback, not a broken state.
  *
  * Styles the scrollbar only; it does not create the overflow. Pair it with
- * .overflow-auto or a component that already scrolls (the one-row strips:
- * pagination, horizontal steps; tabs hide their bar and fade their own
- * edges). No edge fade here: a mask would
- * dictate the strip's scroll-padding and focus geometry for a decorative cue,
- * and an item clipped at the edge already says the strip continues.
+ * .overflow-auto or a component that already scrolls (horizontal steps, a
+ * table wrap; tabs hide their bar and fade their own edges). No edge fade
+ * here: a mask would dictate the strip's scroll-padding and focus geometry for
+ * a decorative cue, and an item clipped at the edge already says the strip
+ * continues.
  *
- * Fine pointers only: Chromium trades the overlay scrollbar of a touch screen,
+ * Not on touch: Chromium trades the overlay scrollbar of a touch screen,
  * hidden at rest, for a classic always-visible one as soon as scrollbar-color
  * or scrollbar-width is set. On a phone that painted a permanent bar under
  * every strip; the native overlay is the better cue there.
@@ -1890,7 +1890,10 @@ small {
   --scroller-thumb: var(--border);
 }
 
-@media (pointer: fine) {
+/* Any primary pointer but touch: a keyboard-only or pointerless device
+   (pointer: none) draws classic scrollbars too. `all and` keeps the negation
+   valid in Media Queries 3 parsers. */
+@media not all and (pointer: coarse) {
   .scroller {
     scrollbar-color: var(--scroller-thumb) var(--scroller-track);
     scrollbar-width: thin;

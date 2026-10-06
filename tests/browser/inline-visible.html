@@ -9,8 +9,7 @@
     /* Narrow boxes overflow on any font: many labels against a few words of
        room. Assertions compare rects, never a label width. */
     .box { inline-size: 12rem; margin-block: 1rem; }
-    .spacer { block-size: 150vh; }
-  </style>
+    .spacer { block-size: 150vh; }  </style>
 </head>
 <body>
   <!-- First in tab order. The test sizes it from its tabs so the next one
@@ -88,6 +87,16 @@
         `<button class="tab" type="button" role="tab" id="${name}-${i}" aria-controls="${name}-p${i}" aria-selected="${i === pick}">${label}</button>`).join("");
       const panels = labels.map((_, i) => `<div role="tabpanel" id="${name}-p${i}"></div>`).join("");
       box.innerHTML = `<div class="tabs" data-enhance="tabs" role="tablist" aria-label="${name}" id="${name}">${tabs}</div>${panels}`;
+    }
+
+    // Each horizontal strip is sized from its own tabs, never a fixed length:
+    // its widest tab fits between both scroll-paddings, so "clear" is
+    // reachable on any font, while six tabs always overflow it.
+    for (const strip of document.querySelectorAll(".box > .tabs:not([aria-orientation])")) {
+      const widest = Math.max(...[...strip.querySelectorAll(".tab")].map((tab) => tab.getBoundingClientRect().width));
+      if (!widest) continue;
+      const pad = parseFloat(getComputedStyle(strip).scrollPaddingInlineStart) || 0;
+      strip.closest(".box").style.inlineSize = `${widest + pad * 2 + 8}px`;
     }
   </script>
 </body>

@@ -154,7 +154,8 @@ Set `--step-min` when names need a wider minimum share. If the markers or that
 minimum do not fit, the row scrolls; use `.steps-vertical` when every name must
 remain visible without horizontal scrolling.
 
-A row that scrolls starts on its `aria-current="step"` instead of step 1. A row
+In supporting browsers, a row that scrolls starts on its `aria-current="step"`
+instead of step 1. A row
 that raises `--step-min` can scroll, so it is worth pairing with `.scroller`,
 which gives the native scrollbar the theme's density and colour instead of the
 OS default:

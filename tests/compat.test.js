@@ -154,6 +154,19 @@ test("an optional safe-drop capability needs no guard", () => {
   expect(optional.some((entry) => entry.includes("anchor positioning"))).toBe(true);
 });
 
+test("a scroll-driven animation needs an @supports, never a comment", () => {
+  const rule = ".tabs { animation: fade linear both; animation-timeline: scroll(self inline); }";
+  const guarded = auditCss(`@supports (animation-timeline: scroll()) {\n  ${rule}\n}`);
+  expect(guarded.violations).toEqual([]);
+  // The @supports condition names the capability too, and is counted like any use.
+  expect(guarded.optional).toContain("test.css:2  scroll-driven animations");
+
+  // A justifying word in the file header excuses other structural uses; this
+  // one would pin its last keyframe without the gate, so prose is not enough.
+  const prose = auditCss(`/* Strips scroll without a scrollbar. */\n${rule}`);
+  expect(prose.violations).toEqual(["test.css:2  scroll-driven animations"]);
+});
+
 /*
  * Popover is a runtime requirement now, not a tracked capability: the audit
  * must not flag Actual's own transport rules, and must not report them as an

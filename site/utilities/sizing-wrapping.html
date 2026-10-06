@@ -331,8 +331,8 @@ never quite matches the native one anyway.</p>
 above the capability floor. An engine that knows neither ignores both
 declarations and draws its native scrollbar — the intended fallback, not a
 broken state.</p>
-<p><code>.scroller</code> applies to fine pointers only. On a touch screen the native overlay
-scrollbar stays: it hides at rest, where a styled bar would stay visible.</p>
+<p><code>.scroller</code> does not apply to touch screens, where the native overlay scrollbar
+stays: it hides at rest, where a styled bar would stay visible.</p>
 <p><code>.scroller</code> is a layout primitive, so it comes with <code>actual.full.css</code> and with
 <code>actual-css/css/layout</code> like <code>.stack</code> or <code>.cluster</code>. A project importing module
 by module reaches it directly:</p>
@@ -365,7 +365,7 @@ by module reaches it directly:</p>
   --scroller-thumb: var(--border);
 }
 
-@media (pointer: fine) {
+@media not all and (pointer: coarse) {
   .scroller {
     scrollbar-color: var(--scroller-thumb) var(--scroller-track);
     scrollbar-width: thin;
@@ -384,7 +384,8 @@ the part of a custom scrollbar that never held up.</p>
 <p>Components that never wrap scroll horizontally when they do not fit: <code>.tabs</code>,
 <code>.steps-horizontal</code>, and <code>.table-wrap</code>. (<code>.breadcrumb</code> truncates its labels
 instead; see <a href="../components/breadcrumb.html">Breadcrumb</a>. <code>.pagination</code> wraps.)
-A strip that loads on a current link tab or step starts scrolled to it.</p>
+In supporting browsers, a strip that loads on a current link tab or step starts
+scrolled to it; elsewhere it starts at its first item.</p>
 <p><code>.tabs</code> hides its scrollbar and fades its edges instead: selecting the clipped
 tab scrolls it into view. The others leave the scrollbar to the engine, so an
 OS-default horizontal scrollbar can sit under a short strip, and on touch

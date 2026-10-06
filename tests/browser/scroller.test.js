@@ -1,9 +1,11 @@
 /*
- * .scroller styles the scrollbar under a fine pointer only. Chromium trades a
- * touch screen's overlay scrollbar, hidden at rest, for a classic visible one
- * as soon as scrollbar-color or scrollbar-width is set: on a phone every
- * .scroller strip grew a permanent bar. A coarse pointer must leave both
- * properties at their initial value.
+ * .scroller styles the scrollbar on any primary pointer but touch. Chromium
+ * trades a touch screen's overlay scrollbar, hidden at rest, for a classic
+ * visible one as soon as scrollbar-color or scrollbar-width is set: on a phone
+ * every .scroller strip grew a permanent bar. A coarse pointer must leave both
+ * properties at their initial value. The other case is not "fine": headless
+ * Chrome on a CI runner without a mouse reports pointer: none, and a
+ * pointerless device draws classic scrollbars too.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -23,7 +25,7 @@ const READ = `(() => {
   };
 })()`;
 
-it("styles the scrollbar under a fine pointer", async () => {
+it("styles the scrollbar unless the pointer is touch", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
     const result = await view.evaluate(READ);
     expect(result.coarse).toBe(false);

@@ -58,10 +58,10 @@ strips reserve only their focus line. `.tabs` is the exception: it hides its
 scrollbar, so its fade is the cue, and the fade spans the strip's existing
 scroll-padding instead of setting it.
 
-A strip that loads on a current item starts scrolled to it through
-`scroll-initial-target`, not a runtime: one declaration on the item replaces a
-module, its opt-in token and its wait for parsing. Engines without the
-property start at the first item, which the fade or the scrollbar already
-says is not all. `.pagination` does not scroll at all: it wraps, because a
+Starting a strip on its current item is a progressive enhancement, not a
+contract: `scroll-initial-target` on the item, no runtime. One declaration
+replaces a module, its opt-in token and its wait for parsing. Engines without
+the property start at the first item, which the fade or the scrollbar already
+says is not all; do not reintroduce a script fallback for them. `.pagination` does not scroll at all: it wraps, because a
 click on a page navigates instead of moving the strip, so a scrolling row hid
 pages the mouse could not reach.
