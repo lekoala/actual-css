@@ -708,11 +708,19 @@ test("steps keep complete and current distinct, and current wins when both apply
   expect(css).toContain('.steps > .step-complete:not([aria-current="step"])::before');
   expect(css).toContain('.steps > [aria-current="step"]::before');
 
-  /* No state rule may be written against a composition: a marker that read
-     differently in a sidebar than in a row would be two components. */
+  /* No state may be painted against a composition: a marker that read
+     differently in a sidebar than in a row would be two components. The one
+     exception places the scroll, never paint: only the row scrolls, and in a
+     vertical list the nearest scroll container would be the page. */
   const rules = readRules("src/css/components/steps.css");
-  expect(rules).not.toMatch(/\.steps-(horizontal|vertical)[^{,]* > \.step-complete/);
-  expect(rules).not.toMatch(/\.steps-(horizontal|vertical)[^{,]* > \[aria-current/);
+  const composed = [
+    ...rules.matchAll(
+      /\.steps-(?:horizontal|vertical)[^{,]* > (?:\.step-complete|\[aria-current)[^{]*\{([^}]*)\}/g,
+    ),
+  ];
+  for (const [rule, body] of composed) {
+    expect(body.trim(), rule).toBe("scroll-initial-target: nearest;");
+  }
 });
 
 test("tabs include vertical orientation styling without spending specificity on it", () => {
@@ -808,17 +816,15 @@ test("strips reserve their focus line, not a decorative edge", () => {
   const tabs = readRules("src/css/components/tab.css");
   expect(tabs).toContain("scroll-padding-inline: var(--tab-edge);");
   expect(tabs).toMatch(/mask-image:[^;]*var\(--tab-edge\)/s);
-  /* Mid-strip the padding has scrolled away, so scroll-padding is what keeps a
-     focused item's outer line inside the clip (tests/browser/strip-focus). */
-  expect(readCss("src/css/components/pagination.css")).toContain(
-    "scroll-padding-inline: var(--pagination-focus-bleed);",
-  );
+});
 
-  /* An arrow would say "action". The scrollbar stays: on a strip it is the
-     only visible control for a mouse. */
+test("pagination wraps instead of scrolling", () => {
+  /* A scrolling row hid pages behind a scrollbar a click cannot move, since a
+     click navigates; wrapping keeps every page visible with no scrollport to
+     clip a focus line. */
   const pagination = readRules("src/css/components/pagination.css");
-  expect(pagination).not.toMatch(/\.pagination::(before|after)\s*\{[^}]*content:/s);
-  expect(pagination.includes("scrollbar-width: none")).toBe(false);
+  expect(pagination).toMatch(/\.pagination\s*\{[^}]*flex-wrap:\s*wrap/s);
+  expect(pagination).not.toMatch(/overflow|scroll/);
 });
 
 test("prose styles native kbd elements", () => {

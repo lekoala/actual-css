@@ -175,6 +175,13 @@
   overscroll-behavior-inline: contain;
 }
 
+/* A row that loads mid-flow starts scrolled to its current step; engines
+   without the property start at the first. */
+.steps-horizontal > [aria-current="step"] {
+  /* biome-ignore lint/correctness/noUnknownProperty: CSS Scroll Snap 2 property that Biome's list predates; an engine without it drops the declaration. */
+  scroll-initial-target: nearest;
+}
+
 /* A scroll container clips at the padding edge, so a navigable row reserves the
    focus ring's own width and offset, and focus scrolls a link in that far from
    the inline clip. Only this composition scrolls, and only a link has a ring to

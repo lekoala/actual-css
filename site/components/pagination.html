@@ -320,13 +320,10 @@ buttons — they are decorative, not actionable.</p>
 </div>
 <div class="prose docs-prose">
 <h2 id="narrow-screens">Narrow screens</h2>
-<p>Pagination is one ordered row and never wraps. When the items do not fit, the
-row scrolls horizontally; that is the fallback, not the mobile design. Add
-<code>data-enhance=&quot;reveal-current&quot;</code> so the current page starts in view, and
-<code>.scroller</code> for a thin scrollbar; see
-<a href="../utilities/sizing-wrapping.html#one-row-strips">one-row strips</a>. For a
-phone or a narrow column (responsive, mobile, small screen), render a shorter
-range — the server knows which pages matter around the current one:</p>
+<p>When the items do not fit, the row wraps: every page stays visible and
+clickable. That is the fallback, not the mobile design. For a phone or a
+narrow column (responsive, mobile, small screen), render a shorter range — the
+server knows which pages matter around the current one:</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">

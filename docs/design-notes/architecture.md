@@ -46,8 +46,8 @@ padding and type together has become a component, whatever file it lives in.
 A value derived from an overridable token is computed on the element that uses
 it, never as an alias on `:root`: an inherited custom property arrives already
 computed, so an override on a theme island or a region would not reach it. The
-generic focus line (`focus.css`) and the dialog, drawer and pagination focus
-reserves follow this rule.
+generic focus line (`focus.css`) and the dialog and drawer focus reserves
+follow this rule.
 
 ## Decoration
 
@@ -57,3 +57,11 @@ reserve, and repeated what a clipped item and the scrollbar already show. The
 strips reserve only their focus line. `.tabs` is the exception: it hides its
 scrollbar, so its fade is the cue, and the fade spans the strip's existing
 scroll-padding instead of setting it.
+
+A strip that loads on a current item starts scrolled to it through
+`scroll-initial-target`, not a runtime: one declaration on the item replaces a
+module, its opt-in token and its wait for parsing. Engines without the
+property start at the first item, which the fade or the scrollbar already
+says is not all. `.pagination` does not scroll at all: it wraps, because a
+click on a page navigates instead of moving the strip, so a scrolling row hid
+pages the mouse could not reach.

@@ -11,36 +11,19 @@
  * — they are decorative, not actionable. They still get the same box sizing
  * as .btn below so the row stays visually aligned.
  *
- * One ordered sequence on one axis: it never wraps, since a second line reads
- * as a detached piece. The rendered range is the application's to keep
- * compact; horizontal scroll is the fallback when it does not fit.
- *
- * Internal:
- * --pagination-focus-bleed
+ * The row wraps when it does not fit: every page stays visible and
+ * clickable. A strip that scrolled hid pages behind a scrollbar that clicking
+ * cannot move, since a click changes the page. Keeping the rendered range
+ * compact is the application's job.
  */
 .pagination {
-  /* The scrollport clips on both axes, so the padding keeps the outer focus
-     line of every item inside it. Negative margins give the room back on the
-     block axis and at the inline start, so the first item aligns with the
-     content around it: overflow toward the start is never scrollable. The
-     inline end keeps it, or the list would grow past its container and scroll
-     the page on a phone. */
-  --pagination-focus-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
-
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-10);
   margin: 0;
-  margin-block: calc(var(--pagination-focus-bleed) * -1);
-  margin-inline-start: calc(var(--pagination-focus-bleed) * -1);
-  padding: var(--pagination-focus-bleed);
-  overflow: auto hidden;
-  overscroll-behavior-inline: contain;
-  /* Mid-row there is no padding to spare: focus and reveal-current stop an
-     item one focus line short of the clip. */
-  scroll-padding-inline: var(--pagination-focus-bleed);
+  padding: 0;
   list-style: none;
   font-size: var(--control-font-size);
 
@@ -48,20 +31,6 @@
      system: equal digit widths keep the row from re-flowing as numbers grow
      (98 → 99 → 100). */
   font-variant-numeric: tabular-nums;
-}
-
-/* The landmark around the row is not a scroll container, so as a flex or
-   grid item it would keep the row's full width and push the page into
-   scrolling. Letting it shrink hands the overflow back to the row.
-   Without :has() the landmark keeps its width; min-inline-size: 0 on the
-   wrapper is the fallback. */
-:where(nav:has(> .pagination)) {
-  min-inline-size: 0;
-}
-
-/* Items keep their size and the row scrolls instead. */
-.pagination > li {
-  flex: none;
 }
 
 .pagination .btn {

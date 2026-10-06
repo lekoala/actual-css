@@ -22,43 +22,23 @@
   <div class="box" dir="rtl" data-strip="tabs-rtl"></div>
   <div hidden><div class="box" data-strip="tabs-hidden"></div></div>
 
-  <div class="box">
-    <nav aria-label="Long pages">
-      <ol class="pagination" data-enhance="reveal-current" id="pages-long">
-        <li><a class="btn ghost" href="#a">First</a></li>
-        <li><a class="btn ghost" href="#b">Previous</a></li>
-        <li><a class="btn ghost" href="#c">Page 11</a></li>
-        <li><a class="btn ghost" href="#d">Page 12</a></li>
-        <li><a class="btn ghost" href="#e" aria-current="page">Page 13</a></li>
-      </ol>
-    </nav>
-  </div>
-
-  <!-- The current page sits mid-strip, so the strip stops short of its end
-       padding: only scroll-padding keeps the item's focus line in the clip. -->
-  <div class="box">
-    <nav aria-label="Mid pages">
-      <ol class="pagination" data-enhance="reveal-current" id="pages-mid">
-        <li><a class="btn ghost" href="#a">First</a></li>
-        <li><a class="btn ghost" href="#b">Previous</a></li>
-        <li><a class="btn ghost" href="#c">Page 11</a></li>
-        <li><a class="btn ghost" href="#d" aria-current="page">Page 12</a></li>
-        <li><a class="btn ghost" href="#e">Page 13</a></li>
-        <li><a class="btn ghost" href="#f">Next</a></li>
-      </ol>
-    </nav>
-  </div>
-
-  <nav aria-label="Short pages">
-    <ol class="pagination" data-enhance="reveal-current" id="pages-short">
-      <li><a class="btn ghost" href="#a">1</a></li>
-      <li><a class="btn ghost" href="#e" aria-current="page">2</a></li>
-    </ol>
+  <!-- Link tabs have no runtime: the strip starts on its current page
+       through scroll-initial-target alone. Not the last tab, so the scroll
+       range does not clamp it flush against the end. -->
+  <nav class="box" aria-label="Sections">
+    <ul class="tabs" id="links-mid">
+      <li><a class="tab" href="#a">General</a></li>
+      <li><a class="tab" href="#b">Security</a></li>
+      <li><a class="tab" href="#c">Billing</a></li>
+      <li><a class="tab" href="#d" aria-current="page">Notifications</a></li>
+      <li><a class="tab" href="#e">Integrations</a></li>
+      <li><a class="tab" href="#f">Advanced</a></li>
+    </ul>
   </nav>
 
   <!-- An authored item floor guarantees overflow independently of label wrapping. -->
   <div class="box">
-    <ol class="steps steps-horizontal" data-enhance="reveal-current" id="steps-row" style="--step-min: 7rem">
+    <ol class="steps steps-horizontal" id="steps-row" style="--step-min: 7rem">
       <li class="step-complete"><span class="step-label">Account</span></li>
       <li class="step-complete"><span class="step-label">Profile</span></li>
       <li class="step-complete"><span class="step-label">Delivery</span></li>
@@ -67,55 +47,35 @@
     </ol>
   </div>
 
-  <!-- Short names fit without an authored floor: connecting must not scroll. -->
+  <!-- Short names fit without an authored floor: nothing scrolls. -->
   <div class="box">
-    <ol class="steps steps-horizontal" data-enhance="reveal-current" id="steps-fit">
+    <ol class="steps steps-horizontal" id="steps-fit">
       <li class="step-complete"><span class="step-label">Account</span></li>
       <li aria-current="step"><span class="step-label">Payment</span></li>
       <li><span class="step-label">Confirm</span></li>
     </ol>
   </div>
 
-  <div class="box">
-    <ol class="pagination" data-enhance="reveal-current" id="pager">
-      <li><a class="btn ghost" href="#1">First</a></li>
-      <li><a class="btn ghost" href="#1">Previous</a></li>
-      <li><a class="btn ghost" href="#7">7</a></li>
-      <li><a class="btn ghost" href="#8">8</a></li>
-      <li><a class="btn ghost" href="#9" aria-current="page">9</a></li>
-      <li><a class="btn ghost" href="#10">Next</a></li>
-    </ol>
-  </div>
-
-  <!-- The current item has no box (hidden), so nothing may move. RTL, because
-       an empty rect sits at x=0, and only there is "left of the box" a
-       direction the strip can actually scroll. -->
-  <div class="box" dir="rtl">
-    <ol class="pagination" data-enhance="reveal-current" id="pages-hidden-current">
-      <li><a class="btn ghost" href="#a">First</a></li>
-      <li><a class="btn ghost" href="#b">Previous</a></li>
-      <li><a class="btn ghost" href="#c">Page 11</a></li>
-      <li><a class="btn ghost" href="#d">Page 12</a></li>
-      <li hidden><a class="btn ghost" href="#e" aria-current="page">Page 13</a></li>
-    </ol>
-  </div>
-
-  <!-- A boxless current item first (a responsive duplicate) must not hide the
-       rendered one: the strip still starts on it. -->
-  <div class="box">
-    <ol class="pagination" data-enhance="reveal-current" id="pages-duplicate-current">
-      <li hidden><a class="btn ghost" href="#e" aria-current="page">Page 13</a></li>
-      <li><a class="btn ghost" href="#a">First</a></li>
-      <li><a class="btn ghost" href="#b">Previous</a></li>
-      <li><a class="btn ghost" href="#c">Page 11</a></li>
-      <li><a class="btn ghost" href="#d">Page 12</a></li>
-      <li><a class="btn ghost" href="#e" aria-current="page">Page 13</a></li>
-    </ol>
-  </div>
-
   <div class="spacer"></div>
-  <!-- Below the fold: placing its tab must not scroll the page. -->
+  <!-- Below the fold: placing their tab must not scroll the page. A vertical
+       rail is no scroll container, so its current tab must not target the
+       page either. -->
   <div class="box" data-strip="tabs-below"></div>
+  <nav class="box" aria-label="Sections below">
+    <ul class="tabs" id="links-below">
+      <li><a class="tab" href="#a">General</a></li>
+      <li><a class="tab" href="#b">Security</a></li>
+      <li><a class="tab" href="#c">Billing</a></li>
+      <li><a class="tab" href="#d">Notifications</a></li>
+      <li><a class="tab" href="#e" aria-current="page">Integrations</a></li>
+    </ul>
+  </nav>
+  <nav class="box" aria-label="Rail below">
+    <ul class="tabs" aria-orientation="vertical" id="rail-below">
+      <li><a class="tab" href="#a">General</a></li>
+      <li><a class="tab" href="#b" aria-current="page">Security</a></li>
+    </ul>
+  </nav>
 
   <script>
     // Selected index per strip; -1 selects the last tab.

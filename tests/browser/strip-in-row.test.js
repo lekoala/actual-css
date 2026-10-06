@@ -1,8 +1,8 @@
 /*
- * One-row strips keep their contract inside flex rows and at the page edge:
- * the <nav> landmark around a strip shrinks, so the strip scrolls (or the
- * breadcrumb truncates) instead of the page, and the first item aligns with
- * the content around it in both directions.
+ * Strips keep their contract inside flex rows and at the page edge: the <nav>
+ * landmark around a strip shrinks, so the tabs scroll, the breadcrumb
+ * truncates and the pagination wraps instead of the page scrolling, and the
+ * first item aligns with the content around it in both directions.
  */
 import { expect, test } from "bun:test";
 import {
@@ -54,9 +54,10 @@ for (const dir of ["ltr", "rtl"]) {
         await view.evaluate(`document.documentElement.dir = ${JSON.stringify(dir)}`);
         const state = await view.evaluate(READ);
 
-        // The strips absorb the overflow; the page never scrolls sideways.
+        // The strips absorb the overflow; the page never scrolls sideways. The
+        // pagination wraps, the breadcrumb truncates, only the tabs scroll.
         expect(state.pageOverflow).toBe(0);
-        expect(state.scrolls).toEqual({ pager: true, trail: false, tabs: true });
+        expect(state.scrolls).toEqual({ pager: false, trail: false, tabs: true });
         expect(state.truncated.slice(0, -1)).toContain(true);
         expect(state.truncated.at(-1)).toBe(false);
         // The first item sits on the same inline-start edge as the heading.

@@ -154,16 +154,16 @@ Set `--step-min` when names need a wider minimum share. If the markers or that
 minimum do not fit, the row scrolls; use `.steps-vertical` when every name must
 remain visible without horizontal scrolling.
 
-A row that raises `--step-min` can scroll, so it is worth pairing with
-`.scroller`, which gives the native scrollbar the theme's density and colour
-instead of the OS default, and with `data-enhance="reveal-current"`, which
-starts a scrolling row on its `aria-current="step"` instead of step 1:
+A row that scrolls starts on its `aria-current="step"` instead of step 1. A row
+that raises `--step-min` can scroll, so it is worth pairing with `.scroller`,
+which gives the native scrollbar the theme's density and colour instead of the
+OS default:
 
 ```html
-<ol class="steps steps-horizontal scroller" data-enhance="reveal-current">
+<ol class="steps steps-horizontal scroller">
 ```
 
-Steps applies neither for you; see
+Steps does not apply it for you; see
 [one-row strips](../utilities/sizing-wrapping.md#one-row-strips) for the
 page-wide rule and the hooks.
 

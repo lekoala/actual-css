@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const TOKENS = new Set(["tabs", "reveal-current", "flyout", "range", "scrollspy", "validation"]);
+const TOKENS = new Set(["tabs", "flyout", "range", "scrollspy", "validation"]);
 const REGISTRATION = /^\s*registerEnhancement\(\s*["']([a-z][a-z0-9-]*)["']/gm;
 
 const DISCOVERY_CLASSES = [

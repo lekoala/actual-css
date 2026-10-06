@@ -18,7 +18,6 @@ import "./context-menu.js";
 import "./dialog.js";
 import "./dismiss.js";
 import "./tab.js";
-import "./reveal-current.js";
 import "./tooltip.js";
 import "./scrollspy.js";
 import "./filter.js";

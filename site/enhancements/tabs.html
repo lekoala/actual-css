@@ -407,12 +407,10 @@ do not fit (narrow screen, mobile, long translations), the strip scrolls
 horizontally without a scrollbar; the edges it can still scroll toward fade
 out. Selecting or focusing the tab clipped at the edge scrolls it into view
 with the next one peeking, so a click, the arrow keys or a swipe move along the
-strip. A tab
-selected in the markup starts in view too, when the strip is visible at
-connect; the placement moves the strip only, never the page. A vertical
-strip (<code>aria-orientation=&quot;vertical&quot;</code>) keeps wrapping its labels. Link tabs
-have no tabs runtime: add <code>data-enhance=&quot;reveal-current&quot;</code> to the list so the
-current link (or flyout trigger) starts in view.</p>
+strip. A tab selected in the markup starts in view too, when the strip is
+visible at connect, and so does the current link tab (or flyout trigger),
+without the runtime; the placement moves the strip only, never the page. A
+vertical strip (<code>aria-orientation=&quot;vertical&quot;</code>) keeps wrapping its labels.</p>
 <p>Scrolling is the fallback, not a responsive design. If a strip regularly
 overflows, shorten the labels, group sections, or switch to a vertical rail.</p>
 <h2 id="tab-with-a-flyout">Tab with a flyout</h2>

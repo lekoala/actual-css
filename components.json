@@ -501,9 +501,6 @@
     "classes": [
       "pagination"
     ],
-    "internalHooks": [
-      "--pagination-focus-bleed"
-    ],
     "states": [
       "aria-hidden"
     ]

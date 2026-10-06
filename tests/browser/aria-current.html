@@ -34,22 +34,5 @@
     <a class="list-item" href="#e" data-reference>None</a>
   </div>
 
-  <!-- Overflowing strips for reveal-current. The control holds a current page
-       near its end; the other only values reveal-current must skip, so it
-       stays at its start. Items are written by the script below. -->
-  <ol class="pagination" id="strip-control" data-enhance="reveal-current"></ol>
-  <ol class="pagination" id="strip-not-current" data-enhance="reveal-current"></ol>
-  <script>
-    for (const [id, marks] of [
-      ["strip-control", { 25: "page" }],
-      ["strip-not-current", { 22: "location", 25: "false", 28: "" }],
-    ]) {
-      const strip = document.getElementById(id);
-      for (let n = 1; n <= 30; n++) {
-        const current = n in marks ? ` aria-current="${marks[n]}"` : "";
-        strip.insertAdjacentHTML("beforeend", `<li><a class="btn ghost" href="#p${n}"${current}>${n}</a></li>`);
-      }
-    }
-  </script>
 </body>
 </html>

@@ -105,6 +105,16 @@
   }
 }
 
+/* A strip that loads on a current link tab starts scrolled to it. Horizontal
+   only: the strip is then its nearest scroll container, while a vertical
+   rail would hand the target to the page. Engines without the property start
+   at the first tab, and the fade says there is more. */
+:where(.tabs:not([aria-orientation="vertical"]))
+.tab:is([aria-current="page"], [aria-current="true"]) {
+  /* biome-ignore lint/correctness/noUnknownProperty: CSS Scroll Snap 2 property that Biome's list predates; an engine without it drops the declaration. */
+  scroll-initial-target: nearest;
+}
+
 /* Forced colors keep every label at full contrast. */
 @media (forced-colors: active) {
   .tabs {

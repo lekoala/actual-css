@@ -382,35 +382,31 @@ Hover is left to the engine — it varies by platform, and matching it by hand w
 the part of a custom scrollbar that never held up.</p>
 <h3 id="one-row-strips">One-row strips</h3>
 <p>Components that never wrap scroll horizontally when they do not fit: <code>.tabs</code>,
-<code>.pagination</code>, <code>.steps-horizontal</code>, and <code>.table-wrap</code>. (<code>.breadcrumb</code> truncates
-its labels instead; see <a href="../components/breadcrumb.html">Breadcrumb</a>.) <code>.tabs</code>
-hides its scrollbar and fades its edges instead: selecting the clipped tab
-scrolls it into view. The others
-leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
-sit under a short strip, and on touch screens it overlays the strip and hides
-at rest, leaving a clipped item as the cue that the strip continues. Put
-<code>.scroller</code> on the strip itself — the element that scrolls — for a thin,
-theme-coloured bar under a mouse; touch keeps the overlay. These strips have no
-edge fade (overflow shadow, scroll hint): the clipped item and the scrollbar
-already say there is more. Keyboard focus and <code>reveal-current</code> stop an item with its focus line
-inside the strip.</p>
-<pre><code class="language-html">&lt;ol class=&quot;pagination scroller&quot; data-enhance=&quot;reveal-current&quot;&gt;
+<code>.steps-horizontal</code>, and <code>.table-wrap</code>. (<code>.breadcrumb</code> truncates its labels
+instead; see <a href="../components/breadcrumb.html">Breadcrumb</a>. <code>.pagination</code> wraps.)
+A strip that loads on a current link tab or step starts scrolled to it.</p>
+<p><code>.tabs</code> hides its scrollbar and fades its edges instead: selecting the clipped
+tab scrolls it into view. The others leave the scrollbar to the engine, so an
+OS-default horizontal scrollbar can sit under a short strip, and on touch
+screens it overlays the strip and hides at rest, leaving a clipped item as the
+cue that the strip continues. Put <code>.scroller</code> on the strip itself — the element
+that scrolls — for a thin, theme-coloured bar under a mouse; touch keeps the
+overlay. These strips have no edge fade (overflow shadow, scroll hint): the
+clipped item and the scrollbar already say there is more. Keyboard focus stops
+an item with its focus line inside the strip.</p>
+<pre><code class="language-html">&lt;ol class=&quot;steps steps-horizontal scroller&quot;&gt;
 </code></pre>
-<p>A strip whose current item can render off-screen at rest (pagination,
-horizontal steps, link tabs) takes <code>data-enhance=&quot;reveal-current&quot;</code>:
-at connect it scrolls its current page, step or flyout section into view,
-once.</p>
 <p>There is no class that hides the scrollbar: on a strip whose items do not
 scroll it themselves, it is the only visible scroll control for a mouse without
 a horizontal wheel. Apply <code>.scroller</code> to every such strip of a page, or to
 none, so the bars stay consistent.</p>
-<p>A strip keeps scrolling inside a flex or grid row, such as a counter and a
-pagination on one <code>.cluster</code>: a <code>&lt;nav&gt;</code> directly around <code>.pagination</code> or
-<code>.tabs</code> shrinks with the row (and around <code>.breadcrumb</code>, which then truncates). Any other wrapper needs
+<p>A strip keeps scrolling inside a flex or grid row, such as a label and link
+tabs on one <code>.cluster</code>: a <code>&lt;nav&gt;</code> directly around <code>.tabs</code> shrinks with the row
+(and around <code>.breadcrumb</code>, which then truncates). Any other wrapper needs
 <code>min-inline-size: 0</code>, or the row pushes the whole page into scrolling.</p>
-<pre><code class="language-html">&lt;div class=&quot;cluster&quot; style=&quot;--cluster-justify: space-between&quot;&gt;
-  &lt;span&gt;Showing 4 of 28&lt;/span&gt;
-  &lt;nav aria-label=&quot;Pages&quot;&gt;&lt;ol class=&quot;pagination&quot;&gt;…&lt;/ol&gt;&lt;/nav&gt;
+<pre><code class="language-html">&lt;div class=&quot;cluster&quot;&gt;
+  &lt;span&gt;Sections&lt;/span&gt;
+  &lt;nav aria-label=&quot;Account sections&quot;&gt;&lt;ul class=&quot;tabs&quot;&gt;…&lt;/ul&gt;&lt;/nav&gt;
 &lt;/div&gt;
 </code></pre>
 <h2 id="css-hooks">CSS hooks</h2>
