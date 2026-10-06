@@ -53,7 +53,7 @@ optimizing — the bare `actual-css` entrypoint and `actual-css/full` both resol
 to the complete compiled framework:
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/actual-css@0.12/dist/actual.full.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/actual-css@0.13/dist/actual.full.min.css">
 ```
 
 The package does not maintain separate partial bundles. Modular entrypoints map
