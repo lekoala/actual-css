@@ -114,7 +114,7 @@
   },
   "scripts": {
     "hooks:install": "bun scripts/install-hooks.js",
-    "lint": "biome check",
+    "lint": "biome check --reporter concise",
     "lint:fix": "biome check --write",
     "build:docs": "bun run build:themes && bun scripts/build-docs.js",
     "watch:docs": "bun run build:themes && bun scripts/build-docs.js --watch",
@@ -157,7 +157,7 @@
     "prepublishOnly": "bun run build:all"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.12",
+    "@biomejs/biome": "^2.5.15",
     "happy-dom": "^20.14.0"
   },
   "dependencies": {
