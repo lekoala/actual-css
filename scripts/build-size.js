@@ -33,7 +33,7 @@ const DIST = join(ROOT, "dist");
  */
 const BUDGETS = {
   coreCssBrotli: 2900, // src/css/actual.css, minified in memory (current ~2697; typographic density: --font-width hooks + compact/spacious font-stretch)
-  fullCssBrotli: 19300, // actual.full.min.css (current ~19256; tabs hide their scrollbar and fade their edges)
+  fullCssBrotli: 19400, // actual.full.min.css (current ~19310; .scroll-snap reserves its focus gutter and clamps the snap inset)
   fullJsBrotli: 18500, // actual.full.js (current ~17416)
 };
 
