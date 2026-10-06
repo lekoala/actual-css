@@ -14,12 +14,16 @@
  *
  * A horizontal strip is one axis of navigation, so it never wraps: a second
  * line no longer matches the Left/Right model and reads as a nested level.
- * When the tabs do not fit, the strip scrolls; focus scrolls the active tab
- * into view.
+ * When the tabs do not fit, the strip scrolls without a scrollbar; focus
+ * scrolls the active tab into view.
  *
  * Public hooks:
  * --tab-flex
  * --tab-gap
+ *
+ * Internal:
+ * --tab-edge
+ * --tab-fade-dir (read inside @keyframes, so it resolves per element)
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -40,8 +44,16 @@
      is inset and the indicator sits inside the tab. */
   overflow: auto hidden;
   overscroll-behavior-inline: contain;
-  /* Focus scrolls a tab in with room to spare, hinting at the next one. */
-  scroll-padding-inline: var(--space-30);
+  /* why: a visible bar sits on the indicator and the hairline and reads as a
+     second underline. The strip has its own scroll controls: selecting the
+     clipped tab, or focusing it, brings it into view with the next one
+     hinted by scroll-padding; arrow keys and swipes do the same. */
+  scrollbar-width: none;
+  /* Focus scrolls a tab in with room to spare, hinting at the next one; the
+     edge fade below spans the same inset, so a revealed tab stays clear of it. */
+  --tab-edge: var(--space-60);
+
+  scroll-padding-inline: var(--tab-edge);
   border-block-end: var(--border-width) solid var(--border);
   list-style: none;
 }
@@ -71,6 +83,60 @@
   justify-items: stretch;
   border-block-end: 0;
   border-inline-end: var(--border-width) solid var(--border);
+}
+
+/* Edge fade: with no scrollbar, the strip fades the edges it can still scroll
+   toward. It runs on the strip's own inline timeline, which is inactive on a
+   strip that fits or a vertical rail, so those stay unmasked. Keep the
+   @supports: without scroll timelines the animation would end at once and pin
+   its last mask. It follows scroll, not time, so reduced motion keeps it. */
+@supports (animation-timeline: scroll()) {
+  .tabs {
+    --tab-fade-dir: to right;
+
+    animation: actual-tabs-fade linear both;
+    animation-timeline: scroll(self inline);
+  }
+
+  /* Gradient keywords are physical; :dir() follows the strip's own
+     direction, so an LTR island in an RTL page keeps its fade on the right. */
+  .tabs:dir(rtl) {
+    --tab-fade-dir: to left;
+  }
+}
+
+/* Forced colors keep every label at full contrast. */
+@media (forced-colors: active) {
+  .tabs {
+    animation: none;
+  }
+}
+
+/* mask-image does not interpolate, so each mask holds until halfway to the
+   next keyframe: the start fade appears within the first pixels of scroll and
+   the end fade drops at the very end. */
+@keyframes actual-tabs-fade {
+  0% {
+    mask-image: linear-gradient(
+      var(--tab-fade-dir),
+      #000 calc(100% - var(--tab-edge)),
+      transparent
+    );
+  }
+
+  1%,
+  99% {
+    mask-image: linear-gradient(
+      var(--tab-fade-dir),
+      transparent,
+      #000 var(--tab-edge) calc(100% - var(--tab-edge)),
+      transparent
+    );
+  }
+
+  100% {
+    mask-image: linear-gradient(var(--tab-fade-dir), transparent, #000 var(--tab-edge));
+  }
 }
 
 .tab {

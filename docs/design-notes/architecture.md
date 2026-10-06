@@ -52,6 +52,8 @@ reserves follow this rule.
 ## Decoration
 
 A decorative cue must not dictate geometry, focus or scroll behavior. Scrolling
-strips have no edge fade: its mask set their scroll-padding and focus reserve,
-depended on scroll-driven animations, and repeated what a clipped item already
-shows. The strips reserve only their focus line.
+strips have no shared edge fade: its mask set their scroll-padding and focus
+reserve, and repeated what a clipped item and the scrollbar already show. The
+strips reserve only their focus line. `.tabs` is the exception: it hides its
+scrollbar, so its fade is the cue, and the fade spans the strip's existing
+scroll-padding instead of setting it.

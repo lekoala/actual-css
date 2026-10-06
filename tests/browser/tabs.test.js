@@ -1,12 +1,14 @@
 /*
  * Tab strips on a narrow viewport: a horizontal strip is one row that scrolls
  * on its own, never a wrapped second line, a wrapped label or a scrolled page;
- * keyboard focus brings an off-screen tab fully into view. A navigation flyout
+ * keyboard focus brings an off-screen tab fully into view. With no scrollbar,
+ * the strip fades the edges it can still scroll toward. A navigation flyout
  * trigger lines up with its sibling tabs, and a vertical rail keeps wrapping.
  */
 import { expect, test } from "bun:test";
 import {
   browserAvailable,
+  clickAt,
   fixtureUrl,
   pressKey,
   setViewport,
@@ -89,6 +91,89 @@ it("a narrow tablist scrolls as one row and focus reveals the next tab", async (
   );
 });
 
+it("a narrow tablist hides its scrollbar and a click reveals the clipped tab", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      await setViewport(view, { width: 320 });
+      // The strip has no scrollbar, so selecting the tab cut at the edge is
+      // how a mouse moves along it: click its visible sliver, as a user would.
+      const target = await view.evaluate(`(() => {
+        const list = document.getElementById("widget");
+        const box = list.getBoundingClientRect();
+        const clipped = [...list.querySelectorAll(".tab")].find((tab) => {
+          const rect = tab.getBoundingClientRect();
+          return rect.left < box.right - 4 && rect.right > box.right;
+        });
+        const rect = clipped.getBoundingClientRect();
+        return {
+          id: clipped.id,
+          scrollbar: getComputedStyle(list).scrollbarWidth,
+          x: (rect.left + box.right) / 2,
+          y: rect.top + rect.height / 2,
+        };
+      })()`);
+      expect(target.scrollbar).toBe("none");
+
+      await clickAt(view, target.x, target.y);
+      const id = JSON.stringify(target.id);
+      expect(
+        await waitForBrowser(
+          view,
+          `(() => {
+            const box = document.getElementById("widget").getBoundingClientRect();
+            const tab = document.getElementById(${id}).getBoundingClientRect();
+            return tab.left >= box.left && tab.right <= box.right;
+          })()`,
+        ),
+      ).toBe(true);
+    },
+    { artifactName: "tabs-click-reveal" },
+  );
+});
+
+// The fade sides of #widget: which edges the mask makes transparent.
+const FADE = `(() => {
+  const mask = getComputedStyle(document.getElementById("widget")).maskImage;
+  if (mask === "none") return "none";
+  // Computed stops serialize transparent as rgba(0, 0, 0, 0).
+  const clear = "rgba(0, 0, 0, 0)";
+  const stops = mask.slice(mask.indexOf(",") + 1, -1).trim();
+  const start = stops.startsWith(clear);
+  const end = stops.endsWith(clear);
+  return start && end ? "both" : start ? "start" : "end";
+})()`;
+
+for (const reduced of [false, true]) {
+  it(`an overflowing strip fades the edges it can scroll toward${reduced ? " (reduced motion)" : ""}`, async () => {
+    await withBrowserPage(
+      fixtureUrl(FIXTURE),
+      async (view) => {
+        await view.evaluate(`document.getElementById("widget").scrollLeft = 0`);
+        // Wide enough to fit: the timeline is inactive and nothing is masked.
+        expect(await view.evaluate(FADE)).toBe("none");
+
+        await setViewport(view, { width: 320 });
+        expect(await waitForBrowser(view, `${FADE} === "end"`)).toBe(true);
+
+        await view.evaluate(`document.getElementById("widget").scrollLeft = 40`);
+        expect(await waitForBrowser(view, `${FADE} === "both"`)).toBe(true);
+
+        await view.evaluate(`(() => {
+          const list = document.getElementById("widget");
+          list.scrollLeft = list.scrollWidth;
+        })()`);
+        expect(await waitForBrowser(view, `${FADE} === "start"`)).toBe(true);
+      },
+      {
+        // The fade follows scroll, not time, so the reduced-motion reset keeps it.
+        mediaFeatures: reduced ? [{ name: "prefers-reduced-motion", value: "reduce" }] : [],
+        artifactName: `tabs-fade${reduced ? "-reduced" : ""}`,
+      },
+    );
+  });
+}
+
 it("a navigation flyout trigger lines up with its sibling tabs", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
@@ -133,11 +218,14 @@ it("a vertical rail wraps long labels instead of scrolling", async () => {
         const tab = document.getElementById("rail-long");
         return {
           overflow: getComputedStyle(list).overflowX,
+          // Not a scroll container: its fade timeline is inactive.
+          mask: getComputedStyle(list).maskImage,
           fits: tab.getBoundingClientRect().right <= list.getBoundingClientRect().right + 0.5,
           lines: (${LINES})(tab),
         };
       })()`);
       expect(rail.overflow).toBe("visible");
+      expect(rail.mask).toBe("none");
       expect(rail.fits).toBe(true);
       expect(rail.lines).toBeGreaterThan(1);
     },

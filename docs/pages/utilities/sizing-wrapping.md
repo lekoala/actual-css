@@ -130,14 +130,17 @@ the part of a custom scrollbar that never held up.
 
 Components that never wrap scroll horizontally when they do not fit: `.tabs`,
 `.pagination`, `.steps-horizontal`, and `.table-wrap`. (`.breadcrumb` truncates
-its labels instead; see [Breadcrumb](../components/breadcrumb.md).) They
+its labels instead; see [Breadcrumb](../components/breadcrumb.md).) `.tabs`
+hides its scrollbar and fades its edges instead: selecting the clipped tab
+scrolls it into view. The others
 leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
 sit under a short strip, and on touch screens it overlays the strip and hides
 at rest, leaving a clipped item as the cue that the strip continues. Put
 `.scroller` on the strip itself — the element that scrolls — for a thin,
-theme-coloured bar under a mouse; touch keeps the overlay. There is no edge fade (overflow shadow, scroll hint): the
-clipped item already says there is more. Keyboard focus and `reveal-current`
-stop an item with its focus line inside the strip.
+theme-coloured bar under a mouse; touch keeps the overlay. These strips have no
+edge fade (overflow shadow, scroll hint): the clipped item and the scrollbar
+already say there is more. Keyboard focus and `reveal-current` stop an item with its focus line
+inside the strip.
 
 ```html
 <ol class="pagination scroller" data-enhance="reveal-current">
@@ -148,9 +151,10 @@ horizontal steps, link tabs) takes `data-enhance="reveal-current"`:
 at connect it scrolls its current page, step or flyout section into view,
 once.
 
-There is no class that hides the scrollbar: on a strip it is the only visible
-scroll control for a mouse without a horizontal wheel. Apply `.scroller` to
-every scrolling strip of a page, or to none, so the bars stay consistent.
+There is no class that hides the scrollbar: on a strip whose items do not
+scroll it themselves, it is the only visible scroll control for a mouse without
+a horizontal wheel. Apply `.scroller` to every such strip of a page, or to
+none, so the bars stay consistent.
 
 A strip keeps scrolling inside a flex or grid row, such as a counter and a
 pagination on one `.cluster`: a `<nav>` directly around `.pagination` or

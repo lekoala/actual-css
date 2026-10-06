@@ -1,12 +1,12 @@
 {
-  "totalRaw": 364095,
+  "totalRaw": 366244,
   "core": {
     "minified": 12310,
     "brotli": 2758
   },
   "full": {
-    "minified": 133015,
-    "brotli": 19127
+    "minified": 133710,
+    "brotli": 19257
   },
   "js": {
     "full": {
@@ -41,6 +41,10 @@
       "raw": 8409
     },
     {
+      "file": "components/tab.css",
+      "raw": 8389
+    },
+    {
       "file": "components/drawer.css",
       "raw": 8171
     },
@@ -63,10 +67,6 @@
     {
       "file": "effects/aura.css",
       "raw": 6445
-    },
-    {
-      "file": "components/tab.css",
-      "raw": 6288
     },
     {
       "file": "components/flyout.css",
@@ -293,16 +293,16 @@
       "raw": 2205
     },
     {
+      "file": "layout/scroller.css",
+      "raw": 2084
+    },
+    {
       "file": "forms/input-icon.css",
       "raw": 2071
     },
     {
       "file": "layout/container-query.css",
       "raw": 2052
-    },
-    {
-      "file": "layout/scroller.css",
-      "raw": 2036
     },
     {
       "file": "layout/sidebar-layout.css",
