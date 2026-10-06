@@ -1,0 +1,44 @@
+/*
+ * .scroller styles the scrollbar under a fine pointer only. Chromium trades a
+ * touch screen's overlay scrollbar, hidden at rest, for a classic visible one
+ * as soon as scrollbar-color or scrollbar-width is set: on a phone every
+ * .scroller strip grew a permanent bar. A coarse pointer must leave both
+ * properties at their initial value.
+ */
+import { expect, test } from "bun:test";
+import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+
+const FIXTURE = "tests/browser/scroller.html";
+const TIMEOUT = 60_000;
+
+const baseTest = (await browserAvailable()) ? test : test.skip;
+const it = (name, run) => baseTest(name, run, TIMEOUT);
+
+const READ = `(() => {
+  const style = getComputedStyle(document.getElementById("strip"));
+  return {
+    coarse: matchMedia("(pointer: coarse)").matches,
+    width: style.scrollbarWidth,
+    color: style.scrollbarColor,
+  };
+})()`;
+
+it("styles the scrollbar under a fine pointer", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const result = await view.evaluate(READ);
+    expect(result.coarse).toBe(false);
+    expect(result.width).toBe("thin");
+    expect(result.color).not.toBe("auto");
+  });
+});
+
+it("leaves the native overlay scrollbar to a touch screen", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    await view.cdp("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 1 });
+    const result = await view.evaluate(READ);
+    // Guards the emulation itself: without it the assertion below is vacuous.
+    expect(result.coarse).toBe(true);
+    expect(result.width).toBe("auto");
+    expect(result.color).toBe("auto");
+  });
+});

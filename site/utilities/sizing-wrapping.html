@@ -331,6 +331,8 @@ never quite matches the native one anyway.</p>
 above the capability floor. An engine that knows neither ignores both
 declarations and draws its native scrollbar — the intended fallback, not a
 broken state.</p>
+<p><code>.scroller</code> applies to fine pointers only. On a touch screen the native overlay
+scrollbar stays: it hides at rest, where a styled bar would stay visible.</p>
 <p><code>.scroller</code> is a layout primitive, so it comes with <code>actual.full.css</code> and with
 <code>actual-css/css/layout</code> like <code>.stack</code> or <code>.cluster</code>. A project importing module
 by module reaches it directly:</p>
@@ -361,9 +363,13 @@ by module reaches it directly:</p>
 <pre><code class="language-css">.scroller {
   --scroller-track: transparent;
   --scroller-thumb: var(--border);
+}
 
-  scrollbar-color: var(--scroller-thumb) var(--scroller-track);
-  scrollbar-width: thin;
+@media (pointer: fine) {
+  .scroller {
+    scrollbar-color: var(--scroller-thumb) var(--scroller-track);
+    scrollbar-width: thin;
+  }
 }
 </code></pre>
 <p>Customize locally when a scroll surface needs more contrast:</p>
@@ -382,7 +388,7 @@ leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
 sit under a short strip, and on touch screens it overlays the strip and hides
 at rest, leaving a clipped item as the cue that the strip continues. Put
 <code>.scroller</code> on the strip itself — the element that scrolls — for a thin,
-theme-coloured bar. There is no edge fade (overflow shadow, scroll hint): the
+theme-coloured bar under a mouse; touch keeps the overlay. There is no edge fade (overflow shadow, scroll hint): the
 clipped item already says there is more. Keyboard focus and <code>reveal-current</code>
 stop an item with its focus line inside the strip.</p>
 <pre><code class="language-html">&lt;ol class=&quot;pagination scroller&quot; data-enhance=&quot;reveal-current&quot;&gt;

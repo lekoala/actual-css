@@ -32,6 +32,7 @@
 - A navigation flyout `.tab` shows the current state with `aria-current="true"` while its panel holds the current page.
 - `.breadcrumb` ancestor labels truncate on their `<a>` or `<span>`; the current page also truncates as bare text in an `<li aria-current="page">`.
 - The current `.nav-list` link trait sits inside the row's inline padding with rounded ends, instead of flush on its rounded edge.
+- `.scroller` styles the scrollbar under a fine pointer only; on touch screens the native overlay scrollbar, hidden at rest, stays.
 
 ### Fixed
 

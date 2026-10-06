@@ -79,6 +79,9 @@ above the capability floor. An engine that knows neither ignores both
 declarations and draws its native scrollbar — the intended fallback, not a
 broken state.
 
+`.scroller` applies to fine pointers only. On a touch screen the native overlay
+scrollbar stays: it hides at rest, where a styled bar would stay visible.
+
 `.scroller` is a layout primitive, so it comes with `actual.full.css` and with
 `actual-css/css/layout` like `.stack` or `.cluster`. A project importing module
 by module reaches it directly:
@@ -101,9 +104,13 @@ by module reaches it directly:
 .scroller {
   --scroller-track: transparent;
   --scroller-thumb: var(--border);
+}
 
-  scrollbar-color: var(--scroller-thumb) var(--scroller-track);
-  scrollbar-width: thin;
+@media (pointer: fine) {
+  .scroller {
+    scrollbar-color: var(--scroller-thumb) var(--scroller-track);
+    scrollbar-width: thin;
+  }
 }
 ```
 
@@ -128,7 +135,7 @@ leave the scrollbar to the engine, so an OS-default horizontal scrollbar can
 sit under a short strip, and on touch screens it overlays the strip and hides
 at rest, leaving a clipped item as the cue that the strip continues. Put
 `.scroller` on the strip itself — the element that scrolls — for a thin,
-theme-coloured bar. There is no edge fade (overflow shadow, scroll hint): the
+theme-coloured bar under a mouse; touch keeps the overlay. There is no edge fade (overflow shadow, scroll hint): the
 clipped item already says there is more. Keyboard focus and `reveal-current`
 stop an item with its focus line inside the strip.
 

@@ -1875,6 +1875,11 @@ small {
  * dictate the strip's scroll-padding and focus geometry for a decorative cue,
  * and an item clipped at the edge already says the strip continues.
  *
+ * Fine pointers only: Chromium trades the overlay scrollbar of a touch screen,
+ * hidden at rest, for a classic always-visible one as soon as scrollbar-color
+ * or scrollbar-width is set. On a phone that painted a permanent bar under
+ * every strip; the native overlay is the better cue there.
+ *
  * Public hooks:
  * --scroller-track
  * --scroller-thumb
@@ -1882,9 +1887,13 @@ small {
 .scroller {
   --scroller-track: transparent;
   --scroller-thumb: var(--border);
+}
 
-  scrollbar-color: var(--scroller-thumb) var(--scroller-track);
-  scrollbar-width: thin;
+@media (pointer: fine) {
+  .scroller {
+    scrollbar-color: var(--scroller-thumb) var(--scroller-track);
+    scrollbar-width: thin;
+  }
 }
 
 /* Opt-in gutter: reserves space so the layout does not shift when
