@@ -20,7 +20,7 @@ simple applications, and other layouts that need a header / main / footer struct
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material","glass"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","admin-neutral","square","brutalist","edge","cyberpunk","neon","gradient","material","glass"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -68,6 +68,7 @@ simple applications, and other layouts that need a header / main / footer struct
             <option value="sunset">Sunset</option>
             <option value="lavender">Lavender</option>
             <option value="mono">Mono</option>
+            <option value="admin-neutral">Admin neutral</option>
             <option value="square">Square</option>
             <option value="brutalist">Brutalist</option>
             <option value="edge">Edge</option>
@@ -348,6 +349,7 @@ direct-child <code>.topbar</code>, independently scrolling <code>.app-main</code
             <option value="sunset">Sunset</option>
             <option value="lavender">Lavender</option>
             <option value="mono">Mono</option>
+            <option value="admin-neutral">Admin neutral</option>
             <option value="square">Square</option>
             <option value="brutalist">Brutalist</option>
             <option value="edge">Edge</option>

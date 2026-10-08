@@ -19,7 +19,7 @@
   <script src="../../scripts/docs/assets/docs.js" defer></script>
   <script>
   (function () {
-    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","square","brutalist","edge","cyberpunk","neon","gradient","material","glass"];
+    var valid = ["system","light","dark","indigo","dim","corporate","bootstrap-v6","forest","ocean","spruce","petrol","sunset","lavender","mono","admin-neutral","square","brutalist","edge","cyberpunk","neon","gradient","material","glass"];
     var saved = null;
     try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
     if (saved === "system" || !valid.includes(saved)) {
@@ -67,6 +67,7 @@
             <option value="sunset">Sunset</option>
             <option value="lavender">Lavender</option>
             <option value="mono">Mono</option>
+            <option value="admin-neutral">Admin neutral</option>
             <option value="square">Square</option>
             <option value="brutalist">Brutalist</option>
             <option value="edge">Edge</option>
@@ -249,7 +250,7 @@ rest show it composed, isolated, or under stress.</p>
 <p>Whole pages, composed the way a real product would.</p>
 <ul>
 <li><a href="../../demo/templates/dashboard.html">Dashboard</a> - data-heavy overview page</li>
-<li><a href="../../demo/templates/order-management.html">Order management</a> - one state at three levels: a badge in a selectable list, a message in context, and a notification with its own action</li>
+<li><a href="../../demo/templates/order-management.html">Order management</a> - one state at three levels (a badge in a selectable list, a message in context, a notification with its own action) composed on the <code>admin-neutral</code> business-interface theme</li>
 <li><a href="../../demo/templates/app.html">App</a> - application shell with sidebar</li>
 <li><a href="../../demo/templates/workspaces.html">Workspaces</a> - sectioned sidebar, master/detail list with native current state, and workspace cards</li>
 <li><a href="../../demo/templates/marketing.html">Marketing</a> - landing page with typography and fluid type</li>
@@ -391,6 +392,7 @@ the checkout, not from a standalone copy of <code>site</code>.</p>
             <option value="sunset">Sunset</option>
             <option value="lavender">Lavender</option>
             <option value="mono">Mono</option>
+            <option value="admin-neutral">Admin neutral</option>
             <option value="square">Square</option>
             <option value="brutalist">Brutalist</option>
             <option value="edge">Edge</option>
