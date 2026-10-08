@@ -1,5 +1,5 @@
 {
-  "totalRaw": 378376,
+  "totalRaw": 379251,
   "core": {
     "minified": 12322,
     "brotli": 2765
@@ -213,6 +213,10 @@
       "raw": 2822
     },
     {
+      "file": "themes/admin-neutral.css",
+      "raw": 2791
+    },
+    {
       "file": "themes/petrol.css",
       "raw": 2789
     },
@@ -311,10 +315,6 @@
     {
       "file": "themes/brutalist.css",
       "raw": 1937
-    },
-    {
-      "file": "themes/admin-neutral.css",
-      "raw": 1916
     },
     {
       "file": "layout/topbar.css",

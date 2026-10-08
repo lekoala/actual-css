@@ -64,12 +64,29 @@
 
     .orders-card > header {
       padding: var(--space-40);
+      padding-block-end: var(--space-20);
     }
 
     .orders-card > .list {
       --list-item-pad-inline: var(--space-40);
 
       border-block-start: 0;
+    }
+
+    /* This contextual notice is quieter than the status badges: only the
+       title and icon carry amber ink, while the description stays neutral. */
+    .order-address-warning {
+      --soft-bg-mix: 92%;
+
+      color: var(--text);
+    }
+
+    .order-address-warning :is(strong, .alert-icon) {
+      color: var(--warning-soft-fg, var(--warning));
+    }
+
+    .order-address-warning strong {
+      font-weight: var(--font-weight-semibold);
     }
   </style>
 </head>
@@ -121,7 +138,7 @@
             <p class="muted">Manage your latest orders</p>
           </hgroup>
 
-          <button class="btn" type="button">
+          <button class="btn neutral outline" type="button">
             <i class="ti ti-plus" aria-hidden="true"></i>
             New order
           </button>
@@ -146,7 +163,7 @@
         </ul>
       </div>
 
-      <div class="alert warning">
+      <div class="alert warning order-address-warning">
         <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
         <div class="cluster" style="--cluster-justify: space-between; flex: 1 1 auto; gap: var(--space-20);">
           <div class="stack" style="--gap: var(--space-10);">
