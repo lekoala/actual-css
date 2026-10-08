@@ -580,8 +580,13 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   // Selection never changes text metrics: the current link shares the base
   // weight and is carried by the selected accent plus, in .nav-list, an inset
   // inline-start trait (CONTRIBUTING.md "Forced colors invariant").
+  // The current link is selected ink on a surface, not a selected fill: it
+  // reads --state-selected-text first, with the fallback at the point of use
+  // so a local --state-selected still reaches it.
   expect(css).toMatch(
-    new RegExp(`\\.nav-link${NAV_CURRENT_RE} \\{[^}]*color: var\\(--state-selected\\);`),
+    new RegExp(
+      `\\.nav-link${NAV_CURRENT_RE} \\{[^}]*color: var\\(--state-selected-text, var\\(--state-selected\\)\\);`,
+    ),
   );
   expect(css).not.toMatch(/\.nav-link[^{]*aria-current[^{]*\{[^}]*font-weight:/);
   // A hovered current link keeps the selected accent by source order: the
@@ -1304,12 +1309,17 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
     /> a > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: var\(--app-nav-icon-size\);[\s\S]*line-height: 1;/,
   );
   // The current tile is a full selected surface at the shared weight —
-  // selection never changes text metrics. Forced colors paints the system
-  // Highlight pair because --state-selected flattens there.
+  // selection never changes text metrics. In forced colors --state-selected
+  // flattens, so a transparent border is the structural cue the user agent
+  // turns visible (CONTRIBUTING.md "Forced colors invariant"): no repaint into
+  // Highlight, no opt-out. The rendered frame is asserted in
+  // tests/browser/app-nav.test.js.
   expect(navCss).not.toMatch(/> a\[aria-current="page"\]\s*\{[^}]*font-weight:/);
   expect(navCss).toMatch(
-    /@media \(forced-colors: active\)[\s\S]*\.app-nav > a\[aria-current="page"\][\s\S]*background: Highlight;[\s\S]*color: HighlightText;/,
+    /\.app-nav > a\[aria-current="page"\] \{[^}]*border: var\(--border-width\) solid transparent;/,
   );
+  expect(navCss).not.toContain("@media (forced-colors");
+  expect(navCss).not.toMatch(/forced-color-adjust\s*:/);
   expect(navCss).not.toContain(".active");
   expect(navCss).not.toContain("@media (min-width:");
 

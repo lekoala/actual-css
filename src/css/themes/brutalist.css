@@ -7,13 +7,13 @@
 
   --primary: hsl(48 100% 50%);
   --primary-fg: hsl(0 0% 4%);
-  --secondary: hsl(215 100% 55%);
+  --secondary: hsl(215 100% 51%);
   --secondary-fg: white;
   --success: hsl(135 70% 42%);
   --success-fg: hsl(0 0% 4%);
   --warning: hsl(35 100% 52%);
   --warning-fg: hsl(0 0% 4%);
-  --danger: hsl(0 85% 52%);
+  --danger: hsl(0 85% 49%);
   --danger-fg: white;
   --neutral: hsl(0 0% 5%);
   --neutral-fg: white;
@@ -32,6 +32,9 @@
   /* Inline text ink cannot be the yellow primary (1.4 against --surface);
      the theme lends its own blue, darkened to carry body copy. */
   --link: hsl(215 100% 30%);
+  /* Selected ink on the page (current link, tab, step) for the same reason;
+     the yellow stays the selected fill. */
+  --state-selected-text: var(--link);
   --hover-overlay: rgb(0 0 0 / 0.1);
 
   --radius: 0;

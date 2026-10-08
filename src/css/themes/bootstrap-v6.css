@@ -66,11 +66,14 @@
   --control-border: var(--control-hover-border);
 }
 
-/* v6 badges are filled by default; .soft opts into its subtle treatment. */
+/* v6 badges are filled by default; .soft opts into its subtle treatment. The
+   hover fill stays the badge's own: the core hover of a default badge is the
+   soft tint, which under this white ink fell to 1.5:1. */
 [data-theme="bootstrap-v6"] .badge:not(.soft):not(.solid):not(.outline):not(.surface) {
   --badge-bg: var(--intent, var(--secondary));
   --badge-fg: var(--intent-fg, var(--secondary-fg));
   --badge-border: transparent;
+  --badge-default-hover-bg: var(--badge-bg);
 }
 
 [data-theme="bootstrap-v6"] .badge.soft {
@@ -90,15 +93,25 @@
   [data-theme="bootstrap-v6"] {
     color-scheme: light dark;
 
-    --primary: oklch(60% 0.24 240);
+    /* Each lightness is the vivid value capped where its -fg still clears
+       4.5:1 on the solid fill: white needs the fill at or below it, the dark
+       inks of the dark scheme at or above it. */
+    --primary: oklch(54% 0.24 240);
     --primary-fg: #fff;
+    /* Selected ink on the page. The primary is dark enough to carry white in
+       both schemes, so on a dark page it reads at 2.7:1: pull it toward
+       --text there, as v6 does with its lighter dark-mode link color. */
+    --state-selected-text: light-dark(
+      color-mix(in oklab, var(--primary) 85%, var(--text)),
+      color-mix(in oklab, var(--primary) 50%, var(--text))
+    );
     --secondary: light-dark(#e9ecef, #495057);
     --secondary-fg: light-dark(#212529, #fff);
-    --success: oklch(64% 0.22 160);
+    --success: light-dark(oklch(51% 0.22 160), oklch(64% 0.22 160));
     --success-fg: light-dark(#fff, #051b11);
     --warning: oklch(88% 0.24 88);
     --warning-fg: #212529;
-    --danger: oklch(60% 0.22 20);
+    --danger: light-dark(oklch(59% 0.22 20), oklch(63% 0.22 20));
     --danger-fg: light-dark(#fff, #2c0b0e);
     --neutral: light-dark(#6c757d, #adb5bd);
     --neutral-fg: light-dark(#fff, #212529);

@@ -137,11 +137,14 @@
 
 /* Complete owns the accented connector that reaches the current step, so the
    connector leaving current goes back to neutral. Declared after
-   .step-complete at equal specificity: current wins on every channel. */
+   .step-complete at equal specificity: current wins on every channel. The
+   current marker is a regular surface, so its number and ring are selected
+   ink on a surface, not a selected fill; they are held to different ratios
+   (4.5:1 for the number, 3:1 for the ring) by report:theme-contrast. */
 .steps > [aria-current="step"] {
   --step-marker-bg: var(--surface-opaque);
-  --step-marker-border: var(--state-selected);
-  --step-marker-fg: var(--state-selected);
+  --step-marker-border: var(--state-selected-text, var(--state-selected));
+  --step-marker-fg: var(--state-selected-text, var(--state-selected));
   --step-line: var(--border);
 
   color: var(--text);

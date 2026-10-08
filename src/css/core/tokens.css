@@ -162,7 +162,13 @@
 [data-theme] {
   /* State tokens — semantic colors for selected/pressed/current and disabled.
      Components consume these instead of hard-wiring --primary/--text-subtle
-     so forced-colors can override them in one place. */
+     so forced-colors can override them in one place. --state-selected is a
+     selected fill or accent, --state-selected-fg the ink on that fill.
+     --state-selected-text, undeclared, is selected ink on a regular surface
+     (current nav link, selected tab, current step number). It falls back to
+     --state-selected where it is read, so a local --state-selected still
+     reaches it; a theme sets it when one color cannot be both a fill under its
+     -fg and text on the page, typically in a dark scheme. */
   --state-selected: var(--primary);
   --state-selected-fg: var(--primary-fg);
   --state-disabled: var(--text-subtle);

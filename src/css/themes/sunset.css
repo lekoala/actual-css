@@ -43,6 +43,11 @@
     color-scheme: light dark;
     --primary: light-dark(hsl(16 84% 43%), hsl(16 75% 80%));
     --primary-fg: light-dark(white, hsl(16 30% 12%));
+    /* Selected ink on the page: the light primary is a fill under white. */
+    --state-selected-text: light-dark(
+      color-mix(in oklab, var(--primary) 90%, var(--text)),
+      var(--primary)
+    );
     --secondary: light-dark(hsl(330 60% 52%), hsl(330 68% 80%));
     --secondary-fg: light-dark(white, hsl(330 30% 12%));
     --success: light-dark(hsl(142 52% 34%), hsl(142 60% 80%));

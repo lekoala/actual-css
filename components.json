@@ -487,6 +487,9 @@
       "navbar",
       "navbar-brand"
     ],
+    "publicHooks": [
+      "--state-selected-text"
+    ],
     "internalHooks": [
       "--gap"
     ],

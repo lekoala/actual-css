@@ -7,6 +7,11 @@
  * Measured per island (one per color scheme the theme declares):
  *   - soft ink against the resting and the hovered soft fill (4.5:1), on each
  *     surface a soft element sits on
+ *   - the solid pairs, -fg on the intent fill (4.5:1); a fill painted by a
+ *     background-image reads n/a
+ *   - selected ink on those surfaces: the current nav link at rest and on
+ *     hover, the selected tab and the current step number (4.5:1), and the
+ *     current step's ring (3:1)
  *   - the focus line against --surface and --surface-solid (3:1)
  *   - the invalid-field focus line against the field's own background (3:1)
  *   - --surface-solid-fg on --surface-solid (4.5:1)
@@ -42,10 +47,19 @@ function islandMarkup(id, scheme) {
     (surface) => `<div data-surface="${surface}" style="background: var(--${surface})">
       ${INTENTS.map((i) => `<span class="badge soft ${i}" data-badge="${i}">t</span>`).join("")}
       ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
+      <nav class="navbar" aria-label="t">
+        <a class="nav-link" href="#t" aria-current="page" data-selected="nav">t</a>
+        <a class="nav-link" href="#t" aria-current="page" data-selected="nav-hover">t</a>
+      </nav>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" type="button" data-selected="tab">t</button>
+      </div>
+      <ol class="steps"><li aria-current="step" data-selected="step"><span class="step-label">t</span></li></ol>
     </div>`,
   ).join("");
   return `<div${style} id="${id}">
     ${softPairs}
+    ${INTENTS.map((i) => `<button class="btn solid ${i}" data-solid="${i}" type="button">t</button>`).join("")}
     <span data-pair="focus-surface" style="color: var(--focus); background: var(--surface)"></span>
     <span data-pair="focus-solid" style="color: var(--focus); background: var(--surface-solid)"></span>
     <span data-pair="inverse" style="color: var(--surface-solid-fg); background: var(--surface-solid)"></span>
@@ -104,7 +118,7 @@ export async function measureContrast({ css, themes, label = "default" }) {
   const { root } = await view.cdp("DOM.getDocument");
   const { nodeIds } = await view.cdp("DOM.querySelectorAll", {
     nodeId: root.nodeId,
-    selector: "[data-hover]",
+    selector: '[data-hover], [data-selected="nav-hover"]',
   });
   for (const nodeId of nodeIds) {
     await view.cdp("CSS.forcePseudoState", { nodeId, forcedPseudoClasses: ["hover"] });
@@ -122,7 +136,23 @@ export async function measureContrast({ css, themes, label = "default" }) {
         const fg = el.dataset.pair === "invalid-field" ? cs(el).borderBlockEndColor : cs(el).color;
         pairs[el.dataset.pair] = { fg: rgba(fg), bg: rgba(cs(el).backgroundColor) };
       }
+      // A solid fill painted by a background-image (a gradient theme) has no
+      // single color to measure: it is reported, not sampled.
+      const solid = {};
+      for (const el of island.querySelectorAll("[data-solid]")) {
+        solid[el.dataset.solid] =
+          cs(el).backgroundImage === "none"
+            ? { fg: rgba(cs(el).color), bg: rgba(cs(el).backgroundColor) }
+            : null;
+      }
       const soft = {};
+      // Fills from the surface down to the element, outermost first: the stack
+      // the page composites under a selected ink.
+      const layers = (surface, el) => {
+        const chain = [];
+        for (let n = el; n !== surface.parentElement; n = n.parentElement) chain.unshift(n);
+        return chain.map((n) => rgba(cs(n).backgroundColor));
+      };
       for (const surface of island.querySelectorAll("[data-surface]")) {
         const fills = {};
         for (const el of surface.querySelectorAll("[data-badge]")) {
@@ -133,23 +163,65 @@ export async function measureContrast({ css, themes, label = "default" }) {
             hover: rgba(cs(hover).backgroundColor),
           };
         }
-        soft[surface.dataset.surface] = { backdrop: rgba(cs(surface).backgroundColor), fills };
+        const selected = {};
+        for (const el of surface.querySelectorAll("[data-selected]")) {
+          const kind = el.dataset.selected;
+          if (kind === "step") {
+            // The number and ring live on the marker pseudo; the ring reads
+            // against what is under the step, the number against the marker.
+            const marker = getComputedStyle(el, "::before");
+            const under = layers(surface, el);
+            selected[kind] = {
+              layers: [...under, rgba(marker.backgroundColor)],
+              fg: rgba(marker.color),
+              ring: { layers: under, fg: rgba(marker.borderTopColor) },
+            };
+          } else {
+            selected[kind] = { layers: layers(surface, el), fg: rgba(cs(el).color) };
+          }
+        }
+        soft[surface.dataset.surface] = {
+          backdrop: rgba(cs(surface).backgroundColor),
+          fills,
+          selected,
+        };
       }
-      return { pairs, soft };
+      return { pairs, soft, solid };
     });
   })()`);
 
   return islands.map(({ theme, scheme }, i) => {
-    const { pairs, soft } = colors[i];
+    const { pairs, soft, solid } = colors[i];
     const pair = (key) => ratio(pairs[key].fg, pairs[key].bg);
     // Fill over the surface, then ink over the fill: the colors the page shows.
     const shown = (fg, fill, backdrop) => {
       const bg = composite(fill, backdrop);
       return ratio(composite(fg, bg), bg);
     };
+    const stacked = ({ layers, fg }) => {
+      const [base, ...rest] = layers;
+      const bg = rest.reduce((under, fill) => composite(fill, under), base);
+      return ratio(composite(fg, bg), bg);
+    };
     return {
       theme,
       scheme,
+      solid: INTENTS.map((intent) => ({
+        intent,
+        value: solid[intent] ? ratio(solid[intent].fg, solid[intent].bg) : null,
+      })),
+      // Selected ink on a regular surface (--state-selected-text): text needs
+      // 4.5:1, the current step's ring is a non-text accent at 3:1.
+      selected: SURFACES.flatMap((surface) => {
+        const { selected } = soft[surface];
+        return [
+          { kind: "nav link", surface, min: 4.5, value: stacked(selected.nav) },
+          { kind: "nav link hover", surface, min: 4.5, value: stacked(selected["nav-hover"]) },
+          { kind: "tab", surface, min: 4.5, value: stacked(selected.tab) },
+          { kind: "step number", surface, min: 4.5, value: stacked(selected.step) },
+          { kind: "step ring", surface, min: 3, value: stacked(selected.step.ring) },
+        ];
+      }),
       soft: SURFACES.flatMap((surface) => {
         const { backdrop, fills } = soft[surface];
         return INTENTS.map((intent) => ({
@@ -205,6 +277,34 @@ export function formatContrast(rows) {
       const cells = [cell(rest, 4.5), cell(hover, 4.5)];
       lines.push(
         `${head(row)}  ${surface.padEnd(15)} ${intent.padEnd(9)} ${cells[0].text.padStart(8)}  ${cells[1].text.padStart(8)}${flag(cells, 4.5)}`,
+      );
+    }
+  }
+
+  lines.push(
+    "",
+    "Solid pair contrast (-fg on the intent fill), needs 4.5:1. n/a: a gradient fill, not sampled.",
+    "",
+  );
+  lines.push(`${"theme".padEnd(width)}  scheme  intent       ratio`);
+  for (const row of rows) {
+    for (const { intent, value } of row.solid ?? []) {
+      const c = cell(value, 4.5);
+      lines.push(`${head(row)}  ${intent.padEnd(9)} ${c.text.padStart(8)}${flag([c], 4.5)}`);
+    }
+  }
+
+  lines.push(
+    "",
+    "Selected ink on a surface (--state-selected-text), text 4.5:1, step ring 3:1.",
+    "",
+  );
+  lines.push(`${"theme".padEnd(width)}  scheme  surface         selected          ratio`);
+  for (const row of rows) {
+    for (const { kind, surface, min, value } of row.selected ?? []) {
+      const c = cell(value, min);
+      lines.push(
+        `${head(row)}  ${surface.padEnd(15)} ${kind.padEnd(15)} ${c.text.padStart(8)}${flag([c], min)}`,
       );
     }
   }
