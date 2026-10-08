@@ -10,16 +10,22 @@ bunx --bun actual-css design --theme src/theme.css --out design/
 
 ## What is exported
 
-| File                                          | Content                              |
-| --------------------------------------------- | ------------------------------------ |
-| `figma/foundations.tokens.json`               | spacing, radius, borders, type sizes |
-| `figma/light.tokens.json`, `dark.tokens.json` | colors, one file per scheme          |
-| `penpot/tokens.json`                          | all tokens, as sets and themes       |
-| `penpot/plugin/`                              | the plugin and component spec        |
+| File                                          | Content                                |
+| --------------------------------------------- | -------------------------------------- |
+| `figma/foundations.tokens.json`               | spacing, radius, borders, type sizes   |
+| `figma/light.tokens.json`, `dark.tokens.json` | colors, one file per scheme            |
+| `dtcg/foundations.tokens.json`                | the portable profile, every foundation |
+| `dtcg/light.tokens.json`, `dark.tokens.json`  | colors, one file per scheme            |
+| `penpot/tokens.json`                          | all tokens, as sets and themes         |
+| `penpot/plugin/`                              | the plugin and component spec          |
 
 Token names are the CSS names without `--`: `surface-raised` in the design tool is `var(--surface-raised)` in code. A scheme exists when the theme declares it: `color-scheme: light dark` exports both, anything else one. Lengths are exported in px, with the CSS value kept in `$extensions["actual-css"]`.
 
-Colors no theme token paints — the soft fills and borders of `.soft` — are exported as recipe tokens named `<variant>-<intent>-<role>` (`soft-danger-bg`, `soft-danger-border`, `soft-danger-fg`), next to the theme colors so they switch with the scheme. Font stacks, line heights, shadows, motion and z-index have no design-tool equivalent and are not exported.
+Colors no theme token paints — the soft fills and borders of `.soft` — are exported as recipe tokens named `<variant>-<intent>-<role>` (`soft-danger-bg`, `soft-danger-border`, `soft-danger-fg`), next to the theme colors so they switch with the scheme.
+
+## DTCG
+
+`dtcg/` is the portable profile, for any reader that follows the [Design Tokens Format](https://www.designtokens.org/format/): every foundation carries the `$type` the spec defines (`dimension`, `fontWeight`, `fontFamily`, `duration`, `cubicBezier`, `number`), and each color carries a 6-digit `hex` with `alpha` separate. It keeps font stacks, line heights and motion, which `figma/` drops, and omits Figma's adaptations: a font weight is a `fontWeight` here, a `number` there. Shadows and z-index are not exported anywhere.
 
 ## Figma
 
