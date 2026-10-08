@@ -111,26 +111,40 @@
 }
 
 /* Soft by default. Local defaults remain behind --ui-* in the resolution
-   chain, so explicit shared treatments compose without selector exclusions. */
+   chain, so explicit shared treatments compose without selector exclusions.
+   The fill is a translucent intent tint, so it shows the surface it sits on
+   instead of a fixed mix with --surface: a mix stops separating on a subtle
+   or raised surface of its own lightness. No rim unless a theme sets
+   --soft-border-mix (tokens.css). */
 @supports (color: color-mix(in oklch, red, white)) {
   .badge {
-    /* @sync soft-recipe */
+    /* @sync soft-tint */
     --badge-default-bg: color-mix(
       in oklab,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix)),
+      transparent
     );
     --badge-default-border: color-mix(
       in oklab,
-      var(--surface) var(--soft-border-mix),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-border-mix, 100%)),
+      transparent
     );
+    /* @sync soft-tint */
+    /* @sync soft-ink */
     --badge-default-fg: var(
       --intent-soft-fg,
       color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
-    /* @sync soft-recipe */
+    /* @sync soft-ink */
   }
+}
+
+/* Soft is the badge's own default: an explicit .soft must not swap the tint
+   for the shared opaque .soft recipe, so it defers to the default. */
+.badge.soft {
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
 }
 
 .badge:empty {
@@ -171,8 +185,8 @@
   :is(a.badge, button.badge):where(:not(.solid, .outline, :empty)) {
     --badge-default-hover-bg: color-mix(
       in oklab,
-      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix) + var(--soft-hover-alpha)),
+      transparent
     );
   }
 

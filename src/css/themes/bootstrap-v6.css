@@ -34,7 +34,7 @@
   /* v6 subtle fills use an 80% white tint; borders use its 300 step. */
   --soft-bg-mix: 80%;
   --soft-border-mix: 40%;
-  --soft-fg-mix: 40%;
+  --soft-fg-mix: 35%;
 
   --radius: 0.5rem;
   --radius-sm: 0.25rem;

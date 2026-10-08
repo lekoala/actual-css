@@ -34,6 +34,9 @@
  *
  * Intent list source of truth: intents.css. Components consume --intent* tokens
  * instead of re-listing intent classes.
+ *
+ * Public hooks:
+ * --soft-border-mix (fallback-only: a soft rim of that weight on every recipe)
  */
 .solid {
   --ui-bg: var(--intent, var(--neutral));
@@ -155,21 +158,25 @@
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable
-   everywhere. Interactive states live in the components that consume them. */
+   everywhere. Interactive states live in the components that consume them.
+   The shared .soft is opaque: it paints zones (.card, .navbar, .app-nav,
+   .chat-bubble) an author may lay over an image, where a translucent fill
+   would hand the text's contrast to whatever is behind it. The badge, alert
+   and soft button own a translucent tint instead (soft-tint). */
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
-    /* @sync soft-recipe */
     --ui-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(
       in oklab,
-      var(--surface) var(--soft-border-mix),
+      var(--surface) var(--soft-border-mix, 65%),
       var(--intent, var(--neutral))
     );
+    /* @sync soft-ink */
     --ui-fg: var(
       --intent-soft-fg,
       color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
-    /* @sync soft-recipe */
+    /* @sync soft-ink */
   }
 }
 

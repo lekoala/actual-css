@@ -5,9 +5,19 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 
+/* soft-tint: the translucent fill and rim of the components that own one.
+   soft-ink: the soft text, shared by that tint and the opaque .soft. */
 const GROUPS = [
   {
-    name: "soft-recipe",
+    name: "soft-tint",
+    files: [
+      "src/css/components/alert.css",
+      "src/css/components/badge.css",
+      "src/css/components/button.css",
+    ],
+  },
+  {
+    name: "soft-ink",
     files: [
       "src/css/core/variants.css",
       "src/css/components/alert.css",

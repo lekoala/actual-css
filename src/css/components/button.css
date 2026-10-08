@@ -133,12 +133,27 @@
   --ui-hover-bg: transparent;
 }
 
+/* A soft button takes the badge and alert tint, not the shared opaque .soft:
+   it carries a short label like them, and the translucent fill keeps
+   separating on a subtle or raised surface. Ink stays the shared .soft one. */
 @supports (color: color-mix(in oklch, red, white)) {
   .btn.soft {
+    /* @sync soft-tint */
+    --ui-bg: color-mix(
+      in oklab,
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix)),
+      transparent
+    );
+    --ui-border: color-mix(
+      in oklab,
+      var(--intent, var(--neutral)) calc(100% - var(--soft-border-mix, 100%)),
+      transparent
+    );
+    /* @sync soft-tint */
     --ui-hover-bg: color-mix(
       in oklab,
-      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix) + var(--soft-hover-alpha)),
+      transparent
     );
   }
 

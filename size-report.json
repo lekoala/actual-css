@@ -1,12 +1,12 @@
 {
-  "totalRaw": 367704,
+  "totalRaw": 371676,
   "core": {
-    "minified": 12310,
-    "brotli": 2758
+    "minified": 12290,
+    "brotli": 2759
   },
   "full": {
-    "minified": 133877,
-    "brotli": 19310
+    "minified": 134955,
+    "brotli": 19398
   },
   "js": {
     "full": {
@@ -26,7 +26,11 @@
     },
     {
       "file": "core/tokens.css",
-      "raw": 11995
+      "raw": 12433
+    },
+    {
+      "file": "components/alert.css",
+      "raw": 10255
     },
     {
       "file": "components/tab.css",
@@ -41,32 +45,32 @@
       "raw": 8856
     },
     {
-      "file": "components/alert.css",
-      "raw": 8409
+      "file": "components/button.css",
+      "raw": 8335
     },
     {
       "file": "components/drawer.css",
       "raw": 8171
     },
     {
-      "file": "components/button.css",
-      "raw": 7769
-    },
-    {
       "file": "forms/choice.css",
       "raw": 7741
+    },
+    {
+      "file": "components/badge.css",
+      "raw": 7405
     },
     {
       "file": "themes/material.css",
       "raw": 6976
     },
     {
-      "file": "components/badge.css",
-      "raw": 6841
-    },
-    {
       "file": "effects/aura.css",
       "raw": 6445
+    },
+    {
+      "file": "core/variants.css",
+      "raw": 6003
     },
     {
       "file": "components/flyout.css",
@@ -79,10 +83,6 @@
     {
       "file": "forms/range.css",
       "raw": 5632
-    },
-    {
-      "file": "core/variants.css",
-      "raw": 5615
     },
     {
       "file": "typography/prose.css",
@@ -157,6 +157,10 @@
       "raw": 3857
     },
     {
+      "file": "components/close.css",
+      "raw": 3687
+    },
+    {
       "file": "forms/control.css",
       "raw": 3653
     },
@@ -167,10 +171,6 @@
     {
       "file": "components/list.css",
       "raw": 3625
-    },
-    {
-      "file": "components/close.css",
-      "raw": 3517
     },
     {
       "file": "layout/scroll-snap.css",

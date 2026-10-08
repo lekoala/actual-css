@@ -27,12 +27,12 @@
 
   --border: hsl(260 28% 85%);
   --focus: hsl(258 70% 65%);
-  --soft-fg-mix: 50%;
+  --soft-fg-mix: 45%;
 
   /* Pastel tuning — demonstrates the soft-variant knobs (paler tints, gentler
      hovers) and violet-tinted shadows. */
   --soft-bg-mix: 92%;
-  --soft-hover-alpha: 8%;
+  --soft-hover-alpha: 4%;
   --shadow-color: hsl(260 45% 20%);
   /* Pre-light-dark() tier, mirroring the light half below. */
   --hover-overlay: hsl(220 30% 10% / 0.04);

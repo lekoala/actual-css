@@ -1,28 +1,32 @@
 /*
  * Real-browser soft-variant contract, driven over Bun.WebView.
  *
- * The recipe mixes --surface with --intent, so its correctness depends on how
- * the mix treats a surface carrying chroma of its own. No shipped preset can
- * exercise that: the default light surface is pure white, and the tinted ones
- * sit below the chroma where a polar mix starts rotating hue toward the
- * surface. Past that point the polar response is a cliff — a theme nudging its
- * surface tint up sees soft secondary swing 116 degrees into green — while a
- * rectangular mix stays continuous.
+ * Two recipes share the soft ink. Badge, alert and soft button paint a
+ * translucent intent tint; the shared .soft (card, navbar, app-nav, chat) an
+ * opaque mix of --surface with --intent. The opaque mix depends on how it
+ * treats a surface carrying chroma of its own. No shipped preset can exercise
+ * that: the default light surface is pure white, and the tinted ones sit below
+ * the chroma where a polar mix starts rotating hue toward the surface. Past
+ * that point the polar response is a cliff — a theme nudging its surface tint
+ * up sees soft secondary swing 116 degrees into green — while a rectangular
+ * mix stays continuous.
  *
  * So this fixture pins a surface just above that threshold, behind vivid and
- * light intents, and asserts three things the string-level @sync check cannot
- * see:
+ * light intents, and asserts what the string-level @sync check cannot see:
  *
  *   1. a soft surface keeps its intent's hue instead of the surface's;
  *   2. --soft-fg-mix rebates soft ink toward --text far enough to stay legible,
  *      and is a byte-exact no-op at its 100% default;
- *   3. badge, alert, and button resolve to the same soft treatment at runtime.
+ *   3. badge, alert, and button resolve to the same soft treatment at runtime;
+ *   4. the tint stays translucent and the zone recipe opaque.
  *
- * Colors are read through RASTERIZE, so the assertions compare sRGB bytes.
+ * Colors are read through RASTERIZE, so the assertions compare sRGB bytes. A
+ * translucent fill is composited over the surface it sits on before any
+ * contrast or hue is measured: that is the color the page shows.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
-import { contrast, hueDistance, oklch, RASTERIZE } from "../../src/tooling/color.js";
+import { composite, contrast, hueDistance, oklch, RASTERIZE } from "../../src/tooling/color.js";
 
 const FIXTURE = "tests/browser/soft-recipe.html";
 const TIMEOUT = 60_000;
@@ -74,12 +78,15 @@ it("soft variant contract over a chromatic surface", async () => {
           alertSoft: { primary: read("#alert-soft-primary"), danger: read("#alert-soft-danger") },
           badgeSoft: { primary: read("#badge-soft-primary"), danger: read("#badge-soft-danger") },
           btn: { primary: read("#btn-primary"), secondary: read("#btn-secondary") },
+          card: { secondary: read("#card-soft-secondary"), danger: read("#card-soft-danger") },
           bare: read("#badge-bare"),
           raw: { primary: read("#raw-badge-primary"), danger: read("#raw-badge-danger") },
           plain: {
+            surface: norm(style("#plain").backgroundColor),
             primary: read("#plain-badge-primary"),
             danger: read("#plain-badge-danger"),
             bare: read("#plain-badge-bare"),
+            card: read("#plain-card-primary"),
             intentPrimary: ink("#plain-ref-primary"),
             intentDanger: ink("#plain-ref-danger"),
             text: ink("#plain-ref-text"),
@@ -92,18 +99,27 @@ it("soft variant contract over a chromatic surface", async () => {
       // oklch and oklab agree and this file would assert nothing.
       expect(oklch(snapshot.surface).C).toBeGreaterThan(0.02);
 
+      // What the page shows: the tint over the theme surface, the ink over that.
+      const shown = ({ bg, fg }, surface) => {
+        const fill = composite(bg, surface);
+        return { bg: fill, fg: composite(fg, fill) };
+      };
+
       for (const intent of INTENTS) {
         const soft = snapshot.badge[intent];
         const raw = snapshot.intent[intent];
+        const seen = shown(soft, snapshot.surface);
 
         // 1. The soft surface carries the intent hue, not the surface hue.
         // Interpolating in polar form drifts 116 degrees on secondary here (35
-        // on success, 50 on danger) and turns the soft blue badge green.
+        // on success, 50 on danger) and turns the soft blue badge green. The
+        // tint is mixed with transparent, so its own hue is the intent's; the
+        // rim is set by this theme (--soft-border-mix: 25%).
         expect(hueDrift(raw, soft.bg)).toBeLessThan(20);
         expect(hueDrift(raw, soft.border)).toBeLessThan(20);
 
-        // 2. Soft ink stays legible on the surface the same recipe generated.
-        expect(contrast(soft.fg, soft.bg)).toBeGreaterThanOrEqual(4.5);
+        // 2. Soft ink stays legible on the tint over the theme surface.
+        expect(contrast(seen.fg, seen.bg)).toBeGreaterThanOrEqual(4.5);
 
         // A --soft-fg-mix below 100% must actually move the ink off raw intent.
         // Neutral is the fixture's near-black text, so rebating toward --text
@@ -136,6 +152,18 @@ it("soft variant contract over a chromatic surface", async () => {
       expect(hueDrift(snapshot.intent.primary, snapshot.alertSoft.primary.bg)).toBeLessThan(20);
       expect(hueDrift(snapshot.intent.danger, snapshot.alertSoft.danger.bg)).toBeLessThan(20);
 
+      // 4. The zone recipe (.card.soft) is an opaque mix, and that mix is the
+      // one the polar cliff threatens: it must keep the intent hue too.
+      for (const intent of ["secondary", "danger"]) {
+        const card = snapshot.card[intent];
+        expect(card.bg[3]).toBe(255);
+        expect(hueDrift(snapshot.intent[intent], card.bg)).toBeLessThan(20);
+        expect(hueDrift(snapshot.intent[intent], card.border)).toBeLessThan(20);
+        expect(contrast(card.fg, card.bg)).toBeGreaterThanOrEqual(4.5);
+        // Same ink as the tint: both recipes read the soft-ink block.
+        expect(card.fg).toEqual(snapshot.badge[intent].fg);
+      }
+
       // Without an intent the recipe collapses to plain text ink, never a mix.
       expect(snapshot.bare.fg).toEqual(snapshot.text);
 
@@ -153,66 +181,73 @@ it("soft variant contract over a chromatic surface", async () => {
       expect(snapshot.plain.bare.fg).toEqual(snapshot.plain.text);
 
       // And the default theme's own soft pairs stay legible.
-      expect(contrast(snapshot.plain.primary.fg, snapshot.plain.primary.bg)).toBeGreaterThanOrEqual(
-        4.5,
-      );
-      expect(contrast(snapshot.plain.danger.fg, snapshot.plain.danger.bg)).toBeGreaterThanOrEqual(
-        4.5,
-      );
+      for (const pair of [snapshot.plain.primary, snapshot.plain.danger]) {
+        const seen = shown(pair, snapshot.plain.surface);
+        expect(contrast(seen.fg, seen.bg)).toBeGreaterThanOrEqual(4.5);
+      }
+
+      // Without --soft-border-mix the tint draws no rim, and the zone recipe
+      // keeps its tinted, opaque one: the hook's absence is each recipe's
+      // own default (tokens.css).
+      expect(snapshot.plain.primary.bg[3]).toBeLessThan(255);
+      expect(snapshot.plain.primary.border[3]).toBe(0);
+      expect(snapshot.plain.card.bg[3]).toBe(255);
+      expect(snapshot.plain.card.border[3]).toBe(255);
+      expect(snapshot.plain.card.border).not.toEqual(snapshot.plain.card.bg);
     },
     { artifactName: "soft-recipe" },
   );
 });
 
-it("default theme soft contract clears 4.5 on rest and hover, light and dark", async () => {
+it("default theme soft contract clears 4.5 on rest and hover, on every surface, light and dark", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
-      const readContract = (root) =>
-        view.evaluate(`(() => {
-          const norm = ${RASTERIZE};
-          const ink = {};
-          for (const el of document.querySelectorAll("#${root} [data-ink]"))
-            ink[el.dataset.ink] = norm(getComputedStyle(el).color);
-          const pair = (sel) => {
-            const s = getComputedStyle(document.querySelector("#${root} " + sel));
-            return { bg: norm(s.backgroundColor), fg: norm(s.color) };
+      // Force a real :hover on the soft buttons (see surface-context.test.js).
+      await view.cdp("DOM.enable");
+      await view.cdp("CSS.enable");
+      const { root } = await view.cdp("DOM.getDocument", { depth: -1 });
+      const { nodeIds } = await view.cdp("DOM.querySelectorAll", {
+        nodeId: root.nodeId,
+        selector: "[id^=contract] [data-hover]",
+      });
+      for (const nodeId of nodeIds) {
+        await view.cdp("CSS.forcePseudoState", { nodeId, forcedPseudoClasses: ["hover"] });
+      }
+
+      const surfaces = await view.evaluate(`(() => {
+        const norm = ${RASTERIZE};
+        const cs = (el) => getComputedStyle(el);
+        return [...document.querySelectorAll("[id^=contract] [data-surface]")].map((surface) => {
+          const pairs = {};
+          for (const badge of surface.querySelectorAll("[data-badge]")) {
+            const intent = badge.dataset.badge;
+            pairs[intent] = {
+              fg: norm(cs(badge).color),
+              rest: norm(cs(badge).backgroundColor),
+              hover: norm(cs(surface.querySelector('[data-hover="' + intent + '"]')).backgroundColor),
+            };
+          }
+          return {
+            label: surface.parentElement.id + " " + surface.dataset.surface,
+            backdrop: norm(cs(surface).backgroundColor),
+            pairs,
           };
-          const rest = {};
-          for (const el of document.querySelectorAll("#${root} [data-badge]"))
-            rest[el.dataset.badge] = pair("[data-badge='" + el.dataset.badge + "']");
-          return { rest };
-        })()`);
+        });
+      })()`);
 
-      for (const root of ["contract", "contract-dark"]) {
-        const resting = await readContract(root);
-
-        // Force a real :hover on the soft buttons (see surface-context.test.js).
-        await view.cdp("DOM.enable");
-        await view.cdp("CSS.enable");
-        const { root: docRoot } = await view.cdp("DOM.getDocument");
+      expect(surfaces).toHaveLength(6);
+      for (const { label, backdrop, pairs } of surfaces) {
         for (const intent of INTENTS) {
-          const { nodeId } = await view.cdp("DOM.querySelector", {
-            nodeId: docRoot.nodeId,
-            selector: `#${root} [data-hover="${intent}"]`,
-          });
-          await view.cdp("CSS.forcePseudoState", { nodeId, forcedPseudoClasses: ["hover"] });
-        }
-
-        const hoveredBg = await view.evaluate(`(() => {
-          const norm = ${RASTERIZE};
-          const out = {};
-          for (const el of document.querySelectorAll("#${root} [data-hover]"))
-            out[el.dataset.hover] = norm(getComputedStyle(el).backgroundColor);
-          return out;
-        })()`);
-
-        // The soft ink must clear the required ratio on BOTH surfaces the fill
-        // reaches: the resting fill just carries more margin.
-        for (const intent of INTENTS) {
-          const fg = resting.rest[intent].fg;
-          expect(contrast(fg, resting.rest[intent].bg)).toBeGreaterThanOrEqual(4.5);
-          expect(contrast(fg, hoveredBg[intent])).toBeGreaterThanOrEqual(4.5);
+          const { fg, rest, hover } = pairs[intent];
+          // The soft ink must clear the ratio over BOTH fills, each composited
+          // over the surface it sits on: the hover fill is usually binding.
+          for (const fill of [rest, hover]) {
+            const bg = composite(fill, backdrop);
+            const ratio = contrast(composite(fg, bg), bg);
+            if (ratio < 4.5) console.error(`${label} ${intent}: ${ratio.toFixed(2)}`);
+            expect(ratio).toBeGreaterThanOrEqual(4.5);
+          }
         }
       }
     },
