@@ -39,11 +39,11 @@
   --hover-overlay: rgb(255 255 255 / 8%);
   --shadow-color: hsl(232 50% 4%);
 
-  /* color-mix() premultiplies alpha: at the default 88% an opaque intent
-     outweighs an 8% surface and the soft fill turns ~60% intent, the ink's own
-     hue. 97% keeps the fill near the glass with a ~30% tint. */
-  --soft-bg-mix: 97%;
-  --soft-hover-alpha: 3%;
+  /* Keep the default --soft-bg-mix: the soft tint is an opacity of 100% minus
+     it, so a high mix leaves the intent invisible on the glass. The rim gives
+     soft badges, alerts and buttons the frosted edge the theme draws
+     elsewhere. */
+  --soft-border-mix: 70%;
 
   --radius: 0.75rem;
   --radius-sm: 0.5rem;

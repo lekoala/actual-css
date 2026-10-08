@@ -25,6 +25,7 @@
 - Demo themes set `--state-selected-text` where the primary cannot be both fill and page text: bootstrap-v6, brutalist, cyberpunk, gradient, ocean, square, sunset.
 - bootstrap-v6 filled badges keep their fill on hover.
 - The edge demo theme's default button reads its intent through `--soft-fg-mix`.
+- The glass demo theme keeps the default `--soft-bg-mix` and sets `--soft-border-mix: 70%`, so soft tints show their intent.
 - `.alert.admonition` title bar follows `.solid`, `.surface` and `.outline`; `.solid` previously left white ink on the soft tint.
 
 ### Changed
