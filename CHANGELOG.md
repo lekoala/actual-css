@@ -29,6 +29,8 @@
 
 ### Changed
 
+- `admin-neutral` uses emerald success fills with white solid ink, amber warning fills with dark ink, lighter neutral badges and white admonition bodies with neutral frames.
+- `demo/templates/order-management.html` softens the address notice, makes New order secondary and tightens the Orders header.
 - `demo/templates/order-management.html` pins `admin-neutral` and adds an Orders-list composition beside the existing three-level narrative.
 - `.alert.admonition` `.alert-title` is semibold.
 - `.alert.admonition.solid` frames its body with the neutral `--border` instead of the intent.

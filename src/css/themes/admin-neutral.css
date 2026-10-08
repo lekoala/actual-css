@@ -11,15 +11,15 @@
   --primary-fg: #fff;
   --secondary: #595959;
   --secondary-fg: #fff;
-  --success: #047857;
+  /* Saturated emerald stays deep enough for white ink on solid feedback. */
+  --success: #00875f;
   --success-fg: #fff;
-  /* Amber rather than burnt orange: stays distinct from the danger red when
-     the two badges sit side by side. */
-  --warning: #b45309;
-  --warning-fg: #fff;
-  /* The soft tint carries a darker amber ink separately from the fill, so a
-     cream tint reads with a calm brown-amber label. */
-  --warning-soft-fg: #805000;
+  --success-soft-fg: #065f46;
+  /* Bright amber needs dark solid ink; soft treatments carry their own darker
+     ink so the fill can stay luminous without sacrificing label contrast. */
+  --warning: #f59e0b;
+  --warning-fg: #1a1a1a;
+  --warning-soft-fg: #854d0e;
   --danger: #b42318;
   --danger-fg: #fff;
   --neutral: #303030;
@@ -54,4 +54,28 @@
      soft-button rim looks come from their own recipe and stay borderless. */
   --soft-bg-mix: 88%;
   --soft-fg-mix: 70%;
+}
+
+/* Attribute labels stay quieter than colored status badges. */
+[data-theme="admin-neutral"] .badge.neutral {
+  --soft-bg-mix: 96%;
+}
+
+/* An admonition is a card-like message, so its body and title mix use the
+   raised surface instead of bringing the grey page inside a white card. */
+[data-theme="admin-neutral"] .alert.admonition {
+  --surface: var(--surface-raised);
+
+  border-color: var(--border);
+}
+
+/* Unfilled treatments put ink on the page, where bright intents cannot carry
+   readable text. Keep the vivid intent for fills and use its dark ink here. */
+[data-theme="admin-neutral"] :is(.success, .warning):is(.outline, .surface),
+[data-theme="admin-neutral"] .btn:is(.success, .warning):is(.ghost, .link) {
+  --ui-fg: var(--intent-soft-fg);
+}
+
+[data-theme="admin-neutral"] :is(.success, .warning).outline {
+  --ui-border: var(--intent-soft-fg);
 }
