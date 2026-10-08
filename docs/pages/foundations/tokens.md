@@ -151,34 +151,42 @@ Color should reinforce structure and meaning, not carry them alone. Information 
 
 The default palette is **Ink & Terra**: a near-neutral aubergine `primary`, terracotta `secondary`, and pigment-toned statuses (sage, ochre, brick) tuned to equal perceived weight. The neutral ramp (text, borders, subtle surfaces) is tinted toward the primary hue so the whole page quietly carries the identity. Optional themes can re-introduce vivid intent palettes on top of this foundation.
 
-Soft surfaces (`.btn.soft`, `.badge.soft`, and the default `.alert`) are generated from intent colors through `color-mix()`. Themes can tune the mix globally instead of rewriting component selectors.
+Soft surfaces are generated from intent colors through `color-mix()`, in two
+recipes that share one ink:
+
+- **Tint** — the default `.badge` and `.alert`, and `.btn.soft`: a translucent
+  intent laid over whatever surface is underneath, with no rim. It keeps
+  separating on `--surface-subtle` and `--surface-raised`, where a fixed mix
+  with `--surface` would match the surface it sits on.
+- **Mix** — the shared `.soft` on zones (`.card`, `.chat-bubble`, `.navbar`,
+  `.app-nav`): an opaque mix of `--surface` with the intent and a tinted rim.
+  A zone may sit over an image, where a translucent fill would hand the text's
+  contrast to whatever is behind it.
+
+Themes tune both globally instead of rewriting component selectors:
 
 ```css
 :root {
-  --soft-bg-mix: 88%;
-  --soft-border-mix: 65%;
-  --soft-hover-alpha: 12%;
+  --soft-bg-mix: 88%;     /* share of surface; the tint's opacity is 100% minus it */
+  --soft-hover-alpha: 6%; /* extra intent share on hover */
   --soft-fg-mix: 100%;
 }
 ```
 
-`--soft-border-mix` is the same lever for the rim. The `65%` default keeps a
-visibly tinted border around every soft surface; pointing it at `--soft-bg-mix`
-resolves the rim to the fill, and soft treatments become a tint carrying text
-with no contour — the flatter language of a modern component set, from one
-declaration:
+`--soft-border-mix` has no default. Unset, the tint draws no rim and the mix
+keeps a 65% one. A theme that sets it gives every soft treatment a tinted rim
+of that weight — contoured badges and alerts, from one declaration:
 
 ```css
-[data-theme="flat"] {
-  --soft-border-mix: var(--soft-bg-mix);
+[data-theme="contoured"] {
+  --soft-border-mix: 65%;
 }
 ```
 
-It reaches the default `.badge` and `.alert` plus every explicit `.soft`
-(`.btn`, `.card`, `.chat`, `.navbar`, `.app-nav`), and nothing else: a component
-on its own surface keeps its `--border` rim. The dial is also
-rendering-only — the baseline path below `color-mix()` keeps `var(--border)`, so
-borderless soft is a look, not a contract the Degraded tier upholds.
+A rule that re-derives a soft color reads it with the recipe's own fallback:
+`var(--soft-border-mix, 100%)` for a tint, `var(--soft-border-mix, 65%)` for a
+mix. Both recipes are rendering-only — the baseline path below `color-mix()`
+keeps `var(--surface-subtle)` and `var(--border)`.
 
 `--soft-fg-mix` is the share of raw intent in soft *text*. At its `100%` default soft ink is the intent color itself, which is what a palette of dark, muted intents wants. A vivid or light palette cannot afford that: a soft badge then paints intent-tinted ink on an intent-tinted surface, and the two converge. Lowering the mix rebates the ink toward `--text`, which is the right direction in both schemes because `--text` is dark on a light theme and light on a dark one. Around `45%` a fully saturated palette recovers AA while the ink still reads as its intent.
 
@@ -193,17 +201,19 @@ hook, and the soft recipe reads it before falling back to the global mix:
 - `--soft-fg-mix` — the **global fallback derivation**, unchanged.
 
 **Soft foregrounds are calibrated against the darkest or closest interactive
-surface they are expected to appear on.** For interactive soft treatments the
-fill moves toward the intent on hover (`--soft-hover-alpha`), so the binding
-surface is the *hovered* one and the resting fill simply carries more margin;
-the default palette ships its own `--primary`/`--secondary`/… `-soft-fg` hooks
-to keep that pair ≥ 4.5:1 in both color schemes, enforced by
-`tests/browser/soft-recipe.test.js`. The hard line stops at the default theme:
+surface they are expected to appear on.** The tint is translucent, so the same
+pair reads differently on each surface — usually closest on `--surface-subtle`.
+For interactive soft treatments the fill moves toward the intent on hover
+(`--soft-hover-alpha`), so the binding pair is the *hovered* tint over
+`--surface-subtle` and the resting fill simply carries more margin; the default
+palette ships its own `--primary`/`--secondary`/… `-soft-fg` hooks to keep
+every pair ≥ 4.5:1 on `--surface`, `--surface-raised` and `--surface-subtle` in
+both color schemes, enforced by `tests/browser/soft-recipe.test.js`. The hard line stops at the default theme:
 presets and custom `[data-theme]` islands keep the `--soft-fg-mix` derivation
 unless they declare the hooks themselves (the framework resets them outside
 the default boundary). A theme that overrides the soft palette is responsible
 for preserving sufficient text contrast; `bunx --bun actual-css contrast --theme FILE`
-measures its resting and hovered pairs.
+measures its resting and hovered pairs, composited on each of those surfaces.
 
 A theme whose primary should read more muted than its statuses sets only
 `--primary-soft-fg`, and every soft `.primary` foreground follows it. Without a

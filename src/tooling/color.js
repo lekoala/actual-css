@@ -10,7 +10,8 @@
  * `const rgba = ${RASTERIZE};`. getComputedStyle returns color-mix() and
  * light-dark() results as oklab() or color(), so a 1x1 canvas turns any
  * computed color into sRGB bytes. Alpha is kept so contrast() can refuse a
- * translucent color instead of measuring it as if it were opaque.
+ * translucent color instead of measuring it as if it were opaque; composite()
+ * resolves it over its backdrop first.
  */
 export const RASTERIZE = `(() => {
   const canvas = Object.assign(document.createElement("canvas"), { width: 1, height: 1 });
@@ -44,6 +45,18 @@ export function contrast(a, b) {
   }
   const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
   return (hi + 0.05) / (lo + 0.05);
+}
+
+/* `top` painted over `base`, the way the page composites a fill: source-over
+   on gamma-encoded sRGB bytes. The result is opaque when `base` is, so a
+   translucent soft fill becomes measurable once its backdrop is known. */
+export function composite(top, base) {
+  const a = (top[3] ?? 255) / 255;
+  const b = (base[3] ?? 255) / 255;
+  const alpha = a + b * (1 - a);
+  if (alpha === 0) return [0, 0, 0, 0];
+  const channel = (i) => Math.round((top[i] * a + base[i] * b * (1 - a)) / alpha);
+  return [channel(0), channel(1), channel(2), Math.round(alpha * 255)];
 }
 
 /* OKLCH of an sRGB color: L 0-1, C chroma, h degrees. */

@@ -61,6 +61,16 @@
   font-size: var(--alert-font-size);
 }
 
+/* Density steps the block padding only: the inline padding is the text
+   column's edge and stays stable. Local to the alert, like .card.compact. */
+.alert.compact {
+  --alert-pad-block: var(--space-20);
+}
+
+.alert.spacious {
+  --alert-pad-block: var(--space-40);
+}
+
 .alert > * {
   min-inline-size: 0;
 }
@@ -85,26 +95,38 @@
 }
 
 /* Alerts are soft by default. The recipe writes local defaults rather than
-   --ui-* so an explicit shared treatment always wins without exclusions. */
+   --ui-* so an explicit shared treatment always wins without exclusions. The
+   fill is the translucent soft tint (see badge.css), with no rim unless a
+   theme sets --soft-border-mix. */
 @supports (color: color-mix(in oklch, red, white)) {
   .alert {
-    /* @sync soft-recipe */
+    /* @sync soft-tint */
     --alert-default-bg: color-mix(
       in oklab,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix)),
+      transparent
     );
     --alert-default-border: color-mix(
       in oklab,
-      var(--surface) var(--soft-border-mix),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-border-mix, 100%)),
+      transparent
     );
+    /* @sync soft-tint */
+    /* @sync soft-ink */
     --alert-default-fg: var(
       --intent-soft-fg,
       color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
-    /* @sync soft-recipe */
+    /* @sync soft-ink */
   }
+}
+
+/* Soft is the alert's own default: an explicit .soft must not swap the tint
+   for the shared opaque .soft recipe, so it defers to the default. */
+.alert.soft {
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
 }
 
 /* Decorative leading icon — use .alert-icon on the icon element. display and
@@ -205,7 +227,10 @@
 
 /* Admonition — structured static box with a tinted title bar and a body
    that rests on the page surface. Not collapsible — use .accordion inside
-   the body if the content needs to be expandable. */
+   the body if the content needs to be expandable. The title bar is what a
+   shared treatment paints (.solid fills it, .surface/.outline clear it): the
+   root's fill never shows behind the opaque title and body, and the title ink
+   already follows --ui-fg, so a bar left on the soft tint is unreadable. */
 .alert.admonition {
   padding: 0;
   display: block;
@@ -219,6 +244,7 @@
   gap: var(--space-20);
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
+  font-weight: var(--font-weight-semibold);
   border-start-start-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
   border-start-end-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
 }
@@ -230,18 +256,17 @@
 
 @supports (color: color-mix(in oklch, red, white)) {
   .alert.admonition > .alert-title {
-    background: color-mix(
-      in oklab,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral))
+    background: var(
+      --ui-bg,
+      color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)))
     );
   }
 }
 
 @supports not (color: color-mix(in oklch, red, white)) {
   .alert.admonition > .alert-title {
-    background: var(--intent, var(--neutral));
-    color: var(--intent-fg, var(--neutral-fg));
+    background: var(--ui-bg, var(--intent, var(--neutral)));
+    color: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   }
 }
 
@@ -250,6 +275,32 @@
   padding-inline: var(--alert-pad-inline);
   background: var(--surface);
   color: var(--text);
+}
+
+/* Solid: the filled title bar already carries the intent, so the frame moves
+   to the body and stays neutral. The root border goes because a transparent
+   one would show the root's intent fill around the body. */
+.alert.admonition.solid {
+  border: 0;
+}
+
+.alert.admonition.solid > .alert-body {
+  border: var(--border-width) solid var(--border);
+  border-block-start: 0;
+  border-end-start-radius: var(--alert-radius, var(--radius-lg));
+  border-end-end-radius: var(--alert-radius, var(--radius-lg));
+}
+
+/* Forced colors drop the title fill, so the bar would lose its edge: the
+   frame returns to the root as one uniform system-colored border. */
+@media (forced-colors: active) {
+  .alert.admonition.solid {
+    border: var(--border-width) solid CanvasText;
+  }
+
+  .alert.admonition.solid > .alert-body {
+    border: 0;
+  }
 }
 
 .alert.admonition > .alert-body > :first-child {

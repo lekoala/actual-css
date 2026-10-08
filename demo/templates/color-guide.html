@@ -572,9 +572,9 @@
           <p class="muted measure">
             Six intents, two palettes, twelve tinted surfaces — and no
             <code>--primary-subtle</code>, <code>--danger-subtle</code> or
-            <code>--success-subtle</code> anywhere. The soft treatment mixes the
-            intent into the <em>local</em> surface, so it lands correctly on
-            whatever it is dropped onto.
+            <code>--success-subtle</code> anywhere. The soft treatment lays a
+            translucent intent over the <em>local</em> surface, so it lands
+            correctly on whatever it is dropped onto.
           </p>
         </figcaption>
 
@@ -605,10 +605,10 @@
         </div>
 
         <div class="prose cg-code">
-          <pre><code>/* the whole recipe, from core/variants.css */
---ui-bg:     color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--intent));
---ui-border: color-mix(in oklab, var(--surface) var(--soft-border-mix), var(--intent));
---ui-fg:     var(--intent-soft-fg, color-mix(in oklab, var(--text), var(--intent) var(--soft-fg-mix)));</code></pre>
+          <pre><code>/* the whole recipe, from components/badge.css */
+--badge-default-bg:     color-mix(in oklab, var(--intent) calc(100% - var(--soft-bg-mix)), transparent);
+--badge-default-border: color-mix(in oklab, var(--intent) calc(100% - var(--soft-border-mix, 100%)), transparent);
+--badge-default-fg:     var(--intent-soft-fg, color-mix(in oklab, var(--text), var(--intent) var(--soft-fg-mix)));</code></pre>
         </div>
 
         <div class="stack muted measure cg-legend">
@@ -626,26 +626,16 @@
           <span class="overline pill primary cg-tag">Figure&nbsp;</span>
           <h3>One dial changes the whole language</h3>
           <p class="muted measure">
-            <code>--soft-border-mix</code> decides how much of the rim survives.
-            Pointing it at <code>--soft-bg-mix</code> resolves the border to the
-            fill, and every soft treatment in the island becomes a flat tint —
-            from one declaration, with no component rule rewritten.
+            Soft badges, alerts and buttons are a flat tint with no contour.
+            Setting <code>--soft-border-mix</code> gives every soft treatment
+            in the island a tinted rim of that weight — from one declaration,
+            with no component rule rewritten.
           </p>
         </figcaption>
 
         <div class="grid cg-columns" style="--grid-min: 18rem;">
           <div class="stack cg-island" data-theme="ocean" style="color-scheme: light;">
-            <p class="cg-island-name">default · 65%</p>
-            <div class="cluster">
-              <span class="badge primary soft">Primary</span>
-              <span class="badge success soft">Success</span>
-              <span class="badge danger soft">Danger</span>
-            </div>
-            <div class="alert warning">Contoured soft surfaces.</div>
-          </div>
-
-          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light; --soft-border-mix: var(--soft-bg-mix);">
-            <p class="cg-island-name">rim resolved to the fill</p>
+            <p class="cg-island-name">default · unset</p>
             <div class="cluster">
               <span class="badge primary soft">Primary</span>
               <span class="badge success soft">Success</span>
@@ -653,14 +643,25 @@
             </div>
             <div class="alert warning">Flat soft surfaces.</div>
           </div>
+
+          <div class="stack cg-island" data-theme="ocean" style="color-scheme: light; --soft-border-mix: 65%;">
+            <p class="cg-island-name">--soft-border-mix: 65%</p>
+            <div class="cluster">
+              <span class="badge primary soft">Primary</span>
+              <span class="badge success soft">Success</span>
+              <span class="badge danger soft">Danger</span>
+            </div>
+            <div class="alert warning">Contoured soft surfaces.</div>
+          </div>
         </div>
 
         <div class="stack muted measure cg-legend">
           <p>
-            It reaches the default <code>.badge</code> and <code>.alert</code>
-            plus every explicit <code>.soft</code>, and nothing else — a
-            component sitting on its own surface keeps its <code>--border</code>
-            rim.
+            It reaches the default <code>.badge</code> and <code>.alert</code>,
+            <code>.btn.soft</code> and every explicit <code>.soft</code>, and
+            nothing else — a component sitting on its own surface keeps its
+            <code>--border</code> rim. Unset, the zone treatments
+            (<code>.card.soft</code>, <code>.navbar.soft</code>) keep a 65% rim.
           </p>
         </div>
       </figure>

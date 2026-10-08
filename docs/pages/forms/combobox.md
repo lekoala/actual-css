@@ -93,9 +93,9 @@ contrast contracts apply to the combobox for free:
 
 .actual-combobox .cb-chip {
   border: var(--border-width) solid
-    color-mix(in oklab, var(--surface) var(--soft-border-mix), var(--primary));
+    color-mix(in oklab, var(--primary) calc(100% - var(--soft-border-mix, 100%)), transparent);
   border-radius: var(--radius-full);
-  background: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
+  background: color-mix(in oklab, var(--primary) calc(100% - var(--soft-bg-mix)), transparent);
   color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);

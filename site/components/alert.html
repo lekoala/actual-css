@@ -243,7 +243,7 @@
 <li>Could have simple or complex html content.</li>
 <li>A title and a description are plain siblings: the alert owns the small space between its direct content blocks, so neither needs a wrapper. Nested content keeps its own rhythm — wrap several paragraphs in <code>.prose</code>, or a differently spaced group in <code>.stack</code>, when the message needs a rhythm of its own.</li>
 <li>Alerts may include a decorative leading icon. Use <code>.alert-icon</code> on the icon element; the rest of the content flows into the remaining text column.</li>
-<li>Use <code>.compact</code> or <code>.spacious</code> for density changes. The inline padding stays stable.</li>
+<li>Use <code>.compact</code> or <code>.spacious</code> on the alert to step its block padding. The inline padding stays stable.</li>
 <li>Use a <a href="close.html"><code>.close</code></a> button to make the alert dismissible. It is a direct trailing child in standard alerts and lives inside <code>.alert-title</code> in admonitions; the alert makes it compact.</li>
 </ul>
 <p>Because alerts are soft by default, adding <code>.soft</code> to an intent (<code>.alert.soft.primary</code>,
@@ -570,7 +570,7 @@ full-bleed notice.</p>
 </div>
 <div class="prose docs-prose">
 <h2 id="admonition">Admonition</h2>
-<p>An admonition is a structured box with a tinted title bar, an optional icon, and body content on the page surface — like the <code>!!! note</code> callouts in mkdocs. Use <code>.alert-title</code> for the header and <code>.alert-body</code> for the content. Intent classes tint the title bar background and the border.</p>
+<p>An admonition is a structured box with a tinted title bar, an optional icon, and body content on the page surface — like the <code>!!! note</code> callouts in mkdocs. Use <code>.alert-title</code> for the header and <code>.alert-body</code> for the content. Intent classes tint the title bar background and the border; shared variants paint the title bar, so <code>.solid</code> fills it — and keeps the body's frame neutral — for a notification that needs to stand out.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -594,6 +594,16 @@ full-bleed notice.</p>
       <p>The intent tints the title bar, the border, and the body uses <code>var(--surface)</code>.</p>
     </div>
   </div>
+
+  <div class="alert success admonition solid">
+    <div class="alert-title">
+      <i class="ti ti-circle-check" aria-hidden="true"></i>
+      Saved
+    </div>
+    <div class="alert-body">
+      <p>A solid title bar for an action response.</p>
+    </div>
+  </div>
 </div>
   </div>
   <div class="docs-code">
@@ -615,6 +625,16 @@ full-bleed notice.</p>
     &lt;/div&gt;
     &lt;div class=&quot;alert-body&quot;&gt;
       &lt;p&gt;The intent tints the title bar, the border, and the body uses &lt;code&gt;var(--surface)&lt;/code&gt;.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div class=&quot;alert success admonition solid&quot;&gt;
+    &lt;div class=&quot;alert-title&quot;&gt;
+      &lt;i class=&quot;ti ti-circle-check&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;
+      Saved
+    &lt;/div&gt;
+    &lt;div class=&quot;alert-body&quot;&gt;
+      &lt;p&gt;A solid title bar for an action response.&lt;/p&gt;
     &lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;</code></pre>

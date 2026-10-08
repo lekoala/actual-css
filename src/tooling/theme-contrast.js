@@ -5,23 +5,31 @@
  * (`bun run report:theme-contrast`).
  *
  * Measured per island (one per color scheme the theme declares):
- *   - soft ink against the resting and the hovered soft fill (4.5:1)
+ *   - soft ink against the resting and the hovered soft fill (4.5:1), on each
+ *     surface a soft element sits on
  *   - the focus line against --surface and --surface-solid (3:1)
  *   - the invalid-field focus line against the field's own background (3:1)
  *   - --surface-solid-fg on --surface-solid (4.5:1)
- * A pair involving a translucent color has no ratio until it is composited
- * over its backdrop, so it reads n/a instead of a number.
+ * Soft fills are translucent, so each is composited over the surface under it
+ * before it is measured: the pair is what the page displays, not the token.
+ * A surface that is itself translucent (a glass theme) has no defined
+ * backdrop, so its pairs read n/a instead of a number.
  *
  * Bun only: Bun.WebView drives the browser.
  */
 import { fileURLToPath } from "node:url";
-import { contrast, RASTERIZE } from "./color.js";
+import { composite, contrast, RASTERIZE } from "./color.js";
 import { inlineImports } from "./css-bundle.js";
 import { themeNameOf } from "./design-tokens.js";
 
 const FRAMEWORK = fileURLToPath(new URL("../css/actual.full.css", import.meta.url));
 
 export const INTENTS = ["primary", "secondary", "success", "warning", "danger", "neutral"];
+
+/* The surfaces a soft badge or button is expected to sit on. --surface-subtle
+   is usually the binding one: a translucent fill over it ends darker in light
+   and lighter in dark than over --surface. */
+export const SURFACES = ["surface", "surface-raised", "surface-subtle"];
 
 /* Badges state .soft explicitly: a theme may fill badges by default
    (bootstrap-v6), which would measure a solid pair against the soft hover.
@@ -30,9 +38,14 @@ export const INTENTS = ["primary", "secondary", "success", "warning", "danger", 
    "light" or "dark". */
 function islandMarkup(id, scheme) {
   const style = scheme ? ` style="color-scheme: ${scheme}"` : "";
+  const softPairs = SURFACES.map(
+    (surface) => `<div data-surface="${surface}" style="background: var(--${surface})">
+      ${INTENTS.map((i) => `<span class="badge soft ${i}" data-badge="${i}">t</span>`).join("")}
+      ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
+    </div>`,
+  ).join("");
   return `<div${style} id="${id}">
-    ${INTENTS.map((i) => `<span class="badge soft ${i}" data-badge="${i}">t</span>`).join("")}
-    ${INTENTS.map((i) => `<button class="btn soft ${i}" data-hover="${i}" type="button">t</button>`).join("")}
+    ${softPairs}
     <span data-pair="focus-surface" style="color: var(--focus); background: var(--surface)"></span>
     <span data-pair="focus-solid" style="color: var(--focus); background: var(--surface-solid)"></span>
     <span data-pair="inverse" style="color: var(--surface-solid-fg); background: var(--surface-solid)"></span>
@@ -110,13 +123,17 @@ export async function measureContrast({ css, themes, label = "default" }) {
         pairs[el.dataset.pair] = { fg: rgba(fg), bg: rgba(cs(el).backgroundColor) };
       }
       const soft = {};
-      for (const el of island.querySelectorAll("[data-badge]")) {
-        const hover = island.querySelector('[data-hover="' + el.dataset.badge + '"]');
-        soft[el.dataset.badge] = {
-          fg: rgba(cs(el).color),
-          rest: rgba(cs(el).backgroundColor),
-          hover: rgba(cs(hover).backgroundColor),
-        };
+      for (const surface of island.querySelectorAll("[data-surface]")) {
+        const fills = {};
+        for (const el of surface.querySelectorAll("[data-badge]")) {
+          const hover = surface.querySelector('[data-hover="' + el.dataset.badge + '"]');
+          fills[el.dataset.badge] = {
+            fg: rgba(cs(el).color),
+            rest: rgba(cs(el).backgroundColor),
+            hover: rgba(cs(hover).backgroundColor),
+          };
+        }
+        soft[surface.dataset.surface] = { backdrop: rgba(cs(surface).backgroundColor), fills };
       }
       return { pairs, soft };
     });
@@ -125,14 +142,23 @@ export async function measureContrast({ css, themes, label = "default" }) {
   return islands.map(({ theme, scheme }, i) => {
     const { pairs, soft } = colors[i];
     const pair = (key) => ratio(pairs[key].fg, pairs[key].bg);
+    // Fill over the surface, then ink over the fill: the colors the page shows.
+    const shown = (fg, fill, backdrop) => {
+      const bg = composite(fill, backdrop);
+      return ratio(composite(fg, bg), bg);
+    };
     return {
       theme,
       scheme,
-      soft: INTENTS.map((intent) => ({
-        intent,
-        rest: ratio(soft[intent].fg, soft[intent].rest),
-        hover: ratio(soft[intent].fg, soft[intent].hover),
-      })),
+      soft: SURFACES.flatMap((surface) => {
+        const { backdrop, fills } = soft[surface];
+        return INTENTS.map((intent) => ({
+          intent,
+          surface,
+          rest: shown(fills[intent].fg, fills[intent].rest, backdrop),
+          hover: shown(fills[intent].fg, fills[intent].hover, backdrop),
+        }));
+      }),
       focusSurface: pair("focus-surface"),
       focusSolid: pair("focus-solid"),
       invalidFocus: pair("invalid-field"),
@@ -167,15 +193,18 @@ export function formatContrast(rows) {
   const flag = (cells, min) => (cells.some((c) => c.miss) ? `  <-- under ${min}` : "");
   const lines = [];
 
-  lines.push("Soft pair contrast (ink vs resting / hovered fill), needs 4.5:1.", "");
-  lines.push(`${"theme".padEnd(width)}  scheme  intent       rest     hover`);
+  lines.push(
+    "Soft pair contrast (ink vs resting / hovered fill, composited on each surface), needs 4.5:1.",
+    "",
+  );
+  lines.push(`${"theme".padEnd(width)}  scheme  surface         intent       rest     hover`);
   for (const row of rows) {
-    for (const { intent, rest, hover } of row.soft) {
+    for (const { intent, surface, rest, hover } of row.soft) {
       // Both states gate: the hovered fill is usually the closer one, but a
       // theme can invert that, and a 1:1 resting pair once passed silently.
       const cells = [cell(rest, 4.5), cell(hover, 4.5)];
       lines.push(
-        `${head(row)}  ${intent.padEnd(9)} ${cells[0].text.padStart(8)}  ${cells[1].text.padStart(8)}${flag(cells, 4.5)}`,
+        `${head(row)}  ${surface.padEnd(15)} ${intent.padEnd(9)} ${cells[0].text.padStart(8)}  ${cells[1].text.padStart(8)}${flag(cells, 4.5)}`,
       );
     }
   }

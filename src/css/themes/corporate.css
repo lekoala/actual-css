@@ -27,7 +27,7 @@
 
   --border: hsl(220 16% 86%);
   --focus: hsl(214 75% 52%);
-  --soft-fg-mix: 55%;
+  --soft-fg-mix: 50%;
   /* Pre-light-dark() tier, mirroring the light half below. */
   --hover-overlay: hsl(220 30% 10% / 0.04);
   --shadow-color: hsl(220 30% 10%);

@@ -36,7 +36,7 @@
   /* M3 focuses in the primary, which has no contrast pair with the dark
      inverse surface; a mid-tone of its hue holds 3:1 on both surfaces. */
   --focus: hsl(256 34% 59%);
-  --soft-fg-mix: 75%;
+  --soft-fg-mix: 70%;
   --hover-overlay: rgb(29 27 32 / 8%);
   --shadow-color: #000;
 

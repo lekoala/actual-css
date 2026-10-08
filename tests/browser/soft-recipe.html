@@ -64,8 +64,10 @@
   </style>
 </head>
 <body>
-  <!-- Palette references so assertions never hard-code sRGB values. -->
-  <div data-theme="chroma-stress">
+  <!-- Palette references so assertions never hard-code sRGB values. The theme
+       paints its own surface: the soft tint is translucent, so it is measured
+       composited over #ref-surface. -->
+  <div data-theme="chroma-stress" style="background: var(--surface)">
     <div id="ref-surface" style="background: var(--surface)"></div>
     <div id="ref-text" style="color: var(--text)"></div>
     <div id="ref-primary" style="color: var(--primary)"></div>
@@ -115,6 +117,11 @@
     <!-- No intent: soft ink must collapse to plain --text, never a mix. -->
     <span class="badge" id="badge-bare">Bare</span>
 
+    <!-- The shared .soft stays an opaque mix with --surface: the zone
+         components (card, navbar, app-nav, chat) keep it. -->
+    <div class="card soft secondary" id="card-soft-secondary">Card</div>
+    <div class="card soft danger" id="card-soft-danger">Card</div>
+
     <!-- Nested island: same palette, --soft-fg-mix back at its 100% default. -->
     <div data-theme="chroma-raw">
       <span class="badge primary" id="raw-badge-primary">Primary</span>
@@ -124,27 +131,22 @@
 
   <!-- Achromatic control: the default theme, whose surface is pure white. The
        100% default must leave soft ink exactly at the raw intent color. -->
-  <div id="plain">
+  <div id="plain" style="background: var(--surface)">
     <div id="plain-ref-primary" style="color: var(--primary)"></div>
     <div id="plain-ref-danger" style="color: var(--danger)"></div>
     <div id="plain-ref-text" style="color: var(--text)"></div>
     <span class="badge primary" id="plain-badge-primary">Primary</span>
     <span class="badge danger" id="plain-badge-danger">Danger</span>
     <span class="badge" id="plain-badge-bare">Bare</span>
+    <div class="card soft primary" id="plain-card-primary">Card</div>
   </div>
 
   <!-- Blocking contract: the default theme, light and dark, all six intents,
-       resting and hovered soft pairs. The hover soft fill is the binding
-       surface soft ink must clear (the resting fill simply carries more
-       margin). Dedicated ids keep the selector list explicit. -->
-  <div id="contract">
-    <span data-ink="text" style="color: var(--text)"></span>
-    <span data-ink="primary" style="color: var(--primary)"></span>
-    <span data-ink="secondary" style="color: var(--secondary)"></span>
-    <span data-ink="success" style="color: var(--success)"></span>
-    <span data-ink="warning" style="color: var(--warning)"></span>
-    <span data-ink="danger" style="color: var(--danger)"></span>
-    <span data-ink="neutral" style="color: var(--neutral)"></span>
+       resting and hovered soft pairs, on each surface a soft element sits on.
+       The tint is translucent, so the surface under it changes the pair;
+       --surface-subtle is usually the binding one. The test fills each
+       [data-surface] from one template, so the markup stays a single list. -->
+  <template id="contract-pairs">
     <span class="badge primary" data-badge="primary">1</span>
     <span class="badge secondary" data-badge="secondary">2</span>
     <span class="badge success" data-badge="success">3</span>
@@ -157,27 +159,22 @@
     <button class="btn soft warning" data-hover="warning" type="button"></button>
     <button class="btn soft danger" data-hover="danger" type="button"></button>
     <button class="btn soft neutral" data-hover="neutral" type="button"></button>
+  </template>
+  <div id="contract">
+    <div data-surface="surface" style="background: var(--surface)"></div>
+    <div data-surface="surface-raised" style="background: var(--surface-raised)"></div>
+    <div data-surface="surface-subtle" style="background: var(--surface-subtle)"></div>
   </div>
   <div id="contract-dark" data-theme="dark">
-    <span data-ink="text" style="color: var(--text)"></span>
-    <span data-ink="primary" style="color: var(--primary)"></span>
-    <span data-ink="secondary" style="color: var(--secondary)"></span>
-    <span data-ink="success" style="color: var(--success)"></span>
-    <span data-ink="warning" style="color: var(--warning)"></span>
-    <span data-ink="danger" style="color: var(--danger)"></span>
-    <span data-ink="neutral" style="color: var(--neutral)"></span>
-    <span class="badge primary" data-badge="primary">1</span>
-    <span class="badge secondary" data-badge="secondary">2</span>
-    <span class="badge success" data-badge="success">3</span>
-    <span class="badge warning" data-badge="warning">4</span>
-    <span class="badge danger" data-badge="danger">5</span>
-    <span class="badge neutral" data-badge="neutral">6</span>
-    <button class="btn soft primary" data-hover="primary" type="button"></button>
-    <button class="btn soft secondary" data-hover="secondary" type="button"></button>
-    <button class="btn soft success" data-hover="success" type="button"></button>
-    <button class="btn soft warning" data-hover="warning" type="button"></button>
-    <button class="btn soft danger" data-hover="danger" type="button"></button>
-    <button class="btn soft neutral" data-hover="neutral" type="button"></button>
+    <div data-surface="surface" style="background: var(--surface)"></div>
+    <div data-surface="surface-raised" style="background: var(--surface-raised)"></div>
+    <div data-surface="surface-subtle" style="background: var(--surface-subtle)"></div>
   </div>
+  <script>
+    const pairs = document.getElementById("contract-pairs");
+    for (const surface of document.querySelectorAll("[data-surface]")) {
+      surface.append(pairs.content.cloneNode(true));
+    }
+  </script>
 </body>
 </html>

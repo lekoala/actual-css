@@ -12,7 +12,7 @@
 - Could have simple or complex html content.
 - A title and a description are plain siblings: the alert owns the small space between its direct content blocks, so neither needs a wrapper. Nested content keeps its own rhythm — wrap several paragraphs in `.prose`, or a differently spaced group in `.stack`, when the message needs a rhythm of its own.
 - Alerts may include a decorative leading icon. Use `.alert-icon` on the icon element; the rest of the content flows into the remaining text column.
-- Use `.compact` or `.spacious` for density changes. The inline padding stays stable.
+- Use `.compact` or `.spacious` on the alert to step its block padding. The inline padding stays stable.
 - Use a [`.close`](close.md) button to make the alert dismissible. It is a direct trailing child in standard alerts and lives inside `.alert-title` in admonitions; the alert makes it compact.
 
 Because alerts are soft by default, adding `.soft` to an intent (`.alert.soft.primary`,
@@ -216,7 +216,7 @@ full-bleed notice.
 
 ## Admonition
 
-An admonition is a structured box with a tinted title bar, an optional icon, and body content on the page surface — like the `!!! note` callouts in mkdocs. Use `.alert-title` for the header and `.alert-body` for the content. Intent classes tint the title bar background and the border.
+An admonition is a structured box with a tinted title bar, an optional icon, and body content on the page surface — like the `!!! note` callouts in mkdocs. Use `.alert-title` for the header and `.alert-body` for the content. Intent classes tint the title bar background and the border; shared variants paint the title bar, so `.solid` fills it — and keeps the body's frame neutral — for a notification that needs to stand out.
 
 ```html demo
 <div class="stack">
@@ -237,6 +237,16 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
     </div>
     <div class="alert-body">
       <p>The intent tints the title bar, the border, and the body uses <code>var(--surface)</code>.</p>
+    </div>
+  </div>
+
+  <div class="alert success admonition solid">
+    <div class="alert-title">
+      <i class="ti ti-circle-check" aria-hidden="true"></i>
+      Saved
+    </div>
+    <div class="alert-body">
+      <p>A solid title bar for an action response.</p>
     </div>
   </div>
 </div>

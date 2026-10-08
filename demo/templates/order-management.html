@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Management, Semantic Feedback - Actual CSS</title>
+  <meta name="description" content="A backoffice order page showing one state at three levels: a badge in a list, a message in context, and a notification with its own action.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <style>
+    .order-content {
+      --center-size: 64rem;
+      --gap: var(--space-40);
+
+      padding-block: var(--space-40) var(--space-60);
+    }
+
+    /* Product thumbnail: a neutral tile standing in for artwork, so the demo
+       ships no image asset. */
+    .order-thumb {
+      display: inline-grid;
+      flex: none;
+      place-items: center;
+      inline-size: 2.75rem;
+      block-size: 2.75rem;
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      font-size: 1.35rem;
+    }
+
+    /* Title and attribute badges share one wrapping row. */
+    .order-item-title {
+      gap: var(--space-20);
+      flex-wrap: wrap;
+    }
+
+    .order-item-trailing {
+      display: grid;
+      justify-items: end;
+      text-align: end;
+    }
+
+    .order-note {
+      padding-block-start: var(--space-40);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <a class="navbar-brand" href="#order">
+      <span class="avatar primary"><abbr>OC</abbr></span>
+      <span>Order Console</span>
+    </a>
+
+    <nav aria-label="Breadcrumb">
+      <ol class="breadcrumb">
+        <li><a href="#orders">Orders</a></li>
+        <li aria-current="page">#8851</li>
+      </ol>
+    </nav>
+
+    <div class="grow"></div>
+
+    <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+  </header>
+
+  <main class="center stack order-content" id="order">
+    <header class="cluster" style="--cluster-justify: space-between; align-items: flex-start;">
+      <hgroup>
+        <p class="overline">Order management</p>
+        <h1>Order #8851</h1>
+        <p class="muted">3 items · Customer order · Placed 2 days ago</p>
+      </hgroup>
+
+      <div class="cluster" style="gap: var(--space-20);">
+        <button class="btn neutral outline" type="button">Manage order</button>
+        <button class="btn" type="button">
+          <i class="ti ti-printer" aria-hidden="true"></i>
+          Create shipping label
+        </button>
+      </div>
+    </header>
+
+    <!-- Level one: state as a compact badge inside a selectable list. -->
+    <section class="card raised stack" aria-labelledby="order-items">
+      <header>
+        <h2 id="order-items">Items</h2>
+        <span class="badge neutral soft">3 selected</span>
+      </header>
+
+      <ul class="list">
+        <li class="list-item">
+          <input class="check" type="checkbox" aria-label="Select Teak dining chair" checked>
+          <span class="order-thumb" aria-hidden="true"><i class="ti ti-armchair"></i></span>
+          <span class="list-item-content">
+            <span class="cluster order-item-title">
+              <strong class="list-item-title">Teak dining chair</strong>
+              <span class="badge neutral soft">Teak</span>
+              <span class="badge neutral soft">Natural</span>
+            </span>
+            <span class="list-item-text">SKU TK-1180 · 3 locations</span>
+          </span>
+          <span class="list-item-trailing order-item-trailing">
+            <strong>$559.00</strong>
+            <small class="muted">7 available</small>
+          </span>
+        </li>
+
+        <li class="list-item">
+          <input class="check" type="checkbox" aria-label="Select Turquoise dining chair" checked>
+          <span class="order-thumb" aria-hidden="true"><i class="ti ti-armchair-2"></i></span>
+          <span class="list-item-content">
+            <span class="cluster order-item-title">
+              <strong class="list-item-title">Turquoise dining chair</strong>
+              <span class="badge neutral soft">Turquoise</span>
+              <span class="badge neutral soft">Teak</span>
+              <span class="badge neutral soft">Painted</span>
+            </span>
+            <span class="list-item-text">SKU TK-2044 · 3 locations</span>
+          </span>
+          <span class="list-item-trailing order-item-trailing">
+            <strong>$579.00</strong>
+            <span class="badge danger soft">0 available</span>
+          </span>
+        </li>
+
+        <li class="list-item">
+          <input class="check" type="checkbox" aria-label="Select Grey dining chair" checked>
+          <span class="order-thumb" aria-hidden="true"><i class="ti ti-armchair"></i></span>
+          <span class="list-item-content">
+            <span class="cluster order-item-title">
+              <strong class="list-item-title">Grey dining chair</strong>
+              <span class="badge neutral soft">Gray</span>
+              <span class="badge neutral soft">White</span>
+              <span class="badge neutral soft">Painted</span>
+            </span>
+            <span class="list-item-text">SKU TK-3310 · 3 locations</span>
+          </span>
+          <span class="list-item-trailing order-item-trailing">
+            <strong>$579.00</strong>
+            <small class="muted">4 available</small>
+          </span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Level two, smallest: a side effect stated next to the field that
+         causes it, before the change is saved. -->
+    <section class="card raised stack" aria-labelledby="order-customer">
+      <header>
+        <h2 id="order-customer">Customer</h2>
+      </header>
+
+      <div class="field">
+        <label class="field-label" for="customer-phone">Phone number</label>
+        <div class="sidebar-layout" style="--gap: var(--space-20); --sidebar-layout-size: 7rem; --sidebar-content-min: 12rem;">
+          <input class="input" id="customer-phone" type="tel" value="930-444-1919" autocomplete="tel"
+            aria-describedby="customer-phone-warning">
+          <select class="select" aria-label="Country code">
+            <option>US +1</option>
+            <option>CA +1</option>
+            <option>BE +32</option>
+          </select>
+        </div>
+
+        <div class="alert warning compact" id="customer-phone-warning" style="--alert-font-size: var(--font-size-sm); --alert-icon-size: 1rem; margin-block-start: var(--space-10); font-weight: var(--font-weight-semibold);">
+          <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+          <p>Changing the phone number for this customer will unsubscribe them from SMS marketing text messages until
+            they provide consent.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card raised stack" aria-labelledby="order-fulfillment">
+      <header>
+        <h2 id="order-fulfillment">Fulfillment</h2>
+      </header>
+
+      <div class="cluster" style="--cluster-justify: space-between;">
+        <span class="cluster" style="gap: var(--space-20);">
+          <span class="badge warning soft">Unfulfilled</span>
+          <span class="muted">2 items</span>
+        </span>
+        <button class="btn neutral outline sm" type="button">Fulfill item</button>
+      </div>
+
+      <div class="cluster" style="--cluster-justify: space-between;">
+        <span class="cluster" style="gap: var(--space-20);">
+          <span class="badge success soft">Fulfilled</span>
+          <span class="muted">Shipment #8851-F1</span>
+        </span>
+        <span class="muted">Shipped successfully</span>
+      </div>
+
+      <!-- Level three: the result of an action, with its own follow-up. It
+           follows the shipment it reports on. -->
+      <div class="alert admonition success" id="label-ready">
+        <div class="alert-title">
+          <i class="ti ti-circle-check" aria-hidden="true"></i>
+          Your shipping label is ready to print.
+          <button class="close" type="button" commandfor="label-ready" command="--dismiss"
+            aria-label="Dismiss this message"></button>
+        </div>
+        <div class="alert-body">
+          <p>Your shipping label has been saved to your shipment. You can print it now, or later.</p>
+          <menu class="cluster list-reset">
+            <li>
+              <button class="btn neutral outline sm" type="button">
+                <i class="ti ti-printer" aria-hidden="true"></i>
+                Print label
+              </button>
+            </li>
+          </menu>
+        </div>
+      </div>
+    </section>
+
+    <!-- The same response with solid emphasis, raised like a toast: for a
+         notification that lands above the page rather than inside a card. -->
+    <section class="stack" style="--gap: var(--space-20);" aria-labelledby="order-toast">
+      <h2 class="overline" id="order-toast">Solid alternative</h2>
+
+      <div class="alert admonition success solid shadow-context" id="label-ready-toast">
+        <div class="alert-title">
+          <i class="ti ti-circle-check" aria-hidden="true"></i>
+          Your shipping label is ready to print.
+          <button class="close" type="button" commandfor="label-ready-toast" command="--dismiss"
+            aria-label="Dismiss this message"></button>
+        </div>
+        <div class="alert-body">
+          <p>Your shipping label has been saved to your shipment. You can print it now, or later.</p>
+          <menu class="cluster list-reset">
+            <li>
+              <button class="btn neutral outline sm" type="button">
+                <i class="ti ti-printer" aria-hidden="true"></i>
+                Print label
+              </button>
+            </li>
+          </menu>
+        </div>
+      </div>
+    </section>
+
+    <!-- Level two: the same kind of state as a message in context. -->
+    <section class="stack" aria-label="Order issues">
+      <div class="alert danger">
+        <i class="ti ti-alert-circle alert-icon" aria-hidden="true"></i>
+        <div class="cluster" style="--cluster-justify: space-between; flex: 1 1 auto; gap: var(--space-20);">
+          <div class="stack" style="--gap: var(--space-10);">
+            <strong>Product unavailable.</strong>
+            <span>Turquoise dining chair has no inventory remaining. Remove it or restock before creating the label.</span>
+          </div>
+          <button class="btn danger outline sm" type="button">Review item</button>
+        </div>
+      </div>
+
+      <div class="alert warning callout">
+        <i class="ti ti-map-pin alert-icon" aria-hidden="true"></i>
+        <div class="cluster" style="--cluster-justify: space-between; flex: 1 1 auto; gap: var(--space-20);">
+          <div class="stack" style="--gap: var(--space-10);">
+            <strong>Shipping address needs attention.</strong>
+            <span>Some address details must be corrected before creating the label.</span>
+          </div>
+          <button class="btn warning outline sm" type="button">Edit address</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="order-note">
+      <p>
+        Surface, action hierarchy and semantic feedback are three separate concerns. The primary action stays
+        neutral, so color is reserved for state — and one state reads as a badge in a list, a message in context,
+        or a notification with its own action.
+      </p>
+    </footer>
+  </main>
+
+  <script src="../../dist/actual.full.js"></script>
+</body>
+
+</html>

@@ -1,14 +1,31 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Breaking changes
+
+- `--soft-border-mix` has no default: read it as `var(--soft-border-mix, 100%)` for the soft tint or `var(--soft-border-mix, 65%)` for the opaque `.soft` mix.
+
 ### Added
 
+- `demo/templates/order-management.html`: one state at three levels — a badge in a selectable list, a contextual alert, and a notification with its own action — plus a critical alert, with no new framework API.
 - `actual-css design` writes a portable `dtcg/` token profile beside `figma/` and `penpot/`, with spec `$types` (`fontWeight`, `fontFamily`, `duration`, `cubicBezier`, `number`) and the font stacks, line heights and motion `figma/` drops.
 
 ### Fixed
 
 - `actual-css design` writes DTCG colors with a 6-digit `hex` and `alpha` separate; Penpot still receives the alpha in its hex.
 - `.scroll-snap` keeps a focused item's ring inside its own clip on all four sides.
+- `.alert.compact` and `.alert.spacious` step `--alert-pad-block`.
+- `.close` stays visible in forced colors on a light-on-dark ink such as a `.solid` admonition title.
+- `.alert.admonition` title bar follows `.solid`, `.surface` and `.outline`; `.solid` previously left white ink on the soft tint.
+
+### Changed
+
+- `.alert.admonition` `.alert-title` is semibold.
+- `.alert.admonition.solid` frames its body with the neutral `--border` instead of the intent.
+- `.badge`, `.alert` and `.btn.soft` paint a translucent intent tint with no rim; the shared `.soft` on `.card`, `.navbar`, `.app-nav` and `.chat-bubble` stays an opaque mix.
+- `--soft-hover-alpha` defaults to `6%`.
+- `actual-css contrast` measures soft pairs composited on `--surface`, `--surface-raised` and `--surface-subtle`.
+- Demo themes retune `--soft-fg-mix` (bootstrap-v6, corporate, cyberpunk, dim, gradient, indigo, lavender, material, square) and `--soft-hover-alpha` (lavender, neon) for the soft tint.
 
 ## [0.13.0] - 2026-10-06
 ### Breaking changes

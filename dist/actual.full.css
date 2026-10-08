@@ -226,10 +226,15 @@ select {
 
 :root {
   /* Variant tuning — themes may adjust generated soft surfaces without
-     replacing the component rules. */
+     replacing the component rules. --soft-bg-mix is the share of surface in a
+     soft fill: an opaque mix on the shared .soft, an opacity (100% minus it)
+     on the translucent badge, alert and soft-button tint. --soft-hover-alpha
+     is the extra intent share on hover. --soft-border-mix has no default: it
+     is a fallback-only hook whose absence lets each recipe keep its own rim
+     (a tinted rim on .soft, none on the tint), and a theme that sets it gives
+     both a rim of that weight. */
   --soft-bg-mix: 88%;
-  --soft-border-mix: 65%;
-  --soft-hover-alpha: 12%;
+  --soft-hover-alpha: 6%;
   /* Soft foreground: the share of raw intent in soft text. 100% keeps the
      pure intent color; lower values rebate it toward --text, which vivid or
      light intent palettes need to stay legible on their own soft surface.
@@ -718,6 +723,9 @@ small {
  *
  * Intent list source of truth: intents.css. Components consume --intent* tokens
  * instead of re-listing intent classes.
+ *
+ * Public hooks:
+ * --soft-border-mix (fallback-only: a soft rim of that weight on every recipe)
  */
 .solid {
   --ui-bg: var(--intent, var(--neutral));
@@ -839,21 +847,25 @@ small {
 }
 
 /* Modern color enhancement. Baseline variant values above remain usable
-   everywhere. Interactive states live in the components that consume them. */
+   everywhere. Interactive states live in the components that consume them.
+   The shared .soft is opaque: it paints zones (.card, .navbar, .app-nav,
+   .chat-bubble) an author may lay over an image, where a translucent fill
+   would hand the text's contrast to whatever is behind it. The badge, alert
+   and soft button own a translucent tint instead (soft-tint). */
 @supports (color: color-mix(in oklch, red, white)) {
   .soft {
-    /* @sync soft-recipe */
     --ui-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)));
     --ui-border: color-mix(
       in oklab,
-      var(--surface) var(--soft-border-mix),
+      var(--surface) var(--soft-border-mix, 65%),
       var(--intent, var(--neutral))
     );
+    /* @sync soft-ink */
     --ui-fg: var(
       --intent-soft-fg,
       color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
-    /* @sync soft-recipe */
+    /* @sync soft-ink */
   }
 }
 
@@ -3988,12 +4000,27 @@ small {
   --ui-hover-bg: transparent;
 }
 
+/* A soft button takes the badge and alert tint, not the shared opaque .soft:
+   it carries a short label like them, and the translucent fill keeps
+   separating on a subtle or raised surface. Ink stays the shared .soft one. */
 @supports (color: color-mix(in oklch, red, white)) {
   .btn.soft {
+    /* @sync soft-tint */
+    --ui-bg: color-mix(
+      in oklab,
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix)),
+      transparent
+    );
+    --ui-border: color-mix(
+      in oklab,
+      var(--intent, var(--neutral)) calc(100% - var(--soft-border-mix, 100%)),
+      transparent
+    );
+    /* @sync soft-tint */
     --ui-hover-bg: color-mix(
       in oklab,
-      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix) + var(--soft-hover-alpha)),
+      transparent
     );
   }
 
@@ -4192,11 +4219,14 @@ a.btn[aria-disabled="true"] {
 }
 
 @media (forced-colors: active) {
-  /* The X is a currentColor mask fill: without this the system remaps the
-    background to Canvas and the glyph disappears. Kept on the pseudo so the
-    host keeps its native color and focus adaptation. */
+  /* The X is a mask fill: without this the system remaps the background to
+    Canvas and the glyph disappears. Kept on the pseudo so the host keeps its
+    native color and focus adaptation. The fill is the system color, not
+    currentColor: an unadjusted pseudo inherits the authored ink, so a white
+    .solid ink painted a white X on Canvas. */
   .close::before {
     forced-color-adjust: none;
+    background: ButtonText;
   }
 }
 
@@ -4313,26 +4343,40 @@ a.btn[aria-disabled="true"] {
 }
 
 /* Soft by default. Local defaults remain behind --ui-* in the resolution
-   chain, so explicit shared treatments compose without selector exclusions. */
+   chain, so explicit shared treatments compose without selector exclusions.
+   The fill is a translucent intent tint, so it shows the surface it sits on
+   instead of a fixed mix with --surface: a mix stops separating on a subtle
+   or raised surface of its own lightness. No rim unless a theme sets
+   --soft-border-mix (tokens.css). */
 @supports (color: color-mix(in oklch, red, white)) {
   .badge {
-    /* @sync soft-recipe */
+    /* @sync soft-tint */
     --badge-default-bg: color-mix(
       in oklab,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix)),
+      transparent
     );
     --badge-default-border: color-mix(
       in oklab,
-      var(--surface) var(--soft-border-mix),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-border-mix, 100%)),
+      transparent
     );
+    /* @sync soft-tint */
+    /* @sync soft-ink */
     --badge-default-fg: var(
       --intent-soft-fg,
       color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
-    /* @sync soft-recipe */
+    /* @sync soft-ink */
   }
+}
+
+/* Soft is the badge's own default: an explicit .soft must not swap the tint
+   for the shared opaque .soft recipe, so it defers to the default. */
+.badge.soft {
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
 }
 
 .badge:empty {
@@ -4373,8 +4417,8 @@ a.btn[aria-disabled="true"] {
   :is(a.badge, button.badge):where(:not(.solid, .outline, :empty)) {
     --badge-default-hover-bg: color-mix(
       in oklab,
-      var(--surface) calc(var(--soft-bg-mix) - var(--soft-hover-alpha)),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix) + var(--soft-hover-alpha)),
+      transparent
     );
   }
 
@@ -4492,6 +4536,16 @@ a.badge[aria-disabled="true"] {
   font-size: var(--alert-font-size);
 }
 
+/* Density steps the block padding only: the inline padding is the text
+   column's edge and stays stable. Local to the alert, like .card.compact. */
+.alert.compact {
+  --alert-pad-block: var(--space-20);
+}
+
+.alert.spacious {
+  --alert-pad-block: var(--space-40);
+}
+
 .alert > * {
   min-inline-size: 0;
 }
@@ -4516,26 +4570,38 @@ a.badge[aria-disabled="true"] {
 }
 
 /* Alerts are soft by default. The recipe writes local defaults rather than
-   --ui-* so an explicit shared treatment always wins without exclusions. */
+   --ui-* so an explicit shared treatment always wins without exclusions. The
+   fill is the translucent soft tint (see badge.css), with no rim unless a
+   theme sets --soft-border-mix. */
 @supports (color: color-mix(in oklch, red, white)) {
   .alert {
-    /* @sync soft-recipe */
+    /* @sync soft-tint */
     --alert-default-bg: color-mix(
       in oklab,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-bg-mix)),
+      transparent
     );
     --alert-default-border: color-mix(
       in oklab,
-      var(--surface) var(--soft-border-mix),
-      var(--intent, var(--neutral))
+      var(--intent, var(--neutral)) calc(100% - var(--soft-border-mix, 100%)),
+      transparent
     );
+    /* @sync soft-tint */
+    /* @sync soft-ink */
     --alert-default-fg: var(
       --intent-soft-fg,
       color-mix(in oklab, var(--text), var(--intent, var(--text)) var(--soft-fg-mix))
     );
-    /* @sync soft-recipe */
+    /* @sync soft-ink */
   }
+}
+
+/* Soft is the alert's own default: an explicit .soft must not swap the tint
+   for the shared opaque .soft recipe, so it defers to the default. */
+.alert.soft {
+  --ui-bg: initial;
+  --ui-fg: initial;
+  --ui-border: initial;
 }
 
 /* Decorative leading icon — use .alert-icon on the icon element. display and
@@ -4636,7 +4702,10 @@ a.badge[aria-disabled="true"] {
 
 /* Admonition — structured static box with a tinted title bar and a body
    that rests on the page surface. Not collapsible — use .accordion inside
-   the body if the content needs to be expandable. */
+   the body if the content needs to be expandable. The title bar is what a
+   shared treatment paints (.solid fills it, .surface/.outline clear it): the
+   root's fill never shows behind the opaque title and body, and the title ink
+   already follows --ui-fg, so a bar left on the soft tint is unreadable. */
 .alert.admonition {
   padding: 0;
   display: block;
@@ -4650,6 +4719,7 @@ a.badge[aria-disabled="true"] {
   gap: var(--space-20);
   padding-block: var(--alert-pad-block);
   padding-inline: var(--alert-pad-inline);
+  font-weight: var(--font-weight-semibold);
   border-start-start-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
   border-start-end-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
 }
@@ -4661,18 +4731,17 @@ a.badge[aria-disabled="true"] {
 
 @supports (color: color-mix(in oklch, red, white)) {
   .alert.admonition > .alert-title {
-    background: color-mix(
-      in oklab,
-      var(--surface) var(--soft-bg-mix),
-      var(--intent, var(--neutral))
+    background: var(
+      --ui-bg,
+      color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--intent, var(--neutral)))
     );
   }
 }
 
 @supports not (color: color-mix(in oklch, red, white)) {
   .alert.admonition > .alert-title {
-    background: var(--intent, var(--neutral));
-    color: var(--intent-fg, var(--neutral-fg));
+    background: var(--ui-bg, var(--intent, var(--neutral)));
+    color: var(--ui-fg, var(--intent-fg, var(--neutral-fg)));
   }
 }
 
@@ -4681,6 +4750,32 @@ a.badge[aria-disabled="true"] {
   padding-inline: var(--alert-pad-inline);
   background: var(--surface);
   color: var(--text);
+}
+
+/* Solid: the filled title bar already carries the intent, so the frame moves
+   to the body and stays neutral. The root border goes because a transparent
+   one would show the root's intent fill around the body. */
+.alert.admonition.solid {
+  border: 0;
+}
+
+.alert.admonition.solid > .alert-body {
+  border: var(--border-width) solid var(--border);
+  border-block-start: 0;
+  border-end-start-radius: var(--alert-radius, var(--radius-lg));
+  border-end-end-radius: var(--alert-radius, var(--radius-lg));
+}
+
+/* Forced colors drop the title fill, so the bar would lose its edge: the
+   frame returns to the root as one uniform system-colored border. */
+@media (forced-colors: active) {
+  .alert.admonition.solid {
+    border: var(--border-width) solid CanvasText;
+  }
+
+  .alert.admonition.solid > .alert-body {
+    border: 0;
+  }
 }
 
 .alert.admonition > .alert-body > :first-child {

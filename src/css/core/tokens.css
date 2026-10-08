@@ -173,10 +173,15 @@
 
 :root {
   /* Variant tuning — themes may adjust generated soft surfaces without
-     replacing the component rules. */
+     replacing the component rules. --soft-bg-mix is the share of surface in a
+     soft fill: an opaque mix on the shared .soft, an opacity (100% minus it)
+     on the translucent badge, alert and soft-button tint. --soft-hover-alpha
+     is the extra intent share on hover. --soft-border-mix has no default: it
+     is a fallback-only hook whose absence lets each recipe keep its own rim
+     (a tinted rim on .soft, none on the tint), and a theme that sets it gives
+     both a rim of that weight. */
   --soft-bg-mix: 88%;
-  --soft-border-mix: 65%;
-  --soft-hover-alpha: 12%;
+  --soft-hover-alpha: 6%;
   /* Soft foreground: the share of raw intent in soft text. 100% keeps the
      pure intent color; lower values rebate it toward --text, which vivid or
      light intent palettes need to stay legible on their own soft surface.
