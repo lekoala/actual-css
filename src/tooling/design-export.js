@@ -14,6 +14,7 @@ import {
   linkTokens,
   resolveTokens,
   themeNameOf,
+  toDtcg,
   toFigma,
   toPenpot,
 } from "./design-tokens.js";
@@ -24,6 +25,7 @@ const PLUGIN = fileURLToPath(new URL("./penpot-plugin/", import.meta.url));
 /*
  * Writes, under `out`:
  *   figma/foundations.tokens.json, figma/<scheme>.tokens.json
+ *   dtcg/foundations.tokens.json, dtcg/<scheme>.tokens.json
  *   penpot/tokens.json
  *   penpot/plugin/ (manifest.json, plugin.js, ui.html, spec.json)
  * Without `themeFile`, exports the default theme. `name` overrides the
@@ -46,6 +48,12 @@ export async function exportDesign({ themeFile, name, out }) {
     ...Object.fromEntries(
       Object.entries(toFigma(linked, recipes)).map(([file, doc]) => [
         `figma/${file}.tokens.json`,
+        doc,
+      ]),
+    ),
+    ...Object.fromEntries(
+      Object.entries(toDtcg(linked, recipes)).map(([file, doc]) => [
+        `dtcg/${file}.tokens.json`,
         doc,
       ]),
     ),

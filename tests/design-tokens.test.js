@@ -11,9 +11,14 @@ import {
   FOUNDATIONS,
   linkTokens,
   NOT_EXPORTED,
+  parseCubicBezier,
+  parseDuration,
+  parseFontFamily,
+  parseNumber,
   parseSrgb,
   THEME_COLORS,
   themeNameOf,
+  toDtcg,
   toFigma,
   toPenpot,
 } from "../src/tooling/design-tokens.js";
@@ -80,6 +85,22 @@ describe("source reading", () => {
     });
     expect(() => parseSrgb("rgb(0, 0, 0)")).toThrow();
   });
+
+  test("raw foundations parse to their DTCG value, or throw", () => {
+    expect(parseDuration("150ms")).toEqual({ value: 150, unit: "ms" });
+    expect(parseDuration("0.75s")).toEqual({ value: 0.75, unit: "s" });
+    expect(() => parseDuration("150")).toThrow();
+    expect(parseCubicBezier("cubic-bezier(0.2, 0, 0, 1)")).toEqual([0.2, 0, 0, 1]);
+    expect(() => parseCubicBezier("ease-in")).toThrow();
+    expect(() => parseCubicBezier("cubic-bezier(0.2, 0, 1)")).toThrow();
+    expect(parseFontFamily('system-ui, "Segoe UI", sans-serif')).toEqual([
+      "system-ui",
+      "Segoe UI",
+      "sans-serif",
+    ]);
+    expect(parseNumber("1.5")).toBe(1.5);
+    expect(() => parseNumber("auto")).toThrow();
+  });
 });
 
 const black = { components: [0, 0, 0], alpha: 1 };
@@ -101,6 +122,12 @@ const linked = linkTokens({
     radius: { px: 8, css: "0.5rem" },
   },
   weights: { "font-weight-bold": 700 },
+  extras: {
+    "font-sans": ["system-ui", "sans-serif"],
+    duration: { value: 150, unit: "ms" },
+    "ease-enter": [0.2, 0, 0, 1],
+    "line-height": 1.5,
+  },
   aliases: new Map([
     ["heading", ["text"]],
     ["focus", ["text"]],
@@ -123,8 +150,23 @@ describe("linking", () => {
     expect(linked.foundations["font-weight-bold"]).toEqual({ role: "font-weight", weight: 700 });
   });
 
-  test("translucent colors carry alpha in the hex", () => {
-    expect(linked.modes.light["hover-overlay"].hex).toBe("#ffffff0f");
+  test("the model carries a 6-digit hex and the alpha separately", () => {
+    expect(linked.modes.light["hover-overlay"]).toEqual({
+      color: { ...white, alpha: 0.06 },
+      hex: "#ffffff",
+    });
+  });
+
+  test("raw foundations carry their role and parsed value", () => {
+    expect(linked.foundations.duration).toEqual({
+      role: "duration",
+      value: { value: 150, unit: "ms" },
+    });
+    expect(linked.foundations["ease-enter"]).toEqual({
+      role: "cubic-bezier",
+      value: [0.2, 0, 0, 1],
+    });
+    expect(linked.foundations["line-height"]).toEqual({ role: "number", value: 1.5 });
   });
 });
 
@@ -145,6 +187,11 @@ describe("Figma output", () => {
     });
     expect(files.foundations["control-pad-x"].$value).toBe("{space-40}");
     expect(files.foundations["font-weight-bold"]).toEqual({ $type: "number", $value: 700 });
+    // The DTCG color MUST: a 6-digit hex, alpha separate.
+    expect(files.light["hover-overlay"].$value.hex).toBe("#ffffff");
+    // DTCG-only roles stay out of Figma.
+    expect(files.foundations.duration).toBeUndefined();
+    expect(files.foundations["font-sans"]).toBeUndefined();
   });
 });
 
@@ -190,5 +237,53 @@ describe("Penpot output", () => {
     expect(doc.foundations.gap).toEqual({ $type: "spacing", $value: "12px" });
     expect(doc.foundations["control-pad-x"]).toEqual({ $type: "spacing", $value: "{space-40}" });
     expect(doc.foundations["font-weight-bold"]).toEqual({ $type: "fontWeights", $value: 700 });
+    // Penpot reads a plain string and needs the alpha in the hex.
+    expect(doc["mode/light"]["hover-overlay"]).toEqual({ $type: "color", $value: "#ffffff0f" });
+    // The DTCG-only roles stay out of Penpot.
+    expect(doc.foundations.duration).toBeUndefined();
+  });
+});
+
+describe("DTCG output", () => {
+  const files = toDtcg(linked);
+
+  test("one file per mode plus foundations", () => {
+    expect(Object.keys(files).sort()).toEqual(["dark", "foundations", "light"]);
+  });
+
+  test("spec types, and the DTCG-only roles are present", () => {
+    expect(files.foundations.radius).toEqual({
+      $type: "dimension",
+      $value: { value: 8, unit: "px" },
+      $extensions: { "actual-css": { css: "0.5rem" } },
+    });
+    expect(files.foundations["font-weight-bold"]).toEqual({ $type: "fontWeight", $value: 700 });
+    expect(files.foundations["font-sans"]).toEqual({
+      $type: "fontFamily",
+      $value: ["system-ui", "sans-serif"],
+    });
+    expect(files.foundations.duration).toEqual({
+      $type: "duration",
+      $value: { value: 150, unit: "ms" },
+    });
+    expect(files.foundations["ease-enter"]).toEqual({
+      $type: "cubicBezier",
+      $value: [0.2, 0, 0, 1],
+    });
+    expect(files.foundations["line-height"]).toEqual({ $type: "number", $value: 1.5 });
+  });
+
+  test("colors keep a 6-digit hex and the alpha separate", () => {
+    expect(files.light["hover-overlay"].$value).toEqual({
+      colorSpace: "srgb",
+      ...white,
+      alpha: 0.06,
+      hex: "#ffffff",
+    });
+    for (const mode of ["light", "dark"]) {
+      for (const token of Object.values(files[mode])) {
+        if (token.$value.hex) expect(token.$value.hex).toMatch(/^#[0-9a-f]{6}$/);
+      }
+    }
   });
 });

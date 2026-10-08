@@ -1,8 +1,13 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Added
+
+- `actual-css design` writes a portable `dtcg/` token profile beside `figma/` and `penpot/`, with spec `$types` (`fontWeight`, `fontFamily`, `duration`, `cubicBezier`, `number`) and the font stacks, line heights and motion `figma/` drops.
+
 ### Fixed
 
+- `actual-css design` writes DTCG colors with a 6-digit `hex` and `alpha` separate; Penpot still receives the alpha in its hex.
 - `.scroll-snap` keeps a focused item's ring inside its own clip on all four sides.
 
 ## [0.13.0] - 2026-10-06

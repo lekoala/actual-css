@@ -15,7 +15,7 @@
  * padding, height, type — about 1,800 bindings over 221 variants) froze
  * Penpot, and a theme's own lengths already arrive through the measurement.
  */
-import { hexOf, inPage, parseSrgb } from "./design-tokens.js";
+import { hexOf, hexRgbOf, inPage, parseSrgb } from "./design-tokens.js";
 
 /* Every list starts with its default: the first combination is the one a
    design tool picks for a new instance. */
@@ -214,11 +214,15 @@ export async function measureComponents({ css, resolved, linked, components = CO
       modes.forEach((mode, m) => {
         const known = recipes[mode][token];
         // A recipe name carries no size and no component: if two of them
-        // ever paint different colors, the name has to grow a dimension.
-        if (known && known.hex !== hexes[m]) {
-          throw new Error(`Recipe ${token} paints ${known.hex} and ${hexes[m]} in ${mode}`);
+        // ever paint different colors, the name has to grow a dimension. The
+        // comparison is on the CSS form (alpha included), the stored hex is the
+        // 6-digit DTCG form.
+        if (known && hexOf(known.color) !== hexes[m]) {
+          throw new Error(
+            `Recipe ${token} paints ${hexOf(known.color)} and ${hexes[m]} in ${mode}`,
+          );
         }
-        recipes[mode][token] = { color: colors[m], hex: hexes[m] };
+        recipes[mode][token] = { color: colors[m], hex: hexRgbOf(colors[m]) };
       });
     }
     const [first] = colors;

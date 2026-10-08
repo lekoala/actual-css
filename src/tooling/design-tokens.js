@@ -1,7 +1,8 @@
 /*
- * Design-tool token export: resolves a theme's tokens in headless Chrome and
- * writes them for Figma (DTCG files, one per mode) and Penpot (one token file
- * with its sets and themes).
+ * Design-tool token export: resolves a theme's tokens in headless Chrome into
+ * a target-neutral model, then writes them for Figma, Penpot, and a portable
+ * DTCG profile. Figma and Penpot get the compromises their importers need; the
+ * DTCG profile stays spec-conformant (correct $types, 6-digit `hex`).
  *
  * Values are read from the browser, never from the CSS text: tokens are built
  * with light-dark(), color-mix() and var() chains that only the browser
@@ -56,8 +57,9 @@ export const THEME_COLORS = [
   "backdrop-fill",
 ];
 
-/* Mode-independent tokens by role. The role tells a design tool where a value
-   applies (Penpot token types); every role but font-weight is a length. */
+/* Mode-independent tokens by role. The role drives the DTCG type (see
+   DTCG_TYPE) and the Penpot type; length roles plus font-weight are the ones
+   Figma and Penpot read, the rest are DTCG-only. */
 export const FOUNDATIONS = {
   spacing: [
     "space-10",
@@ -89,32 +91,23 @@ export const FOUNDATIONS = {
     "font-weight-semibold",
     "font-weight-bold",
   ],
+  "font-family": ["font-sans", "font-mono"],
+  duration: ["duration", "duration-fast", "duration-slow", "duration-spin", "duration-shimmer"],
+  "cubic-bezier": ["ease-enter", "ease-exit"],
+  number: ["line-height", "line-height-tight", "line-height-relaxed"],
 };
 
 /* Every custom property declared by the core token files is exported or
    listed here (tests/design-tokens.test.js), so a new token cannot silently
    stay out of the design tools. */
 export const NOT_EXPORTED = {
-  "font stack; a design tool font token holds one family": ["font-sans", "font-mono"],
   "internal 0/1 weights selecting a control step; the steps are exported": [
     "control-step-sm",
     "control-step-md",
     "control-step-lg",
   ],
-  "no design tool equivalent": [
+  "no DTCG type that keeps its meaning": [
     "font-width",
-    "line-height",
-    "line-height-tight",
-    "line-height-relaxed",
-    "shadow",
-    "shadow-popout",
-    "duration",
-    "duration-fast",
-    "duration-slow",
-    "duration-spin",
-    "duration-shimmer",
-    "ease-enter",
-    "ease-exit",
     "viewport-block",
     "viewport-inline",
     "z-sticky",
@@ -125,6 +118,7 @@ export const NOT_EXPORTED = {
     "icon-close",
     "icon-plus",
   ],
+  "composite DTCG types the export does not build yet": ["shadow", "shadow-popout"],
   "input of a derived value": [
     "backdrop-color",
     "backdrop-opacity",
@@ -152,10 +146,13 @@ export const NOT_EXPORTED = {
   ],
 };
 
+// Length roles carry a px value plus the CSS source; every other role carries
+// one scalar read as-is and parsed by role (see PARSE).
+const LENGTH_ROLES = ["spacing", "radius", "border-width", "font-size", "size", "offset"];
+const RAW_ROLES = ["font-family", "duration", "cubic-bezier", "number"];
+const LENGTHS = LENGTH_ROLES.flatMap((role) => FOUNDATIONS[role]);
 const WEIGHTS = FOUNDATIONS["font-weight"];
-const LENGTHS = Object.entries(FOUNDATIONS).flatMap(([role, names]) =>
-  role === "font-weight" ? [] : names,
-);
+const RAWS = RAW_ROLES.flatMap((role) => FOUNDATIONS[role]);
 const ROLE_OF = new Map(
   Object.entries(FOUNDATIONS).flatMap(([role, names]) => names.map((n) => [n, role])),
 );
@@ -220,7 +217,7 @@ export async function coreTokenCss() {
  * what light-dark() resolves against. Colors go through color-mix(in srgb) so
  * every color syntax computes to the same `color(srgb r g b / a)` form.
  */
-function readIslands({ css, islands, colors, lengths, weights }) {
+function readIslands({ css, islands, colors, lengths, weights, raws }) {
   const style = document.createElement("style");
   style.textContent = css;
   document.head.append(style);
@@ -236,7 +233,7 @@ function readIslands({ css, islands, colors, lengths, weights }) {
     document.body.append(island);
 
     const computed = getComputedStyle(probe);
-    const values = { colors: {}, lengths: {}, weights: {}, missing: [] };
+    const values = { colors: {}, lengths: {}, weights: {}, raws: {}, missing: [] };
     const read = (name) => {
       const raw = computed.getPropertyValue(`--${name}`).trim();
       if (!raw) values.missing.push(name);
@@ -259,6 +256,10 @@ function readIslands({ css, islands, colors, lengths, weights }) {
     for (const name of weights) {
       const raw = read(name);
       if (raw) values.weights[name] = Number(raw);
+    }
+    for (const name of raws) {
+      const raw = read(name);
+      if (raw) values.raws[name] = raw;
     }
     values.scheme = getComputedStyle(island).colorScheme;
     result.push(values);
@@ -295,6 +296,7 @@ export async function resolveTokens({ css, theme = null, aliasSources = [] }) {
     colors: [],
     lengths: [],
     weights: [],
+    raws: [],
   });
   const schemes = declared.scheme.split(/\s+/).filter((s) => s === "light" || s === "dark");
   const islands = (schemes.length > 0 ? schemes : ["light"]).map((mode) => ({
@@ -309,6 +311,7 @@ export async function resolveTokens({ css, theme = null, aliasSources = [] }) {
     colors: THEME_COLORS,
     lengths: LENGTHS,
     weights: WEIGHTS,
+    raws: RAWS,
   });
   const missing = [...new Set(read.flatMap((values) => values.missing))];
   if (missing.length > 0) {
@@ -321,9 +324,13 @@ export async function resolveTokens({ css, theme = null, aliasSources = [] }) {
       Object.fromEntries(Object.entries(read[i].colors).map(([n, c]) => [n, parseSrgb(c)])),
     ]),
   );
-  // Geometry does not follow the color scheme; the first mode is the reference.
-  const [{ lengths, weights }] = read;
-  return { islands, modes, lengths, weights, aliases: aliasCandidates(...aliasSources) };
+  // Geometry and the raw foundations do not follow the color scheme; the first
+  // mode is the reference.
+  const [{ lengths, weights, raws }] = read;
+  const extras = Object.fromEntries(
+    Object.entries(raws).map(([name, raw]) => [name, PARSE[ROLE_OF.get(name)](raw)]),
+  );
+  return { islands, modes, lengths, weights, extras, aliases: aliasCandidates(...aliasSources) };
 }
 
 export function parseSrgb(value) {
@@ -336,14 +343,60 @@ export function parseSrgb(value) {
   };
 }
 
+/* Raw foundation readers. Each role maps to one parser, so a value the browser
+   reports in an unexpected shape fails loudly instead of exporting garbage. */
+export function parseDuration(value) {
+  const match = value.match(/^([\d.]+)(ms|s)$/);
+  if (!match) throw new Error(`Unexpected duration: ${value}`);
+  return { value: Number(match[1]), unit: match[2] };
+}
+
+export function parseCubicBezier(value) {
+  const match = value.match(/^cubic-bezier\(([^)]+)\)$/);
+  const numbers = match?.[1].split(",").map((n) => Number(n.trim()));
+  if (numbers?.length !== 4 || numbers.some(Number.isNaN)) {
+    throw new Error(`Unexpected cubic-bezier: ${value}`);
+  }
+  return numbers;
+}
+
+export function parseFontFamily(value) {
+  return value
+    .split(",")
+    .map((family) => family.trim().replace(/^["']|["']$/g, ""))
+    .filter(Boolean);
+}
+
+export function parseNumber(value) {
+  const n = Number(value);
+  if (Number.isNaN(n)) throw new Error(`Unexpected number: ${value}`);
+  return n;
+}
+
+const PARSE = {
+  "font-family": parseFontFamily,
+  duration: parseDuration,
+  "cubic-bezier": parseCubicBezier,
+  number: parseNumber,
+};
+
 const round = (n) => Math.round(n * 10000) / 10000;
 
+const byte = (n) =>
+  Math.round(n * 255)
+    .toString(16)
+    .padStart(2, "0");
+
+/* DTCG color `hex` is a 6-digit fallback: alpha is carried separately, and the
+   spec requires the hex itself to be 6 digits. */
+export function hexRgbOf({ components }) {
+  return `#${components.map(byte).join("")}`;
+}
+
+/* The CSS-fidelity form: keeps alpha in the hex for Penpot and for comparing
+   colors across modes (two colors that share RGB but not alpha must differ). */
 export function hexOf({ components, alpha }) {
-  const byte = (n) =>
-    Math.round(n * 255)
-      .toString(16)
-      .padStart(2, "0");
-  return `#${components.map(byte).join("")}${alpha < 1 ? byte(alpha) : ""}`;
+  return `${hexRgbOf({ components })}${alpha < 1 ? byte(alpha) : ""}`;
 }
 
 const colorsEqual = (a, b) =>
@@ -357,11 +410,12 @@ function aliasOf(name, valueSets, aliases, same) {
 }
 
 /*
- * The target-neutral model both writers read: per mode, each color is
- * `{ alias }` or `{ color, hex }`; each foundation carries its role and is
- * `{ alias }`, `{ px, css }` or `{ weight }`.
+ * The target-neutral model the writers read: per mode, each color is
+ * `{ alias }` or `{ color, hex }` (hex 6-digit, the DTCG form); each
+ * foundation carries its role and is `{ alias }`, `{ px, css }`, `{ weight }`
+ * or `{ value }` for the raw roles.
  */
-export function linkTokens({ modes, lengths, weights, aliases }) {
+export function linkTokens({ modes, lengths, weights, extras = {}, aliases }) {
   const modeSets = Object.values(modes);
   const linkedModes = Object.fromEntries(
     Object.entries(modes).map(([mode, colors]) => [
@@ -369,7 +423,7 @@ export function linkTokens({ modes, lengths, weights, aliases }) {
       Object.fromEntries(
         Object.entries(colors).map(([name, color]) => {
           const alias = aliasOf(name, modeSets, aliases, colorsEqual);
-          return [name, alias ? { alias } : { color, hex: hexOf(color) }];
+          return [name, alias ? { alias } : { color, hex: hexRgbOf(color) }];
         }),
       ),
     ]),
@@ -382,6 +436,9 @@ export function linkTokens({ modes, lengths, weights, aliases }) {
   }
   for (const [name, weight] of Object.entries(weights)) {
     foundations[name] = { role: "font-weight", weight };
+  }
+  for (const [name, value] of Object.entries(extras)) {
+    foundations[name] = { role: ROLE_OF.get(name), value };
   }
   return { modes: linkedModes, foundations };
 }
@@ -411,12 +468,72 @@ export function toFigma({ modes, foundations }, recipes = {}) {
   }
 
   files.foundations = Object.fromEntries(
-    Object.entries(foundations).map(([name, token]) => {
+    Object.entries(foundations).flatMap(([name, token]) => {
       // `number`, not DTCG `fontWeight`: Figma's import drops fontWeight
       // tokens, and a number variable is what binds to a text layer's weight.
-      if (token.role === "font-weight") return [name, { $type: "number", $value: token.weight }];
+      if (token.role === "font-weight") {
+        return [[name, { $type: "number", $value: token.weight }]];
+      }
+      // Figma reads dimensions only; the raw roles stay in the DTCG profile.
+      if (!LENGTH_ROLES.includes(token.role)) return [];
       const $value = token.alias ? `{${token.alias}}` : { value: token.px, unit: "px" };
       const doc = { $type: "dimension", $value };
+      if (token.css) doc.$extensions = { [EXTENSION]: { css: token.css } };
+      return [[name, doc]];
+    }),
+  );
+  return files;
+}
+
+/* DTCG `$type` per role. Figma keeps its own adaptations (a font weight as a
+   number); the neutral profile uses the type the spec defines. */
+const DTCG_TYPE = {
+  spacing: "dimension",
+  radius: "dimension",
+  "border-width": "dimension",
+  "font-size": "dimension",
+  size: "dimension",
+  offset: "dimension",
+  "font-weight": "fontWeight",
+  "font-family": "fontFamily",
+  duration: "duration",
+  "cubic-bezier": "cubicBezier",
+  number: "number",
+};
+
+function dtcgValue(token) {
+  if (token.alias) return `{${token.alias}}`;
+  if (token.role === "font-weight") return token.weight;
+  if (LENGTH_ROLES.includes(token.role)) return { value: token.px, unit: "px" };
+  return token.value;
+}
+
+/*
+ * DTCG: the portable profile. Same file split as Figma, but every foundation
+ * keeps its spec type (`fontWeight`, `duration`, `cubicBezier`, `fontFamily`,
+ * `number`), colors carry a 6-digit `hex` with alpha separate, and dimensions
+ * keep their CSS value in `$extensions`. No tool adaptation: any DTCG reader
+ * can import it.
+ */
+export function toDtcg({ modes, foundations }, recipes = {}) {
+  const files = {};
+  for (const [mode, colors] of Object.entries(modes)) {
+    files[mode] = Object.fromEntries(
+      Object.entries({ ...colors, ...recipes[mode] }).map(([name, token]) => [
+        name,
+        {
+          $type: "color",
+          $value: token.alias
+            ? `{${token.alias}}`
+            : { colorSpace: "srgb", ...token.color, hex: token.hex },
+        },
+      ]),
+    );
+  }
+
+  files.foundations = Object.fromEntries(
+    Object.entries(foundations).map(([name, token]) => {
+      const doc = { $type: DTCG_TYPE[token.role], $value: dtcgValue(token) };
       if (token.css) doc.$extensions = { [EXTENSION]: { css: token.css } };
       return [name, doc];
     }),
@@ -449,10 +566,12 @@ const PENPOT_THEME_GROUP = "Mode";
 export function toPenpot({ modes, foundations }, recipes = {}) {
   const doc = {
     foundations: Object.fromEntries(
-      Object.entries(foundations).map(([name, token]) => {
+      Object.entries(foundations).flatMap(([name, token]) => {
         const $type = PENPOT_TYPES[token.role];
-        if (token.alias) return [name, { $type, $value: `{${token.alias}}` }];
-        return [name, { $type, $value: token.weight ?? `${token.px}px` }];
+        // Penpot reads the roles it types; the DTCG-only roles stay out.
+        if (!$type) return [];
+        if (token.alias) return [[name, { $type, $value: `{${token.alias}}` }]];
+        return [[name, { $type, $value: token.weight ?? `${token.px}px` }]];
       }),
     ),
   };
@@ -461,7 +580,7 @@ export function toPenpot({ modes, foundations }, recipes = {}) {
     Object.fromEntries(
       Object.entries(colors).map(([name, token]) => [
         name,
-        { $type: "color", $value: token.alias ? `{${token.alias}}` : token.hex },
+        { $type: "color", $value: token.alias ? `{${token.alias}}` : hexOf(token.color) },
       ]),
     );
   const schemes = Object.keys(modes);

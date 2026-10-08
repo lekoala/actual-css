@@ -22,12 +22,18 @@ it("the default theme exports both schemes with their own values", async () => {
   expect(resolved.lengths["space-40"]).toEqual({ px: 16, css: "1rem" });
   // 0.65rem: exact, not the 1/64px layout snap (10.390625).
   expect(resolved.lengths["bar-height"].px).toBe(10.4);
+  // The raw foundations, parsed by role.
+  expect(resolved.extras["font-sans"]).toContain("system-ui");
+  expect(resolved.extras.duration).toEqual({ value: 150, unit: "ms" });
+  expect(resolved.extras["ease-enter"]).toEqual([0.2, 0, 0, 1]);
+  expect(resolved.extras["line-height"]).toBe(1.5);
 
   const { modes, foundations } = linkTokens(resolved);
   // Aliased in the core, including one a forced-colors block redeclares.
   expect(modes.dark.heading).toEqual({ alias: "text" });
   expect(modes.dark["state-disabled"]).toEqual({ alias: "text-subtle" });
   expect(foundations["control-size"].alias).toBe("control-size-md");
+  expect(foundations.duration).toEqual({ role: "duration", value: { value: 150, unit: "ms" } });
 });
 
 it("a light-only theme exports one mode and its own aliases", async () => {
@@ -36,6 +42,8 @@ it("a light-only theme exports one mode and its own aliases", async () => {
     --primary: rgb(255 0 0);
     --focus: var(--primary);
     --radius: 0.625rem;
+    --duration: 250ms;
+    --line-height: 1.4;
   }`;
   const resolved = await resolveTokens({
     css: `${framework}\n${theme}`,
@@ -45,6 +53,9 @@ it("a light-only theme exports one mode and its own aliases", async () => {
   expect(Object.keys(resolved.modes)).toEqual(["light"]);
   expect(resolved.modes.light.primary).toEqual({ components: [1, 0, 0], alpha: 1 });
   expect(resolved.lengths.radius.px).toBe(10);
+  // A theme override reaches the raw foundations too.
+  expect(resolved.extras.duration).toEqual({ value: 250, unit: "ms" });
+  expect(resolved.extras["line-height"]).toBe(1.4);
   expect(linkTokens(resolved).modes.light.focus).toEqual({ alias: "primary" });
 });
 
