@@ -219,7 +219,7 @@
    stays inert. */
 .tab[aria-selected="true"],
 .tab:is([aria-current="page"], [aria-current="true"]) {
-  color: var(--intent, var(--state-selected));
+  color: var(--intent, var(--state-selected-text, var(--state-selected)));
 }
 
 /* The selected indicator lives on a positioned pseudo so that only the active

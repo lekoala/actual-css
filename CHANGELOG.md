@@ -8,6 +8,8 @@
 ### Added
 
 - `demo/templates/order-management.html`: one state at three levels — a badge in a selectable list, a contextual alert, and a notification with its own action — plus a critical alert, with no new framework API.
+- `--state-selected-text`: selected ink on a regular surface (current `.nav-link`, selected `.tab`, current step number and ring), falling back to `--state-selected`.
+- `actual-css contrast` measures selected ink on each surface and the solid `-fg` pairs; a gradient fill reads n/a.
 - `actual-css design` writes a portable `dtcg/` token profile beside `figma/` and `penpot/`, with spec `$types` (`fontWeight`, `fontFamily`, `duration`, `cubicBezier`, `number`) and the font stacks, line heights and motion `figma/` drops.
 
 ### Fixed
@@ -16,6 +18,11 @@
 - `.scroll-snap` keeps a focused item's ring inside its own clip on all four sides.
 - `.alert.compact` and `.alert.spacious` step `--alert-pad-block`.
 - `.close` stays visible in forced colors on a light-on-dark ink such as a `.solid` admonition title.
+- `.app-nav` frames the current tile with a border in forced colors instead of a `Highlight` repaint, whose label Chromium's backplate hid.
+- Demo themes clear 4.5:1 on their solid pairs: bootstrap-v6 primary, success and danger; spruce and petrol warning; petrol secondary; edge warning; brutalist secondary and danger.
+- Demo themes set `--state-selected-text` where the primary cannot be both fill and page text: bootstrap-v6, brutalist, cyberpunk, gradient, ocean, square, sunset.
+- bootstrap-v6 filled badges keep their fill on hover.
+- The edge demo theme's default button reads its intent through `--soft-fg-mix`.
 - `.alert.admonition` title bar follows `.solid`, `.surface` and `.outline`; `.solid` previously left white ink on the soft tint.
 
 ### Changed
@@ -25,7 +32,7 @@
 - `.badge`, `.alert` and `.btn.soft` paint a translucent intent tint with no rim; the shared `.soft` on `.card`, `.navbar`, `.app-nav` and `.chat-bubble` stays an opaque mix.
 - `--soft-hover-alpha` defaults to `6%`.
 - `actual-css contrast` measures soft pairs composited on `--surface`, `--surface-raised` and `--surface-subtle`.
-- Demo themes retune `--soft-fg-mix` (bootstrap-v6, corporate, cyberpunk, dim, gradient, indigo, lavender, material, square) and `--soft-hover-alpha` (lavender, neon) for the soft tint.
+- Demo themes retune `--soft-fg-mix` (bootstrap-v6, corporate, cyberpunk, dim, edge, gradient, indigo, lavender, material, square) and `--soft-hover-alpha` (lavender, neon) for the soft tint.
 
 ## [0.13.0] - 2026-10-06
 ### Breaking changes

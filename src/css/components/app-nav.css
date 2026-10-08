@@ -80,18 +80,14 @@
 }
 
 /* Current tile is already a full selected surface. Selection never changes
-   text metrics: the shared medium weight is kept, no permanent indicator is
-   added here. */
+   text metrics: the shared medium weight is kept. The transparent border is
+   the forced-colors cue: hidden under the fill here, it becomes a system-color
+   frame once forced colors flatten --state-selected to the bar's own Canvas.
+   Box sizing is border-box, so the tile keeps its size. No forced-colors
+   repaint: a Highlight fill put HighlightText on Chromium's Canvas backplate,
+   which hid the label. */
 .app-nav > a[aria-current="page"] {
+  border: var(--border-width) solid transparent;
   background: var(--state-selected);
   color: var(--state-selected-fg);
-}
-
-@media (forced-colors: active) {
-  /* --state-selected flattens to a UA color that no longer distinguishes the
-     current tile from the rest of the bar, so paint the system Highlight pair. */
-  .app-nav > a[aria-current="page"] {
-    background: Highlight;
-    color: HighlightText;
-  }
 }

@@ -609,6 +609,25 @@ A minimal recolor theme (illustrative, not a shipped theme):
 
 Several tokens are theme-derived aliases that reference other tokens — `--state-selected`/`--state-selected-fg`/`--state-disabled`, `--indicator-ring`, `--shadow`/`--shadow-popout`, `--heading`, `--selection-bg`/`--selection-fg`, and `--surface-opaque`/`--surface-solid-fg`. They are declared on `:root, [data-theme]` so they recompute on every theme boundary: a custom property resolves its `var()` references at computed-value time on the element that declares it, so an alias declared only on `:root` would be inherited as an already-resolved value and would not follow a `[data-theme]` island's overridden tokens. A theme that wants a distinct alias (e.g. a `--selection-bg` of its own) overrides it explicitly afterwards, which wins by cascade order.
 
+Selected state has three roles:
+
+- `--state-selected` — the selected fill or accent: a pressed button, a checked switch, a completed step.
+- `--state-selected-fg` — ink on that fill.
+- `--state-selected-text` — selected ink on a regular surface: the current nav link, the selected tab, the current step's number and ring.
+
+`--state-selected-text` has no default: each consumer reads `var(--state-selected-text, var(--state-selected))`, so a local `--state-selected` still reaches it. Set it when one color cannot be both a fill under its `-fg` and text on the page — typically a dark scheme, where a fill dark enough for white ink is too dark to read as text. Pulling the accent toward `--text` keeps its hue in both schemes:
+
+```css
+[data-theme="my-theme"] {
+  --state-selected-text: light-dark(
+    var(--primary),
+    color-mix(in oklab, var(--primary) 50%, var(--text))
+  );
+}
+```
+
+`actual-css contrast` measures it on each surface (4.5:1 for text, 3:1 for the step ring).
+
 Without `data-theme`, the default theme advertises `color-scheme: light dark` and follows the user's OS preference in browsers that support `light-dark()`. Dark themes should set `color-scheme: dark`. Light themes should set `color-scheme: light`. Browsers without `light-dark()` receive the light fallback.
 
 Because the native select chevron is an SVG background image and cannot inherit `currentColor`, the select hands the arrow back to the browser under `prefers-contrast: more` (same treatment as `forced-colors: active`) instead of shipping a recolored chevron per theme — one native fallback covers every theme without a high-contrast icon variant to maintain.

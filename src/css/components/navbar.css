@@ -7,6 +7,9 @@
  * links are a .cluster using .nav-link items. .nav-list is the vertical nav
  * list shared with .drawer, fed by the shared --gap token.
  *
+ * Public hooks:
+ * --state-selected-text (fallback-only: current-link ink, see tokens.css)
+ *
  * Internal:
  * --gap (local value for the shared gap token)
  */
@@ -84,7 +87,7 @@
    shared with the hover rule above. */
 .nav-link:is([aria-current="page"], [aria-current="location"]) {
   background: var(--surface-subtle);
-  color: var(--state-selected);
+  color: var(--state-selected-text, var(--state-selected));
 }
 
 /* On a bar with its own --ui-bg/--ui-fg the fill is a tint of the link's own
@@ -105,7 +108,7 @@
 
   /* After :hover so a hovered current link keeps the selected accent. */
   .nav-link:is([aria-current="page"], [aria-current="location"]) {
-    color: var(--ui-fg, var(--state-selected));
+    color: var(--ui-fg, var(--state-selected-text, var(--state-selected)));
   }
 }
 

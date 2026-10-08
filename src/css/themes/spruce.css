@@ -13,7 +13,7 @@
   --secondary-fg: hsl(0 0% 98%);
   --success: hsl(135 38% 33%);
   --success-fg: hsl(0 0% 98%);
-  --warning: hsl(42 72% 35%);
+  --warning: hsl(42 72% 33%);
   --warning-fg: hsl(0 0% 98%);
   --danger: hsl(3 55% 44%);
   --danger-fg: hsl(0 0% 98%);
@@ -46,7 +46,7 @@
     --secondary-fg: light-dark(hsl(0 0% 98%), hsl(26 35% 11%));
     --success: light-dark(hsl(135 38% 33%), hsl(135 35% 60%));
     --success-fg: light-dark(hsl(0 0% 98%), hsl(135 35% 8%));
-    --warning: light-dark(hsl(42 72% 35%), hsl(44 60% 62%));
+    --warning: light-dark(hsl(42 72% 33%), hsl(44 60% 62%));
     --warning-fg: light-dark(hsl(0 0% 98%), hsl(42 35% 10%));
     --danger: light-dark(hsl(3 55% 44%), hsl(3 58% 69%));
     --danger-fg: light-dark(hsl(0 0% 98%), hsl(3 35% 10%));

@@ -80,9 +80,11 @@ accent, override the tokens on the component:
 }
 ```
 
-`--state-selected` drives the completed fill, connector and the current ring;
+`--state-selected` drives the completed fill and connector;
 `--state-selected-fg` corrects the number inside a completed marker when the
-accent needs a lighter ink.
+accent needs a lighter ink. The current marker sits on the surface, so its
+number and ring read `--state-selected-text` first
+([tokens](../foundations/tokens.md)).
 
 ## Horizontal steps
 

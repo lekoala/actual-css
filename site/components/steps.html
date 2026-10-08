@@ -314,9 +314,11 @@ accent, override the tokens on the component:</p>
   --state-selected-fg: var(--success-fg);
 }
 </code></pre>
-<p><code>--state-selected</code> drives the completed fill, connector and the current ring;
+<p><code>--state-selected</code> drives the completed fill and connector;
 <code>--state-selected-fg</code> corrects the number inside a completed marker when the
-accent needs a lighter ink.</p>
+accent needs a lighter ink. The current marker sits on the surface, so its
+number and ring read <code>--state-selected-text</code> first
+(<a href="../foundations/tokens.html">tokens</a>).</p>
 <h2 id="horizontal-steps">Horizontal steps</h2>
 <p><code>.steps-horizontal</code> is designed for <strong>2 to 5 stages</strong>.</p>
 <h3 id="without-labels-visual-progress-only">Without labels — visual progress only</h3>

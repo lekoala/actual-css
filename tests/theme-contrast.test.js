@@ -26,6 +26,28 @@ test("a translucent pair reads n/a and is not a miss", () => {
   expect(text).toContain("n/a");
 });
 
+test("selected ink gates text at 4.5:1 and the step ring at 3:1", () => {
+  const selected = (kind, min, value) => ({
+    ...row({ rest: 5, hover: 5 }),
+    selected: [{ kind, surface: "surface-subtle", min, value }],
+  });
+  expect(formatContrast([selected("tab", 4.5, 4.4)]).misses).toBe(1);
+  expect(formatContrast([selected("step ring", 3, 3.2)]).misses).toBe(0);
+  expect(formatContrast([selected("step ring", 3, 2.9)]).misses).toBe(1);
+});
+
+// A gradient fill has no single color: it is reported n/a, never passed.
+test("a solid pair on a gradient fill reads n/a and is not a miss", () => {
+  const solid = (value) => ({
+    ...row({ rest: 5, hover: 5 }),
+    solid: [{ intent: "warning", value }],
+  });
+  expect(formatContrast([solid(4.2)]).misses).toBe(1);
+  const { text, misses } = formatContrast([solid(null)]);
+  expect(misses).toBe(0);
+  expect(text).toMatch(/warning\s+n\/a/);
+});
+
 test("each soft row names the surface it was composited on", () => {
   expect(formatContrast([row({ rest: 5, hover: 5 })]).text).toContain("surface-subtle");
 });

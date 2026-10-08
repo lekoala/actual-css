@@ -215,7 +215,13 @@ select {
 [data-theme] {
   /* State tokens — semantic colors for selected/pressed/current and disabled.
      Components consume these instead of hard-wiring --primary/--text-subtle
-     so forced-colors can override them in one place. */
+     so forced-colors can override them in one place. --state-selected is a
+     selected fill or accent, --state-selected-fg the ink on that fill.
+     --state-selected-text, undeclared, is selected ink on a regular surface
+     (current nav link, selected tab, current step number). It falls back to
+     --state-selected where it is read, so a local --state-selected still
+     reaches it; a theme sets it when one color cannot be both a fill under its
+     -fg and text on the page, typically in a dark scheme. */
   --state-selected: var(--primary);
   --state-selected-fg: var(--primary-fg);
   --state-disabled: var(--text-subtle);
@@ -7487,11 +7493,14 @@ a.avatar[aria-disabled="true"] {
 
 /* Complete owns the accented connector that reaches the current step, so the
    connector leaving current goes back to neutral. Declared after
-   .step-complete at equal specificity: current wins on every channel. */
+   .step-complete at equal specificity: current wins on every channel. The
+   current marker is a regular surface, so its number and ring are selected
+   ink on a surface, not a selected fill; they are held to different ratios
+   (4.5:1 for the number, 3:1 for the ring) by report:theme-contrast. */
 .steps > [aria-current="step"] {
   --step-marker-bg: var(--surface-opaque);
-  --step-marker-border: var(--state-selected);
-  --step-marker-fg: var(--state-selected);
+  --step-marker-border: var(--state-selected-text, var(--state-selected));
+  --step-marker-fg: var(--state-selected-text, var(--state-selected));
   --step-line: var(--border);
 
   color: var(--text);
@@ -7832,20 +7841,16 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* Current tile is already a full selected surface. Selection never changes
-   text metrics: the shared medium weight is kept, no permanent indicator is
-   added here. */
+   text metrics: the shared medium weight is kept. The transparent border is
+   the forced-colors cue: hidden under the fill here, it becomes a system-color
+   frame once forced colors flatten --state-selected to the bar's own Canvas.
+   Box sizing is border-box, so the tile keeps its size. No forced-colors
+   repaint: a Highlight fill put HighlightText on Chromium's Canvas backplate,
+   which hid the label. */
 .app-nav > a[aria-current="page"] {
+  border: var(--border-width) solid transparent;
   background: var(--state-selected);
   color: var(--state-selected-fg);
-}
-
-@media (forced-colors: active) {
-  /* --state-selected flattens to a UA color that no longer distinguishes the
-     current tile from the rest of the bar, so paint the system Highlight pair. */
-  .app-nav > a[aria-current="page"] {
-    background: Highlight;
-    color: HighlightText;
-  }
 }
 
 /*
@@ -7856,6 +7861,9 @@ a.avatar[aria-disabled="true"] {
  * .navbar is a horizontal bar; .navbar-brand is the brand link; the inline
  * links are a .cluster using .nav-link items. .nav-list is the vertical nav
  * list shared with .drawer, fed by the shared --gap token.
+ *
+ * Public hooks:
+ * --state-selected-text (fallback-only: current-link ink, see tokens.css)
  *
  * Internal:
  * --gap (local value for the shared gap token)
@@ -7934,7 +7942,7 @@ a.avatar[aria-disabled="true"] {
    shared with the hover rule above. */
 .nav-link:is([aria-current="page"], [aria-current="location"]) {
   background: var(--surface-subtle);
-  color: var(--state-selected);
+  color: var(--state-selected-text, var(--state-selected));
 }
 
 /* On a bar with its own --ui-bg/--ui-fg the fill is a tint of the link's own
@@ -7955,7 +7963,7 @@ a.avatar[aria-disabled="true"] {
 
   /* After :hover so a hovered current link keeps the selected accent. */
   .nav-link:is([aria-current="page"], [aria-current="location"]) {
-    color: var(--ui-fg, var(--state-selected));
+    color: var(--ui-fg, var(--state-selected-text, var(--state-selected)));
   }
 }
 
@@ -8390,7 +8398,7 @@ a.avatar[aria-disabled="true"] {
    stays inert. */
 .tab[aria-selected="true"],
 .tab:is([aria-current="page"], [aria-current="true"]) {
-  color: var(--intent, var(--state-selected));
+  color: var(--intent, var(--state-selected-text, var(--state-selected)));
 }
 
 /* The selected indicator lives on a positioned pseudo so that only the active

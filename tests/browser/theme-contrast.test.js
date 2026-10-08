@@ -5,7 +5,11 @@
 import { expect, test } from "bun:test";
 import { browserAvailable } from "../../scripts/utils/browser.js";
 import { inlineImports } from "../../src/tooling/css-bundle.js";
-import { measureContrast } from "../../src/tooling/theme-contrast.js";
+import {
+  formatContrast,
+  measureContrast,
+  measureThemeFile,
+} from "../../src/tooling/theme-contrast.js";
 
 const TIMEOUT = 60_000;
 const baseTest = (await browserAvailable()) ? test : test.skip;
@@ -36,6 +40,23 @@ it("a :root theme is measured with its own colors in both schemes", async () => 
   expect(light.focusSurface).toBe(21);
   // White on white: the dark side of the application's light-dark() applied.
   expect(dark.focusSurface).toBe(1);
+});
+
+// The presets are only reported (report:theme-contrast); the default theme is
+// what ships, so every pair the report measures is a gate on it: soft, solid,
+// selected ink on each surface, focus and inverse, in both schemes.
+it("the default theme clears every measured pair", async () => {
+  const rows = await measureThemeFile({});
+  expect(rows.map((row) => row.scheme)).toEqual(["light", "dark"]);
+  const { text, misses } = formatContrast(rows);
+  if (misses > 0)
+    console.error(
+      text
+        .split("\n")
+        .filter((line) => line.includes("under"))
+        .join("\n"),
+    );
+  expect(misses).toBe(0);
 });
 
 // Trap: the name, read from the file by a regex, was concatenated into the

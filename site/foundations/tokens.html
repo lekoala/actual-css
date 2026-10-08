@@ -716,6 +716,21 @@ undo that.</p>
 }
 </code></pre>
 <p>Several tokens are theme-derived aliases that reference other tokens — <code>--state-selected</code>/<code>--state-selected-fg</code>/<code>--state-disabled</code>, <code>--indicator-ring</code>, <code>--shadow</code>/<code>--shadow-popout</code>, <code>--heading</code>, <code>--selection-bg</code>/<code>--selection-fg</code>, and <code>--surface-opaque</code>/<code>--surface-solid-fg</code>. They are declared on <code>:root, [data-theme]</code> so they recompute on every theme boundary: a custom property resolves its <code>var()</code> references at computed-value time on the element that declares it, so an alias declared only on <code>:root</code> would be inherited as an already-resolved value and would not follow a <code>[data-theme]</code> island's overridden tokens. A theme that wants a distinct alias (e.g. a <code>--selection-bg</code> of its own) overrides it explicitly afterwards, which wins by cascade order.</p>
+<p>Selected state has three roles:</p>
+<ul>
+<li><code>--state-selected</code> — the selected fill or accent: a pressed button, a checked switch, a completed step.</li>
+<li><code>--state-selected-fg</code> — ink on that fill.</li>
+<li><code>--state-selected-text</code> — selected ink on a regular surface: the current nav link, the selected tab, the current step's number and ring.</li>
+</ul>
+<p><code>--state-selected-text</code> has no default: each consumer reads <code>var(--state-selected-text, var(--state-selected))</code>, so a local <code>--state-selected</code> still reaches it. Set it when one color cannot be both a fill under its <code>-fg</code> and text on the page — typically a dark scheme, where a fill dark enough for white ink is too dark to read as text. Pulling the accent toward <code>--text</code> keeps its hue in both schemes:</p>
+<pre><code class="language-css">[data-theme=&quot;my-theme&quot;] {
+  --state-selected-text: light-dark(
+    var(--primary),
+    color-mix(in oklab, var(--primary) 50%, var(--text))
+  );
+}
+</code></pre>
+<p><code>actual-css contrast</code> measures it on each surface (4.5:1 for text, 3:1 for the step ring).</p>
 <p>Without <code>data-theme</code>, the default theme advertises <code>color-scheme: light dark</code> and follows the user's OS preference in browsers that support <code>light-dark()</code>. Dark themes should set <code>color-scheme: dark</code>. Light themes should set <code>color-scheme: light</code>. Browsers without <code>light-dark()</code> receive the light fallback.</p>
 <p>Because the native select chevron is an SVG background image and cannot inherit <code>currentColor</code>, the select hands the arrow back to the browser under <code>prefers-contrast: more</code> (same treatment as <code>forced-colors: active</code>) instead of shipping a recolored chevron per theme — one native fallback covers every theme without a high-contrast icon variant to maintain.</p>
 <p>Under <code>prefers-contrast: more</code>, the user's contrast preference wins over a theme's palette by contract: the core collapses <code>--text-muted</code>/<code>--text-subtle</code> to <code>--text</code> and thickens borders and focus so no theme can defeat a legibility requirement. This is a deliberate decision, not a specificity quirk — the repeated <code>[data-theme][data-theme]</code> attribute only outranks a preset theme stylesheet loaded after the core.</p>

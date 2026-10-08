@@ -1,12 +1,12 @@
 {
-  "totalRaw": 371676,
+  "totalRaw": 375492,
   "core": {
     "minified": 12290,
     "brotli": 2759
   },
   "full": {
-    "minified": 134955,
-    "brotli": 19398
+    "minified": 135024,
+    "brotli": 19416
   },
   "js": {
     "full": {
@@ -18,7 +18,7 @@
   "files": [
     {
       "file": "components/steps.css",
-      "raw": 15385
+      "raw": 15667
     },
     {
       "file": "components/modal.css",
@@ -26,7 +26,7 @@
     },
     {
       "file": "core/tokens.css",
-      "raw": 12433
+      "raw": 12894
     },
     {
       "file": "components/alert.css",
@@ -34,7 +34,7 @@
     },
     {
       "file": "components/tab.css",
-      "raw": 8974
+      "raw": 9002
     },
     {
       "file": "core/theme.css",
@@ -85,16 +85,20 @@
       "raw": 5632
     },
     {
+      "file": "themes/bootstrap-v6.css",
+      "raw": 5594
+    },
+    {
+      "file": "components/navbar.css",
+      "raw": 5411
+    },
+    {
       "file": "typography/prose.css",
       "raw": 5274
     },
     {
       "file": "components/accordion.css",
       "raw": 5262
-    },
-    {
-      "file": "components/navbar.css",
-      "raw": 5260
     },
     {
       "file": "forms/switch.css",
@@ -117,12 +121,12 @@
       "raw": 4960
     },
     {
-      "file": "themes/bootstrap-v6.css",
-      "raw": 4753
+      "file": "themes/gradient.css",
+      "raw": 4871
     },
     {
-      "file": "themes/gradient.css",
-      "raw": 4667
+      "file": "themes/edge.css",
+      "raw": 4747
     },
     {
       "file": "components/card.css",
@@ -131,10 +135,6 @@
     {
       "file": "themes/glass.css",
       "raw": 4238
-    },
-    {
-      "file": "themes/edge.css",
-      "raw": 4195
     },
     {
       "file": "layout/grid.css",
@@ -185,8 +185,20 @@
       "raw": 3239
     },
     {
+      "file": "themes/ocean.css",
+      "raw": 3003
+    },
+    {
       "file": "forms/native.css",
       "raw": 2996
+    },
+    {
+      "file": "themes/sunset.css",
+      "raw": 2881
+    },
+    {
+      "file": "components/app-nav.css",
+      "raw": 2871
     },
     {
       "file": "themes/spruce.css",
@@ -195,14 +207,6 @@
     {
       "file": "forms/validation.css",
       "raw": 2822
-    },
-    {
-      "file": "themes/ocean.css",
-      "raw": 2799
-    },
-    {
-      "file": "components/app-nav.css",
-      "raw": 2794
     },
     {
       "file": "themes/index.css",
@@ -229,12 +233,16 @@
       "raw": 2728
     },
     {
-      "file": "themes/sunset.css",
-      "raw": 2677
+      "file": "themes/cyberpunk.css",
+      "raw": 2704
     },
     {
       "file": "themes/lavender.css",
       "raw": 2655
+    },
+    {
+      "file": "themes/square.css",
+      "raw": 2654
     },
     {
       "file": "layout/column-layout.css",
@@ -261,10 +269,6 @@
       "raw": 2450
     },
     {
-      "file": "themes/square.css",
-      "raw": 2450
-    },
-    {
       "file": "components/table.css",
       "raw": 2437
     },
@@ -283,10 +287,6 @@
     {
       "file": "layout/scroller.css",
       "raw": 2264
-    },
-    {
-      "file": "themes/cyberpunk.css",
-      "raw": 2255
     },
     {
       "file": "components/meter.css",
@@ -309,16 +309,16 @@
       "raw": 1960
     },
     {
+      "file": "themes/brutalist.css",
+      "raw": 1937
+    },
+    {
       "file": "layout/topbar.css",
       "raw": 1834
     },
     {
       "file": "core/intents.css",
       "raw": 1806
-    },
-    {
-      "file": "themes/brutalist.css",
-      "raw": 1778
     },
     {
       "file": "components/pagination.css",
