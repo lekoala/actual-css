@@ -136,6 +136,7 @@ export const NOT_EXPORTED = {
     "danger-soft-fg",
     "neutral-soft-fg",
   ],
+  "fallback-only state hook, read at the point of use": ["state-selected-text"],
   "internal or plumbing": [
     "density-space",
     "disabled-opacity",

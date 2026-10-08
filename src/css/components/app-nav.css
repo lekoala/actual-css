@@ -40,6 +40,7 @@
 }
 
 .app-nav > a {
+  position: relative;
   display: grid;
   grid-template-rows: auto auto;
   place-content: center;
@@ -80,14 +81,25 @@
 }
 
 /* Current tile is already a full selected surface. Selection never changes
-   text metrics: the shared medium weight is kept. The transparent border is
-   the forced-colors cue: hidden under the fill here, it becomes a system-color
-   frame once forced colors flatten --state-selected to the bar's own Canvas.
-   Box sizing is border-box, so the tile keeps its size. No forced-colors
-   repaint: a Highlight fill put HighlightText on Chromium's Canvas backplate,
-   which hid the label. */
+   text metrics: the shared medium weight is kept. The forced-colors cue is a
+   transparent border on a ::before overlay, not on the tile: an element border
+   shrinks the content box, and the side layout starts its content at the inline
+   edge, so the icon and label shifted by --border-width when a tile became
+   current. The overlay costs no layout, yet forced colors still turn its
+   transparent border into a system-color frame once --state-selected flattens
+   to the bar's own Canvas. No forced-colors repaint: a Highlight fill put
+   HighlightText on Chromium's Canvas backplate, which hid the label. The
+   positioning context is on every link so it does not move when one becomes
+   current or an application places its own decoration. */
 .app-nav > a[aria-current="page"] {
-  border: var(--border-width) solid transparent;
   background: var(--state-selected);
   color: var(--state-selected-fg);
+}
+
+.app-nav > a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--border-width) solid transparent;
+  border-radius: inherit;
 }
