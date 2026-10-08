@@ -28,6 +28,7 @@
     "sunset",
     "lavender",
     "mono",
+    "admin-neutral",
     "square",
     "brutalist",
     "edge",

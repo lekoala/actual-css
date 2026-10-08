@@ -8,6 +8,7 @@
 ### Added
 
 - `demo/templates/order-management.html`: one state at three levels — a badge in a selectable list, a contextual alert, and a notification with its own action — plus a critical alert, with no new framework API.
+- `admin-neutral` demo theme: light-only business interface with a grey page, white cards, neutral actions and flat semantic tints.
 - `--state-selected-text`: selected ink on a regular surface (current `.nav-link`, selected `.tab`, current step number and ring), falling back to `--state-selected`.
 - `actual-css contrast` measures selected ink on each surface and the solid `-fg` pairs; a gradient fill reads n/a.
 - `actual-css design` writes a portable `dtcg/` token profile beside `figma/` and `penpot/`, with spec `$types` (`fontWeight`, `fontFamily`, `duration`, `cubicBezier`, `number`) and the font stacks, line heights and motion `figma/` drops.
@@ -28,6 +29,7 @@
 
 ### Changed
 
+- `demo/templates/order-management.html` pins `admin-neutral` and adds an Orders-list composition beside the existing three-level narrative.
 - `.alert.admonition` `.alert-title` is semibold.
 - `.alert.admonition.solid` frames its body with the neutral `--border` instead of the intent.
 - `.badge`, `.alert` and `.btn.soft` paint a translucent intent tint with no rim; the shared `.soft` on `.card`, `.navbar`, `.app-nav` and `.chat-bubble` stays an opaque mix.

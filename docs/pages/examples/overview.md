@@ -23,7 +23,7 @@ rest show it composed, isolated, or under stress.
 Whole pages, composed the way a real product would.
 
 - [Dashboard](../../demo/templates/dashboard.html) - data-heavy overview page
-- [Order management](../../demo/templates/order-management.html) - one state at three levels: a badge in a selectable list, a message in context, and a notification with its own action
+- [Order management](../../demo/templates/order-management.html) - one state at three levels (a badge in a selectable list, a message in context, a notification with its own action) composed on the `admin-neutral` business-interface theme
 - [App](../../demo/templates/app.html) - application shell with sidebar
 - [Workspaces](../../demo/templates/workspaces.html) - sectioned sidebar, master/detail list with native current state, and workspace cards
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type

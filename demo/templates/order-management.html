@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="admin-neutral">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Order Management, Semantic Feedback - Actual CSS</title>
-  <meta name="description" content="A backoffice order page showing one state at three levels: a badge in a list, a message in context, and a notification with its own action.">
+  <meta name="description" content="A backoffice order page showing one state at three levels — a badge in a list, a message in context, and a notification with its own action — composed on the admin-neutral business-interface theme.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
@@ -50,6 +50,27 @@
       color: var(--text-muted);
       font-size: var(--font-size-sm);
     }
+
+    /* Card header plus a flush list: the header keeps its own padding while
+       the rows run edge to edge. No leading divider — the card frame already
+       separates the list. Kept as application CSS until a second composition
+       needs the same contract. */
+    .orders-card {
+      --card-pad: 0;
+      --card-gap: 0;
+
+      overflow: clip;
+    }
+
+    .orders-card > header {
+      padding: var(--space-40);
+    }
+
+    .orders-card > .list {
+      --list-item-pad-inline: var(--space-40);
+
+      border-block-start: 0;
+    }
   </style>
 </head>
 
@@ -88,6 +109,54 @@
         </button>
       </div>
     </header>
+
+    <!-- Business composition on the admin-neutral theme: a grey page with white
+         cards, neutral actions, and flat semantic tints. The contextual warning
+         sits next to the orders it concerns rather than above them. -->
+    <section class="stack" aria-labelledby="orders-list">
+      <div class="card raised orders-card">
+        <header>
+          <hgroup>
+            <h2 id="orders-list">Orders</h2>
+            <p class="muted">Manage your latest orders</p>
+          </hgroup>
+
+          <button class="btn" type="button">
+            <i class="ti ti-plus" aria-hidden="true"></i>
+            New order
+          </button>
+        </header>
+
+        <ul class="list">
+          <li class="list-item">
+            <span class="list-item-content">
+              <strong class="list-item-title">#8851 · Martin Lewis</strong>
+              <span class="list-item-text">Today, 09:42</span>
+            </span>
+            <span class="badge warning soft">Unfulfilled</span>
+          </li>
+
+          <li class="list-item">
+            <span class="list-item-content">
+              <strong class="list-item-title">#8850 · Sophie Carter</strong>
+              <span class="list-item-text">Yesterday, 16:20</span>
+            </span>
+            <span class="badge success soft">Fulfilled</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="alert warning">
+        <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+        <div class="cluster" style="--cluster-justify: space-between; flex: 1 1 auto; gap: var(--space-20);">
+          <div class="stack" style="--gap: var(--space-10);">
+            <strong>Shipping address needs attention</strong>
+            <span>The postal code doesn't match the selected city.</span>
+          </div>
+          <button class="btn neutral outline sm" type="button">Edit address</button>
+        </div>
+      </div>
+    </section>
 
     <!-- Level one: state as a compact badge inside a selectable list. -->
     <section class="card raised stack" aria-labelledby="order-items">
@@ -263,13 +332,13 @@
       </div>
 
       <div class="alert warning callout">
-        <i class="ti ti-map-pin alert-icon" aria-hidden="true"></i>
+        <i class="ti ti-credit-card alert-icon" aria-hidden="true"></i>
         <div class="cluster" style="--cluster-justify: space-between; flex: 1 1 auto; gap: var(--space-20);">
           <div class="stack" style="--gap: var(--space-10);">
-            <strong>Shipping address needs attention.</strong>
-            <span>Some address details must be corrected before creating the label.</span>
+            <strong>Payment method expires soon.</strong>
+            <span>The card on file expires next month. Update it before the next charge.</span>
           </div>
-          <button class="btn warning outline sm" type="button">Edit address</button>
+          <button class="btn warning outline sm" type="button">Update card</button>
         </div>
       </div>
     </section>

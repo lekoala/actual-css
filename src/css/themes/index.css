@@ -20,6 +20,7 @@
  *   sunset     — paired recolor + selection and shadow-color theming
  *   lavender   — paired recolor + soft-variant tuning, tinted shadows
  *   mono       — grayscale palette, colored status intents only
+ *   admin-neutral — light-only business interface: grey page, white cards, neutral actions, flat semantic tints
  *   square     — paired recolor + full radius scale forced to 0
  *   brutalist  — light-only stress test: off-white canvas, black ink,
  *                2px borders, hard offset shadows
@@ -35,9 +36,9 @@
  *   glass      — dark-only translucent surfaces over a theme-painted backdrop,
  *                a stress test of the opaque surface roles
  *
- * Single-block themes (indigo, dim, brutalist, cyberpunk, neon, glass) pin one
- * color-scheme and cannot adapt to prefers-color-scheme; the paired ones follow
- * the OS. */
+ * Single-block themes (indigo, dim, brutalist, cyberpunk, neon, glass,
+ * admin-neutral) pin one color-scheme and cannot adapt to prefers-color-scheme;
+ * the paired ones follow the OS. */
 @import "./indigo.css";
 @import "./dim.css";
 @import "./corporate.css";
@@ -49,6 +50,7 @@
 @import "./sunset.css";
 @import "./lavender.css";
 @import "./mono.css";
+@import "./admin-neutral.css";
 @import "./square.css";
 @import "./brutalist.css";
 @import "./edge.css";
