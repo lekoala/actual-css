@@ -164,13 +164,18 @@
      Components consume these instead of hard-wiring --primary/--text-subtle
      so forced-colors can override them in one place. --state-selected is a
      selected fill or accent, --state-selected-fg the ink on that fill.
-     --state-selected-text, undeclared, is selected ink on a regular surface
-     (current nav link, selected tab, current step number). It falls back to
-     --state-selected where it is read, so a local --state-selected still
-     reaches it; a theme sets it when one color cannot be both a fill under its
-     -fg and text on the page, typically in a dark scheme. */
+     --state-selected-text is selected ink on a regular surface (current nav
+     link, selected tab, current step number). It is reset to the
+     guaranteed-invalid value on every theme boundary, so a consumer reads its
+     local --state-selected through the fallback var(--state-selected-text,
+     var(--state-selected)): a theme that resolves it to var(--link) bakes that
+     reference where it is declared, so a nested island that does not set it
+     inherits an already-resolved value the local fallback can never reach. A
+     theme sets it when one color cannot be both a fill under its -fg and text
+     on the page, typically in a dark scheme. */
   --state-selected: var(--primary);
   --state-selected-fg: var(--primary-fg);
+  --state-selected-text: initial;
   --state-disabled: var(--text-subtle);
 
   /* Status dot ring — cuts the dot out of what it overlaps. */

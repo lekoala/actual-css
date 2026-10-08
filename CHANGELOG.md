@@ -18,7 +18,8 @@
 - `.scroll-snap` keeps a focused item's ring inside its own clip on all four sides.
 - `.alert.compact` and `.alert.spacious` step `--alert-pad-block`.
 - `.close` stays visible in forced colors on a light-on-dark ink such as a `.solid` admonition title.
-- `.app-nav` frames the current tile with a border in forced colors instead of a `Highlight` repaint, whose label Chromium's backplate hid.
+- `.app-nav` frames the current tile in forced colors with a transparent border on a `::before` overlay, so selecting a tile never shifts its icon or label and no `Highlight` repaint is needed.
+- `--state-selected-text` resets on every theme boundary, so a nested theme island reads its own `--state-selected` instead of inheriting the parent's selected ink.
 - Demo themes clear 4.5:1 on their solid pairs: bootstrap-v6 primary, success and danger; spruce and petrol warning; petrol secondary; edge warning; brutalist secondary and danger.
 - Demo themes set `--state-selected-text` where the primary cannot be both fill and page text: bootstrap-v6, brutalist, cyberpunk, gradient, ocean, square, sunset.
 - bootstrap-v6 filled badges keep their fill on hover.

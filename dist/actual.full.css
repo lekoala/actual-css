@@ -217,13 +217,18 @@ select {
      Components consume these instead of hard-wiring --primary/--text-subtle
      so forced-colors can override them in one place. --state-selected is a
      selected fill or accent, --state-selected-fg the ink on that fill.
-     --state-selected-text, undeclared, is selected ink on a regular surface
-     (current nav link, selected tab, current step number). It falls back to
-     --state-selected where it is read, so a local --state-selected still
-     reaches it; a theme sets it when one color cannot be both a fill under its
-     -fg and text on the page, typically in a dark scheme. */
+     --state-selected-text is selected ink on a regular surface (current nav
+     link, selected tab, current step number). It is reset to the
+     guaranteed-invalid value on every theme boundary, so a consumer reads its
+     local --state-selected through the fallback var(--state-selected-text,
+     var(--state-selected)): a theme that resolves it to var(--link) bakes that
+     reference where it is declared, so a nested island that does not set it
+     inherits an already-resolved value the local fallback can never reach. A
+     theme sets it when one color cannot be both a fill under its -fg and text
+     on the page, typically in a dark scheme. */
   --state-selected: var(--primary);
   --state-selected-fg: var(--primary-fg);
+  --state-selected-text: initial;
   --state-disabled: var(--text-subtle);
 
   /* Status dot ring — cuts the dot out of what it overlaps. */
@@ -7801,6 +7806,7 @@ a.avatar[aria-disabled="true"] {
 }
 
 .app-nav > a {
+  position: relative;
   display: grid;
   grid-template-rows: auto auto;
   place-content: center;
@@ -7841,16 +7847,27 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* Current tile is already a full selected surface. Selection never changes
-   text metrics: the shared medium weight is kept. The transparent border is
-   the forced-colors cue: hidden under the fill here, it becomes a system-color
-   frame once forced colors flatten --state-selected to the bar's own Canvas.
-   Box sizing is border-box, so the tile keeps its size. No forced-colors
-   repaint: a Highlight fill put HighlightText on Chromium's Canvas backplate,
-   which hid the label. */
+   text metrics: the shared medium weight is kept. The forced-colors cue is a
+   transparent border on a ::before overlay, not on the tile: an element border
+   shrinks the content box, and the side layout starts its content at the inline
+   edge, so the icon and label shifted by --border-width when a tile became
+   current. The overlay costs no layout, yet forced colors still turn its
+   transparent border into a system-color frame once --state-selected flattens
+   to the bar's own Canvas. No forced-colors repaint: a Highlight fill put
+   HighlightText on Chromium's Canvas backplate, which hid the label. The
+   positioning context is on every link so it does not move when one becomes
+   current or an application places its own decoration. */
 .app-nav > a[aria-current="page"] {
-  border: var(--border-width) solid transparent;
   background: var(--state-selected);
   color: var(--state-selected-fg);
+}
+
+.app-nav > a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--border-width) solid transparent;
+  border-radius: inherit;
 }
 
 /*

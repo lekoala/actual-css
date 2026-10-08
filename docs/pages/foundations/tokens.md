@@ -615,7 +615,7 @@ Selected state has three roles:
 - `--state-selected-fg` — ink on that fill.
 - `--state-selected-text` — selected ink on a regular surface: the current nav link, the selected tab, the current step's number and ring.
 
-`--state-selected-text` has no default: each consumer reads `var(--state-selected-text, var(--state-selected))`, so a local `--state-selected` still reaches it. Set it when one color cannot be both a fill under its `-fg` and text on the page — typically a dark scheme, where a fill dark enough for white ink is too dark to read as text. Pulling the accent toward `--text` keeps its hue in both schemes:
+`--state-selected-text` has no default: the core resets it to the guaranteed-invalid value on every theme boundary, and each consumer reads `var(--state-selected-text, var(--state-selected))`. The reset is what lets a nested theme island reach its own `--state-selected`: a theme that resolves the hook to another token bakes the reference where it is declared, so an island that sets nothing would otherwise inherit the resolved value and never fall back. Set it when one color cannot be both a fill under its `-fg` and text on the page — typically a dark scheme, where a fill dark enough for white ink is too dark to read as text. Pulling the accent toward `--text` keeps its hue in both schemes:
 
 ```css
 [data-theme="my-theme"] {

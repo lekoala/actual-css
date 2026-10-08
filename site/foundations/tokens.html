@@ -722,7 +722,7 @@ undo that.</p>
 <li><code>--state-selected-fg</code> — ink on that fill.</li>
 <li><code>--state-selected-text</code> — selected ink on a regular surface: the current nav link, the selected tab, the current step's number and ring.</li>
 </ul>
-<p><code>--state-selected-text</code> has no default: each consumer reads <code>var(--state-selected-text, var(--state-selected))</code>, so a local <code>--state-selected</code> still reaches it. Set it when one color cannot be both a fill under its <code>-fg</code> and text on the page — typically a dark scheme, where a fill dark enough for white ink is too dark to read as text. Pulling the accent toward <code>--text</code> keeps its hue in both schemes:</p>
+<p><code>--state-selected-text</code> has no default: the core resets it to the guaranteed-invalid value on every theme boundary, and each consumer reads <code>var(--state-selected-text, var(--state-selected))</code>. The reset is what lets a nested theme island reach its own <code>--state-selected</code>: a theme that resolves the hook to another token bakes the reference where it is declared, so an island that sets nothing would otherwise inherit the resolved value and never fall back. Set it when one color cannot be both a fill under its <code>-fg</code> and text on the page — typically a dark scheme, where a fill dark enough for white ink is too dark to read as text. Pulling the accent toward <code>--text</code> keeps its hue in both schemes:</p>
 <pre><code class="language-css">[data-theme=&quot;my-theme&quot;] {
   --state-selected-text: light-dark(
     var(--primary),

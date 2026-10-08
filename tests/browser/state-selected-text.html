@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" data-theme="brutalist">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>State selected text fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <link rel="stylesheet" href="../../src/css/themes/brutalist.css">
+  <link rel="stylesheet" href="../../src/css/themes/corporate.css">
+</head>
+<body>
+  <nav class="navbar" aria-label="Parent">
+    <a class="nav-link" href="#parent" aria-current="page" id="parent">Parent</a>
+  </nav>
+  <div data-theme="corporate" style="color-scheme: dark">
+    <nav class="navbar" aria-label="Island">
+      <a class="nav-link" href="#island" aria-current="page" id="island">Island</a>
+    </nav>
+    <span id="island-ref" style="color: var(--state-selected)">ref</span>
+  </div>
+</body>
+</html>

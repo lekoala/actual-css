@@ -961,10 +961,18 @@ test("theme-derived aliases are declared on :root, [data-theme] so islands recom
     return block.includes(prop);
   };
 
-  // tokens.css aliases
-  for (const prop of ["--state-selected", "--state-disabled", "--indicator-ring"]) {
+  // tokens.css aliases. --state-selected-text is reset to the
+  // guaranteed-invalid value, not aliased, so each boundary falls back to its
+  // own --state-selected instead of inheriting a parent's resolved value.
+  for (const prop of [
+    "--state-selected",
+    "--state-selected-text",
+    "--state-disabled",
+    "--indicator-ring",
+  ]) {
     expect(inThemeBoundary(tokensCss, prop), `${prop} on [data-theme] in tokens.css`).toBe(true);
   }
+  expect(tokensCss).toContain("--state-selected-text: initial;");
   // theme.css aliases
   for (const prop of ["--heading", "--selection-bg", "--selection-fg"]) {
     expect(inThemeBoundary(themeCss, prop), `${prop} on [data-theme] in theme.css`).toBe(true);
@@ -1309,14 +1317,17 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
     /> a > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: var\(--app-nav-icon-size\);[\s\S]*line-height: 1;/,
   );
   // The current tile is a full selected surface at the shared weight —
-  // selection never changes text metrics. In forced colors --state-selected
-  // flattens, so a transparent border is the structural cue the user agent
-  // turns visible (CONTRIBUTING.md "Forced colors invariant"): no repaint into
-  // Highlight, no opt-out. The rendered frame is asserted in
-  // tests/browser/app-nav.test.js.
+  // selection never changes text metrics. The positioning context sits on
+  // every link so it does not move when one becomes current. In forced colors
+  // --state-selected flattens, so a transparent border on a ::before overlay
+  // is the structural cue the user agent turns visible (CONTRIBUTING.md
+  // "Forced colors invariant"): no repaint into Highlight, no opt-out, and no
+  // content-box shift from an element border. The rendered frame is asserted
+  // in tests/browser/app-nav.test.js.
   expect(navCss).not.toMatch(/> a\[aria-current="page"\]\s*\{[^}]*font-weight:/);
+  expect(navCss).toMatch(/\.app-nav > a \{[^}]*position: relative;/);
   expect(navCss).toMatch(
-    /\.app-nav > a\[aria-current="page"\] \{[^}]*border: var\(--border-width\) solid transparent;/,
+    /\.app-nav > a\[aria-current="page"\]::before \{[^}]*border: var\(--border-width\) solid transparent;/,
   );
   expect(navCss).not.toContain("@media (forced-colors");
   expect(navCss).not.toMatch(/forced-color-adjust\s*:/);
