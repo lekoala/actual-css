@@ -41,12 +41,6 @@ temp/
 # Cache directories
 .cache/
 
-# Playwright
-/test-results/
-playwright-report/
-*.png
-!/tests/visual.spec.js-snapshots/*.png
-
 # Local directories
 thirdparty
 local/

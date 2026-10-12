@@ -86,8 +86,9 @@ img { filter: saturate(1.06) contrast(1.03); }
 }
 
 .site-header .navbar {
-  border-color: var(--brand-line);
-  background: var(--brand-glass);
+  --ui-border: var(--brand-line);
+  --ui-bg: var(--brand-glass);
+
   backdrop-filter: blur(14px);
 }
 

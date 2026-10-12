@@ -30,8 +30,11 @@
    surface on the light branch). The dialog close corner would paint a light
    --surface-subtle block with dark ink on that branch, so it takes the rail's
    translucent wash and ink instead. Edges take the same wash: --border is a
-   light line on that branch (the drawer's 1px white edge). */
+   light line on that branch (the drawer's 1px white edge). --ui-fg is the
+   navbar contract for a bar with its own ink: the brand and the nav links take
+   it, and their hover tint derives from it. */
 .admini-rail {
+  --ui-fg: var(--surface);
   --close-bg: rgb(255 255 255 / 0.08);
   --close-color: var(--surface);
   --close-hover-color: var(--surface);
@@ -57,10 +60,6 @@
   inline-size: 17rem;
   padding: var(--space-40);
   border-inline-end: var(--border-width) solid var(--border);
-}
-
-.admini-rail .navbar-brand {
-  color: var(--surface);
 }
 
 .admini-main {
@@ -109,23 +108,9 @@
   padding-inline: var(--space-30);
 }
 
-/* Dark-rail ink. The framework recipe derives link ink from
-   --text-muted/--text, whose light-branch values are dark and unreadable on
-   the dark rail. */
-.admini-rail .admini-nav .nav-link {
-  color: var(--surface);
-}
-
 .admini-nav .nav-link i {
   color: var(--text-subtle);
   font-size: 1.125rem;
-}
-
-/* Neutral translucent hover on the dark rail; the framework's
-   --surface-subtle pill would read as a light block here. */
-.admini-rail .nav-link:hover:not([aria-current="page"]) {
-  background: rgb(255 255 255 / 0.08);
-  color: var(--surface);
 }
 
 /* Active item is a selected pill on the dark rail. State tokens keep
@@ -143,10 +128,6 @@
    would double it. */
 .admini-rail .nav-list .nav-link[aria-current="page"]::before {
   content: none;
-}
-
-.admini-rail .admini-nav .nav-link[aria-current="page"]:hover {
-  color: var(--state-selected-fg);
 }
 
 .admini-sidebar .flyout-trigger > .btn {

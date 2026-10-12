@@ -6,6 +6,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
       - run: bun install --frozen-lockfile
       - run: bun run build:all
       # dist/, site/ and size-report.json are committed: a build that produces
@@ -27,6 +29,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
       - name: Extract release notes
         run: bun run release:notes "$GITHUB_REF_NAME" > "$RUNNER_TEMP/notes.md"
       - name: Create release
