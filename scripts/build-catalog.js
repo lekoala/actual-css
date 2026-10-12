@@ -30,6 +30,11 @@
  *                   they are the behavior layer (see check:enhance), not
  *                   visual states — and interaction pseudo-classes (:hover,
  *                   :focus-visible, :active) are not "states".
+ *   pseudoElements  the ::before / ::after the file generates, keyed by the
+ *                   element that owns them (`.nav-link`, `.accordion summary`):
+ *                   those slots are taken, so an author decorating that
+ *                   element must use another one. Any state counts — a
+ *                   pseudo-element generated only when current still collides.
  *   jsImport        `actual-css/js/<name>` only when src/js/<name>.js exists
  *                   (existence, never a guessed name). A component without a
  *                   same-named module has no jsImport.
@@ -71,7 +76,12 @@
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { preludeClasses, selectorPreludes, stripComments } from "./utils/css-classes.js";
+import {
+  generatedPseudoElements,
+  preludeClasses,
+  selectorPreludes,
+  stripComments,
+} from "./utils/css-classes.js";
 import { loadReservedClasses } from "./utils/load-reserved-classes.js";
 import { parseHookSections } from "./utils/parse-hook-sections.js";
 
@@ -100,6 +110,21 @@ function stateNames(css) {
     }
   }
   return [...states].sort();
+}
+
+function pseudoElements(css) {
+  const owners = {};
+  for (const prelude of selectorPreludes(stripComments(css))) {
+    for (const { owner, pseudo } of generatedPseudoElements(prelude)) {
+      owners[owner] ??= new Set();
+      owners[owner].add(pseudo);
+    }
+  }
+  return Object.fromEntries(
+    Object.keys(owners)
+      .sort()
+      .map((owner) => [owner, [...owners[owner]].sort()]),
+  );
 }
 
 async function sharedVocabulary(root) {
@@ -158,6 +183,8 @@ export async function buildCatalog(root) {
       if (hooks.internal.length) entry.internalHooks = hooks.internal;
       const states = stateNames(css);
       if (states.length) entry.states = states;
+      const pseudos = pseudoElements(css);
+      if (Object.keys(pseudos).length) entry.pseudoElements = pseudos;
       if (modules.has(name)) {
         entry.jsImport = `actual-css/js/${name}`;
         const source = await readFile(join(root, "src", "js", `${name}.js`), "utf8");

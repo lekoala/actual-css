@@ -16,7 +16,12 @@
     ],
     "states": [
       "open"
-    ]
+    ],
+    "pseudoElements": {
+      ".accordion summary": [
+        "::after"
+      ]
+    }
   },
   {
     "name": "alert",
@@ -60,7 +65,12 @@
     "states": [
       "aria-current",
       "aria-hidden"
-    ]
+    ],
+    "pseudoElements": {
+      ".app-nav a": [
+        "::before"
+      ]
+    }
   },
   {
     "name": "avatar",
@@ -87,7 +97,12 @@
     "states": [
       "aria-disabled",
       "disabled"
-    ]
+    ],
+    "pseudoElements": {
+      ".avatar": [
+        "::after"
+      ]
+    }
   },
   {
     "name": "badge",
@@ -143,7 +158,12 @@
     ],
     "states": [
       "aria-current"
-    ]
+    ],
+    "pseudoElements": {
+      ".breadcrumb li": [
+        "::before"
+      ]
+    }
   },
   {
     "name": "busy",
@@ -157,7 +177,12 @@
     ],
     "states": [
       "aria-busy"
-    ]
+    ],
+    "pseudoElements": {
+      "[aria-busy]": [
+        "::before"
+      ]
+    }
   },
   {
     "name": "button",
@@ -257,7 +282,12 @@
       "--close-color",
       "--close-hover-color",
       "--close-hover-overlay"
-    ]
+    ],
+    "pseudoElements": {
+      ".close": [
+        "::before"
+      ]
+    }
   },
   {
     "name": "data-list",
@@ -308,7 +338,13 @@
     ],
     "states": [
       "open"
-    ]
+    ],
+    "pseudoElements": {
+      ".fab summary": [
+        "::after",
+        "::before"
+      ]
+    }
   },
   {
     "name": "flyout",
@@ -406,7 +442,12 @@
     ],
     "states": [
       "aria-current"
-    ]
+    ],
+    "pseudoElements": {
+      ".list-item": [
+        "::before"
+      ]
+    }
   },
   {
     "name": "menu",
@@ -430,6 +471,11 @@
       "aria-disabled",
       "disabled"
     ],
+    "pseudoElements": {
+      ".menu-item": [
+        "::before"
+      ]
+    },
     "jsImport": "actual-css/js/menu"
   },
   {
@@ -495,7 +541,12 @@
     ],
     "states": [
       "aria-current"
-    ]
+    ],
+    "pseudoElements": {
+      ".nav-link": [
+        "::before"
+      ]
+    }
   },
   {
     "name": "pagination",
@@ -630,7 +681,25 @@
     ],
     "states": [
       "aria-current"
-    ]
+    ],
+    "pseudoElements": {
+      ".step-complete": [
+        "::before"
+      ],
+      ".steps [aria-current]": [
+        "::before"
+      ],
+      ".steps li": [
+        "::after",
+        "::before"
+      ],
+      ".steps-horizontal li": [
+        "::after"
+      ],
+      ".steps-vertical li": [
+        "::after"
+      ]
+    }
   },
   {
     "name": "tab",
@@ -655,6 +724,11 @@
       "aria-selected",
       "disabled"
     ],
+    "pseudoElements": {
+      ".tab": [
+        "::after"
+      ]
+    },
     "jsImport": "actual-css/js/tab",
     "enhancements": [
       "tabs"
@@ -693,6 +767,11 @@
       "hidden",
       "popover-open"
     ],
+    "pseudoElements": {
+      ".tooltip": [
+        "::before"
+      ]
+    },
     "jsImport": "actual-css/js/tooltip"
   }
 ]

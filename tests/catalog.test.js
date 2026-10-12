@@ -62,3 +62,13 @@ test("busy has no owned class", () => {
   const busy = catalog.find((entry) => entry.name === "busy");
   expect("classes" in busy).toBe(false);
 });
+
+/* A pseudo-element belongs to the compound that carries it, not to the
+   selector's leading class: the trait in `.nav-list .nav-link::before` takes
+   the link's ::before. A classless owner is scoped by the leading class. */
+test("pseudoElements name the element whose slot is taken", () => {
+  const byName = (name) => catalog.find((entry) => entry.name === name).pseudoElements;
+  expect(byName("navbar")).toEqual({ ".nav-link": ["::before"] });
+  expect(byName("accordion")).toEqual({ ".accordion summary": ["::after"] });
+  expect(byName("button")).toBeUndefined();
+});
