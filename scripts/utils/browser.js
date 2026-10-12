@@ -76,11 +76,29 @@ const SOURCE_CSS = [
  * resolves once each replacement (imports included) has loaded, so the caller
  * never reads a style computed between the two sheets. Returns the swaps.
  * Page scripts have already run against the built CSS; measure after them.
+ *
+ * Chrome for Testing 137 never fired `load` after the href change although
+ * the source tree had loaded, and the promise hung the caller forever. The
+ * event stays the fast path; polling the @import tree is the fallback, and
+ * the deadline turns a sheet that truly never loads into an error naming it.
+ * The poll needs readable cssRules (same origin, so not file://), where the
+ * deadline alone applies.
  */
-export async function useSourceCss(view) {
+export async function useSourceCss(view, { timeoutMs = 15_000 } = {}) {
   const map = SOURCE_CSS.map(([pattern, source]) => [pattern.source, source]);
   return view.evaluate(`(async () => {
     const map = ${JSON.stringify(map)};
+    const deadline = performance.now() + ${timeoutMs};
+    // An import still loading has no styleSheet, or an empty one.
+    const pending = (sheet) => {
+      try {
+        return [...sheet.cssRules]
+          .filter((rule) => rule instanceof CSSImportRule)
+          .flatMap((rule) => rule.styleSheet?.cssRules.length ? pending(rule.styleSheet) : [rule.href]);
+      } catch {
+        return [sheet.href + " (cssRules unreadable)"];
+      }
+    };
     const swaps = [];
     const loads = [];
     for (const link of document.querySelectorAll('link[rel~="stylesheet"][href]')) {
@@ -89,8 +107,25 @@ export async function useSourceCss(view) {
       if (!entry) continue;
       const source = new URL(built.pathname.replace(new RegExp(entry[0]), entry[1]), built);
       loads.push(new Promise((resolve, reject) => {
-        link.addEventListener("load", resolve, { once: true });
-        link.addEventListener("error", () => reject(new Error("--src-css could not load " + source.href)), { once: true });
+        let settled = false;
+        const settle = (done) => (value) => {
+          settled = true;
+          done(value);
+        };
+        link.addEventListener("load", settle(resolve), { once: true });
+        link.addEventListener("error", () => settle(reject)(new Error("--src-css could not load " + source.href)), { once: true });
+        const poll = () => {
+          if (settled) return;
+          const sheet = link.sheet?.href === source.href ? link.sheet : null;
+          const missing = sheet ? pending(sheet) : [source.href];
+          if (missing.length === 0) return settle(resolve)();
+          if (performance.now() >= deadline) {
+            // One line: view.evaluate only surfaces an error's first line.
+            return settle(reject)(new Error("--src-css timed out after ${timeoutMs}ms; not loaded: " + missing.join(", ")));
+          }
+          requestAnimationFrame(poll);
+        };
+        requestAnimationFrame(poll);
       }));
       link.href = source.href;
       swaps.push(decodeURI(built.pathname) + " -> " + decodeURI(source.pathname));

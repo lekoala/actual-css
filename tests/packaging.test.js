@@ -205,6 +205,9 @@ async function packAvailable() {
   } catch {
     packTools = false;
   }
+  // CI must pack; locally the skip is said aloud, not left to the summary.
+  if (!packTools && process.env.CI) throw new Error("packaging tests need npm and tar in CI");
+  if (!packTools) console.warn("packaging tests skipped: npm or tar not found");
   return packTools;
 }
 const packTest = (await packAvailable()) ? test : test.skip;
