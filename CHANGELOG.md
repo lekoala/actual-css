@@ -11,6 +11,7 @@
 - `admin-neutral` demo theme: light-only business interface with a grey page, white cards, neutral actions and flat semantic tints.
 - `--state-selected-text`: selected ink on a regular surface (current `.nav-link`, selected `.tab`, current step number and ring), falling back to `--state-selected`.
 - `actual-css contrast` measures selected ink on each surface and the solid `-fg` pairs; a gradient fill reads n/a.
+- `components.json`: `pseudoElements` lists the `::before`/`::after` each component generates, keyed by the element that owns them (`.nav-link`, `.accordion summary`).
 - `actual-css design` writes a portable `dtcg/` token profile beside `figma/` and `penpot/`, with spec `$types` (`fontWeight`, `fontFamily`, `duration`, `cubicBezier`, `number`) and the font stacks, line heights and motion `figma/` drops.
 
 ### Fixed

@@ -209,3 +209,57 @@ export function preludeClasses(prelude, options) {
   }
   return classes;
 }
+
+/* The rightmost compound of a simple selector: the element a pseudo-element
+   hangs off, where subjectClasses reads the leftmost one. */
+function lastCompound(simple) {
+  let depth = 0;
+  let quote = null;
+  let start = 0;
+
+  for (let i = 0; i < simple.length; i += 1) {
+    const char = simple[i];
+    if (quote) {
+      if (char === "\\") {
+        i += 1;
+      } else if (char === quote) {
+        quote = null;
+      }
+    } else if (char === '"' || char === "'") {
+      quote = char;
+    } else if (char === "(") {
+      depth += 1;
+    } else if (char === ")" && depth > 0) {
+      depth -= 1;
+    } else if (depth === 0 && /[\s>+~]/.test(char)) {
+      start = i + 1;
+    }
+  }
+
+  return simple.slice(start);
+}
+
+/* The ::before / ::after a prelude generates, each with the element that owns
+   it as a short selector: the owning compound's first class
+   (`.nav-list .nav-link[aria-current]::before` → `.nav-link`), else its
+   element or attribute scoped by the selector's leading class
+   (`.accordion > details > summary::after` → `.accordion summary`). */
+export function generatedPseudoElements(prelude) {
+  const found = [];
+  for (const simple of simpleSelectors(prelude)) {
+    const compound = lastCompound(simple);
+    const pseudo = compound.match(/::(before|after)\b/);
+    if (!pseudo) continue;
+    const [own] = subjectClasses(compound);
+    let owner = own && `.${own}`;
+    if (!owner) {
+      const element = compound.match(/^[a-z][a-z0-9-]*|^\[[a-z][a-z0-9-]*/)?.[0] ?? compound;
+      const [scope] = subjectClasses(simple);
+      owner = [scope && `.${scope}`, element.startsWith("[") ? `${element}]` : element]
+        .filter(Boolean)
+        .join(" ");
+    }
+    found.push({ owner, pseudo: `::${pseudo[1]}` });
+  }
+  return found;
+}
