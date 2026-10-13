@@ -22,7 +22,9 @@
   <input class="check" type="checkbox" data-control aria-label="Check">
   <input class="radio" type="radio" data-control aria-label="Radio">
   <input class="switch" type="checkbox" role="switch" data-control aria-label="Switch">
-  <input class="color" type="color" data-control aria-label="Color">
+  <!-- .color draws its edge on ::-webkit-color-swatch, which getComputedStyle
+       cannot read; css-audit checks that rule's source instead. -->
+  <label class="color-swatch" data-control data-pseudo="::before"><input type="radio" name="swatch" aria-label="Swatch"></label>
   <div class="join">
     <span class="join-addon" data-control>https://</span>
     <input class="input" aria-label="Address">

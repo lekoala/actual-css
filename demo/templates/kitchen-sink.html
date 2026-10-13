@@ -420,6 +420,39 @@
         <label class="field-label" for="color">Color picker</label>
         <input class="color" id="color" type="color" value="#7048e8">
       </div>
+      <div class="cluster">
+        <span class="field-label" id="sink-accent-label">Palette picker</span>
+        <div class="flyout-trigger">
+          <button class="color-swatch" type="button" data-enhance="flyout"
+                  aria-controls="sink-accent-palette" aria-expanded="false"
+                  aria-labelledby="sink-accent-label sink-accent-name"
+                  style="--color-swatch-value: #2563eb">
+            <span class="sr-only" id="sink-accent-name">Blue</span>
+          </button>
+          <div class="flyout" id="sink-accent-palette" style="--flyout-pad: var(--space-30)" hidden>
+            <div class="cluster" role="radiogroup" aria-labelledby="sink-accent-label">
+              <label class="color-swatch" style="--color-swatch-value: #2563eb"><input type="radio" name="sink-accent" value="#2563eb" aria-label="Blue" checked></label>
+              <label class="color-swatch" style="--color-swatch-value: #10b981"><input type="radio" name="sink-accent" value="#10b981" aria-label="Green"></label>
+              <label class="color-swatch" style="--color-swatch-value: #f59e0b"><input type="radio" name="sink-accent" value="#f59e0b" aria-label="Amber"></label>
+              <label class="color-swatch" style="--color-swatch-value: #e11d48"><input type="radio" name="sink-accent" value="#e11d48" aria-label="Rose"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <fieldset class="field-group cluster">
+        <legend class="field-label">Color swatches</legend>
+        <label class="color-swatch" style="--color-swatch-value: #2563eb"><input type="radio" name="sink-label" value="blue" aria-label="Blue" checked></label>
+        <label class="color-swatch" style="--color-swatch-value: #10b981"><input type="radio" name="sink-label" value="green" aria-label="Green"></label>
+        <label class="color-swatch" style="--color-swatch-value: #f59e0b"><input type="radio" name="sink-label" value="amber" aria-label="Amber"></label>
+        <label class="color-swatch" style="--color-swatch-value: #0b1a3a"><input type="radio" name="sink-label" value="navy" aria-label="Navy"></label>
+        <label class="color-swatch" style="--color-swatch-value: #ffffff"><input type="radio" name="sink-label" value="white" aria-label="White"></label>
+      </fieldset>
+      <fieldset class="segmented">
+        <legend class="sr-only">Range</legend>
+        <label class="segment"><input type="radio" name="sink-span" value="day">Day</label>
+        <label class="segment"><input type="radio" name="sink-span" value="week" checked>Week</label>
+        <label class="segment"><input type="radio" name="sink-span" value="month">Month</label>
+      </fieldset>
       <label class="choice">
         <input class="check" type="checkbox" checked>
         Remember me
@@ -895,7 +928,7 @@
          tokens instead of inheriting the parent's resolved values. -->
     <p>Pressed button, selected and disabled choices, card shadow, focus ring
       and text selection all follow the green palette.</p>
-    <div class="cluster items-start sink-island" data-theme="forest">
+    <div class="cluster sink-island" data-theme="forest">
       <button class="btn" type="button" aria-pressed="false">Toggle</button>
       <button class="btn" type="button" aria-pressed="true">Toggle</button>
       <label class="choice">
@@ -1011,11 +1044,28 @@
         <label class="field-label" for="d-color">Color picker</label>
         <input class="color" id="d-color" type="color" value="#7048e8" disabled>
       </div>
+      <div class="field">
+        <span class="field-label">Color swatch</span>
+        <label class="color-swatch" style="--color-swatch-value: #7048e8"><input type="radio" name="d-swatch" aria-label="Violet" checked disabled></label>
+      </div>
+      <fieldset class="segmented">
+        <legend class="sr-only">Range disabled</legend>
+        <label class="segment"><input type="radio" name="d-span" checked disabled>Day</label>
+        <label class="segment"><input type="radio" name="d-span" disabled>Week</label>
+      </fieldset>
     </div>
   </section>
 
   <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
   <script src="../../dist/actual.full.js"></script>
+  <script>
+    /* The palette button shows the pick: application code, as in the docs. */
+    document.getElementById("sink-accent-palette").addEventListener("change", (event) => {
+      const trigger = document.querySelector('[aria-controls="sink-accent-palette"]');
+      trigger.style.setProperty("--color-swatch-value", event.target.value);
+      document.getElementById("sink-accent-name").textContent = event.target.getAttribute("aria-label");
+    });
+  </script>
   <script>
     const fonts = {
       geist: '"Geist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',

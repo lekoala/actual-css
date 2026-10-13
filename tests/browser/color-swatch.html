@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Color swatch fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+  </style>
+</head>
+<body>
+  <form id="form" class="stack" style="align-items: start">
+    <!-- Tab order is the test's navigation path: keep the palette first. -->
+    <fieldset class="field-group cluster" id="palette-static">
+      <legend>Category color</legend>
+      <label class="color-swatch" id="blue" style="--color-swatch-value: #2563eb"><input type="radio" name="category" value="#2563eb" aria-label="Blue" checked></label>
+      <label class="color-swatch" id="white" style="--color-swatch-value: #ffffff"><input type="radio" name="category" value="#ffffff" aria-label="White"></label>
+      <label class="color-swatch" id="navy" style="--color-swatch-value: #0b1a3a"><input type="radio" name="category" value="#0b1a3a" aria-label="Navy"></label>
+      <label class="color-swatch" id="gray" style="--color-swatch-value: #9ca3af"><input type="radio" name="category" value="#9ca3af" aria-label="Gray" disabled></label>
+    </fieldset>
+
+    <div class="cluster">
+      <label class="color-swatch sm" id="small" style="--color-swatch-value: #10b981"><input type="checkbox" name="tags" value="green" aria-label="Green"></label>
+      <input class="switch" type="checkbox" role="switch" id="switch" aria-label="Switch">
+      <label class="color-swatch" id="beside-switch" style="--color-swatch-value: #f59e0b"><input type="checkbox" name="tags" value="amber" aria-label="Amber"></label>
+    </div>
+
+    <span class="field-label" id="accent-label">Accent color</span>
+    <div class="flyout-trigger">
+      <button class="color-swatch" type="button" id="trigger" data-enhance="flyout" aria-controls="accent-palette" aria-expanded="false" aria-labelledby="accent-label accent-name" style="--color-swatch-value: #2563eb"><span class="sr-only" id="accent-name">Blue</span></button>
+      <div class="flyout" id="accent-palette" style="--flyout-pad: var(--space-30)" hidden>
+        <div class="cluster" role="radiogroup" aria-labelledby="accent-label">
+          <label class="color-swatch" id="a-blue" style="--color-swatch-value: #2563eb"><input type="radio" name="accent" value="#2563eb" aria-label="Blue" checked></label>
+          <label class="color-swatch" id="a-green" style="--color-swatch-value: #10b981"><input type="radio" name="accent" value="#10b981" aria-label="Green"></label>
+          <label class="color-swatch" id="a-amber" style="--color-swatch-value: #f59e0b"><input type="radio" name="accent" value="#f59e0b" aria-label="Amber"></label>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    // Application code, as in the docs recipe: the trigger shows the pick.
+    document.getElementById("accent-palette").addEventListener("change", (event) => {
+      const trigger = document.getElementById("trigger");
+      trigger.style.setProperty("--color-swatch-value", event.target.value);
+      document.getElementById("accent-name").textContent = event.target.getAttribute("aria-label");
+    });
+  </script>
+</body>
+</html>

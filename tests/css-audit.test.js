@@ -415,13 +415,24 @@ test("native color control has normal, disabled, focus, and forced-colors states
   const css = readCss("src/css/forms/native.css");
 
   expect(css).toContain(".color {");
-  expect(css).toContain("inline-size: var(--control-size);");
-  expect(css).toContain("block-size: var(--control-size);");
+  // A control-sized hit area around a smaller swatch that carries the ring.
+  expect(css).toContain("inline-size: max(var(--control-size), var(--color-size));");
+  expect(css).toContain("block-size: max(var(--control-size), var(--color-size));");
   expect(css).toContain(".color:disabled");
-  expect(css).toContain(".color:focus-visible");
+  expect(css).toContain(".color:focus-visible::-webkit-color-swatch");
+  expect(css).toContain(".color:focus-visible::-moz-color-swatch");
   expect(css).toContain("@media (forced-colors: active)");
   expect(css).toContain(".color::-webkit-color-swatch-wrapper");
   expect(css).toContain(".color::-moz-color-swatch");
+  // The edge is on the swatch, which getComputedStyle cannot read: the
+  // border-control browser test covers .color-swatch, this the native one.
+  for (const pseudo of ["::-webkit-color-swatch", "::-moz-color-swatch"]) {
+    expect(css).toMatch(
+      new RegExp(
+        `\\.color${pseudo} \\{[^}]*border: var\\(--border-width\\) solid var\\(--border-control\\);`,
+      ),
+    );
+  }
 });
 
 test("status bar supports long tokens", () => {
@@ -1846,6 +1857,10 @@ test("action focus is a solid --focus line with the shared offset", () => {
     if (selector === ".tab:focus-visible") {
       // A tab's ring is inset so it remains attached to the tab strip.
       expect(body, selector).toMatch(/outline-offset:\s*-2px;/);
+    } else if (selector.startsWith(".segment:")) {
+      // Inset: the track's padding is narrower than an offset ring, which
+      // would cover the neighbouring segment (focus.css).
+      expect(body, selector).toMatch(/outline-offset:\s*calc\(var\(--focus-ring-width\) \* -1\);/);
     } else {
       expect(body, selector).toMatch(/outline-offset:\s*var\(--focus-outline-offset\);/);
     }

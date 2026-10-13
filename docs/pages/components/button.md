@@ -153,8 +153,9 @@ Keep one variant family inside a group. Because each button keeps its own
 classes, nothing stops `.btn`, `.btn outline` and `.btn soft` from sitting side
 by side — but three fills and three border treatments in one shape read as
 unrelated controls that happen to touch, not as one unit. Change the variant
-only to carry meaning: [Toggle](#toggle) marks the active segment with a solid
-button among outlines, which is the pattern a segmented control wants.
+only to carry meaning: [Toggle](#toggle) marks a pressed button with a solid
+fill among outlines. For one choice among a few on a shared track, use a
+[segmented control](segmented.md) instead.
 
 ## Sizes
 

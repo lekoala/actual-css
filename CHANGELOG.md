@@ -7,6 +7,8 @@
 
 ### Added
 
+- `.color-swatch`: palette color on a native radio or checkbox, or a `<button>` opening a palette flyout, with `--color-swatch-value`, `--color-swatch-size` and `--color-swatch-radius`.
+- `.segmented` / `.segment`: segmented control for radios, a `role="tablist"` or navigation links, with `--segmented-bg`, `--segmented-pad`, `--segmented-radius`, `--segmented-fg`, `--segmented-selected-bg` and `--segmented-selected-border`.
 - `demo/templates/order-management.html`: one state at three levels — a badge in a selectable list, a contextual alert, and a notification with its own action — plus a critical alert, with no new framework API.
 - `prefers-reduced-transparency: reduce` paints `.topbar` and `.form-actions.sticky` opaque without backdrop blur.
 - The glass demo theme switches to opaque surfaces and drops its blur under `prefers-reduced-transparency: reduce`.
@@ -21,6 +23,9 @@
 
 ### Fixed
 
+- `.color` shows a round swatch the height of a `.switch` on a control-sized hit area, with the focus ring on the swatch; `--color-size` sets it.
+- A flyout no longer closes when the arrow keys or Space move through a radio group inside it.
+- Opening a flyout from the keyboard focuses a radio group at its checked radio, not its first one.
 - `.list-item` moves its trailing region to a new line when it no longer fits beside the longest word, instead of breaking `.list-item-title` mid-word.
 - `.truncate` inside `.list-item-content` keeps the trailing region on its line.
 - `actual-css design` writes DTCG colors with a 6-digit `hex` and `alpha` separate; Penpot still receives the alpha in its hex.

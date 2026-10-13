@@ -610,6 +610,30 @@
     ]
   },
   {
+    "name": "segmented",
+    "source": "src/css/components/segmented.css",
+    "cssImport": "actual-css/css/components/segmented",
+    "classes": [
+      "segment",
+      "segmented"
+    ],
+    "publicHooks": [
+      "--segmented-bg",
+      "--segmented-pad",
+      "--segmented-radius",
+      "--segmented-fg",
+      "--segmented-selected-bg",
+      "--segmented-selected-border"
+    ],
+    "states": [
+      "aria-current",
+      "aria-disabled",
+      "aria-selected",
+      "checked",
+      "disabled"
+    ]
+  },
+  {
     "name": "skeleton",
     "source": "src/css/components/skeleton.css",
     "cssImport": "actual-css/css/components/skeleton",

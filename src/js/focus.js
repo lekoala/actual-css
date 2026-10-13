@@ -44,8 +44,23 @@ export function getFocusable(root) {
   return [...root.querySelectorAll(FOCUSABLE_SELECTOR)].filter(isFocusable);
 }
 
+/* Tab reaches a radio group at its checked radio, or at its first one when none
+   is checked; the other radios are arrow-key stops only. Entering a panel on
+   an unchecked radio put focus on a value the user had not picked. */
+function isRadioTabStop(el) {
+  if (el.type !== "radio" || el.checked || !el.name) return true;
+  // form.elements also holds controls associated through form="…".
+  const candidates = el.form
+    ? [...el.form.elements]
+    : [...el.getRootNode().querySelectorAll('input[type="radio"]')];
+  return !candidates.some(
+    (radio) =>
+      radio.type === "radio" && radio.name === el.name && radio.form === el.form && radio.checked,
+  );
+}
+
 export function focusFirstDescendant(root) {
-  const target = getFocusable(root)[0];
+  const target = getFocusable(root).filter(isRadioTabStop)[0];
   target?.focus();
   return !!target;
 }

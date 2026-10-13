@@ -180,6 +180,11 @@ flyout when that specific control must close it regardless of the automatic
 policy. This is useful for an Apply or Done action in an `outside` or `false`
 panel. The trigger and Escape continue to close the flyout in every mode.
 
+Arrow keys and Space in a radio group never close the flyout: they move
+through the options, and a pointer pick closes it. Opening from the keyboard
+focuses a group at its checked radio. The [palette picker](../forms/color-swatches.md#palette-in-a-flyout)
+relies on both.
+
 ```html
 <div class="flyout"
      id="filters"
