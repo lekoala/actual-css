@@ -14,7 +14,11 @@ spectrum or RGB sliders are outside Actual.
 
 ## Palette
 
-Lay the swatches out with `.cluster` or `.grid`.
+Lay the swatches out with `.cluster` or `.grid`, and space them with `--gap`
+(`.tight`, `.loose` or an inline value), not `gap`: the hit area reaches
+half of `--gap` past the swatch, up to `--control-size`, so neighbours split
+the gap between them. A tighter palette trades target size for density. Set
+the column count with `--grid-columns: repeat(6, max-content)` on `.grid`.
 
 ```html demo
 <fieldset class="field-group cluster">
@@ -123,5 +127,5 @@ The color dialog is the browser's own and looks different on each platform.
 
 - `--color-swatch-value` — the color, set on each swatch.
 - `--color-swatch-size` — visible swatch size, the height of a `.switch` track
-  by default; the hit area stays `--control-size`. `.sm` and `.lg` scale both.
+  by default. `.sm` and `.lg` scale it and the hit area.
 - `--color-swatch-radius` — corner radius; round by default.

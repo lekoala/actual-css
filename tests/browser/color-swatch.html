@@ -26,6 +26,15 @@
       <label class="color-swatch" id="beside-switch" style="--color-swatch-value: #f59e0b"><input type="checkbox" name="tags" value="amber" aria-label="Amber"></label>
     </div>
 
+    <!-- A tight two-row palette: 4px is under the hit area's natural reach. -->
+    <div class="grid" id="palette-tight" style="--gap: 4px; --grid-columns: repeat(3, max-content)">
+      <label class="color-swatch" id="t-1" style="--color-swatch-value: #f44336"><input type="radio" name="tight" value="1" aria-label="Red"></label>
+      <label class="color-swatch" id="t-2" style="--color-swatch-value: #673ab7"><input type="radio" name="tight" value="2" aria-label="Deep purple"></label>
+      <label class="color-swatch" id="t-3" style="--color-swatch-value: #2196f3"><input type="radio" name="tight" value="3" aria-label="Blue"></label>
+      <label class="color-swatch" id="t-4" style="--color-swatch-value: #4caf50"><input type="radio" name="tight" value="4" aria-label="Green"></label>
+      <label class="color-swatch" id="t-5" style="--color-swatch-value: #ffeb3b"><input type="radio" name="tight" value="5" aria-label="Yellow"></label>
+    </div>
+
     <span class="field-label" id="accent-label">Accent color</span>
     <div class="flyout-trigger">
       <button class="color-swatch" type="button" id="trigger" data-enhance="flyout" aria-controls="accent-palette" aria-expanded="false" aria-labelledby="accent-label accent-name" style="--color-swatch-value: #2563eb"><span class="sr-only" id="accent-name">Blue</span></button>

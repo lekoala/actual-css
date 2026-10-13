@@ -1,12 +1,12 @@
 {
-  "totalRaw": 394086,
+  "totalRaw": 394435,
   "core": {
     "minified": 12376,
     "brotli": 2776
   },
   "full": {
-    "minified": 141532,
-    "brotli": 19982
+    "minified": 141587,
+    "brotli": 20009
   },
   "js": {
     "full": {
@@ -121,6 +121,10 @@
       "raw": 5180
     },
     {
+      "file": "forms/color-swatch.css",
+      "raw": 5169
+    },
+    {
       "file": "themes/glass.css",
       "raw": 5128
     },
@@ -131,10 +135,6 @@
     {
       "file": "themes/gradient.css",
       "raw": 4871
-    },
-    {
-      "file": "forms/color-swatch.css",
-      "raw": 4820
     },
     {
       "file": "themes/edge.css",

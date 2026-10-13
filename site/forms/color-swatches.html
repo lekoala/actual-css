@@ -243,7 +243,11 @@ double ring that reads on any color. Use checkboxes for several colors at once.<
 <p>For a free color, use the native <a href="controls.html"><code>.color</code></a> picker; a custom
 spectrum or RGB sliders are outside Actual.</p>
 <h2 id="palette">Palette</h2>
-<p>Lay the swatches out with <code>.cluster</code> or <code>.grid</code>.</p>
+<p>Lay the swatches out with <code>.cluster</code> or <code>.grid</code>, and space them with <code>--gap</code>
+(<code>.tight</code>, <code>.loose</code> or an inline value), not <code>gap</code>: the hit area reaches
+half of <code>--gap</code> past the swatch, up to <code>--control-size</code>, so neighbours split
+the gap between them. A tighter palette trades target size for density. Set
+the column count with <code>--grid-columns: repeat(6, max-content)</code> on <code>.grid</code>.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -431,7 +435,7 @@ when no palette color is checked.</li>
 <ul>
 <li><code>--color-swatch-value</code> — the color, set on each swatch.</li>
 <li><code>--color-swatch-size</code> — visible swatch size, the height of a <code>.switch</code> track
-by default; the hit area stays <code>--control-size</code>. <code>.sm</code> and <code>.lg</code> scale both.</li>
+by default. <code>.sm</code> and <code>.lg</code> scale it and the hit area.</li>
 <li><code>--color-swatch-radius</code> — corner radius; round by default.</li>
 </ul>
 
