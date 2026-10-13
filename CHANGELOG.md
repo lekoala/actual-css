@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Fixed
+- `.color-swatch`: an inline swatch (a flyout trigger beside its label) centers on the text instead of sitting above the baseline.
 
 ## [0.14.0] - 2026-10-13
 ### Breaking changes

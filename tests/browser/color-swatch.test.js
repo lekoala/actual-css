@@ -149,6 +149,28 @@ it("a tight palette splits the gap: each swatch owns its own center", async () =
   );
 });
 
+it("a swatch in running text centers on the lowercase letters, not above the baseline", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      // An empty 1ex inline-block spans baseline to x-height, so its center is
+      // the font-independent target of `vertical-align: middle`.
+      const level = await view.evaluate(`(() => {
+        const row = document.getElementById("inline-row");
+        const mark = document.createElement("span");
+        mark.style.cssText = "display: inline-block; block-size: 1ex";
+        row.prepend(mark);
+        const x = mark.getBoundingClientRect();
+        mark.remove();
+        const swatch = document.getElementById("inline-swatch").getBoundingClientRect();
+        return { midline: (x.top + x.bottom) / 2, swatch: (swatch.top + swatch.bottom) / 2 };
+      })()`);
+      expect(Math.abs(level.swatch - level.midline)).toBeLessThanOrEqual(1);
+    },
+    { artifactName: "color-swatch-inline" },
+  );
+});
+
 it("keyboard focus draws the action ring outside the selection ring", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
