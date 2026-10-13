@@ -2,7 +2,11 @@
 
 > Use `.join` when controls need to be visually joined into a single unit.
 
-**Related terms:** segmented control, button group, input group.
+**Related terms:** button group, input group, toolbar.
+
+`.join` groups controls that keep their own identity and function. For one
+choice among a few on a shared track, use a
+[segmented control](../components/segmented.md).
 
 ## Class reference
 
@@ -13,7 +17,7 @@
 
 Add `.join` to the wrapper that groups the controls. Use `.join-addon` for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`. The wrapper should still carry `role="group"` with a label for accessibility.
 
-`.join` reshapes corners and shared edges; it does not unify the segments' treatments, and the children keep whatever classes they carry. Give them one variant family so the group reads as a single unit, and change a segment's variant only to mark state — a solid button among outlines for the active segment of a segmented control. A group mixing `.btn`, `.btn outline` and `.btn soft` is valid markup that renders as three unrelated controls stuck together.
+`.join` reshapes corners and shared edges; it does not unify the segments' treatments, and the children keep whatever classes they carry. Give them one variant family so the group reads as a single unit, and change a segment's variant only to mark state — a solid button among outlines for a pressed toggle. A group mixing `.btn`, `.btn outline` and `.btn soft` is valid markup that renders as three unrelated controls stuck together.
 
 When composing source files manually, import `components/join.css` after the controls it groups. `.join` writes child border-radius longhands directly so joined corners win at equal specificity.
 

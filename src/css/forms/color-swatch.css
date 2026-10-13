@@ -1,0 +1,154 @@
+/*
+ * Color swatch — a color chosen from a palette the application defines.
+ *
+ * Docs: docs/pages/forms/color-swatches.md
+ *
+ * A <label class="color-swatch"> wraps a native radio (one color) or checkbox
+ * (several) and paints --color-swatch-value. The same class on a <button> is
+ * the trigger of a palette flyout. The application owns the colors; Actual
+ * owns the shape, the selection mark and the focus ring.
+ *
+ * Two sizes: the element is a --control-size hit area, so it lines up with
+ * fields and stays easy to tap; the visible swatch (::before) is the height of
+ * a .switch track, so a swatch and a switch in neighbouring rows match. Edge,
+ * selection ring and focus ring all belong to the visible swatch.
+ *
+ * The color is arbitrary, so nothing drawn on it may assume a contrast: the
+ * selected mark is a double ring (--text outside, --surface-opaque inside) that
+ * reads on any fill, and a hairline edge keeps a near-white color apart from
+ * the page. ::before opts out of forced colors to keep the color, so it takes
+ * system colors itself there.
+ *
+ * Without :has() the native radio stays visible in the swatch and carries the
+ * state; the ring needs :has() to mirror it.
+ *
+ * Public hooks:
+ * --color-swatch-value (fallback-only: the color, set per swatch)
+ * --color-swatch-size
+ * --color-swatch-radius
+ */
+.color-swatch {
+  /* The .switch track height (switch.css); a browser test holds them equal. */
+  --color-swatch-size: calc(var(--choice-control-size) + 0.125em);
+  --color-swatch-radius: var(--radius-full);
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: max(var(--control-size), var(--color-swatch-size));
+  block-size: max(var(--control-size), var(--color-swatch-size));
+  /* Lay out at the visible width: the hit area overflows on both sides, so a
+     label gap or a palette gap is measured from the swatch, not from its
+     invisible padding. Block size stays control-high to align with fields. */
+  margin: 0
+    calc((var(--color-swatch-size) - max(var(--control-size), var(--color-swatch-size))) / 2);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  /* Consumed so .sm/.lg reach the em-sized swatch, as on .choice-card. */
+  font: inherit;
+  font-size: var(--control-font-size);
+  cursor: pointer;
+}
+
+.color-swatch::before {
+  content: "";
+  grid-area: 1 / 1;
+  inline-size: var(--color-swatch-size);
+  block-size: var(--color-swatch-size);
+  box-sizing: border-box;
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--color-swatch-radius);
+  background: var(--color-swatch-value, transparent) padding-box;
+  /* The color is the content, as on .color (native.css). */
+  forced-color-adjust: none;
+  transition:
+    border-color var(--duration),
+    box-shadow var(--duration);
+}
+
+/* Shares the swatch's cell and paints after ::before, so a native radio left
+   visible sits on the color. */
+.color-swatch > input {
+  grid-area: 1 / 1;
+  position: relative;
+  margin: 0;
+}
+
+/* Visually hidden but focusable, submitted and arrow-key navigable (sr-only
+   pattern). Guarded: without :has() the swatch cannot mirror :checked, so the
+   visible native radio is the fallback. */
+@supports selector(:has(*)) {
+  .color-swatch > input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+.color-swatch:hover::before {
+  border-color: var(--text-subtle);
+}
+
+.color-swatch:has(> input:checked)::before {
+  box-shadow:
+    inset 0 0 0 2px var(--text),
+    inset 0 0 0 4px var(--surface-opaque);
+}
+
+/* The ring goes around the visible swatch, not the larger hit area. */
+.color-swatch:focus-visible {
+  outline: none;
+}
+
+.color-swatch:focus-visible::before {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.color-swatch:has(> input:focus-visible)::before {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.color-swatch:disabled {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+.color-swatch:has(> input:disabled) {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+/* A disabled swatch keeps its color: --disabled-opacity is 1 here
+   (tokens.css), and the edge carries the state. */
+@media (forced-colors: active) {
+  .color-swatch::before {
+    --focus: CanvasText;
+
+    border-color: CanvasText;
+  }
+
+  .color-swatch:has(> input:checked)::before {
+    box-shadow:
+      inset 0 0 0 2px CanvasText,
+      inset 0 0 0 4px Canvas;
+  }
+
+  .color-swatch:disabled::before {
+    border-color: GrayText;
+  }
+
+  .color-swatch:has(> input:disabled)::before {
+    border-color: GrayText;
+  }
+}

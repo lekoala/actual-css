@@ -24,29 +24,6 @@
        is only a second cue, shared by plan and notification surfaces. */
     .workspace-option { cursor: pointer; }
     .workspace-option:has(:checked) { border-color: var(--primary); }
-
-    /* A local second expression of tabs; discovery and keyboard behavior stay
-       with data-enhance and ARIA. Nothing is added to the component API. */
-    .workspace-tabs {
-      align-self: start;
-      padding: var(--space-10);
-      border: var(--border-width) solid var(--border);
-      border-radius: var(--radius);
-      background: var(--surface-subtle);
-    }
-
-    .workspace-tabs .tab { border-radius: var(--radius-sm); }
-    .workspace-tabs .tab[aria-selected="true"] {
-      background: var(--surface-raised);
-      box-shadow: var(--shadow);
-    }
-
-    .workspace-tabs .tab[aria-selected="true"]::after { content: none; }
-
-    /* System colors can suppress the selected fill and shadow. */
-    @media (forced-colors: active) {
-      .workspace-tabs .tab[aria-selected="true"] { outline: 2px solid Highlight; }
-    }
   </style>
 </head>
 <body>
@@ -63,9 +40,9 @@
       </label>
     </header>
 
-    <div class="tabs workspace-tabs" role="tablist" aria-label="Workspace settings" data-enhance="tabs">
-      <button class="tab" type="button" role="tab" id="billing-tab" aria-controls="billing-panel" aria-selected="true">Plan &amp; billing</button>
-      <button class="tab" type="button" role="tab" id="preferences-tab" aria-controls="preferences-panel" aria-selected="false" tabindex="-1">Preferences</button>
+    <div class="segmented align-self-start" role="tablist" aria-label="Workspace settings" data-enhance="tabs">
+      <button class="segment" type="button" role="tab" id="billing-tab" aria-controls="billing-panel" aria-selected="true">Plan &amp; billing</button>
+      <button class="segment" type="button" role="tab" id="preferences-tab" aria-controls="preferences-panel" aria-selected="false" tabindex="-1">Preferences</button>
     </div>
 
     <section class="stack" role="tabpanel" id="billing-panel" aria-labelledby="billing-tab" tabindex="-1">

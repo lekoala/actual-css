@@ -100,7 +100,7 @@
 
 /* Shared control scale. Wrappers are listed when their descendants form one
    component (field, choice-card, floating-field, input-icon, join, pagination,
-   tabs, flyout). A local size declaration beats inherited density because it
+   tabs, segmented, flyout). A local size declaration beats inherited density because it
    is declared on the sized component itself. Guarded by check:sync
    (size-scale-participants): .sm and .lg must list the same components. */
 :where(
@@ -113,6 +113,7 @@
   .field,
   .choice,
   .choice-card,
+  .color-swatch,
   .input-icon,
   .floating-field,
   .otp,
@@ -120,6 +121,7 @@
   .pagination,
   .tabs,
   .tab,
+  .segmented,
   .flyout
 ).sm {
   --control-size: var(--control-size-sm);
@@ -140,6 +142,7 @@
   .field,
   .choice,
   .choice-card,
+  .color-swatch,
   .input-icon,
   .floating-field,
   .otp,
@@ -147,6 +150,7 @@
   .pagination,
   .tabs,
   .tab,
+  .segmented,
   .flyout
 ).lg {
   --control-size: var(--control-size-lg);

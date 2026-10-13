@@ -17,10 +17,11 @@ it("controls take --border-control and separators keep --border", async () => {
     fixtureUrl(FIXTURE),
     async (view) => {
       const edges = await view.evaluate(`(() => {
-        // Block-start: the edge every control and the hr divider draw.
+        // Block-start: the edge every control and the hr divider draw, read on
+        // the pseudo-element when the control draws it there.
         const edge = (el) => {
           const name = el.className.split(" ")[0];
-          return name + " " + getComputedStyle(el).borderBlockStartColor;
+          return name + " " + getComputedStyle(el, el.dataset.pseudo ?? null).borderBlockStartColor;
         };
         return {
           controls: [...document.querySelectorAll("[data-control]")].map(edge),
@@ -35,7 +36,7 @@ it("controls take --border-control and separators keep --border", async () => {
         "check rgb(255, 0, 0)",
         "radio rgb(255, 0, 0)",
         "switch rgb(255, 0, 0)",
-        "color rgb(255, 0, 0)",
+        "color-swatch rgb(255, 0, 0)",
         "join-addon rgb(255, 0, 0)",
         "choice-card rgb(255, 0, 0)",
       ]);

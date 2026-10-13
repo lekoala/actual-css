@@ -6,9 +6,12 @@ Native-only control chrome: the file input and color picker mostly defeat custom
 
 > Small, theme-aware chrome for the native color picker.
 
-Use `.color` on an `input[type="color"]` to give the native picker a control-sized
-box with the framework's border, radius, surface, disabled, and focus styles.
-The color dialog and selected-color swatch remain browser-native.
+Use `.color` on an `input[type="color"]` to show the native picker as a round
+swatch the height of a [switch](switch.md), on a control-sized hit area, with
+the framework's edge, disabled, and focus styles. `--color-size` sets the
+swatch. The color dialog remains browser-native. To choose from a fixed
+palette instead, use [color swatches](color-swatches.md), which share this
+geometry.
 
 ```html demo
 <label class="field">

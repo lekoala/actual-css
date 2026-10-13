@@ -71,6 +71,17 @@
       --range-thumb-bg: #fff;
     }
 
+    /* iOS labels keep full ink; the selected segment lightens in dark, above
+       the track (the dark surface-raised sits below surface-subtle), and is
+       set apart by its fill and shadow with only a faint edge. */
+    [data-theme="ios-demo"] .segmented {
+      --segmented-pad: 0.125rem;
+      --segmented-radius: var(--radius-sm);
+      --segmented-fg: var(--text);
+      --segmented-selected-bg: light-dark(#fff, #636366);
+      --segmented-selected-border: light-dark(rgb(0 0 0 / 4%), transparent);
+    }
+
     [data-theme="ios-demo"] .list {
       --list-item-pad-inline: var(--space-40);
       --list-item-pad-block: var(--space-20);
@@ -126,43 +137,6 @@
       border-end-end-radius: calc(var(--card-radius) - var(--border-width));
     }
 
-    /* F2. Segmented control: a radio group on a recessed track, the checked
-       segment raised. Chips carry a dot and a check slot, and .join keeps
-       every segment's own border. */
-    .ios-segmented {
-      display: inline-flex;
-      gap: 0.125rem;
-      margin: 0;
-      padding: 0.125rem;
-      border: 0;
-      border-radius: var(--radius-sm);
-      background: var(--surface-subtle);
-    }
-
-    .ios-segmented .choice-card {
-      --choice-card-border: transparent;
-      --choice-card-bg: transparent;
-      --choice-card-radius: calc(var(--radius-sm) - 0.125rem);
-
-      min-block-size: var(--control-size-sm);
-    }
-
-    .ios-segmented .choice-card:has(:checked) {
-      --choice-card-border: transparent;
-      --choice-card-bg: var(--surface-raised);
-
-      box-shadow: var(--shadow);
-    }
-
-    .ios-segmented .choice-card::before,
-    .ios-segmented .choice-card::after { display: none; }
-
-    /* Hiding the chip's check also hid its forced-colors cue: the raised fill
-       is dropped there, so the checked segment needs a cue of its own. */
-    @media (forced-colors: active) {
-      .ios-segmented .choice-card:has(:checked) { outline: 2px solid Highlight; }
-    }
-
     /* The iOS knob floats; the core keeps it flat on purpose. */
     [data-theme="ios-demo"] .switch::before {
       box-shadow: 0 0.125rem 0.375rem rgb(0 0 0 / 15%);
@@ -202,11 +176,11 @@
 
         <figure class="stack">
           <div class="card ios-stage">
-            <fieldset class="ios-segmented">
+            <fieldset class="segmented sm">
               <legend class="sr-only">Range</legend>
-              <label class="choice-card chip"><input type="radio" name="span" value="day">Day</label>
-              <label class="choice-card chip"><input type="radio" name="span" value="week" checked>Week</label>
-              <label class="choice-card chip"><input type="radio" name="span" value="month">Month</label>
+              <label class="segment"><input type="radio" name="span" value="day">Day</label>
+              <label class="segment"><input type="radio" name="span" value="week" checked>Week</label>
+              <label class="segment"><input type="radio" name="span" value="month">Month</label>
             </fieldset>
           </div>
           <figcaption class="muted text-center">Segmented control</figcaption>
@@ -271,10 +245,10 @@
           <li class="list-item">
             <span class="list-item-content list-item-title" id="appearance-label">Appearance</span>
             <span class="list-item-trailing">
-              <span class="ios-segmented" role="radiogroup" aria-labelledby="appearance-label">
-                <label class="choice-card chip"><input type="radio" name="appearance" value="light" checked>Light</label>
-                <label class="choice-card chip"><input type="radio" name="appearance" value="dark">Dark</label>
-                <label class="choice-card chip"><input type="radio" name="appearance" value="auto">Auto</label>
+              <span class="segmented sm" role="radiogroup" aria-labelledby="appearance-label">
+                <label class="segment"><input type="radio" name="appearance" value="light" checked>Light</label>
+                <label class="segment"><input type="radio" name="appearance" value="dark">Dark</label>
+                <label class="segment"><input type="radio" name="appearance" value="auto">Auto</label>
               </span>
             </span>
           </li>
@@ -305,9 +279,9 @@
             <li class="list-item">
               <span class="list-item-content list-item-title" id="narrow-appearance">Appearance</span>
               <span class="list-item-trailing">
-                <span class="ios-segmented" role="radiogroup" aria-labelledby="narrow-appearance">
-                  <label class="choice-card chip"><input type="radio" name="narrow-a" value="light" checked>Light</label>
-                  <label class="choice-card chip"><input type="radio" name="narrow-a" value="dark">Dark</label>
+                <span class="segmented sm" role="radiogroup" aria-labelledby="narrow-appearance">
+                  <label class="segment"><input type="radio" name="narrow-a" value="light" checked>Light</label>
+                  <label class="segment"><input type="radio" name="narrow-a" value="dark">Dark</label>
                 </span>
               </span>
             </li>

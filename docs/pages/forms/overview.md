@@ -28,6 +28,7 @@
 | `.range`        | Component   | Native range slider, theme-aware accent.      |
 | `.file`         | Component   | Native file input, themed picker button.      |
 | `.color`        | Component   | Native color picker in a control-sized box.   |
+| `.color-swatch` | Component   | Palette color on a radio, or its trigger.     |
 | `.field`        | Composition | Field wrapper, on `<label>` or `<div>`.       |
 | `.field-label`  | Composition | Label text, element-agnostic.                 |
 | `.field-help`   | Composition | Supporting helper text under a control.       |

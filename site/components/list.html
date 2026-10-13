@@ -151,6 +151,7 @@
         <li><a class="nav-link" href="pagination.html">Pagination</a></li>
         <li><a class="nav-link" href="progress.html">Progress</a></li>
         <li><a class="nav-link" href="rating.html">Rating</a></li>
+        <li><a class="nav-link" href="segmented.html">Segmented control</a></li>
         <li><a class="nav-link" href="shimmer.html">Shimmer</a></li>
         <li><a class="nav-link" href="skeleton.html">Skeleton</a></li>
         <li><a class="nav-link" href="spinner.html">Spinner</a></li>
@@ -170,6 +171,7 @@
         <li><a class="nav-link" href="../forms/form-actions.html">Form Actions</a></li>
         <li><a class="nav-link" href="../forms/joined-controls.html">Joined Controls</a></li>
         <li><a class="nav-link" href="../forms/choice-cards.html">Choice Cards</a></li>
+        <li><a class="nav-link" href="../forms/color-swatches.html">Color swatches</a></li>
         <li><a class="nav-link" href="../forms/switch.html">Switches</a></li>
         <li><a class="nav-link" href="../forms/range.html">Range</a></li>
         <li><a class="nav-link" href="../forms/otp.html">One-time code input</a></li>
@@ -282,9 +284,12 @@ list markers when order or bullets carry meaning.</p>
 </div>
 <div class="prose docs-prose">
 <p>Leading and trailing content are unconstrained: avatars, native choices,
-badges, text, switches, and buttons retain their own component sizing.
-<code>.list-item-content</code> has no minimum content floor, so supporting text and long
-tokens wrap instead of widening the page.</p>
+badges, text, switches, and buttons retain their own component sizing. In a
+narrow row, the trailing region moves under the content rather than breaking a
+word of the title; supporting text still wraps beside it, and a token longer
+than the row breaks instead of widening the page. A <code>.truncate</code> line inside
+<code>.list-item-content</code> gives up its width, so it ellipsizes next to the trailing
+region (wrap, responsive row, overflow).</p>
 <p>Both outer regions are optional, and an absent one costs neither space nor a
 gap: <code>.list-item-content</code> always takes the row's free space and
 <code>.list-item-trailing</code> always sits on the end edge, whether the row has a
@@ -527,6 +532,7 @@ deliberately has no trailing divider.</li>
         <li><a class="nav-link" href="pagination.html">Pagination</a></li>
         <li><a class="nav-link" href="progress.html">Progress</a></li>
         <li><a class="nav-link" href="rating.html">Rating</a></li>
+        <li><a class="nav-link" href="segmented.html">Segmented control</a></li>
         <li><a class="nav-link" href="shimmer.html">Shimmer</a></li>
         <li><a class="nav-link" href="skeleton.html">Skeleton</a></li>
         <li><a class="nav-link" href="spinner.html">Spinner</a></li>
@@ -546,6 +552,7 @@ deliberately has no trailing divider.</li>
         <li><a class="nav-link" href="../forms/form-actions.html">Form Actions</a></li>
         <li><a class="nav-link" href="../forms/joined-controls.html">Joined Controls</a></li>
         <li><a class="nav-link" href="../forms/choice-cards.html">Choice Cards</a></li>
+        <li><a class="nav-link" href="../forms/color-swatches.html">Color swatches</a></li>
         <li><a class="nav-link" href="../forms/switch.html">Switches</a></li>
         <li><a class="nav-link" href="../forms/range.html">Range</a></li>
         <li><a class="nav-link" href="../forms/otp.html">One-time code input</a></li>

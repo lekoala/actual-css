@@ -169,6 +169,8 @@ const PROGRESSIVE = {
   "src/css/components/modal.css": [":has()"],
   "src/css/forms/choice-card.css": [":has()"],
   "src/css/forms/choice.css": [":has()"],
+  "src/css/components/segmented.css": [":has()"],
+  "src/css/forms/color-swatch.css": [":has()"],
   "src/css/layout/grid.css": ["@container queries"],
   "src/css/layout/container-query.css": ["@container queries"],
 };

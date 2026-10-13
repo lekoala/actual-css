@@ -106,17 +106,6 @@
       padding: var(--space-40) var(--space-50) var(--space-50);
     }
 
-    /* A 12px round preview next to a picker is not a framework primitive. If
-       it turns up in a palette, a theme selector and a status dot as well, it
-       earns one. */
-    .settings-swatch {
-      inline-size: 0.75rem;
-      block-size: 0.75rem;
-      border: var(--border-width) solid var(--border);
-      border-radius: var(--radius-full);
-      background: var(--primary);
-    }
-
     .settings-empty {
       margin: 0;
       color: var(--text-muted);
@@ -266,15 +255,24 @@
               </span>
             </li>
             <li class="list-item">
-              <label class="list-item-content list-item-title" for="pref-accent">Accent color</label>
-              <span class="list-item-trailing cluster">
-                <span class="settings-swatch" aria-hidden="true"></span>
-                <select class="select sm fit" id="pref-accent">
-                  <option>Default</option>
-                  <option>Indigo</option>
-                  <option>Forest</option>
-                  <option>Sunset</option>
-                </select>
+              <span class="list-item-content list-item-title" id="pref-accent-label">Accent color</span>
+              <span class="list-item-trailing">
+                <span class="flyout-trigger">
+                  <button class="color-swatch sm" type="button" data-enhance="flyout"
+                          aria-controls="pref-accent-palette" aria-expanded="false"
+                          aria-labelledby="pref-accent-label pref-accent-name"
+                          style="--color-swatch-value: hsl(268 32% 33%)">
+                    <span class="sr-only" id="pref-accent-name">Default</span>
+                  </button>
+                  <span class="flyout" id="pref-accent-palette" data-flyout-placement="bottom-end" style="--flyout-pad: var(--space-30)" hidden>
+                    <span class="cluster" role="radiogroup" aria-labelledby="pref-accent-label">
+                      <label class="color-swatch" style="--color-swatch-value: hsl(268 32% 33%)"><input type="radio" name="pref-accent" value="default" aria-label="Default" checked></label>
+                      <label class="color-swatch" style="--color-swatch-value: hsl(220 90% 66%)"><input type="radio" name="pref-accent" value="indigo" aria-label="Indigo"></label>
+                      <label class="color-swatch" style="--color-swatch-value: hsl(175 48% 26%)"><input type="radio" name="pref-accent" value="forest" aria-label="Forest"></label>
+                      <label class="color-swatch" style="--color-swatch-value: hsl(16 84% 43%)"><input type="radio" name="pref-accent" value="sunset" aria-label="Sunset"></label>
+                    </span>
+                  </span>
+                </span>
               </span>
             </li>
             <li class="list-item">
@@ -620,6 +618,15 @@
         empty.hidden = matches > 0;
       });
     }
+
+    /* The accent button shows the pick: the palette's values are application
+       data, so mirroring them is application code too. */
+    const accent = document.querySelector('[aria-controls="pref-accent-palette"]');
+    document.getElementById("pref-accent-palette")?.addEventListener("change", (event) => {
+      const swatch = event.target.closest(".color-swatch");
+      accent.style.setProperty("--color-swatch-value", swatch.style.getPropertyValue("--color-swatch-value"));
+      document.getElementById("pref-accent-name").textContent = event.target.getAttribute("aria-label");
+    });
 
     /* The modal is the demo, so it opens on load. */
     document.getElementById("settings-modal")?.showModal();

@@ -1,0 +1,183 @@
+/*
+ * Segmented control — one compact choice among a few, on a shared track.
+ *
+ * Docs: docs/pages/components/segmented.md
+ *
+ * .segmented is the track, each .segment a direct child. The look is shared;
+ * the semantics stay with the markup, and the selected state is read from it:
+ *   radios    <label class="segment"><input type="radio">   :checked
+ *   tabs      <button class="segment" role="tab">           aria-selected="true"
+ *   links     <a class="segment">                           aria-current="page"
+ * No script of its own: radios bring their arrow keys, a tablist takes
+ * data-enhance="tabs". Without :has() the radio anatomy loses its selected
+ * fill and focus ring, and the native radio stays visible to carry both.
+ *
+ * One row of equal shares (grid-auto-columns: 1fr), at least --control-size
+ * tall so it lines up with .btn and .input. Labels wrap instead of truncating;
+ * a word longer than its share breaks, so the control never overflows its
+ * container. A strip too long for one row is .tabs, which scrolls.
+ *
+ * Focus is drawn inside the segment, unlike other discrete actions
+ * (focus.css): an offset ring would cross the track's padding and cover the
+ * neighbouring segment.
+ *
+ * Public hooks:
+ * --segmented-bg
+ * --segmented-pad
+ * --segmented-radius
+ * --segmented-fg
+ * --segmented-selected-bg
+ * --segmented-selected-border
+ */
+.segmented {
+  --segmented-bg: var(--surface-subtle);
+  --segmented-pad: var(--space-10);
+  --segmented-radius: var(--radius);
+  --segmented-fg: var(--text-muted);
+  --segmented-selected-bg: var(--surface-raised);
+  /* The edge is what separates the selected segment where --surface-raised
+     is darker than --surface-subtle (the default dark palette). */
+  --segmented-selected-border: var(--border);
+
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: var(--segmented-pad);
+  /* A minimum, not a height: a wrapped label grows the whole row. */
+  min-block-size: var(--control-size);
+  /* why: margin and border also reset <fieldset>, the radio anatomy's
+     element. The border is transparent, not 0: forced colors paint it, which
+     outlines the track once its fill is gone. */
+  margin: 0;
+  padding: var(--segmented-pad);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--segmented-radius);
+  background: var(--segmented-bg);
+  font-size: var(--control-font-size);
+  vertical-align: middle;
+}
+
+.segment {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375em;
+  padding: calc(var(--space-10) / 2) var(--space-30);
+  border: 0;
+  border-radius: calc(var(--segmented-radius) - var(--segmented-pad));
+  background: transparent;
+  color: var(--segmented-fg);
+  font: inherit;
+  /* Constant across states: a heavier selected label would resize its share. */
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  /* why: also shrinks the min-content contribution, so 1fr keeps equal
+     shares under constraint instead of widening one around a long word. */
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition:
+    background-color var(--duration),
+    color var(--duration),
+    box-shadow var(--duration);
+}
+
+.segment > input {
+  margin: 0;
+}
+
+/* The radio is visually hidden but stays focusable, submitted and arrow-key
+   navigable (sr-only pattern). Guarded: without :has() the segment cannot
+   mirror :checked, so the visible native radio is the fallback. */
+@supports selector(:has(*)) {
+  .segment > input {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+.segment:hover {
+  color: var(--text);
+}
+
+/* Separate rules from the :has() forms below: an engine without :has() would
+   discard a shared selector list, ARIA states included. */
+.segment:is([aria-selected="true"], [aria-current="page"], [aria-current="true"]) {
+  background: var(--segmented-selected-bg);
+  color: var(--text);
+  box-shadow:
+    0 0 0 var(--border-width) var(--segmented-selected-border),
+    var(--shadow);
+}
+
+.segment:has(> input:checked) {
+  background: var(--segmented-selected-bg);
+  color: var(--text);
+  box-shadow:
+    0 0 0 var(--border-width) var(--segmented-selected-border),
+    var(--shadow);
+}
+
+.segment:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: calc(var(--focus-ring-width) * -1);
+}
+
+.segment:has(> input:focus-visible) {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: calc(var(--focus-ring-width) * -1);
+}
+
+.segment:is(:disabled, [aria-disabled="true"]) {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+.segment:has(> input:disabled) {
+  opacity: var(--disabled-opacity);
+  cursor: not-allowed;
+}
+
+/* Forced colors drop the raised fill and its edge. The selected segment
+   takes the system highlight — a background, so the outline stays the focus
+   channel alone. forced-color-adjust: none is required, not cosmetic: the UA
+   otherwise paints a Canvas backplate behind the label, which hid the text on
+   the highlight. Opting out also stops the forcing of the rest, so the shadow
+   is dropped here and the focus line takes the highlight's text color. */
+@media (forced-colors: active) {
+  .segment:is([aria-selected="true"], [aria-current="page"], [aria-current="true"]) {
+    --focus: HighlightText;
+
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+    box-shadow: none;
+  }
+
+  .segment:has(> input:checked) {
+    --focus: HighlightText;
+
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+    box-shadow: none;
+  }
+
+  /* --disabled-opacity is 1 here (tokens.css): the dimming needs a color. */
+  .segment:is(:disabled, [aria-disabled="true"]) {
+    color: GrayText;
+  }
+
+  .segment:has(> input:disabled) {
+    color: GrayText;
+  }
+}

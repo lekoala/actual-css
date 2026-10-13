@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Segmented control fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+  <style>
+    * { transition-duration: 0s !important; }
+
+    /* Far narrower than the labels in any font, so the longest word must
+       break; still above the floor of two segment paddings and one glyph
+       each (5rem was below it, and nothing could fit). */
+    #narrow-box { inline-size: 8rem; }
+  </style>
+</head>
+<body>
+  <form id="form" class="stack" style="align-items: start">
+    <!-- Tab order is the test's navigation path: keep the radios first. -->
+    <fieldset class="segmented" id="radios">
+      <legend class="sr-only">Range</legend>
+      <label class="segment" id="day"><input type="radio" name="span" value="day">Day</label>
+      <label class="segment" id="week"><input type="radio" name="span" value="week" id="week-input" checked>Week</label>
+      <label class="segment" id="quarter"><input type="radio" name="span" value="quarter">Fiscal quarter</label>
+      <label class="segment" id="year"><input type="radio" name="span" value="year" disabled>Year</label>
+    </fieldset>
+
+    <fieldset class="segmented sm" id="small">
+      <legend class="sr-only">Small range</legend>
+      <label class="segment"><input type="radio" name="small" value="a" checked>A</label>
+      <label class="segment"><input type="radio" name="small" value="b">B</label>
+    </fieldset>
+
+    <div id="narrow-box">
+      <fieldset class="segmented" id="narrow">
+        <legend class="sr-only">Narrow range</legend>
+        <label class="segment"><input type="radio" name="narrow" value="a" checked>Notifications</label>
+        <label class="segment"><input type="radio" name="narrow" value="b">Off</label>
+      </fieldset>
+    </div>
+  </form>
+
+  <div class="segmented" id="tabs" role="tablist" aria-label="View" data-enhance="tabs">
+    <button class="segment" type="button" role="tab" id="t1" aria-selected="true" aria-controls="p1">List</button>
+    <button class="segment" type="button" role="tab" id="t2" aria-selected="false" aria-controls="p2" tabindex="-1">Grid</button>
+  </div>
+  <section role="tabpanel" id="p1" aria-labelledby="t1">List view</section>
+  <section role="tabpanel" id="p2" aria-labelledby="t2" hidden>Grid view</section>
+
+  <nav class="segmented" id="nav" aria-label="Period">
+    <a class="segment" href="#d" aria-current="page">Day</a>
+    <a class="segment" href="#w">Week</a>
+  </nav>
+</body>
+</html>

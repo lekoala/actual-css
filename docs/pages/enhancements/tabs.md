@@ -91,9 +91,14 @@ JavaScript involved:
 
 ## Equal-width tabs
 
-To make a few tabs share the strip's width (segmented, full-width, fill), set
+To make a few tabs share the strip's width (full-width, fill), set
 `--tab-flex: 1 1 0` on the strip. `.switcher` does not apply here: a tab strip
 never wraps, so it could never stack.
+
+For a few tabs on a track with a raised selected tab (segmented control, pill
+tabs), put the same tablist on [`.segmented`](../components/segmented.md):
+the runtime is unchanged. Its labels wrap instead of scrolling, so keep it to
+what fits on one row.
 
 ```html demo
 <nav aria-label="Pricing sections">
@@ -158,5 +163,5 @@ Do not put a flyout trigger in a `role="tablist"`: a tablist holds only
 ## CSS hooks
 
 - `--tab-flex` — flex of each item; set `1 1 0` on the strip for equal-width tabs
-  (segmented, fill the width). A strip that cannot fit its labels still scrolls.
+  (fill the width). A strip that cannot fit its labels still scrolls.
 - `--tab-gap` — space between an icon and the label text (default `0.375em`).

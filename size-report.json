@@ -1,20 +1,20 @@
 {
-  "totalRaw": 380694,
+  "totalRaw": 393800,
   "core": {
-    "minified": 12322,
-    "brotli": 2765
+    "minified": 12376,
+    "brotli": 2776
   },
   "full": {
-    "minified": 135490,
-    "brotli": 19471
+    "minified": 141475,
+    "brotli": 19997
   },
   "js": {
     "full": {
-      "bytes": 61659,
-      "brotli": 18032
+      "bytes": 62014,
+      "brotli": 18116
     }
   },
-  "fileCount": 114,
+  "fileCount": 116,
   "files": [
     {
       "file": "components/steps.css",
@@ -70,7 +70,11 @@
     },
     {
       "file": "core/variants.css",
-      "raw": 6003
+      "raw": 6076
+    },
+    {
+      "file": "components/segmented.css",
+      "raw": 5998
     },
     {
       "file": "components/flyout.css",
@@ -89,6 +93,10 @@
       "raw": 5594
     },
     {
+      "file": "forms/switch.css",
+      "raw": 5421
+    },
+    {
       "file": "components/navbar.css",
       "raw": 5411
     },
@@ -99,10 +107,6 @@
     {
       "file": "components/accordion.css",
       "raw": 5262
-    },
-    {
-      "file": "forms/switch.css",
-      "raw": 5259
     },
     {
       "file": "forms/otp.css",
@@ -129,6 +133,10 @@
       "raw": 4871
     },
     {
+      "file": "forms/color-swatch.css",
+      "raw": 4820
+    },
+    {
       "file": "themes/edge.css",
       "raw": 4747
     },
@@ -137,8 +145,16 @@
       "raw": 4535
     },
     {
+      "file": "components/list.css",
+      "raw": 4387
+    },
+    {
       "file": "layout/grid.css",
       "raw": 4129
+    },
+    {
+      "file": "forms/native.css",
+      "raw": 4076
     },
     {
       "file": "forms/floating-field.css",
@@ -169,10 +185,6 @@
       "raw": 3652
     },
     {
-      "file": "components/list.css",
-      "raw": 3625
-    },
-    {
       "file": "layout/scroll-snap.css",
       "raw": 3390
     },
@@ -191,10 +203,6 @@
     {
       "file": "themes/ocean.css",
       "raw": 3003
-    },
-    {
-      "file": "forms/native.css",
-      "raw": 2996
     },
     {
       "file": "themes/index.css",
@@ -321,6 +329,10 @@
       "raw": 1937
     },
     {
+      "file": "core/focus.css",
+      "raw": 1883
+    },
+    {
       "file": "core/intents.css",
       "raw": 1806
     },
@@ -335,10 +347,6 @@
     {
       "file": "typography/fluid.css",
       "raw": 1731
-    },
-    {
-      "file": "core/focus.css",
-      "raw": 1729
     },
     {
       "file": "layout/index.css",
@@ -386,7 +394,7 @@
     },
     {
       "file": "components/index.css",
-      "raw": 1091
+      "raw": 1118
     },
     {
       "file": "components/scrollspy.css",
@@ -410,7 +418,7 @@
     },
     {
       "file": "forms/index.css",
-      "raw": 544
+      "raw": 574
     },
     {
       "file": "actual.full.css",

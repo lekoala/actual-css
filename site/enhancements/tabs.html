@@ -151,6 +151,7 @@
         <li><a class="nav-link" href="../components/pagination.html">Pagination</a></li>
         <li><a class="nav-link" href="../components/progress.html">Progress</a></li>
         <li><a class="nav-link" href="../components/rating.html">Rating</a></li>
+        <li><a class="nav-link" href="../components/segmented.html">Segmented control</a></li>
         <li><a class="nav-link" href="../components/shimmer.html">Shimmer</a></li>
         <li><a class="nav-link" href="../components/skeleton.html">Skeleton</a></li>
         <li><a class="nav-link" href="../components/spinner.html">Spinner</a></li>
@@ -170,6 +171,7 @@
         <li><a class="nav-link" href="../forms/form-actions.html">Form Actions</a></li>
         <li><a class="nav-link" href="../forms/joined-controls.html">Joined Controls</a></li>
         <li><a class="nav-link" href="../forms/choice-cards.html">Choice Cards</a></li>
+        <li><a class="nav-link" href="../forms/color-swatches.html">Color swatches</a></li>
         <li><a class="nav-link" href="../forms/switch.html">Switches</a></li>
         <li><a class="nav-link" href="../forms/range.html">Range</a></li>
         <li><a class="nav-link" href="../forms/otp.html">One-time code input</a></li>
@@ -378,9 +380,13 @@ JavaScript involved:</p>
 </div>
 <div class="prose docs-prose">
 <h2 id="equal-width-tabs">Equal-width tabs</h2>
-<p>To make a few tabs share the strip's width (segmented, full-width, fill), set
+<p>To make a few tabs share the strip's width (full-width, fill), set
 <code>--tab-flex: 1 1 0</code> on the strip. <code>.switcher</code> does not apply here: a tab strip
 never wraps, so it could never stack.</p>
+<p>For a few tabs on a track with a raised selected tab (segmented control, pill
+tabs), put the same tablist on <a href="../components/segmented.html"><code>.segmented</code></a>:
+the runtime is unchanged. Its labels wrap instead of scrolling, so keep it to
+what fits on one row.</p>
 </div>
 <div class="docs-example">
   <div class="docs-preview">
@@ -474,7 +480,7 @@ the current item of the strip. This is the only place a <code>.tab</code> takes 
 <h2 id="css-hooks">CSS hooks</h2>
 <ul>
 <li><code>--tab-flex</code> — flex of each item; set <code>1 1 0</code> on the strip for equal-width tabs
-(segmented, fill the width). A strip that cannot fit its labels still scrolls.</li>
+(fill the width). A strip that cannot fit its labels still scrolls.</li>
 <li><code>--tab-gap</code> — space between an icon and the label text (default <code>0.375em</code>).</li>
 </ul>
 
@@ -615,6 +621,7 @@ the current item of the strip. This is the only place a <code>.tab</code> takes 
         <li><a class="nav-link" href="../components/pagination.html">Pagination</a></li>
         <li><a class="nav-link" href="../components/progress.html">Progress</a></li>
         <li><a class="nav-link" href="../components/rating.html">Rating</a></li>
+        <li><a class="nav-link" href="../components/segmented.html">Segmented control</a></li>
         <li><a class="nav-link" href="../components/shimmer.html">Shimmer</a></li>
         <li><a class="nav-link" href="../components/skeleton.html">Skeleton</a></li>
         <li><a class="nav-link" href="../components/spinner.html">Spinner</a></li>
@@ -634,6 +641,7 @@ the current item of the strip. This is the only place a <code>.tab</code> takes 
         <li><a class="nav-link" href="../forms/form-actions.html">Form Actions</a></li>
         <li><a class="nav-link" href="../forms/joined-controls.html">Joined Controls</a></li>
         <li><a class="nav-link" href="../forms/choice-cards.html">Choice Cards</a></li>
+        <li><a class="nav-link" href="../forms/color-swatches.html">Color swatches</a></li>
         <li><a class="nav-link" href="../forms/switch.html">Switches</a></li>
         <li><a class="nav-link" href="../forms/range.html">Range</a></li>
         <li><a class="nav-link" href="../forms/otp.html">One-time code input</a></li>

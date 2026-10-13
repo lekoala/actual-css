@@ -7,6 +7,9 @@
  *
  * Range has its own custom-styled file (range.css) so the focus ring can
  * target the thumb pseudo-element rather than the rectangular CSS box.
+ *
+ * Public hooks:
+ * --color-size
  */
 .file {
   color: var(--text-muted);
@@ -52,16 +55,24 @@
   outline-offset: var(--focus-outline-offset);
 }
 
-/* Native color picker — keep the browser's dialog and selected-color UI. The
-   swatch fills almost the whole control so it reads as a color, not as a tiny
-   square inside a button; the 1px padding keeps a hair of --surface around it. */
+/* Native color picker — keep the browser's dialog and selected-color UI. Same
+   geometry as .color-swatch: a --control-size hit area around a round swatch
+   the height of a .switch track, so a picker, a palette and a switch compose.
+   The input is the hit area; its padding leaves the swatch, which carries the
+   edge and the focus ring. Vendor pseudos cannot share a rule. */
 .color {
-  inline-size: var(--control-size);
-  block-size: var(--control-size);
-  padding: var(--border-width);
-  border: var(--border-width) solid var(--border-control);
-  border-radius: var(--radius);
-  background: var(--surface);
+  --color-size: calc(var(--choice-control-size) + 0.125em);
+
+  inline-size: max(var(--control-size), var(--color-size));
+  block-size: max(var(--control-size), var(--color-size));
+  padding: calc((max(var(--control-size), var(--color-size)) - var(--color-size)) / 2);
+  /* Lay out at the visible width, as .color-swatch does: the hit area
+     overflows on both sides so a label gap is measured from the swatch. */
+  margin: 0 calc((var(--color-size) - max(var(--control-size), var(--color-size))) / 2);
+  border: 0;
+  background: transparent;
+  /* Consumed so .sm/.lg reach the em-sized swatch. */
+  font-size: var(--control-font-size);
   cursor: pointer;
 }
 
@@ -70,13 +81,21 @@
 }
 
 .color::-webkit-color-swatch {
-  border: 0;
-  border-radius: calc(var(--radius) - var(--border-width));
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-full);
 }
 
 .color::-moz-color-swatch {
-  border: 0;
-  border-radius: calc(var(--radius) - var(--border-width));
+  border: var(--border-width) solid var(--border-control);
+  border-radius: var(--radius-full);
+}
+
+.color:hover::-webkit-color-swatch {
+  border-color: var(--text-subtle);
+}
+
+.color:hover::-moz-color-swatch {
+  border-color: var(--text-subtle);
 }
 
 .color:disabled {
@@ -84,24 +103,35 @@
   opacity: var(--disabled-opacity);
 }
 
+/* The ring goes around the visible swatch, not the larger hit area. */
 .color:focus-visible {
+  outline: none;
+}
+
+.color:focus-visible::-webkit-color-swatch {
+  outline: var(--focus-ring-width) solid var(--focus);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.color:focus-visible::-moz-color-swatch {
   outline: var(--focus-ring-width) solid var(--focus);
   outline-offset: var(--focus-outline-offset);
 }
 
 @media (forced-colors: active) {
-  .color {
-    border-color: ButtonText;
-    background: ButtonFace;
-  }
-
-  /* The swatch color is content, so preserve it without disabling the host's
-     native forced-color focus treatment. Vendor pseudos cannot share a rule. */
+  /* The swatch color is content, so the swatch opts out of forcing and takes
+     system colors for its edge and ring itself. */
   .color::-webkit-color-swatch {
+    --focus: CanvasText;
+
     forced-color-adjust: none;
+    border-color: CanvasText;
   }
 
   .color::-moz-color-swatch {
+    --focus: CanvasText;
+
     forced-color-adjust: none;
+    border-color: CanvasText;
   }
 }

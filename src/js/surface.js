@@ -386,8 +386,17 @@ export function disconnectSurface(menu) {
   }
 }
 
+/* Arrow keys in a radio group check the next radio by dispatching a click
+   (detail 0, no pointer). That click is navigation, not a pick: closing on it
+   shut a palette on the first arrow press, before the user could reach the
+   color they wanted. Space dispatches the same click and is left alone too. */
+function isKeyboardRadioMove(e) {
+  return e.detail === 0 && e.target?.matches?.('input[type="radio"]') === true;
+}
+
 function onDocumentClick(e) {
   const path = e.composedPath();
+  const radioMove = isKeyboardRadioMove(e);
 
   for (const menu of openSurfaces) {
     if (menu.ownerDocument !== e.currentTarget) continue;
@@ -396,6 +405,7 @@ function onDocumentClick(e) {
 
     const menuIndex = path.indexOf(menu);
     const isInside = menuIndex >= 0;
+    if (isInside && radioMove) continue;
     const hasCloseTrigger =
       isInside &&
       path

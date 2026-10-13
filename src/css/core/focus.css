@@ -18,6 +18,9 @@
    --surface-solid, so one token reads on the page, on a solid band and on
    any nested surface.
 
+   A .segment is an action but takes the inset ring: its track's padding is
+   narrower than an offset ring, which would cover the neighbouring segment.
+
    Documented exception: an invalid field focuses in --form-invalid-border
    (danger), so the error stays visible at the point of correction. The border
    carries the same hook; report:theme-contrast measures that line at 3:1
