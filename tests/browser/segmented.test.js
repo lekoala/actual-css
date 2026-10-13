@@ -48,7 +48,9 @@ const track = (id) => `(() => {
   el.append(probe);
   const controlSize = probe.getBoundingClientRect().height;
   probe.remove();
-  return { left: box.left, right: box.right, height: box.height, pad, controlSize, segments };
+  const cs = getComputedStyle(el);
+  const inner = el.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  return { left: box.left, right: box.right, height: box.height, inner, pad, controlSize, segments };
 })()`;
 
 const paint = (id) => `(() => {
@@ -78,6 +80,9 @@ it("one row of equal shares, control height, legend outside the grid", async () 
         // A minimum met exactly while every label holds on one line.
         expect(t.segments.every((s) => s.lines === 1)).toBe(true);
         expect(t.height).toBeCloseTo(t.controlSize, 0);
+        // Segments fill the track: on a <fieldset>, a minimum on the track
+        // alone left them short of it.
+        for (const s of t.segments) expect(s.height).toBeCloseTo(t.inner, 0);
         // The sr-only legend is out of flow: the first segment starts at the
         // track's border and padding, not after an empty column.
         expect(t.segments[0].left - t.left).toBeCloseTo(t.pad, 0);

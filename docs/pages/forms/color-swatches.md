@@ -65,6 +65,60 @@ Application code shows the pick on the button.
 </script>
 ```
 
+## Palette and custom color
+
+Add the native [`.color`](controls.md) picker to the panel for a color
+outside the palette. Two changes to the flyout above:
+
+- `data-flyout-auto-close="outside"` on the panel, so opening the color dialog
+  does not close it, and `data-flyout-close` on each swatch, so a pointer pick
+  still does. The arrow keys still move through the palette with the panel
+  open.
+- The custom input sits in a `<label class="cluster">`, which centers it on
+  its text; `.choice` aligns checkboxes, radios and switches only.
+- The custom input takes its own name. Application code unchecks the palette
+  when a custom color is chosen, so the form sends `brand`, or `brand-custom`
+  when no palette color is checked.
+
+```html demo
+<span class="field-label" id="brand-label">Brand color</span>
+<div class="flyout-trigger">
+  <button class="color-swatch" type="button" data-enhance="flyout"
+          aria-controls="brand-palette" aria-expanded="false"
+          aria-labelledby="brand-label brand-name"
+          style="--color-swatch-value: #2563eb">
+    <span class="sr-only" id="brand-name">Blue</span>
+  </button>
+  <div class="flyout stack" id="brand-palette" data-flyout-auto-close="outside"
+       style="--flyout-pad: var(--space-30)" hidden>
+    <div class="cluster" role="radiogroup" aria-labelledby="brand-label">
+      <label class="color-swatch" data-flyout-close style="--color-swatch-value: #2563eb"><input type="radio" name="brand" value="#2563eb" aria-label="Blue" checked></label>
+      <label class="color-swatch" data-flyout-close style="--color-swatch-value: #10b981"><input type="radio" name="brand" value="#10b981" aria-label="Green"></label>
+      <label class="color-swatch" data-flyout-close style="--color-swatch-value: #f59e0b"><input type="radio" name="brand" value="#f59e0b" aria-label="Amber"></label>
+      <label class="color-swatch" data-flyout-close style="--color-swatch-value: #e11d48"><input type="radio" name="brand" value="#e11d48" aria-label="Rose"></label>
+    </div>
+    <label class="cluster"><input class="color" type="color" name="brand-custom" value="#7048e8"> Custom…</label>
+  </div>
+</div>
+<script>
+  (() => {
+    const preview = document.currentScript.closest(".docs-preview");
+    const trigger = preview.querySelector("button.color-swatch");
+    const palette = preview.querySelector(".flyout");
+    palette.addEventListener("change", (event) => {
+      const custom = event.target.type === "color";
+      if (custom) for (const radio of palette.querySelectorAll('[type="radio"]')) radio.checked = false;
+      trigger.style.setProperty("--color-swatch-value", event.target.value);
+      trigger.querySelector(".sr-only").textContent = custom
+        ? `Custom ${event.target.value}`
+        : event.target.getAttribute("aria-label");
+    });
+  })();
+</script>
+```
+
+The color dialog is the browser's own and looks different on each platform.
+
 ## Hooks
 
 - `--color-swatch-value` — the color, set on each swatch.

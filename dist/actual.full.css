@@ -8705,8 +8705,6 @@ a.avatar[aria-disabled="true"] {
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   gap: var(--segmented-pad);
-  /* A minimum, not a height: a wrapped label grows the whole row. */
-  min-block-size: var(--control-size);
   /* why: margin and border also reset <fieldset>, the radio anatomy's
      element. The border is transparent, not 0: forced colors paint it, which
      outlines the track once its fill is gone. */
@@ -8725,6 +8723,11 @@ a.avatar[aria-disabled="true"] {
   align-items: center;
   justify-content: center;
   gap: 0.375em;
+  /* The track is --control-size tall through its segments, not through its
+     own min-block-size: a <fieldset> lays its content in an anonymous box
+     sized to the content, so a minimum on the track left the segments short.
+     A minimum, not a height: a wrapped label grows the whole row. */
+  min-block-size: calc(var(--control-size) - 2 * (var(--segmented-pad) + var(--border-width)));
   padding: calc(var(--space-10) / 2) var(--space-30);
   border: 0;
   border-radius: calc(var(--segmented-radius) - var(--segmented-pad));

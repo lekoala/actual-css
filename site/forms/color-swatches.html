@@ -336,6 +336,97 @@ Application code shows the pick on the button.</p>
   </div>
 </div>
 <div class="prose docs-prose">
+<h2 id="palette-and-custom-color">Palette and custom color</h2>
+<p>Add the native <a href="controls.html"><code>.color</code></a> picker to the panel for a color
+outside the palette. Two changes to the flyout above:</p>
+<ul>
+<li><code>data-flyout-auto-close=&quot;outside&quot;</code> on the panel, so opening the color dialog
+does not close it, and <code>data-flyout-close</code> on each swatch, so a pointer pick
+still does. The arrow keys still move through the palette with the panel
+open.</li>
+<li>The custom input sits in a <code>&lt;label class=&quot;cluster&quot;&gt;</code>, which centers it on
+its text; <code>.choice</code> aligns checkboxes, radios and switches only.</li>
+<li>The custom input takes its own name. Application code unchecks the palette
+when a custom color is chosen, so the form sends <code>brand</code>, or <code>brand-custom</code>
+when no palette color is checked.</li>
+</ul>
+</div>
+<div class="docs-example">
+  <div class="docs-preview">
+<span class="field-label" id="brand-label">Brand color</span>
+<div class="flyout-trigger">
+  <button class="color-swatch" type="button" data-enhance="flyout"
+          aria-controls="brand-palette" aria-expanded="false"
+          aria-labelledby="brand-label brand-name"
+          style="--color-swatch-value: #2563eb">
+    <span class="sr-only" id="brand-name">Blue</span>
+  </button>
+  <div class="flyout stack" id="brand-palette" data-flyout-auto-close="outside"
+       style="--flyout-pad: var(--space-30)" hidden>
+    <div class="cluster" role="radiogroup" aria-labelledby="brand-label">
+      <label class="color-swatch" data-flyout-close style="--color-swatch-value: #2563eb"><input type="radio" name="brand" value="#2563eb" aria-label="Blue" checked></label>
+      <label class="color-swatch" data-flyout-close style="--color-swatch-value: #10b981"><input type="radio" name="brand" value="#10b981" aria-label="Green"></label>
+      <label class="color-swatch" data-flyout-close style="--color-swatch-value: #f59e0b"><input type="radio" name="brand" value="#f59e0b" aria-label="Amber"></label>
+      <label class="color-swatch" data-flyout-close style="--color-swatch-value: #e11d48"><input type="radio" name="brand" value="#e11d48" aria-label="Rose"></label>
+    </div>
+    <label class="cluster"><input class="color" type="color" name="brand-custom" value="#7048e8"> Custom…</label>
+  </div>
+</div>
+<script>
+  (() => {
+    const preview = document.currentScript.closest(".docs-preview");
+    const trigger = preview.querySelector("button.color-swatch");
+    const palette = preview.querySelector(".flyout");
+    palette.addEventListener("change", (event) => {
+      const custom = event.target.type === "color";
+      if (custom) for (const radio of palette.querySelectorAll('[type="radio"]')) radio.checked = false;
+      trigger.style.setProperty("--color-swatch-value", event.target.value);
+      trigger.querySelector(".sr-only").textContent = custom
+        ? `Custom ${event.target.value}`
+        : event.target.getAttribute("aria-label");
+    });
+  })();
+</script>
+  </div>
+  <div class="docs-code">
+    <pre><code class="language-html">&lt;span class=&quot;field-label&quot; id=&quot;brand-label&quot;&gt;Brand color&lt;/span&gt;
+&lt;div class=&quot;flyout-trigger&quot;&gt;
+  &lt;button class=&quot;color-swatch&quot; type=&quot;button&quot; data-enhance=&quot;flyout&quot;
+          aria-controls=&quot;brand-palette&quot; aria-expanded=&quot;false&quot;
+          aria-labelledby=&quot;brand-label brand-name&quot;
+          style=&quot;--color-swatch-value: #2563eb&quot;&gt;
+    &lt;span class=&quot;sr-only&quot; id=&quot;brand-name&quot;&gt;Blue&lt;/span&gt;
+  &lt;/button&gt;
+  &lt;div class=&quot;flyout stack&quot; id=&quot;brand-palette&quot; data-flyout-auto-close=&quot;outside&quot;
+       style=&quot;--flyout-pad: var(--space-30)&quot; hidden&gt;
+    &lt;div class=&quot;cluster&quot; role=&quot;radiogroup&quot; aria-labelledby=&quot;brand-label&quot;&gt;
+      &lt;label class=&quot;color-swatch&quot; data-flyout-close style=&quot;--color-swatch-value: #2563eb&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;brand&quot; value=&quot;#2563eb&quot; aria-label=&quot;Blue&quot; checked&gt;&lt;/label&gt;
+      &lt;label class=&quot;color-swatch&quot; data-flyout-close style=&quot;--color-swatch-value: #10b981&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;brand&quot; value=&quot;#10b981&quot; aria-label=&quot;Green&quot;&gt;&lt;/label&gt;
+      &lt;label class=&quot;color-swatch&quot; data-flyout-close style=&quot;--color-swatch-value: #f59e0b&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;brand&quot; value=&quot;#f59e0b&quot; aria-label=&quot;Amber&quot;&gt;&lt;/label&gt;
+      &lt;label class=&quot;color-swatch&quot; data-flyout-close style=&quot;--color-swatch-value: #e11d48&quot;&gt;&lt;input type=&quot;radio&quot; name=&quot;brand&quot; value=&quot;#e11d48&quot; aria-label=&quot;Rose&quot;&gt;&lt;/label&gt;
+    &lt;/div&gt;
+    &lt;label class=&quot;cluster&quot;&gt;&lt;input class=&quot;color&quot; type=&quot;color&quot; name=&quot;brand-custom&quot; value=&quot;#7048e8&quot;&gt; Custom…&lt;/label&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+  (() =&gt; {
+    const preview = document.currentScript.closest(&quot;.docs-preview&quot;);
+    const trigger = preview.querySelector(&quot;button.color-swatch&quot;);
+    const palette = preview.querySelector(&quot;.flyout&quot;);
+    palette.addEventListener(&quot;change&quot;, (event) =&gt; {
+      const custom = event.target.type === &quot;color&quot;;
+      if (custom) for (const radio of palette.querySelectorAll('[type=&quot;radio&quot;]')) radio.checked = false;
+      trigger.style.setProperty(&quot;--color-swatch-value&quot;, event.target.value);
+      trigger.querySelector(&quot;.sr-only&quot;).textContent = custom
+        ? `Custom ${event.target.value}`
+        : event.target.getAttribute(&quot;aria-label&quot;);
+    });
+  })();
+&lt;/script&gt;</code></pre>
+  </div>
+</div>
+<div class="prose docs-prose">
+<p>The color dialog is the browser's own and looks different on each platform.</p>
 <h2 id="hooks">Hooks</h2>
 <ul>
 <li><code>--color-swatch-value</code> — the color, set on each swatch.</li>
@@ -364,6 +455,7 @@ by default; the hit area stays <code>--control-size</code>. <code>.sm</code> and
           <ul class="nav-list docs-toc-list" data-docs-toc>
         <li><a class="nav-link" href="#palette" data-docs-toc-item data-level="2">Palette</a></li>
         <li><a class="nav-link" href="#palette-in-a-flyout" data-docs-toc-item data-level="2">Palette in a flyout</a></li>
+        <li><a class="nav-link" href="#palette-and-custom-color" data-docs-toc-item data-level="2">Palette and custom color</a></li>
         <li><a class="nav-link" href="#hooks" data-docs-toc-item data-level="2">Hooks</a></li>
           </ul>
         </nav>

@@ -213,3 +213,86 @@ it("arrow keys browse the palette without closing it; Escape returns", async () 
     { artifactName: "color-swatch-picker-keyboard" },
   );
 });
+
+const brandOpen = `document.getElementById("brand-palette").matches(":popover-open")`;
+const brandForm = `[...new FormData(document.getElementById("form")).entries()]
+  .filter(([k]) => k.startsWith("brand")).map(([k, v]) => k + "=" + v)`;
+
+it("palette plus custom color: the input keeps the panel open, a swatch closes it", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      await view.evaluate(`(() => { ${runtime} })()`);
+
+      // The panel only closes outside, so opening the native dialog from the
+      // custom input does not take the panel down with it.
+      await clickSelector(view, "#brand-trigger");
+      expect(await waitForBrowser(view, brandOpen)).toBe(true);
+
+      // The "Custom…" text and the swatch share a center line.
+      const level = await view.evaluate(`(() => {
+        const row = document.getElementById("b-custom-row");
+        const range = document.createRange();
+        range.selectNodeContents(row.lastChild);
+        const text = range.getBoundingClientRect();
+        const swatch = document.getElementById("b-custom").getBoundingClientRect();
+        return { text: (text.top + text.bottom) / 2, swatch: (swatch.top + swatch.bottom) / 2 };
+      })()`);
+      expect(Math.abs(level.text - level.swatch)).toBeLessThanOrEqual(1);
+
+      await clickSelector(view, "#b-custom");
+      expect(await view.evaluate(brandOpen)).toBe(true);
+
+      // The dialog itself cannot be driven: commit a value the way it does.
+      await view.evaluate(`(() => {
+        const input = document.getElementById("b-custom");
+        input.value = "#123456";
+        input.dispatchEvent(new Event("change", { bubbles: true }));
+      })()`);
+      expect(await view.evaluate(brandForm)).toEqual(["brand-custom=#123456"]);
+      expect(
+        await view.evaluate(
+          `getComputedStyle(document.getElementById("brand-trigger"), "::before").backgroundColor`,
+        ),
+      ).toBe("rgb(18, 52, 86)");
+      expect(await view.evaluate(brandOpen)).toBe(true);
+
+      // A palette swatch closes it again through data-flyout-close.
+      await clickSelector(view, "#b-green");
+      expect(await waitForBrowser(view, `!${brandOpen}`)).toBe(true);
+      expect(await view.evaluate(brandForm)).toEqual(["brand=#10b981", "brand-custom=#123456"]);
+    },
+    { artifactName: "color-swatch-custom-pointer" },
+  );
+});
+
+it("palette plus custom color: arrow keys still browse without closing", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      await view.evaluate(`(() => { ${runtime} })()`);
+      expect(await tabUntil(view, `document.activeElement?.id === "brand-trigger"`)).toBe(true);
+      await pressKey(view, "Enter");
+      expect(await waitForBrowser(view, brandOpen)).toBe(true);
+      expect(
+        await waitForBrowser(
+          view,
+          `document.activeElement === document.querySelector("#b-blue input")`,
+        ),
+      ).toBe(true);
+
+      // data-flyout-close sits on the swatch, yet a keyboard move is not a pick.
+      await pressKey(view, "ArrowRight", ARROW_RIGHT);
+      expect(await waitForBrowser(view, `document.querySelector("#b-green input").checked`)).toBe(
+        true,
+      );
+      expect(await view.evaluate(brandOpen)).toBe(true);
+
+      // Tab reaches the custom input inside the open panel.
+      await pressKey(view, "Tab");
+      expect(await waitForBrowser(view, `document.activeElement?.id === "b-custom"`)).toBe(true);
+      expect(await view.evaluate(brandOpen)).toBe(true);
+    },
+    { artifactName: "color-swatch-custom-keyboard" },
+  );
+});
