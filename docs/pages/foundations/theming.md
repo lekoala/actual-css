@@ -56,7 +56,7 @@ Set `--form-actions-justify` (and `--form-actions-align`).
 
 ### Customize a switch's size
 
-Change `--switch-width`, `--switch-block-size`, and `--switch-knob-margin`; knob size and travel are derived from them. To rescale the whole row of inline choices at once, use `.sm` / `.lg` on `.choice`, or set `--choice-control-size` directly — the checkbox, the radio, and the switch track all follow it. Density contexts leave inline choices alone.
+Change `--switch-width`, `--switch-block-size`, and `--switch-knob-margin`; knob size and travel are derived from them. `--switch-knob-inline-size` widens the knob into a capsule. To rescale the whole row of inline choices at once, use `.sm` / `.lg` on `.choice`, or set `--choice-control-size` directly — the checkbox, the radio, and the switch track all follow it. Density contexts leave inline choices alone.
 
 → Forms · Switch
 

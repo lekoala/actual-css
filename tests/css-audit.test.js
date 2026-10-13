@@ -1162,6 +1162,17 @@ test("the switch knob is concentric inside its track", () => {
   );
 });
 
+test("a capsule knob still ends its travel at the track's far inset", () => {
+  const css = readCss("src/css/forms/switch.css");
+
+  // The knob's width and the travel must read the same hook, or a widened
+  // knob overshoots the end of the track when checked.
+  expect(css).toMatch(/\.switch::before\s*\{[^}]*inline-size:\s*var\(--switch-knob-inline-size\);/);
+  expect(css).toMatch(
+    /--switch-travel:\s*calc\(\s*var\(--switch-width\)\s*-\s*var\(--switch-knob-inline-size\)/,
+  );
+});
+
 test("checked choices fall back to the selected token, not primary", () => {
   const choiceCss = readCss("src/css/forms/choice.css");
   const switchCss = readCss("src/css/forms/switch.css");

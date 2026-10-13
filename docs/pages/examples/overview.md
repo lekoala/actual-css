@@ -31,6 +31,7 @@ Whole pages, composed the way a real product would.
 - [Settings modal](../../demo/templates/settings-modal.html) - two-pane preferences dialog, with the local CSS it needs audited rule by rule
 - [Modal patterns](../../demo/templates/modal-patterns.html) - eight application modals, each the modal surface plus the smallest application CSS it needs
 - [Workspace settings](../../demo/templates/settings-pricing.html) - plans with visible native choices, preferences and a local segmented tab treatment
+- [iOS-style settings](../../demo/templates/settings-ios.html) - iOS-like controls and grouped settings from unchanged framework markup, a local theme, and its findings listed rule by rule
 - [Card compositions](../../demo/templates/card-compositions.html) - editorial, team, sign-in and horizontal cards composed from existing primitives
 - [Register form](../../demo/templates/register-form.html) - registration page with choice cards, masks, the password toggle, `tel-prefix` validation, an OTP verification dialog, and status feedback
 
