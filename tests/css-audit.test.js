@@ -1389,16 +1389,19 @@ test("application lists provide optional regions without owning their controls",
   expect(css).toContain("border-block-start: var(--list-divider);");
   expect(css).not.toContain("border-block: var(--list-divider);");
   expect(css).toContain(".list-item-content");
-  expect(css).toContain("min-inline-size: 0;");
+  // The content keeps its automatic (longest-word) minimum so the row wraps;
+  // tests/browser/list-item.test.js measures the narrow cases.
+  expect(css).toMatch(/\.list-item-content \{[^}]*max-inline-size: 100%;/);
+  expect(css).not.toMatch(/\.list-item-content \{[^}]*min-inline-size/);
   expect(css).toContain("a.list-item");
   // The divider is a real border, so it stays visible in forced colors without
   // a repaint block (CONTRIBUTING.md "Forced colors invariant").
   expect(css).not.toContain("@media (forced-colors: active)");
   expect(css).not.toContain("two-line");
   expect(css).not.toContain("three-line");
-  // Long content wraps instead of pushing the grid track: title and text share
-  // the anywhere wrap, and an explicit .truncate stays the opt-in single line.
-  expect(css).toMatch(/\.list-item-title,\s*\.list-item-text \{[^}]*overflow-wrap: anywhere;/);
+  // Long content wraps at words: anywhere would lower the min-content to one
+  // character and the row would never wrap. .truncate stays the opt-in line.
+  expect(css).toMatch(/\.list-item-title,\s*\.list-item-text \{[^}]*overflow-wrap: break-word;/);
   // Navigational current row ("page", or "true" for a master/detail item):
   // calm surface, normal text, inset selected trait.
   expect(css).toMatch(

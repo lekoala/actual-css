@@ -43,6 +43,9 @@
 .list > :where(.list-item),
 .list > li > .list-item {
   display: flex;
+  /* A trailing control that no longer fits beside the content's longest word
+     moves to its own line instead of breaking that word. */
+  flex-wrap: wrap;
   /* Centered fits the short rows lists mostly hold. Read through
      --items-align so .items-start on the row or the list wins without
      outranking this selector — the opt-out for long supporting text. */
@@ -89,17 +92,29 @@ a.list-item:is([aria-current="page"], [aria-current="true"])::before {
   border-inline-start: 2px solid var(--state-selected);
 }
 
-/* The content region is the one that flexes, whichever position it holds. */
+/* The content region is the one that flexes, whichever position it holds.
+   Its automatic minimum is its longest word, which is what wraps the row; the
+   max size caps that minimum at the row, so a long token breaks rather than
+   widening the page. A zero minimum shrank it until words broke mid-way. */
 .list-item-content {
   flex: 1 1 0;
-  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 
+/* break-word, not anywhere: anywhere also lowers the min-content to a single
+   character, and the row would never wrap. */
 .list-item-title,
 .list-item-text {
   display: block;
   margin: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+}
+
+/* Truncated text gives up its width by design: without containment its
+   unbreakable line would become the content's minimum and push the trailing
+   region onto a line of its own. */
+.list-item-content .truncate {
+  contain: inline-size;
 }
 
 .list-item-text {
