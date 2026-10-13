@@ -49,6 +49,10 @@
      its invisible reach. */
   margin: calc(var(--color-swatch-reach) / -2);
   padding: 0;
+  /* No in-flow text, so the baseline would be the box's bottom edge and an
+     inline swatch would ride above the line (a flyout trigger beside its
+     label). A palette in .cluster or .grid ignores it. */
+  vertical-align: middle;
   border: 0;
   background: transparent;
   color: inherit;
