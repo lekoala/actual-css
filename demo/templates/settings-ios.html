@@ -74,6 +74,8 @@
     [data-theme="ios-demo"] .list {
       --list-item-pad-inline: var(--space-40);
       --list-item-pad-block: var(--space-20);
+      /* Not the page's section --gap, which the rows would otherwise inherit. */
+      --list-item-gap: var(--space-30);
     }
 
     /* Icon tiles: a square avatar painted by its intent. */
@@ -160,12 +162,6 @@
     @media (forced-colors: active) {
       .ios-segmented .choice-card:has(:checked) { outline: 2px solid Highlight; }
     }
-
-    /* F3. A wide trailing control squeezes the content until the title breaks
-       mid-word (overflow-wrap: anywhere). flex-wrap alone never wraps: the
-       content's zero flex-basis always fits, so it needs its text width too. */
-    .ios-wrap { flex-wrap: wrap; }
-    .ios-wrap > .list-item-content { flex-basis: auto; }
 
     /* The iOS knob floats; the core keeps it flat on purpose. */
     [data-theme="ios-demo"] .switch::before {
@@ -272,7 +268,7 @@
       <h2 id="display-title" class="overline">Display</h2>
       <div class="card">
         <ul class="list">
-          <li class="list-item ios-wrap">
+          <li class="list-item">
             <span class="list-item-content list-item-title" id="appearance-label">Appearance</span>
             <span class="list-item-trailing">
               <span class="ios-segmented" role="radiogroup" aria-labelledby="appearance-label">
@@ -302,8 +298,8 @@
     </section>
 
     <section class="stack" aria-labelledby="narrow-title">
-      <h2 id="narrow-title" class="overline">F3 — narrow column, default vs .ios-wrap</h2>
-      <div class="cluster items-start">
+      <h2 id="narrow-title" class="overline">Narrow column</h2>
+      <div>
         <div class="card ios-narrow">
           <ul class="list">
             <li class="list-item">
@@ -326,35 +322,6 @@
             </li>
             <li>
               <a class="list-item" href="#accessibility">
-                <span class="list-item-content list-item-title">Accessibility</span>
-                <span class="list-item-trailing muted">Larger Text <i class="ti ti-chevron-right" aria-hidden="true"></i></span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="card ios-narrow">
-          <ul class="list">
-            <li class="list-item ios-wrap">
-              <span class="list-item-content list-item-title" id="wrap-appearance">Appearance</span>
-              <span class="list-item-trailing">
-                <span class="ios-segmented" role="radiogroup" aria-labelledby="wrap-appearance">
-                  <label class="choice-card chip"><input type="radio" name="wrap-a" value="light" checked>Light</label>
-                  <label class="choice-card chip"><input type="radio" name="wrap-a" value="dark">Dark</label>
-                </span>
-              </span>
-            </li>
-            <li class="list-item ios-wrap">
-              <label class="list-item-content list-item-title" for="wrap-notify">Notifications</label>
-              <span class="list-item-trailing">
-                <select class="select sm fit" id="wrap-notify">
-                  <option>Immediately</option>
-                  <option>Scheduled</option>
-                </select>
-              </span>
-            </li>
-            <li>
-              <a class="list-item ios-wrap" href="#accessibility">
                 <span class="list-item-content list-item-title">Accessibility</span>
                 <span class="list-item-trailing muted">Larger Text <i class="ti ti-chevron-right" aria-hidden="true"></i></span>
               </a>

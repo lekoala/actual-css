@@ -21,6 +21,8 @@
 
 ### Fixed
 
+- `.list-item` moves its trailing region to a new line when it no longer fits beside the longest word, instead of breaking `.list-item-title` mid-word.
+- `.truncate` inside `.list-item-content` keeps the trailing region on its line.
 - `actual-css design` writes DTCG colors with a 6-digit `hex` and `alpha` separate; Penpot still receives the alpha in its hex.
 - `.scroll-snap` keeps a focused item's ring inside its own clip on all four sides.
 - `.alert.compact` and `.alert.spacious` step `--alert-pad-block`.

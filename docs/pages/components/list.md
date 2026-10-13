@@ -29,9 +29,12 @@ list markers when order or bullets carry meaning.
 ```
 
 Leading and trailing content are unconstrained: avatars, native choices,
-badges, text, switches, and buttons retain their own component sizing.
-`.list-item-content` has no minimum content floor, so supporting text and long
-tokens wrap instead of widening the page.
+badges, text, switches, and buttons retain their own component sizing. In a
+narrow row, the trailing region moves under the content rather than breaking a
+word of the title; supporting text still wraps beside it, and a token longer
+than the row breaks instead of widening the page. A `.truncate` line inside
+`.list-item-content` gives up its width, so it ellipsizes next to the trailing
+region (wrap, responsive row, overflow).
 
 Both outer regions are optional, and an absent one costs neither space nor a
 gap: `.list-item-content` always takes the row's free space and

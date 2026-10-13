@@ -14,6 +14,11 @@
 
       inline-size: 600px;
     }
+
+    /* Narrow enough that a long word and a wide control cannot share a line.
+       Sizes come from the content, never from a length matched to a label. */
+    #narrow { inline-size: 240px; }
+    .wide-control { display: inline-block; inline-size: 200px; block-size: 24px; }
   </style>
 </head>
 <body>
@@ -79,6 +84,40 @@
         <span class="list-item-text">Line one<br>Line two<br>Line three</span>
       </span>
       <span class="list-item-trailing"><span class="badge">Badge</span></span>
+    </li>
+  </ul>
+
+  <!-- Narrow column: a word never breaks to keep a trailing control on its
+       line; the control wraps instead. Prose still wraps beside a control,
+       an unbreakable token stays inside the row, and truncated text keeps its
+       trailing neighbour. -->
+  <ul class="list" id="narrow">
+    <li class="list-item" id="word">
+      <span class="list-item-content">
+        <span class="list-item-title" id="word-title">Notifications</span>
+      </span>
+      <span class="list-item-trailing" id="word-trailing"><span class="wide-control"></span></span>
+    </li>
+    <li class="list-item" id="prose">
+      <span class="list-item-content" id="prose-content">
+        <span class="list-item-title">Prose</span>
+        <span class="list-item-text">A description long enough to wrap across several lines beside its switch.</span>
+      </span>
+      <span class="list-item-trailing" id="prose-trailing">
+        <input class="switch" type="checkbox" role="switch" aria-label="Prose">
+      </span>
+    </li>
+    <li class="list-item" id="token">
+      <span class="list-item-content" id="token-content">
+        <span class="list-item-title">https://example.com/a-very-long-unbreakable-path-segment-that-overflows</span>
+      </span>
+    </li>
+    <li class="list-item" id="truncated">
+      <span class="list-item-content">
+        <span class="list-item-title">Ada</span>
+        <span class="list-item-text truncate" id="truncated-text">A preview that is far too long to fit on one line here</span>
+      </span>
+      <time class="list-item-trailing" id="truncated-trailing">09:30</time>
     </li>
   </ul>
 

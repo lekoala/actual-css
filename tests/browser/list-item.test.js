@@ -125,6 +125,55 @@ it("regions center by default and .items-start on the row or the list tops them"
   );
 });
 
+it("a narrow row wraps its trailing region instead of breaking a word", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const narrow = await view.evaluate(`(() => {
+        const rect = (id) => {
+          const { top, right, bottom, left } = document.getElementById(id).getBoundingClientRect();
+          return { top, right, bottom, left };
+        };
+        const lines = (id) => {
+          const range = document.createRange();
+          range.selectNodeContents(document.getElementById(id));
+          return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size;
+        };
+        const text = document.getElementById("truncated-text");
+        return {
+          wordLines: lines("word-title"),
+          word: rect("word-title"),
+          wordTrailing: rect("word-trailing"),
+          wordRow: rect("word"),
+          prose: rect("prose-content"),
+          proseTrailing: rect("prose-trailing"),
+          token: rect("token-content"),
+          tokenRow: rect("token"),
+          truncated: rect("truncated-text"),
+          truncatedTrailing: rect("truncated-trailing"),
+          clipped: text.scrollWidth > text.clientWidth,
+        };
+      })()`);
+
+      // The word keeps one line; the control moves below it, on the end edge.
+      expect(narrow.wordLines).toBe(1);
+      expect(narrow.wordTrailing.top).toBeGreaterThanOrEqual(narrow.word.bottom);
+      expect(Math.round(narrow.wordTrailing.right)).toBe(Math.round(narrow.wordRow.right));
+
+      // Prose has no word as wide as the room left, so it wraps beside the switch.
+      expect(narrow.proseTrailing.left).toBeGreaterThanOrEqual(narrow.prose.right);
+
+      // An unbreakable token breaks inside the row rather than widening it.
+      expect(narrow.token.right).toBeLessThanOrEqual(narrow.tokenRow.right);
+
+      // Truncated text gives up its width: it ellipsizes beside the time.
+      expect(narrow.clipped).toBe(true);
+      expect(narrow.truncatedTrailing.left).toBeGreaterThanOrEqual(narrow.truncated.right);
+    },
+    { artifactName: "list-item-narrow" },
+  );
+});
+
 it("a row with no trailing region lets its content reach the end edge", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
