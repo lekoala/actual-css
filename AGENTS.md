@@ -29,7 +29,7 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   `node_modules/.bin/playwright` is a stale shim). Use `bun run shot:page`
   (full page), `bun run shot:multi` (widths), `bun run shot:crop --selector`
   (one element crop per call), `bun run shot:states` (motion/reduced/forced/
-  contrast matrix) or `bun run probe` (numbers, not pixels). Shared helpers
+  contrast/transparency matrix) or `bun run probe` (numbers, not pixels). Shared helpers
   live in that module: `setViewport`, `forceStates` (+ `--force` on the shot
   scripts), `clickSelector`/`tabUntil` for real dispatched input,
   `elementRect` for crops. Prefer `fixtureUrl` over a `tmp/` `Bun.serve`;

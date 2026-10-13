@@ -8,6 +8,9 @@
 ### Added
 
 - `demo/templates/order-management.html`: one state at three levels — a badge in a selectable list, a contextual alert, and a notification with its own action — plus a critical alert, with no new framework API.
+- `prefers-reduced-transparency: reduce` paints `.topbar` and `.form-actions.sticky` opaque without backdrop blur.
+- The glass demo theme switches to opaque surfaces and drops its blur under `prefers-reduced-transparency: reduce`.
+- `shot:states` accepts a `transparency` state.
 - `admin-neutral` demo theme: light-only business interface with a grey page, white cards, neutral actions and flat semantic tints.
 - `--state-selected-text`: selected ink on a regular surface (current `.nav-link`, selected `.tab`, current step number and ring), falling back to `--state-selected`.
 - `actual-css contrast` measures selected ink on each surface and the solid `-fg` pairs; a gradient fill reads n/a.

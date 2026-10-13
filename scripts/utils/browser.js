@@ -390,4 +390,5 @@ export const MEDIA_STATES = {
   reduced: [{ name: "prefers-reduced-motion", value: "reduce" }],
   forced: [{ name: "forced-colors", value: "active" }],
   contrast: [{ name: "prefers-contrast", value: "more" }],
+  transparency: [{ name: "prefers-reduced-transparency", value: "reduce" }],
 };

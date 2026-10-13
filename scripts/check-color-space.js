@@ -120,6 +120,7 @@ const isContextualTint = (operands) =>
   operands.some((operand) => has(operand, INTENT));
 
 const violations = [];
+const srgbMixes = [];
 let inspected = 0;
 
 for (const file of cssFiles(SRC)) {
@@ -131,6 +132,12 @@ for (const file of cssFiles(SRC)) {
   // them: keeping their newlines means reported line numbers match the file.
   const source = raw.replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, " "));
 
+  // bundledCssIssues (src/tooling/css-bundle.js) reads an srgb mix as a
+  // transpile artifact and fails the build, so authored source never uses one.
+  for (const match of source.matchAll(/color-mix\(\s*in\s+srgb\b/gi)) {
+    srgbMixes.push(`${relative(ROOT, file)}:${source.slice(0, match.index).split("\n").length}`);
+  }
+
   for (const call of polarCalls(source)) {
     inspected += 1;
     if (!isContextualTint(call.operands)) continue;
@@ -138,6 +145,13 @@ for (const file of cssFiles(SRC)) {
     if (exempt.has(call.line) || exempt.has(call.line - 1) || exempt.has(call.line - 2)) continue;
     violations.push({ file: relative(ROOT, file), ...call });
   }
+}
+
+if (srgbMixes.length > 0) {
+  console.error("check:color-space failed.");
+  console.error("color-mix(in srgb, ...) fails the bundle check; mix in oklab:");
+  for (const location of srgbMixes) console.error(`- ${location}`);
+  process.exit(1);
 }
 
 if (violations.length > 0) {

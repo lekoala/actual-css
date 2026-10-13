@@ -2,7 +2,8 @@
  * surface roles: --surface-* are frosted white over a backdrop the theme
  * paints itself, while --surface-opaque and --surface-solid-fg keep rings,
  * separators and inverse text opaque. Small recipes carry what tokens cannot:
- * the backdrop, the blur behind floating panels, and an opaque busy veil.
+ * the backdrop, the blur behind floating panels, an opaque busy veil, and the
+ * opaque palette prefers-reduced-transparency asks for.
  * Contrast depends on the backdrop, so report:theme-contrast measures only the
  * opaque pairs. */
 [data-theme="glass"] {
@@ -103,4 +104,28 @@
 [data-theme="glass"] .select:not(.native)::picker(select) {
   background-color: color-mix(in oklab, var(--surface-opaque) 75%, transparent);
   backdrop-filter: blur(24px) saturate(140%);
+}
+
+/* Reduced transparency: each surface becomes the opaque tone it reads as over
+   the backdrop's mean, and nothing frosts. Overlays fall back to the core's
+   --surface-raised fill. */
+@media (prefers-reduced-transparency: reduce) {
+  [data-theme="glass"] {
+    --surface: color-mix(in oklab, white 8%, var(--surface-opaque));
+    --surface-raised: color-mix(in oklab, white 12%, var(--surface-opaque));
+    --surface-subtle: color-mix(in oklab, white 6%, var(--surface-opaque));
+  }
+
+  [data-theme="glass"] :is(.card, .alert, .navbar, .topbar, .modal, .drawer, .flyout) {
+    backdrop-filter: none;
+  }
+
+  [data-theme="glass"] .flyout {
+    background: var(--surface-raised);
+  }
+
+  [data-theme="glass"] .select:not(.native)::picker(select) {
+    background-color: var(--surface-raised);
+    backdrop-filter: none;
+  }
 }

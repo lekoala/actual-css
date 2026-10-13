@@ -634,6 +634,8 @@ Because the native select chevron is an SVG background image and cannot inherit 
 
 Under `prefers-contrast: more`, the user's contrast preference wins over a theme's palette by contract: the core collapses `--text-muted`/`--text-subtle` to `--text` and thickens borders and focus so no theme can defeat a legibility requirement. This is a deliberate decision, not a specificity quirk — the repeated `[data-theme][data-theme]` attribute only outranks a preset theme stylesheet loaded after the core.
 
+Under `prefers-reduced-transparency: reduce`, `.topbar` and `.form-actions.sticky` paint `--surface` without a backdrop blur. A theme with translucent `--surface-*` redeclares them opaque inside the same media query; the glass demo theme shows the recipe.
+
 Under `forced-colors: active`, the browser automatically remaps `color`, `background`, and `border` properties to system colors. The core only adjusts what the remapping cannot express on its own — `--state-disabled` becomes `GrayText` and `--disabled-opacity` becomes `1` — declared on `:root` and `[data-theme]` so every theme boundary follows. Keep local forced-color rules only for custom control geometry, native bar parts, or selected/checked states that would otherwise be communicated only by background color.
 
 ## Component mapping
