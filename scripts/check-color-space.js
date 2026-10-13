@@ -1,7 +1,9 @@
 /*
  * Color interpolation space contract. Run with bun run check:color-space.
  *
- * The rule:
+ * The rules:
+ *
+ *   No color-mix() interpolates in srgb.
  *
  *   When an intent is tinted against a theme-controlled surface or border,
  *   interpolate in oklab.
@@ -132,8 +134,9 @@ for (const file of cssFiles(SRC)) {
   // them: keeping their newlines means reported line numbers match the file.
   const source = raw.replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, " "));
 
-  // bundledCssIssues (src/tooling/css-bundle.js) reads an srgb mix as a
-  // transpile artifact and fails the build, so authored source never uses one.
+  // Mixes interpolate in a perceptual space: srgb steps unevenly in lightness
+  // and dulls the midpoints, so one --*-mix percentage would read differently
+  // per theme.
   for (const match of source.matchAll(/color-mix\(\s*in\s+srgb\b/gi)) {
     srgbMixes.push(`${relative(ROOT, file)}:${source.slice(0, match.index).split("\n").length}`);
   }
@@ -149,7 +152,7 @@ for (const file of cssFiles(SRC)) {
 
 if (srgbMixes.length > 0) {
   console.error("check:color-space failed.");
-  console.error("color-mix(in srgb, ...) fails the bundle check; mix in oklab:");
+  console.error("color-mix() must interpolate in oklab or oklch, not srgb:");
   for (const location of srgbMixes) console.error(`- ${location}`);
   process.exit(1);
 }
