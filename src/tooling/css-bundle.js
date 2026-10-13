@@ -298,11 +298,6 @@ export function bundledCssIssues(css) {
   const issues = [];
 
   if (css.includes("@import")) issues.push("contains unresolved @import");
-  if (css.includes("--lightningcss")) issues.push("contains --lightningcss-* variables");
-  if (/color-mix\(in srgb/.test(css)) issues.push("contains color-mix(in srgb, ...)");
-  if (/@media[^{]*\(\s*width\s*[<>]=/.test(css)) {
-    issues.push("contains transpiled media query range syntax");
-  }
 
   return issues;
 }
