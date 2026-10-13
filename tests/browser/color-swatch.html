@@ -37,6 +37,19 @@
         </div>
       </div>
     </div>
+
+    <span class="field-label" id="brand-label">Brand color</span>
+    <div class="flyout-trigger">
+      <button class="color-swatch" type="button" id="brand-trigger" data-enhance="flyout" aria-controls="brand-palette" aria-expanded="false" aria-labelledby="brand-label brand-name" style="--color-swatch-value: #2563eb"><span class="sr-only" id="brand-name">Blue</span></button>
+      <div class="flyout stack" id="brand-palette" data-flyout-auto-close="outside" style="--flyout-pad: var(--space-30)" hidden>
+        <div class="cluster" role="radiogroup" aria-labelledby="brand-label">
+          <label class="color-swatch" id="b-blue" data-flyout-close style="--color-swatch-value: #2563eb"><input type="radio" name="brand" value="#2563eb" aria-label="Blue" checked></label>
+          <label class="color-swatch" id="b-green" data-flyout-close style="--color-swatch-value: #10b981"><input type="radio" name="brand" value="#10b981" aria-label="Green"></label>
+          <label class="color-swatch" id="b-amber" data-flyout-close style="--color-swatch-value: #f59e0b"><input type="radio" name="brand" value="#f59e0b" aria-label="Amber"></label>
+        </div>
+        <label class="cluster" id="b-custom-row"><input class="color" type="color" id="b-custom" name="brand-custom" value="#7048e8"> Custom…</label>
+      </div>
+    </div>
   </form>
 
   <script>
@@ -45,6 +58,18 @@
       const trigger = document.getElementById("trigger");
       trigger.style.setProperty("--color-swatch-value", event.target.value);
       document.getElementById("accent-name").textContent = event.target.getAttribute("aria-label");
+    });
+
+    // Palette plus custom color: a custom pick unchecks the palette, so the
+    // form carries brand, or brand-custom when no palette color is checked.
+    const brand = document.getElementById("brand-palette");
+    brand.addEventListener("change", (event) => {
+      const custom = event.target.type === "color";
+      if (custom) for (const radio of brand.querySelectorAll('[type="radio"]')) radio.checked = false;
+      document.getElementById("brand-trigger").style.setProperty("--color-swatch-value", event.target.value);
+      document.getElementById("brand-name").textContent = custom
+        ? `Custom ${event.target.value}`
+        : event.target.getAttribute("aria-label");
     });
   </script>
 </body>
