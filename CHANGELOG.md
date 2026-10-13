@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.14.0] - 2026-10-13
 ### Breaking changes
 
 - `--soft-border-mix` has no default: read it as `var(--soft-border-mix, 100%)` for the soft tint or `var(--soft-border-mix, 65%)` for the opaque `.soft` mix.
