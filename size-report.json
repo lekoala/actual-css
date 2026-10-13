@@ -1,12 +1,12 @@
 {
-  "totalRaw": 379257,
+  "totalRaw": 380694,
   "core": {
     "minified": 12322,
     "brotli": 2765
   },
   "full": {
-    "minified": 135189,
-    "brotli": 19441
+    "minified": 135490,
+    "brotli": 19471
   },
   "js": {
     "full": {
@@ -117,6 +117,10 @@
       "raw": 5180
     },
     {
+      "file": "themes/glass.css",
+      "raw": 5128
+    },
+    {
       "file": "components/tooltip.css",
       "raw": 4960
     },
@@ -131,10 +135,6 @@
     {
       "file": "components/card.css",
       "raw": 4535
-    },
-    {
-      "file": "themes/glass.css",
-      "raw": 4244
     },
     {
       "file": "layout/grid.css",
@@ -241,6 +241,10 @@
       "raw": 2704
     },
     {
+      "file": "forms/form-actions.css",
+      "raw": 2697
+    },
+    {
       "file": "themes/lavender.css",
       "raw": 2655
     },
@@ -263,10 +267,6 @@
     {
       "file": "themes/corporate.css",
       "raw": 2479
-    },
-    {
-      "file": "forms/form-actions.css",
-      "raw": 2456
     },
     {
       "file": "components/skeleton.css",
@@ -301,6 +301,10 @@
       "raw": 2205
     },
     {
+      "file": "layout/topbar.css",
+      "raw": 2146
+    },
+    {
       "file": "forms/input-icon.css",
       "raw": 2071
     },
@@ -315,10 +319,6 @@
     {
       "file": "themes/brutalist.css",
       "raw": 1937
-    },
-    {
-      "file": "layout/topbar.css",
-      "raw": 1834
     },
     {
       "file": "core/intents.css",

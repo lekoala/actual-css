@@ -57,3 +57,12 @@
     background: color-mix(in oklch, var(--surface) 88%, transparent);
   }
 }
+
+/* Same reduce override as .topbar (src/css/layout/topbar.css). */
+@media (prefers-reduced-transparency: reduce) {
+  .form-actions.sticky {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

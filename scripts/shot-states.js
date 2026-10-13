@@ -4,7 +4,7 @@
  * forced-colors and contrast variants without a tmp/ script per state.
  *
  * Usage:
- *   bun scripts/shot-states.js [page] [--states motion,reduced,forced,contrast]
+ *   bun scripts/shot-states.js [page] [--states motion,reduced,forced,contrast,transparency]
  *       [--width 700] [--scheme light|dark]
  *       [--force ".f:focus+focus-visible"] [--eval file.js] [--src-css]
  *       [--out dir]

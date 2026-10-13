@@ -2096,6 +2096,16 @@ small {
   }
 }
 
+/* A reduce override, not a no-preference gate: a browser without the feature
+   evaluates it false and keeps the frosted bar instead of losing it. */
+@media (prefers-reduced-transparency: reduce) {
+  .topbar {
+    background: var(--surface);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
 /* Readable content measure. Composes with .center for centering or with
    margin-inline: auto for a one-off centered block.
  *
@@ -2852,6 +2862,15 @@ small {
 @supports (background: color-mix(in oklch, red 50%, transparent)) {
   .form-actions.sticky {
     background: color-mix(in oklch, var(--surface) 88%, transparent);
+  }
+}
+
+/* Same reduce override as .topbar (src/css/layout/topbar.css). */
+@media (prefers-reduced-transparency: reduce) {
+  .form-actions.sticky {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
