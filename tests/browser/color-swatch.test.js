@@ -1,8 +1,9 @@
 /*
  * Real-browser .color-swatch contract, driven over Bun.WebView.
  *
- * A control-sized swatch whose selected mark (a double ring) reads on any
- * color, with the action focus ring outside it; forced colors keep the color.
+ * A swatch whose selected mark (a double ring) reads on any color, with the
+ * action focus ring outside it; forced colors keep the color. Its hit area
+ * reaches half the gap past it, so neighbours in a tight palette never overlap.
  * In a flyout it becomes a palette picker: a pointer pick closes the panel,
  * while arrow keys move through the colors without closing it, and the panel
  * opens on the checked color. The runtime is built from source, so these
@@ -59,13 +60,17 @@ const swatch = (id) => `(() => {
 
 const isOpen = `document.getElementById("accent-palette").matches(":popover-open")`;
 
-it("a switch-sized swatch on a control-sized target, ringed when checked", async () => {
+it("a switch-sized swatch on a larger target, ringed when checked", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       const blue = await view.evaluate(swatch("blue"));
-      expect(blue.width).toBeCloseTo(blue.controlSize, 0);
-      expect(blue.height).toBeCloseTo(blue.controlSize, 0);
+      // The target reaches half the default gap past the swatch on each side.
+      const gap = await view.evaluate(
+        `parseFloat(getComputedStyle(document.getElementById("palette-static")).columnGap)`,
+      );
+      expect(blue.width).toBeCloseTo(Math.min(blue.controlSize, blue.visible + gap), 0);
+      expect(blue.height).toBeCloseTo(blue.width, 0);
       // A swatch and a switch side by side are the same height.
       const switchHeight = await view.evaluate(
         `document.getElementById("switch").getBoundingClientRect().height`,
@@ -93,8 +98,8 @@ it("a switch-sized swatch on a control-sized target, ringed when checked", async
       expect((await view.evaluate(swatch("white"))).ring).toBe("none");
 
       const small = await view.evaluate(swatch("small"));
-      expect(small.width).toBeLessThan(blue.width);
-      expect(small.width).toBeCloseTo(small.controlSize, 0);
+      expect(small.visible).toBeLessThan(blue.visible);
+      expect(small.width).toBeLessThanOrEqual(small.controlSize + 0.5);
 
       // The radio is still the control: it submits, and a disabled one dims.
       await view.evaluate(`document.getElementById("navy").click()`);
@@ -105,6 +110,42 @@ it("a switch-sized swatch on a control-sized target, ringed when checked", async
       expect((await view.evaluate(swatch("gray"))).opacity).toBeLessThan(1);
     },
     { artifactName: "color-swatch" },
+  );
+});
+
+it("a tight palette splits the gap: each swatch owns its own center", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const ids = ["t-1", "t-2", "t-3", "t-4", "t-5"];
+      const layout = await view.evaluate(`(() => {
+        const ids = ${JSON.stringify(ids)};
+        return ids.map((id) => {
+          const el = document.getElementById(id);
+          const r = el.getBoundingClientRect();
+          const size = parseFloat(getComputedStyle(el, "::before").width);
+          const x = r.left + r.width / 2;
+          const y = r.top + r.height / 2;
+          return {
+            hit: { left: r.left, right: r.right, top: r.top, bottom: r.bottom },
+            dot: { left: x - size / 2, top: y - size / 2, size },
+            // The label a pointer lands on at this swatch's center.
+            atCenter: document.elementFromPoint(x, y)?.closest(".color-swatch")?.id,
+          };
+        });
+      })()`);
+      const [t1, t2, , t4] = layout;
+      for (const [i, item] of layout.entries()) expect(item.atCenter).toBe(ids[i]);
+      // Neighbours meet in the gap instead of overlapping.
+      expect(t1.hit.right).toBeLessThanOrEqual(t2.hit.left + 0.5);
+      expect(t1.hit.bottom).toBeLessThanOrEqual(t4.hit.top + 0.5);
+      // Rows sit one gap apart, like columns.
+      const column = t2.dot.left - t1.dot.left - t1.dot.size;
+      const row = t4.dot.top - t1.dot.top - t1.dot.size;
+      expect(column).toBeCloseTo(4, 0);
+      expect(row).toBeCloseTo(column, 0);
+    },
+    { artifactName: "color-swatch-tight" },
   );
 });
 

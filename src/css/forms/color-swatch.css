@@ -8,10 +8,13 @@
  * the trigger of a palette flyout. The application owns the colors; Actual
  * owns the shape, the selection mark and the focus ring.
  *
- * Two sizes: the element is a --control-size hit area, so it lines up with
- * fields and stays easy to tap; the visible swatch (::before) is the height of
- * a .switch track, so a swatch and a switch in neighbouring rows match. Edge,
- * selection ring and focus ring all belong to the visible swatch.
+ * Two sizes: the visible swatch (::before) is the height of a .switch track, so
+ * a swatch and a switch in neighbouring rows match; the element is the hit
+ * area around it. The hit area reaches half the inherited --gap past the
+ * swatch, up to --control-size, and overflows its layout box: neighbours in a
+ * .cluster or .grid meet in the middle of the gap instead of overlapping, and
+ * rows sit one gap apart like columns. Edge, selection ring and focus ring all
+ * belong to the visible swatch.
  *
  * The color is arbitrary, so nothing drawn on it may assume a contrast: the
  * selected mark is a double ring (--text outside, --surface-opaque inside) that
@@ -31,18 +34,20 @@
   /* The .switch track height (switch.css); a browser test holds them equal. */
   --color-swatch-size: calc(var(--choice-control-size) + 0.125em);
   --color-swatch-radius: var(--radius-full);
+  /* Internal: what the hit area adds to the swatch, half on each side. One gap
+     at most, so two neighbours never claim the same point — a wider reach let
+     the next swatch take a click on this one's center. */
+  --color-swatch-reach: clamp(0px, var(--control-size) - var(--color-swatch-size), var(--gap));
 
   position: relative;
   display: inline-grid;
   place-items: center;
   flex: none;
-  inline-size: max(var(--control-size), var(--color-swatch-size));
-  block-size: max(var(--control-size), var(--color-swatch-size));
-  /* Lay out at the visible width: the hit area overflows on both sides, so a
-     label gap or a palette gap is measured from the swatch, not from its
-     invisible padding. Block size stays control-high to align with fields. */
-  margin: 0
-    calc((var(--color-swatch-size) - max(var(--control-size), var(--color-swatch-size))) / 2);
+  inline-size: calc(var(--color-swatch-size) + var(--color-swatch-reach));
+  block-size: calc(var(--color-swatch-size) + var(--color-swatch-reach));
+  /* Lay out at the visible size: gaps are measured from the swatch, not from
+     its invisible reach. */
+  margin: calc(var(--color-swatch-reach) / -2);
   padding: 0;
   border: 0;
   background: transparent;
