@@ -132,8 +132,10 @@ same optical line. Change the type or the control size and they stay level:
 - `--switch-width` — track width.
 - `--switch-block-size` — track height.
 - `--switch-knob-margin` — inset between knob and track.
+- `--switch-knob-inline-size` — knob width; wider than its height makes a
+  capsule knob. Defaults to the knob height.
 
-Knob size and travel distance are derived from the three `--switch-*` hooks; set
-those rather than the derived values. The knob is concentric in its track: the
+Knob size and travel distance are derived from these hooks; set them rather
+than the derived values. The knob is concentric in its track: the
 inset is measured inside the border on both axes, so it clears the rails by the
 same distance it clears the ends.

@@ -14,6 +14,7 @@
  * --switch-block-size
  * --switch-knob-margin
  * --switch-knob-size
+ * --switch-knob-inline-size
  * --switch-travel
  *
  * The track is sized from --choice-control-size (tokens.css), not
@@ -47,9 +48,11 @@
     2 *
     var(--switch-knob-margin)
   );
+  /* A wider knob is a capsule; the travel follows its width. */
+  --switch-knob-inline-size: var(--switch-knob-size);
   --switch-travel: calc(
     var(--switch-width) -
-    var(--switch-knob-size) -
+    var(--switch-knob-inline-size) -
     2 *
     var(--border-width) -
     2 *
@@ -85,7 +88,7 @@
   position: absolute;
   inset-block-start: var(--switch-knob-margin);
   inset-inline-start: var(--switch-knob-margin);
-  inline-size: var(--switch-knob-size);
+  inline-size: var(--switch-knob-inline-size);
   block-size: var(--switch-knob-size);
   border-radius: var(--radius-full);
   background: var(--switch-knob);

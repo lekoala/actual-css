@@ -11,6 +11,8 @@
 - `prefers-reduced-transparency: reduce` paints `.topbar` and `.form-actions.sticky` opaque without backdrop blur.
 - The glass demo theme switches to opaque surfaces and drops its blur under `prefers-reduced-transparency: reduce`.
 - `shot:states` accepts a `transparency` state.
+- `--switch-knob-inline-size` sets the switch knob width for a capsule knob; the travel follows it.
+- `demo/templates/settings-ios.html`: iOS-like controls and grouped settings from unchanged markup, with the local CSS each gap needs.
 - `admin-neutral` demo theme: light-only business interface with a grey page, white cards, neutral actions and flat semantic tints.
 - `--state-selected-text`: selected ink on a regular surface (current `.nav-link`, selected `.tab`, current step number and ring), falling back to `--state-selected`.
 - `actual-css contrast` measures selected ink on each surface and the solid `-fg` pairs; a gradient fill reads n/a.
