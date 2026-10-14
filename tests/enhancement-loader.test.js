@@ -371,19 +371,15 @@ describe("enhancement-loader", () => {
       const { loadStyle } = await import("../src/js/enhancement-loader.js");
       const url = "https://example.test/theme.css";
 
+      // happy-dom refuses external stylesheets by default and fires `error`
+      // during append, the same path a real network failure takes.
       const first = loadStyle(url);
-      const link = document.head.querySelector('link[rel="stylesheet"]');
-      expect(link.href).toBe(url);
-
-      link.dispatchEvent(new Event("error"));
       await expect(first).rejects.toThrow(`Unable to load style: ${url}`);
-      expect(link.isConnected).toBe(false);
+      expect(document.head.querySelector('link[rel="stylesheet"]')).toBeNull();
 
       const retry = loadStyle(url);
       expect(retry).not.toBe(first);
-      const replacement = document.head.querySelector('link[rel="stylesheet"]');
-      expect(replacement).not.toBe(link);
-      expect(replacement.href).toBe(url);
+      await expect(retry).rejects.toThrow(`Unable to load style: ${url}`);
     });
 
     test("loadStyle keeps a successful load cached", async () => {
@@ -391,12 +387,13 @@ describe("enhancement-loader", () => {
       const { loadStyle } = await import("../src/js/enhancement-loader.js");
       const url = "https://example.test/theme.css";
 
+      // Turns happy-dom's refused stylesheet load into a `load` event.
+      window.happyDOM.settings.handleDisabledFileLoadingAsSuccess = true;
+
       const first = loadStyle(url);
       const link = document.head.querySelector('link[rel="stylesheet"]');
-      const loaded = new Event("load");
-      link.dispatchEvent(loaded);
 
-      await expect(first).resolves.toBe(loaded);
+      await expect(first).resolves.toBeInstanceOf(window.Event);
       expect(loadStyle(url)).toBe(first);
       expect(document.head.querySelector('link[rel="stylesheet"]')).toBe(link);
     });
