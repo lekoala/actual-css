@@ -31,10 +31,9 @@ function collectHtml(dir) {
 }
 
 /*
- * A committed demo page must load every local href/src from a git-tracked
- * file. An untracked asset exists after a local build but 404s from a fresh
- * checkout and from GitHub Pages — the demo/assets/ theme bundle used to be
- * exactly that.
+ * Demo pages must load every local href/src. Source assets must be tracked;
+ * dist/ and site/ are generated locally and staged into the GitHub Pages
+ * artifact by CI.
  */
 function trackedFiles() {
   const output = execSync("git ls-files", { cwd: ROOT, encoding: "utf8" });
@@ -51,7 +50,11 @@ function checkAssets(source, file, tracked) {
       continue;
     }
     const trackedPath = relative(ROOT, target).replaceAll(sep, "/");
-    if (!tracked.has(trackedPath)) {
+    if (
+      !tracked.has(trackedPath) &&
+      !trackedPath.startsWith("dist/") &&
+      !trackedPath.startsWith("site/")
+    ) {
       issues.push(
         `${attr}="${url}" (${trackedPath}) is not tracked by git — 404 from a clean checkout`,
       );

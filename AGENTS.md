@@ -20,8 +20,10 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Never ignore biome diagnostics: warnings and info-level findings must be
   fixed or explicitly accepted, never dismissed. `bun run lint` must end clean
   before the work is considered done
-- Do not run build:dist, unless you want to test if build script works (the user build it)
-- Do not run build:docs unless you worked on the build scripts or docs sources (it needs dist/ first; the user runs it)
+- Do not rebuild `dist/` routinely: it is untracked local build output. If it is
+  missing on a fresh checkout, run `bun run build:dist && bun run build:js` once.
+- Do not run build:docs unless you worked on the build scripts or docs sources
+  (it needs `dist/` first; the user runs it).
 - After editing demo/templates/*.html, run `bun run check:templates` (balanced `<style>` braces) — it's cheap and doesn't touch dist or generated demo output, unlike build:all
 - `components.json` is a derived artifact, not a second source of truth. After touching CSS header comments, selectors, `src/js` enhancements, or `package.json#exports`, run `bun run generate:catalog` and let the diff speak; `check:catalog` (in build:all) verifies the committed file matches the derivation.
 - Rendering is `Bun.WebView` driving headless Chrome through
@@ -35,7 +37,7 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   `elementRect` for crops. Prefer `fixtureUrl` over a `tmp/` `Bun.serve`;
   serve only for fetch/CORS needs, via `scripts/serve.js`.
 - Demo templates link built CSS (`dist/actual.full.css`, the demo themes
-  bundle), which you do not rebuild — a probe of a demo measured the last
+  bundle). Do not rebuild it routinely — a probe of a demo measured the last
   build and passed on stale evidence. Pass `--src-css` to `probe` and every
   `shot:*` script (`sourceCss: true` for `withBrowserPage`/`capture`) to render
   the working tree; it reports what it swapped. It covers CSS only:

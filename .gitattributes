@@ -10,15 +10,6 @@
 *.yml text eol=lf
 *.yaml text eol=lf
 
-# Mark generated files as linguist-generated so GitHub doesn't count them
-# in language stats and hides them in diffs by default
-dist/*.css linguist-generated=true
-dist/*.min.css linguist-generated=true
-dist/*.js linguist-generated=true
-site/**/*.html linguist-generated=true
-site/assets/search-index.js linguist-generated=true
-site/README.md linguist-generated=true
-
 # Binary files
 *.png binary
 *.jpg binary

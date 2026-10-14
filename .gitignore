@@ -4,6 +4,8 @@ package-lock.json
 
 # Build output
 out/
+/dist/
+/site/
 *.tgz
 # Everything in demo/assets/ except the theme bundle, which committed demo
 # pages (templates + admini) reference and must resolve from a fresh checkout.

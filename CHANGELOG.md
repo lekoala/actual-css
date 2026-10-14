@@ -1,6 +1,9 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Changed
+- `dist/` and `site/` are no longer committed; CDN and npm builds are unchanged, and GitHub Pages deploys from CI.
+
 ### Fixed
 - `.color-swatch`: an inline swatch (a flyout trigger beside its label) centers on the text instead of sitting above the baseline.
 

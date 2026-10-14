@@ -229,7 +229,6 @@ MIT
 
 ## Docs
 
-The documentation site is generated into [`site/`](site/) from the
-source pages under [`docs/pages/`](docs/pages/). Start at
-[`site/index.html`](site/index.html), or build it locally with
-`bun run build:docs`.
+The documentation site is generated from [`docs/pages/`](docs/pages/) into
+`site/` by `bun run build:docs`. Visit the
+[live site](https://lekoala.github.io/actual-css/) or build it locally.

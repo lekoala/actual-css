@@ -1,5 +1,12 @@
 # Contributing to Actual CSS
 
+## Build output
+
+`dist/` and `site/` are build output and are not tracked. After a fresh clone,
+run `bun run build:dist && bun run build:js` once before opening demos or
+running browser tests; demo templates and 13 `tests/browser` fixtures link to
+`dist/`. GitHub Pages deploys from CI on `master`.
+
 ## Rendering invariants
 
 Actual CSS should preserve meaning across alternate rendering environments
