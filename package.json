@@ -161,6 +161,6 @@
     "happy-dom": "^21.0.1"
   },
   "dependencies": {
-    "@lekoala/floating": "^0.2.0"
+    "@lekoala/floating": "^0.3.0"
   }
 }

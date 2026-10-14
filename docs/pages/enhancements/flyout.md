@@ -67,9 +67,10 @@ For a modal bottom sheet or action sheet, use `dialog.drawer`; use
 `dialog.modal` for a centered modal. Those components own modal focus,
 dismissal, scroll locking, and backdrop behavior explicitly.
 
-Use `data-flyout-placement` for the preferred anchored placement. It accepts the
-placement strings supported by the floating runtime, such as `bottom-start`,
-`bottom-end`, `top-start`, `right`, or `left`.
+Use `data-flyout-placement` for the preferred anchored placement: a side
+(`top`, `bottom`, `left`, `right`), optionally followed by `-start` or `-end`,
+such as `bottom-start` or `right`. An unknown value logs a console warning and
+falls back to `bottom-start`.
 
 Use `data-flyout-distance` for the trigger gap in pixels. The default is `4`.
 

@@ -51,7 +51,7 @@
 import { autoUpdate, reposition } from "@lekoala/floating";
 import enhance from "./enhance.js";
 import { registerEscapeDismissal } from "./escape.js";
-import { positionModeFor } from "./floating-space.js";
+import { positionModeFor, readPlacement } from "./floating-space.js";
 import { CLASSES } from "./selectors.js";
 
 const SHOW_DELAY_MS = 150;
@@ -144,7 +144,7 @@ export function isTooltipVisible(tip) {
  * the tip's own placement never enters into it.
  */
 function placementFor(ref) {
-  return ref?.getAttribute("data-tooltip-placement") || "top";
+  return readPlacement(ref, "data-tooltip-placement") ?? "top";
 }
 
 function hasOption(trigger, name) {

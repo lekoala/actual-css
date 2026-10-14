@@ -115,7 +115,9 @@ viewport-aware maximum width.
 ## Positioning
 
 Set `data-tooltip-placement` to control where the tooltip appears relative to
-its trigger. The arrow follows the placement automatically.
+its trigger: a side (`top`, `bottom`, `left`, `right`), optionally followed by
+`-start` or `-end`. An unknown value logs a console warning and falls back to
+`top`. The arrow follows the placement automatically.
 
 The runtime also picks the coordinate space, and writes `position` to match. A
 tooltip whose trigger scrolls with the page is placed in document coordinates

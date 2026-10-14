@@ -1,4 +1,5 @@
 import { registerEnhancement } from "./enhance.js";
+import { readPlacement } from "./floating-space.js";
 import { focusFirstDescendant } from "./focus.js";
 import { shouldIgnoreKey } from "./keys.js";
 import { connectMenu, focusFirstMenuItem, focusLastMenuItem } from "./menu.js";
@@ -9,7 +10,8 @@ const triggerMap = new WeakMap();
 function readFlyoutOptions(panel) {
   const opts = { autoClose: "true" };
   const ds = panel.dataset;
-  if (ds.flyoutPlacement) opts.placement = ds.flyoutPlacement;
+  const placement = readPlacement(panel, "data-flyout-placement");
+  if (placement) opts.placement = placement;
   if (ds.flyoutDistance != null) {
     const d = Number.parseFloat(ds.flyoutDistance);
     if (Number.isFinite(d)) opts.distance = d;

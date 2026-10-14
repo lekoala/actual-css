@@ -5,6 +5,8 @@
 - `actual-css/js/enhance` logs a console warning when a second copy of the runtime loads (dist bundle plus source modules, or two bundles).
 
 ### Changed
+- `@lekoala/floating` 0.3: a wrapped inline trigger flipped above anchors to its first line, and start/end alignment follows CSS `direction` without a `dir` attribute.
+- `data-tooltip-placement` and `data-flyout-placement`: an unknown value logs one console warning and falls back to the default placement.
 - `dist/`, `site/` and `demo/assets/` are no longer committed: run `bun run build:all` after a clone; npm, GitHub releases and Pages ship the CI build.
 - GitHub Pages deploys from CI (`build:pages`, `scripts/pages.js`) instead of serving the branch.
 
