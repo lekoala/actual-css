@@ -23,6 +23,11 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Do not run build:dist, unless you want to test if build script works (the user build it)
 - Do not run build:docs unless you worked on the build scripts or docs sources (it needs dist/ first; the user runs it)
 - After editing demo/templates/*.html, run `bun run check:templates` (balanced `<style>` braces) — it's cheap and doesn't touch dist or generated demo output, unlike build:all
+- `dist/`, `site/` and `demo/assets/` are git-ignored build output. GitHub
+  Pages publishes the slice of the built tree listed in `scripts/pages.js`;
+  a demo or docs page linking a file outside it 404s on the site, which
+  `check:templates` and `build:pages` catch. Extend the manifest, never
+  commit a build output to make a link resolve.
 - `components.json` is a derived artifact, not a second source of truth. After touching CSS header comments, selectors, `src/js` enhancements, or `package.json#exports`, run `bun run generate:catalog` and let the diff speak; `check:catalog` (in build:all) verifies the committed file matches the derivation.
 - Rendering is `Bun.WebView` driving headless Chrome through
   `scripts/utils/browser.js`, never Playwright (not a dependency;

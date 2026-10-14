@@ -2,7 +2,8 @@
  * Demo themes bundle builder. The preset palettes in src/css/themes/ are
  * reference material, not package entrypoints — they are bundled here for
  * the demo pages and the docs site instead of dist/, keeping dist/ strictly
- * equal to the npm-published surface.
+ * equal to the npm-published surface. The output is git-ignored; Pages gets
+ * it from the CI build.
  *
  *   bun run build:themes
  */

@@ -4,6 +4,10 @@ Development tooling. Every script runs with `bun` and is wired to an npm
 script in `package.json`; `bun run build:all` chains the full pipeline
 (build, checks, tests, size report) and is what `prepublishOnly` runs.
 
+`dist/`, `site/` and `demo/assets/` are git-ignored build output. After a
+clone, run `bun run build:all` once: demo pages, the docs site and the browser
+test fixtures load `dist/`. CI deploys GitHub Pages from its own build.
+
 | npm script | file | purpose |
 | --- | --- | --- |
 | `lint` / `lint:fix` | Biome | Lint + format `src/`, `scripts/`, and `tests/`. Runs first in `build:all` and must end clean. |
@@ -12,6 +16,7 @@ script in `package.json`; `bun run build:all` chains the full pipeline
 | `build:js` | `build-js.js` | Bundle `src/js/full.js` into `dist/actual.full.js`; no sourcemap; byte-deterministic across rebuilds. |
 | `build:themes` | `build-themes.js` | Bundle the preset palettes into `demo/assets/actual-themes.min.css` for the demo pages and docs site. Demo asset only — never in `dist/`. |
 | `build:size` | `build-size.js` | Write `size-report.json` (per-file, minified, brotli). |
+| `build:pages` | `pages.js` | Stage the GitHub Pages site in `out/pages/` and verify its local links. Its manifest is what `check:templates` accepts as a demo asset. Run after `build:all`. |
 | `check:docs` | `check-docs.js` | Structural checks for the docs site: page/IA consistency, fence contract, internal links + anchors, and that referenced `src/css` / `src/js` files exist. |
 | `check:compat` | `check-compat.js` | Capability floor audit: flags unguarded above-Degraded structural CSS. |
 | `check:css-api` | `check-css-api.js` | Enforce the public/internal custom-property contract against fixtures. |
@@ -39,7 +44,8 @@ Push the branch and tag with the command printed by the release script.
 
 Once the tag's CI passes, the maintainer runs `npm publish` from that release
 commit. Its `prepublishOnly` script runs `build:all`. The CI `release` job
-creates the GitHub release and attaches `dist/`; npm publication is separate
+creates the GitHub release and attaches the `dist/` built and tested by the
+tag's `build` job; npm publication is separate
 and makes the new version available to npm-backed CDNs.
 
 ## Git hooks

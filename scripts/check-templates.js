@@ -1,8 +1,8 @@
-import { execSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { dirname, join, relative, resolve, sep } from "node:path";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadThemes } from "./docs/themes.js";
+import { localLinks, publishedFiles } from "./pages.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
@@ -31,30 +31,21 @@ function collectHtml(dir) {
 }
 
 /*
- * A committed demo page must load every local href/src from a git-tracked
- * file. An untracked asset exists after a local build but 404s from a fresh
- * checkout and from GitHub Pages — the demo/assets/ theme bundle used to be
- * exactly that.
+ * A demo page must load every local href/src from a file GitHub Pages
+ * publishes. A file that only exists after some local step 404s on the site —
+ * the demo/assets/ theme bundle used to be exactly that. Directory links
+ * (a site index) only need to exist.
  */
-function trackedFiles() {
-  const output = execSync("git ls-files", { cwd: ROOT, encoding: "utf8" });
-  return new Set(output.split(/\r?\n/).filter(Boolean));
-}
-
-function checkAssets(source, file, tracked) {
+function checkAssets(file, published) {
   const issues = [];
-  for (const [, attr, url] of source.matchAll(/\b(href|src)="([^"]+)"/g)) {
-    if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#|\?|\/)/i.test(url)) continue;
-    const target = resolve(dirname(file), url.split(/[?#]/)[0]);
+  for (const { attr, url, target } of localLinks(file)) {
     if (!existsSync(target)) {
       issues.push(`${attr}="${url}" does not exist`);
       continue;
     }
-    const trackedPath = relative(ROOT, target).replaceAll(sep, "/");
-    if (!tracked.has(trackedPath)) {
-      issues.push(
-        `${attr}="${url}" (${trackedPath}) is not tracked by git — 404 from a clean checkout`,
-      );
+    const path = relative(ROOT, target).replaceAll(sep, "/");
+    if (!statSync(target).isDirectory() && !published.has(path)) {
+      issues.push(`${attr}="${url}" (${path}) is not published to Pages — see scripts/pages.js`);
     }
   }
   return issues;
@@ -80,7 +71,7 @@ function checkThemePickerList(themeNames) {
   return [`THEMES does not match src/css/themes/index.css: expected ${themeNames.join(", ")}`];
 }
 
-function checkFile(file, tracked) {
+function checkFile(file, published) {
   const source = readFileSync(file, "utf8");
   const issues = [];
 
@@ -90,7 +81,7 @@ function checkFile(file, tracked) {
       issues.push(`unbalanced braces in <style> (open: ${open}, close: ${close})`);
     }
   }
-  issues.push(...checkAssets(source, file, tracked));
+  issues.push(...checkAssets(file, published));
   issues.push(...checkThemeCopy(source));
 
   return issues;
@@ -98,10 +89,10 @@ function checkFile(file, tracked) {
 
 function main() {
   const files = [...collectHtml(TEMPLATES_DIR), ...collectHtml(SITES_DIR)];
-  const tracked = trackedFiles();
+  const published = publishedFiles();
   const themeNames = loadThemes(ROOT).map((theme) => theme.name);
   const reports = [
-    ...files.map((file) => [file, checkFile(file, tracked)]),
+    ...files.map((file) => [file, checkFile(file, published)]),
     [THEME_PICKER, checkThemePickerList(themeNames)],
   ];
   let failed = false;

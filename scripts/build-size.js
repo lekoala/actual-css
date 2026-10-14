@@ -3,11 +3,12 @@
  *
  * Runs before build:docs in build:all, never after: the docs home renders its
  * stat strip from this report, so a build that measures last publishes the
- * previous run's figures and leaves site/index.html disagreeing with the
- * report beside it. CI verifies the committed build output, so that lag fails
- * the pipeline on exactly the changes that move the bundle — and converges
- * only if someone builds twice. It reads dist/ and src/css alone, so it fits
- * anywhere after build:dist and build:js.
+ * previous run's figures — and the deployed site, built once in CI, would
+ * show them. It reads dist/ and src/css alone, so it fits anywhere after
+ * build:dist and build:js.
+ *
+ * The committed report is also the review trail for the bundles, which are
+ * not tracked: a toolchain upgrade that changes the bytes shows up here.
  */
 import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";

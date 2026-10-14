@@ -10,15 +10,46 @@ jobs:
           bun-version-file: package.json
       - run: bun install --frozen-lockfile
       - run: bun run build:all
-      # dist/, site/ and size-report.json are committed: a build that produces
-      # anything different from what is tracked must fail the pipeline.
+      # dist/ and site/ are git-ignored build output; the derived files that
+      # stay committed (reports, catalogs) must match what the build produces,
+      # and a new build output must be ignored rather than left untracked.
       - name: Verify committed build output
         run: |
-          git diff --exit-code -- dist site size-report.json components.json reserved-classes.json
-          test -z "$(git ls-files --others --exclude-standard -- dist site size-report.json components.json reserved-classes.json)"
+          git status --porcelain
+          test -z "$(git status --porcelain)"
+      - run: bun run build:pages
+      - if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: out/pages
+      # The release job publishes the bundles this job built and tested.
+      - if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+
+  # Settings → Pages → Source must be "GitHub Actions".
+  pages:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
 
   # Pushing a tag publishes the release: the notes are the dated changelog
-  # section for that version, and the committed dist/ files ride along as
+  # section for that version, and the build job's dist/ rides along as
   # assets. Gated on build, so a tag that does not build never gets a release.
   release:
     needs: build
@@ -31,6 +62,10 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version-file: package.json
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist
       - name: Extract release notes
         run: bun run release:notes "$GITHUB_REF_NAME" > "$RUNNER_TEMP/notes.md"
       - name: Create release

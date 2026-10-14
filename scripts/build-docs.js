@@ -36,18 +36,17 @@ const BRAND = join(ROOT, "docs", "brand");
 const BRAND_FILES = ["favicon.svg"];
 
 // The docs site previews the framework from its source locations: pages link
-// src/css/*.css (so CSS edits are visible without a compile step) and the dist
-// bundles the site depends on — both committed, so they resolve when the repo
-// is served as-is. assets/ holds the generated files the site must carry
-// itself: search-index.js, the theme palettes bundle, and the brand files
-// (favicon) copied from docs/brand/. The site chrome
-// (docs.css, docs.js) is edited in scripts/docs/assets/ and referenced in
-// place, so site/ never stores a copy.
+// src/css/*.css (so CSS edits are visible without a compile step) and the
+// dist bundles the site depends on, so they resolve when the built repo is
+// served as-is — scripts/pages.js publishes that same tree. assets/ holds the
+// generated files the site must carry itself: search-index.js, the theme
+// palettes bundle, and the brand files (favicon) copied from docs/brand/. The
+// site chrome (docs.css, docs.js) is edited in scripts/docs/assets/ and
+// referenced in place, so site/ never stores a copy.
 //
-// build-themes.js writes the palettes bundle to demo/assets/, which is
-// committed because the demo pages (templates + admini) link it from a fresh
-// checkout. site/ still takes its own copy into site/assets/ so a page here
-// never depends on demo/, keeping the published site self-contained.
+// build-themes.js writes the palettes bundle to demo/assets/ for the demo
+// pages. site/ takes its own copy into site/assets/ so a page here never
+// depends on demo/.
 const REQUIRED_ASSETS = [
   { path: join(DIST, "actual.full.js"), command: "bun run build:js" },
   { path: THEMES_SOURCE, command: "bun run build:themes" },
@@ -188,8 +187,8 @@ HTML chrome in \`scripts/templates/\`, and the site chrome
 \`scripts/docs/assets/docs.css\` + \`scripts/docs/assets/docs.js\`.
 
 The pages reference the framework from the repo (\`src/\`, \`dist/\`) and the
-chrome from \`scripts/docs/assets/\`, so the site opens from the checkout, not
-from a standalone copy.
+chrome from \`scripts/docs/assets/\`, so the site opens from a built checkout
+or from the Pages stage (\`bun run build:pages\`), not from a copy of \`site/\`.
 `,
   );
 }
@@ -220,9 +219,9 @@ export function buildDocs() {
 
 /*
  * Every local href/src a generated page emits must resolve to a file that
- * exists. Pages link out of site/ into src/ and dist/, so a missing target is
- * invisible locally the moment any build step has produced it once — and 404s
- * for everyone served from a clean checkout. Absolute URLs, protocol-relative
+ * exists. Pages link out of site/ into src/ and dist/; build:pages repeats
+ * this check on the published stage, where a file left out of the manifest
+ * 404s. Absolute URLs, protocol-relative
  * URLs, in-page fragments and mailto: are not ours to resolve.
  */
 function checkGeneratedAssets(navigation) {

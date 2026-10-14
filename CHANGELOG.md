@@ -1,6 +1,10 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Changed
+- `dist/`, `site/` and `demo/assets/` are no longer committed: run `bun run build:all` after a clone; npm, GitHub releases and Pages ship the CI build.
+- GitHub Pages deploys from CI (`build:pages`, `scripts/pages.js`) instead of serving the branch.
+
 ### Fixed
 - `.color-swatch`: an inline swatch (a flyout trigger beside its label) centers on the text instead of sitting above the baseline.
 

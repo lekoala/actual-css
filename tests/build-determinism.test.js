@@ -14,10 +14,10 @@
  * with no source change.
  *
  * Two things cover that instead, both outside the test suite: `packageManager`
- * in package.json pins the version, and `dist/` is committed, so a toolchain
- * upgrade shows up as a reviewable diff rather than as a silent rebuild. If
- * `dist/` ever stops being committed, that second half is gone and this note
- * becomes a real gap.
+ * in package.json pins the version, and the committed `size-report.json`
+ * records the bytes of the minified CSS and JS bundles, so a toolchain upgrade shows up
+ * as a reviewable diff rather than as a silent rebuild. A change that keeps
+ * every byte count equal slips through; `dist/` itself is not tracked.
  */
 import { afterAll, expect, test } from "bun:test";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
