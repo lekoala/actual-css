@@ -1,12 +1,16 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Added
+- `actual-css/js/enhance` logs a console warning when a second copy of the runtime loads (dist bundle plus source modules, or two bundles).
+
 ### Changed
 - `dist/`, `site/` and `demo/assets/` are no longer committed: run `bun run build:all` after a clone; npm, GitHub releases and Pages ship the CI build.
 - GitHub Pages deploys from CI (`build:pages`, `scripts/pages.js`) instead of serving the branch.
 
 ### Fixed
 - `.color-swatch`: an inline swatch (a flyout trigger beside its label) centers on the text instead of sitting above the baseline.
+- `data-enhance-config`: a relaxed config keeps `key:`-like text inside a double-quoted string (`{url: "http://x"}`) instead of throwing.
 
 ## [0.14.0] - 2026-10-13
 ### Breaking changes

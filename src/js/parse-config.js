@@ -11,10 +11,13 @@
  */
 
 function relax(source) {
+  // Double-quoted strings are matched first and copied verbatim, so text
+  // such as `http:` inside them is never mistaken for an unquoted key.
   return source.replace(
-    /([a-zA-Z_$][\w$-]*)\s*:|'((?:\\'|[^'])*)'/g,
-    (_match, key, stringContent) => {
+    /"(?:\\.|[^"\\])*"|([a-zA-Z_$][\w$-]*)\s*:|'((?:\\'|[^'])*)'/g,
+    (match, key, stringContent) => {
       if (key) return `"${key}":`;
+      if (stringContent === undefined) return match;
       const unescaped = stringContent.replace(/\\'/g, "'");
       const escaped = unescaped.replace(/"/g, '\\"');
       return `"${escaped}"`;

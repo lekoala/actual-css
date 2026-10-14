@@ -720,3 +720,23 @@ test("a rejected init does not reserve the name", () => {
   const runtime = registerEnhancement("demo", () => {});
   runtime.disconnect();
 });
+
+test("a second runtime copy warns once it evaluates", async () => {
+  setupDOM("<div></div>");
+  const marker = Symbol.for("actual-css.runtime");
+  const originalWarn = console.warn;
+  const warnings = [];
+  console.warn = (message) => warnings.push(message);
+  delete globalThis[marker];
+
+  try {
+    await import("../src/js/enhance.js?copy=1");
+    expect(warnings).toEqual([]);
+    await import("../src/js/enhance.js?copy=2");
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toContain("second copy");
+  } finally {
+    console.warn = originalWarn;
+    delete globalThis[marker];
+  }
+});

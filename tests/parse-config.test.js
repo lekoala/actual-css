@@ -106,11 +106,21 @@ describe("parseConfig", () => {
     expect(parseConfig('{ "label": "foo: bar" }')).toEqual({ label: "foo: bar" });
   });
 
-  test("rejects a relaxed double-quoted string containing key-like text", () => {
-    // Out of contract: the relax step cannot see into double-quoted strings,
-    // so `bar:` inside them looks like a key. Strict JSON remains the escape
-    // hatch — write valid JSON to include such text.
-    expect(() => parseConfig('{foo: "text containing bar: baz"}')).toThrow(SyntaxError);
+  test("keeps key-like text inside a relaxed double-quoted string", () => {
+    expect(parseConfig('{foo: "text containing bar: baz"}')).toEqual({
+      foo: "text containing bar: baz",
+    });
+  });
+
+  test("keeps a URL inside a relaxed double-quoted string", () => {
+    expect(parseConfig('{url: "http://x"}')).toEqual({ url: "http://x" });
+  });
+
+  test("keeps an escaped double quote inside a relaxed double-quoted string", () => {
+    expect(parseConfig('{label: "say \\"a: b\\"", id: \'x\'}')).toEqual({
+      label: 'say "a: b"',
+      id: "x",
+    });
   });
 
   test("accepts a relaxed object without surrounding braces", () => {

@@ -1,5 +1,6 @@
 [test]
 root = "./tests"
-# Keeps failed DOM assertions to one line instead of dumping the whole window.
-preload = ["./tests/helpers/inspect.js"]
+# inspect: keeps failed DOM assertions to one line instead of dumping the
+# whole window. dist-check: names a missing build before the tests that read it fail.
+preload = ["./tests/helpers/inspect.js", "./tests/helpers/dist-check.js"]
 

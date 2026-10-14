@@ -35,6 +35,10 @@ The named exports each module carries:
 - `selectors` — `CLASSES`
 
 `surface` also owns outside-click and Escape dismissal, and focus restore.
+A click on an element with `data-flyout-close` closes the open panel around
+it, whichever widget opened that panel. The attribute keeps the `flyout` name
+because the panels authors write are flyouts; `surface` is only the code that
+opens and closes them.
 `menu` filters to usable items.
 
 ## Focus group

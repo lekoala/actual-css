@@ -56,7 +56,8 @@ is a no-op until the module is loaded again with a DOM.
 Load the full bundle **or** the source modules, never both: each evaluation
 owns its registry and document handlers, so a dist bundle mixed with
 `actual-css/js/*` source subpaths (or two dist bundles) registers every
-behavior twice and a flyout opens then immediately closes.
+behavior twice and a flyout opens then immediately closes. The second copy
+logs a console warning when it loads.
 
 ## Component pages
 

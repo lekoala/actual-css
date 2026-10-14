@@ -31,6 +31,20 @@
 const registries = new WeakMap();
 const ownedNames = new WeakMap();
 
+// Each evaluation owns its registries, so a second copy (the dist bundle plus
+// source modules, or two bundles) registers every behavior twice and fails
+// silently — a flyout opens then closes. Every built-in imports this module,
+// so the marker catches any duplicated runtime once, here.
+const RUNTIME = Symbol.for("actual-css.runtime");
+if (typeof document !== "undefined") {
+  if (globalThis[RUNTIME]) {
+    console.warn(
+      "actual-css: a second copy of the JavaScript runtime is loaded. Load the full bundle or the source modules, never both.",
+    );
+  }
+  globalThis[RUNTIME] = true;
+}
+
 // Node type constants as literals, not the realm's Node global, so nodes from
 // another document/window compare correctly.
 const ELEMENT_NODE = 1;
