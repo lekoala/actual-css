@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.14.1] - 2026-10-14
 ### Added
 - `actual-css/js/enhance` logs a console warning when a second copy of the runtime loads (dist bundle plus source modules, or two bundles).
 
