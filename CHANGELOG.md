@@ -12,7 +12,7 @@
 - `--accordion-marker-icon` and `--accordion-marker-open-rotate`: swap the accordion marker glyph and its open turn (plus to cross with `--icon-plus` and `45deg`).
 
 ### Fixed
-- `.choice-card.chip`: the check reads `--state-selected-text` when a theme sets it, so a light selected fill (yellow, lime) no longer draws a check that vanishes on the chip.
+- `.skeleton`: `--skeleton-track` and `--skeleton-highlight` are translucent ink tints, so a placeholder keeps its edges on cards, soft cards and dark surfaces.- `.choice-card.chip`: the check reads `--state-selected-text` when a theme sets it, so a light selected fill (yellow, lime) no longer draws a check that vanishes on the chip.
 - `.alert` with `.alert-icon`: an icon taller than one line, or an alert stretched by an equal-height grid, no longer opens a gap between the title and the body.
 
 ### Removed

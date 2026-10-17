@@ -190,6 +190,12 @@
   border: var(--border-width) solid var(--border);
 }
 
+/* A placeholder is a wireframe of the object to come: framed like it, but in
+   a faint ink, so it never reads as a real empty field or button. */
+[data-theme="neo-brutalist"] .skeleton {
+  border: var(--border-width) solid color-mix(in oklab, var(--border) 25%, transparent);
+}
+
 /* The alert icon becomes a stamped tile in the full intent. content-box so
    the padding grows the tile around the glyph instead of shrinking it. */
 [data-theme="neo-brutalist"] .alert > .alert-icon {

@@ -1142,6 +1142,17 @@ test("a skeleton placeholder gives its ancestors no width floor", () => {
   );
 });
 
+test("skeleton tints follow the surface they sit on", () => {
+  const css = readCss("src/css/components/skeleton.css");
+
+  // A fixed --surface-raised highlight matched cards and light pages, so the
+  // shape lost its edges mid-sweep; translucent ink tints never do.
+  expect(css).toMatch(/--skeleton-track:\s*color-mix\(in oklab, currentColor \d+%, transparent\)/);
+  expect(css).toMatch(
+    /--skeleton-highlight:\s*color-mix\(in oklab, currentColor \d+%, transparent\)/,
+  );
+});
+
 test("the table scroller contains its own absolutely positioned content", () => {
   const css = readCss("src/css/components/table.css");
 

@@ -350,6 +350,34 @@
           <progress class="progress warning" value="91" max="100" aria-label="Yellow ink level">91%</progress>
         </div>
       </div>
+      <!-- The loading card mirrors the loaded one's anatomy, pill included. -->
+      <div class="grid" style="--grid-min: 18rem">
+        <article class="card stack">
+          <header>
+            <h3>Run #214</h3>
+            <span class="badge primary">Proofed</span>
+          </header>
+          <p class="muted">Back Alley Zine #12 · 100 copies, A5, medium blue and fluo pink.</p>
+          <footer>
+            <span class="muted">Ships Oct 30</span>
+            <a class="btn outline sm" href="#orders">Review proof</a>
+          </footer>
+        </article>
+        <article class="card stack" role="status" aria-busy="true" aria-label="Loading run #215">
+          <header>
+            <span class="skeleton" data-shape="title" style="--skeleton-width: 8rem"></span>
+            <span class="skeleton" style="--skeleton-size: 1.5rem; --skeleton-width: 6rem; --skeleton-radius: var(--radius-full)"></span>
+          </header>
+          <div class="stack" style="--gap: var(--space-20)">
+            <span class="skeleton" data-shape="text"></span>
+            <span class="skeleton" data-shape="text" style="--skeleton-width: 60%"></span>
+          </div>
+          <footer>
+            <span class="skeleton" data-shape="text" style="--skeleton-width: 6rem"></span>
+            <span class="skeleton" style="--skeleton-size: var(--control-size-sm); --skeleton-width: 8rem"></span>
+          </footer>
+        </article>
+      </div>
     </section>
 
     <section class="stack" id="faq" aria-labelledby="faq-title">

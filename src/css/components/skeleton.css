@@ -38,6 +38,17 @@
     0 0 / 200% 100%;
 }
 
+/* Translucent ink tints show the surface they sit on. Fixed surfaces did
+   not: the --surface-raised highlight matched a card or a light page, so the
+   shape lost its edges mid-sweep, and a soft card or dark page made the track
+   inverted or invisible. The highlight keeps a tint so the edge never goes. */
+@supports (color: color-mix(in oklab, red, blue)) {
+  .skeleton {
+    --skeleton-track: color-mix(in oklab, currentColor 10%, transparent);
+    --skeleton-highlight: color-mix(in oklab, currentColor 4%, transparent);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .skeleton {
     animation: actual-skeleton var(--duration-shimmer) ease-in-out infinite;
