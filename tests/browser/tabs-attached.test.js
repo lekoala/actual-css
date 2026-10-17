@@ -12,6 +12,54 @@ import {
 const it = (await browserAvailable()) ? test : test.skip;
 const fixture = fixtureUrl("tests/browser/tabs-attached.html");
 
+it("attached tab border ends stay square at the panel opening", async () => {
+  await withBrowserPage(
+    fixture,
+    async (view) => {
+      await setViewport(view, { width: 1000 });
+      // Exaggerate the border so a diagonal join cannot hide in antialiasing.
+      await view.evaluate(`(() => {
+        document.documentElement.style.setProperty("--border-width", "8px");
+        document.getElementById("activity-tab").click();
+        // Inspect the border itself, without the overlapping focus outline.
+        document.activeElement.blur();
+      })()`);
+      for (const direction of ["ltr", "rtl"]) {
+        await view.evaluate(`document.documentElement.dir = ${JSON.stringify(direction)}`);
+        const { data } = await view.cdp("Page.captureScreenshot", { format: "png" });
+        const painted = await view.evaluate(`(async () => {
+        const img = new Image();
+        img.src = ${JSON.stringify(`data:image/png;base64,${data}`)};
+        await img.decode();
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0);
+        const scale = img.width / innerWidth;
+        const at = (x, y) => [...ctx.getImageData(
+          Math.floor(x * scale), Math.floor(y * scale), 1, 1
+        ).data].join(",");
+        const tab = document.getElementById("activity-tab").getBoundingClientRect();
+        return {
+          leftEnd: at(tab.left + 4, tab.bottom - 1),
+          leftSide: at(tab.left + 4, tab.bottom - 12),
+          rightEnd: at(tab.right - 4, tab.bottom - 1),
+          rightSide: at(tab.right - 4, tab.bottom - 12),
+          opening: at(tab.left + tab.width / 2, tab.bottom - 1),
+          panel: at(tab.left + tab.width / 2, tab.bottom + 4),
+        };
+      })()`);
+        expect(painted.leftEnd).toBe(painted.leftSide);
+        expect(painted.rightEnd).toBe(painted.rightSide);
+        expect(painted.opening).toBe(painted.panel);
+        expect(painted.opening).not.toBe(painted.leftEnd);
+      }
+    },
+    { sourceCss: true },
+  );
+}, 60_000);
+
 for (const theme of ["light", "dark", "neo-brutalist"]) {
   it(`attached tabs share their panel edge and retain keyboard navigation in ${theme}`, async () => {
     await withBrowserPage(
@@ -44,7 +92,9 @@ for (const theme of ["light", "dark", "neo-brutalist"]) {
             tabBottom: tab.getBoundingClientRect().bottom,
             panelTop: panel.getBoundingClientRect().top,
             fill: style.backgroundColor, panelFill: p.backgroundColor,
-            edge: style.borderBottomColor, panelBorder: p.borderTopWidth,
+            edge: style.borderBottomColor, side: style.borderInlineStartColor,
+            opening: getComputedStyle(tab, "::after").backgroundColor,
+            panelBorder: p.borderTopWidth,
             shadow: p.boxShadow,
             pageScrolls: document.documentElement.scrollWidth > innerWidth,
             stripScrolls: strip.scrollWidth > strip.clientWidth,
@@ -53,7 +103,8 @@ for (const theme of ["light", "dark", "neo-brutalist"]) {
           };
         })()`);
           expect(geometry.tabBottom).toBeCloseTo(geometry.panelTop, 1);
-          expect(geometry.edge).toBe(geometry.panelFill);
+          expect(geometry.edge).toBe(geometry.side);
+          expect(geometry.opening).toBe(geometry.panelFill);
           expect(geometry.fill).toBe(geometry.panelFill);
           expect(geometry.panelBorder).toBe("0px");
           expect(geometry.pageScrolls).toBe(false);

@@ -284,13 +284,18 @@
 }
 
 .tabs-attached > .tabs > .tab[aria-selected="true"] {
-  border-block-end-color: var(--tab-panel-bg);
   background: var(--tab-panel-bg);
   color: var(--text);
 }
 
 .tabs-attached > .tabs > .tab[aria-selected="true"]::after {
-  content: none;
+  /* Keep all four border colors equal: differently colored bottom borders
+     meet the sides diagonally. Erase only the inner bottom edge so the
+     vertical strokes reach the panel with square ends. */
+  inset-block-end: calc(-1 * var(--border-width));
+  block-size: var(--border-width);
+  border: 0;
+  background: var(--tab-panel-bg);
 }
 
 .tab-panel {
@@ -315,5 +320,9 @@
     border-color: CanvasText;
     background: Highlight;
     color: HighlightText;
+  }
+
+  .tabs-attached > .tabs > .tab[aria-selected="true"]::after {
+    content: none;
   }
 }

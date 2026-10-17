@@ -1,12 +1,12 @@
 {
-  "totalRaw": 413117,
+  "totalRaw": 413480,
   "core": {
     "minified": 12460,
     "brotli": 2796
   },
   "full": {
-    "minified": 143711,
-    "brotli": 20313
+    "minified": 143855,
+    "brotli": 20305
   },
   "js": {
     "full": {
@@ -34,7 +34,7 @@
     },
     {
       "file": "components/tab.css",
-      "raw": 10834
+      "raw": 11197
     },
     {
       "file": "components/alert.css",
