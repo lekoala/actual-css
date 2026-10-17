@@ -735,11 +735,16 @@
     "cssImport": "actual-css/css/components/tab",
     "classes": [
       "tab",
-      "tabs"
+      "tab-panel",
+      "tabs",
+      "tabs-attached"
     ],
     "publicHooks": [
       "--tab-flex",
-      "--tab-gap"
+      "--tab-gap",
+      "--tab-panel-bg",
+      "--tab-panel-pad",
+      "--tab-panel-shadow"
     ],
     "internalHooks": [
       "--tab-edge",

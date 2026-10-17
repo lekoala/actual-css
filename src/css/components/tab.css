@@ -20,6 +20,9 @@
  * Public hooks:
  * --tab-flex
  * --tab-gap
+ * --tab-panel-bg
+ * --tab-panel-pad
+ * --tab-panel-shadow
  *
  * Internal:
  * --tab-edge
@@ -248,4 +251,69 @@
    it, so the indicator and the hit area span the whole share. */
 .tabs > li > .tab {
   inline-size: 100%;
+}
+
+/* Attached horizontal tabs share a surface with their panels. The strip
+   draws the panel's top edge inside its scrollport: no overlapping layers
+   or outside ink that overflow clipping could cut off. Direct children
+   keep an ordinary or nested tablist inside a panel independent. */
+.tabs-attached {
+  --tab-panel-bg: var(--surface-raised);
+  --tab-panel-pad: var(--space-40);
+  --tab-panel-shadow: none;
+
+  display: grid;
+  gap: 0;
+  min-inline-size: 0;
+}
+
+.tabs-attached > .tabs {
+  gap: 0;
+  border: 0;
+  background:
+    linear-gradient(var(--border), var(--border)) bottom / 100% var(--border-width) no-repeat;
+}
+
+.tabs-attached > .tabs > .tab {
+  border: var(--border-width) solid var(--border);
+  background: var(--surface-subtle);
+}
+
+.tabs-attached > .tabs > .tab + .tab {
+  margin-inline-start: calc(-1 * var(--border-width));
+}
+
+.tabs-attached > .tabs > .tab[aria-selected="true"] {
+  border-block-end-color: var(--tab-panel-bg);
+  background: var(--tab-panel-bg);
+  color: var(--text);
+}
+
+.tabs-attached > .tabs > .tab[aria-selected="true"]::after {
+  content: none;
+}
+
+.tab-panel {
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--tab-panel-pad);
+  border: var(--border-width) solid var(--border);
+  border-block-start: 0;
+  background: var(--tab-panel-bg);
+  box-shadow: var(--tab-panel-shadow);
+}
+
+/* Forced colors remove gradients and shadows. A real strip edge and the
+   user's selection colors preserve both the frame and the selected state. */
+@media (forced-colors: active) {
+  .tabs-attached > .tabs {
+    border-block-end: var(--border-width) solid CanvasText;
+  }
+
+  .tabs-attached > .tabs > .tab[aria-selected="true"] {
+    forced-color-adjust: none;
+    border-color: CanvasText;
+    background: Highlight;
+    color: HighlightText;
+  }
 }

@@ -34,7 +34,7 @@ const DIST = join(ROOT, "dist");
  */
 const BUDGETS = {
   coreCssBrotli: 2900, // src/css/actual.css, minified in memory (current ~2697; typographic density: --font-width hooks + compact/spacious font-stretch)
-  fullCssBrotli: 20200, // actual.full.min.css (current ~19731; soft tint split from the opaque .soft mix, --state-selected-text, admonition variants, .segmented)
+  fullCssBrotli: 20500, // actual.full.min.css, including attached tab panels
   fullJsBrotli: 18500, // actual.full.js (current ~17416)
 };
 

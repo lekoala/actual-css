@@ -4,11 +4,13 @@
 
 ## Class reference
 
-| Class      | Kind      | Description                                  |
-| ---------- | --------- | -------------------------------------------- |
-| `.tabs`    | Component | Tab strip; pairs with `role="tablist"`.      |
-| `.tab`     | Component | One tab trigger; pairs with `role="tab"`.    |
-| `.primary` | Intent    | Tints the selected tab's indicator and text. |
+| Class            | Kind      | Description                                  |
+| ---------------- | --------- | -------------------------------------------- |
+| `.tabs`          | Component | Tab strip; pairs with `role="tablist"`.      |
+| `.tab`           | Component | One tab trigger; pairs with `role="tab"`.    |
+| `.primary`       | Intent    | Tints the selected tab's indicator and text. |
+| `.tabs-attached` | Component | Joins a horizontal tablist to its panels.    |
+| `.tab-panel`     | Part      | Framed panel inside `.tabs-attached`.        |
 
 ## Usage
 
@@ -89,6 +91,39 @@ JavaScript involved:
 </nav>
 ```
 
+## Attached panels
+
+For attached tabs (folder tabs, connected or enclosed panels), wrap the
+horizontal tablist and its panels in `.tabs-attached`. Put `.tab` buttons
+directly in the strip and `.tab-panel` on each panel. The selected tab and
+panel share one surface; selection uses the open edge instead of an underline.
+Keep the wrapper free of layout gaps and panel background overrides.
+
+```html demo
+<div class="tabs-attached">
+  <div class="tabs" role="tablist" aria-label="Traffic" data-enhance="tabs">
+    <button class="tab" type="button" role="tab" id="traffic-overview-tab"
+            aria-selected="true" aria-controls="traffic-overview">Overview</button>
+    <button class="tab" type="button" role="tab" id="traffic-activity-tab"
+            aria-selected="false" aria-controls="traffic-activity" tabindex="-1">Activity</button>
+  </div>
+  <section class="tab-panel" role="tabpanel" id="traffic-overview"
+           aria-labelledby="traffic-overview-tab" tabindex="-1">
+    Traffic is up 12% week over week, led by organic search.
+  </section>
+  <section class="tab-panel" role="tabpanel" id="traffic-activity"
+           aria-labelledby="traffic-activity-tab" tabindex="-1" hidden>
+    Recent activity appears here.
+  </section>
+</div>
+```
+
+Set `--tab-panel-bg`, `--tab-panel-pad`, and `--tab-panel-shadow` on
+`.tabs-attached` to customize the shared fill, panel padding and elevation.
+The neo-brutalist demo theme supplies the panel shadow. Use ordinary `.tabs`
+for vertical rails or navigation links; attached tabs are a horizontal panel
+switcher. Long strips retain horizontal scrolling and keyboard navigation.
+
 ## Equal-width tabs
 
 To make a few tabs share the strip's width (full-width, fill), set
@@ -160,8 +195,11 @@ the current item of the strip. This is the only place a `.tab` takes `true`.
 Do not put a flyout trigger in a `role="tablist"`: a tablist holds only
 `role="tab"` items, and the arrow keys of the two widgets collide.
 
-## CSS hooks
+### Hooks
 
 - `--tab-flex` — flex of each item; set `1 1 0` on the strip for equal-width tabs
   (fill the width). A strip that cannot fit its labels still scrolls.
 - `--tab-gap` — space between an icon and the label text (default `0.375em`).
+- `--tab-panel-bg` — shared fill for the attached panel and selected tab.
+- `--tab-panel-pad` — attached panel padding.
+- `--tab-panel-shadow` — attached panel elevation; the strip casts no shadow.

@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- `.tabs-attached` and `.tab-panel`: folder-style horizontal tabs joined to their panel, with shared surface, padding and shadow hooks.
 - `--control-default-bg`: inherited resting field fill shared with external widget bridges.
 - `theming.md`: a custom button focus recipe that preserves the outline and elevation when focus and hover coincide.
 - `modular-import.md`: replacing a component while keeping its markup, states and theme tokens, with a minimal Steps recipe linked from Philosophy.

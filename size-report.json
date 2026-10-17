@@ -1,12 +1,12 @@
 {
-  "totalRaw": 411121,
+  "totalRaw": 413117,
   "core": {
     "minified": 12460,
     "brotli": 2796
   },
   "full": {
-    "minified": 142466,
-    "brotli": 20150
+    "minified": 143711,
+    "brotli": 20313
   },
   "js": {
     "full": {
@@ -18,7 +18,7 @@
   "files": [
     {
       "file": "themes/neo-brutalist.css",
-      "raw": 18205
+      "raw": 18369
     },
     {
       "file": "components/steps.css",
@@ -33,6 +33,10 @@
       "raw": 13222
     },
     {
+      "file": "components/tab.css",
+      "raw": 10834
+    },
+    {
       "file": "components/alert.css",
       "raw": 10767
     },
@@ -43,10 +47,6 @@
     {
       "file": "forms/choice-card.css",
       "raw": 9121
-    },
-    {
-      "file": "components/tab.css",
-      "raw": 9002
     },
     {
       "file": "components/button.css",

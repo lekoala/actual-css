@@ -484,6 +484,11 @@
   color: inherit;
 }
 
+/* Attached tabs and their panel form one object, with one shadow. */
+:where([data-theme="neo-brutalist"]) .tabs-attached {
+  --tab-panel-shadow: var(--shadow);
+}
+
 /* Table: column labels shout like badges, over a doubled rule that closes the
    header band (--table-header-bg). */
 [data-theme="neo-brutalist"] .table thead th {
