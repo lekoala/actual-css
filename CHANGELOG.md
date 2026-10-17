@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- `theming.md`: a custom button focus recipe that preserves the outline and elevation when focus and hover coincide.
 - `modular-import.md`: replacing a component while keeping its markup, states and theme tokens, with a minimal Steps recipe linked from Philosophy.
 - `neo-brutalist` demo theme: pastel intents under black ink, offset shadows on framed objects, lifting buttons, a plus accordion marker.
 - `demo/templates/neo-brutalist.html`: a risograph print studio page on that theme, with page-loaded fonts.

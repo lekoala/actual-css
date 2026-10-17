@@ -36,6 +36,7 @@ const DOC_DEMO_CLASSES = new Set([
   "profile-aside",
   "profile-layout",
   "profile-main",
+  "settings-action",
   "shell-sidebar",
   "shell-sidebar-main",
   "shell-sidebar-nav",

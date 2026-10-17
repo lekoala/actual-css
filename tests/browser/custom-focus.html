@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Custom button focus</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    :root { --duration: 0s; }
+    body { padding: 2rem; }
+    .actions { --btn-shadow: 3px 3px 0 rgb(0 0 0); }
+    /* Kept identical to the recipe in theming.md by custom-focus.test.js. */
+.settings-action.btn:focus-visible:not(:where(:disabled, [aria-disabled="true"])) {
+  background: var(--surface-solid);
+  color: var(--surface-solid-fg);
+  border-color: var(--focus);
+  /* Hover paints an inset shadow over the background. */
+  --btn-hover-overlay: transparent;
+}
+  </style>
+</head>
+<body class="stack">
+  <h1>Custom button focus</h1>
+  <p>Tab to an action, then move the pointer over it. Focus keeps its fill and outline.</p>
+  <div class="cluster actions">
+    <button class="btn primary settings-action" type="button" id="solid">Solid action</button>
+    <button class="btn primary soft settings-action" type="button" id="soft">Soft action</button>
+    <button class="btn primary outline settings-action" type="button" id="outline">Outline action</button>
+    <button class="btn primary settings-action" type="button" id="disabled" disabled>Disabled action</button>
+    <a class="btn primary settings-action" id="disabled-link" href="#" aria-disabled="true">Disabled link</a>
+  </div>
+  <span id="reference" hidden style="background: var(--surface-solid); color: var(--surface-solid-fg); border: 1px solid var(--focus)"></span>
+</body>
+</html>

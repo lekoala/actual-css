@@ -64,6 +64,33 @@ Change `--switch-width`, `--switch-block-size`, and `--switch-knob-margin`; knob
 
 Set `--disabled-opacity`. All disabled-prone components — buttons, tabs, menu items, badges, avatars, choice cards, native inputs, and range sliders — read it for their dimmed state.
 
+### Customize focus beyond the ring / focus background, text and border
+
+Use an application class with `:focus-visible` to change a button's fill, text,
+and border while keeping its framework outline. Load the rule after Actual CSS:
+
+```css
+.settings-action.btn:focus-visible:not(:where(:disabled, [aria-disabled="true"])) {
+  background: var(--surface-solid);
+  color: var(--surface-solid-fg);
+  border-color: var(--focus);
+  /* Hover paints an inset shadow over the background. */
+  --btn-hover-overlay: transparent;
+}
+```
+
+```html
+<button class="btn primary settings-action" type="button">Settings</button>
+```
+
+Focus and hover can be active together. The selector takes precedence over the
+generic hover fill; `--btn-hover-overlay` removes its extra tint while
+preserving any `--btn-shadow` elevation. Check keyboard focus both with and
+without the pointer over the button, in each color scheme and in forced colors.
+Keep the outline visible against the surrounding surface when changing colors.
+
+→ [Button hooks](../components/button.md#css-hooks) · [Focus tokens](./tokens.md#color)
+
 ### Keep bare native controls on-theme / accent-color
 
 Native controls that no component class restyles — a bare checkbox, radio, range, or `<progress>` — follow the theme through `accent-color: var(--primary)`, declared on `:root` and every `[data-theme]` island so each island recomputes it from its own palette. Component classes (`.check`, `.radio`, `.range`) paint their own rendering and do not read it.
