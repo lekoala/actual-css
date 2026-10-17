@@ -8,11 +8,11 @@
   <meta name="description" content="A native date input, a masked text field and @lekoala/date-picker side by side, the external picker themed entirely with Actual CSS tokens.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.3.0/dist/date-picker.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.4.0/dist/date-picker.css">
   <script src="../scripts/theme-picker.js"></script>
   <!-- defer: the element reads its <input> on connect, so it must be defined
        after parsing — a head-time definition upgrades it before its child. -->
-  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.3.0/dist/date-picker.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.4.0/dist/date-picker.min.js"></script>
   <style>
     .page {
       --center-size: 60rem;
@@ -53,24 +53,20 @@
       --dp-accent: var(--primary);
       --dp-accent-fg: var(--primary-fg);
       --dp-radius: var(--radius);
+      /* The picker draws focus as an inset line, like the core: the two
+         tokens are the whole focus mapping. */
+      --dp-focus: var(--focus);
+      --dp-focus-width: var(--focus-ring-width);
       /* Centers the trigger glyph on the select chevron axis: border +
          control-pad-x from the edge, 1em wide. The button overlays the field's
          border box, so the border is counted twice. */
       --dp-picker-button-size: calc(var(--control-pad-x) * 2 + 1em + var(--border-width) * 2);
     }
 
-    /* Focus: the picker paints its own --dp-accent halo, so the calendar's
-       controls are mapped back onto the core focus contract. */
-    .dp-calendar-header :where(button, select, input):focus-visible {
-      border-color: var(--dp-border);
-      outline: var(--focus-ring-width) solid var(--focus);
-      outline-offset: calc(var(--focus-ring-width) * -1);
-      box-shadow: none;
-    }
-
-    .dp-picker-button:focus-visible,
-    .dp-day:focus-visible {
-      outline-color: var(--focus);
+    /* The picker has no shadow token: the panel takes the theme's popout
+       elevation, like any other floating surface. */
+    .dp-picker-panel[popover] {
+      box-shadow: var(--shadow-popout);
     }
   </style>
 </head>
@@ -154,8 +150,8 @@
             <h2>External picker — a widget on Actual tokens</h2>
             <p class="muted">
               <code>@lekoala/date-picker</code> adds a calendar popup over a plain
-              Actual <code>.input</code>. The skin is a <code>--dp-*</code> token map
-              plus a focus mapping onto the core outline, so themes and light/dark
+              Actual <code>.input</code>. The skin is a <code>--dp-*</code> token map,
+              focus included, plus the panel shadow, so themes and light/dark
               mode apply for free; the widget keeps its own behaviour.
             </p>
           </hgroup>
@@ -182,8 +178,8 @@
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
       <span>
-        Loaded from jsDelivr, pinned: <code>@lekoala/date-picker@0.3.0/dist/date-picker.css</code> and
-        <code>@lekoala/date-picker@0.3.0/dist/date-picker.min.js</code>.
+        Loaded from jsDelivr, pinned: <code>@lekoala/date-picker@0.4.0/dist/date-picker.css</code> and
+        <code>@lekoala/date-picker@0.4.0/dist/date-picker.min.js</code>.
       </span>
       <span>The picker wraps a native <code>&lt;input&gt;</code> — the input owns the form value.</span>
     </footer>

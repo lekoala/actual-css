@@ -225,14 +225,16 @@
   clip-path: circle(0 at var(--choice-chip-dot));
 }
 
-/* The check keeps the card's scale-in, in flow ahead of the label. */
+/* The check keeps the card's scale-in, in flow ahead of the label. It is ink
+   on the chip, not a fill: a theme whose selected fill cannot be text (a
+   yellow or lime accent) lends its selected ink here, as for tabs and steps. */
 .choice-card.chip::after {
   order: -1;
   flex: none;
   align-self: center;
   margin-block: 0;
   margin-inline: 0 0.375em;
-  background: var(--intent, var(--state-selected));
+  background: var(--intent, var(--state-selected-text, var(--state-selected)));
   -webkit-mask-size: contain;
   mask-size: contain;
 }

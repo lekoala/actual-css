@@ -8,6 +8,7 @@ import {
   browserAvailable,
   fixtureUrl,
   forceStates,
+  tabUntil,
   waitForBrowser,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
@@ -35,6 +36,22 @@ it("keeps --btn-shadow under the solid hover overlay", async () => {
     expect(shadow.rest).toBe("rgb(0, 0, 0) 4px 4px 0px 0px");
     expect(shadow.hover.startsWith("rgb(0, 0, 0) 4px 4px 0px 0px, ")).toBe(true);
     expect(shadow.hover).toContain("999px inset");
+  });
+});
+
+// Trap: the focus rule reset box-shadow to none to drop any halo, which
+// erased a theme's field elevation the moment the keyboard reached it.
+it("keeps --control-shadow on a keyboard-focused field", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    await tabUntil(view, `document.activeElement?.id === "field"`);
+    await waitForBrowser(view, `document.getElementById("field").matches(":focus-visible")`);
+    const field = await view.evaluate(`(() => {
+      const style = getComputedStyle(document.getElementById("field"));
+      return { shadow: style.boxShadow, outline: style.outlineStyle };
+    })()`);
+
+    expect(field.outline).toBe("solid");
+    expect(field.shadow).toBe("rgb(0, 0, 0) 3px 3px 0px 0px");
   });
 });
 

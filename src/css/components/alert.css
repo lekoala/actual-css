@@ -172,6 +172,9 @@
   /* No grid-template-columns: the icon and close branches below always set
      it, since one of them is what matched. */
   align-items: var(--items-align, start);
+  /* why: a stretched alert (equal-height grid row) spread its extra height
+     between the content rows, opening a gap under the title. */
+  align-content: start;
   column-gap: var(--space-30);
 }
 
@@ -179,9 +182,14 @@
   grid-template-columns: auto minmax(0, 1fr);
 }
 
+/* why span 2, not 1 / -1: the rows are implicit, so -1 is line 1 and the
+   icon sat in the title row alone — any icon taller than one line inflated
+   that row and pushed the body down. Spanning the title and body rows lets
+   its height spread over both; only an icon taller than both together still
+   splits its excess between them. */
 .alert:has(> .alert-icon) > .alert-icon {
   grid-column: 1;
-  grid-row: 1 / -1;
+  grid-row: 1 / span 2;
   display: inline-grid;
   place-items: center;
   margin-block-start: 0.125em;

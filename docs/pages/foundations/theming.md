@@ -206,6 +206,27 @@ step per role rather than importing the scale.
 
 → Foundations · Tokens (theme contract) · Guides · Tailwind (Map the palette to theme roles)
 
+### Use a custom font / webfont / typeface with a theme
+
+A font belongs to the page, not to the theme. Load the face in the application
+stylesheet (`@font-face` or a font service) and set `--font-sans` (and
+`--font-mono`) on `:root`, never in a `[data-theme]` block: a theme switches at
+runtime and scopes to islands, so a font tied to it would change the text
+metrics of every island it touches. A display face for headings has no token:
+name it on the headings in application CSS.
+
+```css
+:root {
+  --font-sans: "Space Grotesk Variable", system-ui, sans-serif;
+}
+
+:is(h1, h2) {
+  font-family: "Archivo Black", var(--font-sans);
+}
+```
+
+→ Examples · Neo-brutalist
+
 ### Use or adapt a preset palette
 
 `src/css/themes/` holds example palettes (`ocean`, `spruce`, `neon`, `brutalist`, …) as
@@ -214,7 +235,10 @@ assets, not package entrypoints. Each sets the intent/surface/text tokens and
 lets the core derive everything else.
 
 The `gradient` example keeps a Bootstrap 4 style outer halo on focused fields
-instead of the core inset line. The `material` example restyles
+instead of the core inset line. The `neo-brutalist` example puts a hard offset
+shadow on every standalone framed object (`--btn-shadow` for buttons, which
+lift on hover and press flat), keeps every ink black so its pastel intents
+show only as fills, and turns the accordion marker into a plus. The `material` example restyles
 fields as filled underlines with pill buttons — tokens plus three small rules,
 and `.join` still needs no adaptation. The `glass` example paints translucent
 surfaces over its own backdrop: it sets `--surface-opaque` and

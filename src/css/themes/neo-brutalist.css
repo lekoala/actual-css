@@ -1,0 +1,448 @@
+/* Neo-brutalist — light-only: pastel pop intents, black ink on every fill,
+ * 2px black frames, and hard offset shadows on every standalone framed
+ * object. Buttons lift on hover and press flat. Tokens plus component rules;
+ * the font is the page's, not the theme's (docs: Theming · fonts).
+ *
+ * Shadows follow two rules: an object that stands on the page casts one, and
+ * so does anything you can operate, until it is disabled and lies flat. A
+ * surface nested in another does not (shadow on shadow reads as noise).
+ *
+ * A demo theme targets current engines, not the CSS floor: its component
+ * rules use :has() and :not() selector lists freely. Below the floor those
+ * rules drop and only the theme's tokens remain, which still render a usable
+ * flat palette — a deliberate degradation, not a fallback to maintain. */
+[data-theme="neo-brutalist"] {
+  color-scheme: light;
+
+  --primary: hsl(78 88% 62%);
+  --primary-fg: hsl(240 10% 7%);
+  --secondary: hsl(197 82% 68%);
+  --secondary-fg: hsl(240 10% 7%);
+  --success: hsl(150 55% 55%);
+  --success-fg: hsl(240 10% 7%);
+  --warning: hsl(27 100% 64%);
+  --warning-fg: hsl(240 10% 7%);
+  /* The one intent the core uses as bare ink (.field-error, the invalid
+     field border), so it stays deep enough for text on the page. */
+  --danger: hsl(335 85% 45%);
+  --danger-fg: white;
+  --neutral: hsl(240 10% 7%);
+  --neutral-fg: white;
+
+  --surface: hsl(60 20% 97%);
+  --surface-raised: white;
+  --surface-subtle: hsl(60 12% 92%);
+  --surface-solid: hsl(240 10% 7%);
+
+  --text: hsl(240 10% 7%);
+  --text-muted: hsl(240 5% 28%);
+  --text-subtle: hsl(240 4% 40%);
+
+  --border: hsl(240 10% 7%);
+  --focus: hsl(220 100% 52%);
+  /* The pastels cannot carry text on the page: links and the selected
+     ink stay black, the fill carries the accent. */
+  --link: var(--text);
+  --state-selected-text: var(--text);
+  --hover-overlay: rgb(0 0 0 / 0.08);
+
+  --radius: 0;
+  --radius-sm: 0;
+  --radius-lg: 0;
+  --border-width: 2px;
+  --shadow: 5px 5px 0 var(--border);
+  --shadow-popout: 8px 8px 0 var(--border);
+  --shadow-color: var(--border);
+
+  /* Every soft fill is a light pastel of its intent under black ink. */
+  --soft-bg-mix: 76%;
+  --soft-fg-mix: 0%;
+
+  --font-weight-medium: 600;
+  --font-weight-semibold: 700;
+  --font-weight-bold: 800;
+
+  /* Buttons: a black frame and a small offset, inherited by every .btn. */
+  --btn-border-color: var(--border);
+  --btn-shadow: 3px 3px 0 var(--border);
+  /* Fields stand like buttons: the same offset, a black hover frame. */
+  --control-shadow: 3px 3px 0 var(--border);
+  --control-hover-border: var(--border);
+
+  --selection-bg: var(--primary);
+  --selection-fg: var(--primary-fg);
+}
+
+/* Intent lives in fills only. The ink-only treatments would set a pastel as
+   text (1.3-2:1 on the page), so their ink and frame stay black: use .solid
+   or .soft when the intent must show. */
+[data-theme="neo-brutalist"] :is(.outline, .surface, .btn.ghost, .btn.link) {
+  --ui-fg: var(--text);
+}
+
+/* Frames stay black under every treatment: a toned .card.soft drew a pastel
+   rim from --soft-border-mix, and .solid a transparent one. */
+[data-theme="neo-brutalist"] :is(.outline, .soft, .solid) {
+  --ui-border: var(--border);
+}
+
+/* No black slabs: a button without an intent is a white object under the
+   black frame, and an intent class still fills it. Declared on .btn, not on
+   the theme root, so var(--intent) resolves after the local intent class.
+   An explicit .solid keeps the neutral black for the rare loud case. */
+[data-theme="neo-brutalist"] .btn {
+  --btn-default-bg: var(--intent, var(--surface-raised));
+  --btn-default-fg: var(--intent-fg, var(--text));
+}
+
+/* Ghost and link buttons are text, not objects. Buttons inside a .join share
+   their edges with fields and neighbours, so an offset would overlap them. */
+[data-theme="neo-brutalist"] :is(.btn.ghost, .btn.link) {
+  --btn-border-color: transparent;
+}
+
+[data-theme="neo-brutalist"] :is(.btn.ghost, .btn.link, .join .btn) {
+  --btn-shadow: 0 0 #0000;
+}
+
+/* The lift is the hover feedback, so the fill stays put: no overlay, and
+   the hover background falls back to the resting one (initial makes the
+   hook invalid). Ghost and link do not move and keep their wash. */
+[data-theme="neo-brutalist"] .btn:not(.ghost, .link) {
+  --btn-hover-overlay: transparent;
+  --ui-hover-bg: initial;
+}
+
+/* Lift on hover, press flat on :active: the shadow is the travel, so the
+   face moves by exactly the offset it gains or loses. Transform, not
+   translate, so the button's own transition animates it and the core 1px
+   press is replaced rather than added. */
+@media (hover: hover) {
+  [data-theme="neo-brutalist"]
+    .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link, .join *)):hover {
+    --btn-shadow: 5px 5px 0 var(--border);
+    transform: translate(-2px, -2px);
+  }
+}
+
+[data-theme="neo-brutalist"]
+  .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link, .join *)):active {
+  --btn-shadow: 0 0 #0000;
+  transform: translate(3px, 3px);
+}
+
+/* Standalone framed objects cast the theme shadow. */
+[data-theme="neo-brutalist"]
+:is(
+  .card,
+  .alert:not(.callout),
+  .accordion:not(.flush, .separated),
+  .accordion.separated > details
+) {
+  box-shadow: var(--shadow);
+}
+
+[data-theme="neo-brutalist"]
+  :is(.card, .alert, .modal, .drawer, .flyout)
+  :is(.card, .alert, .accordion, .accordion > details) {
+  box-shadow: none;
+}
+
+/* Actions move, destinations light up. A card that is a link is a place you
+   go, not a key you press: it keeps its shadow and fills with the accent
+   tint (the open accordion's colour, softened). Stronger than the soft
+   fills: at their 24% a hovered white card barely changed. Guarded: an unsupported
+   color-mix() over var() would leave the card transparent, not unchanged. */
+[data-theme="neo-brutalist"] a.card {
+  transition: background-color var(--duration);
+}
+
+@supports (color: color-mix(in oklab, red, white)) {
+  [data-theme="neo-brutalist"] a.card:hover {
+    background-color: color-mix(in oklab, var(--primary) 40%, var(--surface-raised));
+  }
+}
+
+/* Frames are black whatever the intent; the callout keeps its colored flag. */
+[data-theme="neo-brutalist"] .alert:not(.callout),
+[data-theme="neo-brutalist"] .badge:not(:empty) {
+  border-color: var(--border);
+}
+
+/* Labels shout: uppercase with the tracking capitals need. The empty dot
+   badge has no text to transform. One badge opts in on any theme with
+   .text-uppercase; this is the theme's voice. */
+[data-theme="neo-brutalist"] .badge:not(:empty) {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* The status dot inside a badge is stamped like the alert tile: the full
+   intent under a black ring, since the ink it follows here is always black. */
+[data-theme="neo-brutalist"] .badge > .dot {
+  inline-size: 0.75em;
+  block-size: 0.75em;
+  border: var(--border-width) solid var(--border);
+  background-color: var(--intent, var(--surface-raised));
+}
+
+[data-theme="neo-brutalist"] .avatar {
+  border: var(--border-width) solid var(--border);
+}
+
+/* The alert icon becomes a stamped tile in the full intent. content-box so
+   the padding grows the tile around the glyph instead of shrinking it. */
+[data-theme="neo-brutalist"] .alert > .alert-icon {
+  box-sizing: content-box;
+  padding: 0.3em;
+  border: var(--border-width) solid var(--border);
+  background: var(--intent, var(--neutral));
+  color: var(--intent-fg, var(--neutral-fg));
+  box-shadow: 2px 2px 0 var(--border);
+}
+
+/* Roomier alerts, so the tile clears the frame. :where() keeps this at the
+   base rule's weight: .compact and .spacious still step it. */
+:where([data-theme="neo-brutalist"]) .alert {
+  --alert-pad-block: var(--space-40);
+  --alert-pad-inline: var(--space-50);
+}
+
+/* The glyph stays centred on the title line, where the core puts it
+   (0.125em): the tile grows around it evenly, up into the padding. Without
+   :has() the core alert grid is off too and the icon sits inline: the rule
+   drops with it and the tile keeps its plain top edge. */
+[data-theme="neo-brutalist"] .alert:has(> .alert-icon) > .alert-icon {
+  margin-block-start: calc(0.125em - 0.3em - var(--border-width));
+}
+
+/* Forms. What you can operate stands up, what is disabled lies flat: the
+   shadow says "available", its absence says "not now". Fields ride
+   --control-shadow (set on the root), choices their own box-shadow. */
+[data-theme="neo-brutalist"] .btn:is(:disabled, [aria-disabled="true"]) {
+  --btn-shadow: 0 0 #0000;
+}
+
+[data-theme="neo-brutalist"] :is(.input, .textarea, .select):disabled {
+  --control-shadow: 0 0 #0000;
+}
+
+/* White fields under the black frame. :where() keeps the base rule's weight,
+   so the readonly, disabled and hover states still restyle them. */
+:where([data-theme="neo-brutalist"]) :is(.input, .textarea, .select) {
+  --control-bg: var(--surface-raised);
+  --control-border: var(--border);
+}
+
+/* An invalid field keeps its shape and fills with a danger tint: the
+   validation rules set --form-invalid-border on the field (or its .field),
+   and the mix falls back to plain white when it is unset. Guarded: an
+   unsupported color-mix() over var() would leave the field transparent. */
+@supports (color: color-mix(in oklab, red, white)) {
+  :where([data-theme="neo-brutalist"]) :is(.input, .textarea, .select) {
+    --control-bg: color-mix(
+      in oklab,
+      var(--form-invalid-border, var(--surface-raised)) 14%,
+      var(--surface-raised)
+    );
+  }
+}
+
+/* A .join is one object: the group casts the shadow, its parts do not. */
+[data-theme="neo-brutalist"] .join {
+  box-shadow: 3px 3px 0 var(--border);
+}
+
+[data-theme="neo-brutalist"] .join :is(.input, .textarea, .select) {
+  --control-shadow: 0 0 #0000;
+}
+
+/* Choices: black frames in every state (the checked fill carries the
+   accent), and a stamp shadow while they can be operated. */
+[data-theme="neo-brutalist"] :is(.check, .radio, .switch) {
+  border-color: var(--form-invalid-border, var(--border));
+}
+
+[data-theme="neo-brutalist"] :is(.check, .radio, .switch):not(:disabled) {
+  box-shadow: 2px 2px 0 var(--border);
+}
+
+/* A choice card is an operable object too: black frame (validation still
+   recolours it), the field shadow while enabled, and the accent tint once
+   chosen. Its indicator ring follows the choice frames. */
+:where([data-theme="neo-brutalist"]) .choice-card {
+  --choice-card-bg: var(--surface-raised);
+}
+
+[data-theme="neo-brutalist"] .choice-card {
+  border-color: var(--form-invalid-border, var(--border));
+}
+
+[data-theme="neo-brutalist"] .choice-card::before {
+  border-color: var(--form-invalid-border, var(--border));
+}
+
+/* Without :has() the core choice card keeps its native input visible and
+   the card simply stays flat: only the enabled-state shadow is lost. */
+[data-theme="neo-brutalist"] .choice-card:not(:has(:disabled)) {
+  box-shadow: 3px 3px 0 var(--border);
+}
+
+@supports (color: color-mix(in oklab, red, white)) {
+  [data-theme="neo-brutalist"] .choice-card:has(:checked) {
+    --choice-card-bg: color-mix(
+      in oklab,
+      var(--intent, var(--state-selected)) 40%,
+      var(--surface-raised)
+    );
+  }
+}
+
+/* Switch: a square track and a square white knob framed in black, in both
+   states; the track carries the state (grey off, the accent on). Never a
+   black slab. */
+/* Larger than the checkbox-sized core track: a framed square knob needs room,
+   and it fills the track height. The knob size and travel derive from these
+   in switch.css. :where() keeps the base rule's weight. */
+:where([data-theme="neo-brutalist"]) .switch {
+  --switch-block-size: 1.75em;
+  --switch-width: 3.25em;
+  --switch-knob-margin: 2px;
+}
+
+[data-theme="neo-brutalist"] .switch,
+[data-theme="neo-brutalist"] .switch::before {
+  border-radius: 0;
+}
+
+[data-theme="neo-brutalist"] .switch::before {
+  border: var(--border-width) solid currentColor;
+  color: var(--border);
+}
+
+[data-theme="neo-brutalist"] .switch:not(:disabled) {
+  --switch-knob: var(--surface-raised);
+}
+
+[data-theme="neo-brutalist"] .switch:not(:checked, :disabled) {
+  --switch-bg: var(--surface-subtle);
+}
+
+[data-theme="neo-brutalist"] .switch:disabled::before {
+  color: var(--state-disabled);
+}
+
+/* Range: a framed square track and a square stamped thumb. The frame is an
+   inset shadow, not a border: the thumb is centred on the track height, and
+   a border would push it off-axis. Vendor pseudos stay in separate rules,
+   since one unknown selector drops a whole list. */
+:where([data-theme="neo-brutalist"]) .range {
+  --range-thumb-size: 1.5rem;
+  --range-track-height: 1rem;
+  --range-thumb-bg: var(--surface-raised);
+  --range-track-bg: var(--surface-subtle);
+}
+
+[data-theme="neo-brutalist"] .range::-webkit-slider-runnable-track {
+  border-radius: 0;
+  box-shadow: inset 0 0 0 var(--border-width) var(--border);
+}
+
+[data-theme="neo-brutalist"] .range::-moz-range-track {
+  border-radius: 0;
+  box-shadow: inset 0 0 0 var(--border-width) var(--border);
+}
+
+[data-theme="neo-brutalist"] .range::-webkit-slider-thumb {
+  box-sizing: border-box;
+  border: var(--border-width) solid var(--border);
+  border-radius: 0;
+  box-shadow: 2px 2px 0 var(--border);
+}
+
+[data-theme="neo-brutalist"] .range::-moz-range-thumb {
+  box-sizing: border-box;
+  border: var(--border-width) solid var(--border);
+  border-radius: 0;
+  box-shadow: 2px 2px 0 var(--border);
+}
+
+/* Focus keeps the stamp and adds the --focus ring around the thumb. */
+[data-theme="neo-brutalist"] .range:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    2px 2px 0 var(--border),
+    0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
+}
+
+[data-theme="neo-brutalist"] .range:focus-visible::-moz-range-thumb {
+  box-shadow:
+    2px 2px 0 var(--border),
+    0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
+}
+
+[data-theme="neo-brutalist"] .range:disabled::-webkit-slider-thumb {
+  box-shadow: none;
+}
+
+[data-theme="neo-brutalist"] .range:disabled::-moz-range-thumb {
+  box-shadow: none;
+}
+
+/* Progress: a thick framed bar that stands like a card, square ends, and a
+   black edge closing the value. */
+[data-theme="neo-brutalist"] .progress {
+  --bar-height: 1.25rem;
+
+  border: var(--border-width) solid var(--border);
+  border-radius: 0;
+  box-shadow: 3px 3px 0 var(--border);
+}
+
+[data-theme="neo-brutalist"] .progress::-webkit-progress-bar {
+  border-radius: 0;
+}
+
+[data-theme="neo-brutalist"] .progress::-webkit-progress-value {
+  border-radius: 0;
+  box-shadow: var(--border-width) 0 0 var(--border);
+}
+
+[data-theme="neo-brutalist"] .progress::-moz-progress-bar {
+  border-radius: 0;
+  box-shadow: var(--border-width) 0 0 var(--border);
+}
+
+/* Accordion: a plus that turns into a cross, and an open item filled with
+   the accent, its summary ruled off from the panel. */
+[data-theme="neo-brutalist"] .accordion {
+  /* The core plus is drawn at stroke 2/24, a hairline next to 2px frames:
+     the theme draws its own at 3.5 and a size up. */
+  --accordion-marker-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='square'%3E%3Cpath d='M12 4v16M4 12h16'/%3E%3C/svg%3E");
+  --accordion-marker-size: 1.125rem;
+  --accordion-marker-open-rotate: 45deg;
+  --accordion-marker-color: currentColor;
+}
+
+/* Shadowed siblings need about three offsets of air: at the core 0.5rem
+   gap the 5px shadow left 3px, and the items read as one stuck block. */
+[data-theme="neo-brutalist"] .accordion.separated {
+  gap: var(--space-40);
+}
+
+[data-theme="neo-brutalist"] .accordion details {
+  transition: background-color var(--duration);
+}
+
+[data-theme="neo-brutalist"] .accordion details[open] {
+  background: var(--primary);
+  color: var(--primary-fg);
+}
+
+[data-theme="neo-brutalist"] .accordion details[open] > summary {
+  border-block-end: var(--border-width) solid var(--border);
+}
+
+[data-theme="neo-brutalist"] .accordion details[open] > summary + * {
+  padding-block-start: var(--accordion-pad);
+  color: inherit;
+}

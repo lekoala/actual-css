@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en" data-theme="neo-brutalist">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neo-brutalist - Actual CSS</title>
+  <meta name="description" content="A risograph print studio page on the neo-brutalist theme, with the page loading its own fonts.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.4.0/dist/date-picker.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.6.0/dist/combobox.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.4.0/dist/date-picker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.6.0/dist/combobox.js"></script>
+  <style>
+    /* The fonts belong to the page, not to the theme: switch the theme and
+       the type stays. --font-sans is the one framework token they touch; the
+       display face has no token, so headings name it here. */
+    @font-face {
+      font-family: "Space Grotesk Variable";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 300 700;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource-variable/space-grotesk@5.3.0/files/space-grotesk-latin-wght-normal.woff2") format("woff2-variations");
+    }
+    @font-face {
+      font-family: "Archivo Black";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 400;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource/archivo-black@5.3.0/files/archivo-black-latin-400-normal.woff2") format("woff2");
+    }
+
+    :root {
+      --font-sans: "Space Grotesk Variable", system-ui, sans-serif;
+    }
+
+    :is(h1, h2, .nb-brand) {
+      font-family: "Archivo Black", var(--font-sans);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .nb-page {
+      --center-size: 68rem;
+      --gap: var(--space-60);
+
+      padding-block: var(--space-50) 12rem;
+    }
+
+    .nb-brand {
+      color: inherit;
+      text-decoration: none;
+      font-size: var(--font-size-lg);
+    }
+
+    /* An .overline led by a short rule, for section labels. */
+    .nb-lead-rule {
+      display: flex;
+      align-items: center;
+      gap: var(--space-30);
+      color: var(--text);
+    }
+
+    .nb-lead-rule::before {
+      content: "";
+      inline-size: 2.5rem;
+      border-block-start: var(--border-width) solid currentColor;
+    }
+
+    /* Notes: stamped square bullets. Page CSS, not theme: a theme rule would
+       replace ::marker on every list, prose and nested lists included. The
+       top margin centres the square on the first line. */
+    .nb-notes {
+      display: grid;
+      gap: var(--space-30);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .nb-notes > li {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-30);
+    }
+
+    .nb-notes > li::before {
+      content: "";
+      inline-size: 0.75em;
+      block-size: 0.75em;
+      margin-block-start: 0.4em;
+      border: var(--border-width) solid var(--border);
+      background: var(--secondary);
+    }
+
+    /* Ruled grid: the cells share one 2px rule instead of each drawing its
+       own. The gap is the rule (the grid paints --border behind the cells).
+       Trap: an incomplete last row shows that fill in the empty cells (two
+       columns over three quotes left a black block), so the grid is one row
+       of three or one column, never in between. */
+    .nb-ruled {
+      --gap: var(--border-width);
+      --grid-columns: repeat(3, minmax(0, 1fr));
+
+      border: var(--border-width) solid var(--border);
+      background: var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    @media (width < 48rem) {
+      .nb-ruled {
+        --grid-columns: minmax(0, 1fr);
+      }
+    }
+
+    /* --gap is inherited: the cells restore their own rhythm, or every
+       .stack inside would space its children by the 2px rule. */
+    .nb-ruled > * {
+      --gap: var(--space-40);
+
+      margin: 0;
+      padding: var(--space-50);
+      background: var(--surface);
+    }
+
+    /* Each quote takes three rows of the ruled grid (quote, rule, caption)
+       and lays its parts on them: the rules line up across a row whatever
+       the quote lengths, with no height pitted against the text. Without
+       subgrid a quote keeps its own rows, unaligned. */
+    .nb-quote {
+      display: grid;
+      grid-row: span 3;
+      grid-template-rows: subgrid;
+      row-gap: var(--space-40);
+    }
+
+    /* The quote rule is quieter than a frame: dashed and in the subtle ink. */
+    .nb-quote hr {
+      --hr-space: 0;
+
+      border-block-start-style: dashed;
+      border-block-start-color: var(--text-subtle);
+    }
+
+    .nb-quote blockquote {
+      margin: 0;
+      font-size: var(--font-size-lg);
+      line-height: 1.6;
+    }
+
+    .nb-quote blockquote::before {
+      content: "\201C";
+      font-family: "Archivo Black", var(--font-sans);
+    }
+
+    /* Non-modal <dialog open>: dismissed by its own form, no script. The
+       framework centres dialogs in the viewport; this one docks at the
+       bottom, so its position is product CSS. */
+    .nb-cookie {
+      position: fixed;
+      inset: auto var(--space-40) var(--space-40);
+      z-index: var(--z-sticky, 10);
+      max-inline-size: 60rem;
+      margin-inline: auto;
+      padding: var(--space-50);
+      color: var(--text);
+    }
+
+    .nb-cookie h2 {
+      font-size: 1.375rem;
+    }
+
+    .nb-cookie form {
+      --cluster-justify: flex-end;
+    }
+
+    /* Date picker on the token bridge (docs: Forms · Date picker). The
+       calendar opens as a popover, in the top layer: inside the modal's
+       scrolling body it is neither clipped nor stacked under the dialog. */
+    date-picker,
+    date-calendar {
+      --dp-bg: var(--surface-raised);
+      --dp-fg: var(--text);
+      --dp-muted: var(--text-muted);
+      --dp-border: var(--border);
+      --dp-hover: var(--surface-subtle);
+      --dp-accent: var(--primary);
+      --dp-accent-fg: var(--primary-fg);
+      --dp-radius: var(--radius);
+      --dp-focus: var(--focus);
+      --dp-focus-width: var(--focus-ring-width);
+      --dp-picker-button-size: calc(var(--control-pad-x) * 2 + 1em + var(--border-width) * 2);
+    }
+
+    /* The picker has no shadow token: the panel takes the theme's popout
+       elevation, like any other floating surface. */
+    .dp-picker-panel[popover] {
+      box-shadow: var(--shadow-popout);
+    }
+
+    /* Combobox on the token bridge (docs: Forms · Combobox). Its picker is a
+       popover too, so it opens above the modal like the calendar. */
+    .actual-combobox {
+      --cb-bg: var(--surface);
+      --cb-color: var(--text);
+      --cb-border-color: var(--form-invalid-border, var(--border));
+      --cb-border-radius: var(--radius);
+      --cb-focus-color: var(--focus);
+      --cb-muted-color: var(--text-muted);
+      --cb-error-color: var(--danger);
+      --cb-chip-bg: transparent;
+      --cb-control-height: var(--control-size);
+      --cb-option-min-height: var(--control-size);
+    }
+
+    .actual-combobox :is(.cb-text-control:focus-visible, .cb-control:has(.cb-input:focus-visible)) {
+      border-color: var(--form-invalid-border, var(--cb-border-color));
+      outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
+      outline-offset: calc(var(--focus-ring-width) * -1);
+      box-shadow: var(--control-shadow, none);
+    }
+
+    :where(.actual-combobox) combo-box {
+      border-radius: var(--cb-border-radius);
+    }
+
+    /* The control is a field: the theme's border width and field elevation,
+       like .input. */
+    .actual-combobox :is(.cb-control, .cb-text-control) {
+      border-width: var(--border-width);
+      border-radius: inherit;
+      box-shadow: var(--control-shadow, none);
+    }
+
+    .actual-combobox .cb-chip {
+      min-block-size: var(--badge-size);
+      padding-inline: 0.55em;
+      border: var(--border-width) solid
+        color-mix(in oklab, var(--primary) calc(100% - var(--soft-border-mix, 100%)), transparent);
+      border-radius: var(--radius-full);
+      background: color-mix(in oklab, var(--primary) calc(100% - var(--soft-bg-mix)), transparent);
+      color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .actual-combobox .cb-chip-remove {
+      color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+    }
+
+    .cb-popover {
+      --cb-picker-bg: var(--surface-raised);
+      --cb-muted-color: var(--text-muted);
+      --cb-error-color: var(--danger);
+
+      border-color: var(--border);
+      border-radius: var(--radius);
+      background: var(--cb-picker-bg);
+      box-shadow: var(--shadow-popout);
+    }
+
+    .cb-option:is(:hover, [data-active]) {
+      background: var(--hover-overlay);
+      color: var(--text);
+    }
+
+    .cb-option[aria-selected="true"] {
+      background: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
+      color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+    }
+
+    /* Stamped icon tile, the same mark the theme gives .alert-icon. */
+    .nb-tile {
+      display: inline-grid;
+      place-items: center;
+      inline-size: 3rem;
+      block-size: 3rem;
+      border: var(--border-width) solid var(--border);
+      background: var(--danger);
+      color: var(--danger-fg);
+      font-size: 1.5rem;
+      box-shadow: 3px 3px 0 var(--border);
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack nb-page">
+    <nav class="cluster" style="--cluster-justify: space-between" aria-label="Main">
+      <a class="nb-brand" href="#top">Plate&amp;Pulp</a>
+      <div class="cluster">
+        <theme-picker themes="neo-brutalist brutalist"><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+        <a class="btn sm" href="#plans">Order a run</a>
+      </div>
+    </nav>
+
+    <header class="stack" id="top">
+      <span class="overline">Risograph print studio</span>
+      <h1 class="text-display text-balance">Print it loud. Fold it yourself.</h1>
+      <p class="text-lead muted text-pretty">
+        Small risograph editions for zines, gig posters and café menus. Upload
+        a PDF, pick your inks, and get a proof back before a single sheet
+        touches the drum.
+      </p>
+      <div class="cluster">
+        <button class="btn primary" type="button" commandfor="order-dialog" command="show-modal" aria-haspopup="dialog" aria-controls="order-dialog">Start a print run</button>
+        <a class="btn outline" href="#orders">Track an order</a>
+        <button class="btn" type="button" disabled>Reprints closed</button>
+        <a class="btn ghost" href="#faq">How pricing works</a>
+      </div>
+    </header>
+
+    <section class="stack" id="orders" aria-labelledby="orders-title">
+      <h2 id="orders-title" class="text-title">Your orders, at a glance</h2>
+      <div class="grid" style="--grid-min: 22rem">
+        <div class="alert secondary" role="status">
+          <i class="ti ti-eye alert-icon" aria-hidden="true"></i>
+          <strong>Proof ready to review</strong>
+          <p>Run #214: check where the blue and pink layers overlap.</p>
+        </div>
+        <div class="alert success" role="status">
+          <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
+          <strong>Files received</strong>
+        </div>
+        <div class="alert warning" role="status">
+          <i class="ti ti-droplet alert-icon" aria-hidden="true"></i>
+          <strong>Fluorescent pink is running low</strong>
+          <p>Orders placed after Friday ship with the next drum.</p>
+        </div>
+        <div class="alert danger" role="alert">
+          <i class="ti ti-credit-card-off alert-icon" aria-hidden="true"></i>
+          <strong>Card declined</strong>
+          <p>We hold your slot until noon tomorrow. <a href="#orders">Update payment</a> to keep it.</p>
+        </div>
+      </div>
+      <div class="cluster">
+        <span class="badge">Draft</span>
+        <span class="badge primary">Proofed</span>
+        <span class="badge secondary">In the drum</span>
+        <span class="badge warning">Drying</span>
+        <span class="badge danger solid">2</span>
+      </div>
+      <div class="cluster">
+        <span class="badge solid secondary"><i class="ti ti-sparkles" aria-hidden="true"></i> New inks</span>
+        <span class="badge surface success"><span class="dot" aria-hidden="true"></span> Drum running</span>
+        <span class="badge surface warning"><span class="dot" aria-hidden="true"></span> Paper restock Friday</span>
+      </div>
+      <div class="grid" style="--grid-min: 16rem" aria-label="Ink levels">
+        <div class="stack" style="--gap: var(--space-20)">
+          <div class="cluster" style="--cluster-justify: space-between"><strong>Fluo pink</strong><span class="muted">18%</span></div>
+          <progress class="progress danger" value="18" max="100" aria-label="Fluo pink ink level">18%</progress>
+        </div>
+        <div class="stack" style="--gap: var(--space-20)">
+          <div class="cluster" style="--cluster-justify: space-between"><strong>Medium blue</strong><span class="muted">64%</span></div>
+          <progress class="progress secondary" value="64" max="100" aria-label="Medium blue ink level">64%</progress>
+        </div>
+        <div class="stack" style="--gap: var(--space-20)">
+          <div class="cluster" style="--cluster-justify: space-between"><strong>Yellow</strong><span class="muted">91%</span></div>
+          <progress class="progress warning" value="91" max="100" aria-label="Yellow ink level">91%</progress>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack" id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="text-title">Before you print</h2>
+      <div class="accordion separated">
+        <details name="faq" open>
+          <summary>How long does a run take?</summary>
+          <p>Most runs leave the studio within five working days of proof approval. Fluorescent inks add a day to dry.</p>
+        </details>
+        <details name="faq">
+          <summary>Which files do you accept?</summary>
+          <p>A PDF with one greyscale page per ink layer. We send a template with bleed and safe margins.</p>
+        </details>
+        <details name="faq">
+          <summary>Can I print on coloured paper?</summary>
+          <p>Yes: twelve recycled stocks, from bone white to kraft. Ask for the swatch book.</p>
+        </details>
+        <details name="faq">
+          <summary>What if the colours drift?</summary>
+          <p>Riso is never pixel-exact and layers shift by a millimetre. If a proof misses your intent, the second one is free.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="stack" id="quotes" aria-labelledby="quotes-title">
+      <span class="overline">Printed here</span>
+      <h2 id="quotes-title" class="text-title text-balance">Small runs, loud results.</h2>
+      <div class="grid nb-ruled">
+        <figure class="nb-quote">
+          <blockquote>Our zine sold out at the fair before lunch. We had asked for a clean two-colour run, and the proof showed the pink drifting a hair off the blue. We kept it. Readers now ask whether the misregistration is on purpose, and the answer is yes.</blockquote>
+          <hr>
+          <figcaption class="media items-center" style="--gap: var(--space-30)">
+            <span class="avatar primary"><abbr title="Ines Moreau">IM</abbr></span>
+            <span><strong>Ines Moreau</strong><br><span class="muted">Editor-in-chief and weekend folder, Back Alley Zine</span></span>
+          </figcaption>
+        </figure>
+        <figure class="nb-quote">
+          <blockquote>The posters arrived still smelling of ink.</blockquote>
+          <hr>
+          <figcaption class="media items-center" style="--gap: var(--space-30)">
+            <span class="avatar danger"><abbr title="Tomás Reyes">TR</abbr></span>
+            <span><strong>Tomás Reyes</strong><br><span class="muted">Booker, Low Ceiling Nights</span></span>
+          </figcaption>
+        </figure>
+        <figure class="nb-quote">
+          <blockquote>We reprint the menu every season. Same stock, same blue, no surprises.</blockquote>
+          <hr>
+          <figcaption class="media items-center" style="--gap: var(--space-30)">
+            <span class="avatar secondary"><abbr title="Hana Okafor">HO</abbr></span>
+            <span><strong>Hana Okafor</strong><br><span class="muted">Owner, Corner Crumb Café</span></span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="switcher" id="plans" aria-label="Newsletter and pricing" style="--switcher-threshold: 40rem">
+      <form class="card stack">
+        <h2 class="text-title">Get the misprint drop</h2>
+        <p class="muted">Rejected sheets, sold cheap, once a month.</p>
+        <div class="field">
+          <label class="field-label" for="nb-email">Email</label>
+          <div class="join">
+            <input class="input" id="nb-email" type="email" placeholder="you@example.com">
+            <button class="btn primary" type="button">Subscribe</button>
+          </div>
+        </div>
+        <label class="cluster"><input class="switch" type="checkbox" checked> Also tell me about new inks</label>
+      </form>
+      <article class="card soft secondary stack">
+        <header>
+          <h2 class="text-title">Zine run</h2>
+          <span class="badge solid primary">Most ordered</span>
+        </header>
+        <p class="muted">100 copies, A5, two inks, saddle-stitched on recycled stock.</p>
+        <footer>
+          <strong class="text-title">€180<span class="muted">/run</span></strong>
+          <button class="btn primary" type="button" commandfor="order-dialog" command="show-modal" aria-haspopup="dialog" aria-controls="order-dialog">Book a slot</button>
+        </footer>
+      </article>
+    </section>
+
+    <section class="stack" aria-labelledby="notes-title">
+      <h2 class="overline nb-lead-rule" id="notes-title">Before you send files</h2>
+      <ul class="nb-notes">
+        <li>One greyscale page per ink: black prints, white stays paper.</li>
+        <li>Keep text above 7pt; fine hairlines fill in on the drum.</li>
+        <li>Large flat areas of one colour can band slightly. That is the medium, not a fault.</li>
+      </ul>
+    </section>
+
+    <nav class="grid" style="--grid-min: 16rem" aria-label="Studio guides">
+      <a class="card link-plain" href="#top">
+        <span class="overline"><i class="ti ti-arrow-left" aria-hidden="true"></i> Previous</span>
+        <strong class="text-title">Paper stocks</strong>
+      </a>
+      <a class="card link-plain text-end" href="#top">
+        <span class="overline">Next <i class="ti ti-arrow-right" aria-hidden="true"></i></span>
+        <strong class="text-title">Ink colours</strong>
+      </a>
+    </nav>
+  </main>
+
+  <dialog class="modal scrollable" id="order-dialog" closedby="any" aria-labelledby="order-title" style="--modal-size: 38rem">
+    <form method="dialog">
+      <header>
+        <h2 class="text-title" id="order-title">Book a print run</h2>
+        <p class="muted">We send a proof within a day. Nothing prints until you approve it.</p>
+      </header>
+
+      <div class="stack">
+        <label class="field">
+          <span class="field-label">Project name</span>
+          <input class="input" name="project" value="Back Alley Zine #12" autocomplete="off">
+        </label>
+
+        <div class="grid" style="--grid-min: 12rem">
+          <label class="field">
+            <span class="field-label">Format</span>
+            <select class="select" name="format">
+              <option>A6 postcard</option>
+              <option selected>A5 zine</option>
+              <option>A4 flyer</option>
+              <option>A3 poster</option>
+            </select>
+          </label>
+          <label class="field">
+            <span class="field-label">Copies</span>
+            <input class="input" name="copies" type="number" min="20" step="10" value="100">
+          </label>
+        </div>
+
+        <fieldset class="field-group stack">
+          <legend class="field-label">Paper</legend>
+          <div class="grid" style="--grid-min: 12rem">
+            <label class="choice-card">
+              <input type="radio" name="paper" value="bone" checked>
+              <strong>Bone white</strong>
+              <span class="muted">90 g, uncoated</span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="paper" value="kraft">
+              <strong>Kraft</strong>
+              <span class="muted">100 g, recycled</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field-group stack">
+          <legend class="field-label">Inks</legend>
+          <div class="cluster">
+            <label class="choice-card chip"><input type="checkbox" name="ink" value="blue" checked><span>Medium blue</span></label>
+            <label class="choice-card chip"><input type="checkbox" name="ink" value="pink" checked><span>Fluo pink</span></label>
+            <label class="choice-card chip"><input type="checkbox" name="ink" value="yellow"><span>Yellow</span></label>
+            <label class="choice-card chip"><input type="checkbox" name="ink" value="black"><span>Black</span></label>
+          </div>
+        </fieldset>
+
+        <label class="field actual-combobox">
+          <span class="field-label">Finishing</span>
+          <combo-box placeholder="Add a finish…">
+            <select name="finishing[]" multiple>
+              <option value="fold" selected>Fold in half</option>
+              <option value="staple" selected>Saddle staple</option>
+              <option value="trim">Trim to bleed</option>
+              <option value="score">Score</option>
+              <option value="perforate">Perforate</option>
+              <option value="number">Hand numbering</option>
+            </select>
+          </combo-box>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Ink density</span>
+          <input class="range" type="range" name="density" min="0" max="100" value="60" data-enhance="range">
+          <span class="field-help">Heavier coverage reads bolder and dries slower.</span>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Pick-up date</span>
+          <date-picker value="2026-10-30" open-on-focus="false">
+            <input class="input" name="date">
+          </date-picker>
+          <span class="field-help">Runs leave within five working days of proof approval.</span>
+        </label>
+
+        <label class="choice"><input class="switch" type="checkbox" role="switch" name="proof" checked> Post me a physical proof first</label>
+
+        <label class="field">
+          <span class="field-label">Notes for the printer</span>
+          <textarea class="textarea" name="notes" placeholder="Folding, trimming, anything odd about the files…"></textarea>
+        </label>
+      </div>
+
+      <footer class="cluster justify-content-end">
+        <button class="btn outline" value="cancel" formnovalidate>Cancel</button>
+        <button class="btn primary" value="book">Book the run</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="card nb-cookie" open aria-labelledby="cookie-title">
+    <div class="switcher" style="--switcher-threshold: 44rem; --gap: var(--space-50)">
+      <div class="media items-center" style="--gap: var(--space-40)">
+        <span class="nb-tile" aria-hidden="true"><i class="ti ti-cookie"></i></span>
+        <div class="stack" style="--gap: var(--space-10)">
+          <h2 id="cookie-title">We only track ink levels.</h2>
+          <p class="muted">No ads, no profiles. One anonymous counter tells us which pages get read, and it stays off until you choose. <a href="#top">Privacy notes</a></p>
+        </div>
+      </div>
+      <form class="cluster" method="dialog" style="align-self: center">
+        <button class="btn outline" value="essential">Essential only</button>
+        <button class="btn primary" value="all">Allow counting</button>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="../../dist/actual.full.js"></script>
+</body>
+</html>

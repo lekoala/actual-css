@@ -11,7 +11,10 @@
   <style>
     :root { --duration: 0s; }
     body { padding: 1rem; }
-    .lifted { --btn-shadow: 4px 4px 0 rgb(0 0 0); }
+    .lifted {
+      --btn-shadow: 4px 4px 0 rgb(0 0 0);
+      --control-shadow: 3px 3px 0 rgb(0 0 0);
+    }
     .plus {
       --accordion-marker-icon: var(--icon-plus);
       --accordion-marker-open-rotate: 45deg;
@@ -22,6 +25,7 @@
   <div class="lifted cluster">
     <button class="btn" type="button" id="btn-rest">Rest</button>
     <button class="btn" type="button" id="btn-hover">Hover</button>
+    <input class="input" id="field" aria-label="Field">
   </div>
 
   <div class="accordion" id="acc-default">

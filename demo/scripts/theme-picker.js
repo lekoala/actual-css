@@ -30,6 +30,7 @@
     "admin-neutral",
     "square",
     "brutalist",
+    "neo-brutalist",
     "edge",
     "cyberpunk",
     "neon",

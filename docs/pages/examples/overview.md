@@ -33,6 +33,7 @@ Whole pages, composed the way a real product would.
 - [Workspace settings](../../demo/templates/settings-pricing.html) - plans with visible native choices, preferences and segmented tabs
 - [iOS-style settings](../../demo/templates/settings-ios.html) - iOS-like controls and grouped settings from unchanged framework markup, a local theme, and its findings listed rule by rule
 - [Card compositions](../../demo/templates/card-compositions.html) - editorial, team, sign-in and horizontal cards composed from existing primitives
+- [Neo-brutalist](../../demo/templates/neo-brutalist.html) - a risograph print studio on the `neo-brutalist` theme (order alerts, plus-marker FAQ, ruled testimonial grid, docked cookie banner) with the page loading its own fonts
 - [Register form](../../demo/templates/register-form.html) - registration page with choice cards, masks, the password toggle, `tel-prefix` validation, an OTP verification dialog, and status feedback
 
 ### Layout references

@@ -22,6 +22,7 @@
  * --control-bg
  * --control-fg
  * --control-cursor
+ * --control-shadow
  * --control-border-block-end-color
  * --control-border-block-end-width
  * --control-hover-border (input and textarea)
@@ -49,6 +50,11 @@
   border-radius: var(--radius);
   background: var(--control-bg);
   color: var(--control-fg);
+  /* why: an unset hook, so a theme can give every field a resting elevation
+     that focus keeps (see the focus rule). The fallback is none, the same as
+     the focus rule's: a transparent 0 0 shadow here made focus transition
+     between two values and expose a phantom shadow mid-way. */
+  box-shadow: var(--control-shadow, none);
   font-size: var(--control-font-size);
   cursor: var(--control-cursor);
   /* No outline: none here — the core :focus fallback must survive for browsers
@@ -81,13 +87,15 @@
    the control's border box (any smaller offset bleeds outward), so it covers
    the border, never touches a .join neighbour or a scrollport edge, and needs
    no group treatment. Width follows --focus-ring-width, including its
-   prefers-contrast step. Border = shape and validation, outline = focus. */
+   prefers-contrast step. Border = shape and validation, outline = focus.
+   The box-shadow reset drops any halo but keeps the field's own elevation:
+   a plain none erased --control-shadow on keyboard focus. */
 .input:focus-visible:not(:disabled),
 .textarea:focus-visible:not(:disabled),
 .select:focus-visible:not(:disabled) {
   outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
   outline-offset: calc(var(--focus-ring-width) * -1);
-  box-shadow: none;
+  box-shadow: var(--control-shadow, none);
 }
 
 .input[readonly],

@@ -2,14 +2,26 @@
 
 ## [Unreleased]
 ### Added
+- `neo-brutalist` demo theme: pastel intents under black ink, offset shadows on framed objects, lifting buttons, a plus accordion marker.
+- `demo/templates/neo-brutalist.html`: a risograph print studio page on that theme, with page-loaded fonts.
+- Theming docs: where a font goes when a theme is in use (`:root`, not `[data-theme]`).
+- Card docs: tones (`.card.soft` plus an intent class).
+- Date picker docs and `date-fields.html`: the token bridge maps the panel shadow to `--shadow-popout`.
 - `--btn-shadow`: a resting button elevation that inherits and that the solid hover overlay keeps.
+- `--control-shadow`: a resting elevation for `.input`, `.textarea` and `.select` that keyboard focus keeps.
 - `--accordion-marker-icon` and `--accordion-marker-open-rotate`: swap the accordion marker glyph and its open turn (plus to cross with `--icon-plus` and `45deg`).
+
+### Fixed
+- `.choice-card.chip`: the check reads `--state-selected-text` when a theme sets it, so a light selected fill (yellow, lime) no longer draws a check that vanishes on the chip.
+- `.alert` with `.alert-icon`: an icon taller than one line, or an alert stretched by an equal-height grid, no longer opens a gap between the title and the body.
 
 ### Removed
 - The `bootstrap-v6` demo theme: the core focus line and field treatment it demonstrated are now the defaults.
 
 ### Changed
 - `edge` theme: the default button drops its hover overlay through `--btn-hover-overlay` instead of `box-shadow: none`.
+- Date picker docs and `date-fields.html`: `@lekoala/date-picker` 0.4.0; focus maps through `--dp-focus` / `--dp-focus-width` instead of two override rules.
+- Combobox docs and `combobox.html`: `@lekoala/combobox` 0.6.0; the control reads `--border-width` and `--control-shadow` like `.input`.
 
 ## [0.14.1] - 2026-10-14
 ### Added

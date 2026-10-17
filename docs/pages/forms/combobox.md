@@ -76,7 +76,7 @@ contrast contracts apply to the combobox for free:
   border-color: var(--form-invalid-border, var(--cb-border-color));
   outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
   outline-offset: calc(var(--focus-ring-width) * -1);
-  box-shadow: none;
+  box-shadow: var(--control-shadow, none);
 }
 
 .actual-combobox :is(.cb-text-control[aria-invalid="true"], .cb-control:has([aria-invalid="true"])) {
@@ -88,7 +88,9 @@ contrast contracts apply to the combobox for free:
 }
 
 .actual-combobox :is(.cb-control, .cb-text-control) {
+  border-width: var(--border-width);
   border-radius: inherit;
+  box-shadow: var(--control-shadow, none);
 }
 
 .actual-combobox .cb-chip {
@@ -102,8 +104,10 @@ contrast contracts apply to the combobox for free:
 }
 ```
 
-While the search input is focused, the control takes the same inset outline as
-`.input` in place of the library's accent border and outer halo; a focused chip
+The control reads the field geometry a theme gives `.input`: `--border-width`
+and the `--control-shadow` elevation, which focus keeps. While the search input
+is focused, the control takes the same inset outline as `.input` in place of
+the library's accent border and outer halo; a focused chip
 or remove × keeps the library's own inner ring. Being inset, the outline needs
 no adaptation inside `.join`: `combo-box` owns the radius at zero specificity,
 so the join gives it the group corners and the visible control inherits them. The invalid rule sets `--form-invalid-border`,

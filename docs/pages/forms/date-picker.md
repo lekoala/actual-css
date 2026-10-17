@@ -58,26 +58,23 @@ date-calendar {
   --dp-accent: var(--primary);
   --dp-accent-fg: var(--primary-fg);
   --dp-radius: var(--radius);
+  --dp-focus: var(--focus);
+  --dp-focus-width: var(--focus-ring-width);
   /* Trigger glyph on the select chevron axis. */
   --dp-picker-button-size: calc(var(--control-pad-x) * 2 + 1em + var(--border-width) * 2);
 }
 
-.dp-calendar-header :where(button, select, input):focus-visible {
-  border-color: var(--dp-border);
-  outline: var(--focus-ring-width) solid var(--focus);
-  outline-offset: calc(var(--focus-ring-width) * -1);
-  box-shadow: none;
-}
-
-.dp-picker-button:focus-visible,
-.dp-day:focus-visible {
-  outline-color: var(--focus);
+.dp-picker-panel[popover] {
+  box-shadow: var(--shadow-popout);
 }
 ```
 
-The field is a plain `.input`, so the core inset focus outline already outranks
-the library's halo; the calendar's own controls paint a `--dp-accent` halo, so
-the two focus rules map them onto the core outline. The calendar popup is its own
+The picker draws focus as an inset line, like the core, so `--dp-focus` and
+`--dp-focus-width` are the whole focus mapping; the field itself is a plain
+`.input` and keeps the core outline. The panel has no shadow token, so it takes
+`--shadow-popout` directly. It opens as a popover, in the top layer,
+so inside a modal, even in a scrolling body, it is neither clipped nor stacked
+under the dialog. The calendar popup is its own
 element, so the `--dp-*` map is declared on `date-picker`/`date-calendar` rather
 than inherited from a wrapper.
 As with the combobox, the bridge stays in docs/demo — it is a recipe, not package

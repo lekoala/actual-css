@@ -38,7 +38,7 @@
         --control-bg: var(--surface-raised);
         outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
         outline-offset: calc(var(--focus-ring-width) * -1);
-        box-shadow: none;
+        box-shadow: var(--control-shadow, none);
       }
 
       &::picker-icon {

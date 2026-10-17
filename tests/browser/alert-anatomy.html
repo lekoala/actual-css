@@ -1,0 +1,36 @@
+<!doctype html>
+<!-- Icon + title + body: a tall icon (a theme tile) and a stretched alert
+     (equal-height grid row) must not open a gap under the title. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alert anatomy fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    body { padding: 1rem; }
+    /* Taller than one line, shorter than title + body: the contract. */
+    .tall { --alert-icon-size: 2.5rem; }
+    .stretched { block-size: 12rem; }
+  </style>
+</head>
+<body>
+  <div class="stack">
+    <div class="alert" id="plain">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <strong>Title</strong>
+      <p>Body</p>
+    </div>
+    <div class="alert tall" id="tall">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <strong>Title</strong>
+      <p>Body</p>
+    </div>
+    <div class="alert stretched" id="stretched">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <strong>Title</strong>
+      <p>Body</p>
+    </div>
+  </div>
+</body>
+</html>

@@ -16,6 +16,9 @@ Flexible content container with optional header, body, and footer regions.
 `--surface-raised` and leaves the intent to the text. For a dark card on a
 light page (or the reverse), put `data-theme="dark"` on the card.
 
+Shared `.soft` with an intent class gives the card a tone: an opaque surface
+tinted by the intent, with the soft ink. See [Tones](#tones).
+
 ## Basic usage
 
 Use semantic elements inside the card. A direct `<header>` or `<footer>` is the
@@ -125,6 +128,33 @@ all footers in the row line up regardless of body length.
   </article>
 </section>
 ```
+
+## Tones
+
+A toned, tinted, or colored card (accent card, highlight card) is `.soft` plus
+an intent class. The tint is opaque, so it holds over an image, and the ink
+follows the soft recipe, so muted text and links stay readable on it.
+
+```html demo
+<section class="grid">
+  <article class="card soft primary">
+    <h3>Primary</h3>
+    <p class="muted">A highlighted plan or feature.</p>
+  </article>
+  <article class="card soft success">
+    <h3>Success</h3>
+    <p class="muted">A completed step.</p>
+  </article>
+  <article class="card soft warning">
+    <h3>Warning</h3>
+    <p class="muted">Something to check.</p>
+  </article>
+</section>
+```
+
+For a fully colored card, use a `data-theme` island rather than `.solid`: the
+island recomputes muted text, links, and fields for the new surface, where
+`.solid` only repaints the fill and the main ink.
 
 ## Surfaces
 

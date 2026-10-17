@@ -8,9 +8,9 @@
   <meta name="description" content="@lekoala/combobox loaded from CDN and themed with Actual CSS tokens: searchable selects, removable chips, autocomplete, states and the theme presets follow the framework.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.6.0/dist/combobox.css">
   <script src="../scripts/theme-picker.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.6.0/dist/combobox.js"></script>
   <style>
     .page {
       --center-size: 60rem;
@@ -68,7 +68,7 @@
       border-color: var(--form-invalid-border, var(--cb-border-color));
       outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
       outline-offset: calc(var(--focus-ring-width) * -1);
-      box-shadow: none;
+      box-shadow: var(--control-shadow, none);
     }
 
     /* 3. Invalid — the native source is required; join the field validation
@@ -86,8 +86,12 @@
       border-radius: var(--cb-border-radius);
     }
 
+    /* The control is a field: the theme's border width and field elevation,
+       like .input. */
     .actual-combobox :is(.cb-control, .cb-text-control) {
+      border-width: var(--border-width);
       border-radius: inherit;
+      box-shadow: var(--control-shadow, none);
     }
 
     /* 4. Chips — re-derive the removable .badge soft recipe */
@@ -418,7 +422,7 @@ font-size: var(--font-size-xs);
   border-color: var(--form-invalid-border, var(--cb-border-color));
   outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
   outline-offset: calc(var(--focus-ring-width) * -1);
-  box-shadow: none;
+  box-shadow: var(--control-shadow, none);
 }
 
 .actual-combobox :is(.cb-text-control[aria-invalid="true"], .cb-control:has([aria-invalid="true"])) {
@@ -430,7 +434,9 @@ font-size: var(--font-size-xs);
 }
 
 .actual-combobox :is(.cb-control, .cb-text-control) {
+  border-width: var(--border-width);
   border-radius: inherit;
+  box-shadow: var(--control-shadow, none);
 }
 
 .actual-combobox .cb-chip {
@@ -469,8 +475,8 @@ font-size: var(--font-size-xs);
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
       <span>
-        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.5.0/dist/combobox.css</code> and
-        <code>@lekoala/combobox@0.5.0/dist/combobox.js</code>.
+        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.6.0/dist/combobox.css</code> and
+        <code>@lekoala/combobox@0.6.0/dist/combobox.js</code>.
       </span>
       <span>Combobox enhances native <code>&lt;input&gt;</code>/<code>&lt;select&gt;</code> — the source owns the form value.</span>
     </footer>
