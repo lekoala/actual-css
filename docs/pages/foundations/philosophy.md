@@ -102,6 +102,12 @@ classes: `<article class="card pricing-plan pricing-plan--featured">`.
 
 Components are semantic boxes: `.btn`, `.badge`, `.alert`, `.card`, `.avatar`, etc. Each component owns its intrinsic layout and visual defaults.
 
+Components are replaceable implementations. If a built-in component does more
+than your application needs, omit its module and write your own. Keep the
+semantic markup, state conventions, and shared design tokens where they fit.
+See [Replace a component, keep the conventions](../guides/modular-import.md#replace-a-component-keep-the-conventions)
+for a minimal Steps implementation.
+
 ## Intents
 
 `.primary`, `.secondary`, `.success`, `.warning`, `.danger` do not style elements directly. They only expose `--intent` and `--intent-fg`. Components and variants decide how to consume them.

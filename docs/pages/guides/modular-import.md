@@ -74,6 +74,130 @@ shared: keep `components/close` with modal, drawer, alert, or a removable
 badge; `components/bleed` with a `.bleed` child of card, drawer, or accordion;
 `components/spinner` with `components/busy`.
 
+## Replace a component, keep the conventions
+
+Actual CSS components are reference implementations, not mandatory dependencies.
+Omit a component's stylesheet and write a smaller implementation when your
+application needs fewer features. Keep its semantic markup, state conventions,
+and shared theme tokens where they fit.
+
+Choose the level of customization that matches the need:
+
+- Change a color, size, or spacing through the component's public hooks.
+- Give the component a different appearance with an application CSS variant.
+- Replace a component that does more than you need by omitting its module and
+  writing your own implementation.
+
+### Example: a simpler Steps component
+
+The built-in Steps component supports horizontal and vertical layouts,
+connectors, optional labels, responsive representations, scrolling, and focus
+for navigable labels. A static, horizontal progress indicator can use the same
+HTML with a smaller stylesheet.
+
+Import only the framework modules the application uses, followed by the
+replacement:
+
+```css
+/* app.css */
+@import "actual-css/css";
+@import "actual-css/css/components/button";
+@import "actual-css/css/components/card";
+@import "./steps.css";
+```
+
+Omit `actual-css/css/components/steps` and any entrypoint that includes it:
+`actual-css`, `actual-css/full`, `actual-css/css/full`, or
+`actual-css/css/components`. Loading the original and overriding it retains
+its weight and may introduce cascade conflicts.
+
+Keep the ordered list, `.step-complete` for completed steps, and
+`aria-current="step"` for the current step:
+
+```html
+<ol class="steps steps-horizontal" aria-label="Booking progress">
+  <li class="step-complete">
+    <span class="step-label">Details</span>
+  </li>
+  <li aria-current="step">
+    <span class="step-label">Payment</span>
+  </li>
+  <li>
+    <span class="step-label">Confirmation</span>
+  </li>
+</ol>
+```
+
+The application owns this replacement stylesheet:
+
+```css
+/* steps.css — static horizontal progress only */
+.steps-horizontal {
+  --step-size: 2rem;
+  counter-reset: app-step;
+  display: flex;
+  gap: var(--space-30);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps-horizontal > li {
+  counter-increment: app-step;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--space-20);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.steps-horizontal > li::before {
+  content: counter(app-step);
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  inline-size: var(--step-size);
+  block-size: var(--step-size);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface-opaque);
+  color: var(--text-muted);
+  font-weight: var(--font-weight-semibold);
+}
+
+.steps-horizontal > .step-complete::before {
+  background: var(--state-selected);
+  border-color: var(--state-selected);
+  color: var(--state-selected-fg);
+}
+
+.steps-horizontal > [aria-current="step"] {
+  color: var(--text);
+}
+
+.steps-horizontal > [aria-current="step"]::before {
+  border-color: var(--state-selected-text, var(--state-selected));
+  color: var(--state-selected-text, var(--state-selected));
+}
+
+.steps-horizontal .step-label {
+  color: inherit;
+  font-size: var(--font-size-sm);
+  overflow-wrap: anywhere;
+}
+```
+
+The shared tokens supply theme colors, typography, and spacing without copying
+the palette. This recipe is for static labels: use the built-in
+[Steps](../components/steps.md) for navigable labels, connectors, vertical
+orientation, or responsive representations.
+
+If a replacement needs different markup or semantics, give it an
+application-specific component name.
+
 ## Family manifests
 
 Each family is one import. The contents are enumerations rather than table
