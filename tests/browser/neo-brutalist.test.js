@@ -129,14 +129,29 @@ it("neo-brutalist joined faces respond without moving and disabled groups lie fl
         expect(group.shadow).not.toBe("none");
       }
     }
-    await forceStates(view, { "#lift": ["hover"] });
-    await settled(view);
-    expect((await read(view, "lift")).transform).toBe("matrix(1, 0, 0, 1, -2, -2)");
-    await forceStates(view, { "#lift": ["active"] });
-    await settled(view);
-    expect((await read(view, "lift")).transform).toBe("matrix(1, 0, 0, 1, 3, 3)");
   });
 });
+
+for (const touch of [false, true]) {
+  it(`neo-brutalist standalone button travel follows pointer capability, touch: ${touch}`, async () => {
+    await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+      await view.cdp("Emulation.setTouchEmulationEnabled", { enabled: touch });
+      const canHover = await view.evaluate('matchMedia("(hover: hover)").matches');
+      if (touch) expect(canHover).toBe(false);
+
+      // Forcing :hover does not change @media (hover: hover). Headless CI
+      // may report no hover capability even without touch emulation.
+      await forceStates(view, { "#lift": ["hover"] });
+      await settled(view);
+      expect((await read(view, "lift")).transform).toBe(
+        canHover ? "matrix(1, 0, 0, 1, -2, -2)" : "none",
+      );
+      await forceStates(view, { "#lift": ["active"] });
+      await settled(view);
+      expect((await read(view, "lift")).transform).toBe("matrix(1, 0, 0, 1, 3, 3)");
+    });
+  });
+}
 
 it("neo-brutalist honours component hooks, validation and shared resting field fills", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
