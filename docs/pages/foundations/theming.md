@@ -264,8 +264,12 @@ lets the core derive everything else.
 The `gradient` example keeps a Bootstrap 4 style outer halo on focused fields
 instead of the core inset line. The `neo-brutalist` example puts a hard offset
 shadow on every standalone framed object (`--btn-shadow` for buttons, which
-lift on hover and press flat), keeps every ink black so its pastel intents
-show only as fills, and turns the accordion marker into a plus. The `material` example restyles
+lift on hover and press flat), keeps pastel intents in fills with contrasting
+ink, and turns the accordion marker into a plus. It is an invasive page skin:
+its descendant rules and inherited component hooks cross nested `data-theme`
+boundaries, so use a separate page to show another theme. Its `.join` groups
+fit their contents so the shadow follows the controls.
+The `material` example restyles
 fields as filled underlines with pill buttons — tokens plus three small rules,
 and `.join` still needs no adaptation. The `glass` example paints translucent
 surfaces over its own backdrop: it sets `--surface-opaque` and

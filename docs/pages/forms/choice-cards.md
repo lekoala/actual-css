@@ -197,6 +197,9 @@ The dot is `::before`: a full-chip layer clipped to a `circle()` centred on
 the check slot (`--choice-chip-dot`). A theme can grow it into a selected fill
 by widening the clip, as the `material` theme does.
 
+The check uses `--state-selected-text` when the theme sets it, including on
+chips with an explicit intent. Otherwise it follows the chip's intent.
+
 ## CSS hooks
 
 - `--choice-card-pad` — inner padding.

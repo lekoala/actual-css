@@ -20,6 +20,7 @@
  * Public hooks:
  * --control-border
  * --control-bg
+ * --control-default-bg
  * --control-fg
  * --control-cursor
  * --control-shadow
@@ -32,7 +33,7 @@
 .textarea,
 .select {
   --control-border: var(--border-control);
-  --control-bg: var(--surface);
+  --control-bg: var(--control-default-bg, var(--surface));
   --control-fg: var(--text);
   --control-cursor: auto;
 

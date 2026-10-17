@@ -172,6 +172,11 @@ A full form using the control classes, field wrappers, and form actions:
 
 ## Hooks
 
+Set `--control-default-bg` on a theme or region for an inherited resting field
+background shared by `.input`, `.textarea`, `.select` and external widget bridges.
+Use `--control-bg` for a local field override; state rules still own readonly,
+disabled and validation fills.
+
 Set `--control-hover-border` to tune the hover border of `.input` and `.textarea`.
 Set `--control-hover-bg` to keep a `.select` background steady on hover, or give
 it a stronger fill.

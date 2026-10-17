@@ -64,7 +64,7 @@ contrast contracts apply to the combobox for free:
 
 ```css
 .actual-combobox {
-  --cb-bg: var(--surface);
+  --cb-bg: var(--control-default-bg, var(--surface));
   --cb-color: var(--text);
   --cb-border-color: var(--form-invalid-border, var(--border));
   --cb-border-radius: var(--radius);
@@ -115,9 +115,9 @@ turn danger together.
 
 ### Limits
 
-The bridge follows tokens, not rules. A theme that restyles fields through a
-hook declared on `.input` itself, such as a white `--control-bg`, does not
-reach the widget: repeat the value on the matching `--cb-*` token.
+The bridge shares the inherited resting field fill through `--control-default-bg`.
+It follows tokens, not native-control selectors: local `--control-bg` overrides
+and theme-specific invalid or disabled fills need matching widget state rules.
 
 The same approach works for any widget that exposes a custom-property skin —
 keep the widget's behavior, restyle its tokens through the shared vocabulary.

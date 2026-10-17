@@ -202,10 +202,8 @@
 
     /* Combobox on the token bridge (docs: Forms · Combobox). Its picker is a
        popover too, so it opens above the modal like the calendar. */
-    /* --cb-bg repeats the theme's white field fill: neo-brutalist sets it
-       with --control-bg on .input itself, which a bridge cannot read. */
     .actual-combobox {
-      --cb-bg: var(--surface-raised);
+      --cb-bg: var(--control-default-bg, var(--surface));
       --cb-color: var(--text);
       --cb-border-color: var(--form-invalid-border, var(--border));
       --cb-border-radius: var(--radius);

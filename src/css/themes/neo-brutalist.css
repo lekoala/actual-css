@@ -1,4 +1,4 @@
-/* Neo-brutalist — light-only: pastel pop intents, black ink on every fill,
+/* Neo-brutalist — light-only: pastel pop intents with contrasting ink,
  * 2px black frames, and hard offset shadows on every standalone framed
  * object. Buttons lift on hover and press flat. Tokens plus component rules;
  * the font is the page's, not the theme's (docs: Theming · fonts).
@@ -10,7 +10,9 @@
  * A demo theme targets current engines, not the CSS floor: its component
  * rules use :has() and :not() selector lists freely. Below the floor those
  * rules drop and only the theme's tokens remain, which still render a usable
- * flat palette — a deliberate degradation, not a fallback to maintain. */
+ * flat palette — a deliberate degradation, not a fallback to maintain.
+ * This skin is invasive: descendant rules and inherited hooks cross nested
+ * data-theme boundaries. Apply it to a whole page, not around other themes. */
 [data-theme="neo-brutalist"] {
   color-scheme: light;
 
@@ -50,7 +52,10 @@
   --radius-sm: 0;
   --radius-lg: 0;
   --border-width: 2px;
-  --shadow: 5px 5px 0 var(--border);
+  --neo-offset: 3px;
+  --neo-lift: 2px;
+  --shadow: calc(var(--neo-offset) + var(--neo-lift)) calc(var(--neo-offset) + var(--neo-lift)) 0
+    var(--border);
   --shadow-popout: 8px 8px 0 var(--border);
   --shadow-color: var(--border);
 
@@ -64,9 +69,10 @@
 
   /* Buttons: a black frame and a small offset, inherited by every .btn. */
   --btn-border-color: var(--border);
-  --btn-shadow: 3px 3px 0 var(--border);
+  --btn-shadow: var(--neo-offset) var(--neo-offset) 0 var(--border);
   /* Fields stand like buttons: the same offset, a black hover frame. */
-  --control-shadow: 3px 3px 0 var(--border);
+  --control-shadow: var(--neo-offset) var(--neo-offset) 0 var(--border);
+  --control-default-bg: var(--surface-raised);
   --control-hover-border: var(--border);
   /* Table headers are a pastel band under black ink; data grid bridges read
      the same pair, so tables and grids match. */
@@ -77,10 +83,13 @@
   --selection-fg: var(--primary-fg);
 }
 
-/* Intent lives in fills only. The ink-only treatments would set a pastel as
-   text (1.3-2:1 on the page), so their ink and frame stay black: use .solid
-   or .soft when the intent must show. */
-[data-theme="neo-brutalist"] :is(.outline, .surface, .btn.ghost, .btn.link) {
+/* Transparent treatments follow the painted parent's ink, not a pastel
+   intent. Opaque surfaces use the page ink against their own light fill. */
+[data-theme="neo-brutalist"] :is(.outline, .btn.ghost, .btn.link) {
+  --ui-fg: currentColor;
+}
+
+[data-theme="neo-brutalist"] .surface {
   --ui-fg: var(--text);
 }
 
@@ -112,7 +121,7 @@
 /* The lift is the hover feedback, so the fill stays put: no overlay, and
    the hover background falls back to the resting one (initial makes the
    hook invalid). Ghost and link do not move and keep their wash. */
-[data-theme="neo-brutalist"] .btn:not(.ghost, .link) {
+[data-theme="neo-brutalist"] .btn:not(.ghost, .link, .join *) {
   --btn-hover-overlay: transparent;
   --ui-hover-bg: initial;
 }
@@ -124,15 +133,20 @@
 @media (hover: hover) {
   [data-theme="neo-brutalist"]
     .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link, .join *)):hover {
-    --btn-shadow: 5px 5px 0 var(--border);
-    transform: translate(-2px, -2px);
+    --btn-shadow: var(--shadow);
+    transform: translate(calc(-1 * var(--neo-lift)), calc(-1 * var(--neo-lift)));
   }
 }
 
 [data-theme="neo-brutalist"]
   .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link, .join *)):active {
   --btn-shadow: 0 0 #0000;
-  transform: translate(3px, 3px);
+  transform: translate(var(--neo-offset), var(--neo-offset));
+}
+
+/* Joined faces cannot travel independently; text actions have no elevation. */
+[data-theme="neo-brutalist"] :is(.btn.ghost, .btn.link, .join .btn):active {
+  transform: none;
 }
 
 /* Standalone framed objects cast the theme shadow. */
@@ -155,7 +169,8 @@
 
 /* Actions move, destinations light up. A card that is a link is a place you
    go, not a key you press: it keeps its shadow and fills with the accent
-   tint (the open accordion's colour, softened). Stronger than the soft
+   tint (the open accordion's colour, softened). Solid destinations keep their
+   contrasting fill and darken instead. Stronger than the soft
    fills: at their 24% a hovered white card barely changed. Guarded: an unsupported
    color-mix() over var() would leave the card transparent, not unchanged. */
 [data-theme="neo-brutalist"] a.card {
@@ -163,8 +178,12 @@
 }
 
 @supports (color: color-mix(in oklab, red, white)) {
-  [data-theme="neo-brutalist"] a.card:hover {
+  [data-theme="neo-brutalist"] a.card:not(.solid):hover {
     background-color: color-mix(in oklab, var(--primary) 40%, var(--surface-raised));
+  }
+
+  [data-theme="neo-brutalist"] a.card.solid:hover {
+    background-color: color-mix(in oklab, var(--card-bg) 92%, black);
   }
 }
 
@@ -241,7 +260,6 @@
 /* White fields under the black frame. :where() keeps the base rule's weight,
    so the readonly, disabled and hover states still restyle them. */
 :where([data-theme="neo-brutalist"]) :is(.input, .textarea, .select) {
-  --control-bg: var(--surface-raised);
   --control-border: var(--border);
 }
 
@@ -253,15 +271,22 @@
   :where([data-theme="neo-brutalist"]) :is(.input, .textarea, .select) {
     --control-bg: color-mix(
       in oklab,
-      var(--form-invalid-border, var(--surface-raised)) 14%,
-      var(--surface-raised)
+      var(--form-invalid-border, var(--control-default-bg)) 14%,
+      var(--control-default-bg)
     );
   }
 }
 
-/* A .join is one object: the group casts the shadow, its parts do not. */
-[data-theme="neo-brutalist"] .join {
-  box-shadow: 3px 3px 0 var(--border);
+/* Fit the group's shadow to its faces even in a stretching grid or stack.
+   :disabled also covers controls disabled through a fieldset. */
+:where([data-theme="neo-brutalist"]) .join {
+  inline-size: fit-content;
+  max-inline-size: 100%;
+}
+
+[data-theme="neo-brutalist"]
+  .join:has(:is(.btn, .input, .textarea, .select):not(:disabled, [aria-disabled="true"])) {
+  box-shadow: var(--neo-offset) var(--neo-offset) 0 var(--border);
 }
 
 [data-theme="neo-brutalist"] .join :is(.input, .textarea, .select) {
@@ -285,8 +310,9 @@
   --choice-card-bg: var(--surface-raised);
 }
 
-[data-theme="neo-brutalist"] .choice-card {
-  border-color: var(--form-invalid-border, var(--border));
+[data-theme="neo-brutalist"] .choice-card,
+[data-theme="neo-brutalist"] .choice-card:hover {
+  --choice-card-border: var(--border);
 }
 
 [data-theme="neo-brutalist"] .choice-card::before {
@@ -296,7 +322,7 @@
 /* Without :has() the core choice card keeps its native input visible and
    the card simply stays flat: only the enabled-state shadow is lost. */
 [data-theme="neo-brutalist"] .choice-card:not(:has(:disabled)) {
-  box-shadow: 3px 3px 0 var(--border);
+  box-shadow: var(--neo-offset) var(--neo-offset) 0 var(--border);
 }
 
 @supports (color: color-mix(in oklab, red, white)) {
@@ -406,7 +432,7 @@
 
   border: var(--border-width) solid var(--border);
   border-radius: 0;
-  box-shadow: 3px 3px 0 var(--border);
+  box-shadow: var(--neo-offset) var(--neo-offset) 0 var(--border);
 }
 
 [data-theme="neo-brutalist"] .progress::-webkit-progress-bar {
@@ -425,7 +451,7 @@
 
 /* Accordion: a plus that turns into a cross, and an open item filled with
    the accent, its summary ruled off from the panel. */
-[data-theme="neo-brutalist"] .accordion {
+:where([data-theme="neo-brutalist"]) .accordion {
   /* The core plus is drawn at stroke 2/24, a hairline next to 2px frames:
      the theme draws its own at 3.5 and a size up. */
   --accordion-marker-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5' stroke-linecap='square'%3E%3Cpath d='M12 4v16M4 12h16'/%3E%3C/svg%3E");

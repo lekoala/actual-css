@@ -283,3 +283,5 @@ For exclusive groups, manage a single pressed button:
 - `--btn-shadow` — resting elevation (unset by default). It inherits, so a
   theme can set it once on its root; the solid hover overlay composes with it.
   Change it in `:hover`/`:active` rules for a lift and press.
+  Supply shadow-list items; use `0 0 #0000` for no elevation. `none` cannot
+  compose with the inset hover overlay and invalidates the whole shadow list.

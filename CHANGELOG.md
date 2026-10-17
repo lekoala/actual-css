@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- `--control-default-bg`: inherited resting field fill shared with external widget bridges.
 - `theming.md`: a custom button focus recipe that preserves the outline and elevation when focus and hover coincide.
 - `modular-import.md`: replacing a component while keeping its markup, states and theme tokens, with a minimal Steps recipe linked from Philosophy.
 - `neo-brutalist` demo theme: pastel intents under black ink, offset shadows on framed objects, lifting buttons, a plus accordion marker.
@@ -15,8 +16,12 @@
 - `--accordion-marker-icon` and `--accordion-marker-open-rotate`: swap the accordion marker glyph and its open turn (plus to cross with `--icon-plus` and `45deg`).
 
 ### Fixed
+- `neo-brutalist`: preserve contrast on solid card-link hover and contextual ink on transparent buttons.
+- `neo-brutalist`: restore joined-button hover feedback, flatten disabled groups and text actions, and fit group shadows to their controls.
+- `neo-brutalist`: honour `--choice-card-border` and application overrides of accordion marker hooks.
 - `.card.solid`: bare and `.prose` links follow the card's text color at rest, hover and keyboard focus, including when a theme sets `--link`.
-- `.skeleton`: `--skeleton-track` and `--skeleton-highlight` are translucent ink tints, so a placeholder keeps its edges on cards, soft cards and dark surfaces.- `.choice-card.chip`: the check reads `--state-selected-text` when a theme sets it, so a light selected fill (yellow, lime) no longer draws a check that vanishes on the chip.
+- `.skeleton`: `--skeleton-track` and `--skeleton-highlight` are translucent ink tints, so a placeholder keeps its edges on cards, soft cards and dark surfaces.
+- `.choice-card.chip`: `--state-selected-text` takes priority over explicit intents to keep checks legible on light selected fills.
 - `.alert` with `.alert-icon`: an icon taller than one line, or an alert stretched by an equal-height grid, no longer opens a gap between the title and the body.
 
 ### Removed

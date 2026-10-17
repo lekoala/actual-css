@@ -10,7 +10,7 @@
  * Exception: --surface-opaque and --surface-solid-fg are public; a theme with
  * translucent surfaces overrides them with opaque values. --border-control is
  * public too: the resting edge of a neutral control, apart from structural
- * separators.
+ * separators. --control-default-bg is the inherited resting field fill.
  * Internal: --hgroup-gap.
  */
 :root {
@@ -117,6 +117,9 @@
   /* The edge that tells a control apart from the surface, where --border only
      separates surfaces: fields, choices, switch, OTP cells, choice cards. */
   --border-control: var(--border);
+  /* Inherited resting field fill, shared with external control bridges.
+     Component state rules still own readonly, disabled and invalid fills. */
+  --control-default-bg: var(--surface);
 }
 
 /* Soft foreground hooks — the soft ink is the intent rebated toward the local

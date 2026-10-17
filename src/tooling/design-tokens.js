@@ -44,6 +44,7 @@ export const THEME_COLORS = [
   "heading",
   "border",
   "border-control",
+  "control-default-bg",
   "focus",
   "hover-overlay",
   "hover-overlay-solid",

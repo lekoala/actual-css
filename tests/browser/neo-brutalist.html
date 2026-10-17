@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neo-brutalist composition</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <link rel="stylesheet" href="../../src/css/themes/neo-brutalist.css">
+  <style>
+    :root { --duration: 0s; }
+    body { padding: 1rem; }
+    section { padding: 1rem; background: var(--surface); color: var(--text); }
+    .examples { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); }
+    .local-accordion { --accordion-marker-size: 2rem; --accordion-marker-open-rotate: 90deg; }
+    .choice-card.local-choice { --choice-card-border: rgb(100 0 150); }
+    .bridge { background: var(--control-default-bg, var(--surface)); padding: 1rem; }
+    .region { --control-default-bg: rgb(230 240 250); }
+    .flat { --btn-shadow: 0 0 #0000; }
+  </style>
+</head>
+<body class="stack">
+  <section data-theme="neo-brutalist" id="neo" class="examples">
+    <a id="solid-card" class="card solid" href="#"><h2>Neutral solid destination</h2><p>White ink keeps its dark fill on hover.</p></a>
+    <a id="danger-card" class="card solid danger" href="#"><h2>Danger solid destination</h2><p>The intent and heading remain readable.</p></a>
+    <a id="plain-card" class="card" href="#">Plain destination</a>
+    <div class="card solid" id="dark-card">
+      <button id="ghost-solid" class="btn ghost primary" type="button">Ghost on solid</button>
+      <button id="link-solid" class="btn link secondary" type="button">Link on solid</button>
+      <button id="outline-solid" class="btn outline primary" type="button">Outline on solid</button>
+      <button id="surface-solid" class="btn surface primary" type="button">Surface on solid</button>
+    </div>
+    <div class="stack">
+      <div class="cluster">
+        <button id="lift" class="btn primary" type="button">Lift and press</button>
+        <button id="ghost" class="btn ghost" type="button">Ghost</button>
+        <button id="link" class="btn link" type="button">Link</button>
+      </div>
+      <div class="join" id="joined">
+        <button id="joined-button" class="btn outline" type="button">Outline</button>
+        <button id="joined-fill" class="btn primary" type="button">Filled</button>
+        <button id="joined-soft" class="btn soft secondary" type="button">Soft</button>
+      </div>
+      <div class="join" id="disabled-join"><button class="btn" type="button" disabled>Disabled</button><a class="btn" aria-disabled="true">Unavailable</a></div>
+      <fieldset disabled><legend>Unavailable group</legend><div class="join" id="fieldset-join"><input class="input" aria-label="Disabled field"><button class="btn" type="button">Go</button></div></fieldset>
+      <div class="join" id="mixed-join"><input class="input" aria-label="Query"><button class="btn outline" type="button">Go</button></div>
+    </div>
+    <div class="cluster">
+      <label id="chip" class="choice-card chip"><input type="checkbox" checked><span>Selected</span></label>
+      <label id="chip-primary" class="choice-card chip primary"><input type="checkbox" checked><span>Primary</span></label>
+      <label id="chip-secondary" class="choice-card chip secondary"><input type="checkbox" checked><span>Secondary</span></label>
+    </div>
+    <div class="stack">
+      <label id="choice-default" class="choice-card"><input type="checkbox"><span>Theme border in every state</span></label>
+      <label id="choice" class="choice-card local-choice"><input type="checkbox"><span>Application border</span></label>
+      <label id="choice-checked" class="choice-card" style="--choice-card-border: rgb(100 0 150)"><input type="checkbox" checked><span>Inline selected border</span></label>
+      <label id="choice-invalid" class="choice-card local-choice" style="--form-invalid-border: rgb(180 0 0)"><input type="checkbox" checked><span>Validation border wins</span></label>
+    </div>
+    <div id="accordion" class="accordion local-accordion"><details open><summary>Application marker</summary><p>Size and rotation follow the application class.</p></details></div>
+    <div class="stack">
+      <input id="field" class="input" aria-label="Field" value="White resting field">
+      <input id="field-invalid" class="input" aria-label="Invalid field" aria-invalid="true" value="Invalid tint">
+      <input id="field-disabled" class="input" aria-label="Disabled field" disabled value="Disabled fill">
+      <input id="field-readonly" class="input" aria-label="Readonly field" readonly value="Readonly fill">
+      <div id="bridge" class="bridge">External bridge resting fill</div>
+    </div>
+  </section>
+  <section data-theme="light" class="cluster">
+    <label id="light-chip" class="choice-card chip secondary"><input type="checkbox" checked><span>Light intent</span></label>
+    <button id="flat" class="btn flat" type="button">No elevation, hover overlay</button>
+    <div class="region"><input id="regional-field" class="input" aria-label="Regional field"><div id="regional-bridge" class="bridge">Shared regional fill</div></div>
+  </section>
+  <section data-theme="dark" class="cluster">
+    <label id="dark-chip" class="choice-card chip secondary"><input type="checkbox" checked><span>Dark intent</span></label>
+  </section>
+</body>
+</html>
