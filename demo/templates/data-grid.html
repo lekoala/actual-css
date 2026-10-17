@@ -29,12 +29,15 @@
       --dg-muted-color: var(--text-muted);
       --dg-border-color: var(--border);
 
-      --dg-accent: var(--primary);
+      /* The accent is also ink (sort arrow, active labels): a theme whose
+         primary is too light for text routes its ink through --link. */
+      --dg-accent: var(--link, var(--primary));
       --dg-accent-soft: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
       --dg-focus-ring: var(--focus);
 
-      --dg-header-bg: var(--surface-subtle);
-      --dg-header-color: var(--text);
+      /* Same header band as .table when a theme sets one. */
+      --dg-header-bg: var(--table-header-bg, var(--surface-subtle));
+      --dg-header-color: var(--table-header-fg, var(--text));
       --dg-filter-bg: var(--surface);
 
       --dg-row-hover-bg: var(--hover-overlay);

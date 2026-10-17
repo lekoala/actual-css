@@ -68,6 +68,10 @@
   /* Fields stand like buttons: the same offset, a black hover frame. */
   --control-shadow: 3px 3px 0 var(--border);
   --control-hover-border: var(--border);
+  /* Table headers are a pastel band under black ink; data grid bridges read
+     the same pair, so tables and grids match. */
+  --table-header-bg: var(--secondary);
+  --table-header-fg: var(--text);
 
   --selection-bg: var(--primary);
   --selection-fg: var(--primary-fg);
@@ -137,14 +141,15 @@
   .card,
   .alert:not(.callout),
   .accordion:not(.flush, .separated),
-  .accordion.separated > details
+  .accordion.separated > details,
+  .table-wrap
 ) {
   box-shadow: var(--shadow);
 }
 
 [data-theme="neo-brutalist"]
   :is(.card, .alert, .modal, .drawer, .flyout)
-  :is(.card, .alert, .accordion, .accordion > details) {
+  :is(.card, .alert, .accordion, .accordion > details, .table-wrap) {
   box-shadow: none;
 }
 
@@ -451,4 +456,19 @@
 [data-theme="neo-brutalist"] .accordion details[open] > summary + * {
   padding-block-start: var(--accordion-pad);
   color: inherit;
+}
+
+/* Table: column labels shout like badges, over a doubled rule that closes the
+   header band (--table-header-bg). */
+[data-theme="neo-brutalist"] .table thead th {
+  border-block-end-width: calc(var(--border-width) * 2);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* The hovered row takes the accent tint, like a linked card: the default
+   grey overlay is lost under black rules. */
+[data-theme="neo-brutalist"] .table tbody tr:hover {
+  background-color: color-mix(in oklab, var(--primary) 35%, transparent);
 }

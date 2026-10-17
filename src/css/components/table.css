@@ -15,6 +15,11 @@
  * Public hooks:
  * --table-min
  * --table-cell-pad
+ *
+ * Theme hooks (unset by default, read with a fallback, so a theme sets them
+ * once on its root and third-party grid bridges can read the same choice):
+ * --table-header-bg
+ * --table-header-fg
  */
 .table-wrap {
   /* Containing block for anything absolutely positioned inside the table —
@@ -65,11 +70,12 @@
 }
 
 .table thead th {
+  color: var(--table-header-fg, var(--text-muted));
   vertical-align: bottom;
 }
 
 .table thead {
-  background: var(--surface-subtle);
+  background: var(--table-header-bg, var(--surface-subtle));
 }
 
 .table tbody tr:hover {

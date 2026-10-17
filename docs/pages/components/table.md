@@ -141,3 +141,7 @@ a duplication.
 
 - `--table-cell-pad` — cell padding; `.compact` re-declares it tighter.
 - `--table-min` — minimum table width before `.table-wrap` scrolls horizontally.
+- `--table-header-bg`, `--table-header-fg` — header band fill and ink. Set
+  them on a theme root rather than on `.table`: a data grid bridge reads the
+  same pair, so the table and the grid share one header (see the
+  [data grid template](../../demo/templates/data-grid.html)).

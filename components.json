@@ -771,7 +771,9 @@
     ],
     "publicHooks": [
       "--table-min",
-      "--table-cell-pad"
+      "--table-cell-pad",
+      "--table-header-bg",
+      "--table-header-fg"
     ]
   },
   {

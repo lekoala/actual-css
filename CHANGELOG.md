@@ -9,6 +9,7 @@
 - Date picker docs and `date-fields.html`: the token bridge maps the panel shadow to `--shadow-popout`.
 - `--btn-shadow`: a resting button elevation that inherits and that the solid hover overlay keeps.
 - `--control-shadow`: a resting elevation for `.input`, `.textarea` and `.select` that keyboard focus keeps.
+- `--table-header-bg` and `--table-header-fg`: theme hooks for the `.table` header band, also read by the data grid template bridge.
 - `--accordion-marker-icon` and `--accordion-marker-open-rotate`: swap the accordion marker glyph and its open turn (plus to cross with `--icon-plus` and `45deg`).
 
 ### Fixed
@@ -24,6 +25,7 @@
 - Date picker docs and `date-fields.html`: header controls render as `.select`, `.input` and `.btn` through `controlClasses`.
 - Combobox docs and `combobox.html`: `@lekoala/combobox` 0.7.0; the control reads `--border-width`, `--control-shadow` and `--control-hover-border` like `.input`.
 - Combobox docs and `combobox.html`: chips are real `.badge primary` through `chip-class`, replacing the re-derived `.cb-chip` rule.
+- `data-grid.html`: `--dg-accent` reads `--link` before `--primary`, so the sort arrow stays legible on a theme with a light primary.
 - `contrast-contexts.html`: combobox and date picker bridges follow the current recipes (0.7.0 / 0.5.0).
 - `@lekoala/floating` 0.3.1: `repositionAt()` throws on an unknown placement outside a browser too.
 
