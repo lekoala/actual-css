@@ -6,7 +6,7 @@
 - Use the `name` attribute for exclusive accordions.
 - Supports any valid body element (`div`, `p`, `ul`, ...).
 - Three container treatments: the default common shell, `.flush` (bare separators, for embedding inside an existing surface), and `.separated` (independent items).
-- The toggle marker color is customizable with `--accordion-marker-color`; it reinforces to the summary text color on hover, and the marker icon comes from the shared `--icon-chevron` token.
+- The end marker is a chevron that turns when open; its glyph, turn, color, and size are hooks.
 
 ```html demo
 <div class="accordion">
@@ -89,26 +89,21 @@ The accordion owns its disclosure marker; the trigger content belongs to the mar
 </div>
 ```
 
-## Custom markers
+## Plus / close marker
 
-The end marker is a shared token-based chevron; swapping it for a local icon is a demo concern, not part of the base API.
+Swap the glyph and the turn: a plus turned 45° reads as a close cross (plus
+minus, expand collapse, + / ×).
 
-```html
-<div class="accordion accordion-demo">
+```html demo
+<div class="accordion" style="--accordion-marker-icon: var(--icon-plus); --accordion-marker-open-rotate: 45deg">
   <details open>
-    <summary>
-      <span class="accordion-demo-icon" aria-hidden="true"></span>
-      <span>Custom marker at the start</span>
-    </summary>
-    <p>This demo swaps the default end marker for a local plus/minus icon.</p>
+    <summary>Open: the plus has turned into a cross</summary>
+    <p>The turn animates with the open state.</p>
   </details>
 
   <details>
-    <summary>
-      <span class="accordion-demo-icon" aria-hidden="true"></span>
-      <span>Another item</span>
-    </summary>
-    <p>The icon belongs to the example, not the base accordion API.</p>
+    <summary>Closed: a plus</summary>
+    <p>Any mask-ready icon token works as the glyph.</p>
   </details>
 </div>
 ```
@@ -119,6 +114,8 @@ The end marker is a shared token-based chevron; swapping it for a local icon is 
 - `--accordion-pad` — inset of the summary row and the panel. The panel relays it as `--surface-pad`, so a direct `.bleed` child of the panel reaches the item's sides and bottom corners (never the summary); `.flush` drops the inline half and the relay with it.
 - `--accordion-marker-color` — color of the end marker; it reinforces to the summary text color on hover. In forced-colors mode the marker is pinned to `CanvasText` on the property itself, so an application override of the hook cannot leave a `Canvas`-remapped fill.
 - `--accordion-marker-size` — edge length of the end marker.
+- `--accordion-marker-icon` — the marker glyph, any mask image (`--icon-chevron`, `--icon-plus`, …).
+- `--accordion-marker-open-rotate` — the marker's turn when open.
 
 ### Replacing the marker
 
@@ -153,8 +150,8 @@ recipe repeats it on its own property:
   inline-size: var(--accordion-marker-size);
   block-size: var(--accordion-marker-size);
   background-color: var(--accordion-marker-color);
-  -webkit-mask: var(--icon-chevron) center / contain no-repeat;
-  mask: var(--icon-chevron) center / contain no-repeat;
+  -webkit-mask: var(--accordion-marker-icon) center / contain no-repeat;
+  mask: var(--accordion-marker-icon) center / contain no-repeat;
 }
 
 .accordion.custom-marker summary:hover .marker {
@@ -162,7 +159,7 @@ recipe repeats it on its own property:
 }
 
 .accordion.custom-marker details[open] .marker {
-  transform: rotate(180deg);
+  transform: rotate(var(--accordion-marker-open-rotate));
 }
 
 @media (forced-colors: active) {

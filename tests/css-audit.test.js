@@ -69,7 +69,8 @@ test("accordion and select share the chevron asset", () => {
   expect(tokensCss).not.toContain("--icon-chevron-image:");
 
   expect(selectCss).toContain("background-image: var(--icon-chevron);");
-  expect(accordionCss).toContain("mask: var(--icon-chevron) center / contain no-repeat;");
+  expect(accordionCss).toContain("--accordion-marker-icon: var(--icon-chevron);");
+  expect(accordionCss).toContain("mask: var(--accordion-marker-icon) center / contain no-repeat;");
 });
 
 test("forced-colors mask fills survive application hook overrides", () => {
@@ -1802,7 +1803,6 @@ test("controls never zero the outline in their base style", () => {
 test("text controls keep per-control inset focus, even joined or themed", () => {
   const joinCss = readCss("src/css/components/join.css");
   const customCss = readCss("src/css/forms/custom-select.css");
-  const bs6Rules = readRules("src/css/themes/bootstrap-v6.css");
   const gradientCss = readCss("src/css/themes/gradient.css");
 
   // No group ring to extend: the join never moves focus onto itself.
@@ -1819,9 +1819,7 @@ test("text controls keep per-control inset focus, even joined or themed", () => 
   expect(joinCss).not.toContain("combo-box");
   // The custom-select open state follows the same inset recipe.
   expect(customCss).toMatch(new RegExp(String.raw`&:open \{[^}]*` + FIELD_INSET_OUTLINE.source));
-  // bootstrap-v6 is the proof the core recipe is v6's: tokens only, no focus
-  // rule. gradient keeps the outer halo as the demo of the other style.
-  expect(bs6Rules).not.toMatch(/:focus|:open|\boutline[\w-]*\s*:/);
+  // gradient keeps the outer halo as the demo of the other style.
   expect(gradientCss).toMatch(
     // The halo follows validation like the border does.
     /\[data-theme="gradient"\] :is\(\.input, \.textarea, \.select\):is\(:focus-visible, :open\):not\(:disabled\) \{[^}]*--control-border: var\(--focus\);[^}]*outline: 2px solid transparent;[^}]*box-shadow: 0 0 0 var\(--focus-ring-width\)\s*color-mix\(in oklch, var\(--form-invalid-border, var\(--focus\)\)/,

@@ -77,11 +77,8 @@
   }
 }
 
-[data-theme="edge"]
-  .btn:not(
-    :where(:disabled, [aria-disabled="true"], .solid, .soft, .outline, .ghost, .link)
-  ):hover {
-  box-shadow: none;
+[data-theme="edge"] .btn:not(:where(.solid, .soft, .outline, .ghost, .link)) {
+  --btn-hover-overlay: transparent;
 }
 
 /* Intent-dependent alert token, same reasoning as the button rule above:

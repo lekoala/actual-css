@@ -26,8 +26,6 @@ const RESERVED = loadReservedClasses(join(ROOT, "reserved-classes.json"));
    add a class here when it is genuinely demo/product CSS, never to mask a typo
    or a missing framework class. */
 const DOC_DEMO_CLASSES = new Set([
-  "accordion-demo",
-  "accordion-demo-icon",
   "actual-combobox",
   "actual-rich-text",
   "brand",

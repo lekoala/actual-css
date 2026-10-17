@@ -1,0 +1,35 @@
+<!doctype html>
+<!-- Hooks a theme sets to change component behaviour, not only color: a
+     resting button elevation the hover overlay composes with, and an
+     accordion marker glyph and turn. --duration: 0s reads end states. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Theme hooks fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    :root { --duration: 0s; }
+    body { padding: 1rem; }
+    .lifted { --btn-shadow: 4px 4px 0 rgb(0 0 0); }
+    .plus {
+      --accordion-marker-icon: var(--icon-plus);
+      --accordion-marker-open-rotate: 45deg;
+    }
+  </style>
+</head>
+<body>
+  <div class="lifted cluster">
+    <button class="btn" type="button" id="btn-rest">Rest</button>
+    <button class="btn" type="button" id="btn-hover">Hover</button>
+  </div>
+
+  <div class="accordion" id="acc-default">
+    <details open><summary>Default</summary><p>Body</p></details>
+  </div>
+  <div class="accordion plus" id="acc-plus">
+    <details open><summary>Open</summary><p>Body</p></details>
+    <details><summary>Closed</summary><p>Body</p></details>
+  </div>
+</body>
+</html>

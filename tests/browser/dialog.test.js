@@ -371,7 +371,7 @@ it("scrollable dialog bodies preserve full-width focus rings and alignment", asy
 
       // A --focus-ring-width override on the dialog alone must reach its
       // reserve: the bleed is computed on the consumer, so a thicker line
-      // (bootstrap-v6: 3px) still fits. Opened from the keyboard, so the
+      // (3px) still fits. Opened from the keyboard, so the
       // dialog's initial focus is keyboard-modal and matches :focus-visible.
       await closeDialogAndWait(view, "drawer");
       await view.evaluate('document.getElementById("open-thick").focus()');

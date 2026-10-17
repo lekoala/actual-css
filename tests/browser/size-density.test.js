@@ -59,7 +59,7 @@ it("keeps size local and density typographically inert", async () => {
 });
 
 // Trap: a theme that set --control-pad-x directly was overwritten by every size
-// and density boundary — bootstrap-v6's 12px became a wider 13px inside
+// and density boundary — a theme's 12px became a wider 13px inside
 // .compact. Themes set the -sm/-md/-lg steps; boundaries select one.
 it("orders a theme's own padding scale through size and density", async () => {
   await withBrowserPage(fixtureUrl("tests/browser/size-density-theme.html"), async (view) => {
@@ -95,7 +95,7 @@ it("selects a nested theme island's own steps under inherited density", async ()
       ]),
     ))()`);
 
-    // bootstrap-v6 steps: 8 / 12 / 16px.
+    // Fixture theme steps: 8 / 12 / 16px.
     expect(result.island.pad).toBe(12);
     expect(result["island-sm"].pad).toBe(8);
     expect(result["compact-island"].pad).toBe(8);

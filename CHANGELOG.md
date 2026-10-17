@@ -1,6 +1,15 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Added
+- `--btn-shadow`: a resting button elevation that inherits and that the solid hover overlay keeps.
+- `--accordion-marker-icon` and `--accordion-marker-open-rotate`: swap the accordion marker glyph and its open turn (plus to cross with `--icon-plus` and `45deg`).
+
+### Removed
+- The `bootstrap-v6` demo theme: the core focus line and field treatment it demonstrated are now the defaults.
+
+### Changed
+- `edge` theme: the default button drops its hover overlay through `--btn-hover-overlay` instead of `box-shadow: none`.
 
 ## [0.14.1] - 2026-10-14
 ### Added

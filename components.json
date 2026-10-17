@@ -12,7 +12,9 @@
       "--accordion-radius",
       "--accordion-pad",
       "--accordion-marker-color",
-      "--accordion-marker-size"
+      "--accordion-marker-size",
+      "--accordion-marker-icon",
+      "--accordion-marker-open-rotate"
     ],
     "states": [
       "open"
@@ -201,6 +203,7 @@
       "--btn-radius",
       "--btn-gap",
       "--btn-hover-overlay",
+      "--btn-shadow",
       "--btn-default-bg",
       "--btn-default-fg",
       "--btn-default-border",

@@ -18,12 +18,16 @@
  * --accordion-pad
  * --accordion-marker-color
  * --accordion-marker-size
+ * --accordion-marker-icon
+ * --accordion-marker-open-rotate
  */
 .accordion {
   --accordion-radius: var(--radius);
   --accordion-pad: var(--space-40);
   --accordion-marker-color: var(--text-muted);
   --accordion-marker-size: 1rem;
+  --accordion-marker-icon: var(--icon-chevron);
+  --accordion-marker-open-rotate: 180deg;
 
   border: var(--border-width) solid var(--border);
   border-radius: var(--accordion-radius);
@@ -68,13 +72,13 @@
   inline-size: var(--accordion-marker-size);
   block-size: var(--accordion-marker-size);
   background-color: var(--accordion-marker-color);
-  -webkit-mask: var(--icon-chevron) center / contain no-repeat;
-  mask: var(--icon-chevron) center / contain no-repeat;
+  -webkit-mask: var(--accordion-marker-icon) center / contain no-repeat;
+  mask: var(--accordion-marker-icon) center / contain no-repeat;
   transition: transform var(--duration);
 }
 
 .accordion details[open] summary::after {
-  transform: rotate(180deg);
+  transform: rotate(var(--accordion-marker-open-rotate));
 }
 
 /* The panel, not the item, owns the inset here — .separated paints a card on

@@ -280,3 +280,6 @@ For exclusive groups, manage a single pressed button:
 
 - `--btn-radius` — corner radius.
 - `--btn-gap` — space between an icon and the label text (default `0.375em`).
+- `--btn-shadow` — resting elevation (unset by default). It inherits, so a
+  theme can set it once on its root; the solid hover overlay composes with it.
+  Change it in `:hover`/`:active` rules for a lift and press.

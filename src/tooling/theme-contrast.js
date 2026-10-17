@@ -37,7 +37,7 @@ export const INTENTS = ["primary", "secondary", "success", "warning", "danger", 
 export const SURFACES = ["surface", "surface-raised", "surface-subtle"];
 
 /* Badges state .soft explicitly: a theme may fill badges by default
-   (bootstrap-v6), which would measure a solid pair against the soft hover.
+   by a local rule, which would measure a solid pair against the soft hover.
    The theme name is read from a file by a regex, so it never enters this
    markup: measureContrast() sets it through dataset. `scheme` is only ever
    "light" or "dark". */

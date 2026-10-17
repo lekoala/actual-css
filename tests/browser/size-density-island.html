@@ -1,28 +1,39 @@
 <!doctype html>
 <!-- Nested theme islands: the root keeps the core theme, each island carries
      its own control steps and must read them without dropping the density it
-     sits in. -->
+     sits in. The brand theme is the docs example (Tokens · Controls). -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Theme island size and density fixture</title>
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <link rel="stylesheet" href="../../src/css/themes/bootstrap-v6.css">
-  <style>body { padding: 1rem; }</style>
+  <style>
+    body { padding: 1rem; }
+    [data-theme="brand"] {
+      --control-pad-x-sm: 0.5rem;
+      --control-pad-x-md: 0.75rem;
+      --control-pad-x-lg: 1rem;
+      --control-pad-x: calc(
+        (var(--control-pad-x-sm) * var(--control-step-sm)) +
+        (var(--control-pad-x-md) * var(--control-step-md)) +
+        (var(--control-pad-x-lg) * var(--control-step-lg))
+      );
+    }
+  </style>
 </head>
 <body>
-  <section data-theme="bootstrap-v6">
+  <section data-theme="brand">
     <button class="btn" type="button" data-case="island">Default</button>
     <button class="btn sm" type="button" data-case="island-sm">Small</button>
   </section>
   <div class="compact">
-    <section data-theme="bootstrap-v6">
+    <section data-theme="brand">
       <button class="btn" type="button" data-case="compact-island">Compact</button>
     </section>
   </div>
   <div class="spacious">
-    <section data-theme="bootstrap-v6">
+    <section data-theme="brand">
       <button class="btn" type="button" data-case="spacious-island">Spacious</button>
     </section>
   </div>
@@ -32,7 +43,7 @@
     <section data-theme="dark">
       <button class="btn" type="button" data-case="palette-island">Palette only</button>
     </section>
-    <section data-theme="bootstrap-v6">
+    <section data-theme="brand">
       <button class="btn" type="button" data-case="override-island">Own padding</button>
     </section>
   </div>

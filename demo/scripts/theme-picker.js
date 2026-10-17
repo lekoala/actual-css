@@ -20,7 +20,6 @@
     "indigo",
     "dim",
     "corporate",
-    "bootstrap-v6",
     "forest",
     "ocean",
     "spruce",
