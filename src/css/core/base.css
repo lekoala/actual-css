@@ -22,7 +22,7 @@ body {
    opts in by setting --link. Because this is an element selector, any component
    rule that colors its own anchors still wins. */
 a {
-  color: var(--link, inherit);
+  color: var(--surface-link, var(--link, inherit));
   text-underline-offset: 0.18em;
 }
 

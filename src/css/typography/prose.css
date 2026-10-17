@@ -88,7 +88,7 @@
 /* --link is a theme-level token (core/base.css also reads it for bare links);
    prose falls back to --primary so a theme that never sets it is unaffected. */
 .prose :where(a) {
-  color: var(--link, var(--primary));
+  color: var(--surface-link, var(--link, var(--primary)));
   text-decoration-line: underline;
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
@@ -100,7 +100,9 @@
 
 @supports (color: color-mix(in oklch, red, white)) {
   .prose :where(a:hover, a:focus-visible) {
-    color: color-mix(in oklab, var(--link, var(--primary)), var(--text) 15%);
+    /* A solid surface owns its contrast pair in every state; mixing in the
+       page's --text would pull its links toward the wrong background. */
+    color: var(--surface-link, color-mix(in oklab, var(--link, var(--primary)), var(--text) 15%));
   }
 }
 

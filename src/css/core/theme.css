@@ -103,6 +103,8 @@
    their own tokens instead of inheriting :root's resolved values. */
 :root,
 [data-theme] {
+  /* A painted parent's link context must not cross into a new palette. */
+  --surface-link: initial;
   --heading: var(--text);
   --selection-bg: var(--primary);
   --selection-fg: var(--primary-fg);

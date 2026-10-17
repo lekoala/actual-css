@@ -101,6 +101,7 @@ export const FOUNDATIONS = {
    listed here (tests/design-tokens.test.js), so a new token cannot silently
    stay out of the design tools. */
 export const NOT_EXPORTED = {
+  "internal surface context, not a palette color": ["surface-link"],
   "internal 0/1 weights selecting a control step; the steps are exported": [
     "control-step-sm",
     "control-step-md",

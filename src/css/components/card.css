@@ -28,6 +28,7 @@
  * --card-fg
  * --heading
  * --busy-overlay-bg
+ * --surface-link
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity.
@@ -36,6 +37,7 @@
    when they paint this surface, so an ancestor intent would otherwise leak
    through a variant that has no local intent class. */
 :where(.card) {
+  --surface-link: initial;
   --intent: initial;
   --intent-fg: initial;
   --intent-soft-fg: initial;
@@ -69,6 +71,13 @@
   color: var(--card-fg);
   border: var(--border-width) solid var(--ui-border, var(--border));
   border-radius: var(--card-radius);
+}
+
+/* Theme link ink is tuned for the page, not an intent fill. currentColor
+   follows the surrounding copy without freezing a parent's resolved ink;
+   the card and theme boundaries reset this internal relay above/in theme.css. */
+.card.solid {
+  --surface-link: currentColor;
 }
 
 /* The box lives at zero specificity so a layout primitive applied to the same

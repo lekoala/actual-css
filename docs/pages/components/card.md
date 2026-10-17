@@ -19,6 +19,10 @@ light page (or the reverse), put `data-theme="dark"` on the card.
 Shared `.soft` with an intent class gives the card a tone: an opaque surface
 tinted by the intent, with the soft ink. See [Tones](#tones).
 
+On `.card.solid`, bare and `.prose` links follow the surrounding text color,
+including hover and keyboard focus, instead of the theme's `--link` ink.
+Nested cards and `data-theme` islands establish their own link context.
+
 ## Basic usage
 
 Use semantic elements inside the card. A direct `<header>` or `<footer>` is the

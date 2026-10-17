@@ -245,7 +245,8 @@
       "--card-bg",
       "--card-fg",
       "--heading",
-      "--busy-overlay-bg"
+      "--busy-overlay-bg",
+      "--surface-link"
     ]
   },
   {

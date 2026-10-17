@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Links on solid cards</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+    body { padding: 1rem; }
+    [data-theme="island"] {
+      --primary: navy;
+      --link: darkgreen;
+      color-scheme: light;
+      background: white;
+      color: black;
+      padding: 1rem;
+    }
+  </style>
+</head>
+<body class="stack">
+  <div class="prose"><a id="page-link" href="#">Page link</a></div>
+  <article class="card primary solid" id="primary">
+    <p><a href="#" data-ink="primary">Bare link</a></p>
+    <div class="prose"><p><a href="#" data-ink="primary">Prose link</a></p></div>
+    <a class="btn danger" id="button" href="#">Button keeps its intent</a>
+    <article class="card" id="nested">
+      <div class="prose"><p><a id="nested-link" href="#">Neutral card link</a></p></div>
+    </article>
+    <article class="card danger solid" id="danger">
+      <p><a href="#" data-ink="danger">Nested danger bare link</a></p>
+      <div class="prose"><p><a href="#" data-ink="danger">Nested danger link</a></p></div>
+    </article>
+    <aside class="alert success solid" id="nested-alert">
+      <div class="prose"><p><a id="nested-alert-link" href="#">Nested alert link</a></p></div>
+    </aside>
+    <section data-theme="light" style="background: var(--surface); color: var(--text)">
+      <div class="prose"><p><a id="default-island-link" href="#">Default island link</a></p></div>
+      <span id="default-island-ref" style="color: var(--link, var(--primary))">Local link ink</span>
+    </section>
+    <section data-theme="island" id="island">
+      <div class="prose"><p><a id="island-link" href="#">Island link</a></p></div>
+      <article class="card primary solid" id="island-card">
+        <div class="prose"><p><a href="#" data-ink="island-card">Island solid link</a></p></div>
+      </article>
+    </section>
+  </article>
+  <aside class="alert danger solid" id="alert">
+    <p><a href="#" data-ink="alert">Alert bare link</a></p>
+    <div class="prose"><p><a href="#" data-ink="alert">Alert prose link</a></p></div>
+  </aside>
+</body>
+</html>

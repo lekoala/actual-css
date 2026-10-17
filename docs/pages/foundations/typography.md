@@ -97,6 +97,9 @@ The `.prose` fallback to `--primary` breaks down for a theme whose primary is a 
 
 It is a color token only. There are still no `--link-decoration-thickness`, `--link-decoration-thickness-hover`, or `--link-underline-offset` tokens; no global rule consumes them. Prose and components set their own underline metrics inline.
 
+On `.card.solid`, links follow the surrounding text color in every state;
+the theme's `--link` ink remains for page surfaces. See [Card](../components/card.md).
+
 ## Type scale
 
 There is no exposed type scale.
