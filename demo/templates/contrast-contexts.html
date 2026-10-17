@@ -7,13 +7,13 @@
   <meta name="description" content="Bench for data-theme islands, an application-painted band, forms, joined fields, focus lines and intent variants: every sample measured live for text and focus contrast.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.3.0/dist/date-picker.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.0/dist/combobox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.5.0/dist/date-picker.css">
   <script src="../scripts/theme-picker.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.5.0/dist/combobox.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.0/dist/combobox.js"></script>
   <!-- defer: the element reads its <input> on connect, so it must be defined
        after parsing — a head-time definition upgrades it before its child. -->
-  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.3.0/dist/date-picker.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.5.0/dist/date-picker.min.js"></script>
   <style>
     .cc-page {
       --center-size: 76rem;
@@ -141,7 +141,7 @@
       border-color: var(--form-invalid-border, var(--cb-border-color));
       outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
       outline-offset: calc(var(--focus-ring-width) * -1);
-      box-shadow: none;
+      box-shadow: var(--control-shadow, none);
     }
 
     .actual-combobox :is(.cb-text-control[aria-invalid="true"], .cb-control:has([aria-invalid="true"])) {
@@ -153,18 +153,25 @@
     }
 
     .actual-combobox :is(.cb-control, .cb-text-control) {
+      border-width: var(--border-width);
       border-radius: inherit;
+      box-shadow: var(--control-shadow, none);
+    }
+
+    .actual-combobox :is(.cb-control, .cb-text-control):hover {
+      border-color: var(--form-invalid-border, var(--control-hover-border, var(--text-subtle)));
     }
 
     .cb-popover {
       --cb-picker-bg: var(--surface-raised);
       border-color: var(--border);
+      border-radius: var(--radius);
       box-shadow: var(--shadow-popout);
     }
 
     /* The library declares its defaults on the element itself, so the bridge
-       must too (an inherited value would lose to them). The field is a plain
-       .input: the core inset outline already outranks the library's halo. */
+       must too (an inherited value would lose to them). Header controls take
+       Actual classes (controlClasses, script below). */
     date-picker,
     date-calendar {
       --dp-bg: var(--surface-raised);
@@ -175,19 +182,13 @@
       --dp-accent: var(--primary);
       --dp-accent-fg: var(--primary-fg);
       --dp-radius: var(--radius);
-      --dp-picker-button-size: var(--control-size);
+      --dp-focus: var(--focus);
+      --dp-focus-width: var(--focus-ring-width);
+      --dp-picker-button-size: calc(var(--control-pad-x) * 2 + 1em + var(--border-width) * 2);
     }
 
-    .dp-calendar-header :where(button, select, input):focus-visible {
-      border-color: var(--dp-border);
-      outline: var(--focus-ring-width) solid var(--focus);
-      outline-offset: calc(var(--focus-ring-width) * -1);
-      box-shadow: none;
-    }
-
-    .dp-picker-button:focus-visible,
-    .dp-day:focus-visible {
-      outline-color: var(--focus);
+    .dp-picker-panel[popover] {
+      box-shadow: var(--shadow-popout);
     }
 
     .cc-swatch {
@@ -464,7 +465,7 @@
           </div>
           <label class="field actual-combobox">
             <span class="field-label">Skills</span>
-            <combo-box placeholder="Search a skill">
+            <combo-box chip-class="badge primary" placeholder="Search a skill">
               <select class="select" name="skills-${n}" multiple>
                 <option value="css" selected>CSS</option>
                 <option value="html">HTML</option>
@@ -585,9 +586,14 @@
     matchMedia("(prefers-color-scheme: dark)").addEventListener("change", measure);
     measure();
     // The enhanced widgets upgrade after parsing; measure again once they have.
-    Promise.all(["combo-box", "date-picker"].map((tag) => customElements.whenDefined(tag))).then(
-      () => requestAnimationFrame(measure),
-    );
+    // The CDN build exposes no setDefaultControlClasses, and controlClasses is
+    // not upgraded from a pre-definition property: assign it once defined.
+    Promise.all(["combo-box", "date-picker"].map((tag) => customElements.whenDefined(tag))).then(() => {
+      for (const picker of document.querySelectorAll("date-picker")) {
+        picker.controlClasses = { month: "select sm", year: "input sm", nav: "btn outline sm icon-only" };
+      }
+      requestAnimationFrame(measure);
+    });
   </script>
 </body>
 </html>

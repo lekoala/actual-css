@@ -8,9 +8,9 @@
   <meta name="description" content="@lekoala/combobox loaded from CDN and themed with Actual CSS tokens: searchable selects, removable chips, autocomplete, states and the theme presets follow the framework.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.6.0/dist/combobox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.0/dist/combobox.css">
   <script src="../scripts/theme-picker.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.6.0/dist/combobox.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.0/dist/combobox.js"></script>
   <style>
     .page {
       --center-size: 60rem;
@@ -56,7 +56,6 @@
       --cb-focus-color: var(--focus);
       --cb-muted-color: var(--text-muted);
       --cb-error-color: var(--danger);
-      --cb-chip-bg: transparent;
       --cb-control-height: var(--control-size);
       --cb-option-min-height: var(--control-size);
     }
@@ -94,26 +93,13 @@
       box-shadow: var(--control-shadow, none);
     }
 
-    /* 4. Chips — re-derive the removable .badge soft recipe */
-    .actual-combobox .cb-chip {
-min-block-size: var(--badge-size);
-      padding-inline: 0.55em;
-
-      border: var(--border-width) solid
-        color-mix(in oklab, var(--primary) calc(100% - var(--soft-border-mix, 100%)), transparent);
-      border-radius: var(--radius-full);
-
-      background: color-mix(in oklab, var(--primary) calc(100% - var(--soft-bg-mix)), transparent);
-      color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
-
-font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-}
-
-    /* The core supplies a font-independent SVG; only its ink needs mapping. */
-    .actual-combobox .cb-chip-remove {
-      color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+    /* Hover follows .input (you type in it), not the library's own mix. */
+    .actual-combobox :is(.cb-control, .cb-text-control):hover {
+      border-color: var(--form-invalid-border, var(--control-hover-border, var(--text-subtle)));
     }
+
+    /* 4. Chips — no CSS: chip-class="badge primary" makes each chip a real
+          .badge, so badge theme rules reach it. */
 
     /* 5. Picker — the popover renders in the top layer, appended to
           <body>, so its tokens are declared on .cb-popover directly. */
@@ -192,14 +178,14 @@ font-size: var(--font-size-xs);
           <hgroup>
             <h2 style="margin: 0;">Skills — multiple with removable badges</h2>
             <p class="muted">
-              The chips re-derive the <code>.badge</code> soft recipe from the shared
-              <code>--soft-*</code> tokens. Focus a chip and press Delete/Backspace to remove it.
+              <code>chip-class="badge primary"</code> renders each chip as a real
+              <code>.badge</code>. Focus a chip and press Delete/Backspace to remove it.
             </p>
           </hgroup>
         </header>
         <label class="field actual-combobox">
           <span class="field-label">Skills</span>
-          <combo-box placeholder="Search or add a skill…">
+          <combo-box chip-class="badge primary" placeholder="Search or add a skill…">
             <select id="skills" name="skills[]" multiple>
               <option value="design" selected>Design</option>
               <option value="css" selected>CSS</option>
@@ -322,7 +308,7 @@ font-size: var(--font-size-xs);
         </header>
         <label class="field actual-combobox">
           <span class="field-label">Fruit</span>
-          <combo-box placeholder="Pick some…">
+          <combo-box chip-class="badge primary" placeholder="Pick some…">
             <select id="fruit" name="fruit[]" multiple>
               <option value="2">Banana</option>
               <option value="2">Banana</option>
@@ -348,7 +334,7 @@ font-size: var(--font-size-xs);
         <form id="states-form" class="grid grid-2 items-start">
           <div class="field actual-combobox">
             <span class="field-label">Normal</span>
-            <combo-box placeholder="Pick…">
+            <combo-box chip-class="badge primary" placeholder="Pick…">
               <select id="normal" name="normal[]" multiple>
                 <option value="a">Alpha</option>
                 <option value="b" selected>Beta</option>
@@ -359,7 +345,7 @@ font-size: var(--font-size-xs);
 
           <div class="field actual-combobox">
             <span class="field-label">Disabled</span>
-            <combo-box placeholder="Unavailable…">
+            <combo-box chip-class="badge primary" placeholder="Unavailable…">
               <select id="disabled" name="disabled[]" multiple disabled>
                 <option value="d" selected>Delta</option>
                 <option value="e">Epsilon</option>
@@ -413,7 +399,6 @@ font-size: var(--font-size-xs);
   --cb-focus-color: var(--focus);
   --cb-muted-color: var(--text-muted);
   --cb-error-color: var(--danger);
-  --cb-chip-bg: transparent;
   --cb-control-height: var(--control-size);
   --cb-option-min-height: var(--control-size);
 }
@@ -439,20 +424,8 @@ font-size: var(--font-size-xs);
   box-shadow: var(--control-shadow, none);
 }
 
-.actual-combobox .cb-chip {
-  min-block-size: var(--badge-size);
-  padding-inline: 0.55em;
-  border: var(--border-width) solid
-    color-mix(in oklab, var(--primary) calc(100% - var(--soft-border-mix, 100%)), transparent);
-  border-radius: var(--radius-full);
-  background: color-mix(in oklab, var(--primary) calc(100% - var(--soft-bg-mix)), transparent);
-  color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-}
-
-.actual-combobox .cb-chip-remove {
-  color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
+.actual-combobox :is(.cb-control, .cb-text-control):hover {
+  border-color: var(--form-invalid-border, var(--control-hover-border, var(--text-subtle)));
 }
 
 .cb-popover {
@@ -475,8 +448,8 @@ font-size: var(--font-size-xs);
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
       <span>
-        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.6.0/dist/combobox.css</code> and
-        <code>@lekoala/combobox@0.6.0/dist/combobox.js</code>.
+        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.7.0/dist/combobox.css</code> and
+        <code>@lekoala/combobox@0.7.0/dist/combobox.js</code>.
       </span>
       <span>Combobox enhances native <code>&lt;input&gt;</code>/<code>&lt;select&gt;</code> — the source owns the form value.</span>
     </footer>

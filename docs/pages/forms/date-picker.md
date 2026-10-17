@@ -77,6 +77,20 @@ so inside a modal, even in a scrolling body, it is neither clipped nor stacked
 under the dialog. The calendar popup is its own
 element, so the `--dp-*` map is declared on `date-picker`/`date-calendar` rather
 than inherited from a wrapper.
+
+The header month, year and arrows take host classes through `controlClasses`,
+so they render as real Actual controls:
+
+```js
+picker.controlClasses = { month: "select sm", year: "input sm", nav: "btn outline sm icon-only" };
+```
+
+With a bundler, `setDefaultControlClasses()` sets them once for every picker.
+The CDN build exposes neither that function nor an attribute, and drops a
+property set before the element is defined: assign it after
+`customElements.whenDefined("date-picker")`. Day cells and the field trigger
+stay on the `--dp-*` tokens.
+
 As with the combobox, the bridge stays in docs/demo — it is a recipe, not package
 API, and pins no widget version.
 

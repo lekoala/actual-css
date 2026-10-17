@@ -20,8 +20,12 @@
 
 ### Changed
 - `edge` theme: the default button drops its hover overlay through `--btn-hover-overlay` instead of `box-shadow: none`.
-- Date picker docs and `date-fields.html`: `@lekoala/date-picker` 0.4.0; focus maps through `--dp-focus` / `--dp-focus-width` instead of two override rules.
-- Combobox docs and `combobox.html`: `@lekoala/combobox` 0.6.0; the control reads `--border-width` and `--control-shadow` like `.input`.
+- Date picker docs and `date-fields.html`: `@lekoala/date-picker` 0.5.0; focus maps through `--dp-focus` / `--dp-focus-width` instead of two override rules.
+- Date picker docs and `date-fields.html`: header controls render as `.select`, `.input` and `.btn` through `controlClasses`.
+- Combobox docs and `combobox.html`: `@lekoala/combobox` 0.7.0; the control reads `--border-width`, `--control-shadow` and `--control-hover-border` like `.input`.
+- Combobox docs and `combobox.html`: chips are real `.badge primary` through `chip-class`, replacing the re-derived `.cb-chip` rule.
+- `contrast-contexts.html`: combobox and date picker bridges follow the current recipes (0.7.0 / 0.5.0).
+- `@lekoala/floating` 0.3.1: `repositionAt()` throws on an unknown placement outside a browser too.
 
 ## [0.14.1] - 2026-10-14
 ### Added

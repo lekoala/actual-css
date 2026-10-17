@@ -16,15 +16,14 @@ properties onto Actual's tokens.
 
 The [combobox template](../../demo/templates/combobox.html) themes
 [`@lekoala/combobox`](https://github.com/lekoala/combobox) entirely with Actual
-tokens: the control mirrors `.input`, chips re-derive the `.badge` soft recipe,
-and the picker popover follows `--surface-raised` and `--shadow-popout`. No
-adapter, no compatibility layer — a handful of `--cb-*` assignments and shared
-mix tokens.
+tokens: the control mirrors `.input`, chips are real `.badge` elements, and the
+picker popover follows `--surface-raised` and `--shadow-popout`. No adapter, no
+compatibility layer — a handful of `--cb-*` assignments and shared mix tokens.
 
 ```html
 <label class="field actual-combobox">
   <span class="field-label">Skills</span>
-  <combo-box placeholder="Search or add a skill…">
+  <combo-box chip-class="badge primary" placeholder="Search or add a skill…">
     <select class="select" name="skills[]" multiple>
       <option value="design" selected>Design</option>
       <option value="css" selected>CSS</option>
@@ -33,6 +32,11 @@ mix tokens.
   </combo-box>
 </label>
 ```
+
+`chip-class` hands the chip skin to the host classes, so badge variants and
+theme rules on `.badge` apply; the widget keeps layout, removal and keyboard
+focus. With a bundler, set it once with `Combobox.setDefaultChipClass("badge primary")`;
+the CDN build exposes no global, so set the attribute per element.
 
 The card in the template documents the full token map of this recipe.
 
@@ -67,7 +71,6 @@ contrast contracts apply to the combobox for free:
   --cb-focus-color: var(--focus);
   --cb-muted-color: var(--text-muted);
   --cb-error-color: var(--danger);
-  --cb-chip-bg: transparent;
   --cb-control-height: var(--control-size);
   --cb-option-min-height: var(--control-size);
 }
@@ -93,19 +96,15 @@ contrast contracts apply to the combobox for free:
   box-shadow: var(--control-shadow, none);
 }
 
-.actual-combobox .cb-chip {
-  border: var(--border-width) solid
-    color-mix(in oklab, var(--primary) calc(100% - var(--soft-border-mix, 100%)), transparent);
-  border-radius: var(--radius-full);
-  background: color-mix(in oklab, var(--primary) calc(100% - var(--soft-bg-mix)), transparent);
-  color: color-mix(in oklab, var(--primary) var(--soft-fg-mix), var(--text));
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+.actual-combobox :is(.cb-control, .cb-text-control):hover {
+  border-color: var(--form-invalid-border, var(--control-hover-border, var(--text-subtle)));
 }
 ```
 
 The control reads the field geometry a theme gives `.input`: `--border-width`
-and the `--control-shadow` elevation, which focus keeps. While the search input
+and the `--control-shadow` elevation, which focus keeps. Hover follows `.input`
+too (`--control-hover-border`), since the control is typed into, in place of
+the library's own border mix. While the search input
 is focused, the control takes the same inset outline as `.input` in place of
 the library's accent border and outer halo; a focused chip
 or remove × keeps the library's own inner ring. Being inset, the outline needs
@@ -113,6 +112,12 @@ no adaptation inside `.join`: `combo-box` owns the radius at zero specificity,
 so the join gives it the group corners and the visible control inherits them. The invalid rule sets `--form-invalid-border`,
 the hook `.field.danger` and `aria-invalid` already use, so border and outline
 turn danger together.
+
+### Limits
+
+The bridge follows tokens, not rules. A theme that restyles fields through a
+hook declared on `.input` itself, such as a white `--control-bg`, does not
+reach the widget: repeat the value on the matching `--cb-*` token.
 
 The same approach works for any widget that exposes a custom-property skin —
 keep the widget's behavior, restyle its tokens through the shared vocabulary.
