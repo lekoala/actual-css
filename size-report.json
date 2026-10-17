@@ -1,24 +1,24 @@
 {
-  "totalRaw": 406932,
+  "totalRaw": 411121,
   "core": {
-    "minified": 12376,
-    "brotli": 2776
+    "minified": 12460,
+    "brotli": 2796
   },
   "full": {
-    "minified": 141957,
-    "brotli": 20077
+    "minified": 142466,
+    "brotli": 20150
   },
   "js": {
     "full": {
-      "bytes": 62815,
-      "brotli": 18409
+      "bytes": 62814,
+      "brotli": 18408
     }
   },
   "fileCount": 116,
   "files": [
     {
       "file": "themes/neo-brutalist.css",
-      "raw": 15949
+      "raw": 18205
     },
     {
       "file": "components/steps.css",
@@ -37,20 +37,20 @@
       "raw": 10767
     },
     {
+      "file": "core/theme.css",
+      "raw": 9314
+    },
+    {
       "file": "forms/choice-card.css",
-      "raw": 9046
+      "raw": 9121
     },
     {
       "file": "components/tab.css",
       "raw": 9002
     },
     {
-      "file": "core/theme.css",
-      "raw": 8963
-    },
-    {
       "file": "components/button.css",
-      "raw": 8673
+      "raw": 8783
     },
     {
       "file": "components/drawer.css",
@@ -93,6 +93,10 @@
       "raw": 5632
     },
     {
+      "file": "typography/prose.css",
+      "raw": 5466
+    },
+    {
       "file": "components/accordion.css",
       "raw": 5460
     },
@@ -107,10 +111,6 @@
     {
       "file": "forms/color-swatch.css",
       "raw": 5404
-    },
-    {
-      "file": "typography/prose.css",
-      "raw": 5274
     },
     {
       "file": "forms/otp.css",
@@ -137,12 +137,12 @@
       "raw": 4871
     },
     {
-      "file": "themes/edge.css",
-      "raw": 4712
+      "file": "components/card.css",
+      "raw": 4859
     },
     {
-      "file": "components/card.css",
-      "raw": 4535
+      "file": "themes/edge.css",
+      "raw": 4712
     },
     {
       "file": "components/list.css",
@@ -150,7 +150,7 @@
     },
     {
       "file": "forms/control.css",
-      "raw": 4168
+      "raw": 4219
     },
     {
       "file": "layout/grid.css",
@@ -209,6 +209,10 @@
       "raw": 3003
     },
     {
+      "file": "components/skeleton.css",
+      "raw": 2985
+    },
+    {
       "file": "themes/sunset.css",
       "raw": 2881
     },
@@ -233,16 +237,20 @@
       "raw": 2789
     },
     {
+      "file": "core/base.css",
+      "raw": 2784
+    },
+    {
       "file": "components/bleed.css",
       "raw": 2772
     },
     {
-      "file": "core/base.css",
-      "raw": 2763
-    },
-    {
       "file": "components/progress.css",
       "raw": 2728
+    },
+    {
+      "file": "components/table.css",
+      "raw": 2711
     },
     {
       "file": "themes/cyberpunk.css",
@@ -275,14 +283,6 @@
     {
       "file": "themes/corporate.css",
       "raw": 2479
-    },
-    {
-      "file": "components/skeleton.css",
-      "raw": 2450
-    },
-    {
-      "file": "components/table.css",
-      "raw": 2437
     },
     {
       "file": "themes/mono.css",
