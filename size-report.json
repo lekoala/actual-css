@@ -1,12 +1,12 @@
 {
-  "totalRaw": 420481,
+  "totalRaw": 420578,
   "core": {
-    "minified": 12460,
-    "brotli": 2796
+    "minified": 12480,
+    "brotli": 2804
   },
   "full": {
-    "minified": 146955,
-    "brotli": 20702
+    "minified": 146975,
+    "brotli": 20711
   },
   "js": {
     "full": {
@@ -217,6 +217,10 @@
       "raw": 2985
     },
     {
+      "file": "core/base.css",
+      "raw": 2881
+    },
+    {
       "file": "themes/sunset.css",
       "raw": 2881
     },
@@ -239,10 +243,6 @@
     {
       "file": "themes/petrol.css",
       "raw": 2789
-    },
-    {
-      "file": "core/base.css",
-      "raw": 2784
     },
     {
       "file": "components/bleed.css",

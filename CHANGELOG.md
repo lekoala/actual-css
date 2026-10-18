@@ -22,6 +22,7 @@
 - File upload docs and `file-upload.html`: Dropzone 6.3.5 rows composed from `.list`, `.progress` and `.close`, and FilePond 5.0.0-beta.74 on a `--default-*` token bridge.
 
 ### Fixed
+- `::selection`: SVG text uses the theme's selection foreground, keeping Pele diagram labels legible when selected.
 - `.tab-panel`: apply attached panel framing only to direct children of `.tabs-attached`.
 - `.tabs-attached`: square off the selected tab's border ends at the panel junction.
 - `neo-brutalist`: preserve contrast on solid card-link hover and contextual ink on transparent buttons.

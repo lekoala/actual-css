@@ -91,4 +91,6 @@ small {
 ::selection {
   background: var(--selection-bg, var(--primary));
   color: var(--selection-fg, var(--primary-fg));
+  /* SVG text paints with fill, including labels with an explicit fill. */
+  fill: currentColor;
 }
