@@ -4,7 +4,7 @@
 
 Use an `<ol>` because the order is part of the meaning. Add `.step-complete` to
 finished steps and `aria-current="step"` to the current one. Unmarked steps are
-upcoming.
+upcoming. For a history of past events, use [Timeline](timeline.md).
 
 Orientation and labels are two independent choices.
 

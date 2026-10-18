@@ -16,6 +16,8 @@
 - `--table-header-bg` and `--table-header-fg`: theme hooks for the `.table` header band, also read by the data grid template bridge.
 - `--accordion-marker-icon` and `--accordion-marker-open-rotate`: swap the accordion marker glyph and its open turn (plus to cross with `--icon-plus` and `45deg`).
 - `.badge > .avatar`: a leading avatar sized to the badge for person chips (mention, assignee, contributor).
+- `.timeline`: vertical history of dated events, with intent dots and an optional avatar or icon slot.
+- Dashboard and Admini demos: activity feeds use `.timeline` instead of local feed CSS.
 
 ### Fixed
 - `.tab-panel`: apply attached panel framing only to direct children of `.tabs-attached`.

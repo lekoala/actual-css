@@ -218,35 +218,6 @@
 }
 
 
-.admini-feed {
-  display: grid;
-  gap: var(--space-30);
-}
-
-.admini-feed-item {
-  --gap: var(--space-30);
-}
-
-/* The feed text is one tight unit (title over description): a .stack set
-   tighter than the media gap. */
-.admini-feed-item > div {
-  gap: var(--space-10);
-}
-
-.admini-feed-item + .admini-feed-item {
-  padding-block-start: var(--space-30);
-  border-block-start: var(--border-width) solid var(--border);
-}
-
-.admini-dot {
-  inline-size: 0.625rem;
-  block-size: 0.625rem;
-  margin-block-start: 0.45rem;
-  border-radius: var(--radius);
-  background: var(--intent, var(--primary));
-  box-shadow: 0 0 0 0.25rem var(--surface-subtle);
-}
-
 .admini-account {
   display: grid;
   gap: var(--space-10);

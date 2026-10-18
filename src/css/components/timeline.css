@@ -1,0 +1,160 @@
+/*
+ * Timeline — a vertical history of dated events: activity feed, audit log,
+ * order tracking.
+ *
+ * Docs: docs/pages/components/timeline.md
+ *
+ *   <ol class="timeline">
+ *     <li class="success">
+ *       <time datetime="2026-10-18T09:30">Today, 09:30</time>
+ *       Appointment confirmed
+ *     </li>
+ *   </ol>
+ *
+ * Each event draws a dot on a rail; an intent class on the <li> colors it. An
+ * .avatar or an aria-hidden icon written first in the <li> takes the dot's
+ * place. A direct <time> child is the event's dateline. The content stays in
+ * block flow, so a sentence mixing text and links is never split into items.
+ *
+ * Progress through a process is .steps, not a timeline.
+ *
+ * Public hooks:
+ * --timeline-dot-size
+ * --timeline-slot-size
+ * --timeline-gap
+ * --timeline-inline-gap
+ * --timeline-line-size
+ *
+ * Internal:
+ * --timeline-rail-size
+ * --timeline-line-box
+ */
+
+/* Registered so the event's line box computes to a length on the <li> and
+   inherits as one: an avatar slot sets its own font size and line-height, and
+   an unregistered em would resolve against those. Unregistered, the dot still
+   lines up and the slot drifts by the font difference.
+
+   The initial value must be computationally independent: a rem or em there
+   invalidates the whole @property rule, silently. Every <li> sets its own. */
+@property --timeline-line-box {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+.timeline {
+  --timeline-dot-size: 0.625rem;
+  --timeline-slot-size: 1.75rem;
+  --timeline-gap: var(--density-space);
+  --timeline-inline-gap: var(--space-30);
+  --timeline-line-size: var(--border-width);
+  --timeline-rail-size: var(--timeline-dot-size);
+
+  display: grid;
+  /* A long URL or token in an event wraps instead of widening the list. */
+  grid-template-columns: minmax(0, 1fr);
+  /* A list stretched by its parent (a grid cell, an equal-height card) keeps
+     its rhythm instead of spreading the events over the extra height. */
+  align-content: start;
+  gap: var(--timeline-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* One slotted event widens the rail of the whole list, so every line and every
+   text column stays aligned when dots and avatars mix. Without :has() the rail
+   keeps the dot's width and a slot shrinks to it: the degraded list stays
+   aligned and readable, with a dot-sized avatar. */
+.timeline:has(> li > :is(.avatar, [aria-hidden="true"]):first-child) {
+  --timeline-rail-size: var(--timeline-slot-size);
+}
+
+/* The line box is a length, not the unitless ratio: a smaller <time> opening
+   the event keeps the same first line as text would, so the marker centred on
+   it lines up whichever element comes first. */
+.timeline > li {
+  --timeline-line-box: calc(var(--line-height) * 1em);
+
+  position: relative;
+  padding-inline-start: calc(var(--timeline-rail-size) + var(--timeline-inline-gap));
+  line-height: var(--timeline-line-box);
+}
+
+/* The event owns no rhythm beyond its dateline: block children drop their own
+   margins, and an author who needs more spacing composes a .stack inside. */
+.timeline > li > * {
+  margin-block: 0;
+}
+
+.timeline > li > time {
+  display: block;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.timeline > li::before {
+  content: "";
+  position: absolute;
+  inset-block-start: calc((var(--timeline-line-box) - var(--timeline-dot-size)) / 2);
+  inset-inline-start: calc((var(--timeline-rail-size) - var(--timeline-dot-size)) / 2);
+  inline-size: var(--timeline-dot-size);
+  block-size: var(--timeline-dot-size);
+  border-radius: var(--radius-full);
+  background: var(--intent, var(--neutral));
+}
+
+/* Stated as an undo, not as `:not(:has(...))` on the dot rule: an engine
+   without :has() would drop that whole rule and lose every dot, where this way
+   it only keeps a dot under the slot. */
+.timeline > li:has(> :is(.avatar, [aria-hidden="true"]):first-child)::before {
+  content: none;
+}
+
+/* The segment clears each marker by half the rail, so it never shows through
+   a translucent avatar fill, and a dot in a list widened by a slot keeps the
+   slot's clearance. A border rather than a background: forced colors keep a
+   border and wipe a background. */
+.timeline > li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  inset-block-start: calc((var(--timeline-line-box) + var(--timeline-rail-size)) / 2);
+  inset-inline-start: calc((var(--timeline-rail-size) - var(--timeline-line-size)) / 2);
+  block-size: calc(100% + var(--timeline-gap) - var(--timeline-rail-size));
+  border-inline-start: var(--timeline-line-size) solid var(--border);
+}
+
+.timeline > li > :is(.avatar, [aria-hidden="true"]):first-child {
+  --avatar-size: var(--timeline-rail-size);
+
+  position: absolute;
+  inset-block-start: calc((var(--timeline-line-box) - var(--timeline-rail-size)) / 2);
+  inset-inline-start: 0;
+}
+
+/* An icon slot gets a disc of the avatar's size, so both slot kinds read as one
+   rail. The event's intent colors the glyph. */
+.timeline > li > [aria-hidden="true"]:first-child:not(.avatar) {
+  display: grid;
+  place-items: center;
+  inline-size: var(--timeline-rail-size);
+  block-size: var(--timeline-rail-size);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface-opaque);
+  color: var(--intent, var(--text-muted));
+  font-size: var(--font-size-sm);
+  line-height: 1;
+}
+
+.timeline > li > [aria-hidden="true"]:first-child:not(.avatar) > svg {
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+@media (forced-colors: active) {
+  .timeline > li::before {
+    background: CanvasText;
+  }
+}

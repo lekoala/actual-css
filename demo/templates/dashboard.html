@@ -149,25 +149,6 @@
       gap: var(--space-10);
     }
 
-    /* .media owns the dot/text columns; the feed keeps the divider rhythm. */
-    .dashboard-feed-item {
-      gap: var(--space-30);
-    }
-
-    .dashboard-feed-item + .dashboard-feed-item {
-      padding-block-start: var(--space-30);
-      border-block-start: var(--border-width) solid var(--border);
-    }
-
-    .dashboard-dot {
-      inline-size: 0.625rem;
-      block-size: 0.625rem;
-      margin-block-start: 0.45rem;
-      border-radius: var(--radius);
-      background: var(--intent, var(--primary));
-      box-shadow: 0 0 0 0.25rem var(--surface-subtle);
-    }
-
     .dashboard-template-note {
       padding-block: var(--space-40);
       border-block-start: var(--border-width) solid var(--border);
@@ -605,29 +586,20 @@
 
             <section class="card stack" id="activity">
               <h2 style="margin: 0;">Activity</h2>
-              <div class="stack">
-                <div class="media dashboard-feed-item">
-                  <span class="dashboard-dot success" aria-hidden="true"></span>
-                  <div>
-                    <strong>Helio Systems approved security terms.</strong>
-                    <p class="muted">Jana moved the account to commit.</p>
-                  </div>
-                </div>
-                <div class="media dashboard-feed-item">
-                  <span class="dashboard-dot warning" aria-hidden="true"></span>
-                  <div>
-                    <strong>Orchid Health flagged timeline risk.</strong>
-                    <p class="muted">Procurement needs executive approval.</p>
-                  </div>
-                </div>
-                <div class="media dashboard-feed-item">
-                  <span class="dashboard-dot primary" aria-hidden="true"></span>
-                  <div>
-                    <strong>Northstar renewal package sent.</strong>
-                    <p class="muted">Legal review is due Friday.</p>
-                  </div>
-                </div>
-              </div>
+              <ol class="timeline">
+                <li class="success">
+                  <strong>Helio Systems approved security terms.</strong>
+                  <p class="muted">Jana moved the account to commit.</p>
+                </li>
+                <li class="warning">
+                  <strong>Orchid Health flagged timeline risk.</strong>
+                  <p class="muted">Procurement needs executive approval.</p>
+                </li>
+                <li class="primary">
+                  <strong>Northstar renewal package sent.</strong>
+                  <p class="muted">Legal review is due Friday.</p>
+                </li>
+              </ol>
             </section>
 
             <section class="card stack" id="team">

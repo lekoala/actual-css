@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Timeline fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+    body { padding: 1rem; }
+    /* A parent stretching the list taller than its content. */
+    .stretch { display: grid; block-size: 40rem; }
+  </style>
+</head>
+<body>
+  <ol class="timeline" id="dots">
+    <li id="time-first"><time datetime="2026-10-18">Today</time>Appointment confirmed</li>
+    <li id="text-first"><a href="#">Ada Morgan</a> commented on <a href="#">Invoice #2041</a></li>
+    <li id="last"><time datetime="2026-10-15">October 15</time>Patient registered</li>
+  </ol>
+
+  <ol class="timeline" id="slots">
+    <li id="avatar"><span class="avatar"><abbr>AM</abbr></span><time datetime="2026-10-18">Today</time>Approved</li>
+    <li id="icon" class="success"><span aria-hidden="true">✓</span>Signed</li>
+    <li id="slot-dot">Created</li>
+  </ol>
+
+  <ol class="timeline" id="rtl" dir="rtl">
+    <li id="rtl-item">تم تأكيد الموعد</li>
+    <li>تم طلب الموعد</li>
+  </ol>
+
+  <div class="stretch">
+    <ol class="timeline" id="stretched">
+      <li>One</li>
+      <li>Two</li>
+    </ol>
+  </div>
+</body>
+</html>

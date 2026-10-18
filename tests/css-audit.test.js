@@ -473,10 +473,10 @@ test("badge decorative children consume the icon scale once", () => {
 
   expect(css).toMatch(/\.badge\s*\{[^}]*--badge-icon-size:\s*1em;/s);
   expect(css).toMatch(
-    /\.badge\s*>\s*:where\(svg, img, \[aria-hidden="true"\]:not\(\.dot\)\)\s*\{[^}]*font-size:\s*var\(--badge-icon-size\)/s,
+    /\.badge\s*>\s*:where\(svg, img, \[aria-hidden="true"\]:not\(\.dot, \.avatar\)\)\s*\{[^}]*font-size:\s*var\(--badge-icon-size\)/s,
   );
   expect(css).toMatch(
-    /\.badge\s*>\s*:where\(svg, img, \[aria-hidden="true"\]:not\(\.dot\)\)\s*\{[^}]*inline-size:\s*1em;\s*block-size:\s*1em;/s,
+    /\.badge\s*>\s*:where\(svg, img, \[aria-hidden="true"\]:not\(\.dot, \.avatar\)\)\s*\{[^}]*inline-size:\s*1em;\s*block-size:\s*1em;/s,
   );
 });
 

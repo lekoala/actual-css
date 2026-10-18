@@ -783,6 +783,34 @@
     ]
   },
   {
+    "name": "timeline",
+    "source": "src/css/components/timeline.css",
+    "cssImport": "actual-css/css/components/timeline",
+    "classes": [
+      "timeline"
+    ],
+    "publicHooks": [
+      "--timeline-dot-size",
+      "--timeline-slot-size",
+      "--timeline-gap",
+      "--timeline-inline-gap",
+      "--timeline-line-size"
+    ],
+    "internalHooks": [
+      "--timeline-rail-size",
+      "--timeline-line-box"
+    ],
+    "states": [
+      "aria-hidden"
+    ],
+    "pseudoElements": {
+      ".timeline li": [
+        "::after",
+        "::before"
+      ]
+    }
+  },
+  {
     "name": "tooltip",
     "source": "src/css/components/tooltip.css",
     "cssImport": "actual-css/css/components/tooltip",
