@@ -23,16 +23,10 @@
 
 ### Fixed
 - `::selection`: SVG text uses the theme's selection foreground, keeping Pele diagram labels legible when selected.
-- `.tab-panel`: apply attached panel framing only to direct children of `.tabs-attached`.
-- `.tabs-attached`: square off the selected tab's border ends at the panel junction.
-- `neo-brutalist`: preserve contrast on solid card-link hover and contextual ink on transparent buttons.
-- `neo-brutalist`: restore joined-button hover feedback, flatten disabled groups and text actions, and fit group shadows to their controls.
-- `neo-brutalist`: honour `--choice-card-border` and application overrides of accordion marker hooks.
 - `.card.solid`: bare and `.prose` links follow the card's text color at rest, hover and keyboard focus, including when a theme sets `--link`.
 - `.skeleton`: `--skeleton-track` and `--skeleton-highlight` are translucent ink tints, so a placeholder keeps its edges on cards, soft cards and dark surfaces.
 - `.choice-card.chip`: `--state-selected-text` takes priority over explicit intents to keep checks legible on light selected fills.
 - `.alert` with `.alert-icon`: an icon taller than one line, or an alert stretched by an equal-height grid, no longer opens a gap between the title and the body.
-- `.badge`: an `aria-hidden` `.avatar` child no longer risks the 1em decorative-icon sizing.
 
 ### Removed
 - The `bootstrap-v6` demo theme: the core focus line and field treatment it demonstrated are now the defaults.

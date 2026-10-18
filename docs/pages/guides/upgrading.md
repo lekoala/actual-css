@@ -7,6 +7,69 @@ sections in order when skipping a release.
 
 **Related terms:** migration, breaking changes, update, version.
 
+## 0.14 to 0.15
+
+No class or hook is removed: markup and application CSS keep working.
+
+### Rendering changes without an edit
+
+- `.badge > .close` is a disc inside the pill instead of overhanging its end;
+  a transparent hit area keeps the 24px target. Check CSS that overrides it or
+  sets `--close-size` on a badge.
+- `.card.solid` links take the card's text color at rest, hover and focus,
+  even when a theme sets `--link`.
+- `.skeleton` tracks and highlights are translucent ink tints.
+- A selected `.choice-card.chip` paints its check with `--state-selected-text`
+  even when it carries an intent class.
+- The `bootstrap-v6` demo theme is gone. Demo themes are not part of the
+  package, so this only affects a copy of it: keep the copy, or drop it since
+  the core focus line and fields now match it.
+- The combobox, date picker and data grid recipes target
+  `@lekoala/combobox` 0.7.1, `@lekoala/date-picker` 0.5.1 and
+  `data-grid-component` 3.7.0. Compare a copied bridge with the current one in
+  [Combobox](../forms/combobox.md) and [Date picker](../forms/date-picker.md).
+
+## 0.13 to 0.14
+
+### Soft border mix
+
+`--soft-border-mix` has no default. Search application CSS for
+`var(--soft-border-mix)` without a fallback and give it the one its treatment
+needs: `var(--soft-border-mix, 100%)` beside the translucent soft tint,
+`var(--soft-border-mix, 65%)` beside the opaque `.soft` mix. A theme that sets the property still drives both treatments.
+
+### Selected ink in themes
+
+`--state-selected-text` colors selected ink on a regular surface (current
+`.nav-link`, selected `.tab`, current step) and falls back to
+`--state-selected`. A theme whose primary is too light to read as text sets it
+to a darker ink; `actual-css contrast` reports the pair.
+
+### Placement values
+
+An unknown `data-tooltip-placement` or `data-flyout-placement` value logs a
+console warning and falls back to the default placement. Replace the values
+the console names.
+
+### Building from a clone
+
+`dist/`, `site/` and `demo/assets/` are no longer committed: run
+`bun run build:all` after cloning. npm and GitHub release downloads are
+unaffected.
+
+### Rendering changes without an edit
+
+- `.badge`, `.alert` and `.btn.soft` paint a translucent intent tint with no
+  rim; the shared `.soft` on `.card`, `.navbar`, `.app-nav` and `.chat-bubble`
+  stays opaque. Check custom themes on `--surface`, `--surface-raised` and
+  `--surface-subtle`.
+- `.alert.admonition` follows `.solid`, `.surface` and `.outline`; a solid
+  admonition frames its body with `--border`.
+- A `.list-item` moves its trailing region to a new line instead of breaking
+  the title mid-word.
+- `.topbar` and `.form-actions.sticky` turn opaque under
+  `prefers-reduced-transparency: reduce`.
+
 ## 0.12 to 0.13
 
 ### Layout hooks stop at each layout
