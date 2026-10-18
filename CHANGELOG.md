@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.15.0] - 2026-10-18
 ### Added
 - `.tabs-attached` and `.tab-panel`: folder-style horizontal tabs joined to their panel, with shared surface, padding and shadow hooks.
 - `--control-default-bg`: inherited resting field fill shared with external widget bridges.
