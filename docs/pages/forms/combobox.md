@@ -35,8 +35,14 @@ compatibility layer — a handful of `--cb-*` assignments and shared mix tokens.
 
 `chip-class` hands the chip skin to the host classes, so badge variants and
 theme rules on `.badge` apply; the widget keeps layout, removal and keyboard
-focus. With a bundler, set it once with `Combobox.setDefaultChipClass("badge primary")`;
-the CDN build exposes no global, so set the attribute per element.
+focus. Set the default before creating comboboxes, after loading the CDN script:
+
+```js
+customElements.get("combo-box").setDefaultChipClass("badge primary");
+```
+
+With a bundler, use `Combobox.setDefaultChipClass("badge primary")`.
+The `chip-class` attribute overrides the default for one element.
 
 The card in the template documents the full token map of this recipe.
 

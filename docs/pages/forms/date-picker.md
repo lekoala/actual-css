@@ -85,11 +85,21 @@ so they render as real Actual controls:
 picker.controlClasses = { month: "select sm", year: "input sm", nav: "btn outline sm icon-only" };
 ```
 
-With a bundler, `setDefaultControlClasses()` sets them once for every picker.
-The CDN build exposes neither that function nor an attribute, and drops a
-property set before the element is defined: assign it after
-`customElements.whenDefined("date-picker")`. Day cells and the field trigger
-stay on the `--dp-*` tokens.
+Set the defaults once for every picker and inline calendar. With the CDN script,
+call the registered constructor after the deferred script has loaded:
+
+```js
+customElements.get("date-picker").setDefaultControlClasses({
+  month: "select sm",
+  year: "input sm",
+  nav: "btn outline sm icon-only",
+});
+```
+
+With a bundler, import `setDefaultControlClasses` from `@lekoala/date-picker`.
+An instance's `controlClasses` overrides only the supplied roles; omitted roles
+follow the current defaults. Day cells and the field trigger stay on the
+`--dp-*` tokens.
 
 As with the combobox, the bridge stays in docs/demo — it is a recipe, not package
 API, and pins no widget version.

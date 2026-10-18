@@ -8,9 +8,12 @@
   <meta name="description" content="@lekoala/combobox loaded from CDN and themed with Actual CSS tokens: searchable selects, removable chips, autocomplete, states and the theme presets follow the framework.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.0/dist/combobox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.1/dist/combobox.css">
   <script src="../scripts/theme-picker.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.0/dist/combobox.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.1/dist/combobox.js"></script>
+  <script>
+    customElements.get("combo-box").setDefaultChipClass("badge primary");
+  </script>
   <style>
     .page {
       --center-size: 60rem;
@@ -98,8 +101,8 @@
       border-color: var(--form-invalid-border, var(--control-hover-border, var(--text-subtle)));
     }
 
-    /* 4. Chips — no CSS: chip-class="badge primary" makes each chip a real
-          .badge, so badge theme rules reach it. */
+    /* 4. Chips — the global chip class makes each chip a real .badge,
+          so badge theme rules reach it without extra CSS. */
 
     /* 5. Picker — the popover renders in the top layer, appended to
           <body>, so its tokens are declared on .cb-popover directly. */
@@ -178,14 +181,14 @@
           <hgroup>
             <h2 style="margin: 0;">Skills — multiple with removable badges</h2>
             <p class="muted">
-              <code>chip-class="badge primary"</code> renders each chip as a real
+              <code>setDefaultChipClass("badge primary")</code> renders each chip as a real
               <code>.badge</code>. Focus a chip and press Delete/Backspace to remove it.
             </p>
           </hgroup>
         </header>
         <label class="field actual-combobox">
           <span class="field-label">Skills</span>
-          <combo-box chip-class="badge primary" placeholder="Search or add a skill…">
+          <combo-box placeholder="Search or add a skill…">
             <select id="skills" name="skills[]" multiple>
               <option value="design" selected>Design</option>
               <option value="css" selected>CSS</option>
@@ -308,7 +311,7 @@
         </header>
         <label class="field actual-combobox">
           <span class="field-label">Fruit</span>
-          <combo-box chip-class="badge primary" placeholder="Pick some…">
+          <combo-box placeholder="Pick some…">
             <select id="fruit" name="fruit[]" multiple>
               <option value="2">Banana</option>
               <option value="2">Banana</option>
@@ -334,7 +337,7 @@
         <form id="states-form" class="grid grid-2 items-start">
           <div class="field actual-combobox">
             <span class="field-label">Normal</span>
-            <combo-box chip-class="badge primary" placeholder="Pick…">
+            <combo-box placeholder="Pick…">
               <select id="normal" name="normal[]" multiple>
                 <option value="a">Alpha</option>
                 <option value="b" selected>Beta</option>
@@ -345,7 +348,7 @@
 
           <div class="field actual-combobox">
             <span class="field-label">Disabled</span>
-            <combo-box chip-class="badge primary" placeholder="Unavailable…">
+            <combo-box placeholder="Unavailable…">
               <select id="disabled" name="disabled[]" multiple disabled>
                 <option value="d" selected>Delta</option>
                 <option value="e">Epsilon</option>
@@ -448,8 +451,8 @@
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
       <span>
-        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.7.0/dist/combobox.css</code> and
-        <code>@lekoala/combobox@0.7.0/dist/combobox.js</code>.
+        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.7.1/dist/combobox.css</code> and
+        <code>@lekoala/combobox@0.7.1/dist/combobox.js</code>.
       </span>
       <span>Combobox enhances native <code>&lt;input&gt;</code>/<code>&lt;select&gt;</code> — the source owns the form value.</span>
     </footer>
@@ -458,8 +461,7 @@
   <script>
     (() => {
       const stage = document.getElementById("support-status");
-      customElements.whenDefined("combo-box").then(async () => {
-        const first = await document.querySelector("combo-box").whenReady();
+      document.querySelector("combo-box").whenReady().then((first) => {
         stage.textContent =
           first.mode === "enhanced"
             ? "Enhanced mode: manual Popover + CSS Anchor Positioning, skinned through Actual CSS tokens."

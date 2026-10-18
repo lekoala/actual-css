@@ -8,11 +8,14 @@
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.5.0/dist/date-picker.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.0/dist/combobox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.5.1/dist/date-picker.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.1/dist/combobox.css">
   <script src="../scripts/theme-picker.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.5.0/dist/date-picker.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.0/dist/combobox.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.5.1/dist/date-picker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.7.1/dist/combobox.js"></script>
+  <script>
+    customElements.get("combo-box").setDefaultChipClass("badge primary");
+  </script>
   <style>
     /* The fonts belong to the page, not to the theme: switch the theme and
        the type stays. --font-sans is the one framework token they touch; the
@@ -588,7 +591,7 @@
 
         <label class="field actual-combobox">
           <span class="field-label">Finishing</span>
-          <combo-box chip-class="badge primary" placeholder="Add a finish…">
+          <combo-box placeholder="Add a finish…">
             <select name="finishing[]" multiple>
               <option value="fold" selected>Fold in half</option>
               <option value="staple" selected>Saddle staple</option>
@@ -647,12 +650,12 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script>
-    // The CDN build exposes no setDefaultControlClasses, and controlClasses is
-    // not upgraded from a pre-definition property: assign it once defined.
-    customElements.whenDefined("date-picker").then(() => {
-      for (const picker of document.querySelectorAll("date-picker")) {
-        picker.controlClasses = { month: "select sm", year: "input sm", nav: "btn outline sm icon-only" };
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      customElements.get("date-picker").setDefaultControlClasses({
+        month: "select sm",
+        year: "input sm",
+        nav: "btn outline sm icon-only",
+      });
     });
   </script>
 </body>

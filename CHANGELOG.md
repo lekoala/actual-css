@@ -39,12 +39,12 @@
 ### Changed
 - `.badge > .close`: a trailing disc inside the pill, mirroring a leading `.avatar`; a transparent hit area keeps the 24px target.
 - `edge` theme: the default button drops its hover overlay through `--btn-hover-overlay` instead of `box-shadow: none`.
-- Date picker docs and `date-fields.html`: `@lekoala/date-picker` 0.5.0; focus maps through `--dp-focus` / `--dp-focus-width` instead of two override rules.
-- Date picker docs and `date-fields.html`: header controls render as `.select`, `.input` and `.btn` through `controlClasses`.
-- Combobox docs and `combobox.html`: `@lekoala/combobox` 0.7.0; the control reads `--border-width`, `--control-shadow` and `--control-hover-border` like `.input`.
-- Combobox docs and `combobox.html`: chips are real `.badge primary` through `chip-class`, replacing the re-derived `.cb-chip` rule.
-- `data-grid.html`: `--dg-accent` reads `--link` before `--primary`, so the sort arrow stays legible on a theme with a light primary.
-- `contrast-contexts.html`: combobox and date picker bridges follow the current recipes (0.7.0 / 0.5.0).
+- Date picker docs and demos: `@lekoala/date-picker` 0.5.1; focus maps through `--dp-focus` / `--dp-focus-width` instead of two override rules.
+- Date picker docs and demos: `setDefaultControlClasses()` gives every calendar header real `.select`, `.input` and `.btn` controls.
+- Combobox docs and demos: `@lekoala/combobox` 0.7.1; the control reads `--border-width`, `--control-shadow` and `--control-hover-border` like `.input`.
+- Combobox docs and demos: `setDefaultChipClass()` gives every chip the `.badge primary` skin without per-element attributes.
+- `data-grid.html`: `data-grid-component` 3.7.0 with `themes/actual.css`, global Actual control classes and responsive column disclosure.
+- `contrast-contexts.html` and `neo-brutalist.html`: combobox and date picker bridges follow the current recipes (0.7.1 / 0.5.1).
 - `@lekoala/floating` 0.3.1: `repositionAt()` throws on an unknown placement outside a browser too.
 
 ## [0.14.1] - 2026-10-14

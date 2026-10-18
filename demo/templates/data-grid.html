@@ -8,7 +8,8 @@
   <meta name="description" content="data-grid-component loaded from CDN, themed with Actual CSS tokens. Declarative table and JavaScript API examples.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.3.0/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.7.0/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.7.0/themes/actual.css">
   <script src="../scripts/theme-picker.js"></script>
   <style>
     .page {
@@ -18,42 +19,6 @@
 
     .page-header {
       align-items: flex-start;
-    }
-
-    /* Theme bridge: map the grid's --dg-* tokens onto Actual CSS design
-       tokens so the grid follows light/dark mode, data-theme islands and the
-       theme presets for free. */
-    data-grid {
-      --dg-bg: var(--surface-raised);
-      --dg-color: var(--text);
-      --dg-muted-color: var(--text-muted);
-      --dg-border-color: var(--border);
-
-      /* The accent is also ink (sort arrow, active labels): a theme whose
-         primary is too light for text routes its ink through --link. */
-      --dg-accent: var(--link, var(--primary));
-      --dg-accent-soft: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--primary));
-      --dg-focus-ring: var(--focus);
-
-      /* Same header band as .table when a theme sets one. */
-      --dg-header-bg: var(--table-header-bg, var(--surface-subtle));
-      --dg-header-color: var(--table-header-fg, var(--text));
-      --dg-filter-bg: var(--surface);
-
-      --dg-row-hover-bg: var(--hover-overlay);
-      --dg-row-selected-bg: color-mix(in oklab, var(--surface) calc(var(--soft-bg-mix) - 6%), var(--primary));
-      --dg-row-selected-hover-bg: color-mix(in oklab, var(--surface) calc(var(--soft-bg-mix) - 12%), var(--primary));
-      --dg-row-border-color: var(--border);
-
-      --dg-control-bg: var(--surface-raised);
-      --dg-control-color: var(--text);
-      --dg-control-border-color: var(--border);
-
-      --dg-danger-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--danger));
-      --dg-danger-color: var(--danger);
-      --dg-danger-border-color: color-mix(in oklab, var(--surface) var(--soft-border-mix, 65%), var(--danger));
-
-      --dg-radius: var(--radius);
     }
 
     /* The card heading is the visible label; keep the native caption as the
@@ -119,7 +84,7 @@
         </hgroup>
       </header>
 
-      <data-grid id="invoices-grid" sortable filterable searchable selectable row-actions page-size="10"
+      <data-grid id="invoices-grid" sortable filterable searchable selectable responsive row-actions page-size="10"
           page-sizes="10,25,50" no-data="No invoices match your query.">
         <table>
           <caption>Invoices</caption>
@@ -380,15 +345,21 @@
     </section>
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
-      <span>Loaded from jsDelivr: <code>data-grid-component@3.3.0/dist/data-grid.min.css</code> and
-        <code>data-grid-component@3.3.0/dist/data-grid.min.js</code>.</span>
+      <span>Loaded from jsDelivr: <code>data-grid-component@3.7.0</code>, with
+        <code>themes/actual.css</code> and Actual control classes.</span>
     </footer>
   </main>
 
-  <script type="module" src="https://cdn.jsdelivr.net/npm/data-grid-component@3.3.0/dist/data-grid.min.js"></script>
   <script src="../../dist/actual.full.js"></script>
   <script type="module">
-    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.3.0/dist/data-grid.min.js";
+    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.7.0/dist/data-grid.min.js";
+
+    DataGrid.setDefaultControlClasses({
+      button: "btn outline sm",
+      action: "btn outline sm",
+      input: "input sm",
+      select: "select sm",
+    });
 
     const invoicesGrid = document.getElementById("invoices-grid");
     const invoicesStatus = document.getElementById("invoices-status");
@@ -470,6 +441,7 @@
       selectable: true,
       resizable: true,
       reorder: true,
+      responsive: true,
       density: "compact",
       pageSize: 10,
       pageSizes: [10, 25, 50],
