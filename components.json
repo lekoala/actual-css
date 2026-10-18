@@ -126,7 +126,8 @@
       "--badge-default-fg",
       "--badge-default-border",
       "--badge-default-hover-bg",
-      "--badge-avatar-inset",
+      "--badge-slot-inset",
+      "--badge-slot-size",
       "--badge-bg",
       "--badge-fg",
       "--badge-border"
@@ -135,7 +136,12 @@
       "aria-disabled",
       "aria-hidden",
       "disabled"
-    ]
+    ],
+    "pseudoElements": {
+      ".close": [
+        "::after"
+      ]
+    }
   },
   {
     "name": "bleed",

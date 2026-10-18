@@ -1,12 +1,11 @@
 /*
  * Real-browser badge dismiss target contract, driven over Bun.WebView.
  *
- * WCAG 2.2 2.5.8 floors pointer targets at 24 CSS px. The badge's dismiss
- * button uses a 24px literal floor on top of --badge-size, so a local size or
- * a thematic override below 24px (.sm = 20px, or a 17px override) can no
- * longer shrink the target — while the negative margins keep the badge itself
- * visually compact. At and above the floor (default 24px, .lg 30px) the floor
- * is a no-op and badge/button keep their normal relationship.
+ * WCAG 2.2 2.5.8 floors pointer targets at 24 CSS px. The visible .close is a
+ * disc inside the pill, the avatar's mirror, so it is smaller than 24px on the
+ * default and .sm badges. The target is the hit area, not the paint: a
+ * transparent pseudo-element extends it to the floor, which only hit testing
+ * can see.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -17,23 +16,32 @@ const TIMEOUT = 60_000;
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
-it("badge dismiss targets never fall below 24x24 while the badge stays compact", async () => {
+it("the dismiss disc sits inside the pill while its hit target keeps 24x24", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       const result = await view.evaluate(`(() => {
-        const rect = (id) => {
-          const el = document.getElementById(id);
-          const r = el.getBoundingClientRect();
-          return { w: r.width, h: r.height };
+        const measure = (id) => {
+          const badge = document.getElementById(id).getBoundingClientRect();
+          const button = document.querySelector("#" + id + " > button");
+          const disc = button.getBoundingClientRect();
+          const cx = disc.left + disc.width / 2;
+          const cy = disc.top + disc.height / 2;
+          // Just inside the corners of a 24px square centred on the disc.
+          const reach = 11.5;
+          const corners = [[-1, -1], [1, -1], [-1, 1], [1, 1]];
+          return {
+            badge: badge.height,
+            disc: disc.width,
+            top: disc.top - badge.top,
+            bottom: badge.bottom - disc.bottom,
+            end: badge.right - disc.right,
+            hits: corners.every(([dx, dy]) => {
+              const hit = document.elementFromPoint(cx + dx * reach, cy + dy * reach);
+              return hit === button;
+            }),
+          };
         };
-        const measure = (id) => ({
-          badge: rect(id),
-          button: (() => {
-            const r = document.querySelector("#" + id + " > button").getBoundingClientRect();
-            return { w: r.width, h: r.height };
-          })(),
-        });
         return {
           sm: measure("sm"),
           def: measure("default"),
@@ -42,24 +50,18 @@ it("badge dismiss targets never fall below 24x24 while the badge stays compact",
         };
       })()`);
 
-      // The floor holds the target at 24x24 whatever the density…
       for (const key of ["sm", "def", "lg", "custom"]) {
-        expect(result[key].button.w).toBeGreaterThanOrEqual(24);
-        expect(result[key].button.h).toBeGreaterThanOrEqual(24);
+        const chip = result[key];
+        // The disc never inflates the pill and keeps one inset on its edges…
+        expect(chip.disc).toBeLessThan(chip.badge);
+        expect(Math.abs(chip.top - chip.bottom)).toBeLessThanOrEqual(0.5);
+        expect(Math.abs(chip.end - chip.top)).toBeLessThanOrEqual(0.5);
+        // …and the hit area still covers the 24px floor around it.
+        expect(chip.hits).toBe(true);
       }
-
-      // …without inflating the badge under the floor.
-      expect(result.sm.badge.h).toBeLessThan(24);
-      expect(result.sm.badge.h).toBeLessThan(result.sm.button.h);
-      expect(result.custom.badge.h).toBeLessThan(24);
-      expect(result.custom.badge.h).toBeLessThan(result.custom.button.h);
-
-      // At and above the floor, the normal geometry is preserved: badge and
-      // button track each other.
-      expect(Math.abs(result.def.badge.h - result.def.button.h)).toBeLessThanOrEqual(1);
-      expect(result.def.button.h).toBeGreaterThanOrEqual(24);
-      expect(Math.abs(result.lg.badge.h - result.lg.button.h)).toBeLessThanOrEqual(1);
-      expect(result.lg.button.h).toBeGreaterThanOrEqual(30);
+      // A small badge has a small disc: only the hit area meets the floor.
+      expect(result.sm.disc).toBeLessThan(24);
+      expect(result.sm.badge).toBeLessThan(24);
     },
     { artifactName: "badge-target" },
   );

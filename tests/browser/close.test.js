@@ -4,8 +4,8 @@
  * One control, placed by its container: the dialog surfaces pin it to their
  * corner only at the documented positions, so a .close inside content (an
  * alert in a modal body) keeps its container's geometry; alert and badge size
- * it through the hooks they declare, and the badge never drops the target
- * below 24px.
+ * it through the hooks they declare, and the badge never drops the hit target
+ * below 24px, even when its visible disc is smaller.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -32,7 +32,9 @@ it("dialog corners pin the close, content keeps its own, containers size it", as
           drawerCorner: style("#drawer .close").position,
           nested: style("#modal .alert .close").position,
           nestedSize: style("#modal .alert .close").inlineSize,
-          badgeTarget: box("#badge .close"),
+          // The badge's hit area is its transparent ::after, not the disc.
+          badgeTarget: Math.round(parseFloat(getComputedStyle(document.querySelector("#badge .close"), "::after").width)),
+          badgeDisc: box("#badge .close"),
           titleClearsClose: titleRect.right < closeRect.left,
           chromeCorner: style("#chrome > header > .close").position,
           chromeReserve: style("#chrome > header").paddingInlineEnd,
@@ -46,6 +48,7 @@ it("dialog corners pin the close, content keeps its own, containers size it", as
       expect(result.nested).toBe("static");
       expect(result.nestedSize).toBe("28px");
       expect(result.badgeTarget).toBeGreaterThanOrEqual(24);
+      expect(result.badgeDisc).toBeLessThan(24);
       expect(result.titleClearsClose).toBe(true);
       // close-size (2.375rem) + space-20 + space-30, above the modal pad.
       expect(result.chromeCorner).toBe("absolute");

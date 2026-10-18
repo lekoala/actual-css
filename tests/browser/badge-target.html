@@ -8,19 +8,17 @@
   <style>* { transition-duration: 0s !important; }</style>
 </head>
 <body>
-  <!-- .sm sets --badge-size to 1.25rem (20px); the 24px target floor
-       must keep the button at 24x24 while the badge stays visually compact. -->
+  <!-- .sm (20px): a small disc, a 24px hit area around it. -->
   <span class="badge primary soft sm" id="sm"><i aria-hidden="true"></i>Design <button class="close" type="button" aria-label="Remove Design"></button></span>
 
-  <!-- Default size: 1.5rem == 24px at the default root size, so badge and
-       button measure the same and the floor must not change the geometry. -->
+  <!-- Default (24px): the disc is inset, so its hit area still extends it. -->
   <span class="badge primary soft" id="default"><i aria-hidden="true"></i>Design <button class="close" type="button" aria-label="Remove Design"></button></span>
 
-  <!-- .lg: 1.875rem, above the floor on both badge and target. -->
+  <!-- .lg (30px): the disc alone meets the floor; the hit area adds nothing. -->
   <span class="badge primary soft lg" id="lg"><i aria-hidden="true"></i>Design <button class="close" type="button" aria-label="Remove Design"></button></span>
 
-  <!-- A thematic override under the floor (17px): the floor holds the target at
-       24px and still does not inflate the badge itself. -->
+  <!-- A thematic override (17px): the hit area holds the floor without
+       inflating the badge. -->
   <span class="badge primary soft" id="custom" style="--badge-size: 17px"><i aria-hidden="true"></i>Design <button class="close" type="button" aria-label="Remove Design"></button></span>
 
   <span class="compact"><span class="badge" id="compact"><i aria-hidden="true"></i>Compact</span></span>

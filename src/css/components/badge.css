@@ -20,7 +20,8 @@
  * --badge-default-fg
  * --badge-default-border
  * --badge-default-hover-bg
- * --badge-avatar-inset
+ * --badge-slot-inset
+ * --badge-slot-size
  * --badge-bg
  * --badge-fg
  * --badge-border
@@ -45,9 +46,13 @@
   --badge-font-size: var(--font-size-sm);
   --badge-icon-size: 1em;
   --badge-dot-size: 0.5rem;
+  /* A leading .avatar and a trailing .close are slots: a disc inside the pill
+     at the same inset from its block edges and its rounded end. */
+  --badge-slot-inset: calc(var(--badge-size) / 12);
+  --badge-slot-size: calc(var(--badge-size) - 2 * (var(--border-width) + var(--badge-slot-inset)));
   /* Declared on the badge, not the button, so an author can still set them
      on either. Same element as --badge-size, so .sm/.lg carry through. */
-  --close-size: max(var(--badge-size), 24px);
+  --close-size: var(--badge-slot-size);
   --close-icon-size: 0.875em;
   --badge-default-bg: var(--surface-subtle);
   --badge-default-fg: var(--intent, var(--text));
@@ -168,27 +173,33 @@
 }
 
 /* Person chip (mention, assignee, contributor) — a leading .avatar follows the
-   pill instead of its own scale, so the badge keeps its height. The same inset
-   on the block edges and the start edge keeps the circle concentric with the
-   pill's rounded end. */
+   pill instead of its own scale, so the badge keeps its height. */
 .badge > .avatar {
-  --badge-avatar-inset: calc(var(--badge-size) / 12);
-  --avatar-size: calc(var(--badge-size) - 2 * (var(--border-width) + var(--badge-avatar-inset)));
+  --avatar-size: var(--badge-slot-size);
   /* Initials scale from the label, not the diameter: a diameter ratio left
      them under 6px on .sm. em resolves against the badge's font size here. */
   --avatar-font-size: 0.7em;
-  margin-inline-start: calc(var(--badge-avatar-inset) - var(--badge-pad-x));
+  margin-inline-start: calc(var(--badge-slot-inset) - var(--badge-pad-x));
 }
 
-/* Removable tag — a .close (components/close.css) inside the pill. WCAG 2.5.8
-   floors pointer targets at 24 CSS px: density and local size may keep the
-   badge visually compact through the negative margins, but never shrink the
-   target below that literal floor. */
+/* Removable tag — a trailing .close (components/close.css), the avatar's
+   mirror: a fill or the hover wash stays a disc inside the pill. */
 .badge > .close {
-  margin-block: -0.25rem;
-  margin-inline-start: -0.15em;
-  margin-inline-end: -0.45em;
+  position: relative;
+  margin-inline-end: calc(var(--badge-slot-inset) - var(--badge-pad-x));
   border-radius: var(--radius-full);
+}
+
+/* WCAG 2.5.8 floors pointer targets at 24 CSS px. The disc is smaller on the
+   default and .sm badges, so a transparent pseudo-element — part of the
+   button's hit area — extends the target to the floor around it, past the pill
+   if need be, without painting anything there. */
+.badge > .close::after {
+  content: "";
+  position: absolute;
+  /* Square on purpose: nothing paints it, and a round one would miss the
+     corners of the 24px target. */
+  inset: min(0px, calc((var(--close-size) - 24px) / 2));
 }
 
 /* Hover recipes — sets --ui-hover-bg consumed by the hover rule below.

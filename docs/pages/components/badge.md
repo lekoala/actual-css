@@ -216,17 +216,22 @@ an interactive target driving its checkbox/radio, and a nested button would mix
 two interactive targets. A removable tag next to a selectable chip is a sibling
 (a widget tag or a `.badge` + `.close`), never a child of the label.
 
-Inside a badge the close follows the pill's size, keeps a 24px pointer target,
-and tucks into the padding.
+Put the close last. It mirrors a leading avatar: a disc inside the pill at the
+same inset, so a fill or the hover wash never leaves the pill. On small badges
+the disc is small; an invisible hit area keeps the pointer target at 24px.
 
 ```html demo
-<span class="badge primary soft">
+<span class="badge primary soft sm">
   Design
   <button class="close" type="button" aria-label="Remove Design"></button>
 </span>
 <span class="badge primary soft">
-  <button class="close" type="button" aria-label="Remove Design"></button>
   Design
+  <button class="close" type="button" aria-label="Remove Design"></button>
+</span>
+<span class="badge primary soft lg">
+  Design
+  <button class="close" type="button" aria-label="Remove Design"></button>
 </span>
 ```
 

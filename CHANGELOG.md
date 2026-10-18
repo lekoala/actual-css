@@ -35,6 +35,7 @@
 - The `bootstrap-v6` demo theme: the core focus line and field treatment it demonstrated are now the defaults.
 
 ### Changed
+- `.badge > .close`: a trailing disc inside the pill, mirroring a leading `.avatar`; a transparent hit area keeps the 24px target.
 - `edge` theme: the default button drops its hover overlay through `--btn-hover-overlay` instead of `box-shadow: none`.
 - Date picker docs and `date-fields.html`: `@lekoala/date-picker` 0.5.0; focus maps through `--dp-focus` / `--dp-focus-width` instead of two override rules.
 - Date picker docs and `date-fields.html`: header controls render as `.select`, `.input` and `.btn` through `controlClasses`.
