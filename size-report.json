@@ -1,12 +1,12 @@
 {
-  "totalRaw": 413480,
+  "totalRaw": 420481,
   "core": {
     "minified": 12460,
     "brotli": 2796
   },
   "full": {
-    "minified": 143855,
-    "brotli": 20305
+    "minified": 146955,
+    "brotli": 20702
   },
   "js": {
     "full": {
@@ -14,7 +14,7 @@
       "brotli": 18408
     }
   },
-  "fileCount": 116,
+  "fileCount": 117,
   "files": [
     {
       "file": "themes/neo-brutalist.css",
@@ -34,7 +34,7 @@
     },
     {
       "file": "components/tab.css",
-      "raw": 11197
+      "raw": 11214
     },
     {
       "file": "components/alert.css",
@@ -53,16 +53,16 @@
       "raw": 8783
     },
     {
+      "file": "components/badge.css",
+      "raw": 8763
+    },
+    {
       "file": "components/drawer.css",
       "raw": 8171
     },
     {
       "file": "forms/choice.css",
       "raw": 7741
-    },
-    {
-      "file": "components/badge.css",
-      "raw": 7405
     },
     {
       "file": "themes/material.css",
@@ -91,6 +91,10 @@
     {
       "file": "forms/range.css",
       "raw": 5632
+    },
+    {
+      "file": "components/timeline.css",
+      "raw": 5600
     },
     {
       "file": "typography/prose.css",
@@ -394,7 +398,7 @@
     },
     {
       "file": "components/index.css",
-      "raw": 1118
+      "raw": 1144
     },
     {
       "file": "components/scrollspy.css",

@@ -14,14 +14,21 @@ it("alert + close, badge + close, and card + bleed work as modular imports", asy
         return {
           alertDisplay: getComputedStyle(alert).display,
           badgeDisplay: getComputedStyle(badge).display,
-          closeSizes: close.map((el) => getComputedStyle(el).inlineSize),
+          // The pointer target, not the box: a badge's close is a smaller disc
+          // whose transparent ::after extends the target to 24px.
+          closeTargets: close.map((el) =>
+            Math.max(
+              parseFloat(getComputedStyle(el).inlineSize),
+              parseFloat(getComputedStyle(el, "::after").width) || 0,
+            ),
+          ),
           bleedWidth: Math.round(header.getBoundingClientRect().width),
           cardWidth: card.clientWidth,
         };
       })()`);
     expect(result.alertDisplay).toBe("grid");
     expect(result.badgeDisplay).toBe("inline-flex");
-    expect(result.closeSizes.every((size) => Number.parseFloat(size) >= 24)).toBe(true);
+    expect(result.closeTargets.every((size) => size >= 24)).toBe(true);
     expect(result.bleedWidth).toBe(result.cardWidth);
   });
 }, 60_000);

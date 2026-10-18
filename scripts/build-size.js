@@ -34,8 +34,8 @@ const DIST = join(ROOT, "dist");
  */
 const BUDGETS = {
   coreCssBrotli: 2900, // src/css/actual.css, minified in memory (current ~2697; typographic density: --font-width hooks + compact/spacious font-stretch)
-  fullCssBrotli: 20500, // actual.full.min.css, including attached tab panels
-  fullJsBrotli: 18500, // actual.full.js (current ~17416)
+  fullCssBrotli: 21000, // actual.full.min.css (current ~20702; attached tab panels, timeline, badge avatar)
+  fullJsBrotli: 18800, // actual.full.js (current ~18408)
 };
 
 async function collectCSS(root, base = "") {
