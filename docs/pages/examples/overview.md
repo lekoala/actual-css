@@ -64,6 +64,7 @@ extension points.
 - [Data grid](../../demo/templates/data-grid.html) - an external data grid component themed with Actual tokens (sort, filter, search, selection)
 - [Combobox](../../demo/templates/combobox.html) - an external combobox themed with Actual tokens (search, tags, autocomplete)
 - [Date fields](../../demo/templates/date-fields.html) - a native date input, a masked text field and an external date picker on Actual tokens, side by side
+- [File upload](../../demo/templates/file-upload.html) - the native file input, Dropzone rendering its file rows as Actual components, and FilePond on Actual tokens
 - [Diagrams](../../demo/templates/diagrams.html) - Mermaid timelines, Gantt charts and flowcharts drawn by Pele through a small web component, on Actual tokens
 
 ## Sites

@@ -87,6 +87,7 @@
         "controls",
         "combobox",
         "date-picker",
+        "file-upload",
         "rich-text",
         "labels",
         "floating-field",

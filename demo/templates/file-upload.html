@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>File upload - Actual CSS</title>
+  <meta name="description" content="The native .file input, Dropzone rendering its file rows as Actual components, and FilePond v5 themed with Actual CSS tokens.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <style>
+    .page {
+      --center-size: 60rem;
+      padding-block: var(--space-50) var(--space-60);
+    }
+
+    .page-cards {
+      gap: var(--space-50);
+    }
+
+    .page-note {
+      gap: var(--space-20) var(--space-30);
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .page-note code {
+      color: var(--text);
+    }
+
+    /* ================================================================== */
+    /* DROPZONE — the only application CSS                                 */
+    /*                                                                     */
+    /* Dropzone ships behaviour plus an optional stylesheet, not loaded    */
+    /* here: the rows are an Actual .list from previewTemplate, so the     */
+    /* drop target is the one surface left to draw.                        */
+    /* ================================================================== */
+    .upload-zone {
+      display: grid;
+      justify-items: center;
+      gap: var(--space-20);
+      padding: var(--space-50) var(--space-40);
+      border: var(--border-width) dashed var(--border-control);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Written by Dropzone while files hover the zone. */
+    .upload-zone.dz-drag-hover {
+      border-style: solid;
+      border-color: var(--state-selected);
+    }
+
+    /* ================================================================== */
+    /* THEME BRIDGE — the whole skin in one block                          */
+    /*                                                                     */
+    /* FilePond renders in a shadow root: the --default-* properties       */
+    /* inherit through it, so they are the whole public skin. Font and     */
+    /* line height already inherit from the page.                          */
+    /* ================================================================== */
+    file-pond {
+      --default-color: var(--text);
+      --default-background-color: var(--surface-subtle);
+      --default-accent-color: var(--primary);
+      --default-accent-color-text: var(--primary-fg);
+      --default-border: var(--border-width) solid var(--border-control);
+      --default-border-radius: var(--radius);
+      --default-padding: var(--space-40);
+      /* Not a documented hook: FilePond draws every focus-visible outline
+         from it, so mapping it gives the browse button, entry buttons and
+         dialog inputs the framework's focus line. Defaults to the platform
+         ring when a release renames it. */
+      --outline: var(--focus-ring-width) solid var(--focus);
+
+      /* The host is inline-block: a drop zone spans its field. */
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center stack page">
+    <header class="cluster items-start">
+      <hgroup>
+        <p class="overline">File input</p>
+        <h1>File upload × Actual CSS</h1>
+        <p class="muted">
+          The native file input with <code>.file</code>, then two uploaders: Dropzone
+          rendering its file rows as Actual components, and FilePond v5 themed
+          through its CSS custom properties. Switch themes and watch both follow.
+        </p>
+      </hgroup>
+
+      <div class="cluster" style="gap: var(--space-20);">
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+        <a class="btn neutral outline sm" href="https://docs.dropzone.dev/" target="_blank" rel="noopener">
+          Dropzone docs
+        </a>
+        <a class="btn neutral outline sm" href="https://v5.filepond.com/" target="_blank" rel="noopener">
+          FilePond docs
+        </a>
+      </div>
+    </header>
+
+    <div class="stack page-cards">
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>Native — the baseline</h2>
+            <p class="muted">
+              <code>.file</code> themes the picker button and keeps everything else
+              native: the form submits the files, no JavaScript involved.
+            </p>
+          </hgroup>
+        </header>
+        <label class="field">
+          <span class="field-label">Profile picture</span>
+          <input class="file" type="file" name="avatar" accept="image/*" aria-describedby="avatar-help">
+          <span class="field-help" id="avatar-help">JPG, PNG or WebP — max 2 MB</span>
+        </label>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>Dropzone — an uploader composed from Actual</h2>
+            <p class="muted">
+              Dropzone owns drop, queue and requests; its <code>previewTemplate</code>
+              is plain markup, so each file is an Actual <code>.list-item</code> with
+              an <code>.avatar</code>, a <code>.progress</code> and a <code>.close</code>.
+              Without the script, the zone keeps a native <code>.file</code> input.
+              The upload is simulated: the page has no server.
+            </p>
+          </hgroup>
+        </header>
+        <div class="field">
+          <span class="field-label" id="documents-label">Documents</span>
+          <div class="upload-zone" id="documents" aria-labelledby="documents-label">
+            <p>Drop files here</p>
+            <button class="btn outline sm" type="button" hidden>Browse files</button>
+            <input class="file" type="file" name="documents" multiple accept="image/*,application/pdf" aria-labelledby="documents-label">
+          </div>
+          <ul class="list" id="documents-list" aria-labelledby="documents-label"></ul>
+          <span class="field-help">Images or PDFs, up to 5 MB each.</span>
+        </div>
+        <template id="documents-row">
+          <li class="list-item">
+            <span class="avatar"><span data-dz-ext aria-hidden="true"></span><img data-dz-thumbnail alt="" hidden></span>
+            <span class="list-item-content">
+              <strong class="list-item-title truncate" data-dz-name></strong>
+              <span class="list-item-text" data-dz-size></span>
+              <span class="list-item-text"><span class="danger intent-color" data-dz-errormessage></span></span>
+              <progress class="progress" value="0" max="100" data-dz-uploadprogress></progress>
+            </span>
+            <button class="close" type="button" aria-label="Remove file" data-dz-remove></button>
+          </li>
+        </template>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>FilePond — an uploader on Actual tokens</h2>
+            <p class="muted">
+              <code>&lt;file-pond&gt;</code> wraps the same <code>.file</code> input:
+              before the script loads, or without it, the native control stays. The
+              skin is the <code>--default-*</code> token map above; FilePond follows
+              the theme's <code>color-scheme</code> for everything else.
+            </p>
+          </hgroup>
+        </header>
+        <div class="field">
+          <label class="field-label" for="attachments">Attachments</label>
+          <file-pond>
+            <input class="file" id="attachments" type="file" name="attachments" multiple accept="image/*,application/pdf">
+          </file-pond>
+          <span class="field-help">Drop images or PDFs, or browse.</span>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <h2>Which one?</h2>
+        </header>
+        <ul>
+          <li>A form that posts a few files: native <code>.file</code>.</li>
+          <li>Drag and drop, previews and progress in your own markup: Dropzone with an Actual <code>previewTemplate</code>.</li>
+          <li>A complete uploader UI (media previews, image editing, camera, chunked uploads): FilePond on the token bridge.</li>
+        </ul>
+      </section>
+    </div>
+
+    <footer class="cluster items-baseline justify-content-space-between page-note">
+      <span>
+        Loaded from jsDelivr, pinned: <code>dropzone@6.3.5/dist/dropzone-min.js</code> and
+        <code>filepond@5.0.0-beta.74/cdn/index.js</code> — FilePond v5 is in beta.
+      </span>
+      <span>Nothing is sent: the upload endpoint is application configuration.</span>
+    </footer>
+  </main>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dropzone@6.3.5/dist/dropzone-min.js"></script>
+  <script>
+    {
+      const zone = document.getElementById("documents");
+      const browse = zone.querySelector("button");
+      // The native input is the no-JS fallback; Dropzone brings its own.
+      zone.querySelector("input").remove();
+      browse.hidden = false;
+
+      const dropzone = new Dropzone(zone, {
+        url: "/upload", // never requested: uploadFiles is simulated below
+        acceptedFiles: "image/*,application/pdf",
+        maxFilesize: 5,
+        // The size check counts MiB: binary sizes keep the row and the error in step.
+        filesizeBase: 1024,
+        dictFileTooBig: "File is too big ({{filesize}} MB). Max: {{maxFilesize}} MB.",
+        clickable: browse,
+        previewsContainer: "#documents-list",
+        previewTemplate: document.getElementById("documents-row").innerHTML,
+        thumbnailWidth: 80,
+        thumbnailHeight: 80,
+      });
+
+      dropzone.on("addedfile", (file) => {
+        const row = file.previewElement;
+        row.querySelector("[data-dz-ext]").textContent = file.name.split(".").pop().slice(0, 3).toUpperCase();
+        row.querySelector("[data-dz-remove]").setAttribute("aria-label", `Remove ${file.name}`);
+      });
+      dropzone.on("thumbnail", (file) => {
+        file.previewElement.querySelector("[data-dz-ext]").hidden = true;
+        file.previewElement.querySelector("[data-dz-thumbnail]").hidden = false;
+      });
+      // Intent classes, not Dropzone's own dz-success / dz-error styling.
+      dropzone.on("success", (file) => file.previewElement.querySelector("progress").classList.add("success"));
+      dropzone.on("error", (file) => file.previewElement.querySelector("progress").remove());
+
+      // Demo only: progress ticks instead of a request. A real page drops
+      // this override and points `url` at its endpoint.
+      dropzone.uploadFiles = (files) => {
+        for (const file of files) {
+          let progress = 0;
+          const timer = setInterval(() => {
+            progress = Math.min(100, progress + 10 + Math.random() * 20);
+            dropzone.emit("uploadprogress", file, progress, (file.size * progress) / 100);
+            if (progress < 100) return;
+            clearInterval(timer);
+            file.status = Dropzone.SUCCESS;
+            dropzone.emit("success", file, "ok");
+            dropzone.emit("complete", file);
+            dropzone.processQueue();
+          }, 200);
+        }
+      };
+    }
+
+    // Classic, not type="module": a module script is blocked on file://, and
+    // a dynamic import() is all the definition needs.
+    const FILEPOND = "https://cdn.jsdelivr.net/npm/filepond@5.0.0-beta.74/cdn";
+    Promise.all([import(`${FILEPOND}/index.js`), import(`${FILEPOND}/locales/en-gb.js`)]).then(
+      ([{ defineFilePond }, { locale }]) => defineFilePond({ locale }),
+    );
+  </script>
+</body>
+
+</html>

@@ -19,6 +19,7 @@
 - `.timeline`: vertical history of dated events, with intent dots and an optional avatar or icon slot.
 - Dashboard and Admini demos: activity feeds use `.timeline` instead of local feed CSS.
 - Diagrams docs and `diagrams.html`: Pele 1.6.0 on Actual tokens through a demo `<pele-diagram>` web component.
+- File upload docs and `file-upload.html`: Dropzone 6.3.5 rows composed from `.list`, `.progress` and `.close`, and FilePond 5.0.0-beta.74 on a `--default-*` token bridge.
 
 ### Fixed
 - `.tab-panel`: apply attached panel framing only to direct children of `.tabs-attached`.

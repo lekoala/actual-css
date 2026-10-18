@@ -33,3 +33,5 @@ The filename area stays muted.
   <span class="field-help" id="file-help">JPG, PNG or WebP — max 2 MB</span>
 </label>
 ```
+
+For drag and drop, previews and upload progress, see [File upload](file-upload.md).
