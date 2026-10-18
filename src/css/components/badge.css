@@ -20,6 +20,7 @@
  * --badge-default-fg
  * --badge-default-border
  * --badge-default-hover-bg
+ * --badge-avatar-inset
  * --badge-bg
  * --badge-fg
  * --badge-border
@@ -97,9 +98,11 @@
   --badge-dot-size: 0.625rem;
 }
 
-/* Decorative children follow the badge's optical size. Text and the .close
-   button retain their own boxes. */
-.badge > :where(svg, img, [aria-hidden="true"]:not(.dot)) {
+/* Decorative children follow the badge's optical size. Text, the .close
+   button and an .avatar retain their own boxes — an aria-hidden avatar would
+   otherwise tie with .avatar on specificity and shrink to an icon whenever
+   badge.css loads last. */
+.badge > :where(svg, img, [aria-hidden="true"]:not(.dot, .avatar)) {
   flex: none;
   /* The shared rule maps --badge-icon-size onto font-size. One em is therefore
      the requested optical size; reusing the em-valued hook here would apply its
@@ -162,6 +165,19 @@
    intent without repeating the intent class on it. */
 .badge > .dot {
   background-color: currentColor;
+}
+
+/* Person chip (mention, assignee, contributor) — a leading .avatar follows the
+   pill instead of its own scale, so the badge keeps its height. The same inset
+   on the block edges and the start edge keeps the circle concentric with the
+   pill's rounded end. */
+.badge > .avatar {
+  --badge-avatar-inset: calc(var(--badge-size) / 12);
+  --avatar-size: calc(var(--badge-size) - 2 * (var(--border-width) + var(--badge-avatar-inset)));
+  /* Initials scale from the label, not the diameter: a diameter ratio left
+     them under 6px on .sm. em resolves against the badge's font size here. */
+  --avatar-font-size: 0.7em;
+  margin-inline-start: calc(var(--badge-avatar-inset) - var(--badge-pad-x));
 }
 
 /* Removable tag — a .close (components/close.css) inside the pill. WCAG 2.5.8

@@ -6,6 +6,7 @@
 - Can be an inert element, link, or button when the link/button has a real destination or action.
 - Stack avatars with `.avatar-stack` for overlapping group displays.
 - A status dot attaches as an empty `.badge` child; the badge carries an `aria-label` so the dot conveys its meaning to assistive tech.
+- For a person chip (mention, assignee), put the avatar first in a `.badge`; see [Badge](badge.md#with-an-avatar).
 - Does not support shape modifiers as public API. Shape is theme-level.
 - Sizes can be adjusted with CSS variables and optional `.sm` or `.lg`.
 - Background is an exposed css variable (and can use `data-tone`).

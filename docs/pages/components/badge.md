@@ -23,7 +23,7 @@ direct child of `.stack` (where flex children otherwise stretch), and a flex
 parent never compresses it (`flex: none`). Use `inline-size: 100%` — or the
 optional `.inline-size-full` utility — when a full-width badge is intentional.
 
-**Related terms:** chip, tag, pill, removable tag.
+**Related terms:** chip, tag, pill, removable tag, user chip, mention, assignee.
 
 ## Class reference
 
@@ -32,6 +32,7 @@ optional `.inline-size-full` utility — when a full-width badge is intentional.
 | `.badge`        | Component   | Compact label; soft by default.           |
 | `.badge:empty`  | Composition | Truly-empty badge renders as a solid dot. |
 | `.dot`          | Composition | Status dot inside a badge.                |
+| `.avatar`       | Composition | Leading avatar sized to the badge.        |
 | Shared intents  | Intent      | `.primary`, `.secondary`, `.success`, …   |
 | Shared variants | Variant     | `.solid`, `.outline`, `.surface`.         |
 | `.sm` / `.lg`   | Size        | Smaller or larger optical scale.          |
@@ -133,7 +134,7 @@ badge.
 ## With an icon
 
 Decorative SVG, image, or `[aria-hidden="true"]` children follow
-`--badge-icon-size`.
+`--badge-icon-size`. An `.avatar` keeps its own sizing (see below).
 
 ```html demo
 <span class="badge success">
@@ -149,6 +150,36 @@ Decorative SVG, image, or `[aria-hidden="true"]` children follow
   Failed
 </span>
 ```
+
+## With an avatar
+
+Put an [`.avatar`](avatar.md) first in the badge for a person chip: mention,
+assignee, contributor, author. The avatar follows the badge size, so the pill
+keeps its height and `.sm` / `.lg` scale both together. Wrap the chips in a
+[`.cluster`](../layout/cluster.md) to let them wrap.
+
+```html demo
+<div class="cluster tight">
+  <a href="#" class="badge lg">
+    <span class="avatar">
+      <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="" />
+    </span>
+    @jane-doe
+  </a>
+  <a href="#" class="badge lg">
+    <span class="avatar success"><abbr>RM</abbr></span>
+    @rin-moreau
+  </a>
+  <span class="badge primary">
+    <span class="avatar"><abbr>AM</abbr></span>
+    Ada Morgan
+    <button class="close" type="button" aria-label="Remove Ada Morgan"></button>
+  </span>
+</div>
+```
+
+Keep `alt=""` when the handle or name sits next to the image. Initials fit
+the default and `.lg` sizes; use an image on `.sm`.
 
 ## Loading status
 

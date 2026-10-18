@@ -126,6 +126,7 @@
       "--badge-default-fg",
       "--badge-default-border",
       "--badge-default-hover-bg",
+      "--badge-avatar-inset",
       "--badge-bg",
       "--badge-fg",
       "--badge-border"

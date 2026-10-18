@@ -26,5 +26,14 @@
   <span class="compact"><span class="badge" id="compact"><i aria-hidden="true"></i>Compact</span></span>
   <span><span class="badge" id="density-default"><i aria-hidden="true"></i>Default</span></span>
   <span class="spacious"><span class="badge" id="spacious"><i aria-hidden="true"></i>Spacious</span></span>
+
+  <!-- Person chips: the avatar follows the badge, never its own 2.25rem scale.
+       The aria-hidden avatar ties with the decorative-child rule on
+       specificity, so it guards the exclusion. -->
+  <span class="badge sm" id="avatar-sm"><span class="avatar"><abbr>AM</abbr></span>@ada</span>
+  <span class="badge" id="avatar-default"><span class="avatar lg"><abbr>AM</abbr></span>@ada</span>
+  <span class="badge lg" id="avatar-lg"><span class="avatar"><abbr>AM</abbr></span>@ada</span>
+  <span class="badge lg" id="avatar-hidden"><span class="avatar" aria-hidden="true"><abbr>AM</abbr></span>@ada</span>
+  <span class="badge lg" id="plain-lg">@ada</span>
 </body>
 </html>

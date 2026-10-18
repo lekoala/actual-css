@@ -15,6 +15,7 @@
 - `--control-shadow`: a resting elevation for `.input`, `.textarea` and `.select` that keyboard focus keeps.
 - `--table-header-bg` and `--table-header-fg`: theme hooks for the `.table` header band, also read by the data grid template bridge.
 - `--accordion-marker-icon` and `--accordion-marker-open-rotate`: swap the accordion marker glyph and its open turn (plus to cross with `--icon-plus` and `45deg`).
+- `.badge > .avatar`: a leading avatar sized to the badge for person chips (mention, assignee, contributor).
 
 ### Fixed
 - `.tab-panel`: apply attached panel framing only to direct children of `.tabs-attached`.
@@ -26,6 +27,7 @@
 - `.skeleton`: `--skeleton-track` and `--skeleton-highlight` are translucent ink tints, so a placeholder keeps its edges on cards, soft cards and dark surfaces.
 - `.choice-card.chip`: `--state-selected-text` takes priority over explicit intents to keep checks legible on light selected fills.
 - `.alert` with `.alert-icon`: an icon taller than one line, or an alert stretched by an equal-height grid, no longer opens a gap between the title and the body.
+- `.badge`: an `aria-hidden` `.avatar` child no longer risks the 1em decorative-icon sizing.
 
 ### Removed
 - The `bootstrap-v6` demo theme: the core focus line and field treatment it demonstrated are now the defaults.
