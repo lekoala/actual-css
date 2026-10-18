@@ -735,7 +735,6 @@
     "cssImport": "actual-css/css/components/tab",
     "classes": [
       "tab",
-      "tab-panel",
       "tabs",
       "tabs-attached"
     ],

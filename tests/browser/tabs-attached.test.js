@@ -12,6 +12,36 @@ import {
 const it = (await browserAvailable()) ? test : test.skip;
 const fixture = fixtureUrl("tests/browser/tabs-attached.html");
 
+it("attached panel framing applies only to direct children of the wrapper", async () => {
+  await withBrowserPage(
+    fixture,
+    async (view) => {
+      const panels = await view.evaluate(`(() => {
+        return ["overview", "nested-panel", "standalone-panel"].map((id) => {
+          const style = getComputedStyle(document.getElementById(id));
+          return {
+            border: style.borderInlineStartWidth,
+            padding: style.paddingTop,
+            background: style.backgroundColor,
+            shadow: style.boxShadow,
+          };
+        });
+      })()`);
+      expect(panels[0].border).not.toBe("0px");
+      expect(panels[0].padding).not.toBe("0px");
+      for (const panel of panels.slice(1)) {
+        expect(panel).toEqual({
+          border: "0px",
+          padding: "0px",
+          background: "rgba(0, 0, 0, 0)",
+          shadow: "none",
+        });
+      }
+    },
+    { sourceCss: true },
+  );
+}, 60_000);
+
 it("attached tab border ends stay square at the panel opening", async () => {
   await withBrowserPage(
     fixture,

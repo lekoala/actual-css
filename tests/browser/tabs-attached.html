@@ -18,12 +18,13 @@
     <div class="tabs-attached" id="attached">
       <div class="tabs" role="tablist" aria-label="Account" data-enhance="tabs">
         <button class="tab" type="button" role="tab" id="overview-tab" aria-selected="true" aria-controls="overview">Overview</button>
-        <button class="tab primary" type="button" role="tab" id="activity-tab" aria-selected="false" aria-controls="activity" tabindex="-1">Activity</button>
+        <button class="tab" type="button" role="tab" id="activity-tab" aria-selected="false" aria-controls="activity" tabindex="-1">Activity</button>
         <button class="tab" type="button" role="tab" id="settings-tab" aria-selected="false" aria-controls="settings" tabindex="-1">Account settings</button>
         <button class="tab" type="button" role="tab" id="disabled-tab" aria-selected="false" aria-controls="disabled" tabindex="-1" disabled>Unavailable</button>
       </div>
       <section class="tab-panel" role="tabpanel" id="overview" aria-labelledby="overview-tab" tabindex="-1">
         Traffic is up 12% week over week, led by organic search.
+        <div class="tab-panel" id="nested-panel">Unframed nested content.</div>
         <div class="tabs" role="tablist" aria-label="Nested view">
           <button class="tab" role="tab" type="button" aria-selected="true" id="nested-tab">Nested view</button>
         </div>
@@ -33,5 +34,6 @@
       <section class="tab-panel" role="tabpanel" id="disabled" aria-labelledby="disabled-tab" hidden>Unavailable.</section>
     </div>
   </main>
+  <div class="tab-panel" id="standalone-panel">Unframed standalone content.</div>
 </body>
 </html>

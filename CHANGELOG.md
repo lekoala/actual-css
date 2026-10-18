@@ -17,6 +17,7 @@
 - `--accordion-marker-icon` and `--accordion-marker-open-rotate`: swap the accordion marker glyph and its open turn (plus to cross with `--icon-plus` and `45deg`).
 
 ### Fixed
+- `.tab-panel`: apply attached panel framing only to direct children of `.tabs-attached`.
 - `.tabs-attached`: square off the selected tab's border ends at the panel junction.
 - `neo-brutalist`: preserve contrast on solid card-link hover and contextual ink on transparent buttons.
 - `neo-brutalist`: restore joined-button hover feedback, flatten disabled groups and text actions, and fit group shadows to their controls.

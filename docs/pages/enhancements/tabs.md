@@ -94,9 +94,13 @@ JavaScript involved:
 ## Attached panels
 
 For attached tabs (folder tabs, connected or enclosed panels), wrap the
-horizontal tablist and its panels in `.tabs-attached`. Put `.tab` buttons
-directly in the strip and `.tab-panel` on each panel. The selected tab and
-panel share one surface; selection uses the open edge instead of an underline.
+horizontal tablist and its panels as direct children of `.tabs-attached`.
+Put `.tab` buttons directly in the strip and `.tab-panel` on each panel.
+The selected tab and panel share one surface; selection uses the open edge
+instead of an underline.
+The selected tab uses the panel fill and text color; intent classes such as
+`.primary` do not tint it. `.tab-panel` receives its frame only as a direct
+child of `.tabs-attached`.
 Keep the wrapper free of layout gaps and panel background overrides.
 
 ```html demo
