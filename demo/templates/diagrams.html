@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diagrams - Actual CSS</title>
+  <meta name="description" content="A small <pele-diagram> web component renders Mermaid timelines, Gantt charts and flowcharts to SVG with Pele, themed with Actual CSS tokens; the HTML .timeline stays the answer for event histories.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <!-- Classic, not type="module": a module script is blocked on file://, and
+       the component only needs a dynamic import(). -->
+  <script defer src="../scripts/pele-diagram.js"></script>
+  <style>
+    .page {
+      --center-size: 60rem;
+      padding-block: var(--space-50) var(--space-60);
+    }
+
+    .page-cards {
+      gap: var(--space-50);
+    }
+
+    .page-note {
+      gap: var(--space-20) var(--space-30);
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    .page-note code {
+      color: var(--text);
+    }
+
+    /* ================================================================== */
+    /* THEME BRIDGE — the whole skin in one block                          */
+    /*                                                                     */
+    /* Pele reads --pele-* on the SVG or any ancestor, at paint time: a    */
+    /* theme or light/dark switch restyles the diagram without a           */
+    /* re-render.                                                          */
+    /* ================================================================== */
+    pele-diagram {
+      /* Opaque: Pele also writes series labels and edge-label plates in it,
+         and a translucent surface (glass) left them at 12% alpha. */
+      --pele-bg: var(--surface-opaque);
+      --pele-fg: var(--text);
+      --pele-muted: var(--text-muted);
+      --pele-line: var(--text-muted);
+      --pele-surface: var(--surface-subtle);
+      --pele-surface-alt: var(--surface-raised);
+      --pele-border: var(--border);
+      --pele-accent: var(--primary);
+      --pele-critical: var(--danger);
+      --pele-error: var(--danger);
+      --pele-font: var(--font-sans);
+      --pele-font-mono: var(--font-mono);
+      --pele-radius: var(--radius);
+
+      display: block;
+      /* A wide diagram scales down inside a grid or flex cell instead of
+         widening it. */
+      min-inline-size: 0;
+    }
+
+    /* Series (timeline sections, pie slices, kanban lanes) are categories,
+       not states, so they turn one hue instead of borrowing intents. Pele
+       writes their labels in --pele-bg, so the base is the soft primary ink
+       (the badge's chain), which reads against the surface even when a
+       theme's --primary is a light fill. Lightness and chroma stay the
+       ink's; steps of 135deg keep neighbours apart.
+       Guarded: a custom property takes any value, so an engine without
+       relative colors would hand Pele an invalid fill and paint it black;
+       without the block, Pele keeps its own palette. */
+    @supports (color: oklch(from red l c h)) {
+      pele-diagram {
+        --diagram-series: var(
+          --primary-soft-fg,
+          color-mix(in oklab, var(--text), var(--primary) var(--soft-fg-mix))
+        );
+        --pele-series-1: var(--diagram-series);
+        --pele-series-2: oklch(from var(--diagram-series) l c calc(h + 135));
+        --pele-series-3: oklch(from var(--diagram-series) l c calc(h + 270));
+        --pele-series-4: oklch(from var(--diagram-series) l c calc(h + 45));
+        --pele-series-5: oklch(from var(--diagram-series) l c calc(h + 180));
+        --pele-series-6: oklch(from var(--diagram-series) l c calc(h + 315));
+        --pele-series-7: oklch(from var(--diagram-series) l c calc(h + 90));
+        --pele-series-8: oklch(from var(--diagram-series) l c calc(h + 225));
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="center stack page">
+    <header class="cluster items-start">
+      <hgroup>
+        <p class="overline">Diagrams</p>
+        <h1>Pele × Actual CSS</h1>
+        <p class="muted">
+          A small <code>&lt;pele-diagram&gt;</code> web component hands Mermaid
+          text to <code>pele</code>, loaded from CDN, which draws SVG themed with
+          Actual CSS tokens. Switch themes and watch the diagrams follow without a
+          re-render.
+        </p>
+      </hgroup>
+
+      <div class="cluster" style="gap: var(--space-20);">
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+        <a class="btn neutral outline sm" href="https://pele.run/" target="_blank" rel="noopener">
+          Pele docs
+        </a>
+      </div>
+    </header>
+
+    <div class="stack page-cards">
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>Event history — HTML, no library</h2>
+            <p class="muted">
+              A list of what happened, with links and actions in it, is content:
+              <code>.timeline</code> keeps it in the DOM, selectable and
+              accessible without JavaScript.
+            </p>
+          </hgroup>
+        </header>
+        <ol class="timeline">
+          <li class="success">
+            <time datetime="2026-10-18T09:30">Today, 09:30</time>
+            <a href="#">Ada Morgan</a> confirmed the pilot schedule.
+          </li>
+          <li>
+            <time datetime="2026-10-16">October 16</time>
+            Booking flow merged.
+          </li>
+          <li class="warning">
+            <time datetime="2026-10-14">October 14</time>
+            Patient portal estimate raised by a week.
+          </li>
+        </ol>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>Chronology — a timeline diagram</h2>
+            <p class="muted">
+              Periods and milestones laid out graphically: a drawing, not a list
+              to interact with. Sections take a palette turned from
+              <code>--primary</code>.
+            </p>
+          </hgroup>
+        </header>
+        <pele-diagram>
+          <script type="text/plain">
+            timeline
+              title Clinic platform
+              section 2026 Q3
+                July : Discovery
+                August : Interviews : Design system
+              section 2026 Q4
+                September : Booking flow
+                October : Patient portal : Pilot
+                November : Launch
+          </script>
+        </pele-diagram>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>Planning — a Gantt chart</h2>
+            <p class="muted">
+              Critical tasks take <code>--danger</code> through
+              <code>--pele-critical</code>; the rest follows the surface tokens.
+            </p>
+          </hgroup>
+        </header>
+        <pele-diagram>
+          <script type="text/plain">
+            gantt
+              title Clinic migration
+              dateFormat YYYY-MM-DD
+              section Discovery
+                Audit          :done, a1, 2026-09-01, 10d
+                Interviews     :done, a2, after a1, 7d
+              section Build
+                Booking flow   :active, b1, 2026-09-20, 20d
+                Patient portal :crit, b2, after b1, 15d
+              section Launch
+                Pilot          :c1, after b2, 10d
+          </script>
+        </pele-diagram>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <hgroup>
+            <h2>Process — a flowchart</h2>
+            <p class="muted">
+              Nodes fill with <code>--surface-subtle</code>, edges take
+              <code>--text-muted</code>, corners follow <code>--radius</code>.
+            </p>
+          </hgroup>
+        </header>
+        <pele-diagram>
+          <script type="text/plain">
+            flowchart LR
+              A[Request] --> B{Slot free?}
+              B -- Yes --> C[Confirm]
+              B -- No --> D[Waitlist]
+              D --> B
+          </script>
+        </pele-diagram>
+      </section>
+
+      <section class="card stack">
+        <header>
+          <h2>Which one?</h2>
+        </header>
+        <ul>
+          <li>Events a reader scans, follows links from or acts on: <code>.timeline</code>.</li>
+          <li>A chronology, a schedule or a process to look at: a Pele diagram on the token bridge.</li>
+          <li>Progress through the steps of a flow: <code>.steps</code>.</li>
+        </ul>
+      </section>
+    </div>
+
+    <footer class="cluster items-baseline justify-content-space-between page-note">
+      <span>
+        Loaded from jsDelivr, pinned: <code>pele@1.6.0/dist/esm/lazy.js</code>, which
+        fetches each diagram type on first use.
+      </span>
+      <span>
+        <code>demo/scripts/pele-diagram.js</code> is an example to copy, not Actual CSS API.
+      </span>
+    </footer>
+  </main>
+
+  <script src="../../dist/actual.full.js"></script>
+</body>
+
+</html>

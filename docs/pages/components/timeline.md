@@ -13,7 +13,7 @@ log, changelog, order tracking.
 For progress through a process (checkout, onboarding), use
 [Steps](steps.md): a timeline records what happened, steps show where you
 are. For a horizontal, alternating or time-scaled chronology, or a Gantt
-chart, use a diagram library.
+chart, render a diagram: see [Diagrams](diagrams.md).
 
 ## Basic usage
 

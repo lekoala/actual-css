@@ -18,6 +18,7 @@
 - `.badge > .avatar`: a leading avatar sized to the badge for person chips (mention, assignee, contributor).
 - `.timeline`: vertical history of dated events, with intent dots and an optional avatar or icon slot.
 - Dashboard and Admini demos: activity feeds use `.timeline` instead of local feed CSS.
+- Diagrams docs and `diagrams.html`: Pele 1.6.0 on Actual tokens through a demo `<pele-diagram>` web component.
 
 ### Fixed
 - `.tab-panel`: apply attached panel framing only to direct children of `.tabs-attached`.
