@@ -266,6 +266,28 @@ For exclusive groups, manage a single pressed button:
 </script>
 ```
 
+### Touch feedback
+
+The reset sets `-webkit-tap-highlight-color: transparent` on `html`: the native
+tap flash is a rectangle that ignores `--btn-radius`. A pressed button moves
+down a pixel instead. The property inherits, so one declaration on a container
+restores the flash there. Tap both rows on a phone to compare:
+
+```html demo
+<div class="stack">
+  <div class="cluster">
+    <button class="btn primary" type="button" style="--btn-radius: var(--radius-full);">Default</button>
+    <label class="choice-card chip"><input type="checkbox" /> Chip</label>
+    <a href="#touch-feedback">Text link</a>
+  </div>
+  <div class="cluster" style="-webkit-tap-highlight-color: rgb(0 0 0 / 0.2);">
+    <button class="btn primary" type="button" style="--btn-radius: var(--radius-full);">Native flash</button>
+    <label class="choice-card chip"><input type="checkbox" /> Chip</label>
+    <a href="#touch-feedback">Text link</a>
+  </div>
+</div>
+```
+
 ## Accessibility
 
 - Always set `type="button"` when a button is not submitting a form.
