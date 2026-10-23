@@ -26,7 +26,8 @@ a {
   text-underline-offset: 0.18em;
 }
 
-a:hover {
+/* :active stands in for the native tap highlight the reset removes. */
+a:is(:hover, :active) {
   text-decoration-thickness: 0.12em;
 }
 

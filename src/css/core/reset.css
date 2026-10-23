@@ -7,6 +7,10 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* The native tap highlight is a rectangle that ignores border-radius and
+     custom surfaces; components use their own interaction states where
+     relevant. Inherited, so one declaration covers every element. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {

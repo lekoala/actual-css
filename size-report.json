@@ -1,12 +1,12 @@
 {
-  "totalRaw": 420578,
+  "totalRaw": 420926,
   "core": {
-    "minified": 12480,
-    "brotli": 2804
+    "minified": 12536,
+    "brotli": 2828
   },
   "full": {
-    "minified": 146975,
-    "brotli": 20711
+    "minified": 147031,
+    "brotli": 20735
   },
   "js": {
     "full": {
@@ -218,7 +218,7 @@
     },
     {
       "file": "core/base.css",
-      "raw": 2881
+      "raw": 2967
     },
     {
       "file": "themes/sunset.css",
@@ -401,6 +401,10 @@
       "raw": 1144
     },
     {
+      "file": "core/reset.css",
+      "raw": 990
+    },
+    {
       "file": "components/scrollspy.css",
       "raw": 943
     },
@@ -411,10 +415,6 @@
     {
       "file": "layout/switcher.css",
       "raw": 817
-    },
-    {
-      "file": "core/reset.css",
-      "raw": 728
     },
     {
       "file": "layout/scroll-target.css",
