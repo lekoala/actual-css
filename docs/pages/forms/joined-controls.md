@@ -17,9 +17,11 @@ choice among a few on a shared track, use a
 
 Add `.join` to the wrapper that groups the controls. Use `.join-addon` for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`. The wrapper should still carry `role="group"` with a label for accessibility.
 
-`.join` reshapes corners and shared edges; it does not unify the segments' treatments, and the children keep whatever classes they carry. Give them one variant family so the group reads as a single unit, and change a segment's variant only to mark state — a solid button among outlines for a pressed toggle. A group mixing `.btn`, `.btn outline` and `.btn soft` is valid markup that renders as three unrelated controls stuck together.
+Each child keeps its own variant. Use the same variant across the group, and
+change it only to mark state, such as a solid pressed toggle among outlines.
 
-When composing source files manually, import `components/join.css` after the controls it groups. `.join` writes child border-radius longhands directly so joined corners win at equal specificity.
+When composing source files manually, import `components/join.css` after the
+controls it groups so joined corners take precedence.
 
 ```html demo
 <div class="field">

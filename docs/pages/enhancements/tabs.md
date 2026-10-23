@@ -27,10 +27,7 @@
 - A tab list needs both `.tabs` and `role="tablist"`; `.tab` styles each trigger.
   A tab belongs to its closest `role="tablist"`. `data-enhance="tabs"` on an
   element without that role wires nothing and warns in the console.
-- Naming follows the container/item convention (like `menu` / `menu-item`):
-  `.tabs` is the strip, `.tab` is one trigger. The JS module
-  (`actual-css/js/tab`) is named for the file; the behavior token
-  (`data-enhance="tabs"`) is named for what it wires.
+- Import `actual-css/js/tab` to register the `data-enhance="tabs"` behavior.
 - A `.tab` with an icon uses `--tab-gap` (default `0.375em`) for the space between icon and label.
 - A tab that is `hidden`, `disabled`, `aria-disabled`, or has no panel is skipped
   by the arrow keys. An application filtering a tab strip only has to set
@@ -150,17 +147,16 @@ what fits on one row.
 
 ## Too many tabs
 
-A horizontal strip is one row and never wraps, nor does a label: a second line
-would not match the Left/Right keys and reads as a nested level. When the tabs
-do not fit (narrow screen, mobile, long translations), the strip scrolls
-horizontally without a scrollbar; in supporting browsers, the edges it can
-still scroll toward fade out. Selecting or focusing the tab clipped at the edge
-scrolls it into view with the next one peeking, so a click, the arrow keys or a
-swipe move along the strip. A tab selected in the markup starts in view too,
-when the strip is visible at connect; the placement moves the strip only, never
-the page. In supporting browsers, so does the current link tab (or flyout
-trigger), without the runtime; elsewhere the strip starts at its first tab. A
-vertical strip (`aria-orientation="vertical"`) keeps wrapping its labels.
+Horizontal tabs and their labels stay on one line. When they do not fit, the
+strip scrolls without a scrollbar. Supporting browsers fade the edges to show
+where more tabs remain. Selecting or focusing a clipped tab brings it into view.
+
+A tab selected in the markup starts in view if the strip is visible when the
+runtime connects. Only the strip scrolls; the page stays put. Current link tabs
+and flyout triggers also start in view in supporting browsers, without the
+runtime; other browsers start at the first tab.
+
+Vertical tabs (`aria-orientation="vertical"`) allow their labels to wrap.
 
 Scrolling is the fallback, not a responsive design. If a strip regularly
 overflows, shorten the labels, group sections, or switch to a vertical rail.

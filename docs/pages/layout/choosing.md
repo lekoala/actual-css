@@ -10,15 +10,13 @@ number of children visible in one mockup.
 | A normally scrolling page              | Semantic landmarks, optionally `.app-shell` |
 | Topbar + scrolling main + adaptive nav | `.app-layout`                               |
 
-The first covers public, marketing and editorial pages; add `.navbar` for site
-navigation. The second is `.app-layout` with its exact direct-child contract,
-where the primary navigation moves from bottom to side.
+For public, marketing, and editorial pages, use semantic landmarks and add
+`.navbar` for site navigation.
 
-Do not choose `.app-layout` from the word "app" or from the presence of a
-header. Its viewport-sized grid, hidden shell overflow, internal main scroll,
-and adaptive `.app-nav` are one indivisible behavior. If any of those is not
-wanted, compose the ordinary page from semantic landmarks and the primitives
-below.
+Use `.app-layout` for a viewport-sized shell where the main region scrolls
+independently and navigation moves from bottom to side. Follow its
+[required structure](app-layout.md). For other arrangements, compose the
+primitives below.
 
 ## Content relationships
 
@@ -39,14 +37,10 @@ all peers should move together rather than form a partial row, use `.switcher`.
 
 For a main region plus an aside, use `.sidebar-layout`.
 
-Use `.column-layout` when the placement of each region is itself part of the
-design — a 10-column article starting on column 2, regions in separate sibling
-sections that must share the same column lines, an editorial composition whose
-starts and spans are deliberately aligned across the page. It is the one layout
-primitive with no automatic responsive behavior: the canvas stays twelve
-columns and the application owns narrow-container recomposition. Choose it
-because placement is the design, not because a mockup happens to contain
-columns.
+Use `.column-layout` for deliberate placement on a shared 12-column canvas:
+an inset article, aligned sections, or an editorial composition. It keeps
+twelve columns at every width; add application CSS to rearrange it in narrow
+containers.
 
 Use `--grid-columns` for exact track templates that do not match a built-in
 layout contract: arbitrary structural counts such as seven calendar days,

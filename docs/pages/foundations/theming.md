@@ -1,8 +1,7 @@
 # Theming
 
-Find the right lever when you want to change how a component or layout looks, without knowing in advance which custom property to use.
-
-This is a problem-oriented index. It maps common intents to the public hooks and primitives that express them, then points to the canonical section. It is not a catalogue of every variable — the CSS source remains canonical for exact defaults and fallback chains. See the tokens page, Public surface section, for the public/internal rule.
+Find a common customization below, then follow the reference for examples and
+hook details. See [Tokens](tokens.md) for global settings and the theme contract.
 
 ## I want to…
 
@@ -93,17 +92,16 @@ Keep the outline visible against the surrounding surface when changing colors.
 
 ### Keep bare native controls on-theme / accent-color
 
-Native controls that no component class restyles — a bare checkbox, radio, range, or `<progress>` — follow the theme through `accent-color: var(--primary)`, declared on `:root` and every `[data-theme]` island so each island recomputes it from its own palette. Component classes (`.check`, `.radio`, `.range`) paint their own rendering and do not read it.
+Bare checkboxes, radios, ranges, and `<progress>` follow the theme through
+`accent-color: var(--primary)`. Styled controls such as `.check`, `.radio`,
+and `.range` use their own appearance.
 
 → Forms · Overview · Foundations · Tokens (theme contract)
 
 ### Store a theme name without applying it
 
-`data-theme` is an active theme boundary on every element that carries it, not
-a generic storage attribute. Use a different name such as `data-theme-value`,
-or a form control's `value`, when the element should only hold a theme name.
-Apply `data-theme` deliberately when that element and its subtree should paint
-with the selected palette — a theme swatch is a useful example.
+`data-theme` applies a theme to the element and its subtree. To store a theme
+name without applying it, use `data-theme-value` or a form control's `value`.
 
 ### Loading / busy overlay on a container
 
@@ -174,13 +172,10 @@ well as color.
 
 ### Dark mode toggle / theme switcher / remember the user's choice
 
-Actual CSS ships the mechanism, not the control. Without `data-theme` the page
-follows the OS; `data-theme="light"` or `"dark"` on `<html>` forces a scheme,
-and removing the attribute returns to the OS. The switcher UI and where the
-choice is stored belong to the application; a page with no setting already
-follows the OS. Apply a stored choice from an inline script in `<head>` so the
-first paint does not flash the OS scheme. The demo's theme picker is an
-inspection tool, not a component to copy.
+The default theme follows the OS. Set `data-theme="light"` or `"dark"` on
+`<html>` to force a scheme; remove the attribute to follow the OS again.
+Build the switcher and store the preference in application code. Apply a saved
+choice from an inline script in `<head>` to avoid a flash of the wrong scheme.
 
 ### Force light or dark on a theme that has both / theme and color scheme
 
@@ -235,12 +230,10 @@ step per role rather than importing the scale.
 
 ### Use a custom font / webfont / typeface with a theme
 
-A font belongs to the page, not to the theme. Load the face in the application
-stylesheet (`@font-face` or a font service) and set `--font-sans` (and
-`--font-mono`) on `:root`, never in a `[data-theme]` block: a theme switches at
-runtime and scopes to islands, so a font tied to it would change the text
-metrics of every island it touches. A display face for headings has no token:
-name it on the headings in application CSS.
+Load fonts in the application stylesheet with `@font-face` or a font service.
+Set `--font-sans` and `--font-mono` on `:root` so the type stays consistent
+across theme changes and islands. Set a separate heading face directly in
+application CSS:
 
 ```css
 :root {
@@ -261,17 +254,9 @@ reference material to copy into your own `[data-theme]` island — they are demo
 assets, not package entrypoints. Each sets the intent/surface/text tokens and
 lets the core derive everything else.
 
-The `gradient` example keeps a Bootstrap 4 style outer halo on focused fields
-instead of the core inset line. The `neo-brutalist` example puts a hard offset
-shadow on every standalone framed object (`--btn-shadow` for buttons, which
-lift on hover and press flat), keeps pastel intents in fills with contrasting
-ink, and turns the accordion marker into a plus. It is an invasive page skin:
-its descendant rules and inherited component hooks cross nested `data-theme`
-boundaries, so use a separate page to show another theme. Its `.join` groups
-fit their contents so the shadow follows the controls.
-The `material` example restyles
-fields as filled underlines with pill buttons — tokens plus three small rules,
-and `.join` still needs no adaptation. The `glass` example paints translucent
-surfaces over its own backdrop: it sets `--surface-opaque` and
-`--surface-solid-fg` to opaque values, raises `--soft-bg-mix` so soft fills stay
-light over glass, and adds the blur and an opaque busy veil as small rules.
+- `gradient`: outer focus halos on fields.
+- `neo-brutalist`: hard shadows, pastel fills, and plus-shaped accordion
+  markers. Use it as a page skin: its rules cross nested theme boundaries.
+- `material`: filled underline fields and pill buttons.
+- `glass`: translucent surfaces over a backdrop. Keep `--surface-opaque` and
+  `--surface-solid-fg` opaque, and check soft fills against the actual backdrop.

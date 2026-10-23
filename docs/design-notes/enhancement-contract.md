@@ -3,6 +3,20 @@
 Actual CSS splits CSS and JavaScript into two independent layers with a shared
 opt-in mechanism. Every component uses the same grammar.
 
+## Popover ownership
+
+The runtime owns `popover="manual"` and native show/hide calls on managed
+surfaces and tooltips. Native automatic dismissal would compete with Actual's
+close policy. Canceling `beforetoggle` would leave the runtime's open state
+out of sync with platform visibility, so applications cancel
+`actual:surface-open` before promotion instead.
+
+Explicit tooltips stay in place to preserve inherited context. Generated
+tooltips are mounted outside the trigger's sibling sequence: inserting one
+beside the trigger would change structural selectors such as
+`.join > :last-child`. Generated tooltips therefore make no promise to inherit
+the trigger's theme or density.
+
 ## The four-layer contract
 
 ```text

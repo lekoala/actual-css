@@ -19,11 +19,10 @@ cascade layers, import order, or a project-owned build-time prefix transform.
 - Markup stays understandable without JavaScript, and modern features are gated
   with `@supports` so older browsers keep the core layout and controls.
 
-The distinction is structural, not stylistic: presentation lives in classes,
-JavaScript behavior opts in through `data-enhance` tokens, semantics come from
-ARIA and native HTML, and per-widget configuration uses self-describing
-`data-*` attributes. [Philosophy](../foundations/philosophy.md) lays out the
-layers and the order to follow before adding CSS.
+Use classes for presentation, HTML and ARIA for meaning and state,
+`data-enhance` to enable behavior, and feature-specific `data-*` attributes to
+configure it. See [Philosophy](../foundations/philosophy.md) for the main
+principles and how to compose components.
 
 ## Install
 
@@ -67,14 +66,15 @@ Actual CSS uses a small unprefixed class grammar:
 .component [intent] [variant] [size] [modifier]
 ```
 
-Intents are `.primary`, `.secondary`, `.success`, `.warning`, and `.danger`, and
-work across components. Variants such as `.solid`, `.soft`, `.outline`, and `.surface` are
-shared by buttons, badges, alerts, and cards; a subtree that needs another
-palette is a `data-theme` island, not a class. `.ghost` and `.link` are
-button-only. Size variants `.sm` and `.lg` scale typography and
-participating component geometry consistently. Density contexts `.compact` and
-`.spacious` change geometry and spacing without changing font size, font width
-or icons. Undocumented `is-*` classes are runtime internals.
+- **Intent:** `.primary`, `.secondary`, `.success`, `.warning`, or `.danger`.
+- **Variant:** `.solid`, `.soft`, `.outline`, or `.surface`. Buttons also
+  support `.ghost` and `.link`.
+- **Size:** `.sm` or `.lg` changes text and geometry on supported components.
+- **Density:** `.compact` or `.spacious` changes spacing and geometry across a
+  region, keeping text and icons at the same size.
+
+Use `data-theme` to give a region a different palette. Undocumented `is-*`
+classes belong to the runtime.
 
 ```html
 <button class="btn">Click me</button>

@@ -33,9 +33,9 @@ the next card, belongs to the layout around it:
 A rule such as `.card + .card { margin-block-start: 2rem }` moves page layout
 into the component; put a composition around the cards instead.
 
-**A composition on a component takes over its default layout.** A component's
-own layout sits at zero specificity, so `<article class="card media">` lays out
-as a `.media` without an override, whatever the import order.
+**A layout primitive replaces the component's default layout.** For example,
+`<article class="card media">` keeps the card's appearance and uses `.media`
+for its layout.
 
 **State uses the most semantic attribute; classes choose presentation.**
 
@@ -81,19 +81,6 @@ A component takes optional intent, variant and size classes:
 A modifier is a separate class that combines with others (`.btn.primary.soft`,
 not `.btn--primary`), and a part gets a prefixed class (`.alert-icon`,
 `.list-item-title`) only when its element does not already say what it is.
-There is no `__` or `--` in Actual's names, because:
-
-- **Modifiers are shared axes.** `.primary`, `.soft` and `.sm` mean the same
-  thing on every component that supports them, so one class serves `.btn`,
-  `.badge` and `.alert`. BEM names a modifier per block, which multiplies the
-  vocabulary and keeps a custom intent such as `.tertiary` from working
-  everywhere at once.
-- **State is not a modifier.** `disabled`, `aria-current` and `open` already
-  name the state; a `--disabled` or `--active` class would duplicate them and
-  drift out of sync.
-- **Elements come from HTML.** A card's `header` and `footer`, an avatar's
-  `<img>` need no `__element` class; a prefixed class is kept for the parts
-  HTML cannot name.
 
 Application CSS can use any convention, BEM included, alongside Actual's
 classes: `<article class="card pricing-plan pricing-plan--featured">`.
@@ -110,12 +97,11 @@ for a minimal Steps implementation.
 
 ## Intents
 
-`.primary`, `.secondary`, `.success`, `.warning`, `.danger` do not style elements directly. They only expose `--intent` and `--intent-fg`. Components and variants decide how to consume them.
+`.primary`, `.secondary`, `.success`, `.warning`, and `.danger` choose a color
+role. The component and variant decide how to display it.
 
-Intent classes define the current `--intent` value; they do not form a
-general-purpose color utility system. Use `.intent-color` when a simple element
-should consume the current intent as its foreground color. It works with an
-intent on the same element or inherited from an ancestor.
+For plain text or an icon, add `.intent-color` to use the intent as its text
+color. The intent can be on that element or an ancestor.
 
 ```html demo
 <button class="btn primary">Primary</button>
@@ -127,9 +113,7 @@ intent on the same element or inherited from an ancestor.
 </span>
 ```
 
-There is no `.btn-primary` or `.badge-success`. Intents are generic and reusable across any component that supports them.
-
-Components fall back to their own default intent when no intent class is set. Buttons, badges, and alerts use the neutral palette (`--neutral` / `--neutral-fg`) by default.
+Without an intent class, components use their own default palette.
 
 Custom intents need no framework support — define `--intent` and `--intent-fg`
 (and `--intent-soft-fg` when the custom role needs its own soft foreground) on a
@@ -150,7 +134,8 @@ class:
 
 ## Variants
 
-`.solid`, `.soft`, `.outline`, `.surface` define the visual treatment by setting `--ui-bg`, `--ui-fg`, `--ui-border`. Components consume these tokens with sensible fallbacks. Interactive components also set a `--ui-hover-bg` recipe that their hover rule reads.
+`.solid`, `.soft`, `.outline`, and `.surface` choose the visual treatment:
+filled, tinted, outlined, or on the page surface.
 
 `.btn` defaults to `.solid`; `.badge` and `.alert` default to `.soft`.
 
@@ -168,37 +153,20 @@ class:
 
 ## Size and density
 
-`.sm` and `.lg` mean one size role below or above a component's natural size.
-Size names are shared roles, not shared measurements. Each participating
-component family maps them to its own optical scale: badges use `xs / sm / md`,
-while controls use `sm / md / lg`. Components without an explicit mapping do
-not change.
+- **Size:** `.sm` and `.lg` change a component's text and geometry. Each
+  component has its own scale; the same size name does not mean the same
+  dimensions everywhere.
+- **Density:** `.compact` and `.spacious` change spacing and control geometry
+  throughout a region, keeping text and icons at the same size.
+- **Rhythm:** `.tight` and `.loose` change only the inherited gap.
 
-A size role is applied to the component that participates in the scale and
-never styles arbitrary descendants. It propagates through token inheritance,
-though: components in the shared control scale set local `--control-size` and
-`--control-font-size`, and descendants consume them by their own rules. That is
-how `.field sm`, `.input-icon sm`, `.join sm`, and `.flyout sm` size the
-controls inside them, while a bare `.sm` on a plain element does nothing.
+Apply size to a supported component or control wrapper. For example,
+`.field sm`, `.input-icon sm`, `.join sm`, and `.flyout sm` size the controls
+inside them. `.sm` on a plain element has no effect.
 
-`.compact` and `.spacious` establish inherited density tokens. Density arranges
-how tightly UI sits — spacing and component geometry — while font size and
-icon size stay unchanged. `.tight` and `.loose` change the rhythm (`--gap`)
-alone. Participation is opt-in, and a component only joins
-where density has an effect independent from its optical size: if the result is
-merely that the component looks smaller or larger, that is size, not density.
-
-Density participation takes three levels:
-
-- **Geometry + rhythm** — controls and their wrappers (`.field`, `.join`,
-  `.flyout`, …). Height, padding, and gap respond; typography is untouched.
-- **Rhythm only** — content rows and shells such as `.list`. Spacing tightens
-  (`--list-item-gap: var(--gap)`), but the structural size stays stable.
-- **No density effect** — components whose geometry is intrinsic to their
-  content (`.badge`, `.avatar`, `.spinner`, `.rating`, `.key`, prose, inline
-  `.choice`/`.switch`). Their optical size belongs to `sm`/`lg` or local hooks.
-
-As inherited contexts, one class tightens or loosens the whole subtree:
+Density affects controls and layout spacing. Badges, avatars, spinners,
+ratings, keys, prose, and inline choices keep their own size. One density
+class applies to the whole subtree:
 
 ```html demo
 <div class="compact stack">
@@ -229,12 +197,8 @@ affect the same dimension:
 </div>
 ```
 
-The density tokens are `--gap`, `--density-space`, `--control-size`, and
-`--control-pad-x`.
-Components consume the dimensions that make sense for them and opt out of the
-rest. The absolute `--space-*` scale is not rebound by density scopes.
-Components with bespoke geometry (`.badge`, `.avatar`,
-`.spinner`, `.rating`) own their local `.sm`/`.lg` mappings.
+Density leaves the absolute `--space-*` scale unchanged. See
+[Control tokens](tokens.md#controls) to customize the shared scale.
 
 `.compact` also remains a meaningful local modifier for `.card` and `.table`.
 On those components it tightens their own padding and establishes the compact

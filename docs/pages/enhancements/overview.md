@@ -19,24 +19,19 @@ Actual drives the top layer itself. On every surface and tooltip its runtime
 manages, `surface.js` and `tooltip.js` own the `popover` attribute and both
 `showPopover()` and `hidePopover()`.
 
-On a managed element, an application must not:
+On a managed element, leave `popover` and its native show/hide methods to the
+runtime, and let `beforetoggle` proceed. To stop a surface from opening,
+cancel `actual:surface-open`.
 
-- set or change `popover`. The runtime writes `manual` over any other value, because `popover="auto"` hands the browser a dismissal policy of its own that competes with `data-flyout-auto-close`.
-- call `showPopover()`, `hidePopover()`, or `togglePopover()`.
-- cancel its `beforetoggle`. Preventing an open leaves Actual's state saying open while the element is not in the top layer, and nothing repairs that — Actual owns the lifecycle rather than mediating it.
+The runtime manages elements connected to these triggers:
 
-To stop a surface from opening, cancel Actual's own `actual:surface-open`
-instead. It is dispatched before anything is promoted, so cancelling it leaves
-no state behind.
+- `data-enhance="flyout"`, pointing to the panel through `aria-controls`.
+- `data-context-menu`, naming the menu.
+- `data-tooltip`, pointing to the tooltip.
 
-**What counts as managed is the runtime's decision, not the attribute's.** A
-panel is managed when a `data-enhance="flyout"` trigger points at it through
-`aria-controls`, or when a `data-context-menu` target names it; a tooltip is
-managed when a `data-tooltip` trigger points at it. A `.flyout[popover]` or
-`.tooltip[popover]` that no such trigger reaches is never touched — Actual
-supplies its presentation and the application owns its lifecycle. That is the
-supported way to drive either class with `popovertarget` or a third-party
-lifecycle. Do not do both to the same element.
+You can drive an unconnected `.flyout[popover]` or `.tooltip[popover]` with
+`popovertarget` or a third-party library. Actual supplies its appearance;
+your code owns opening and dismissal. Use one owner per element.
 
 ## Modules
 
@@ -53,11 +48,9 @@ Enhancer modules self-register when imported. They do not require init calls and
 are safe to import during server-side rendering: outside a browser, registration
 is a no-op until the module is loaded again with a DOM.
 
-Load the full bundle **or** the source modules, never both: each evaluation
-owns its registry and document handlers, so a dist bundle mixed with
-`actual-css/js/*` source subpaths (or two dist bundles) registers every
-behavior twice and a flyout opens then immediately closes. The second copy
-logs a console warning when it loads.
+Load the full bundle **or** individual source modules. Mixing them, or loading
+two bundles, registers behaviors twice and can make a flyout close immediately
+after opening. The runtime warns in the console when a second copy loads.
 
 ## Component pages
 

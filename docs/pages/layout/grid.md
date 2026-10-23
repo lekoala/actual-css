@@ -1,7 +1,6 @@
 # Grid
 
-Two contracts sit behind these classes. Pick by asking what determines the
-column count.
+Choose what determines the column count:
 
 - The **item width** is what matters — use `.grid` and tune `--grid-min`.
 - The **column density** is what matters — use `.grid-2`, `.grid-3`, `.grid-4`,
@@ -30,9 +29,8 @@ Tune the item minimum with `--grid-min`.
 
 ## Count-driven density
 
-`.grid-N` declares a structural density of N columns. It is responsive on its
-own: it never exceeds N columns, never overflows, and every item keeps the same
-width.
+`.grid-N` fits up to N equal-width columns and reduces the count as space
+narrows. It is responsive without a container wrapper.
 
 ```html demo resize
 <div class="grid-4">
@@ -43,8 +41,7 @@ width.
 </div>
 ```
 
-`--grid-min` does not apply here. Item width is `.grid`'s contract; column
-density is `.grid-N`'s. Choose the preset that suits your item size:
+`--grid-min` applies only to `.grid`. Choose a preset that suits your item size:
 
 | Item                              | Preset               |
 | --------------------------------- | -------------------- |
@@ -111,15 +108,10 @@ that width **plus its own padding and borders**:
 Round up past the figure rather than matching it exactly, so a later padding
 change cannot drop the region a state.
 
-Balanced subdivision is precision, never a prerequisite for responsive
-behavior — forgetting the container costs you the exact chain, nothing else.
-`actual-container` is the framework's shared name for size-aware components,
-so one region can serve a grid and a step flow at once. The grid responds only
-to that name, never to an incidental query container, so a region that sets
-`container-type: inline-size` for its own reasons leaves the grid untouched. The container has to be an
-ancestor: an element cannot query its own size without taking inline-size
-containment, which would collapse the grid inside a `.cluster`, a float, or any
-shrink-to-fit box. Put it on a normal block-level wrapper for the same reason.
+Use a normal block-level ancestor as the named container, keeping it separate
+from the grid. Only the name `actual-container` enables balanced subdivision;
+an unnamed query container leaves the baseline behavior unchanged. The same
+named container can serve both a grid and a step flow.
 
 The chain balances the **declared density**, not your actual item count. Eight
 items in `.grid-6` still give `6 + 2`. For a paginated collection, choose a page

@@ -1,25 +1,23 @@
 # Tokens
 
-The public theming surface — small, semantic global tokens that make the library easy to restyle without understanding every component's internals.
-
-The surface stays small by keeping most tokens semantic, not component-specific.
-
-- Global tokens are public API.
-- Component-local tokens are implementation details unless documented by that component.
-- Components should map global tokens to local variables internally.
-- Themes override tokens, not selectors.
-- Defaults must work without modern color features or build tooling.
-- Modern enhancements can derive better values with `color-mix()`, `light-dark()`, or container queries.
+Tokens are CSS custom properties for colors, spacing, shape, type, and motion.
+Override global tokens to restyle the whole system; use documented component
+hooks for local changes.
 
 ## Public surface
 
-Component custom properties fall into three header categories in the source: **Public hooks** (author-facing customization points), **Framework plumbing** (shared relays consumed across components — `--ui-*`, `--intent*`, `--density-*`), and **Internal** (derived, state/variant-owned, or runtime-written). Documentation focuses on discovering the right hook and on non-obvious usage; the CSS source remains canonical for exact defaults and fallback chains.
+Global tokens and documented component hooks are public API. Shared relays,
+derived values, and properties written by JavaScript are internal.
 
-As a convention, component-prefixed properties owned by the component's base rule are usually author hooks. Properties owned by states/variants, derived from other hooks, or written by JavaScript are not. This convention is indicative, not algorithmic: runtime-written, derived, and state-relay properties stay internal even when their form resembles a hook.
+Component pages list the useful hooks and their relationships. CSS source
+headers classify properties as **Public hooks**, **Framework plumbing**, or
+**Internal** and provide exact defaults and fallback chains.
 
 ### Where a token is declared
 
-A hook is only defined inside the scope that declares it. Reading one outside that scope is not an error a browser reports: `var()` resolves to nothing, the whole declaration becomes invalid at computed-value time, and the property falls back to its initial value — `padding: var(--card-pad)` outside a card computes to `0`, silently.
+Use global tokens in application CSS. Component hooks are available only in
+their component's scope: outside a card, `padding: var(--card-pad)` can silently
+compute to `0`. Supply a fallback when reading a hook outside its component.
 
 | Scope     | Declared on                 | Examples                               |
 | --------- | --------------------------- | -------------------------------------- |
@@ -27,7 +25,8 @@ A hook is only defined inside the scope that declares it. Reading one outside th
 | Component | the component's base rule   | `--card-pad`, `--drawer-size`          |
 | Relay     | a variant, state, or script | `--ui-bg`, `--intent`, `--surface-pad` |
 
-Global tokens are the ones to reach for in application CSS. Write a relay only to override what a variant sets on one element (Button · Variants); read one only where its owner documents it (`--bleed-pad`). When you do want a component token outside its component — matching a bare block to the card rhythm, say — give `var()` the default explicitly, so the declaration survives where the hook is absent:
+Use relays only where documented, such as Button variants or `--bleed-pad`.
+To match a bare panel to a card's padding:
 
 ```css
 .panel {
@@ -48,14 +47,12 @@ hands down. Instance geometry stops at every new instance; policy inherits.
 | Role policy       | `--form-actions-justify`, `--frame-ratio` | yes      |
 | Instance geometry | `--cluster-justify`, `--grid-columns`     | no       |
 
-Set instance geometry on the element itself (a class or inline style), and
-select nested instances to change them (`.toolbar > .cluster`). Set a policy
-once on the region or on `:root` that owns it. A new hook follows the same
-test: "how this element lays out" stops at the element, "what this context
-hands down" inherits. The stop needs the instance to read its own hook:
-`.switcher` and `.sidebar-layout` hooks are read by their children, and a
-nested instance that is itself such a child still needs its parent's value,
-so those keep inheriting.
+Set instance geometry on the element itself, with a class or inline style.
+Select nested instances explicitly to change them (`.toolbar > .cluster`).
+Set inherited policies on a region or `:root`.
+
+The layout hooks of `.switcher` and `.sidebar-layout` inherit because their
+children consume them; check their component pages when nesting layouts.
 
 ### Color
 
@@ -117,7 +114,15 @@ their own colors.
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 
-Focus styling is outline-first. A global focus baseline draws a `--focus-ring-width` line in `--focus-outline-color`, offset by `--focus-outline-offset`: older browsers show it on `:focus`, while modern browsers limit it to `:focus-visible`. The baseline is a `currentColor` line, so text-like elements (links, `summary`, nav and menu items) follow whatever surface the application painted. Boxed components draw a solid `--focus-ring-width` line in `--focus`: inside the border box on text fields (`.input`, `.textarea`, `.select`), outside at `--focus-outline-offset` on actions (`.btn`, `.close`, choices, switches). The color never follows an intent or a local surface, so `--focus` must hold 3:1 against both `--surface` and `--surface-solid` — the page, fields and a solid band all rely on it. Both lines are `--focus-ring-width` wide. Under `forced-colors: active`, outlines map to the system focus color.
+Focus uses an outline:
+
+- Links, summaries, nav items, and menu items use `--focus-outline-color`.
+- Text fields use `--focus` inside their border.
+- Buttons, close controls, choices, and switches use `--focus` outside their border.
+
+`--focus-ring-width` controls all these lines; `--focus-outline-offset` sets
+the outside gap. Choose `--focus` with at least 3:1 contrast against both
+`--surface` and `--surface-solid`. Forced colors use the system focus color.
 
 ```css
 :root {
@@ -137,15 +142,13 @@ writes `var(--focus-ring-width) solid var(--focus-outline-color)`.
 
 ### Palette coherence
 
-A coherent palette treats surfaces, text, borders, intents, and shadows as related roles rather than isolated colors.
+Choose surfaces, text, borders, intents, and shadows as one palette. Neutrals
+may share an ambient hue; success, warning, and danger should remain
+recognizable. These relationships are set in the theme values, not derived
+from `--primary` at runtime.
 
-Coherence does not mean that every token must be chromatic. Pure or near-pure whites and blacks remain legitimate where their role calls for them; what matters is that the surrounding neutral ramp and derived treatments belong to the same visual family.
-
-Neutral roles may lean toward the palette's ambient hue — by default the primary's — while lightness and chroma stay curated per role. Chroma runs strongest through the ramp's mid-lightness rungs, often around `--border` and `--text-muted` depending on the color scheme, and tapers toward both ends. A palette whose accent is deliberately warmer or cooler than its paper picks an ambient hue of its own.
-
-Semantic intents are curated colors, not mechanical derivatives of `--primary`. Danger, warning, and success stay recognizable for their function, but they are chosen as members of the theme palette rather than copied independently from a generic scale. Neither intents nor neutrals are derived from `--primary` at runtime: the relationship is a design decision recorded in the theme's own values.
-
-Color should reinforce structure and meaning, not carry them alone. Information hierarchy and semantic states should remain understandable when hue is removed or unavailable. Desaturating a composition is a useful review heuristic, not a conformance test.
+Keep structure and state understandable without color. A grayscale review can
+help reveal where labels, shapes, or other cues are missing.
 
 ### Default theme philosophy
 
@@ -188,7 +191,9 @@ A rule that re-derives a soft color reads it with the recipe's own fallback:
 mix. Both recipes are rendering-only — the baseline path below `color-mix()`
 keeps `var(--surface-subtle)` and `var(--border)`.
 
-`--soft-fg-mix` is the share of raw intent in soft *text*. At its `100%` default soft ink is the intent color itself, which is what a palette of dark, muted intents wants. A vivid or light palette cannot afford that: a soft badge then paints intent-tinted ink on an intent-tinted surface, and the two converge. Lowering the mix rebates the ink toward `--text`, which is the right direction in both schemes because `--text` is dark on a light theme and light on a dark one. Around `45%` a fully saturated palette recovers AA while the ink still reads as its intent.
+`--soft-fg-mix` controls the share of intent color in soft text. Lower it to
+move the text toward `--text` when a vivid or light intent lacks contrast.
+Measure the result with `actual-css contrast`.
 
 Soft ink can also be corrected per role. The intent classes relay a per-role
 hook, and the soft recipe reads it before falling back to the global mix:
@@ -200,25 +205,18 @@ hook, and the soft recipe reads it before falling back to the global mix:
   intent class to its own `--*-soft-fg`.
 - `--soft-fg-mix` — the **global fallback derivation**, unchanged.
 
-**Soft foregrounds are calibrated against the darkest or closest interactive
-surface they are expected to appear on.** The tint is translucent, so the same
-pair reads differently on each surface — usually closest on `--surface-subtle`.
-For interactive soft treatments the fill moves toward the intent on hover
-(`--soft-hover-alpha`), so the binding pair is the *hovered* tint over
-`--surface-subtle` and the resting fill simply carries more margin; the default
-palette ships its own `--primary`/`--secondary`/… `-soft-fg` hooks to keep
-every pair ≥ 4.5:1 on `--surface`, `--surface-raised` and `--surface-subtle` in
-both color schemes, enforced by `tests/browser/soft-recipe.test.js`. The hard line stops at the default theme:
-presets and custom `[data-theme]` islands keep the `--soft-fg-mix` derivation
-unless they declare the hooks themselves (the framework resets them outside
-the default boundary). A theme that overrides the soft palette is responsible
-for preserving sufficient text contrast; `bunx --bun actual-css contrast --theme FILE`
-measures its resting and hovered pairs, composited on each of those surfaces.
+The default theme's soft text meets 4.5:1 contrast on `--surface`,
+`--surface-raised`, and `--surface-subtle`, at rest and on hover in both schemes.
+Custom themes must check their own pairs:
 
-A theme whose primary should read more muted than its statuses sets only
-`--primary-soft-fg`, and every soft `.primary` foreground follows it. Without a
-`--*-soft-fg` the recipe resolves byte-identically to the old `--soft-fg-mix`
-derivation. A custom intent class provides the relay directly:
+```sh
+bunx --bun actual-css contrast --theme src/theme.css
+```
+
+Named themes fall back to `--soft-fg-mix` unless they declare per-role hooks.
+
+Set `--primary-soft-fg` to change soft primary text without changing other
+intents. A custom intent class provides its soft foreground directly:
 
 ```css
 .tertiary {
@@ -227,14 +225,6 @@ derivation. A custom intent class provides the relay directly:
   --intent-soft-fg: var(--tertiary-soft-fg);
 }
 ```
-
-**When an intent is tinted against a theme-controlled surface or border, the mix interpolates in `oklab`.** That covers the soft recipe, the checked `.choice-card` tint, and the `.overline.pill` border.
-
-Not because rectangular interpolation is more faithful to the intent hue — across the shipped presets it is a few degrees *less* faithful. A browser treats hue as powerless below a small chroma epsilon, so for the low-chroma surfaces and borders the presets actually use, a polar mix snaps cleanly onto the intent and wins.
-
-The reason is continuity. A theme owns `--surface` and `--border`, and may put them anywhere from achromatic to vivid. Under polar interpolation that range contains a cliff: below the epsilon the mix tracks the intent, above it the surface hue starts winning, and crossing it moves the result into a different color family — 116 degrees, a soft `.secondary` landing in the greens. Cartesian interpolation responds smoothly across the whole range a public token allows. A recipe that is only correct while an adopter's surface stays under an unstated, implementation-defined threshold is not a contract, so the framework trades a small continuous error for a predictable one. The present cost is imperceptible: the largest difference the rule introduces in any preset is 3/255 on one channel.
-
-Mixing against `black`, `white`, `transparent`, or `currentColor` is exempt and stays in `oklch`: those have no hue to interpolate, so both spaces give byte-identical results. Polar interpolation also stays legitimate where hue rotation is the point, such as sweeping a gradient through hues. `bun run check:color-space` enforces the rule for contextual tints and takes an `intentional-oklch` comment as an escape hatch.
 
 ### Shape
 
@@ -268,7 +258,8 @@ Spacing should be useful without becoming a design-token encyclopedia.
 }
 ```
 
-Official steps are named in tens so the scale stays extensible. **Actual CSS will never define a `--space-*` token that is not a multiple of 10.** The intermediate names (`--space-15`, `--space-45`, …) are reserved for application-level interpolation: defining them is not writing into the framework namespace, it is using the half of the scale the framework has permanently given up.
+Framework spacing names use multiples of 10. Intermediate names such as
+`--space-15` and `--space-45` are reserved for application-defined steps.
 
 Use `em` for spacing that should scale with the component text size, such as button gaps and inline padding. Use `rem` for global rhythm, layouts, and fixed density.
 
@@ -421,7 +412,9 @@ Motion durations keep transitions consistent and easy to disable.
 }
 ```
 
-Ordinary interaction/state transitions have **no easing token**: they use the CSS default `ease` directly, and the dialog shake feedback plus the `actual-dialog` View Transition keep that default deliberately. The presence pair exists only for one-shot open/close where open and closed states own separate easing values (`.status-bar`/`.is-open`, `dialog.modal[open]`, `dialog.drawer[open]`): `--ease-enter` decelerates the appearance, `--ease-exit` accelerates the departure. The pair follows Material's standard rhythm; the emphasized-decelerate entrance is deliberately not offered because it only pays off at 250–400ms durations, beyond this vocabulary. Backdrops keep `ease` — a scrim only fades, it does not travel — but track their surface's duration. Toggles that share one transition list at `--duration-fast` (flyout, tooltip) also stay on `ease`: at 100ms the curve barely resolves and entry/exit cannot split on a single rule. These absences are deliberate, not gaps; a theme with a different motion character overrides `--ease-enter` / `--ease-exit`.
+Use `--ease-enter` and `--ease-exit` to change how dialogs, drawers, and the
+status bar appear and leave. Ordinary state transitions, flyouts, tooltips,
+and backdrops use CSS `ease`.
 
 `reset.css` clamps raw animation and transition durations to `0.01ms`, resets their delays, and restores `html` scroll behavior under `prefers-reduced-motion: reduce`. Decorative loops effectively complete immediately without blanket-disabling animation support.
 
@@ -463,9 +456,13 @@ Under `forced-colors: active`, `--backdrop-fill` maps to `Canvas`.
 
 Two systems order overlays, and only one of them uses numbers.
 
-**The platform top layer** holds native `<dialog>` (modal, drawer) and every element currently showing as a popover — which, since the runtime drives flyouts, context menus and tooltips with `popover="manual"`, is all of Actual's anchored overlays. Top-layer ordering does not use `z-index`. Such an element always paints above the document, and its order among the others is its top-layer promotion order — the most recently promoted on top. A `z-index` declaration on it still computes; it just does not decide where it lands.
+**The platform top layer** holds modal dialogs, drawers, and open popovers,
+including runtime-managed flyouts, context menus, and tooltips. They appear
+above the document, ordered by when they entered the top layer. `z-index`
+does not change that order.
 
-**The document layer** is everything else, and the scale below is what orders it. Nothing in it can reach the other system: `z-index: 999999` on a document-layer element still paints under any open dialog or popover.
+**The document layer** uses the scale below. Even a very high `z-index` stays
+below the top layer.
 
 | Token        | Value | Used by                         |
 | ------------ | ----- | ------------------------------- |
@@ -476,81 +473,38 @@ Two systems order overlays, and only one of them uses numbers.
 `.flyout` keeps the `--z-menu` declaration for a panel the runtime does not
 manage — one the platform has not promoted still stacks by number.
 
-`status-bar` is at the top of the document layer: above sticky bars and the FAB,
-and below any open dialog, menu or tooltip. That is the boundary between the
-two systems rather than a gap in the scale. Status messages are transient,
-non-critical feedback and their real contract is the live-region announcement
-— which is why `status.js` moves the singleton into an open modal dialog's
-subtree, since a modal inerts the rest of the document and promotion would not
-undo that.
+The status bar sits above sticky bars and the FAB, and below the top layer.
+For messages from a modal dialog, the runtime temporarily moves it inside the
+dialog so the message remains visible and announced.
 
-Stacking-context traps: these apply to overlays painted in the page, not to promoted ones. An element that is a DOM descendant of a container with `transform`, `filter`, `contain`, `isolation`, or `will-change` is confined to that ancestor's stacking context, and its z-index token only orders it against siblings within that context. Promotion escapes all of it — but do not move the markup to chase the effect: a panel or tooltip used from inside a modal dialog must be authored *inside* that dialog, because the top layer does not lift an element out of a modal's inertness.
+Document overlays can be confined by ancestor stacking contexts, such as those
+created by `transform` or `isolation`. Top-layer overlays escape these contexts.
+A panel or tooltip used in a modal dialog still needs to be authored inside
+that dialog; promotion does not remove modal inertness.
 
 Scrollbar gutter: modal open/close can shift page layout when the classic scrollbar disappears. When a measured scrollbar is present, `modal.css` applies `scrollbar-gutter: stable` to the viewport so the page doesn't jump.
 
 ## Internal tokens
 
-Internal tokens are allowed when they reduce duplication or make component code clearer.
-
-### Variant plumbing
-
-The shared visual variants are:
-
-- `.solid`: full background, paired foreground. This is the default for buttons.
-- `.soft`: lightly tinted background, colored text. Good for alerts, badges, and secondary actions.
-- `.outline`: transparent background, colored border and text.
-- `.surface`: the page surface with the theme border, and the intent only in the text. The neutral chrome neither `.soft` (the intent-tinted treatment) nor `.outline` (no fill) can give.
-
-Buttons also support two button-only variants:
-
-- `.ghost`: transparent button with hover affordance.
-- `.link`: button semantics with link presentation.
-
-Do not force `.ghost` or `.link` onto components where the interaction model does not fit. Shared API should follow shared use.
-
-Components map global tokens to local aliases once at the top of the component and consume local tokens afterwards:
-
-```css
-.btn {
-  --btn-bg: var(--ui-bg, var(--btn-default-bg, var(--intent, var(--neutral))));
-  --btn-fg: var(--ui-fg, var(--btn-default-fg, var(--intent-fg, var(--neutral-fg))));
-  --btn-border: var(--ui-border, var(--btn-default-border, transparent));
-
-  border: var(--border-width) solid var(--btn-border-color, var(--btn-border));
-  border-block-end-color: var(
-    --btn-border-block-end-color,
-    var(--btn-border-color, var(--btn-border))
-  );
-  border-block-end-width: var(--btn-border-block-end-width, var(--border-width));
-}
-```
-
-The `--btn-*` fallbacks are intentionally inherited extension points for themes that change button grammar — such as turning the default solid button into a surface button with an intent-colored lower edge (the `edge` theme does exactly this). Keep them local until the same need appears across multiple components.
-
-Text controls (`.input`/`.textarea`/`.select`) expose the same lower-edge extension point: `--control-border-block-end-color` and `--control-border-block-end-width` are unset by default and fall back to the regular border, so a theme can give inputs an underline-style lower edge the same way, without fighting the hover/focus/disabled state rules that still own `--control-border` itself.
-
-Alerts expose the same idea on the leading edge instead of the lower one: `--alert-border-inline-start-color` and `--alert-border-inline-start-width` are unset by default and fall back to the regular `--ui-border`, so a theme can turn an alert into a callout with a colored flag on the inline-start side, matching the classic notice pattern, without a per-variant override.
-
-A theme is not limited to the tokens above; it can restate any component-local token or rule under a state selector to change the interaction recipe itself, not just the palette. The `gradient` theme does this for field focus: it restores a `--focus` border plus an outer translucent halo in place of the core inset outline.
-
-Rules:
-
-- Prefix internal component tokens with the component name (`--btn-*`, `--alert-*`, `--card-*`).
-- Prefix shared variant plumbing with `--ui-*`.
-- The shared relays `--ui-*`, `--intent*`, and `--density-*` are framework plumbing: they are classified once at framework level, not restated in every component file.
-- Keep component-specific variants in component code when they do not generalize.
-- `flush` is a shared modifier: it removes the component's outer chrome so the component sits directly inside an existing surface (`.accordion.flush`). Reuse the term one component at a time when the same integration need appears elsewhere; `separated` stays component-local until a second real consumer exists.
-- Do not require users to override internal tokens for ordinary theming.
-- Promote an internal token to public only when there is a repeated, reasonable customization need.
-- A custom property used only in a fallback position (`var(--x, default)`) and never declared is an unset extension point and must carry a classification — public, framework plumbing, or internal. `check:css-api` fails on any unclassified fallback-only property; it does not force an artificial declaration to satisfy the audit.
+The framework uses `--ui-*` and `--intent*` to connect variants and components.
+Use the documented component hooks for ordinary customization.
 
 ## Theme contract
 
 Themes override tokens, not selectors. The themes in `src/css/themes/` are repository-only demo examples, not included in the default stylesheet or the npm package; they exist to show valid ways to use this contract, such as `ocean`, `square`, `cyberpunk`, and `brutalist`.
 
-A minimal recolor theme overrides the intent pairs, surfaces, text colors, border, focus, hover overlay, and shadow color. Pick `--focus` as a mid-tone that holds 3:1 against both `--surface` and `--surface-solid` in every scheme the theme declares; a pastel dark-scheme primary usually fails on the light solid surface. `bunx --bun actual-css contrast --theme FILE` measures both pairs, and exits 1 when a pair misses. The file may declare a `[data-theme]` island or set the tokens on `:root`; the tool reads each scheme through `color-scheme`, so write dark values with `light-dark()` — a `prefers-color-scheme` media block is not measured.
+A recolor theme sets intent pairs, surfaces, text, border, focus, hover overlay,
+and shadow color. Check it with `bunx --bun actual-css contrast --theme FILE`;
+the command exits 1 when a measured pair fails. In particular, `--focus` needs
+3:1 contrast against both `--surface` and `--surface-solid` in every scheme.
 
-When overriding an intent color, review its paired `--*-fg` and `--*-soft-fg`. A theme that declares no hook falls back to the `--soft-fg-mix` derivation: one global percentage applied to every role, so it carries no contrast guarantee for a palette it was not tuned against. `actual-css contrast` prints the resting and hovered soft pair for every intent in every scheme the theme declares, which is how a theme finds the roles that need a hook or a lower `--soft-fg-mix`.
+The file can use `[data-theme]` or `:root`. The checker reads schemes through
+`color-scheme`: express dark values with `light-dark()`. It does not measure
+`prefers-color-scheme` media blocks.
+
+When changing an intent, check its `--*-fg` and `--*-soft-fg` too. The contrast
+report includes resting and hovered soft pairs for each intent and scheme.
+Adjust failing roles with a per-role hook or a lower `--soft-fg-mix`.
 
 The default palette's hooks apply to `:root` and to the `light`/`dark` boundaries only. Any other `data-theme` value resets them to the derivation, whether the attribute sits on `<html>` or on a nested island.
 
@@ -607,7 +561,9 @@ A minimal recolor theme (illustrative, not a shipped theme):
 }
 ```
 
-Several tokens are theme-derived aliases that reference other tokens — `--state-selected`/`--state-selected-fg`/`--state-disabled`, `--indicator-ring`, `--shadow`/`--shadow-popout`, `--heading`, `--selection-bg`/`--selection-fg`, and `--surface-opaque`/`--surface-solid-fg`. They are declared on `:root, [data-theme]` so they recompute on every theme boundary: a custom property resolves its `var()` references at computed-value time on the element that declares it, so an alias declared only on `:root` would be inherited as an already-resolved value and would not follow a `[data-theme]` island's overridden tokens. A theme that wants a distinct alias (e.g. a `--selection-bg` of its own) overrides it explicitly afterwards, which wins by cascade order.
+Derived tokens, including shadows, headings, selection colors, and state
+colors, recompute at each theme boundary. To customize one, declare it in your
+theme after Actual CSS.
 
 Selected state has three roles:
 
@@ -615,7 +571,9 @@ Selected state has three roles:
 - `--state-selected-fg` — ink on that fill.
 - `--state-selected-text` — selected ink on a regular surface: the current nav link, the selected tab, the current step's number and ring.
 
-`--state-selected-text` has no default: the core resets it to the guaranteed-invalid value on every theme boundary, and each consumer reads `var(--state-selected-text, var(--state-selected))`. The reset is what lets a nested theme island reach its own `--state-selected`: a theme that resolves the hook to another token bakes the reference where it is declared, so an island that sets nothing would otherwise inherit the resolved value and never fall back. Set it when one color cannot be both a fill under its `-fg` and text on the page — typically a dark scheme, where a fill dark enough for white ink is too dark to read as text. Pulling the accent toward `--text` keeps its hue in both schemes:
+`--state-selected-text` falls back to `--state-selected` within each theme.
+Set it separately when the selected fill lacks contrast as text, especially
+in a dark scheme. Mixing the accent toward `--text` can help:
 
 ```css
 [data-theme="my-theme"] {
@@ -630,39 +588,13 @@ Selected state has three roles:
 
 Without `data-theme`, the default theme advertises `color-scheme: light dark` and follows the user's OS preference in browsers that support `light-dark()`. Dark themes should set `color-scheme: dark`. Light themes should set `color-scheme: light`. Browsers without `light-dark()` receive the light fallback.
 
-Because the native select chevron is an SVG background image and cannot inherit `currentColor`, the select hands the arrow back to the browser under `prefers-contrast: more` (same treatment as `forced-colors: active`) instead of shipping a recolored chevron per theme — one native fallback covers every theme without a high-contrast icon variant to maintain.
+Selects use the browser's native arrow under `prefers-contrast: more` and
+`forced-colors: active`.
 
-Under `prefers-contrast: more`, the user's contrast preference wins over a theme's palette by contract: the core collapses `--text-muted`/`--text-subtle` to `--text` and thickens borders and focus so no theme can defeat a legibility requirement. This is a deliberate decision, not a specificity quirk — the repeated `[data-theme][data-theme]` attribute only outranks a preset theme stylesheet loaded after the core.
+Under `prefers-contrast: more`, muted and subtle text use `--text`, and borders
+and focus lines thicken. Keep these accessibility adjustments when customizing
+a theme.
 
 Under `prefers-reduced-transparency: reduce`, `.topbar` and `.form-actions.sticky` paint `--surface` without a backdrop blur. A theme with translucent `--surface-*` redeclares them opaque inside the same media query; the glass demo theme shows the recipe.
 
 Under `forced-colors: active`, the browser automatically remaps `color`, `background`, and `border` properties to system colors. The core only adjusts what the remapping cannot express on its own — `--state-disabled` becomes `GrayText` and `--disabled-opacity` becomes `1` — declared on `:root` and `[data-theme]` so every theme boundary follows. Keep local forced-color rules only for custom control geometry, native bar parts, or selected/checked states that would otherwise be communicated only by background color.
-
-## Component mapping
-
-Components map global tokens to local aliases at the top of the component, then use the local tokens afterwards. This makes the contract obvious:
-
-```css
-.alert {
-  --alert-bg: var(--ui-bg, var(--surface-subtle));
-  --alert-fg: var(--ui-fg, var(--intent, var(--text)));
-  --alert-border: var(--ui-border, var(--border));
-
-  border: var(--border-width) solid var(--alert-border);
-  border-radius: var(--alert-radius, var(--radius-lg));
-  background: var(--alert-bg);
-  color: var(--alert-fg);
-}
-```
-
-- theme authors adjust global tokens
-- variant code adjusts `--ui-*`
-- component code consumes local aliases
-
-## Non-goals
-
-- Do not expose a separate token for every selector.
-- Do not mirror Pico-style component-specific variables unless there is a clear need.
-- Do not add Tailwind-like color scales as public API.
-- Do not rely on Sass, PostCSS, or generated token files.
-- Do not make dark mode required for old browsers. Light mode is the fallback.

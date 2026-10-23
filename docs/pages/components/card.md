@@ -26,13 +26,12 @@ Nested cards and `data-theme` islands establish their own link context.
 ## Basic usage
 
 Use semantic elements inside the card. A direct `<header>` or `<footer>` is the
-card's structural slot. A direct `<footer>` is anchored to the bottom of the
-card when extra block space is available, so prices and actions line up across
-equal-height cards. Cards do not own page spacing — compose them with layout
-primitives like `.grid`. A bare card owns the rhythm between its direct
-children through `--card-gap`; applying a layout primitive such as `.stack` or
-`.media` to the same element gives that primitive control of the layout and
-gap.
+card's header or footer slot. When the card has spare height, its footer stays
+at the bottom, aligning prices and actions across equal-height cards.
+
+Use layout primitives such as `.grid` to space cards. Within a bare card,
+`--card-gap` spaces the direct children. Add `.stack` or `.media` to the card
+to let that primitive control its layout and gap.
 
 ```html demo
 <div style="max-inline-size: 32rem">

@@ -27,6 +27,12 @@ Actual CSS is intended for new projects. Existing projects with class collisions
 
 ### Rules
 
+Modifiers use separate classes because intents, treatments, and sizes are
+shared across components. A custom `.tertiary` intent can then work on buttons,
+badges, and alerts without a modifier for each block. Native and ARIA attributes
+carry state without a parallel class to synchronize. Semantic children such as
+a card's `header` and `footer` need no extra element class.
+
 - Classes name components, not markup. Prefer the established UI term even when it matches the element (`.select`, `.table`); do not invent synonyms just to avoid repetition.
 - When one element can host multiple components, use the component role instead of the element name (`.modal` / `.drawer` on `dialog`, `.check` / `.radio` / `.switch` on `input`).
 - Do not merely restate the element when a more precise or canonical component name exists (`.key`, not `.kbd`; `.modal` / `.drawer`, not `.dialog`).

@@ -28,25 +28,16 @@ positioning and with the projecting arrow, while leaving bare `[popover]`
 elements untouched. The lifecycle owner still writes `position`, the
 coordinates, and the arrow position; Actual only supplies the presentation.
 
-Do not combine them. `tooltip.js` writes `popover="manual"` on every tooltip it
-manages and calls `showPopover()` / `hidePopover()` itself, so a tooltip handed
-to the runtime has its mode overwritten. The runtime only ever reaches a
-tooltip that a `data-tooltip` trigger points at, so a `.tooltip[popover]` with
-no such trigger stays yours to drive. Use `data-tooltip` and the built-in
-runtime when Actual should own showing and hiding.
+Choose one lifecycle owner. Use `data-tooltip` when Actual should show and
+hide the tooltip; the runtime sets `popover="manual"`. To manage a
+`.tooltip[popover]` yourself, leave it unconnected to any `data-tooltip` trigger.
 
-**Where the element lives is part of the contract.** An explicit tooltip stays
-exactly where you wrote it, so it keeps every scope that reaches it by
-inheritance — a theme island, a density scope, your own scoped
-custom properties. It also means placement is yours to get right: a tooltip
-used from inside a modal dialog must be authored inside that dialog, because
-the top layer does not lift an element out of a modal's inertness.
+An explicit tooltip stays where you wrote it and inherits that location's
+theme, density, and custom properties. Place it inside the dialog when its
+trigger is in a modal dialog; content outside the modal is inert.
 
-A generated tooltip (`data-tooltip="Help"`) is Actual's to place, and it goes
-at document level rather than beside the trigger, so it cannot disturb the
-trigger's structural position — a generated sibling would take
-`.join > :last-child` from a trigger that ends a group. It therefore makes no
-inheritance promise. Use the explicit form when the local CSS context matters.
+A generated tooltip (`data-tooltip="Help"`) does not inherit the trigger's
+local CSS context. Use an explicit tooltip when that context matters.
 
 ```html demo
 <button class="btn ghost"

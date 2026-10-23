@@ -149,13 +149,10 @@ and collapses the shared edges.
 </div>
 ```
 
-Keep one variant family inside a group. Because each button keeps its own
-classes, nothing stops `.btn`, `.btn outline` and `.btn soft` from sitting side
-by side — but three fills and three border treatments in one shape read as
-unrelated controls that happen to touch, not as one unit. Change the variant
-only to carry meaning: [Toggle](#toggle) marks a pressed button with a solid
-fill among outlines. For one choice among a few on a shared track, use a
-[segmented control](segmented.md) instead.
+Use the same variant across a group. Change a button's variant to mark a
+meaningful state, such as a solid pressed [toggle](#toggle) among outlines.
+For one choice among a few on a shared track, use a
+[segmented control](segmented.md).
 
 ## Sizes
 

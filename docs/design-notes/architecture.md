@@ -43,6 +43,9 @@ padding and type together has become a component, whatever file it lives in.
 
 ## Tokens
 
+See [Token architecture](tokens.md) for scope, inheritance, size and density,
+color interpolation, motion, and component mapping constraints.
+
 A value derived from an overridable token is computed on the element that uses
 it, never as an alias on `:root`: an inherited custom property arrives already
 computed, so an override on a theme island or a region would not reach it. The
