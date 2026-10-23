@@ -108,7 +108,7 @@ Prefer:
 `<div class="cluster product-actions">`. The hook is read by `.cluster`, so the
 CSS stays a local adjustment, not a reimplementation.
 
-over reimplementing their layout:
+Avoid reimplementing a primitive's layout:
 
 ```css
 /* Avoid when an Actual primitive already owns this behavior */
