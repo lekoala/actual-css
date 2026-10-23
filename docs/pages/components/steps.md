@@ -139,22 +139,36 @@ names, or when a step should be navigable:
 
 ```html demo
 <ol class="steps steps-horizontal" aria-label="Checkout progress">
-  <li class="step-complete"><span class="step-label">Account</span></li>
-  <li class="step-complete"><span class="step-label">Profile</span></li>
-  <li aria-current="step"><span class="step-label">Validation</span></li>
-  <li><span class="step-label">Payment</span></li>
+  <li class="step-complete"><span class="step-label">Cart</span></li>
+  <li class="step-complete"><span class="step-label">Details</span></li>
+  <li aria-current="step"><span class="step-label">Review</span></li>
+  <li><span class="step-label">Pay</span></li>
 </ol>
 ```
 
 **Actual CSS never hides an authored step label.** Labels stay visible at every
 width. Stacked steps keep their markers evenly spaced, and long names wrap
-inside their share, hyphenated when the page declares a `lang`. The first and
-last steps align with the row's edges, labels included, so the track lines up
-with the heading above it. Short labels fit a phone with no width budget.
+inside their share. The first and last steps align with the row's edges, labels
+included, so the track lines up with the heading above it. Their labels get
+half a share, so a phone-width row reads best with short names at both ends.
+
+Automatic hyphenation depends on the browser, the language and its
+dictionaries. Mark break points with `&shy;` (`Ac&shy;count`) when a long name
+must wrap predictably.
 
 Set `--step-min` when names need a wider minimum share. If the markers or that
 minimum do not fit, the row scrolls; use `.steps-vertical` when every name must
 remain visible without horizontal scrolling.
+
+```html demo
+<ol class="steps steps-horizontal scroller" style="--step-min: 7rem" aria-label="Order progress">
+  <li class="step-complete"><span class="step-label">Account</span></li>
+  <li class="step-complete"><span class="step-label">Shipping address</span></li>
+  <li aria-current="step"><span class="step-label">Payment method</span></li>
+  <li><span class="step-label">Review order</span></li>
+  <li><span class="step-label">Confirm</span></li>
+</ol>
+```
 
 In supporting browsers, a row that scrolls starts on its `aria-current="step"`
 instead of step 1. A row
@@ -198,17 +212,17 @@ Resize the demo below. The 3-step flow needs less room than the supported
 ```html demo resize
 <div class="stack">
   <ol class="steps steps-horizontal container-query scroller" style="--step-complete-mark: '✓'">
-    <li class="step-complete"><span class="step-label">Identification</span></li>
-    <li aria-current="step"><span class="step-label">Confirmation</span></li>
-    <li><span class="step-label">Finalisation</span></li>
+    <li class="step-complete"><span class="step-label">Account</span></li>
+    <li aria-current="step"><span class="step-label">Payment</span></li>
+    <li><span class="step-label">Confirm</span></li>
   </ol>
 
   <ol class="steps steps-horizontal container-query scroller" style="--step-complete-mark: '✓'">
-    <li class="step-complete"><span class="step-label">Account</span></li>
-    <li class="step-complete"><span class="step-label">Details</span></li>
-    <li aria-current="step"><span class="step-label">Payment</span></li>
+    <li class="step-complete"><span class="step-label">Cart</span></li>
+    <li class="step-complete"><span class="step-label">Ship</span></li>
+    <li aria-current="step"><span class="step-label">Pay</span></li>
     <li><span class="step-label">Review</span></li>
-    <li><span class="step-label">Confirm</span></li>
+    <li><span class="step-label">Done</span></li>
   </ol>
 </div>
 ```
@@ -334,7 +348,7 @@ label a link when the workflow genuinely allows navigation to that step:
 ```html demo resize
 <ol class="steps steps-horizontal container-query scroller">
   <li class="step-complete">
-    <a class="step-label" href="#">Account</a>
+    <a class="step-label" href="#">Cart</a>
   </li>
   <li class="step-complete">
     <a class="step-label" href="#">Details</a>
@@ -343,7 +357,7 @@ label a link when the workflow genuinely allows navigation to that step:
     <span class="step-label">Payment</span>
   </li>
   <li>
-    <span class="step-label">Confirm</span>
+    <span class="step-label">Done</span>
   </li>
 </ol>
 ```

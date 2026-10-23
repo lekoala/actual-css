@@ -169,10 +169,21 @@ It is not behind a viewport query. Edge alignment is the row's geometry, the
 one the compact and inline forms already have, and a breakpoint on the viewport
 would lay out the same 600px row differently on a phone and in a desktop card.
 
+The end labels pay for that alignment: each gets half a share, and that is
+already all the room it can have. Two neighbouring labels meet at the midpoint
+between their markers, and an end label already runs from the row's edge to
+that midpoint, so widening it would let it overlap a long neighbour. Giving the
+end labels a full share means centring them under inset markers, which gives
+up the edge alignment. That is a design trade, not a technical limit, and it
+stays open to re-evaluation if narrow rows need longer end names.
+
 The marker sets the default item floor. A `minmax(0, 1fr)` grid column keeps a
 long label from widening its step; `hyphens: auto` breaks a long word where the
-page's `lang` allows, and `overflow-wrap: anywhere` still lets an unbroken name
-fit when it does not. `--step-gap` separates both the marker from its label and
+browser has a dictionary for the page's `lang`, and `overflow-wrap: anywhere`
+still lets an unbroken name fit when it does not. Automatic hyphenation is not
+a contract: headless Chrome hyphenates `account` but breaks `Account` as
+`Accoun`/`t`, and most labels are capitalised. An authored `&shy;` is the
+predictable break. `--step-gap` separates both the marker from its label and
 one step from the next, so wrapped names cannot run together.
 
 Authors can raise `--step-min` when wrapping costs too much height. The row
