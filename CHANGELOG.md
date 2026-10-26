@@ -4,6 +4,7 @@
 ### Changed
 - Reset: `-webkit-tap-highlight-color: transparent` on `html`, so the rectangular native tap flash no longer covers rounded controls.
 - Bare links thicken their underline on `:active` as well as `:hover`, as touch feedback.
+- Bare text links (`a[href]` with no class) keep a tap flash tinted from their own color.
 
 ## [0.15.0] - 2026-10-18
 ### Added

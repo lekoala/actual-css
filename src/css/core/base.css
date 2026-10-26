@@ -31,6 +31,14 @@ a:is(:hover, :active) {
   text-decoration-thickness: 0.12em;
 }
 
+/* Bare text links get back the tap flash the reset removes: a text link has
+   no pressed state of its own. Tinted from the link ink so it reads on any
+   surface. Zero specificity so a component styling classless anchors (an
+   .app-nav tile) can opt out with transparent. */
+:where(a[href]:not([class])) {
+  -webkit-tap-highlight-color: color-mix(in oklab, currentColor 18%, transparent);
+}
+
 /* Global heading chrome: color (--heading or inherit), a tight line-height,
    and progressive text-wrap. No font-size or font-weight is set globally —
    components and .prose own the per-context scale. */

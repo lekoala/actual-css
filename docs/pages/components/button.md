@@ -267,8 +267,10 @@ For exclusive groups, manage a single pressed button:
 
 The reset sets `-webkit-tap-highlight-color: transparent` on `html`: the native
 tap flash is a rectangle that ignores `--btn-radius`. A pressed button moves
-down a pixel instead. The property inherits, so one declaration on a container
-restores the flash there. Tap both rows on a phone to compare:
+down a pixel instead. A bare text link (`<a href>` with no class) has no
+pressed state of its own, so it keeps a flash tinted from its own color. The
+property inherits, so one declaration on a container restores the native flash
+on its components. Tap both rows on a phone to compare:
 
 ```html demo
 <div class="stack">
@@ -280,7 +282,6 @@ restores the flash there. Tap both rows on a phone to compare:
   <div class="cluster" style="-webkit-tap-highlight-color: rgb(0 0 0 / 0.2);">
     <button class="btn primary" type="button" style="--btn-radius: var(--radius-full);">Native flash</button>
     <label class="choice-card chip"><input type="checkbox" /> Chip</label>
-    <a href="#touch-feedback">Text link</a>
   </div>
 </div>
 ```
