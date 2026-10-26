@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.15.1] - 2026-10-26
 ### Changed
 - Reset: `-webkit-tap-highlight-color: transparent` on `html`, so the rectangular native tap flash no longer covers rounded controls.
 - Bare links thicken their underline on `:active` as well as `:hover`, as touch feedback.
