@@ -57,6 +57,8 @@
   text-align: center;
   text-decoration: none;
   overflow-wrap: anywhere;
+  /* A rounded tile: opt out of the bare-link tap flash from base.css. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .app-nav > a > :where(svg, img, [aria-hidden="true"]) {
