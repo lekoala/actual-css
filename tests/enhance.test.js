@@ -6,6 +6,36 @@ afterEach(() => {
   cleanupDOM();
 });
 
+test("accept only receives matching elements during discovery and refresh", async () => {
+  setupDOM('<main><input value="ready"><textarea>ready</textarea><div></div></main>');
+  const started = [];
+  const runtime = enhance(
+    { input: (el) => started.push(el), textarea: (el) => started.push(el) },
+    undefined,
+    { accept: (el) => el.value.length > 0 },
+  );
+  const initial = [...document.querySelectorAll("input, textarea")];
+  expect(started).toEqual(initial);
+
+  runtime.refresh(document.body);
+  runtime.refresh(document.querySelector("div"));
+  expect(started).toEqual(initial);
+
+  const others = [];
+  const sibling = enhance({ "[data-other]": (el) => others.push(el) });
+  document
+    .querySelector("main")
+    .insertAdjacentHTML(
+      "beforeend",
+      "<section><div data-other></div><input><textarea>new</textarea></section>",
+    );
+  await nextMicrotask();
+  expect(started).toEqual([...initial, document.querySelector("section textarea")]);
+  expect(others).toEqual([document.querySelector("[data-other]")]);
+  runtime.disconnect();
+  sibling.disconnect();
+});
+
 test("acceptance follows subtree moves without restarting accepted instances", async () => {
   setupDOM('<main><div class="target"></div><section></section></main><aside></aside>');
   const target = document.querySelector(".target");

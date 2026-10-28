@@ -73,6 +73,8 @@ function createRegistry(root) {
   let discovery = "";
 
   function start(record, el) {
+    // Shared discovery also visits the scan root and other records' matches.
+    if (record.accept && !record.keys.some((key) => el.matches(key))) return;
     if (record.accept && !record.accept(el)) {
       stop(record, el);
       return;
