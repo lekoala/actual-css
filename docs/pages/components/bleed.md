@@ -3,6 +3,10 @@
 `.bleed` lets a direct child of a padded surface reach its edges. Use it for a
 full-width image, a colored header or footer, or a notice band.
 
+`.bleed` is relative to a padded surface. A full-width band on a page is a
+different mechanism: keep the landmark full width and put `.center` inside it.
+See [Center](../layout/center.md).
+
 It works inside `.card`, `.drawer`, a modal's direct `<form>` or `.stack`, and
 an accordion panel. The accordion panel owns the padding, so place `.bleed`
 directly inside the panel, after the summary. A deeper descendant stays within

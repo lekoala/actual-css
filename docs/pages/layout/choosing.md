@@ -5,13 +5,23 @@ number of children visible in one mockup.
 
 ## Page and application shells
 
-| Situation                              | Recipe                                      |
-| -------------------------------------- | ------------------------------------------- |
-| A normally scrolling page              | Semantic landmarks, optionally `.app-shell` |
-| Topbar + scrolling main + adaptive nav | `.app-layout`                               |
+| Situation                                       | Recipe                                      |
+| ----------------------------------------------- | ------------------------------------------- |
+| A normally scrolling page                       | Semantic landmarks, optionally `.app-shell` |
+| Full-width bands over a centered content column | `.center` inside each landmark              |
+| Topbar + scrolling main + adaptive nav          | `.app-layout`                               |
 
 For public, marketing, and editorial pages, use semantic landmarks and add
 `.navbar` for site navigation.
+
+When a band must paint edge to edge, keep the landmark a plain page-level box
+and put `.center` inside it: the content column keeps its measure while the
+background reaches the viewport edge. A page wrapped in one `.center` cannot
+paint such a band, and a `.center` inside `.stack` sizes to its content measure
+rather than the row (see
+[stack](stack.md#dont-wrap-full-width-regions-with-stack)).
+[Marketing](../../demo/templates/marketing.html) and
+[Blog](../../demo/templates/blog.html) compose bands this way.
 
 Use `.app-layout` for a viewport-sized shell where the main region scrolls
 independently and navigation moves from bottom to side. Follow its
@@ -46,6 +56,10 @@ Use `--grid-columns` for exact track templates that do not match a built-in
 layout contract: arbitrary structural counts such as seven calendar days,
 asymmetric fractional tracks, or mixed intrinsic/flexible tracks. Once set, the
 application owns narrow-container behavior.
+
+`.measure` caps a single block at a readable width without centering it, for
+content inside a wider region. When the reading column is the page column, use
+`.center` instead. See [Measure](../utilities/list.md#measure).
 
 `.container-query` is a low-level opt-in for a component that changes its own
 representation according to allocated space. It does not enable responsive

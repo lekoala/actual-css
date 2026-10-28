@@ -217,6 +217,10 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   need is composition of existing primitives. Do not create a convenience
   primitive merely because the existing solution was not discoverable — improve
   the docs instead, in the same change.
+- Before proposing a new primitive, component, or layout pattern, inspect
+  `demo/templates/` for existing compositions and `docs/design-notes/` for prior
+  decisions. An existing composition means the gap is discoverability, not
+  capability.
 - Comments explain why, constraints, and non-obvious contracts — not what the
   next declaration says. Add a short `why` comment on intentionally defensive
   declarations or component invariants so future cleanup does not remove and

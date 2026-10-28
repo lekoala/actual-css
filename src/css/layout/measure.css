@@ -1,6 +1,8 @@
 /* Readable content measure. Composes with .center for centering or with
    margin-inline: auto for a one-off centered block.
  *
+ * Docs: docs/pages/utilities/list.md
+ *
  * Public hooks:
  * --measure
  */
