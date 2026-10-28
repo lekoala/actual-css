@@ -8,6 +8,11 @@
 ### Added
 - `enhance()` accepts a third `{ accept }` argument to filter lifecycle membership across subtree moves.
 
+### Changed
+- `data-grid.html`: `data-grid-component` 3.8.0, with row details in the component's own modal dialog.
+- `data-grid.html`: sets the `--modal-size` and `--modal-pad` hooks the data-grid theme reads for that dialog.
+- `data-grid.html`: grid buttons use `.btn.surface` instead of `.btn.outline`, so pagination and row actions keep the theme's light border.
+
 ## [0.15.1] - 2026-10-26
 ### Changed
 - Reset: `-webkit-tap-highlight-color: transparent` on `html`, so the rectangular native tap flash no longer covers rounded controls.

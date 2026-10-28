@@ -8,8 +8,8 @@
   <meta name="description" content="data-grid-component loaded from CDN, themed with Actual CSS tokens. Declarative table and JavaScript API examples.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.7.0/dist/data-grid.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.7.0/themes/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.8.0/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.8.0/themes/actual.css">
   <script src="../scripts/theme-picker.js"></script>
   <style>
     .page {
@@ -19,6 +19,14 @@
 
     .page-header {
       align-items: flex-start;
+    }
+
+    /* The data-grid Actual theme maps its details dialog onto the modal hooks
+       without a fallback of its own, so the demo supplies the documented
+       defaults. */
+    data-grid {
+      --modal-size: 32rem;
+      --modal-pad: var(--space-40);
     }
 
     /* The card heading is the visible label; keep the native caption as the
@@ -80,12 +88,13 @@
           <h2 style="margin: 0;">Invoices</h2>
           <p class="muted">Declarative: a native <code>&lt;table&gt;</code> adopted in place. Attributes and markup drive
             sorting, select filters, global search, selection, pagination and row actions; <code>data-value</code>
-            carries the typed machine value while the cell content stays the authored display.</p>
+            carries the typed machine value while the cell content stays the authored display. Row details open in the
+            grid's own modal <code>&lt;dialog&gt;</code>.</p>
         </hgroup>
       </header>
 
-      <data-grid id="invoices-grid" sortable filterable searchable selectable responsive row-actions page-size="10"
-          page-sizes="10,25,50" no-data="No invoices match your query.">
+      <data-grid id="invoices-grid" sortable filterable searchable selectable responsive row-actions row-label="invoice"
+          details-display="dialog" page-size="10" page-sizes="10,25,50" no-data="No invoices match your query.">
         <table>
           <caption>Invoices</caption>
           <thead>
@@ -345,18 +354,18 @@
     </section>
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
-      <span>Loaded from jsDelivr: <code>data-grid-component@3.7.0</code>, with
+      <span>Loaded from jsDelivr: <code>data-grid-component@3.8.0</code>, with
         <code>themes/actual.css</code> and Actual control classes.</span>
     </footer>
   </main>
 
   <script src="../../dist/actual.full.js"></script>
   <script type="module">
-    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.7.0/dist/data-grid.min.js";
+    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.8.0/dist/data-grid.min.js";
 
     DataGrid.setDefaultControlClasses({
-      button: "btn outline sm",
-      action: "btn outline sm",
+      button: "btn surface sm",
+      action: "btn surface sm",
       input: "input sm",
       select: "select sm",
     });

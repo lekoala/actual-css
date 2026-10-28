@@ -26,7 +26,7 @@ No class or hook is removed: markup and application CSS keep working.
   the core focus line and fields now match it.
 - The combobox, date picker and data grid recipes target
   `@lekoala/combobox` 0.7.1, `@lekoala/date-picker` 0.5.1 and
-  `data-grid-component` 3.7.0. Compare a copied bridge with the current one in
+  `data-grid-component` 3.8.0. Compare a copied bridge with the current one in
   [Combobox](../forms/combobox.md) and [Date picker](../forms/date-picker.md).
 
 ## 0.13 to 0.14
