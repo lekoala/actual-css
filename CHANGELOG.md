@@ -12,6 +12,8 @@
 - `data-grid.html`: `data-grid-component` 3.8.0, with row details in the component's own modal dialog.
 - `data-grid.html`: sets the `--modal-size` and `--modal-pad` hooks the data-grid theme reads for that dialog.
 - `data-grid.html`: grid buttons use `.btn.surface` instead of `.btn.outline`, so pagination and row actions keep the theme's light border.
+- `date-fields.html`, `contrast-contexts.html`, `neo-brutalist.html`: `@lekoala/date-picker` 0.6.0.
+- `combobox.html`, `contrast-contexts.html`, `neo-brutalist.html`: `@lekoala/combobox` 0.8.0.
 
 ## [0.15.1] - 2026-10-26
 ### Changed
