@@ -28,12 +28,13 @@
  */
 
 import { registerCommands, targetFor } from "./command.js";
-import enhance from "./enhance.js";
+import enhance, { registerEnhancement } from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { CLASSES } from "./selectors.js";
 
 const dialogMap = new WeakMap();
 const wiredDialogs = new Set();
+const delegatedDialogs = new WeakSet();
 // HTML has no non-modal dialog keyword, so non-modal opening is the custom
 // `--show` command.
 const DIALOG_COMMANDS = ["show-modal", "--show", "request-close", "close"];
@@ -44,6 +45,18 @@ let uid = 0;
 
 function isDialogElement(el) {
   return el?.nodeType === 1 && el.localName === "dialog";
+}
+
+function allowsDialogEnhancement(dialog) {
+  if (delegatedDialogs.has(dialog) || dialog.matches('[data-enhance~="dialog"]')) return true;
+
+  // Shadow roots and light-DOM custom elements own their dialogs, including
+  // hosts that have not upgraded yet. Avoid realm-dependent instanceof checks.
+  if (dialog.getRootNode().host) return false;
+  for (let parent = dialog.parentElement; parent; parent = parent.parentElement) {
+    if (parent.localName.includes("-")) return false;
+  }
+  return true;
 }
 
 function boolData(el, name) {
@@ -270,7 +283,7 @@ function finishClose(dialog, returnValue = "") {
 export function closeDialog(dialog, returnValue = "") {
   if (!isDialogElement(dialog) || !dialog.open) return;
 
-  const state = ensureDialogWired(dialog);
+  const state = ensureDelegatedDialog(dialog);
   if (state.closing) return;
 
   const trigger = state.restoreFocusTo;
@@ -299,7 +312,7 @@ export function closeDialog(dialog, returnValue = "") {
 export function requestDialogClose(dialog, returnValue = "") {
   if (!isDialogElement(dialog) || !dialog.open) return;
 
-  const state = ensureDialogWired(dialog);
+  const state = ensureDelegatedDialog(dialog);
   state.returnValue = returnValue;
   state.requestingClose = true;
   try {
@@ -317,7 +330,7 @@ export function requestDialogClose(dialog, returnValue = "") {
 export function openDialog(dialog, trigger = null, forcedModal = null) {
   if (!isDialogElement(dialog) || dialog.open || !dialog.isConnected) return;
 
-  const state = ensureDialogWired(dialog);
+  const state = ensureDelegatedDialog(dialog);
   const modal = resolveModalMode(dialog, forcedModal);
   syncDialogSemantics(dialog, state, modal);
 
@@ -497,6 +510,18 @@ function ensureDialogWired(dialog) {
 
 function connectDialog(dialog) {
   ensureDialogWired(dialog);
+  return () => disconnectDialog(dialog);
+}
+
+function ensureDelegatedDialog(dialog) {
+  const state = ensureDialogWired(dialog);
+  if (!allowsDialogEnhancement(dialog)) {
+    delegatedDialogs.add(dialog);
+    // Direct API calls delegate ownership too. Enroll light DOM dialogs in
+    // document cleanup; shadow-root lifecycles remain application-owned.
+    if (dialog.getRootNode() === dialog.ownerDocument) dialogRuntime.refresh(dialog);
+  }
+  return state;
 }
 
 function disconnectDialog(dialog) {
@@ -512,6 +537,7 @@ function disconnectDialog(dialog) {
   restoreOwnedAttributes(state);
   state.modalOpen = false;
   dialogMap.delete(dialog);
+  delegatedDialogs.delete(dialog);
   wiredDialogs.delete(dialog);
   syncModalOpenClass(dialog.ownerDocument);
 }
@@ -519,7 +545,7 @@ function disconnectDialog(dialog) {
 registerCommands(DIALOG_COMMANDS, {
   resolve: (trigger) => {
     const dialog = targetFor(trigger);
-    return isDialogElement(dialog) ? dialog : null;
+    return isDialogElement(dialog) && allowsDialogEnhancement(dialog) ? dialog : null;
   },
   handle: (_event, trigger, dialog, command) => {
     // A dialog inserted since the last enhance() pass is wired on first use.
@@ -541,9 +567,14 @@ registerCommands(DIALOG_COMMANDS, {
   },
 });
 
-enhance({
-  [DIALOG_SELECTOR]: (dialog) => {
-    connectDialog(dialog);
-    return () => disconnectDialog(dialog);
+const dialogRuntime = enhance(
+  {
+    [DIALOG_SELECTOR]: connectDialog,
   },
+  undefined,
+  { accept: allowsDialogEnhancement },
+);
+
+registerEnhancement("dialog", (dialog) => {
+  if (isDialogElement(dialog)) return connectDialog(dialog);
 });

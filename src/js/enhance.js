@@ -73,6 +73,10 @@ function createRegistry(root) {
   let discovery = "";
 
   function start(record, el) {
+    if (record.accept && !record.accept(el)) {
+      stop(record, el);
+      return;
+    }
     let active = record.instances.get(el);
     for (const key of record.keys) {
       if (active?.has(key) || !el.matches(key)) continue;
@@ -115,7 +119,9 @@ function createRegistry(root) {
   function sweepDisconnected() {
     for (const record of records) {
       for (const el of Array.from(record.instances.keys())) {
-        if (!el.isConnected || !root.contains(el)) stop(record, el);
+        if (!el.isConnected || !root.contains(el) || (record.accept && !record.accept(el))) {
+          stop(record, el);
+        }
       }
     }
   }
@@ -254,9 +260,14 @@ export function registerEnhancement(name, init, root) {
 /**
  * @param {Record<string, (el: Element) => (() => void) | void>} enhancers
  * @param {Document | Element | DocumentFragment} [root]
+ * @param {object} [options]
+ * @param {(el: Element) => boolean} [options.accept] Lifecycle eligibility, rechecked on moves.
  * @returns {{ refresh: (node: Node) => void, disconnect: () => void }}
  */
-export default function enhance(enhancers, root) {
+export default function enhance(enhancers, root, { accept } = {}) {
+  if (accept !== undefined && typeof accept !== "function") {
+    throw new TypeError("enhance() requires a function accept predicate.");
+  }
   if (typeof document === "undefined") return noopRuntime();
 
   root ??= document.documentElement;
@@ -272,5 +283,5 @@ export default function enhance(enhancers, root) {
   });
   if (!keys.length) return noopRuntime();
 
-  return registryFor(root).add({ keys, enhancers, query: keys.join(",") });
+  return registryFor(root).add({ keys, enhancers, query: keys.join(","), accept });
 }

@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed
+- `dialog.js`: dialogs inside custom elements or shadow roots keep their native lifecycle and commands unless delegated with `data-enhance="dialog"` or the dialog API.
+
+### Added
+- `enhance()` accepts a third `{ accept }` argument to filter lifecycle membership across subtree moves.
+
 ## [0.15.1] - 2026-10-26
 ### Changed
 - Reset: `-webkit-tap-highlight-color: transparent` on `html`, so the rectangular native tap flash no longer covers rounded controls.

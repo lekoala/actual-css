@@ -77,7 +77,8 @@ than the registration root, without crossing shadow boundaries.
 - **A self-describing `data-*`** is for a leaf whose attribute is simultaneously
   the opt-in and the configuration (`data-tooltip`, `data-mask`, `data-filter`,
   `data-context-menu`).
-- **Elements that are their own opt-in** need nothing (`<dialog>`).
+- **Elements that are their own opt-in** need nothing (`<dialog>` outside a
+  Web Component).
 
 `data-enhance` is explicitly **not** a mandatory prefix for every module.
 
@@ -105,6 +106,10 @@ root, preserves instances moved within it, and requests cleanup once an instance
 leaves it—even when the element remains connected elsewhere. An enhancer's
 cleanup must therefore be authoritative and idempotent: it releases its state
 when called and must not repeat the root-membership decision.
+
+An optional `enhance()` acceptance predicate narrows lifecycle membership
+without another observer. Discovery and the removal sweep recheck it, so moves
+across a behavioral boundary clean up or initialize the element as needed.
 
 Core lifecycle primitives accept a `Document`, `Element`, or `DocumentFragment`
 root, and command targets resolve in the trigger's document or shadow root.
@@ -142,8 +147,11 @@ framework.
 token.** The markup already carries `role="status"` everywhere, so semantics
 alone scope the document-wide lookup.
 
-**D5 — `<dialog>` gets no token.** It is its own opt-in: semantic, native,
-CSS-agnostic.
+**D5 — `<dialog>` is its own opt-in outside Web Components.** Custom-element
+ancestors and shadow roots reserve lifecycle ownership for the component.
+`data-enhance="dialog"` delegates it explicitly to Actual, independently of
+presentation classes. Both discovery and dialog command resolution apply this
+boundary; the command router leaves rejected targets' native clicks alone.
 
 **D6 — `validation.js` accepts `[data-field-error]` as an alias for
 `.field-error`, and keeps `.field` / `.danger` as an optional, degrading

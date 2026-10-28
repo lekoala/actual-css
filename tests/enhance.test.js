@@ -6,6 +6,50 @@ afterEach(() => {
   cleanupDOM();
 });
 
+test("acceptance follows subtree moves without restarting accepted instances", async () => {
+  setupDOM('<main><div class="target"></div><section></section></main><aside></aside>');
+  const target = document.querySelector(".target");
+  const calls = [];
+  const runtime = enhance(
+    {
+      ".target": () => {
+        calls.push("start");
+        return () => calls.push("stop");
+      },
+    },
+    undefined,
+    { accept: (el) => !el.closest("aside") },
+  );
+  document.querySelector("section").append(target);
+  await nextMicrotask();
+  expect(calls).toEqual(["start"]);
+
+  document.querySelector("aside").append(target);
+  await nextMicrotask();
+  expect(calls).toEqual(["start", "stop"]);
+
+  document.querySelector("main").append(target);
+  await nextMicrotask();
+  expect(calls).toEqual(["start", "stop", "start"]);
+  runtime.disconnect();
+  expect(calls).toEqual(["start", "stop", "start", "stop"]);
+});
+
+test("initially rejected elements can become eligible and invalid predicates fail fast", async () => {
+  setupDOM('<main></main><aside><div class="target"></div></aside>');
+  const calls = [];
+  const runtime = enhance({ ".target": (el) => calls.push(el) }, undefined, {
+    accept: (el) => !el.closest("aside"),
+  });
+  expect(calls).toEqual([]);
+  const target = document.querySelector(".target");
+  document.querySelector("main").append(target);
+  await nextMicrotask();
+  expect(calls).toEqual([target]);
+  runtime.disconnect();
+  expect(() => enhance({}, undefined, { accept: true })).toThrow(TypeError);
+});
+
 test("applyEnhancement preserves tokens and initializes existing elements once", () => {
   setupDOM('<div class="target" data-enhance="other"></div>');
   const el = document.querySelector("div");

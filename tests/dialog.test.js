@@ -1,4 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
+import { applyEnhancement } from "../src/js/enhance.js";
 import {
   cleanupDOM,
   click,
@@ -40,6 +41,153 @@ test("trigger with commandfor opens the target dialog", async () => {
 
   expect(dialog.open).toBe(true);
   expect(dialog.hasAttribute("open")).toBe(true);
+});
+
+for (const wrapper of ["data-grid", "my-app><main><data-grid"]) {
+  test(`custom element ancestry reserves dialog lifecycle (${wrapper})`, async () => {
+    const closing = wrapper.split("><").reverse().join("></");
+    await loadDialog(`
+      <button commandfor="owned" command="show-modal">Open</button>
+      <${wrapper}>
+        <dialog id="owned" class="modal" closedby="any" data-dialog-dismissible>
+          <h2>Component dialog</h2>
+          <button commandfor="owned" command="request-close">Close</button>
+        </dialog>
+      </${closing}>
+    `);
+    const dialog = document.getElementById("owned");
+    let cancellations = 0;
+    dialog.addEventListener("actual:dialog-cancel", () => cancellations++);
+
+    expect(dialog.hasAttribute("aria-modal")).toBe(false);
+    expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
+    expect(dialog.querySelector("h2").id).toBe("");
+    expect(dialog.getAttribute("closedby")).toBe("any");
+
+    for (const command of ["show-modal", "--show", "request-close", "close"]) {
+      const trigger = document.querySelector("button");
+      trigger.setAttribute("command", command);
+      const event = new MouseEvent("click", { bubbles: true, cancelable: true });
+      trigger.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(false);
+      expect(dialog.open).toBe(false);
+    }
+
+    // The component can use the native lifecycle without Actual canceling it.
+    dialog.showModal();
+    const event = new Event("cancel", { cancelable: true });
+    dialog.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
+    dialog.requestClose("component");
+    expect(dialog.open).toBe(false);
+    expect(dialog.returnValue).toBe("component");
+    expect(cancellations).toBe(0);
+    expect(document.documentElement.classList.contains("has-modal-open")).toBe(false);
+  });
+}
+
+test("a dialog inserted inside a custom element remains component-owned", async () => {
+  await loadDialog("<data-grid><section></section></data-grid>");
+  document.querySelector("section").innerHTML = "<dialog><h2>Details</h2></dialog>";
+  await flushMutationObserver();
+  expect(document.querySelector("dialog").hasAttribute("aria-labelledby")).toBe(false);
+});
+
+test("moving a dialog across a custom element boundary transfers lifecycle ownership", async () => {
+  await loadDialog(`
+    <main><dialog id="owned"><h2>Preferences</h2></dialog></main>
+    <data-grid></data-grid>
+  `);
+  const dialog = document.getElementById("owned");
+  expect(dialog.hasAttribute("aria-labelledby")).toBe(true);
+
+  document.querySelector("data-grid").append(dialog);
+  await flushMutationObserver();
+  expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
+  const event = new Event("cancel", { cancelable: true });
+  dialog.dispatchEvent(event);
+  expect(event.defaultPrevented).toBe(false);
+
+  document.querySelector("main").append(dialog);
+  await flushMutationObserver();
+  expect(dialog.hasAttribute("aria-labelledby")).toBe(true);
+});
+
+test("explicit dialog token delegates a nested light DOM dialog", async () => {
+  await loadDialog(`
+    <my-app><data-grid>
+      <button commandfor="owned" command="show-modal">Open</button>
+      <dialog id="owned" data-enhance="other dialog"><h2>Preferences</h2></dialog>
+    </data-grid></my-app>
+  `);
+  const dialog = document.getElementById("owned");
+  expect(dialog.getAttribute("aria-labelledby")).toBe(dialog.querySelector("h2").id);
+  click(document.querySelector("button"));
+  expect(dialog.open).toBe(true);
+  expect(document.documentElement.classList.contains("has-modal-open")).toBe(true);
+});
+
+test("applyEnhancement delegates an existing component dialog", async () => {
+  await loadDialog('<my-app><dialog id="owned"><h2>Preferences</h2></dialog></my-app>');
+  const dialog = document.getElementById("owned");
+  expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
+  applyEnhancement("dialog", "dialog", document.querySelector("my-app"));
+  expect(dialog.getAttribute("aria-labelledby")).toBe(dialog.querySelector("h2").id);
+
+  dialog.remove();
+  await flushMutationObserver();
+  expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
+  expect(dialog.querySelector("h2").id).toBe("");
+});
+
+for (const delegated of [false, true]) {
+  test(`shadow dialog commands require explicit delegation (${delegated})`, async () => {
+    setupDOM('<div id="host"></div><dialog id="owned"></dialog>');
+    patchDialogMethods();
+    const shadow = document.getElementById("host").attachShadow({ mode: "open" });
+    shadow.innerHTML = `
+      <button commandfor="owned" command="show-modal">Open</button>
+      <dialog id="owned" ${delegated ? 'data-enhance="dialog"' : ""}>
+        <h2>Shadow dialog</h2>
+      </dialog>
+    `;
+    await import(`../src/js/dialog.js?test=${++importId}`);
+    const dialog = shadow.getElementById("owned");
+    const trigger = shadow.querySelector("button");
+    expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
+
+    for (const command of ["show-modal", "request-close", "--show", "close"]) {
+      trigger.setAttribute("command", command);
+      const event = new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        composed: true,
+      });
+      trigger.dispatchEvent(event);
+      expect(event.defaultPrevented).toBe(delegated);
+      expect(dialog.open).toBe(delegated && ["show-modal", "--show"].includes(command));
+    }
+    expect(dialog.hasAttribute("aria-labelledby")).toBe(delegated);
+    expect(document.getElementById("owned").open).toBe(false);
+  });
+}
+
+test("direct dialog API explicitly delegates a component dialog", async () => {
+  setupDOM("<data-grid><dialog><h2>Preferences</h2></dialog></data-grid>");
+  patchDialogMethods();
+  const { openDialog, requestDialogClose } = await import(`../src/js/dialog.js?test=${++importId}`);
+  const dialog = document.querySelector("dialog");
+  openDialog(dialog);
+  expect(dialog.open).toBe(true);
+  expect(dialog.getAttribute("aria-labelledby")).toBe(dialog.querySelector("h2").id);
+  requestDialogClose(dialog, "done");
+  expect(dialog.open).toBe(false);
+  expect(dialog.returnValue).toBe("done");
+
+  dialog.remove();
+  await flushMutationObserver();
+  expect(dialog.hasAttribute("aria-labelledby")).toBe(false);
+  expect(dialog.querySelector("h2").id).toBe("");
 });
 
 test("opening a dialog leaves trigger accessibility attributes to the markup", async () => {

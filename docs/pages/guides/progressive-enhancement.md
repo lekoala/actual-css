@@ -360,6 +360,10 @@ command. Names must be a native keyword or start with `--`; anything else
 throws. `commandSelector(commands)` builds the matching button selector. The returned handle has an idempotent `disconnect()` method for
 applications that unload the module owning the command.
 
+Dialog command resolution respects [Web Component ownership](../components/dialog.md#web-components):
+dialogs inside custom elements or shadow roots require `data-enhance="dialog"`
+or a direct dialog API call to delegate their commands to Actual.
+
 ### Dismiss command
 
 The runtime includes a generic `--dismiss` command for hiding any resolved
@@ -386,6 +390,11 @@ state or perform another action after the target is hidden.
 
 Use `enhance()` for project-specific behavior. It accepts a selector map where
 each function receives the matched element and may return a cleanup function.
+
+For eligibility that selectors cannot express, pass `{ accept(element) }` as
+the third argument, after the root. Rejected elements are skipped; moving an
+active element into a rejected subtree runs its cleanup. Moving it back starts
+it again. Attribute changes still require `refresh()`.
 
 ```js
 import enhance from "actual-css/js/enhance";

@@ -585,6 +585,32 @@ transition.
 
 ## Notes
 
+### Web Components
+
+The dialog runtime automatically enhances ordinary page dialogs. Dialogs inside
+a custom element (including nested light DOM hosts) or a Shadow DOM keep their
+component's native lifecycle; Actual leaves their `command` buttons untouched.
+The `.modal` styles remain independent of this behavior.
+
+To delegate a light DOM dialog to Actual, add `data-enhance="dialog"` before
+inserting it, including when a custom element is only an application container:
+
+```html
+<my-app>
+  <dialog class="modal" id="preferences" data-enhance="dialog">
+    <form method="dialog">…</form>
+  </dialog>
+</my-app>
+```
+
+For an existing light DOM dialog, use
+`applyEnhancement("dialog", "dialog", scope)` from `actual-css/js/enhance`.
+Document discovery does not enter shadow roots: a marked shadow dialog is wired
+on its first routed command. Calling `openDialog()` from `actual-css/js/dialog`
+also explicitly delegates to Actual, in either DOM tree; use Actual's exported
+close helpers for subsequent programmatic actions. Shadow-root disposal remains
+application-owned.
+
 Prefer native dialog behavior whenever possible. The framework runtime should
 not replace the platform modal system; it should only make dialogs declarative,
 animation-friendly, and consistent across supported browsers.
