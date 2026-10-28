@@ -15,7 +15,7 @@ test fixtures load `dist/`. CI deploys GitHub Pages from its own build.
 | `build:dist` | `build-dist.js` | Build the CSS bundles in `dist/` — the npm-published surface. |
 | `build:js` | `build-js.js` | Bundle `src/js/full.js` into `dist/actual.full.js`; no sourcemap; byte-deterministic across rebuilds. |
 | `build:themes` | `build-themes.js` | Bundle the preset palettes into `demo/assets/actual-themes.min.css` for the demo pages and docs site. Demo asset only — never in `dist/`. |
-| `build:size` | `build-size.js` | Write `size-report.json` (per-file, minified, brotli). |
+| `build:size` | `build-size.js` | Write the git-ignored `size-report.json` (per-file, minified, brotli) that feeds the docs stat strip, and fail if a bundle outgrows its budget. |
 | `build:pages` | `pages.js` | Stage the GitHub Pages site in `out/pages/` and verify its local links. Its manifest is what `check:templates` accepts as a demo asset. Run after `build:all`. |
 | `check:docs` | `check-docs.js` | Structural checks for the docs site: page/IA consistency, fence contract, internal links + anchors, and that referenced `src/css` / `src/js` files exist. |
 | `check:compat` | `check-compat.js` | Capability floor audit: flags unguarded above-Degraded structural CSS. |

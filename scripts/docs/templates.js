@@ -105,7 +105,9 @@ export function renderThemeInit(themes) {
 /*
  * Home stat strip, read from size-report.json so the figures on the landing
  * page are the ones build:size measured, not prose that drifts. A missing or
- * unbuilt report yields an empty strip rather than a stale or invented number.
+ * unreadable report yields an empty strip rather than a stale or invented
+ * number, and says why: the report is git-ignored, so a fresh clone that runs
+ * build:docs without build:size would otherwise publish the gap silently.
  *
  * This is the only consumer of that report, and it is why build:all measures
  * before it builds docs. Reading a report written later in the same pipeline
@@ -115,7 +117,12 @@ export function renderHomeStats(themes) {
   let report;
   try {
     report = JSON.parse(readFileSync(join(__dirname, "..", "..", "size-report.json"), "utf8"));
-  } catch {
+  } catch (error) {
+    console.warn(
+      error.code === "ENOENT"
+        ? "Missing size-report.json; run `bun run build:size` to generate homepage size statistics."
+        : "Invalid size-report.json; run `bun run build:size` to regenerate it.",
+    );
     return "";
   }
 

@@ -7,8 +7,9 @@
  * show them. It reads dist/ and src/css alone, so it fits anywhere after
  * build:dist and build:js.
  *
- * The committed report is also the review trail for the bundles, which are
- * not tracked: a toolchain upgrade that changes the bytes shows up here.
+ * The report is a local artifact, git-ignored and regenerated on every run, so
+ * it is never compared across commits: the budgets below are the guardrail,
+ * and they are measured from a dist/ CI has just rebuilt.
  */
 import { readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
@@ -23,8 +24,8 @@ const DIST = join(ROOT, "dist");
 
 /*
  * Absolute brotli budgets. Edited by hand when the project deliberately grows;
- * build:size never rewrites its own limits, so a committed report cannot
- * silently raise the bar.
+ * build:size never rewrites its own limits, so a measurement run cannot raise
+ * the bar.
  *
  * The core budget is the one that has to hurt: every composition, modular or
  * full, starts from it. It is measured by bundling src/css/actual.css in
@@ -33,9 +34,9 @@ const DIST = join(ROOT, "dist");
  * growth, not against a component gaining a layer.
  */
 const BUDGETS = {
-  coreCssBrotli: 2900, // src/css/actual.css, minified in memory (current ~2697; typographic density: --font-width hooks + compact/spacious font-stretch)
-  fullCssBrotli: 21000, // actual.full.min.css (current ~20702; attached tab panels, timeline, badge avatar)
-  fullJsBrotli: 18800, // actual.full.js (current ~18408)
+  coreCssBrotli: 2900, // src/css/actual.css, minified in memory
+  fullCssBrotli: 21000, // actual.full.min.css
+  fullJsBrotli: 18800, // actual.full.js
 };
 
 async function collectCSS(root, base = "") {
@@ -140,7 +141,7 @@ async function main() {
   }
   console.log();
 
-  // ── Budget guard ────────────────────────────────────────
+  // ── Report ─────────────────────────────────────────────
   const report = {
     totalRaw,
     core: { minified: core.bytes, brotli: core.brotli },
@@ -178,20 +179,8 @@ async function main() {
   }
 
   const reportPath = join(ROOT, "size-report.json");
-  let previous = null;
-  try {
-    previous = JSON.parse(await readFile(reportPath, "utf8"));
-  } catch {
-    // no previous report yet
-  }
-
-  const next = `${JSON.stringify(report, null, 2)}\n`;
-  if (previous && JSON.stringify(previous) === JSON.stringify(report)) {
-    console.log("Report unchanged");
-  } else {
-    await writeFile(reportPath, next);
-    console.log("Report written to size-report.json");
-  }
+  await writeFile(reportPath, `${JSON.stringify(report, null, 2)}\n`);
+  console.log("Report written to size-report.json");
 }
 
 main();

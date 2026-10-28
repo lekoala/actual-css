@@ -9,6 +9,9 @@ package-lock.json
 out/
 *.tgz
 
+# Local size report — build:size writes it, build:docs reads it, Git ignores it
+/size-report.json
+
 # OS files
 .DS_Store
 Thumbs.db

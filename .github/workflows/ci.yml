@@ -11,8 +11,9 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run build:all
       # dist/ and site/ are git-ignored build output; the derived files that
-      # stay committed (reports, catalogs) must match what the build produces,
-      # and a new build output must be ignored rather than left untracked.
+      # stay committed (components.json, reserved-classes.json) must match what
+      # the build produces, and a new build output must be ignored rather than
+      # left untracked.
       - name: Verify committed build output
         run: |
           git status --porcelain
