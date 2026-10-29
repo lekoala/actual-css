@@ -1,8 +1,9 @@
 import { expect, test } from "bun:test";
-import { readFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildCatalog } from "../scripts/build-catalog.js";
+import { buildCatalog, buildTokens } from "../scripts/build-catalog.js";
 import { loadReservedClasses } from "../scripts/utils/load-reserved-classes.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -61,6 +62,63 @@ test("tab exposes the enhancement token its module registers", () => {
 test("busy has no owned class", () => {
   const busy = catalog.find((entry) => entry.name === "busy");
   expect("classes" in busy).toBe(false);
+});
+
+/* The docs URL comes from each file's "Docs:" header, so components documented
+   outside components/ link to their real page instead of a guessed one. */
+test("every component links to its published docs page", () => {
+  const { homepage } = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
+  for (const entry of catalog) {
+    expect(entry.docs.startsWith(homepage)).toBe(true);
+    const page = entry.docs.slice(homepage.length).replace(/\.html$/, ".md");
+    expect(existsSync(join(ROOT, "docs", "pages", page))).toBe(true);
+  }
+  const docsOf = (name) => catalog.find((entry) => entry.name === name).docs;
+  expect(docsOf("tab")).toBe(`${homepage}enhancements/tabs.html`);
+  expect(docsOf("join")).toBe(`${homepage}forms/joined-controls.html`);
+});
+
+test("tokens.json matches the derivation and lists only public globals", async () => {
+  const tokens = await buildTokens(ROOT);
+  expect(tokens).toEqual(JSON.parse(readFileSync(join(ROOT, "tokens.json"), "utf8")));
+  expect(tokens.global).toEqual([...new Set(tokens.global)].sort());
+  // declared in core, fallback-only core hook, theme token
+  expect(tokens.global).toContain("--space-40");
+  expect(tokens.global).toContain("--soft-border-mix");
+  expect(tokens.global).toContain("--primary");
+  // Internal header entries, shared relays, component hooks
+  expect(tokens.global).not.toContain("--disabled-opacity");
+  expect(tokens.global).not.toContain("--hgroup-gap");
+  expect(tokens.global).not.toContain("--density-space");
+  expect(tokens.global.some((name) => name.startsWith("--ui-"))).toBe(false);
+  expect(tokens.global).not.toContain("--card-pad");
+  // Internal in core (theme.css) although a component also writes it.
+  expect(tokens.global).not.toContain("--surface-link");
+  // Public globals whose local value a component classifies as internal.
+  expect(tokens.global).toContain("--heading");
+  expect(tokens.global).toContain("--gap");
+});
+
+test("a file outside core cannot silently call a public global token internal", async () => {
+  const root = mkdtempSync(join(tmpdir(), "actual-tokens-"));
+  try {
+    mkdirSync(join(root, "src/css/core"), { recursive: true });
+    mkdirSync(join(root, "src/css/components"), { recursive: true });
+    writeFileSync(join(root, "src/css/core/tokens.css"), ":root { --relay: 0; --rhythm: 1rem; }\n");
+    const component = (entry) =>
+      writeFileSync(
+        join(root, "src/css/components/x.css"),
+        `/*\n * Internal:\n * ${entry}\n */\n.x { --relay: 1; --rhythm: 2rem; }\n`,
+      );
+
+    component("--relay");
+    await expect(buildTokens(root)).rejects.toThrow(/--relay/);
+
+    component("--rhythm (local value for the shared token)");
+    expect((await buildTokens(root)).global).toEqual(["--relay", "--rhythm"]);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 /* A pseudo-element belongs to the compound that carries it, not to the

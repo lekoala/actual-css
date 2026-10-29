@@ -26,7 +26,7 @@
  * Internal:
  * --card-bg
  * --card-fg
- * --heading
+ * --heading (local value: the card's own ink for the global token)
  * --busy-overlay-bg
  * --surface-link
  */

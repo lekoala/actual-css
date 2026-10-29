@@ -63,6 +63,19 @@ handle, and cleanup happens per element when an element leaves the DOM.
 
 ## The full runtime
 
+Pick one way to load the runtime per page:
+
+| Context                  | Load                                                     |
+| ------------------------ | -------------------------------------------------------- |
+| Bundler, every behavior  | `import "actual-css/js/full"`                            |
+| Bundler, a few behaviors | `import "actual-css/js/tab"`, one line per enhancer      |
+| No build step            | `dist/actual.full.js` in one `<script>`, e.g. from a CDN |
+
+The bundle and the modules register the same behaviors, so loading both
+registers them twice; the runtime warns when a second copy loads.
+`dist/actual.full.js` is not a package export: in a bundler, import
+`actual-css/js/full` instead.
+
 Import `actual-css/js/full` to enable the full runtime:
 
 ```js

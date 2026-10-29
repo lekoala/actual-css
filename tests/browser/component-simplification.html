@@ -20,6 +20,21 @@
     <span class="avatar"><abbr title="Ada Morgan">AM</abbr></span>
     <span class="avatar"><abbr title="Jon Bell">JB</abbr></span>
   </div>
+  <div class="rating lg" id="rating-input">
+    <input type="radio" name="r" value="1" aria-label="1 star">
+    <input type="radio" name="r" value="2" aria-label="2 stars">
+    <input type="radio" name="r" value="3" aria-label="3 stars" checked>
+    <input type="radio" name="r" value="4" aria-label="4 stars">
+    <input type="radio" name="r" value="5" aria-label="5 stars">
+  </div>
+  <span class="rating lg" id="rating-display" role="img" aria-label="3.5 out of 5 stars" style="--rating-value: 3.5"></span>
+  <span class="rating lg" id="rating-unnamed" style="--rating-value: 3.5"></span>
+  <div dir="rtl">
+    <span class="rating" id="rating-rtl" role="img" aria-label="3 out of 5 stars" style="--rating-value: 3"></span>
+    <div dir="ltr">
+      <span class="rating" id="rating-ltr-island" role="img" aria-label="3 out of 5 stars" style="--rating-value: 3"></span>
+    </div>
+  </div>
 </main>
 <dialog class="drawer" id="drawer" aria-label="Navigation">
   <header>Navigation</header>

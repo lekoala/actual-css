@@ -10,7 +10,7 @@
     "type": "git",
     "url": "https://github.com/lekoala/actual-css.git"
   },
-  "homepage": "https://lekoala.github.io/actual-css/",
+  "homepage": "https://lekoala.github.io/actual-css/site/",
   "bugs": {
     "url": "https://github.com/lekoala/actual-css/issues"
   },
@@ -76,6 +76,7 @@
     "./js/surface": "./src/js/surface.js",
     "./reserved-classes.json": "./reserved-classes.json",
     "./components.json": "./components.json",
+    "./tokens.json": "./tokens.json",
     "./package.json": "./package.json"
   },
   "bin": {
@@ -100,6 +101,7 @@
     "src/tooling",
     "reserved-classes.json",
     "components.json",
+    "tokens.json",
     "docs",
     "skills",
     "CHANGELOG.md",

@@ -14,10 +14,11 @@
 - The control shows before any choice: a ring (radio) or a rounded box (checkbox) on the leading edge, level with the first line. Checked, it fills with a check, and the card takes a primary border and a subtle tint.
 - Each child element of the label sits on its own row beside the indicator — a title and a `.muted` detail need no wrapper. Wrap loose text in an element.
 - Stack cards for a list of options (a person, an address, a delivery method), or pair them with grid utilities for options compared side by side.
+- The cards already frame each option, so group them in a `.field-group.flush`: the fieldset keeps its legend and semantics without drawing a second box around the cards.
 - Supports disabled, checked, focus-visible, and invalid states; the resting ring turns danger with the border.
 
 ```html demo
-<fieldset class="field-group stack">
+<fieldset class="field-group flush stack">
   <legend class="field-label">Deliver to</legend>
   <label class="choice-card">
     <input type="radio" name="address" value="home" checked />

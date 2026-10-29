@@ -1,6 +1,8 @@
 /*
  * Menu — action list primitive consumed by flyout and context-menu.
  *
+ * Docs: docs/pages/enhancements/flyout.md
+ *
  * Strict anatomy: .menu > li > .menu-item. Separators and section labels
  * sit directly under .menu as siblings of <li>.
  *

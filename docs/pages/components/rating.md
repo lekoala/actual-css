@@ -1,6 +1,6 @@
 # Rating
 
-> Integer star rating built from native radio inputs.
+> Integer star rating built from native radio inputs, and a read-only display of a rating.
 
 Each star is a real `input[type="radio"]`, so submission, `required`, disabled
 state, form reset, and keyboard navigation remain native. Keep values and DOM
@@ -10,10 +10,11 @@ filled while the control remains fully functional.
 
 ## Class reference
 
-| Class         | Kind      | Description                      |
-| ------------- | --------- | -------------------------------- |
-| `.rating`     | Component | Radio group presented as stars.  |
-| `.sm` / `.lg` | Size      | Smaller or larger star geometry. |
+| Class                 | Kind      | Description                      |
+| --------------------- | --------- | -------------------------------- |
+| `.rating`             | Component | Radio group presented as stars.  |
+| `.rating[role="img"]` | Component | Read-only display of a value.    |
+| `.sm` / `.lg`         | Size      | Smaller or larger star geometry. |
 
 ```html demo
 <fieldset class="field">
@@ -59,6 +60,27 @@ Intent classes change the active color without changing the interaction model.
 </div>
 ```
 
+## Read-only display
+
+To show a rating rather than collect one (reviews, testimonials, average
+score, star display), use one element with `role="img"` and the value in
+`--rating-value`. Fractions draw a partial star. The `aria-label` carries the
+value; without `role="img"` nothing is drawn, so a display cannot ship
+without an accessible name. Do not present a value with disabled radios.
+
+```html demo
+<p>
+  <span class="rating" role="img" aria-label="4.5 out of 5 stars" style="--rating-value: 4.5"></span>
+  4.5 from 312 reviews
+</p>
+
+<span class="rating sm primary" role="img" aria-label="7 out of 10" style="--rating-value: 7; --rating-max: 10"></span>
+```
+
+Stars line up with an input `.rating` of the same size, and `.sm`, `.lg` and
+intent classes apply as above. The fill follows the writing direction. In
+forced-colors mode the filled share is painted in system colors.
+
 ### Hooks
 
 - `--rating-size` — size of each star; `.sm` and `.lg` set this hook.
@@ -66,3 +88,5 @@ Intent classes change the active color without changing the interaction model.
 - `--rating-color` — star color. Prefer an intent class for semantic color.
 - `--rating-empty` — color of unselected stars; use a surface or border token.
 - `--rating-star` — mask image used to draw a star; override it when a strict CSP disallows data URLs.
+- `--rating-value` — display only: the value shown, fractions allowed.
+- `--rating-max` — display only: the number of stars.

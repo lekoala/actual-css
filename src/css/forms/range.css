@@ -46,7 +46,17 @@
   cursor: pointer;
 }
 
-:where([dir="rtl"]) .range,
+/* Separate rules: a browser without :dir() drops a whole rule that names it,
+   which took the [dir="rtl"] fallback with it. The :dir() pair outranks the
+   fallback, so an LTR island inside an RTL region keeps filling from the left. */
+:where([dir="rtl"]) .range {
+  --range-fill-from: to left;
+}
+
+.range:dir(ltr) {
+  --range-fill-from: to right;
+}
+
 .range:dir(rtl) {
   --range-fill-from: to left;
 }

@@ -152,9 +152,11 @@ inside their share. The first and last steps align with the row's edges, labels
 included, so the track lines up with the heading above it. Their labels get
 half a share, so a phone-width row reads best with short names at both ends.
 
-Automatic hyphenation depends on the browser, the language and its
-dictionaries. Mark break points with `&shy;` (`Ac&shy;count`) when a long name
-must wrap predictably.
+A word wider than its share breaks inside the word rather than overflowing the
+row, so the geometry holds at any width. Automatic hyphenation depends on the
+browser, the language and its dictionaries. Mark break points with `&shy;`
+(`Ac&shy;count`) when a long name must wrap predictably, or raise `--step-min`
+(below) to keep whole words and let the row scroll.
 
 Set `--step-min` when names need a wider minimum share. If the markers or that
 minimum do not fit, the row scrolls; use `.steps-vertical` when every name must

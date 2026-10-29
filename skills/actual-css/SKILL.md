@@ -15,11 +15,12 @@ The target is not zero application CSS. The target is:
 
 Actual CSS may evolve between releases. Resolve uncertain API from the version used by the current project, in this order:
 
-1. `actual-css/components.json` — component index: classes, public hooks, states, CSS/JS imports, enhancement tokens.
+1. `actual-css/components.json` — component index: classes, public hooks, states, CSS/JS imports, enhancement tokens, docs URL.
 2. `actual-css/reserved-classes.json` — framework-owned class namespace.
-3. `actual-css/package.json#exports` — canonical package entrypoints.
-4. `actual-css/src/css/` and `actual-css/src/js/` — exact selectors, defaults, state ownership, and runtime behavior.
-5. `actual-css/docs/` and `actual-css/llms.txt` — intended usage and concise architecture guidance.
+3. `actual-css/tokens.json` — public global tokens; a `var(--…)` outside a component should be one of them.
+4. `actual-css/package.json#exports` — canonical package entrypoints.
+5. `actual-css/src/css/` and `actual-css/src/js/` — exact selectors, defaults, state ownership, and runtime behavior.
+6. `actual-css/docs/` and `actual-css/llms.txt` — intended usage and concise architecture guidance.
 
 If this skill was copied into a consuming project, the installed package wins over examples or summaries in this skill.
 

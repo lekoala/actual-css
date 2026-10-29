@@ -11,7 +11,7 @@
  * component cannot know whether its siblings are stacked or gridded.
  *
  * Public API: .field, .field-label, .field-help, .field-error, .field-group,
- * .required-mark.
+ * .field-group.flush, .required-mark.
  *
  * Public hooks:
  * --fieldset-legend-padding-inline
@@ -47,6 +47,20 @@
   padding-block: 0;
   padding-inline: var(--fieldset-legend-padding-inline, var(--space-10));
   font-size: var(--font-size-xs);
+}
+
+/* Flush — the frame removed, for a group that already sits in a card or a
+   form section. With no border to notch, the legend is a plain label above
+   the options: no gutter, and the .field label-to-control gap below it. */
+.field-group.flush {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.field-group.flush > legend {
+  margin-block-end: var(--space-10);
+  padding-inline: 0;
 }
 
 .field-help {

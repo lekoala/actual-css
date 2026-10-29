@@ -3,6 +3,7 @@
     "name": "accordion",
     "source": "src/css/components/accordion.css",
     "cssImport": "actual-css/css/components/accordion",
+    "docs": "https://lekoala.github.io/actual-css/site/components/accordion.html",
     "classes": [
       "accordion",
       "flush",
@@ -29,6 +30,7 @@
     "name": "alert",
     "source": "src/css/components/alert.css",
     "cssImport": "actual-css/css/components/alert",
+    "docs": "https://lekoala.github.io/actual-css/site/components/alert.html",
     "classes": [
       "admonition",
       "alert",
@@ -56,6 +58,7 @@
     "name": "app-nav",
     "source": "src/css/components/app-nav.css",
     "cssImport": "actual-css/css/components/app-nav",
+    "docs": "https://lekoala.github.io/actual-css/site/components/app-navigation.html",
     "classes": [
       "app-nav"
     ],
@@ -78,6 +81,7 @@
     "name": "avatar",
     "source": "src/css/components/avatar.css",
     "cssImport": "actual-css/css/components/avatar",
+    "docs": "https://lekoala.github.io/actual-css/site/components/avatar.html",
     "classes": [
       "avatar",
       "avatar-stack"
@@ -110,6 +114,7 @@
     "name": "badge",
     "source": "src/css/components/badge.css",
     "cssImport": "actual-css/css/components/badge",
+    "docs": "https://lekoala.github.io/actual-css/site/components/badge.html",
     "classes": [
       "badge"
     ],
@@ -147,6 +152,7 @@
     "name": "bleed",
     "source": "src/css/components/bleed.css",
     "cssImport": "actual-css/css/components/bleed",
+    "docs": "https://lekoala.github.io/actual-css/site/components/bleed.html",
     "classes": [
       "bleed",
       "stack"
@@ -162,6 +168,7 @@
     "name": "breadcrumb",
     "source": "src/css/components/breadcrumb.css",
     "cssImport": "actual-css/css/components/breadcrumb",
+    "docs": "https://lekoala.github.io/actual-css/site/components/breadcrumb.html",
     "classes": [
       "breadcrumb"
     ],
@@ -178,6 +185,7 @@
     "name": "busy",
     "source": "src/css/components/busy.css",
     "cssImport": "actual-css/css/components/busy",
+    "docs": "https://lekoala.github.io/actual-css/site/components/spinner.html",
     "publicHooks": [
       "--busy-overlay-bg"
     ],
@@ -197,6 +205,7 @@
     "name": "button",
     "source": "src/css/components/button.css",
     "cssImport": "actual-css/css/components/button",
+    "docs": "https://lekoala.github.io/actual-css/site/components/button.html",
     "classes": [
       "btn",
       "ghost",
@@ -237,6 +246,7 @@
     "name": "card",
     "source": "src/css/components/card.css",
     "cssImport": "actual-css/css/components/card",
+    "docs": "https://lekoala.github.io/actual-css/site/components/card.html",
     "classes": [
       "card",
       "raised",
@@ -260,6 +270,7 @@
     "name": "chat",
     "source": "src/css/components/chat.css",
     "cssImport": "actual-css/css/components/chat",
+    "docs": "https://lekoala.github.io/actual-css/site/components/chat.html",
     "classes": [
       "chat",
       "chat-avatar",
@@ -283,6 +294,7 @@
     "name": "close",
     "source": "src/css/components/close.css",
     "cssImport": "actual-css/css/components/close",
+    "docs": "https://lekoala.github.io/actual-css/site/components/close.html",
     "classes": [
       "close"
     ],
@@ -304,6 +316,7 @@
     "name": "data-list",
     "source": "src/css/components/data-list.css",
     "cssImport": "actual-css/css/components/data-list",
+    "docs": "https://lekoala.github.io/actual-css/site/components/data-list.html",
     "classes": [
       "data-list",
       "stacked"
@@ -313,6 +326,7 @@
     "name": "drawer",
     "source": "src/css/components/drawer.css",
     "cssImport": "actual-css/css/components/drawer",
+    "docs": "https://lekoala.github.io/actual-css/site/components/drawer.html",
     "classes": [
       "drawer",
       "is-static"
@@ -336,6 +350,7 @@
     "name": "fab",
     "source": "src/css/components/fab.css",
     "cssImport": "actual-css/css/components/fab",
+    "docs": "https://lekoala.github.io/actual-css/site/components/fab.html",
     "classes": [
       "fab",
       "fab-action",
@@ -361,6 +376,7 @@
     "name": "flyout",
     "source": "src/css/components/flyout.css",
     "cssImport": "actual-css/css/components/flyout",
+    "docs": "https://lekoala.github.io/actual-css/site/enhancements/flyout.html",
     "classes": [
       "flyout",
       "flyout-trigger",
@@ -391,6 +407,7 @@
     "name": "indicator",
     "source": "src/css/components/indicator.css",
     "cssImport": "actual-css/css/components/indicator",
+    "docs": "https://lekoala.github.io/actual-css/site/components/indicator.html",
     "classes": [
       "bottom",
       "indicator",
@@ -406,6 +423,7 @@
     "name": "join",
     "source": "src/css/components/join.css",
     "cssImport": "actual-css/css/components/join",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/joined-controls.html",
     "classes": [
       "circle",
       "join",
@@ -428,6 +446,7 @@
     "name": "key",
     "source": "src/css/components/key.css",
     "cssImport": "actual-css/css/components/key",
+    "docs": "https://lekoala.github.io/actual-css/site/components/key.html",
     "classes": [
       "key"
     ]
@@ -436,6 +455,7 @@
     "name": "list",
     "source": "src/css/components/list.css",
     "cssImport": "actual-css/css/components/list",
+    "docs": "https://lekoala.github.io/actual-css/site/components/list.html",
     "classes": [
       "list",
       "list-item",
@@ -464,6 +484,7 @@
     "name": "menu",
     "source": "src/css/components/menu.css",
     "cssImport": "actual-css/css/components/menu",
+    "docs": "https://lekoala.github.io/actual-css/site/enhancements/flyout.html",
     "classes": [
       "menu",
       "menu-item",
@@ -493,6 +514,7 @@
     "name": "meter",
     "source": "src/css/components/meter.css",
     "cssImport": "actual-css/css/components/meter",
+    "docs": "https://lekoala.github.io/actual-css/site/components/meter.html",
     "classes": [
       "meter"
     ],
@@ -506,6 +528,7 @@
     "name": "modal",
     "source": "src/css/components/modal.css",
     "cssImport": "actual-css/css/components/modal",
+    "docs": "https://lekoala.github.io/actual-css/site/components/dialog.html",
     "classes": [
       "dialog-icon",
       "had-scrollbar",
@@ -538,6 +561,7 @@
     "name": "navbar",
     "source": "src/css/components/navbar.css",
     "cssImport": "actual-css/css/components/navbar",
+    "docs": "https://lekoala.github.io/actual-css/site/components/navbar.html",
     "classes": [
       "nav-link",
       "nav-list",
@@ -563,6 +587,7 @@
     "name": "pagination",
     "source": "src/css/components/pagination.css",
     "cssImport": "actual-css/css/components/pagination",
+    "docs": "https://lekoala.github.io/actual-css/site/components/pagination.html",
     "classes": [
       "pagination"
     ],
@@ -574,6 +599,7 @@
     "name": "progress",
     "source": "src/css/components/progress.css",
     "cssImport": "actual-css/css/components/progress",
+    "docs": "https://lekoala.github.io/actual-css/site/components/progress.html",
     "classes": [
       "progress"
     ],
@@ -590,6 +616,7 @@
     "name": "rating",
     "source": "src/css/components/rating.css",
     "cssImport": "actual-css/css/components/rating",
+    "docs": "https://lekoala.github.io/actual-css/site/components/rating.html",
     "classes": [
       "rating"
     ],
@@ -598,7 +625,13 @@
       "--rating-gap",
       "--rating-color",
       "--rating-empty",
-      "--rating-star"
+      "--rating-star",
+      "--rating-value",
+      "--rating-max"
+    ],
+    "internalHooks": [
+      "--rating-fill",
+      "--rating-direction"
     ],
     "states": [
       "checked",
@@ -609,6 +642,7 @@
     "name": "scrollspy",
     "source": "src/css/components/scrollspy.css",
     "cssImport": "actual-css/css/components/scrollspy",
+    "docs": "https://lekoala.github.io/actual-css/site/enhancements/scrollspy.html",
     "classes": [
       "scrollspy"
     ],
@@ -624,6 +658,7 @@
     "name": "segmented",
     "source": "src/css/components/segmented.css",
     "cssImport": "actual-css/css/components/segmented",
+    "docs": "https://lekoala.github.io/actual-css/site/components/segmented.html",
     "classes": [
       "segment",
       "segmented"
@@ -648,6 +683,7 @@
     "name": "skeleton",
     "source": "src/css/components/skeleton.css",
     "cssImport": "actual-css/css/components/skeleton",
+    "docs": "https://lekoala.github.io/actual-css/site/components/skeleton.html",
     "classes": [
       "skeleton"
     ],
@@ -663,6 +699,7 @@
     "name": "spinner",
     "source": "src/css/components/spinner.css",
     "cssImport": "actual-css/css/components/spinner",
+    "docs": "https://lekoala.github.io/actual-css/site/components/spinner.html",
     "classes": [
       "spinner"
     ],
@@ -677,6 +714,7 @@
     "name": "status-bar",
     "source": "src/css/components/status-bar.css",
     "cssImport": "actual-css/css/components/status-bar",
+    "docs": "https://lekoala.github.io/actual-css/site/enhancements/status-bar.html",
     "classes": [
       "is-open",
       "status-bar"
@@ -691,6 +729,7 @@
     "name": "steps",
     "source": "src/css/components/steps.css",
     "cssImport": "actual-css/css/components/steps",
+    "docs": "https://lekoala.github.io/actual-css/site/components/steps.html",
     "classes": [
       "steps",
       "steps-horizontal",
@@ -740,6 +779,7 @@
     "name": "tab",
     "source": "src/css/components/tab.css",
     "cssImport": "actual-css/css/components/tab",
+    "docs": "https://lekoala.github.io/actual-css/site/enhancements/tabs.html",
     "classes": [
       "tab",
       "tabs",
@@ -777,6 +817,7 @@
     "name": "table",
     "source": "src/css/components/table.css",
     "cssImport": "actual-css/css/components/table",
+    "docs": "https://lekoala.github.io/actual-css/site/components/table.html",
     "classes": [
       "table",
       "table-wrap"
@@ -792,6 +833,7 @@
     "name": "timeline",
     "source": "src/css/components/timeline.css",
     "cssImport": "actual-css/css/components/timeline",
+    "docs": "https://lekoala.github.io/actual-css/site/components/timeline.html",
     "classes": [
       "timeline"
     ],
@@ -820,6 +862,7 @@
     "name": "tooltip",
     "source": "src/css/components/tooltip.css",
     "cssImport": "actual-css/css/components/tooltip",
+    "docs": "https://lekoala.github.io/actual-css/site/enhancements/tooltip.html",
     "classes": [
       "tooltip"
     ],

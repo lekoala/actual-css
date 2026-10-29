@@ -176,9 +176,11 @@ a.avatar[aria-disabled="true"] {
 }
 
 /* Avatar stack — explicit class for overlapping avatar groups.
-   Does not rely on role="group" auto-detection. */
+   Does not rely on role="group" auto-detection.
+   why an eighth: two-letter initials span most of the disc, so a quarter
+   overlap (plus the ring) cut the second letter at every size. */
 .avatar-stack {
-  --avatar-stack-overlap: calc(var(--avatar-stack-size, 2.25rem) / -4);
+  --avatar-stack-overlap: calc(var(--avatar-stack-size, 2.25rem) / -8);
   --avatar-stack-ring: 2px;
 
   display: inline-flex;

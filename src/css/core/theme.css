@@ -11,7 +11,10 @@
  * translucent surfaces overrides them with opaque values. --border-control is
  * public too: the resting edge of a neutral control, apart from structural
  * separators. --control-default-bg is the inherited resting field fill.
- * Internal: --hgroup-gap.
+ *
+ * Internal:
+ * --hgroup-gap
+ * --surface-link (link ink relay a painted surface sets; reset at boundaries)
  */
 :root {
   color-scheme: light dark;

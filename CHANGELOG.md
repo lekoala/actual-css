@@ -4,11 +4,27 @@
 
 ### Fixed
 - `dialog.js`: dialogs inside custom elements or shadow roots keep their native lifecycle and commands unless delegated with `data-enhance="dialog"` or the dialog API.
+- `.range`: the `[dir="rtl"]` fill fallback is its own rule, so browsers without `:dir()` keep it.
+- `.range`: an LTR island inside an RTL region fills from the left.
 
 ### Added
 - `enhance()` accepts a third `{ accept }` argument to filter lifecycle membership across subtree moves.
+- `components.json`: a `docs` URL per component, read from the CSS `Docs:` header (tab → `enhancements/tabs.html`, join → `forms/joined-controls.html`).
+- `actual-css/tokens.json`: the public global tokens, generated with `components.json` and verified by `check:catalog`.
+- `menu.css`: `Docs:` header pointing at the flyout page.
+- `.field-group.flush`: a fieldset without its frame, the legend as a plain label above the options.
+- `.rating[role="img"]`: read-only rating display on one element, with `--rating-value` (fractions draw partial stars) and `--rating-max`.
+- Avatar docs: an initials trigger keeps its initials in the accessible name (WCAG 2.5.3).
+- Card docs: group a title and its subtitle in an `<hgroup>` inside the header slot, which splits direct children.
+- Progressive enhancement guide: which runtime entry to load with a bundler, per enhancer, or without a build step.
+- Steps docs: a word wider than its share breaks inside the word; `--step-min` keeps whole words.
 
 ### Changed
+- `.avatar-stack`: default `--avatar-stack-overlap` is an eighth of the size instead of a quarter, so two-letter initials stay readable.
+- Choice cards docs: the first demo groups cards in `.field-group.flush`.
+- `package.json#homepage` points at the docs site (`/actual-css/site/`) instead of the redirect page.
+- `tokens.css` and `theme.css` headers list their internal tokens in an `Internal:` section; `--surface-link` is internal.
+- `generate:catalog` fails when a file outside core lists a public global token under `Internal:` without a `(local value …)` note.
 - Bun 1.4.4 (`packageManager`); CI reads the version from there.
 - `data-grid.html`: `data-grid-component` 3.8.0, with row details in the component's own modal dialog.
 - `data-grid.html`: sets the `--modal-size` and `--modal-pad` hooks the data-grid theme reads for that dialog.

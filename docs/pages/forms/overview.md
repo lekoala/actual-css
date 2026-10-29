@@ -191,6 +191,7 @@ root; keyboard focus and an open custom select keep it.
 - `.field` is the canonical field wrapper. It works on `<label>` and `<div>`.
 - `.field-label` is element-agnostic. Use it on `<span>` inside a wrapped label, on `<label for="…">` in a detached layout, or on `<legend>` inside a fieldset.
 - `.field-group` styles a `<fieldset class="field-group">` as a grouped field container. Its legend gutter is tunable with `--fieldset-legend-padding-inline` (`var(--space-10)`). It carries no sibling margin: space consecutive groups with `.stack` on the form, so the rhythm follows the layout instead of the component.
+- `.field-group.flush` drops the frame (unboxed, borderless fieldset) for a group that already sits in a card or a form section; the legend then reads as a plain label above the options. It keeps the `<fieldset>` and `<legend>` semantics.
 - Use native `<optgroup>` and `disabled` options in `.select` controls when applicable; the customizable picker preserves both as a progressive enhancement.
 - `.choice` is the choice-label API. Use `.check` or `.radio` on the nested control. The control goes first, the label group second, so multi-line labels align the control with the first line.
 - For a switch, use `class="switch"` and `role="switch"`.

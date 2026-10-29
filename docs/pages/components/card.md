@@ -68,6 +68,12 @@ start-aligned group, `cluster form-actions` for a form's action row,
 `.justify-content-end` to push actions right. The footer stays anchored to the
 bottom either way.
 
+Each child of the slot is one side of the row. A heading and its subtitle placed
+as two direct children split apart, the subtitle pushed to the far side; group
+them in an `<hgroup>` so they stay one block, title above description. Text that
+is not a split row (a centered intro, a stacked title) belongs in a plain
+`<div>`, not in the `<header>` slot.
+
 ```html demo
 <div style="max-inline-size: 32rem">
   <article class="card">

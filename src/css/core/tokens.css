@@ -8,8 +8,14 @@
    *
    * Derived: "Theme-derived aliases" and "State tokens" reference intent and
    * surface tokens and follow the theme; do not hard-code values into them.
-   * Internal: indicator offsets, --disabled-opacity and the like are
-   * consumed by components, not authored.
+   *
+   * Every token declared here is listed in tokens.json except these, which
+   * components consume but authors do not set:
+   *
+   * Internal:
+   * --indicator-offset
+   * --indicator-ring
+   * --disabled-opacity
    *
    * Component-local hooks and internal state relays live with their
    * components. See docs/pages/foundations/tokens.md for the public/internal

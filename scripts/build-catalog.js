@@ -42,6 +42,20 @@
  *                   registerEnhancement("token", …) — public API. The token may
  *                   differ from the module name (tab → "tabs") because it is
  *                   read from the file, not derived.
+ *   docs            the published page named by the file's "Docs:" header
+ *                   (docs/pages/<path>.md → <homepage><path>.html). Every
+ *                   component file must carry one that resolves to an existing
+ *                   page: a consumer linking to the docs cannot guess that tab
+ *                   lives under enhancements/ or join under forms/.
+ *
+ * tokens.json — the public global tokens, written by the same command:
+ *
+ *   global          custom properties declared in core/tokens.css and
+ *                   core/theme.css, plus the "Public hooks:" of any core file
+ *                   (fallback-only hooks such as --soft-border-mix), minus the
+ *                   "Internal:" sections of those files and the shared relay
+ *                   families (--ui-*, --intent*, --density-*). Component hooks
+ *                   stay in components.json.
  *
  * Shared vocabulary
  *
@@ -73,6 +87,7 @@
  * here, regenerate, and review the diff — the catalog never edits itself.
  */
 
+import { existsSync } from "node:fs";
 import { readdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -88,12 +103,42 @@ import { parseHookSections } from "./utils/parse-hook-sections.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const OUT_FILE = join(ROOT, "components.json");
+const TOKENS_FILE = join(ROOT, "tokens.json");
 
 /* The universal modifier catalogue — the classes a component composes without
    owning them. */
 const SHARED_SOURCES = ["src/css/core/intents.css", "src/css/core/variants.css"];
 
+/* Where global tokens are declared. Other core files only contribute their
+   "Public hooks:" / "Internal:" headers. */
+const TOKEN_SOURCES = ["src/css/core/tokens.css", "src/css/core/theme.css"];
+
+/* Shared relays, never author tokens (same families as check:css-api). */
+const RELAY_PREFIXES = [/^--ui-/, /^--density-/, /^--intent(?:-|$)/];
+
 const ENHANCEMENT_RE = /registerEnhancement\(\s*["']([a-z][a-z0-9-]*)["']/g;
+const DOCS_RE = /^\s*\*\s*Docs:\s*docs\/pages\/(\S+)\.md\s*$/m;
+
+/* The published docs root. package.json#homepage points at the generated
+   site, so a page path maps onto it without a second hard-coded URL. */
+async function docsBase(root) {
+  const { homepage } = JSON.parse(await readFile(join(root, "package.json"), "utf8"));
+  if (!homepage?.endsWith("/site/")) {
+    throw new Error(
+      `package.json#homepage must be the docs site root ending in /site/ (got ${homepage}).`,
+    );
+  }
+  return homepage;
+}
+
+function docsUrl(root, base, file, css) {
+  const path = css.match(DOCS_RE)?.[1];
+  if (!path) throw new Error(`${file}: missing a "Docs: docs/pages/<path>.md" header line.`);
+  if (!existsSync(join(root, "docs", "pages", `${path}.md`))) {
+    throw new Error(`${file}: Docs header points at docs/pages/${path}.md, which does not exist.`);
+  }
+  return `${base}${path}.html`;
+}
 
 function stateNames(css) {
   const states = new Set();
@@ -152,6 +197,7 @@ export async function buildCatalog(root) {
   const reserved = new Set(loadReservedClasses(join(root, "reserved-classes.json")));
   const shared = await sharedVocabulary(root);
   const modules = await jsModules(root);
+  const base = await docsBase(root);
   const componentsDir = join(root, "src", "css", "components");
   const files = (await readdir(componentsDir)).filter(
     (file) => file.endsWith(".css") && file !== "index.css",
@@ -176,6 +222,7 @@ export async function buildCatalog(root) {
         name,
         source: `src/css/components/${file}`,
         cssImport: `actual-css/css/components/${name}`,
+        docs: docsUrl(root, base, file, css),
       };
       if (classes.size) entry.classes = [...classes].sort();
       if (hooks.public.length) entry.publicHooks = hooks.public;
@@ -203,10 +250,77 @@ export async function buildCatalog(root) {
   return catalog;
 }
 
+export async function buildTokens(root) {
+  const coreDir = join(root, "src", "css", "core");
+  const declared = new Set();
+  const publicHooks = new Set();
+  const internal = new Set();
+
+  for (const file of (await readdir(coreDir)).filter((entry) => entry.endsWith(".css"))) {
+    const path = `src/css/core/${file}`;
+    const css = await readFile(join(coreDir, file), "utf8");
+    const hooks = parseHookSections(css);
+    for (const hook of hooks.public) publicHooks.add(hook);
+    for (const hook of hooks.internal) internal.add(hook);
+    if (TOKEN_SOURCES.includes(path)) {
+      for (const match of stripComments(css).matchAll(/(?<![-\w])(--[a-z0-9-]+)\s*:/g)) {
+        declared.add(match[1]);
+      }
+    }
+  }
+
+  const global = [...new Set([...declared, ...publicHooks])]
+    .filter((name) => !internal.has(name) && !RELAY_PREFIXES.some((re) => re.test(name)))
+    .sort();
+
+  /* A file outside core may list a global token under "Internal:" only for
+     the local value it writes (navbar's --gap). If it means the token itself,
+     core must say so too: --surface-link was internal in card.css and public
+     here. Either annotation settles which one, so a disagreement fails. */
+  for (const path of await cssFilesOutsideCore(root)) {
+    const css = await readFile(join(root, path), "utf8");
+    const localValues = new Set([...css.matchAll(LOCAL_VALUE_RE)].map((match) => match[1]));
+    for (const name of parseHookSections(css).internal) {
+      if (global.includes(name) && !localValues.has(name)) {
+        throw new Error(
+          `${path} lists ${name} under "Internal:", but core publishes it as a global token. ` +
+            `Mark it Internal in core, or annotate the entry "${name} (local value …)".`,
+        );
+      }
+    }
+  }
+
+  return { global };
+}
+
+/* "--gap (local value …)": an Internal entry that classifies the value a file
+   writes, not the global token it shadows. */
+const LOCAL_VALUE_RE = /(--[a-z0-9-]+)\s*\(local value\b/g;
+
+async function cssFilesOutsideCore(root) {
+  const files = [];
+  const walk = async (dir) => {
+    for (const entry of await readdir(join(root, dir), { withFileTypes: true })) {
+      const path = `${dir}/${entry.name}`;
+      if (entry.isDirectory()) {
+        // Themes are repository demos, not the published contract.
+        if (path !== "src/css/core" && path !== "src/css/themes") await walk(path);
+      } else if (entry.name.endsWith(".css")) {
+        files.push(path);
+      }
+    }
+  };
+  await walk("src/css");
+  return files.sort();
+}
+
 async function main() {
   const catalog = await buildCatalog(ROOT);
   await writeFile(OUT_FILE, `${JSON.stringify(catalog, null, 2)}\n`);
   console.log(`Wrote ${catalog.length} components to ${OUT_FILE}`);
+  const tokens = await buildTokens(ROOT);
+  await writeFile(TOKENS_FILE, `${JSON.stringify(tokens, null, 2)}\n`);
+  console.log(`Wrote ${tokens.global.length} global tokens to ${TOKENS_FILE}`);
 }
 
 if (import.meta.main) main();

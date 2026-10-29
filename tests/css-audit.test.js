@@ -43,6 +43,31 @@ function mediaBodies(source, query) {
   return bodies;
 }
 
+/* A browser without :dir() (Safari before 16.4) drops every rule whose
+   selector list names it, so the [dir="rtl"] fallback grouped with it vanished
+   exactly where it was needed (rating, range). */
+test(":dir() never shares a selector list", () => {
+  const walk = (dir) =>
+    readdirSync(join(import.meta.dir, "..", dir)).flatMap((name) => {
+      const path = `${dir}/${name}`;
+      return statSync(join(import.meta.dir, "..", path)).isDirectory()
+        ? walk(path)
+        : name.endsWith(".css")
+          ? [path]
+          : [];
+    });
+  for (const path of walk("src/css")) {
+    for (const [, prelude] of readRules(path).matchAll(/([^{};]+)\{/g)) {
+      // Only a top-level comma makes a list; :is(a, b) does not.
+      let topLevel = prelude;
+      while (/\([^()]*\)/.test(topLevel)) topLevel = topLevel.replace(/\([^()]*\)/g, "");
+      if (prelude.includes(":dir(") && topLevel.includes(",")) {
+        throw new Error(`${path}: ":dir()" grouped in "${prelude.trim()}"`);
+      }
+    }
+  }
+});
+
 test("avatar stack sizing uses stack tokens and RTL status-dot direction", () => {
   const css = readCss("src/css/components/avatar.css");
 
@@ -100,6 +125,12 @@ test("forced-colors mask fills survive application hook overrides", () => {
   );
   expect(rangeCss).toMatch(
     /@media \(forced-colors: active\)[\s\S]*\.range::-moz-range-track[\s\S]*Highlight var\(--range-progress\),\s*CanvasText var\(--range-progress\)/,
+  );
+
+  // The read-only rating's value is the share of a gradient, which forced
+  // colors drops; the display opts out on system keywords only.
+  expect(readCss("src/css/components/rating.css")).toMatch(
+    /@media \(forced-colors: active\)[\s\S]*\.rating\[role="img"\][\s\S]*forced-color-adjust:\s*none;[\s\S]*Highlight var\(--rating-fill\),\s*GrayText var\(--rating-fill\)/,
   );
 
   // currentColor mask/gradient fills: without this the system remaps them to

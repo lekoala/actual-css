@@ -7,10 +7,13 @@
 
 Plain CSS component framework for new projects. Semantic classes, shared variants, small tokens, theme hooks, and progressive enhancement.
 
-Documentation: <https://lekoala.github.io/actual-css/>
+Documentation: <https://lekoala.github.io/actual-css/site/>
 
 Actual CSS claims a documented set of global class names; the package publishes
-it as [`actual-css/reserved-classes.json`](reserved-classes.json).
+it as [`actual-css/reserved-classes.json`](reserved-classes.json). Tools can
+also read [`actual-css/components.json`](components.json) (components, imports,
+hooks, docs URLs) and [`actual-css/tokens.json`](tokens.json) (public global
+tokens).
 
 For existing projects: use cascade layers, import order, or your own build-time
 prefix transform.
@@ -229,7 +232,7 @@ MIT
 
 ## Docs
 
-The documentation site is published at <https://lekoala.github.io/actual-css/>.
+The documentation site is published at <https://lekoala.github.io/actual-css/site/>.
 It is generated from the source pages under [`docs/pages/`](docs/pages/);
 in a clone, run `bun run build:all` (or `build:dist`, `build:js` and
 `build:docs`) and open `site/index.html`.

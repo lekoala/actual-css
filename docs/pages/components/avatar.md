@@ -78,6 +78,12 @@ is suppressed inside the avatar.
 </div>
 ```
 
+An image trigger has no visible text, so its `aria-label` is the whole name.
+A trigger that shows initials uses them as its visible label: keep them in the
+accessible name, as in `aria-label="JD, Jane Doe: profile menu"`, so a speech
+user can say what they see (WCAG 2.5.3, *Label in Name*). A name without the
+initials fails that check even when the initials are `aria-hidden`.
+
 ## Avatar stack
 
 Set `.sm` or `.lg` on `.avatar-stack` to size the group; its avatars inherit
@@ -113,3 +119,7 @@ Prefer intents for avatar colors. Inside `.avatar-stack`, `--avatar-size` and
 the stack set, so the whole group resizes together; set `--avatar-size` on an
 individual avatar to opt one out. `--avatar-stack-overlap` is derived from
 `--avatar-stack-size`, not `--avatar-size`.
+
+Wide two-letter initials (`MW`) fill most of a `.sm` disc, so even the default
+overlap can graze the second letter there. Set `--avatar-stack-overlap: 0` on
+that stack, or keep initials stacks at the default size.

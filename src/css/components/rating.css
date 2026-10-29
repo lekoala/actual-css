@@ -7,12 +7,22 @@
  * fills preceding stars without reversing DOM or keyboard order. Forced
  * colors restores the platform radio presentation.
  *
+ * Read-only display: .rating[role="img"] is one element with no inputs, named
+ * by its aria-label. role="img" is the switch on purpose: an unnamed display
+ * draws nothing rather than stars no assistive technology can read.
+ *
  * Public hooks:
  * --rating-size
  * --rating-gap
  * --rating-color
  * --rating-empty
  * --rating-star
+ * --rating-value (display: the shown value, fractions allowed)
+ * --rating-max (display: the number of stars)
+ *
+ * Internal:
+ * --rating-fill
+ * --rating-direction
  */
 :where(.rating) {
   --intent: initial;
@@ -82,6 +92,49 @@
   }
 }
 
+/* Each star takes the same size + gap cell as a radio, so a display and an
+   input of the same size line up. The fill is a share of the whole row, which
+   makes a fractional value a partial star. */
+.rating[role="img"] {
+  --rating-value: 0;
+  --rating-max: 5;
+  --rating-fill: calc(var(--rating-value) / var(--rating-max) * 100%);
+  --rating-direction: to right;
+
+  inline-size: calc(var(--rating-max) * (var(--rating-size) + var(--rating-gap)));
+  block-size: var(--rating-size);
+  vertical-align: middle;
+  background: linear-gradient(
+    var(--rating-direction),
+    var(--rating-color) var(--rating-fill),
+    var(--rating-empty) var(--rating-fill)
+  );
+  -webkit-mask:
+    var(--rating-star) left center / calc(var(--rating-size) + var(--rating-gap)) var(--rating-size)
+    repeat-x;
+  mask:
+    var(--rating-star) left center / calc(var(--rating-size) + var(--rating-gap)) var(--rating-size)
+    repeat-x;
+}
+
+/* The fill starts at the inline start; only the direction changes, so the
+   forced-colors gradient below follows it too. Safari before 16.4 has no
+   :dir(); the attribute path is its fallback, as in avatar.css. Each selector
+   is its own rule: a browser that rejects :dir() drops the whole rule, and the
+   :dir() rules come after the fallback so a nested LTR island beats an outer
+   [dir="rtl"] at equal specificity. */
+[dir="rtl"] .rating[role="img"] {
+  --rating-direction: to left;
+}
+
+.rating[role="img"]:dir(ltr) {
+  --rating-direction: to right;
+}
+
+.rating[role="img"]:dir(rtl) {
+  --rating-direction: to left;
+}
+
 .rating.sm {
   --rating-size: 1rem;
 }
@@ -99,5 +152,18 @@
     -webkit-mask: none;
     mask: none;
     opacity: 1;
+  }
+
+  /* why: forced colors drops the gradient, and the filled share is the value
+     itself, so the display would vanish. It keeps the gradient, painted in the
+     user's own system colors only: Highlight for the value, as progress and
+     range do, GrayText for the empty stars. */
+  .rating[role="img"] {
+    forced-color-adjust: none;
+    background: linear-gradient(
+      var(--rating-direction),
+      Highlight var(--rating-fill),
+      GrayText var(--rating-fill)
+    );
   }
 }

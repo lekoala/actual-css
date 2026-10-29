@@ -4,8 +4,9 @@
 
 Use the installed version rather than guessing from names:
 
-- `components.json` — component classes, hooks, states, CSS/JS imports, enhancement tokens.
+- `components.json` — component classes, hooks, states, CSS/JS imports, enhancement tokens, docs URL.
 - `reserved-classes.json` — whether Actual CSS owns a class name.
+- `tokens.json` — public global tokens (`--space-40`, `--shadow`, `--primary`…).
 - `package.json#exports` — supported package entrypoints.
 - CSS/JS source — exact behavior and defaults.
 - docs / `llms.txt` — intended usage and framework map.

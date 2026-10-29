@@ -32,6 +32,39 @@ it("avatar child sizes cannot change the stack size or overlap", async () => {
   });
 });
 
+it("a read-only rating lines up with the input and needs role=img to draw", async () => {
+  await withBrowserPage(fixture, async (view) => {
+    const result = await view.evaluate(`(() => {
+      const width = id => document.getElementById(id).getBoundingClientRect().width;
+      // The radio row is a stretched grid item here; its stars are the cells.
+      const cells = [...document.querySelectorAll('#rating-input > input')]
+        .reduce((sum, input) => sum + input.getBoundingClientRect().width, 0);
+      return {
+        input: cells,
+        display: width('rating-display'),
+        unnamed: getComputedStyle(document.getElementById('rating-unnamed')).backgroundImage,
+      };
+    })()`);
+    expect(result.display).toBeGreaterThan(0);
+    expect(Math.abs(result.display - result.input)).toBeLessThan(0.5);
+    expect(result.unnamed).toBe("none");
+  });
+});
+
+/* The [dir="rtl"] fallback and :dir() share a specificity, so source order
+   decides: an LTR island inside an RTL region must still fill from the left.
+   Forced colors reads the same --rating-direction. */
+it("a read-only rating fills from the inline start, LTR island included", async () => {
+  await withBrowserPage(fixture, async (view) => {
+    const result = await view.evaluate(`(() => {
+      const direction = id =>
+        getComputedStyle(document.getElementById(id)).getPropertyValue('--rating-direction').trim();
+      return { ltr: direction('rating-display'), rtl: direction('rating-rtl'), island: direction('rating-ltr-island') };
+    })()`);
+    expect(result).toEqual({ ltr: "to right", rtl: "to left", island: "to right" });
+  });
+});
+
 for (const reduced of [false, true]) {
   it(`drawer keeps entry, exit and backdrop motion${reduced ? " with reduced motion" : ""}`, async () => {
     await withBrowserPage(
