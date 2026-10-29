@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-10-29
 ### Fixed
 - `dialog.js`: dialogs inside custom elements or shadow roots keep their native lifecycle and commands unless delegated with `data-enhance="dialog"` or the dialog API.
 - `.range`: the `[dir="rtl"]` fill fallback is its own rule, so browsers without `:dir()` keep it.
