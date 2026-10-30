@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Added
+- `demo/templates/playful-faq.html`: a separated accordion with a pill marker and a CSS-only open/close animation, linked from the accordion docs.
 
 ## [0.16.0] - 2026-10-29
 ### Fixed

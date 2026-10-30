@@ -168,3 +168,8 @@ recipe repeats it on its own property:
   }
 }
 ```
+
+The [playful FAQ template](../../demo/templates/playful-faq.html) applies this
+recipe with a local palette and animates the panel opening and closing (smooth
+expand / collapse, height animation) through `::details-content`, without
+JavaScript.

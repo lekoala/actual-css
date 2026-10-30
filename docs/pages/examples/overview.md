@@ -57,6 +57,7 @@ extension points.
 - [Adaptive filter surface](../../demo/templates/adaptive-surface.html) - app-level flyout/drawer composition with one synchronized filter state
 - [Select intents](../../demo/templates/select-intents.html) - extending the enhancer with a project's own `data-enhance` behavior, injected markup included, with no framework change
 - [Popover transport probe](../../demo/templates/popover-transport.html) - self-scoring bench for the native popover transport go/no-go
+- [Playful FAQ](../../demo/templates/playful-faq.html) - the separated accordion with an application palette, a pill plus/close marker and an animated open/close through `::details-content`, no JavaScript
 - [Tooltips](../../demo/templates/tooltips.html) - generated text is a snapshot at show time: what updates, what stays, and the explicit-tip way for dynamic content
 
 ### Third-party components on Actual tokens

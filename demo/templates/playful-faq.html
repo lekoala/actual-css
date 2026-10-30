@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playful FAQ - Actual CSS</title>
+  <meta name="description" content="A playful, CSS-only animated FAQ built on Actual CSS's native accordion. Application-level motion without a new framework component.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <style>
+    /*
+     * Bring your own motion.
+     *
+     * This is an application-level recipe, not a new Actual CSS variant.
+     * The .accordion.separated structure and its native <details> behavior
+     * remain unchanged. All color and motion decisions live on this page.
+     */
+
+    .playful-page {
+      --center-size: 68rem;
+      padding-block: clamp(2rem, 6vw, 5rem);
+    }
+
+    .playful-intro {
+      max-inline-size: 65ch;
+      margin-block-end: var(--space-50);
+    }
+
+    .playful-intro h1 {
+      margin-block: 0;
+    }
+
+    .playful-stage {
+      /* Intentionally local visual palette; not an Actual CSS theme. The
+         dark island underneath supplies the focus line and color-scheme. */
+      --faq-ink: #f7f3ff;
+      --faq-muted: #d4cde0;
+      --faq-subtle: #b7acc7;
+      --faq-accent: #c3a9ff;
+      --faq-card: #292633;
+      --faq-card-open: #342f43;
+      --faq-border: #494256;
+      --faq-border-open: #806d9b;
+      --faq-marker: #42384f;
+      --faq-marker-open: #6b548e;
+
+      padding: clamp(1.5rem, 6vw, 4rem);
+      border-radius: var(--radius-lg);
+      background: #191721;
+      color: var(--faq-ink);
+      isolation: isolate;
+    }
+
+    .playful-stage-header {
+      max-inline-size: 36rem;
+      margin: 0 auto var(--space-50);
+      text-align: center;
+    }
+
+    .playful-stage-header .overline {
+      margin: 0 0 var(--space-30);
+      color: var(--faq-accent);
+    }
+
+    .playful-stage-header h2 {
+      margin: 0 0 var(--space-30);
+      color: var(--faq-ink);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: var(--font-weight-bold);
+      line-height: 1.12;
+      letter-spacing: -0.035em;
+    }
+
+    .playful-stage-header h2 span {
+      color: var(--faq-accent);
+    }
+
+    .playful-stage-header p:last-child {
+      margin: 0;
+      color: var(--faq-subtle);
+      line-height: 1.6;
+    }
+
+    .playful-faq.accordion.separated {
+      --accordion-radius: 1.1rem;
+      --accordion-pad: clamp(1rem, 2.5vw, 1.4rem);
+      --accordion-marker-icon: var(--icon-plus);
+      --accordion-marker-open-rotate: 45deg;
+      --accordion-marker-size: 1rem;
+      --accordion-marker-color: var(--faq-accent);
+
+      max-inline-size: 40rem;
+      margin-inline: auto;
+      gap: var(--space-20);
+    }
+
+    .playful-faq.accordion.separated > details {
+      border-color: var(--faq-border);
+      background: var(--faq-card);
+      transition:
+        transform 240ms ease,
+        box-shadow 240ms ease,
+        background-color 240ms ease,
+        border-color 240ms ease;
+    }
+
+    .playful-faq.accordion.separated > details[open] {
+      background: var(--faq-card-open);
+      border-color: var(--faq-border-open);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .playful-faq.accordion.separated > details:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 25px rgb(0 0 0 / 18%);
+      }
+    }
+
+    .playful-faq.accordion summary {
+      color: var(--faq-ink);
+      font-size: clamp(0.97rem, 2vw, 1.08rem);
+      font-weight: var(--font-weight-semibold);
+      line-height: 1.4;
+    }
+
+    /* Actual's masked marker cannot carry a pill background. Per the
+       accordion docs, replace it with an aria-hidden element and reuse the
+       same icon, size, color and open-rotation hooks. */
+    .playful-faq.accordion summary::after {
+      display: none;
+    }
+
+    .playful-faq .faq-question {
+      min-inline-size: 0;
+      transition: transform 260ms cubic-bezier(.2, .8, .2, 1);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .playful-faq summary:hover .faq-question {
+        transform: translateX(4px);
+      }
+    }
+
+    .playful-faq .faq-marker {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      inline-size: 2rem;
+      block-size: 2rem;
+      margin-inline-start: auto;
+      border-radius: 0.7rem;
+      background: var(--faq-marker);
+      transition:
+        transform 340ms cubic-bezier(.2, .9, .3, 1.2),
+        background-color 240ms ease;
+    }
+
+    .playful-faq .faq-marker::before {
+      content: "";
+      inline-size: var(--accordion-marker-size);
+      block-size: var(--accordion-marker-size);
+      background-color: var(--accordion-marker-color);
+      -webkit-mask: var(--accordion-marker-icon) center / contain no-repeat;
+      mask: var(--accordion-marker-icon) center / contain no-repeat;
+    }
+
+    .playful-faq summary:hover .faq-marker {
+      --accordion-marker-color: var(--faq-ink);
+    }
+
+    .playful-faq details[open] .faq-marker {
+      transform: rotate(var(--accordion-marker-open-rotate));
+      background: var(--faq-marker-open);
+    }
+
+    /* The core gives the whole panel a muted color. Make the paragraph's
+       foreground explicit to avoid global paragraph rules defeating contrast. */
+    .playful-faq.accordion .faq-answer {
+      color: var(--faq-muted);
+    }
+
+    .playful-faq.accordion .faq-answer p {
+      margin: 0;
+      color: var(--faq-muted);
+      line-height: 1.75;
+    }
+
+    .playful-footnote {
+      margin: var(--space-50) 0 0;
+      color: var(--faq-subtle);
+      text-align: center;
+      font-size: var(--font-size-sm);
+    }
+
+    /* Native height animation where supported. Without these features,
+       <details> still opens and closes immediately, with no JS fallback. */
+    @supports selector(::details-content) and (interpolate-size: allow-keywords) {
+      .playful-faq {
+        interpolate-size: allow-keywords;
+      }
+
+      .playful-faq details::details-content {
+        block-size: 0;
+        opacity: 0;
+        overflow: clip;
+        content-visibility: hidden;
+        transition:
+          block-size 440ms cubic-bezier(.2, .8, .2, 1),
+          opacity 330ms ease,
+          content-visibility 440ms allow-discrete;
+      }
+
+      .playful-faq details[open]::details-content {
+        block-size: auto;
+        opacity: 1;
+        content-visibility: visible;
+      }
+
+      .playful-faq .faq-answer {
+        opacity: 0;
+        transform: translateY(-7px);
+        transition:
+          opacity 300ms ease,
+          transform 380ms cubic-bezier(.2, .8, .2, 1);
+      }
+
+      .playful-faq details[open] .faq-answer {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .playful-explainer {
+      max-inline-size: 65ch;
+      margin-block-start: var(--space-50);
+    }
+
+    .playful-explainer h2 {
+      margin-block-end: var(--space-20);
+    }
+
+    .playful-explainer p {
+      color: var(--text-muted);
+    }
+
+    .playful-explainer code {
+      white-space: nowrap;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .playful-faq.accordion.separated > details,
+      .playful-faq .faq-question,
+      .playful-faq .faq-marker,
+      .playful-faq details::details-content,
+      .playful-faq .faq-answer {
+        transition: none;
+      }
+
+      .playful-faq.accordion.separated > details:hover,
+      .playful-faq summary:hover .faq-question {
+        transform: none;
+      }
+    }
+
+    @media (forced-colors: active) {
+      .playful-stage {
+        background: Canvas;
+        color: CanvasText;
+        border: 1px solid CanvasText;
+      }
+
+      .playful-stage-header h2,
+      .playful-stage-header h2 span,
+      .playful-stage-header .overline,
+      .playful-stage-header p:last-child,
+      .playful-footnote,
+      .playful-faq.accordion summary,
+      .playful-faq.accordion .faq-answer p {
+        color: CanvasText;
+      }
+
+      .playful-faq.accordion.separated > details {
+        background: Canvas;
+        border-color: CanvasText;
+      }
+
+      .playful-faq .faq-marker {
+        background: Canvas;
+        border: 1px solid CanvasText;
+      }
+
+      .playful-faq .faq-marker::before {
+        background-color: CanvasText;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center playful-page">
+    <header class="stack playful-intro">
+      <p class="overline">Actual CSS / Application recipe</p>
+      <h1>Bring your own motion.</h1>
+      <p class="lead">A lively FAQ made from the standard accordion. The markup stays native; the animation and visual identity belong to the application.</p>
+    </header>
+
+    <section class="playful-stage" data-theme="dark" aria-labelledby="playful-faq-title">
+      <header class="playful-stage-header">
+        <p class="overline">A little different</p>
+        <h2 id="playful-faq-title">Good questions.<br><span>Better answers.</span></h2>
+        <p>Everything you wanted to know about Actual CSS.</p>
+      </header>
+
+      <div class="accordion separated playful-faq">
+        <details name="playful-faq" open>
+          <summary>
+            <span class="faq-question">What makes Actual CSS different?</span>
+            <span class="faq-marker" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-answer">
+            <p>A framework that embraces the browser instead of replacing it. Native elements, semantic classes, and a little room for personality.</p>
+          </div>
+        </details>
+
+        <details name="playful-faq">
+          <summary>
+            <span class="faq-question">Can I create custom animations?</span>
+            <span class="faq-marker" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Absolutely. Keep the component's structure and bring your own motion. Actual handles the foundations; your application decides how they feel.</p>
+          </div>
+        </details>
+
+        <details name="playful-faq">
+          <summary>
+            <span class="faq-question">Do I need JavaScript?</span>
+            <span class="faq-marker" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Not for this one. Modern CSS can animate the opening and closing of native details. Other browsers still get an accessible disclosure without animation.</p>
+          </div>
+        </details>
+
+        <details name="playful-faq">
+          <summary>
+            <span class="faq-question">Can I make it look completely different?</span>
+            <span class="faq-marker" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-answer">
+            <p>Yes. Change the palette, radius, icon or timing without adding a new framework variant. The behavior remains the browser's responsibility.</p>
+          </div>
+        </details>
+      </div>
+
+      <p class="playful-footnote">Try clicking the questions, using Enter or Space, or navigating with Tab.</p>
+    </section>
+
+    <section class="stack playful-explainer" aria-labelledby="playful-explainer-title">
+      <h2 id="playful-explainer-title">Same component. Different personality.</h2>
+      <p>This page keeps Actual's <code>.accordion.separated</code>, native <code>&lt;details name&gt;</code> grouping, and documented marker hooks. The dark palette, pill marker, hover lift, and content transition are local CSS, not framework defaults.</p>
+      <p>The interaction works without JavaScript. Browsers that do not support animated <code>::details-content</code> still get a fully functional accordion; reduced-motion preferences disable the effects.</p>
+      <p><a href="../../site/components/accordion.html">Explore the standard accordion</a></p>
+    </section>
+  </main>
+</body>
+</html>
