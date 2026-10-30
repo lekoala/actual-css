@@ -47,6 +47,8 @@ Neutral roles may lean toward the palette's ambient hue — by default the prima
 
 Semantic intents are curated colors, not mechanical derivatives of `--primary`. Danger, warning, and success stay recognizable for their function, but they are chosen as members of the theme palette rather than copied independently from a generic scale. Neither intents nor neutrals are derived from `--primary` at runtime: the relationship is a design decision recorded in the theme's own values.
 
+Actual ships a theme, not a palette. A palette lists available colors (`blue-100` … `blue-900`); a theme assigns meaning (primary, danger, surface, text). Components consume only the roles, so bundled color scales would add hundreds of custom properties the framework never reads and widen the public API without adding behavior. Applications bring their own source — a palette library, brand guidelines, literal values — and map it to the roles at the theme boundary.
+
 Color should reinforce structure and meaning, not carry them alone. Information hierarchy and semantic states should remain understandable when hue is removed or unavailable. Desaturating a composition is a useful review heuristic, not a conformance test.
 
 ## Soft foreground calibration

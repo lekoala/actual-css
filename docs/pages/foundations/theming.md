@@ -200,7 +200,7 @@ controls and scrollbars.
 
 → Foundations · Tokens (theme contract)
 
-### Replace the palette with my own brand
+### Replace the palette with my own brand / bring your own palette
 
 Override the whole minimal recolor set (Tokens · Theme contract), not just
 `--primary`. Every neutral of the default theme — surfaces, text, border,
@@ -223,8 +223,24 @@ It reads the theme in headless Chrome, in every scheme it declares, and exits 1
 when a soft, focus, invalid-focus or inverse pair misses its threshold, so it
 can gate a CI job.
 
-Starting from a color scale (Tailwind `--color-zinc-*`, a brand ramp): map one
-step per role rather than importing the scale.
+Starting from a color scale (Open Props, Radix Colors, Uchū, Tailwind
+`--color-zinc-*`, a brand ramp): map one step per role rather than importing
+the scale. Reference the library's variables in the theme or copy the few
+values you use; components keep reading roles, never a scale step.
+
+```css
+[data-theme="brand"] {
+  --primary: var(--indigo-9);
+  --primary-fg: white;
+  --danger: var(--red-9);
+  --danger-fg: white;
+  /* … the rest of the recolor set */
+}
+```
+
+Actual ships no color scales (`blue-100` … `blue-900`). Colors with no
+component role — chart series, illustrations, logo colors — are application
+tokens.
 
 → Foundations · Tokens (theme contract) · Guides · Tailwind (Map the palette to theme roles)
 
