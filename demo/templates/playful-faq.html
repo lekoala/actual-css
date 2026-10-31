@@ -361,5 +361,40 @@
       <p><a href="../../site/components/accordion.html">Explore the standard accordion</a></p>
     </section>
   </main>
+
+  <!-- Temporary tap diagnostic (?debug): on Chrome Android, taps sometimes
+       land one item lower until reload. The red dot is where the browser
+       placed the tap, the outline is what it hit. Remove once explained. -->
+  <script>
+    if (new URLSearchParams(location.search).has("debug")) {
+      const box = document.createElement("pre");
+      box.style.cssText = "position:fixed;inset:auto 0 0;z-index:2147483647;margin:0;padding:6px;font:11px/1.3 monospace;background:#000d;color:#0f0;pointer-events:none;white-space:pre-wrap";
+      const dot = document.createElement("div");
+      dot.style.cssText = "position:fixed;z-index:2147483647;inline-size:16px;block-size:16px;margin:-8px 0 0 -8px;border-radius:50%;background:red;pointer-events:none";
+      document.body.append(box, dot);
+
+      const name = (el) => el?.closest("summary, details")?.textContent.trim().slice(0, 28) ?? el?.tagName ?? "-";
+      let last;
+
+      addEventListener("pointerdown", (event) => {
+        const { clientX: x, clientY: y } = event;
+        dot.style.left = `${x}px`;
+        dot.style.top = `${y}px`;
+        last?.style.removeProperty("outline");
+        last = event.target.closest("summary") ?? event.target;
+        last.style.outline = "3px solid red";
+
+        const rect = last.getBoundingClientRect();
+        const vv = visualViewport;
+        box.textContent = [
+          `target    ${name(event.target)}`,
+          `fromPoint ${name(document.elementFromPoint(x, y))}`,
+          `clientY ${y | 0}  target rect ${rect.top | 0}..${rect.bottom | 0}`,
+          `scrollY ${scrollY | 0}  vv.offsetTop ${vv.offsetTop | 0}  vv.pageTop ${vv.pageTop | 0}  scale ${vv.scale.toFixed(2)}`,
+          `innerH ${innerHeight}  vv.h ${vv.height | 0}  docH ${document.documentElement.scrollHeight}`,
+        ].join("\n");
+      }, true);
+    }
+  </script>
 </body>
 </html>
