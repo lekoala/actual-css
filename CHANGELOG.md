@@ -1,6 +1,9 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Fixed
+- `.choice-card` and `.choice-card.chip`: hover preserves the selected border and only applies on devices that support hover.
+
 ### Added
 - `demo/templates/playful-faq.html`: a separated accordion with a pill marker and a CSS-only open/close animation, linked from the accordion docs.
 
