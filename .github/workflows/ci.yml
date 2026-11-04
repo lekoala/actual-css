@@ -1,5 +1,6 @@
 name: CI
-on: [push, pull_request]
+# workflow_dispatch redeploys Pages when a push failed to trigger a run.
+on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -19,7 +20,7 @@ jobs:
           git status --porcelain
           test -z "$(git status --porcelain)"
       - run: bun run build:pages
-      - if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+      - if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
         uses: actions/upload-pages-artifact@v5
         with:
           path: out/pages
@@ -34,7 +35,7 @@ jobs:
   # Settings → Pages → Source must be "GitHub Actions".
   pages:
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04
     permissions:
       pages: write
