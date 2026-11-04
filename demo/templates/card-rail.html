@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Card rail - Actual CSS</title>
+  <meta name="description" content="One list of cards: a 3 × 2 grid in a wide container, a swipeable scroll-snap rail with a peek and optional CSS scroll markers in a narrow one.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <style>
+    /*
+     * Grid on wide, rail on narrow.
+     *
+     * An application recipe composed of .scroll-snap and an actual-container
+     * query, not a framework variant: a container query threshold cannot read
+     * a custom property, so a generic class would have to freeze a breakpoint.
+     */
+
+    .rail-page {
+      --center-size: 68rem;
+      padding-block: clamp(2rem, 6vw, 5rem);
+    }
+
+    .rail-intro {
+      max-inline-size: 65ch;
+    }
+
+    .rail-intro h1 {
+      margin-block: 0;
+    }
+
+    /* Narrow: a rail. The cut-off next card is the scroll cue everywhere; iOS
+       hides the scrollbar at rest, so the peek must not be optional. */
+    .card-rail {
+      --scroll-snap-item-size: min(80%, 18rem);
+
+      /* Optional pagination dots, one per card. Dropped where unsupported,
+         leaving the peek and the native scrollbar. */
+      scroll-marker-group: after;
+    }
+
+    .card-rail::scroll-marker-group {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-20);
+      padding-block: var(--space-30);
+    }
+
+    .card-rail > li::scroll-marker {
+      /* Each dot is a link to its card: an empty content alone leaves it
+         nameless, so the label comes from the item. */
+      content: "" / attr(data-marker-label);
+      inline-size: 0.5rem;
+      block-size: 0.5rem;
+      border-radius: var(--radius-full);
+      /* The quietest text tone that still gives these controls 3:1 against
+         the page in both schemes; --border does not. */
+      background: var(--text-subtle);
+    }
+
+    /* Width, not only color, marks the current card (forced colors, low
+       vision). */
+    .card-rail > li::scroll-marker:target-current {
+      inline-size: 1.5rem;
+      background: var(--primary);
+    }
+
+    .card-rail > li::scroll-marker:focus-visible {
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: var(--focus-outline-offset);
+    }
+
+    /* The dots replace the scrollbar as the position indicator, so it goes
+       only where they exist. Unguarded, browsers without markers would lose
+       their last pointer affordance besides the peek. */
+    @supports (scroll-marker-group: after) {
+      .card-rail {
+        scrollbar-width: none;
+      }
+    }
+
+    @media (forced-colors: active) {
+      .card-rail > li::scroll-marker {
+        background: CanvasText;
+      }
+
+      .card-rail > li::scroll-marker:target-current {
+        background: Highlight;
+      }
+    }
+
+    /* Wide: every card is visible. overflow: visible ends the scroll
+       container, which also removes the dots: markers only exist on a scroller,
+       so no scroll-marker-group reset is needed. */
+    @container actual-container (min-width: 48rem) {
+      .card-rail {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        overflow: visible;
+        /* No longer clips, so the rail's focus reserve has nothing to protect. */
+        margin-block: 0;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack rail-page">
+    <header class="stack rail-intro">
+      <h1>Card rail</h1>
+      <p>
+        One list of cards. In a wide container it is a 3 × 2 grid; in a narrow
+        one it becomes a swipeable rail where the next card peeks in. Browsers
+        that support CSS scroll markers add one dot per card.
+      </p>
+    </header>
+
+    <section class="stack" aria-labelledby="featured-title">
+      <h2 id="featured-title">Featured topics</h2>
+
+      <div class="container-query">
+        <ul class="scroll-snap list-reset card-rail">
+          <li class="card stack" data-marker-label="Getting started">
+            <h3>Getting started</h3>
+            <p>Install the package and link one stylesheet.</p>
+            <a href="#featured-title">Read the guide</a>
+          </li>
+          <li class="card stack" data-marker-label="Layouts">
+            <h3>Layouts</h3>
+            <p>Stacks, clusters, grids and sidebars that compose.</p>
+            <a href="#featured-title">Browse layouts</a>
+          </li>
+          <li class="card stack" data-marker-label="Forms">
+            <h3>Forms</h3>
+            <p>Native controls with consistent sizing and focus.</p>
+            <a href="#featured-title">See the fields</a>
+          </li>
+          <li class="card stack" data-marker-label="Theming">
+            <h3>Theming</h3>
+            <p>A small set of tokens drives every component.</p>
+            <a href="#featured-title">Write a theme</a>
+          </li>
+          <li class="card stack" data-marker-label="Accessibility">
+            <h3>Accessibility</h3>
+            <p>Focus, contrast and forced colors handled by default.</p>
+            <a href="#featured-title">Review the checks</a>
+          </li>
+          <li class="card stack" data-marker-label="Enhancements">
+            <h3>Enhancements</h3>
+            <p>Optional scripts that never gate the content.</p>
+            <a href="#featured-title">Add behaviour</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

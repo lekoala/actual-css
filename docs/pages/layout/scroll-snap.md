@@ -6,7 +6,7 @@ Horizontal rails that stay useful without JavaScript and snap in modern browsers
 
 Use `.scroll-snap` for a niche row of items that should scroll horizontally, such as card rails, media strips, overflow tabs, or a simple touch-friendly carousel baseline. Scrolling only appears when the items are wider than the container; set `--scroll-snap-item-size` for card rails.
 
-**Related terms:** carousel, card carousel, horizontal scroller, media rail, scrolling rail.
+**Related terms:** carousel, card carousel, horizontal scroller, media rail, scrolling rail, grid to slider, swipe on mobile, pagination dots.
 
 ```html demo
 <section class="stack" aria-labelledby="featured-title">
@@ -55,4 +55,71 @@ Keep scrollbars visible by default. If a product deliberately hides them, make t
 </div>
 ```
 
-`.scroll-snap` is not a full interactive carousel. For previous/next controls, pagination, active state, mouse drag, looping, autoplay, or robust accessibility behavior, use a dedicated carousel library such as Swiper and compose it with Actual components.
+## Grid on wide, rail on narrow
+
+To show one list as a grid in a wide container and as a swipeable rail in a narrow one, keep a single `.scroll-snap` list and turn it into a grid from an `actual-container` query:
+
+```html
+<div class="container-query">
+  <ul class="scroll-snap list-reset card-rail">
+    <li class="card">…</li>
+  </ul>
+</div>
+```
+
+```css
+.card-rail {
+  --scroll-snap-item-size: min(80%, 18rem);
+}
+
+@container actual-container (min-width: 48rem) {
+  .card-rail {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+    margin-block: 0;
+    padding: 0;
+  }
+}
+```
+
+Keep the item size under `100%` so the next card peeks in: iOS hides the scrollbar at rest, so the cut-off card is the scroll cue. In the grid, `overflow: visible` ends the scroll container, and resetting `margin-block` and `padding` removes the focus reserve that only a clipping rail needs.
+
+### Pagination dots
+
+CSS scroll markers add one dot per item in Chromium. Other browsers drop these declarations and keep the peek.
+
+```css
+.card-rail {
+  scroll-marker-group: after;
+}
+
+.card-rail > li::scroll-marker {
+  content: "" / attr(data-marker-label);
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--radius-full);
+  background: var(--text-subtle);
+}
+
+.card-rail > li::scroll-marker:target-current {
+  inline-size: 1.5rem;
+  background: var(--primary);
+}
+
+@supports (scroll-marker-group: after) {
+  .card-rail {
+    scrollbar-width: none;
+  }
+}
+```
+
+- Each dot is a link: give every item a `data-marker-label`, because `content: ""` alone leaves the links nameless.
+- The dots are controls and need 3:1 against the page: `--text-subtle` is the quietest text tone that holds it, `--border` does not. Mark the current dot by size, not color alone.
+- The dots replace the scrollbar, so hide it only where they exist; `data-scrollbar="hidden"` would also hide it in browsers without markers.
+- Each dot is a tab stop, placed before the items in Chromium's tab order.
+- The grid needs no `scroll-marker-group` reset: markers exist only on a scroll container.
+
+The [card rail template](../../demo/templates/card-rail.html) has the full recipe, focus ring and forced colors included.
+
+`.scroll-snap` is not a full interactive carousel. For previous/next controls, pagination dots in every browser, mouse drag, looping, autoplay, or robust accessibility behavior, use a dedicated carousel library such as Swiper and compose it with Actual components.

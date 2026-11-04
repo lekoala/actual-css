@@ -9,6 +9,7 @@
 ### Added
 - `.chat`: `--chat-avatar-align` places the avatar beside the header (`start`) instead of the last line (`end`, default).
 - `demo/templates/playful-faq.html`: a separated accordion with a pill marker and a CSS-only open/close animation, linked from the accordion docs.
+- `demo/templates/card-rail.html`: one list as a grid on wide and a `.scroll-snap` rail with CSS scroll markers on narrow, documented in the scroll-snap docs.
 
 ### Changed
 - `date-fields.html`, `contrast-contexts.html`, `neo-brutalist.html`: `@lekoala/date-picker` 0.6.1; `date-fields.html` shows its locale entry mask.
