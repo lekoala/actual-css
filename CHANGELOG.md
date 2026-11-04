@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.16.1] - 2026-11-04
 ### Fixed
 - `.field-group.flush`: the legend takes the `.field-label` size (`--control-font-size`) instead of the framed legend's `--font-size-xs`.
 - `status.js`: the status bar rises above a `.form-actions.sticky` bar docked to the bottom edge instead of covering its submit button.
