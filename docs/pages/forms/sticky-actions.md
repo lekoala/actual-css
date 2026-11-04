@@ -187,3 +187,5 @@ Scroll the page to see the detached footer stay reachable.
 ```
 
 A sticky footer can cover the last field on short pages. That is a page-layout concern, not a framework concern. Add bottom padding to the page or scroll container if needed.
+
+While a docked sticky bar is on screen, the [status bar](../enhancements/status-bar.md) rises above it, so a message never covers the actions — including the validation message an invalid submit shows.

@@ -2,10 +2,16 @@
 
 ## [Unreleased]
 ### Fixed
+- `.field-group.flush`: the legend takes the `.field-label` size (`--control-font-size`) instead of the framed legend's `--font-size-xs`.
+- `status.js`: the status bar rises above a `.form-actions.sticky` bar docked to the bottom edge instead of covering its submit button.
 - `.choice-card` and `.choice-card.chip`: hover preserves the selected border and only applies on devices that support hover.
 
 ### Added
+- `.chat`: `--chat-avatar-align` places the avatar beside the header (`start`) instead of the last line (`end`, default).
 - `demo/templates/playful-faq.html`: a separated accordion with a pill marker and a CSS-only open/close animation, linked from the accordion docs.
+
+### Changed
+- `date-fields.html`, `contrast-contexts.html`, `neo-brutalist.html`: `@lekoala/date-picker` 0.6.1; `date-fields.html` shows its locale entry mask.
 
 ## [0.16.0] - 2026-10-29
 ### Fixed

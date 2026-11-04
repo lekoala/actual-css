@@ -6,6 +6,7 @@
  * Public hooks:
  * --chat-gap
  * --chat-max-size
+ * --chat-avatar-align
  *
  * Internal:
  * --chat-bubble-bg
@@ -15,6 +16,9 @@
 .chat {
   --chat-gap: var(--space-30);
   --chat-max-size: min(85%, 40rem);
+  /* end: the avatar sits beside the last line, as in messaging. start sets it
+     beside the header, for long answers or comment threads with a footer. */
+  --chat-avatar-align: end;
 
   display: grid;
   grid-auto-rows: min-content;
@@ -33,7 +37,7 @@
 
 .chat-avatar {
   grid-row: 1 / span 3;
-  align-self: end;
+  align-self: var(--chat-avatar-align);
 }
 
 .chat-start > .chat-avatar {

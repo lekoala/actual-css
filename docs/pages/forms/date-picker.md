@@ -38,6 +38,12 @@ control, the masked field and
 [`@lekoala/date-picker`](https://github.com/lekoala/date-picker) side by side, the
 picker skinned entirely with Actual tokens.
 
+The picker also masks typed entry in the locale: digits gain the `Intl`
+separators (`29102026` becomes `29/10/2026` in `fr-BE`) while the submitted value
+stays ISO. `format-on-type="false"` disables the automatic separators; parsing,
+validation and the ISO value are unaffected. Do not combine the picker with
+`data-mask` — two writers on the same value have no defined caret behaviour.
+
 ```html
 <label class="field">
   <span class="field-label">Booking date</span>

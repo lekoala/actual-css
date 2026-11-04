@@ -58,6 +58,7 @@ import { waitForTransitions } from "./transition.js";
 const STATUS_SELECTOR = '[data-status][role="status"]';
 const STATUS_CLASSES_ATTR = "statusClasses";
 const VIEWPORT_OFFSET_PROPERTY = "--status-viewport-offset";
+const DOCKED_ACTIONS_SELECTOR = `.${CLASSES.formActions}.${CLASSES.sticky}`;
 const DEFAULT_DURATION_MS = 3000;
 
 let statusTimer;
@@ -116,34 +117,94 @@ function mountStatusTarget(target, source) {
   mountedStatusTarget = target;
 }
 
+function dockedActionsBars(target) {
+  const root = target.closest("dialog[open]") ?? target.ownerDocument;
+  return root.querySelectorAll(DOCKED_ACTIONS_SELECTOR);
+}
+
+// A sticky action bar docks to the same bottom edge as the status bar. The
+// validation docs pair the two, so an invalid submit would otherwise show its
+// message on top of the submit button it is about. Any message is lifted, not
+// only one from that form: the bar must not hide the page's primary actions
+// whatever it says. A bar counts as docked when its bottom sits at its sticky
+// offset from the visible bottom edge (above a bottom navigation, for one); a
+// bar at rest higher up the page is not in the way. Detection assumes the
+// bar's scrollport reaches the viewport bottom: a bar docked in a scroll
+// container that ends higher (.app-main above an .app-nav row) is not seen.
+function dockedActionsBand(target, view, visibleBottom) {
+  let band = 0;
+  for (const actions of dockedActionsBars(target)) {
+    const rect = actions.getBoundingClientRect();
+    const offset = Number.parseFloat(view.getComputedStyle(actions).bottom) || 0;
+    if (rect.height > 0 && rect.top < visibleBottom && rect.bottom >= visibleBottom - offset - 1) {
+      band = Math.max(band, visibleBottom - rect.top);
+    }
+  }
+  return band;
+}
+
 // The bar is fixed to the layout viewport, so the mobile software keyboard
-// covers it. visualViewport reports the occluded band; the CSS adds it to the
-// bottom inset. Tracking runs only while a message is on screen.
+// covers it, and a docked sticky action bar sits where it would show.
+// visualViewport reports the keyboard band; the docked bar's height is added on
+// top; the CSS adds the sum to the bottom inset. Tracking runs only while a
+// message is on screen.
 function trackViewport(target) {
   if (viewportTracker?.target === target) return;
   releaseViewport();
 
   const view = target.ownerDocument?.defaultView;
-  const viewport = view?.visualViewport;
-  if (!viewport) return;
+  if (!view) return;
+  const viewport = view.visualViewport;
 
   const controller = new AbortController();
+  let frame = 0;
+  let written = null;
   const update = () => {
+    frame = 0;
     // Self-heal: an app that drops the bar while a message is up never reaches
     // the clear() path, so the tracker would outlive its element.
     if (!target.isConnected) {
       releaseViewport();
       return;
     }
-    const occluded = Math.max(0, view.innerHeight - viewport.height - viewport.offsetTop);
-    target.style.setProperty(VIEWPORT_OFFSET_PROPERTY, `${occluded}px`);
+    const keyboard = viewport
+      ? Math.max(0, view.innerHeight - viewport.height - viewport.offsetTop)
+      : 0;
+    const docked = dockedActionsBand(target, view, view.innerHeight - keyboard);
+    const value = `${keyboard + docked}px`;
+    if (value === written) return;
+    written = value;
+    target.style.setProperty(VIEWPORT_OFFSET_PROPERTY, value);
+  };
+  // Scroll fires per frame and per scroll container; one layout read per frame
+  // is enough.
+  const schedule = () => {
+    if (!frame) frame = view.requestAnimationFrame(update);
   };
 
-  viewport.addEventListener("resize", update, { signal: controller.signal });
-  viewport.addEventListener("scroll", update, { signal: controller.signal });
-  update();
+  // Installed before the first update, so a target already detached there is
+  // released instead of leaving a tracker behind.
+  const observer = view.ResizeObserver ? new view.ResizeObserver(schedule) : null;
+  viewportTracker = {
+    target,
+    stop: () => {
+      controller.abort();
+      observer?.disconnect();
+      if (frame) view.cancelAnimationFrame(frame);
+    },
+  };
 
-  viewportTracker = { target, stop: () => controller.abort() };
+  const options = { signal: controller.signal, passive: true };
+  viewport?.addEventListener("resize", schedule, options);
+  viewport?.addEventListener("scroll", schedule, options);
+  // Scrolling docks and releases the action bar. Capture also hears the scroll
+  // containers (.app-main) whose scroll events do not bubble.
+  view.addEventListener("scroll", schedule, { ...options, capture: true });
+  view.addEventListener("resize", schedule, options);
+  // A docked bar can change height without any scroll: a wrapping button, a
+  // spinner, an error line above the actions.
+  for (const actions of dockedActionsBars(target)) observer?.observe(actions);
+  update();
 }
 
 function releaseViewport() {

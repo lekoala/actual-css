@@ -282,7 +282,8 @@
     ],
     "publicHooks": [
       "--chat-gap",
-      "--chat-max-size"
+      "--chat-max-size",
+      "--chat-avatar-align"
     ],
     "internalHooks": [
       "--chat-bubble-bg",

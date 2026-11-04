@@ -2,8 +2,9 @@
  * Selectors — the state-class vocabulary the runtime writes.
  *
  * The file lists the class names modules write as state (is-open,
- * was-validated, …) and validation's two read-side presentation adapters
- * (field, fieldError). Behavior discovery is not listed here: it uses
+ * was-validated, …) and the classes they only read as presentation adapters:
+ * validation's field and fieldError, status's formActions + sticky pair.
+ * Behavior discovery is not listed here: it uses
  * data-enhance tokens. To run this runtime against a different CSS
  * framework, edit this file (or alias it in a bundler).
  *
@@ -24,6 +25,13 @@ export const CLASSES = {
   // validation.js — read-side presentation adapter: ancestor container
   // for aria-invalid/danger state. Optional — degrades to no-op.
   field: "field",
+  // status.js — read-side presentation adapter, first half of the compound
+  // .form-actions.sticky: the docked action bar the status bar rises above
+  // instead of covering its submit button.
+  formActions: "form-actions",
+  // status.js — read-side presentation adapter, second half of the same
+  // compound. Read only, never written: the runtime sets no sticky state.
+  sticky: "sticky",
   // surface.js — state class on the open flyout/menu/dialog surface.
   // status.js writes the same class on the status bar while a message shows.
   open: "is-open",

@@ -22,7 +22,8 @@
  * Internal:
  * --status-bg
  * --status-fg
- * --status-viewport-offset (written by status.js while the bar is open)
+ * --status-viewport-offset (written by status.js while the bar is open: the
+ *   keyboard band plus any docked .form-actions.sticky bar)
  */
 
 /* Intent boundary — inherited intents do not tint this component.
@@ -38,7 +39,8 @@
 
   position: fixed;
   /* Fixed positioning tracks the layout viewport, which the mobile software
-     keyboard covers. status.js writes the occluded band into the offset. */
+     keyboard covers, and a docked .form-actions.sticky bar shares its bottom
+     edge. status.js writes both occluded bands into the offset. */
   inset-block-end: calc(var(--space-40) + var(--status-viewport-offset, 0px));
   inset-inline: var(--space-40);
   z-index: var(--z-status);

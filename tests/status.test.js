@@ -281,6 +281,7 @@ test("lifts the bar above the band the software keyboard occludes", async () => 
 
   viewport.height = 500;
   viewport.emit("resize");
+  await nextFrame();
   expect(offsetOf(target)).toBe("300px");
 
   status.clear();
@@ -288,6 +289,165 @@ test("lifts the bar above the band the software keyboard occludes", async () => 
 
   expect(offsetOf(target)).toBe("");
   expect(viewport.listenerCount).toBe(0);
+});
+
+// happy-dom has no layout; the docked bar's geometry is stubbed per test.
+function placeActions(actions, top, bottom) {
+  actions.getBoundingClientRect = () => ({ top, bottom, height: bottom - top });
+}
+
+// Viewport and scroll updates are coalesced into one animation frame.
+// status.js schedules on window.requestAnimationFrame (a setImmediate in
+// happy-dom); this awaits the harness's global one (a 0 ms timer), which Bun
+// runs after the immediates. Keep the global: happy-dom's preventTimerLoops
+// can swallow a window.requestAnimationFrame call here and never resolve.
+function nextFrame() {
+  return new Promise((resolve) => requestAnimationFrame(() => resolve()));
+}
+
+const stickyFormHtml = `
+  <form>
+    <div class="cluster form-actions sticky"><button type="submit">Pay</button></div>
+  </form>
+  <div class="status-bar" data-status role="status"></div>`;
+
+test("rises above a sticky form-actions bar docked to the bottom edge", async () => {
+  const { status } = await loadStatus(stickyFormHtml);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  const actions = document.querySelector(".form-actions.sticky");
+  window.innerHeight = 800;
+  placeActions(actions, 728, 800);
+
+  status("Check the highlighted fields.", { duration: false });
+  expect(offsetOf(target)).toBe("72px");
+
+  // Scrolled past the end of the form, the bar releases and rests higher up.
+  placeActions(actions, 400, 472);
+  window.dispatchEvent(new Event("scroll"));
+  await nextFrame();
+  expect(offsetOf(target)).toBe("0px");
+
+  status.clear();
+  await afterExit();
+  expect(offsetOf(target)).toBe("");
+});
+
+// The two keyboard modes browsers actually produce. With
+// interactive-widget=resizes-visual the layout viewport keeps its height, so
+// the sticky bar stays docked to the layout bottom, behind the keyboard: only
+// the keyboard band counts.
+test("with a visual-only keyboard resize, a bar behind the keyboard is not lifted over", async () => {
+  const { status } = await loadStatus(stickyFormHtml);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  const actions = document.querySelector(".form-actions.sticky");
+  window.innerHeight = 800;
+  const viewport = stubVisualViewport(800);
+  placeActions(actions, 728, 800);
+
+  status("Check the highlighted fields.", { duration: false });
+  expect(offsetOf(target)).toBe("72px");
+
+  viewport.height = 500;
+  viewport.emit("resize");
+  await nextFrame();
+  expect(offsetOf(target)).toBe("300px");
+});
+
+// With interactive-widget=resizes-content the layout viewport shrinks with the
+// keyboard: no band is occluded, and the bar re-docks to the new bottom edge.
+test("with a content keyboard resize, the bar re-docks and is lifted over", async () => {
+  const { status } = await loadStatus(stickyFormHtml);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  const actions = document.querySelector(".form-actions.sticky");
+  window.innerHeight = 800;
+  const viewport = stubVisualViewport(800);
+  placeActions(actions, 728, 800);
+
+  status("Check the highlighted fields.", { duration: false });
+
+  window.innerHeight = 500;
+  viewport.height = 500;
+  placeActions(actions, 428, 500);
+  viewport.emit("resize");
+  await nextFrame();
+  expect(offsetOf(target)).toBe("72px");
+});
+
+test("detects a bar docked at its sticky offset, above a bottom navigation", async () => {
+  const { status } = await loadStatus(stickyFormHtml);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  const actions = document.querySelector(".form-actions.sticky");
+  actions.style.position = "sticky";
+  actions.style.bottom = "56px";
+  window.innerHeight = 800;
+  placeActions(actions, 672, 744);
+
+  status("Check the highlighted fields.", { duration: false });
+  // The bar and the navigation band beneath it.
+  expect(offsetOf(target)).toBe("128px");
+});
+
+test("follows a docked bar that changes height without scrolling", async () => {
+  const { status } = await loadStatus(stickyFormHtml);
+  let resized;
+  window.ResizeObserver = class {
+    constructor(callback) {
+      resized = callback;
+    }
+    observe() {}
+    disconnect() {}
+  };
+
+  const target = document.querySelector('[data-status][role="status"]');
+  const actions = document.querySelector(".form-actions.sticky");
+  window.innerHeight = 800;
+  placeActions(actions, 728, 800);
+
+  status("Check the highlighted fields.", { duration: false });
+  expect(offsetOf(target)).toBe("72px");
+
+  // The submit button wraps to a second line.
+  placeActions(actions, 680, 800);
+  resized([]);
+  await nextFrame();
+  expect(offsetOf(target)).toBe("120px");
+});
+
+test("does not rewrite the offset when it has not changed", async () => {
+  const { status } = await loadStatus(stickyFormHtml);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  window.innerHeight = 800;
+  placeActions(document.querySelector(".form-actions.sticky"), 728, 800);
+
+  status("Check the highlighted fields.", { duration: false });
+  let writes = 0;
+  const setProperty = target.style.setProperty.bind(target.style);
+  target.style.setProperty = (...args) => {
+    writes += 1;
+    return setProperty(...args);
+  };
+
+  window.dispatchEvent(new Event("scroll"));
+  await nextFrame();
+  expect(writes).toBe(0);
+});
+
+test("ignores action bars that are not sticky", async () => {
+  const { status } = await loadStatus(`
+    <form><div class="cluster form-actions"><button type="submit">Save</button></div></form>
+    <div class="status-bar" data-status role="status"></div>`);
+
+  const target = document.querySelector('[data-status][role="status"]');
+  window.innerHeight = 800;
+  placeActions(document.querySelector(".form-actions"), 728, 800);
+
+  status("Saved.", { duration: false });
+  expect(offsetOf(target)).toBe("0px");
 });
 
 test("releases the viewport tracker when the bar is removed while a message shows", async () => {

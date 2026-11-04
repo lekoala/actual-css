@@ -15,6 +15,7 @@ runtime targets, empty by default.
 - Use it for transient status (`Saved.`, `Reconnected.`, `Copied.`). Critical, persistent, or actionable information belongs in `.alert`, inline messages, or dialogs.
 - Intents: `danger`, `success`, `warning`, `neutral`. The default (no intent) is a neutral dark pill.
 - On mobile, the runtime keeps the bar above the software keyboard by tracking `visualViewport` while a message is showing.
+- A [sticky form-actions](../forms/sticky-actions.md) bar docked to the bottom edge lifts the bar above it, so an invalid-submit message never covers the submit button.
 - A message from an open modal dialog temporarily moves the bar inside that
   dialog so it remains visible and announced. The bar returns after its exit.
 

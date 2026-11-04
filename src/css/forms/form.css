@@ -51,7 +51,8 @@
 
 /* Flush — the frame removed, for a group that already sits in a card or a
    form section. With no border to notch, the legend is a plain label above
-   the options: no gutter, and the .field label-to-control gap below it. */
+   the options: no gutter, the .field label-to-control gap below it, and the
+   .field label size — the small size only suits a legend set in a frame. */
 .field-group.flush {
   padding: 0;
   border: 0;
@@ -61,6 +62,7 @@
 .field-group.flush > legend {
   margin-block-end: var(--space-10);
   padding-inline: 0;
+  font-size: var(--control-font-size);
 }
 
 .field-help {
