@@ -76,6 +76,76 @@ replaced by new server markup starts a new one, even when the save failed.
 The [Ajax forms recipe](../guides/progressive-enhancement.md#ajax-forms) wires
 the snapshot for you.
 
+## Autosave
+
+Save a `form[data-autosave]` after a pause in typing, without a submit
+button. The form keeps its `action` and `method`, so it still saves without
+JavaScript.
+
+```html
+<form class="stack" action="/notes" method="post" data-enhance="dirty" data-autosave>
+  <label class="field">
+    <span class="field-label">Notes</span>
+    <textarea class="input" name="notes" required></textarea>
+  </label>
+  <p class="muted" aria-hidden="true">
+    <span data-autosave-when="dirty">Saving…</span>
+    <span data-autosave-when="clean">All changes saved</span>
+  </p>
+  <noscript><button class="btn primary" type="submit">Save</button></noscript>
+</form>
+```
+
+```css
+form[data-dirty] [data-autosave-when="clean"],
+form:not([data-dirty]) [data-autosave-when="dirty"] { display: none; }
+```
+
+```js
+import { FormDirty } from "actual-css/js/dirty";
+import { status } from "actual-css/js/status";
+
+const DELAY = 1500; // idle time before saving
+const timers = new WeakMap();
+
+const schedule = (form) => {
+  clearTimeout(timers.get(form));
+  timers.set(form, setTimeout(() => save(form), DELAY));
+};
+
+async function save(form) {
+  if (!form.hasAttribute("data-dirty")) return;
+  if (form.getAttribute("aria-busy") === "true") return; // the running save reschedules
+  // checkValidity() stays silent; requestSubmit() would show errors mid-typing.
+  if (!form.checkValidity()) return;
+
+  const snapshot = FormDirty.capture(form);
+  form.setAttribute("aria-busy", "true");
+  try {
+    const response = await fetch(form.action, { method: form.method, body: new FormData(form) });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    FormDirty.markClean(form, snapshot);
+    if (form.hasAttribute("data-dirty")) schedule(form); // typed during the request
+  } catch {
+    status("Changes not saved. Check your connection.", { intent: "danger" });
+  } finally {
+    form.removeAttribute("aria-busy");
+  }
+}
+
+document.addEventListener("input", ({ target }) => {
+  if (target.form?.matches("[data-autosave]")) schedule(target.form);
+});
+```
+
+- Edits made during a request stay dirty and trigger the next save.
+- Invalid data is never saved. The form stays dirty until it becomes valid.
+- A failed save is not retried in a loop. The next edit tries again, and the
+  warning below still protects the page.
+- The status bar reports failures only. Announcing every successful save
+  would interrupt screen readers at each pause; the inline state is hidden
+  from them for the same reason.
+
 ## Warning before leaving
 
 The module does not guard navigation. This recipe asks for confirmation when
@@ -84,10 +154,14 @@ the page unloads with a dirty form, except the one being submitted natively:
 ```js
 let lastSubmit = null;
 // Read at unload time, once every submit listener has had its say: a
-// canceled submission (validation, Ajax) or a dialog close does not leave.
+// canceled submission (validation, Ajax), a dialog close or a submission into
+// another window or frame does not leave.
 const leavesBySubmit = (form) => {
   if (lastSubmit?.target !== form || lastSubmit.defaultPrevented) return false;
-  const method = lastSubmit.submitter?.getAttribute("formmethod") || form.method;
+  const { submitter } = lastSubmit;
+  const method = submitter?.getAttribute("formmethod") || form.method;
+  const target = submitter?.getAttribute("formtarget") || form.target;
+  if (target && !["_self", "_top", "_parent"].includes(target)) return false;
   return method.toLowerCase() !== "dialog";
 };
 const guard = (event) => {
@@ -113,4 +187,6 @@ document.addEventListener("actual:dirty-change", () => {
 `beforeunload` covers reloads, closing the tab and full-page navigation.
 Navigation inside the page (a client router, a region swap) does not fire it:
 guard it in that router. Mobile browsers may skip the prompt when the page is
-discarded in the background.
+discarded in the background. A submission answered with a download keeps the
+page, but the recipe cannot tell in advance: that form stays unguarded until
+the next submission.
