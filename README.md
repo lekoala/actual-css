@@ -119,6 +119,10 @@ Undocumented `is-*` classes are runtime internals.
 
 **Theme hooks** — public tokens for color, radius, shadow, motion, and typography. Reference presets in `src/css/themes/` are demo material, not default CSS or public package entrypoints.
 
+**Blocks** — copy-paste marketing sections, application screens and navigation
+built with Actual CSS live in a separate gallery:
+[Actual Blocks](https://github.com/lekoala/actual-blocks).
+
 ## Modular CSS
 
 The family manifests are the module catalog: `core`, `layout`, `typography`,

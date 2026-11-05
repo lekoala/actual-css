@@ -7,6 +7,9 @@ and `actual.full.js` from `dist/`, plus the theme palettes bundle from
 `demo/assets/`. Both are build output: in a clone, run `bun run build:dist`,
 `bun run build:js` and `bun run build:themes` before opening a page.
 
+For copy-paste blocks (marketing sections, application screens, navigation)
+with their HTML and CSS, see [Actual Blocks](https://github.com/lekoala/actual-blocks).
+
 ## Templates
 
 `demo/templates/` are standalone pages. The first three explain the system; the
