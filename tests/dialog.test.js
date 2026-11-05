@@ -779,3 +779,108 @@ test("removing a dialog while open and reinserting leaves it controllable", asyn
   expect(dialog.open).toBe(false);
   expect(dialog.returnValue).toBe("done");
 });
+
+test("data-dialog-open opens the dialog modally at load", async () => {
+  await loadDialog('<dialog id="notice" data-dialog-open><h2>Check your inbox</h2></dialog>');
+  const dialog = document.getElementById("notice");
+
+  expect(dialog.open).toBe(true);
+  expect(dialog.getAttribute("aria-modal")).toBe("true");
+  expect(dialog.getAttribute("aria-labelledby")).toBe(dialog.querySelector("h2").id);
+  expect(document.documentElement.classList.contains("has-modal-open")).toBe(true);
+});
+
+test("data-dialog-open follows data-dialog-modal and ignores a false value", async () => {
+  await loadDialog(`
+    <dialog id="inline" data-dialog-open data-dialog-modal="false"></dialog>
+    <dialog id="off" data-dialog-open="false"></dialog>
+  `);
+
+  expect(document.getElementById("inline").open).toBe(true);
+  expect(document.getElementById("inline").hasAttribute("aria-modal")).toBe(false);
+  expect(document.documentElement.classList.contains("has-modal-open")).toBe(false);
+  expect(document.getElementById("off").open).toBe(false);
+});
+
+test("data-dialog-open skips view transitions on opening and closing", async () => {
+  setupDOM('<dialog id="notice" data-dialog-open data-dialog-view-transition></dialog>');
+  patchDialogMethods();
+  let transitions = 0;
+  document.startViewTransition = (update) => {
+    transitions++;
+    update();
+    return { finished: Promise.resolve() };
+  };
+  const { closeDialog } = await import(`../src/js/dialog.js?test=${++importId}`);
+  const dialog = document.getElementById("notice");
+
+  expect(dialog.open).toBe(true);
+  closeDialog(dialog, "done");
+
+  expect(dialog.open).toBe(false);
+  expect(dialog.returnValue).toBe("done");
+  expect(transitions).toBe(0);
+});
+
+test("data-dialog-open leaves an already open non-modal dialog alone", async () => {
+  setupDOM('<dialog id="notice" open data-dialog-open data-dialog-modal="false"></dialog>');
+  patchDialogMethods();
+  const dialog = document.getElementById("notice");
+  let closes = 0;
+  dialog.addEventListener("close", () => closes++);
+  await import(`../src/js/dialog.js?test=${++importId}`);
+
+  expect(dialog.open).toBe(true);
+  expect(dialog.hasAttribute("aria-modal")).toBe(false);
+  expect(document.documentElement.classList.contains("has-modal-open")).toBe(false);
+  expect(closes).toBe(0);
+
+  dialog.close();
+  dialog.remove();
+  await flushMutationObserver();
+  document.body.append(dialog);
+  await flushMutationObserver();
+  expect(dialog.open).toBe(false);
+});
+
+test("removing an upgraded dialog releases its pending close interceptor", async () => {
+  setupDOM('<dialog id="notice" open data-dialog-open></dialog>');
+  patchDialogMethods();
+  const dialog = document.getElementById("notice");
+  // Hold the upgrade's close event pending, as a browser task would.
+  dialog.close = function close() {
+    this.open = false;
+  };
+  await import(`../src/js/dialog.js?test=${++importId}`);
+  expect(dialog.open).toBe(true);
+
+  dialog.remove();
+  await flushMutationObserver();
+  document.body.append(dialog);
+  await flushMutationObserver();
+
+  // The old lifecycle must not suppress events after reconnection.
+  let closes = 0;
+  dialog.addEventListener("close", () => closes++);
+  dialog.dispatchEvent(new Event("close"));
+  expect(closes).toBe(1);
+});
+
+test("data-dialog-open opens once per element; a new node opens again", async () => {
+  await loadDialog('<main><dialog id="notice" data-dialog-open></dialog></main>');
+  const main = document.querySelector("main");
+  const dialog = document.getElementById("notice");
+  dialog.close();
+
+  // A moved node is the same dialog: closing it was the user's answer.
+  dialog.remove();
+  await flushMutationObserver();
+  main.append(dialog);
+  await flushMutationObserver();
+  expect(dialog.open).toBe(false);
+
+  // A server response swapped in a fresh one: that is a new message.
+  main.innerHTML = '<dialog id="notice" data-dialog-open></dialog>';
+  await flushMutationObserver();
+  expect(document.getElementById("notice").open).toBe(true);
+});

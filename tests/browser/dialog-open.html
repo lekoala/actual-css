@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dialog open-at-load fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <p>Sign in</p>
+  <button id="reopen" type="button" commandfor="notice" command="show-modal">Show again</button>
+
+  <!-- Rendered by the server after a submission: shown without JavaScript,
+       upgraded to a modal by the runtime. -->
+  <dialog class="modal" id="notice" open data-dialog-open>
+    <h2>Check your inbox</h2>
+    <form method="dialog">
+      <button class="btn" id="ok">OK</button>
+    </form>
+  </dialog>
+</body>
+</html>

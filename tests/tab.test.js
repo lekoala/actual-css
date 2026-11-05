@@ -102,6 +102,71 @@ test("clicking a tab selects it and reveals its panel", async () => {
   expect(document.activeElement).toBe(tabB);
 });
 
+function recordTabChanges() {
+  const seen = [];
+  document.addEventListener("actual:tab-change", (event) => {
+    const { tab, panel, previousTab } = event.detail;
+    // Read at dispatch: the DOM is already updated when listeners run.
+    seen.push({
+      tab: tab.id,
+      panel: panel.id,
+      previousTab: previousTab?.id ?? null,
+      selected: tab.getAttribute("aria-selected"),
+      panelHidden: panel.hidden,
+      cancelable: event.cancelable,
+    });
+  });
+  return seen;
+}
+
+test("actual:tab-change reports a selection change after the DOM update", async () => {
+  await loadTabs(tabsMarkup());
+  const seen = recordTabChanges();
+
+  click(document.getElementById("tab-b"));
+
+  expect(seen).toEqual([
+    {
+      tab: "tab-b",
+      panel: "panel-b",
+      previousTab: "tab-a",
+      selected: "true",
+      panelHidden: false,
+      cancelable: false,
+    },
+  ]);
+});
+
+test("actual:tab-change fires for keyboard selection", async () => {
+  await loadTabs(tabsMarkup());
+  const seen = recordTabChanges();
+  const tabA = document.getElementById("tab-a");
+
+  tabA.focus();
+  press(tabA, "End");
+
+  expect(seen.map((e) => [e.previousTab, e.tab])).toEqual([["tab-a", "tab-c"]]);
+});
+
+test("actual:tab-change stays silent at connect and when the selection does not change", async () => {
+  const seen = [];
+  setupDOM(tabsMarkup().replace('aria-selected="true"', ""));
+  document.addEventListener("actual:tab-change", (event) => seen.push(event));
+  await import(`../src/js/tab.js?test=${++importId}`);
+  await nextMicrotask();
+
+  // Connect picked the first tab without announcing it.
+  const tabA = document.getElementById("tab-a");
+  expect(tabA.getAttribute("aria-selected")).toBe("true");
+
+  // Enter, Space and a click on the selected tab re-run nothing observable.
+  press(tabA, "Enter");
+  press(tabA, " ");
+  click(tabA);
+
+  expect(seen).toEqual([]);
+});
+
 test("arrow keys move selection and focus", async () => {
   await loadTabs(tabsMarkup());
   const tabA = document.getElementById("tab-a");

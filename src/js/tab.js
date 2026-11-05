@@ -11,6 +11,8 @@
  *            [hidden], disabled and panel-less tabs are skipped
  * Overflow:  a horizontal strip shows its whole selected tab, at connect and
  *            on every selection
+ * Event:     actual:tab-change bubbles from the tablist when the selection
+ *            changes, not at connect
  *
  * Self-registers via registerEnhancement: injected tablists wire automatically.
  * The tab→panel map is rebuilt from the live tablist on each interaction,
@@ -19,6 +21,7 @@
  */
 
 import { registerEnhancement } from "./enhance.js";
+import { EVENTS } from "./events.js";
 import { ensureInlineVisible } from "./inline-visible.js";
 import { itemForKey, shouldIgnoreKey } from "./keys.js";
 import { afterParse } from "./parsed.js";
@@ -68,12 +71,16 @@ function makePanelFocusable(panel) {
   }
 }
 
-function activate(tab) {
+/* Every selection path runs through here, so the change event cannot be
+   forgotten by one of them. Initialization passes notify: false: it settles
+   the markup's state, it is not a transition; read aria-selected for that. */
+function activate(tab, { notify = true } = {}) {
   if (!tab || isTabDisabled(tab) || !panelFor(tab)) return;
   const list = tab.closest(TABLIST_SELECTOR);
   if (!list) return;
   const tabs = tabsOf(list);
   const panels = panelsOf(tabs);
+  const previousTab = tabs.find((t) => t.getAttribute("aria-selected") === "true") ?? null;
 
   for (const t of tabs) {
     t.setAttribute("aria-selected", "false");
@@ -88,6 +95,13 @@ function activate(tab) {
   if (panel) {
     makePanelFocusable(panel);
     panel.hidden = false;
+  }
+
+  // After the DOM update, so a listener reads the new state.
+  if (notify && tab !== previousTab) {
+    list.dispatchEvent(
+      new CustomEvent(EVENTS.tabChange, { bubbles: true, detail: { tab, panel, previousTab } }),
+    );
   }
 }
 
@@ -110,7 +124,7 @@ function initialize(list) {
   const tabs = activatableTabs(list);
   if (!tabs.length) return;
   const selected = tabs.find((tab) => tab.getAttribute("aria-selected") === "true") || tabs[0];
-  activate(selected);
+  activate(selected, { notify: false });
   reveal(list, selected);
 }
 

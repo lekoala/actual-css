@@ -33,6 +33,11 @@
   by the arrow keys. An application filtering a tab strip only has to set
   `hidden`; deciding what to show when the selected tab is filtered out is the
   application's call.
+- `actual:tab-change` bubbles from the tablist after the user selects another
+  tab, with `{ tab, panel, previousTab }`. It cannot be canceled and does not
+  fire at connect: read `aria-selected` for the initial tab. Use it to sync
+  content outside the panels, such as a summary card that follows the selected
+  tab.
 
 ```html demo
 <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Settings">

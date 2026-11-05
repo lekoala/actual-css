@@ -8,6 +8,11 @@
 - `actual-css/js/ajax`: `data-enhance="ajax"` submits a form through `fetch` as a native submission would, and leaves the cases it cannot reproduce to the browser.
 - `data-ajax-target`: an HTML answer with a 2xx or `422` status replaces the target's content.
 - `actual:ajax-start`, `actual:ajax-response` and `actual:ajax-error` report an ajax submission; see the Ajax Submission page.
+- `actual:tab-change` bubbles from a tablist after the selected tab changes, with `{ tab, panel, previousTab }`.
+- `data-dialog-open` opens a dialog at load; on a dialog that also has `open`, it upgrades the no-JS rendering to a modal.
+
+### Fixed
+- `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.
 
 ### Removed
 - Docs: the Ajax forms recipe in the progressive enhancement guide; use `data-enhance="ajax"`.

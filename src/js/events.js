@@ -27,6 +27,9 @@ export const EVENTS = {
   // Dispatched by an ajax form when the request fails (network, CORS).
   // detail: { form, submitter, error }
   ajaxError: `${ACTUAL_EVENT_PREFIX}:ajax-error`,
+  // Dispatched by a tablist after its selection changed, never at connect.
+  // detail: { tab, panel, previousTab }
+  tabChange: `${ACTUAL_EVENT_PREFIX}:tab-change`,
   // Cancelable: dispatched by dialog.js before handling native cancel close.
   // detail: { dialog, sourceEvent }
   dialogCancel: `${ACTUAL_EVENT_PREFIX}:dialog-cancel`,

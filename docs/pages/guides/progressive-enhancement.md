@@ -325,18 +325,19 @@ The runtime dispatches a small set of public `actual:*` events. All are
 listenable on the document; cancelable events veto the associated action when
 `preventDefault()` is called.
 
-| Event                  | Dispatch                      | `detail`                             |
-| ---------------------- | ----------------------------- | ------------------------------------ |
-| `actual:surface-open`  | before a surface opens        | `{ surface, options }`               |
-| `actual:context-menu`  | before a context menu opens   | `{ menu, context, origin, trigger }` |
-| `actual:status`        | status module, or any code    | `{ message, intent, duration }`      |
-| `actual:invalid`       | after a submit was blocked    | `{ form, firstInvalid, message }`    |
-| `actual:dirty-change`  | after `data-dirty` flips      | `{ form, dirty }`                    |
-| `actual:ajax-start`    | an ajax request starts        | `{ form, submitter }`                |
-| `actual:ajax-response` | an ajax response arrived      | `{ form, submitter, response }`      |
-| `actual:ajax-error`    | an ajax request failed        | `{ form, submitter, error }`         |
-| `actual:dialog-cancel` | before a native cancel close  | `{ dialog, sourceEvent }`            |
-| `actual:dismiss`       | after a `--dismiss` dismissal | `{ trigger }`                        |
+| Event                  | Dispatch                       | `detail`                             |
+| ---------------------- | ------------------------------ | ------------------------------------ |
+| `actual:surface-open`  | before a surface opens         | `{ surface, options }`               |
+| `actual:context-menu`  | before a context menu opens    | `{ menu, context, origin, trigger }` |
+| `actual:status`        | status module, or any code     | `{ message, intent, duration }`      |
+| `actual:invalid`       | after a submit was blocked     | `{ form, firstInvalid, message }`    |
+| `actual:dirty-change`  | after `data-dirty` flips       | `{ form, dirty }`                    |
+| `actual:ajax-start`    | an ajax request starts         | `{ form, submitter }`                |
+| `actual:ajax-response` | an ajax response arrived       | `{ form, submitter, response }`      |
+| `actual:ajax-error`    | an ajax request failed         | `{ form, submitter, error }`         |
+| `actual:tab-change`    | after the selected tab changed | `{ tab, panel, previousTab }`        |
+| `actual:dialog-cancel` | before a native cancel close   | `{ dialog, sourceEvent }`            |
+| `actual:dismiss`       | after a `--dismiss` dismissal  | `{ trigger }`                        |
 
 `actual:surface-open`, `actual:context-menu` and `actual:dialog-cancel` are
 cancelable. `actual:status` both shows and clears the status bar — omit

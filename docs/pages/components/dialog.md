@@ -519,6 +519,13 @@ Available options:
 * `data-dialog-modal="false"` makes direct `openDialog()` calls use `show()`
   instead of `showModal()`. The `show-modal` and `--show` commands override
   this default.
+* `data-dialog-open` opens the dialog once the page is parsed, in its
+  `data-dialog-modal` mode: for a page the server renders with a confirmation
+  showing (open on load, auto-open). Add `open` too so the dialog still shows,
+  non-modally, without JavaScript; the runtime upgrades it to a modal. It opens
+  once per element: moving the node does not reopen it, a new node from an
+  ajax response does. With no trigger, it skips the view transition and
+  returns focus to the page on close.
 * `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
 * `closedby` keeps its native meaning: `"any"` closes on backdrop click and
   Escape, `"closerequest"` closes on Escape only, `"none"` disables both. The

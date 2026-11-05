@@ -15,6 +15,8 @@
  * indicator on backdrop click. Escape and explicit close requests always
  * close, unless an application cancels the actual:dialog-cancel event, and
  * closedby="none" keeps its native meaning (no Escape, no backdrop close).
+ * data-dialog-open opens the dialog once the document is parsed, in its
+ * data-dialog-modal mode; with `open` it upgrades the no-JS rendering.
  *
  * View transitions (opt-in via data-dialog-view-transition):
  *   When the browser supports document.startViewTransition and the user allows
@@ -30,9 +32,11 @@
 import { registerCommands, targetFor } from "./command.js";
 import enhance, { registerEnhancement } from "./enhance.js";
 import { EVENTS } from "./events.js";
+import { afterParse } from "./parsed.js";
 import { CLASSES } from "./selectors.js";
 
 const dialogMap = new WeakMap();
+const autoOpened = new WeakSet();
 const wiredDialogs = new Set();
 const delegatedDialogs = new WeakSet();
 // HTML has no non-modal dialog keyword, so non-modal opening is the custom
@@ -440,6 +444,9 @@ function handleDialogCancel(event) {
 
 function handleDialogClose(event) {
   const dialog = event.currentTarget;
+  // close is queued as a task: a dialog closed then reopened in the same task
+  // receives it while open again, and the cleanup would undo the new opening.
+  if (dialog.open) return;
   const state = dialogMap.get(dialog);
 
   clearVtName(dialog);
@@ -508,9 +515,56 @@ function ensureDialogWired(dialog) {
   return state;
 }
 
+/* The close() that precedes an upgrade queues a close event for a dialog
+   nobody closed. Swallow it before application listeners see it: the capture
+   phase reaches the window first even though close does not bubble. */
+function swallowNextClose(dialog) {
+  const view = dialog.ownerDocument.defaultView;
+  if (!view) return;
+  const { controller } = ensureDialogWired(dialog);
+  const swallow = (event) => {
+    if (event.target !== dialog) return;
+    view.removeEventListener("close", swallow, true);
+    if (dialog.open) event.stopImmediatePropagation();
+  };
+  // A detached dialog's queued event no longer passes through the window.
+  view.addEventListener("close", swallow, { capture: true, signal: controller.signal });
+}
+
+/* data-dialog-open: open once per element, for a page the server rendered
+   with the dialog showing. A dialog that also carries `open` is already shown
+   without JavaScript, non-modally; the runtime upgrades it to its modal mode.
+   A reinserted node does not reopen; a new node does. */
+function autoOpen(dialog) {
+  if (!boolData(dialog, "data-dialog-open") || autoOpened.has(dialog)) return;
+  if (dialog.open) {
+    // Already modal (a command came first), or meant to stay non-modal.
+    if (isModalOpen(dialog) || !isModal(dialog)) {
+      autoOpened.add(dialog);
+      return;
+    }
+    // showModal() throws on a dialog that is open non-modally.
+    swallowNextClose(dialog);
+    dialog.close();
+  }
+  openDialog(dialog);
+  if (dialog.open) {
+    // No trigger owns this opening: leave focus restoration to the browser,
+    // and do not morph the closing dialog into the previously active element.
+    dialogMap.get(dialog).restoreFocusTo = null;
+    autoOpened.add(dialog);
+  }
+}
+
 function connectDialog(dialog) {
   ensureDialogWired(dialog);
-  return () => disconnectDialog(dialog);
+  // Once parsed: the title that labels the dialog and the control that takes
+  // initial focus may not exist yet when its start tag connects.
+  const cancelOpen = afterParse(dialog, () => autoOpen(dialog));
+  return () => {
+    cancelOpen();
+    disconnectDialog(dialog);
+  };
 }
 
 function ensureDelegatedDialog(dialog) {
