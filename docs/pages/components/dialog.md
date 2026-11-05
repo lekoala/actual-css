@@ -519,13 +519,8 @@ Available options:
 * `data-dialog-modal="false"` makes direct `openDialog()` calls use `show()`
   instead of `showModal()`. The `show-modal` and `--show` commands override
   this default.
-* `data-dialog-open` opens the dialog once the page is parsed, in its
-  `data-dialog-modal` mode: for a page the server renders with a confirmation
-  showing (open on load, auto-open). Add `open` too so the dialog still shows,
-  non-modally, without JavaScript; the runtime upgrades it to a modal. It opens
-  once per element: moving the node does not reopen it, a new node from an
-  ajax response does. With no trigger, it skips the view transition and
-  returns focus to the page on close.
+* `data-dialog-open` opens the dialog once after parsing, using its
+  `data-dialog-modal` mode. See [Open on load](#open-on-load).
 * `data-dialog-view-transition` enables a view transition that morphs the dialog to/from its trigger. Only active when the browser supports `document.startViewTransition` and the user allows motion.
 * `closedby` keeps its native meaning: `"any"` closes on backdrop click and
   Escape, `"closerequest"` closes on Escape only, `"none"` disables both. The
@@ -533,6 +528,40 @@ Available options:
   `data-dialog-dismissible` opts it into light dismiss, and never overrides
   `closedby="none"`. Use `closedby="none"` for critical dialogs that must be
   closed by an explicit action.
+
+### Open on load
+
+Add `data-dialog-open` to show a dialog without a trigger, for example a
+confirmation rendered by the server after a form submission. Load
+`actual-css/js/dialog` or the full runtime; no application script is needed.
+
+```html
+<dialog class="modal" id="confirmation" open data-dialog-open>
+  <form method="dialog" class="stack">
+    <h2>Check your inbox</h2>
+    <p>We sent you a link to confirm your email address.</p>
+    <footer class="cluster justify-content-end">
+      <button class="btn primary" value="done">Got it</button>
+    </footer>
+  </form>
+</dialog>
+```
+
+The native `open` attribute keeps the confirmation visible, non-modally,
+without JavaScript. The runtime upgrades it to a modal after parsing. Omit
+`open` to keep it hidden without JavaScript, or add `data-dialog-modal="false"`
+to keep the automatic opening non-modal. `data-dialog-open="false"` disables
+automatic opening; it does not hide a dialog that already has `open`.
+
+Automatic opening runs once per element: moving or reinserting a dismissed
+dialog does not reopen it, while a fresh node inserted by an Ajax response
+opens on connection. A dialog already opened modally by a command stays open.
+Automatic opening skips the trigger view transition and leaves focus
+restoration on close to the browser.
+
+The [Settings modal demo](../../demo/templates/settings-modal.html) uses
+`open data-dialog-open` to show its preferences on load. Close the dialog to
+reach its Open settings button and reopen it with a command.
 
 ## Browser support
 

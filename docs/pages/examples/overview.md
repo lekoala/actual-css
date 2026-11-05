@@ -31,7 +31,7 @@ Whole pages, composed the way a real product would.
 - [Workspaces](../../demo/templates/workspaces.html) - sectioned sidebar, master/detail list with native current state, and workspace cards
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type
 - [Blog](../../demo/templates/blog.html) - article page with prose
-- [Settings modal](../../demo/templates/settings-modal.html) - two-pane preferences dialog, with the local CSS it needs audited rule by rule
+- [Settings modal](../../demo/templates/settings-modal.html) - two-pane preferences dialog opening on load with `data-dialog-open`, with the local CSS it needs audited rule by rule
 - [Modal patterns](../../demo/templates/modal-patterns.html) - eight application modals, each the modal surface plus the smallest application CSS it needs
 - [Workspace settings](../../demo/templates/settings-pricing.html) - plans with visible native choices, preferences and segmented tabs
 - [iOS-style settings](../../demo/templates/settings-ios.html) - iOS-like controls and grouped settings from unchanged framework markup, a local theme, and its findings listed rule by rule

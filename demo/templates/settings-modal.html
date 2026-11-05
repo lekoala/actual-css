@@ -154,6 +154,8 @@
         <code>.switch</code>, <code>.meter</code> — and the page's
         <code>&lt;style&gt;</code> block says what each local rule is for.
       </p>
+      <p>The dialog opens on load with <code>data-dialog-open</code>. Close it to
+        explore the page, or use Open settings to show it again.</p>
       <div class="cluster">
         <button class="btn primary" type="button" commandfor="settings-modal" command="show-modal"
                 aria-haspopup="dialog" aria-controls="settings-modal">
@@ -165,7 +167,7 @@
     </header>
   </main>
 
-  <dialog class="modal settings-modal" id="settings-modal" closedby="any" aria-label="Settings">
+  <dialog class="modal settings-modal" id="settings-modal" open data-dialog-open closedby="any" aria-label="Settings">
     <button class="close" type="button" commandfor="settings-modal" command="request-close"
             aria-controls="settings-modal" aria-label="Close settings"></button>
 
@@ -627,9 +629,6 @@
       accent.style.setProperty("--color-swatch-value", swatch.style.getPropertyValue("--color-swatch-value"));
       document.getElementById("pref-accent-name").textContent = event.target.getAttribute("aria-label");
     });
-
-    /* The modal is the demo, so it opens on load. */
-    document.getElementById("settings-modal")?.showModal();
   </script>
 </body>
 

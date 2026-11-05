@@ -516,8 +516,8 @@ function ensureDialogWired(dialog) {
 }
 
 /* The close() that precedes an upgrade queues a close event for a dialog
-   nobody closed. Swallow it before application listeners see it: the capture
-   phase reaches the window first even though close does not bubble. */
+   nobody closed. Window capture stops it before downstream listeners, even
+   though close does not bubble; earlier window capture listeners still see it. */
 function swallowNextClose(dialog) {
   const view = dialog.ownerDocument.defaultView;
   if (!view) return;

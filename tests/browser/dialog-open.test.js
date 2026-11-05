@@ -7,12 +7,14 @@
 import { expect, test } from "bun:test";
 import {
   browserAvailable,
+  clickSelector,
   fixtureUrl,
   waitForBrowser,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
 
 const it = (await browserAvailable()) ? test : test.skip;
+const TIMEOUT = 60_000;
 
 // Exercise the source without depending on a rebuilt distribution bundle.
 const bundle = await Bun.build({ entrypoints: ["src/js/dialog.js"], format: "iife", write: false });
@@ -31,9 +33,11 @@ const state = `(() => {
   };
 })()`;
 
-it("an open dialog upgrades to modal without a stray close", async () => {
-  await withBrowserPage(fixtureUrl("tests/browser/dialog-open.html"), async (view) => {
-    await view.evaluate(`(() => {
+it(
+  "an open dialog upgrades to modal without a stray close",
+  async () => {
+    await withBrowserPage(fixtureUrl("tests/browser/dialog-open.html"), async (view) => {
+      await view.evaluate(`(() => {
       const dialog = document.getElementById("notice");
       window.closes = 0;
       dialog.addEventListener("close", () => window.closes++);
@@ -45,33 +49,82 @@ it("an open dialog upgrades to modal without a stray close", async () => {
       }, { capture: true, once: true });
       ${source}
     })()`);
-    await waitForBrowser(view, "window.closeDelivered === true");
+      await waitForBrowser(view, "window.closeDelivered === true");
 
-    expect(await view.evaluate(state)).toEqual({
-      open: true,
-      modal: true,
-      ariaModal: "true",
-      lock: true,
-      focusInside: true,
-      closes: 0,
+      expect(await view.evaluate(state)).toEqual({
+        open: true,
+        modal: true,
+        ariaModal: "true",
+        lock: true,
+        focusInside: true,
+        closes: 0,
+      });
+
+      // A real close afterwards runs the normal lifecycle.
+      await view.press("Escape");
+      await waitForBrowser(view, `!document.getElementById("notice").open`);
+      await waitForBrowser(view, "window.closes === 1");
+      expect((await view.evaluate(state)).lock).toBe(false);
     });
+  },
+  TIMEOUT,
+);
 
-    // A real close afterwards runs the normal lifecycle.
-    await view.press("Escape");
-    await waitForBrowser(view, `!document.getElementById("notice").open`);
-    await waitForBrowser(view, "window.closes === 1");
-    expect((await view.evaluate(state)).lock).toBe(false);
-  });
-}, 60_000);
+it(
+  "a modal command before parsing completes is not reopened by data-dialog-open",
+  async () => {
+    await withBrowserPage(fixtureUrl("tests/browser/dialog-open.html"), async (view) => {
+      await view.evaluate(`(() => {
+      const dialog = document.getElementById("notice");
+      dialog.removeAttribute("open");
+      window.closes = 0;
+      dialog.addEventListener("close", () => window.closes++);
+      // Defer afterParse while exercising real commands and native :modal.
+      Object.defineProperty(document, "readyState", { configurable: true, value: "loading" });
+      ${source}
+    })()`);
+
+      await clickSelector(view, "#reopen");
+      await waitForBrowser(view, `document.getElementById("notice").matches(":modal")`);
+
+      await view.evaluate(`(() => {
+      const dialog = document.getElementById("notice");
+      // A reopen would call showModal again even if its close were swallowed.
+      window.modalOpenings = 0;
+      const showModal = dialog.showModal.bind(dialog);
+      dialog.showModal = () => { window.modalOpenings++; showModal(); };
+      delete document.readyState;
+      document.dispatchEvent(new Event("DOMContentLoaded"));
+    })()`);
+
+      expect(await view.evaluate(state)).toEqual({
+        open: true,
+        modal: true,
+        ariaModal: "true",
+        lock: true,
+        focusInside: true,
+        closes: 0,
+      });
+      expect(await view.evaluate("window.modalOpenings")).toBe(0);
+
+      await view.press("Escape");
+      await waitForBrowser(view, "window.closes === 1");
+      expect((await view.evaluate(state)).lock).toBe(false);
+    });
+  },
+  TIMEOUT,
+);
 
 // Not specific to data-dialog-open: any close() followed by an opening in the
 // same task receives its close event while open again.
-it("a close event delivered after a reopening leaves the new opening alone", async () => {
-  await withBrowserPage(fixtureUrl("tests/browser/dialog-open.html"), async (view) => {
-    await view.evaluate(`(() => { ${source} })()`);
-    await waitForBrowser(view, `document.getElementById("notice").matches(":modal")`);
+it(
+  "a close event delivered after a reopening leaves the new opening alone",
+  async () => {
+    await withBrowserPage(fixtureUrl("tests/browser/dialog-open.html"), async (view) => {
+      await view.evaluate(`(() => { ${source} })()`);
+      await waitForBrowser(view, `document.getElementById("notice").matches(":modal")`);
 
-    await view.evaluate(`(() => {
+      await view.evaluate(`(() => {
       const dialog = document.getElementById("notice");
       addEventListener("close", (event) => {
         if (event.target === dialog) window.closeDelivered = true;
@@ -79,10 +132,12 @@ it("a close event delivered after a reopening leaves the new opening alone", asy
       dialog.close();
       document.getElementById("reopen").click();
     })()`);
-    await waitForBrowser(view, "window.closeDelivered === true");
+      await waitForBrowser(view, "window.closeDelivered === true");
 
-    const after = await view.evaluate(state);
-    expect(after.modal).toBe(true);
-    expect(after.lock).toBe(true);
-  });
-}, 60_000);
+      const after = await view.evaluate(state);
+      expect(after.modal).toBe(true);
+      expect(after.lock).toBe(true);
+    });
+  },
+  TIMEOUT,
+);
