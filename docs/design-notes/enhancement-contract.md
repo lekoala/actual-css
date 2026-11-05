@@ -179,5 +179,6 @@ of the contract itself.
 | `scrollspy`  | Scroll-driven nav highlighting                   | `.scrollspy`        |
 | `validation` | Form validation, focus management, server errors | `.needs-validation` |
 | `dirty`      | Unsaved-changes state on a form                  | —                   |
+| `ajax`       | Form submission through `fetch`                  | —                   |
 
-Six tokens. Everything else stays self-describing.
+Seven tokens. Everything else stays self-describing.

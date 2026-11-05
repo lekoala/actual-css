@@ -127,6 +127,7 @@ status bar, for example:
 | `actual-css/js/range`              | Range fill and named values (token `range`)                 |
 | `actual-css/js/validation`         | Form validation (token `validation`)                        |
 | `actual-css/js/dirty`              | Unsaved-changes state on forms (token `dirty`)              |
+| `actual-css/js/ajax`               | Form submission through `fetch` (token `ajax`)              |
 | `actual-css/js/status`             | Singleton status bar on `[data-status][role="status"]`      |
 | `actual-css/js/enhancement-loader` | Declared enhancement manifests                              |
 
@@ -144,8 +145,8 @@ The JS is designed to run on its own, without Actual's stylesheet.
 
 - **`data-enhance` tokens** register named behaviors. The runtime discovers
   components through `data-enhance="tabs"`, `data-enhance="flyout"`, `data-enhance="range"`, `data-enhance="scrollspy"`,
-  `data-enhance="validation"`, and `data-enhance="dirty"` — no Actual
-  presentation class needed.
+  `data-enhance="validation"`, `data-enhance="dirty"`, and
+  `data-enhance="ajax"` — no Actual presentation class needed.
   Self-describing attributes (`data-mask`, `data-tooltip`,
   `data-context-menu`) stay framework-neutral by construction.
 - **`selectors.js`** lists the state classes the runtime *writes* (`is-open`,
@@ -331,6 +332,9 @@ listenable on the document; cancelable events veto the associated action when
 | `actual:status`        | status module, or any code    | `{ message, intent, duration }`      |
 | `actual:invalid`       | after a submit was blocked    | `{ form, firstInvalid, message }`    |
 | `actual:dirty-change`  | after `data-dirty` flips      | `{ form, dirty }`                    |
+| `actual:ajax-start`    | an ajax request starts        | `{ form, submitter }`                |
+| `actual:ajax-response` | an ajax response arrived      | `{ form, submitter, response }`      |
+| `actual:ajax-error`    | an ajax request failed        | `{ form, submitter, error }`         |
 | `actual:dialog-cancel` | before a native cancel close  | `{ dialog, sourceEvent }`            |
 | `actual:dismiss`       | after a `--dismiss` dismissal | `{ trigger }`                        |
 
@@ -730,80 +734,10 @@ enhance({
 });
 ```
 
-## Ajax forms
+## Ajax fragments
 
-Keep the native form as the baseline: set `action`, `method`, fields, and submit
-buttons normally. Without JavaScript the form submits as usual; with it, one
-delegated listener sends `form[data-ajax]` through `fetch`.
-
-```html
-<form action="/profile" method="post" data-ajax data-ajax-target="#profile-feedback"
-      data-enhance="validation dirty">
-  <!-- fields -->
-  <button class="btn primary" type="submit">Save</button>
-</form>
-<div id="profile-feedback" role="status"></div>
-```
-
-```js
-import { FormDirty } from "actual-css/js/dirty";
-
-// Delegated on the document: the form's own submit listeners, validation's
-// included, run first and can cancel the submission.
-document.addEventListener("submit", async (event) => {
-  const form = event.target;
-  const submitter = event.submitter;
-  if (event.defaultPrevented || !form.matches("form[data-ajax]")) return;
-  const method = (submitter?.getAttribute("formmethod") || form.method).toLowerCase();
-  if (method === "dialog") return;
-
-  event.preventDefault();
-  if (form.getAttribute("aria-busy") === "true") return; // one request at a time
-
-  const action = submitter?.hasAttribute("formaction") ? submitter.formAction : form.action;
-  const enctype = submitter?.hasAttribute("formenctype") ? submitter.formEnctype : form.enctype;
-  const data = new FormData(form, submitter);
-  const url = new URL(action);
-  const init = { method, headers: { Accept: "text/html" } };
-  if (method === "get") url.search = new URLSearchParams(data);
-  else init.body = enctype === "multipart/form-data" ? data : new URLSearchParams(data);
-
-  const snapshot = FormDirty.capture(form); // what is sent, not what is typed meanwhile
-  const busy = [form, submitter].filter(Boolean);
-  for (const el of busy) el.setAttribute("aria-busy", "true");
-  try {
-    const response = await fetch(url, init);
-    // Post/redirect/get: follow the redirect like a native submission.
-    if (response.redirected) return location.assign(response.url);
-
-    const selector = form.dataset.ajaxTarget;
-    const target = selector && document.querySelector(selector);
-    if (target && (response.ok || response.status === 422)) {
-      target.innerHTML = await response.clone().text();
-    }
-    if (response.ok && method !== "get") FormDirty.markClean(form, snapshot); // GET saves nothing
-    form.dispatchEvent(new CustomEvent("app:form-response", { bubbles: true, detail: { response } }));
-  } catch (error) {
-    form.dispatchEvent(new CustomEvent("app:form-error", { bubbles: true, detail: { error } }));
-  } finally {
-    for (const el of busy) el.removeAttribute("aria-busy");
-  }
-});
-```
-
-- The submitter's name, value, `formaction`, `formmethod` and `formenctype`
-  are sent as a native submission would; `GET` replaces the query string.
-- `aria-busy` on the button picks up the [busy button](../components/button.md)
-  styles; add a `.spinner` inside it for a visible indicator.
-- A `422` response is a fragment to show (server-rendered errors). Any other
-  failure leaves the target alone and reaches `app:form-response` with
-  `response.ok === false`; a network failure reaches `app:form-error`.
-- `fetch` follows a redirect before the recipe sees it, so the target page
-  loads twice. Answer Ajax saves with a fragment when that cost matters.
-- Only a successful response clears `data-dirty`, and only for the data that
-  was sent. Drop the two `FormDirty` lines when the form is not dirty-tracked.
-
-For htmx-like fragment swaps, keep the first version narrow: one trigger, one
+Forms submit through `fetch` with the built-in [Ajax Submission](../forms/ajax.md)
+enhancer. For a trigger that loads a fragment, keep the first version narrow: one trigger, one
 target, one swap rule. If the behavior grows into history management, out-of-band
 swaps, request queues, and event policies, use a dedicated library.
 

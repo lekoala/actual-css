@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ajax form fixture</title>
+</head>
+<body>
+  <form id="post" action="save" method="post" data-enhance="ajax" data-ajax-target="#out">
+    <input name="_token" value="t">
+    <textarea name="notes"></textarea>
+    <input type="file" name="doc">
+    <button id="post-save" type="submit" name="op" value="save">Save</button>
+    <button id="post-get" type="submit" formmethod="get" formaction="search?stale=1">Search</button>
+    <button id="post-blank" type="submit" formtarget="_blank">New window</button>
+    <button id="post-plain" type="submit" formenctype="text/plain">Plain</button>
+    <button id="post-dialog" type="submit" formmethod="dialog">Dialog</button>
+  </form>
+  <div id="out">initial</div>
+
+  <div id="card">
+    <form id="swap" action="save" method="post" data-enhance="ajax" data-ajax-target="#card">
+      <button id="swap-save" type="submit">Save</button>
+    </form>
+  </div>
+
+  <form id="remote" action="https://example.test/save" method="post" data-enhance="ajax">
+    <button id="remote-save" type="submit">Save</button>
+  </form>
+
+  <form id="misconfigured" action="save" method="post" data-enhance="ajax" data-ajax-target="#">
+    <button id="misconfigured-save" type="submit">Save</button>
+  </form>
+
+  <form id="checked" action="save" method="post" data-enhance="validation dirty ajax">
+    <input id="email" name="email" type="email" required>
+    <button id="checked-save" type="submit">Save</button>
+  </form>
+</body>
+</html>

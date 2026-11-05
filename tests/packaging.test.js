@@ -172,6 +172,7 @@ test("the js entry split keeps the loader and built-ins separate", () => {
     "./range.js",
     "./validation.js",
     "./dirty.js",
+    "./ajax.js",
     "./status.js",
   ];
   const fullImports = imports(fullJs);

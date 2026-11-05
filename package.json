@@ -73,6 +73,7 @@
     "./js/tooltip": "./src/js/tooltip.js",
     "./js/validation": "./src/js/validation.js",
     "./js/dirty": "./src/js/dirty.js",
+    "./js/ajax": "./src/js/ajax.js",
     "./js/status": "./src/js/status.js",
     "./js/surface": "./src/js/surface.js",
     "./reserved-classes.json": "./reserved-classes.json",

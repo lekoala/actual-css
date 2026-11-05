@@ -26,6 +26,7 @@ import "./password.js";
 import "./range.js";
 import "./validation.js";
 import "./dirty.js";
+import "./ajax.js";
 import "./status.js";
 import "./index.js";
 

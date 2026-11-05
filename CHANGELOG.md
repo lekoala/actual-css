@@ -4,10 +4,13 @@
 ### Added
 - `actual-css/js/dirty`: `data-enhance="dirty"` sets `data-dirty` on a form while its submittable data differs from the baseline, and dispatches `actual:dirty-change`.
 - `FormDirty.capture()`, `FormDirty.markClean()` and `FormDirty.refresh()` move the baseline after an in-page save or programmatic edits; `data-dirty-ignore` leaves a control out.
-- Docs: Unsaved Changes page with a `beforeunload` recipe.
+- Docs: Unsaved Changes page with `beforeunload` and autosave recipes.
+- `actual-css/js/ajax`: `data-enhance="ajax"` submits a form through `fetch` as a native submission would, and leaves the cases it cannot reproduce to the browser.
+- `data-ajax-target`: an HTML answer with a 2xx or `422` status replaces the target's content.
+- `actual:ajax-start`, `actual:ajax-response` and `actual:ajax-error` report an ajax submission; see the Ajax Submission page.
 
-### Fixed
-- Docs: the Ajax forms recipe sends `GET` data in the query string, honors the submitter's `formaction`/`formmethod`/`formenctype`, checks `response.ok`, catches network errors and ignores double submissions.
+### Removed
+- Docs: the Ajax forms recipe in the progressive enhancement guide; use `data-enhance="ajax"`.
 
 ## [0.16.1] - 2026-11-04
 ### Fixed

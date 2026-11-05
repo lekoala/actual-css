@@ -103,6 +103,7 @@
         "input-policy",
         "validation",
         "unsaved-changes",
+        "ajax",
         "detached-actions",
         "sticky-actions"
       ]

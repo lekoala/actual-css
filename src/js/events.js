@@ -16,6 +16,17 @@ export const EVENTS = {
   // Dispatched by a dirty-tracked form after data-dirty flips.
   // detail: { form, dirty }
   dirtyChange: `${ACTUAL_EVENT_PREFIX}:dirty-change`,
+  // Dispatched by an ajax form when its request starts.
+  // detail: { form, submitter }
+  ajaxStart: `${ACTUAL_EVENT_PREFIX}:ajax-start`,
+  // Dispatched by an ajax form with any HTTP response: after display, or
+  // before navigating to a redirect. From the root when display replaced the
+  // form.
+  // detail: { form, submitter, response }
+  ajaxResponse: `${ACTUAL_EVENT_PREFIX}:ajax-response`,
+  // Dispatched by an ajax form when the request fails (network, CORS).
+  // detail: { form, submitter, error }
+  ajaxError: `${ACTUAL_EVENT_PREFIX}:ajax-error`,
   // Cancelable: dispatched by dialog.js before handling native cancel close.
   // detail: { dialog, sourceEvent }
   dialogCancel: `${ACTUAL_EVENT_PREFIX}:dialog-cancel`,

@@ -73,8 +73,8 @@ Reset restores the HTML default values, which are the baseline only until the
 first `markClean()`. A removed and reinserted form keeps its baseline. A form
 replaced by new server markup starts a new one, even when the save failed.
 
-The [Ajax forms recipe](../guides/progressive-enhancement.md#ajax-forms) wires
-the snapshot for you.
+With the [Ajax Submission](ajax.md) enhancer, wire the snapshot to its events
+as shown there.
 
 ## Autosave
 
