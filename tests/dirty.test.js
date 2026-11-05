@@ -162,6 +162,21 @@ test("reset re-evaluates after the controls revert", async () => {
   expect(form.hasAttribute("data-dirty")).toBe(false);
 });
 
+test("reset after markClean restores HTML defaults, not the saved baseline", async () => {
+  const { FormDirty, form } = await loadDirty(`
+    <form data-enhance="dirty"><input name="name" value="Alice"></form>
+  `);
+  const input = form.querySelector("input");
+
+  edit(input, "Alicia");
+  FormDirty.markClean(form);
+  form.reset();
+  await nextTask();
+
+  expect(input.value).toBe("Alice");
+  expect(form.hasAttribute("data-dirty")).toBe(true);
+});
+
 test("a removed and reinserted form keeps its baseline", async () => {
   const { form } = await loadDirty(`
     <div id="host"><form data-enhance="dirty"><input name="name" value="Alice"></form></div>
