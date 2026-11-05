@@ -102,6 +102,7 @@
         "password",
         "input-policy",
         "validation",
+        "unsaved-changes",
         "detached-actions",
         "sticky-actions"
       ]

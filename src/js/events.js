@@ -13,6 +13,9 @@ export const EVENTS = {
   // Dispatched by a form after validation blocks submission.
   // detail: { form, firstInvalid, message }
   invalid: `${ACTUAL_EVENT_PREFIX}:invalid`,
+  // Dispatched by a dirty-tracked form after data-dirty flips.
+  // detail: { form, dirty }
+  dirtyChange: `${ACTUAL_EVENT_PREFIX}:dirty-change`,
   // Cancelable: dispatched by dialog.js before handling native cancel close.
   // detail: { dialog, sourceEvent }
   dialogCancel: `${ACTUAL_EVENT_PREFIX}:dialog-cancel`,

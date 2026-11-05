@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dirty form fixture</title>
+</head>
+<body>
+  <form id="profile" data-enhance="dirty">
+    <label for="name">Name</label>
+    <input id="name" name="name" value="Alice">
+    <button type="reset" id="reset">Reset</button>
+  </form>
+  <label for="outside">Associated by form attribute</label>
+  <input id="outside" name="outside" form="profile" value="1">
+</body>
+</html>

@@ -63,6 +63,7 @@ const JS_EXPORT_INVENTORY = {
   "./js/status": ["default", "status"],
   "./js/tooltip": ["isTooltipVisible"],
   "./js/validation": ["default", "FormValidator"],
+  "./js/dirty": ["FormDirty"],
 };
 
 const specifierFor = (exportPath) => `actual-css${exportPath.slice(1)}`;

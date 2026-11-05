@@ -1,6 +1,13 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Added
+- `actual-css/js/dirty`: `data-enhance="dirty"` sets `data-dirty` on a form while its submittable data differs from the baseline, and dispatches `actual:dirty-change`.
+- `FormDirty.capture()`, `FormDirty.markClean()` and `FormDirty.refresh()` move the baseline after an in-page save or programmatic edits; `data-dirty-ignore` leaves a control out.
+- Docs: Unsaved Changes page with a `beforeunload` recipe.
+
+### Fixed
+- Docs: the Ajax forms recipe sends `GET` data in the query string, honors the submitter's `formaction`/`formmethod`/`formenctype`, checks `response.ok`, catches network errors and ignores double submissions.
 
 ## [0.16.1] - 2026-11-04
 ### Fixed

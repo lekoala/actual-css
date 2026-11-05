@@ -178,5 +178,6 @@ of the contract itself.
 | `range`      | Fill share and named-value synchronization       | `.range`            |
 | `scrollspy`  | Scroll-driven nav highlighting                   | `.scrollspy`        |
 | `validation` | Form validation, focus management, server errors | `.needs-validation` |
+| `dirty`      | Unsaved-changes state on a form                  | —                   |
 
-Five tokens. Everything else stays self-describing.
+Six tokens. Everything else stays self-describing.

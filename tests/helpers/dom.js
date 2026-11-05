@@ -10,6 +10,8 @@ const assignedGlobals = [
   "HTMLElement",
   "HTMLDialogElement",
   "HTMLFormElement",
+  "FormData",
+  "File",
   "Element",
   "Node",
   "Event",
@@ -101,6 +103,10 @@ export function setupDOM(html = "") {
     HTMLElement: window.HTMLElement,
     HTMLDialogElement: window.HTMLDialogElement,
     HTMLFormElement: window.HTMLFormElement,
+    // Bun's own FormData rejects a happy-dom form; File must match the
+    // FormData realm for the instanceof checks inside it.
+    FormData: window.FormData,
+    File: window.File,
     Element: window.Element,
     Node: window.Node,
     Event: window.Event,

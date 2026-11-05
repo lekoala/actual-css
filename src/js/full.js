@@ -25,6 +25,7 @@ import "./mask.js";
 import "./password.js";
 import "./range.js";
 import "./validation.js";
+import "./dirty.js";
 import "./status.js";
 import "./index.js";
 
