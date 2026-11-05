@@ -49,8 +49,14 @@ function fileKey(file) {
   return [file.name, file.size, file.lastModified];
 }
 
-/** Serializes the data the form would submit, in submission order. */
+/**
+ * Serializes the data the form would submit, in submission order.
+ * new FormData(form) fires the form's formdata event, so an entry a listener
+ * adds there counts too; a volatile one (a nonce) keeps the form dirty unless
+ * it shares a name with a data-dirty-ignore control.
+ */
 function capture(form) {
+  if (!isFormElement(form)) throw new TypeError("FormDirty expects an HTMLFormElement.");
   const ignored = ignoredNames(form);
   const entries = [];
   for (const [name, value] of new FormData(form)) {
@@ -78,8 +84,10 @@ function connectForm(form) {
   const controller = new AbortController();
   const options = { signal: controller.signal };
   const update = () => refresh(form);
-  const onEdit = (event) => {
-    if (event.target.form === form) update();
+  const onEdit = ({ target }) => {
+    // A form-associated custom element exposes no .form on its host, but it
+    // is listed in form.elements like any native control.
+    if (target.form === form || Array.prototype.includes.call(form.elements, target)) update();
   };
 
   // Listen on the root: a control associated through form="…" sits outside
@@ -113,14 +121,17 @@ export class FormDirty {
     return capture(form);
   }
 
-  /** Makes `snapshot` (default: current data) the new baseline. */
-  static markClean(form, snapshot = capture(form)) {
+  /**
+   * Makes `snapshot` (default: current data) the new baseline. Also valid
+   * before the form is enhanced: connection keeps an existing baseline.
+   */
+  static markClean(form, snapshot) {
     if (!isFormElement(form)) return;
-    baselines.set(form, snapshot);
+    baselines.set(form, snapshot ?? capture(form));
     refresh(form);
   }
 
-  /** Re-evaluates after programmatic value changes or added controls. */
+  /** Re-evaluates an enhanced form after programmatic edits or added controls. */
   static refresh(form) {
     if (isFormElement(form)) refresh(form);
   }

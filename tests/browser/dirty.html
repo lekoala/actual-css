@@ -4,11 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dirty form fixture</title>
+  <script>
+    // A minimal form-associated custom element: its host has no .form.
+    customElements.define("x-rating", class extends HTMLElement {
+      static formAssociated = true;
+      #internals = this.attachInternals();
+      connectedCallback() {
+        this.set(this.getAttribute("value") ?? "");
+      }
+      set(value) {
+        this.#internals.setFormValue(value);
+        this.dispatchEvent(new Event("input", { bubbles: true, composed: true }));
+      }
+    });
+  </script>
 </head>
 <body>
   <form id="profile" data-enhance="dirty">
     <label for="name">Name</label>
     <input id="name" name="name" value="Alice">
+    <x-rating id="rating" name="rating" value="3"></x-rating>
+    <input id="nonce" type="hidden" name="_nonce" data-dirty-ignore>
     <button type="reset" id="reset">Reset</button>
   </form>
   <label for="outside">Associated by form attribute</label>

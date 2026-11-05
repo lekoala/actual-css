@@ -126,6 +126,7 @@ status bar, for example:
 | `actual-css/js/password`           | Password reveal toggle                                      |
 | `actual-css/js/range`              | Range fill and named values (token `range`)                 |
 | `actual-css/js/validation`         | Form validation (token `validation`)                        |
+| `actual-css/js/dirty`              | Unsaved-changes state on forms (token `dirty`)              |
 | `actual-css/js/status`             | Singleton status bar on `[data-status][role="status"]`      |
 | `actual-css/js/enhancement-loader` | Declared enhancement manifests                              |
 
@@ -142,8 +143,9 @@ needed.
 The JS is designed to run on its own, without Actual's stylesheet.
 
 - **`data-enhance` tokens** register named behaviors. The runtime discovers
-  components through `data-enhance="tabs"`, `data-enhance="flyout"`, `data-enhance="range"`, `data-enhance="scrollspy"`, and
-  `data-enhance="validation"` — no Actual presentation class needed.
+  components through `data-enhance="tabs"`, `data-enhance="flyout"`, `data-enhance="range"`, `data-enhance="scrollspy"`,
+  `data-enhance="validation"`, and `data-enhance="dirty"` — no Actual
+  presentation class needed.
   Self-describing attributes (`data-mask`, `data-tooltip`,
   `data-context-menu`) stay framework-neutral by construction.
 - **`selectors.js`** lists the state classes the runtime *writes* (`is-open`,

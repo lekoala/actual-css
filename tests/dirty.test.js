@@ -179,6 +179,15 @@ test("a removed and reinserted form keeps its baseline", async () => {
   expect(form.hasAttribute("data-dirty")).toBe(false);
 });
 
+test("markClean ignores a non-form; capture rejects it explicitly", async () => {
+  const { FormDirty } = await loadDirty(`<div></div>`);
+  const div = document.querySelector("div");
+
+  expect(() => FormDirty.markClean(div)).not.toThrow();
+  expect(() => FormDirty.refresh(div)).not.toThrow();
+  expect(() => FormDirty.capture(div)).toThrow("FormDirty expects an HTMLFormElement.");
+});
+
 test("the token means nothing outside a form", async () => {
   await loadDirty(`<div data-enhance="dirty"><input name="name" value="Alice"></div>`);
   const input = document.querySelector("input");
