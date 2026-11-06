@@ -52,6 +52,7 @@
 ### Fixed
 - `.modal`: a modal authored inside `.stack` or `.cluster` opens centered instead of pinned to the top of the viewport.
 - `ajax.js`: restores the form's and submitter's authored `aria-busy` after a request instead of removing it, so a resting last-child `.spinner` stays hidden.
+- `dialog.js`: with `data-dialog-view-transition`, a submitter's `formmethod` decides whether a submission closes the dialog, and a control named `method` no longer breaks it.
 - `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.
 - `--dismiss`: focus inside the dismissed target moves to the next tab stop instead of staying on the hidden close button.
 - `validation.js`: picking a radio in a required group clears `aria-invalid` on every radio of the group, so its `.field-error` hides.

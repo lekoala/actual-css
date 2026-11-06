@@ -18,29 +18,13 @@
 
 import { registerEnhancement } from "./enhance.js";
 import { EVENTS } from "./events.js";
+import { submissionSetting, submissionTarget } from "./form-submission.js";
 
 const BUSY = "aria-busy";
 const ENCODINGS = new Set(["application/x-www-form-urlencoded", "multipart/form-data"]);
 
 function isFormElement(el) {
   return typeof HTMLFormElement !== "undefined" && el instanceof HTMLFormElement;
-}
-
-// A submitter's form* attribute overrides the form's own, as natively.
-function setting(form, submitter, name) {
-  const attr = `form${name}`;
-  return submitter?.hasAttribute(attr)
-    ? submitter[`form${name[0].toUpperCase()}${name.slice(1)}`]
-    : form[name];
-}
-
-// Without a target attribute, the form falls back to <base target>. An empty
-// formtarget="" is still an attribute and means the page itself.
-function targetOf(form, submitter) {
-  if (submitter?.hasAttribute("formtarget") || form.hasAttribute("target")) {
-    return setting(form, submitter, "target");
-  }
-  return form.ownerDocument.querySelector("base[target]")?.target ?? "";
 }
 
 // URL encoding as a native submission does it: CRLF newlines, and a file
@@ -56,13 +40,13 @@ function urlEncoded(data) {
 
 /** Builds the request, or returns null for a submission left to the browser. */
 function requestFor(form, submitter) {
-  const method = setting(form, submitter, "method");
-  const enctype = setting(form, submitter, "enctype");
-  const target = targetOf(form, submitter).toLowerCase();
+  const method = submissionSetting(form, submitter, "method");
+  const enctype = submissionSetting(form, submitter, "enctype");
+  const target = submissionTarget(form, submitter).toLowerCase();
   if (method !== "get" && method !== "post") return null;
   if (target !== "" && target !== "_self") return null;
   if (method === "post" && !ENCODINGS.has(enctype)) return null;
-  const url = new URL(setting(form, submitter, "action"));
+  const url = new URL(submissionSetting(form, submitter, "action"));
   // Cross-origin would need CORS and send no cookies: the native submission
   // works where fetch would fail. (file: pages compare "null" to "null".)
   if (url.origin !== form.ownerDocument.location.origin) return null;

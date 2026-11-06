@@ -32,6 +32,7 @@
 import { registerCommands, targetFor } from "./command.js";
 import enhance, { registerEnhancement } from "./enhance.js";
 import { EVENTS } from "./events.js";
+import { submissionSetting } from "./form-submission.js";
 import { afterParse } from "./parsed.js";
 import { CLASSES } from "./selectors.js";
 
@@ -404,7 +405,9 @@ function handleDialogSubmit(event) {
   const form = event.target;
 
   if (!(form instanceof HTMLFormElement)) return;
-  if (form.method.toLowerCase() !== "dialog") return;
+  // formmethod on the submitter wins, as natively: a Save posting from a
+  // method="dialog" form must not close the dialog.
+  if (submissionSetting(form, event.submitter, "method") !== "dialog") return;
   if (!canViewTransition(dialog, dialogMap.get(dialog)?.restoreFocusTo)) return;
 
   event.preventDefault();

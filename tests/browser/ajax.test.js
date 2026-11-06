@@ -142,7 +142,35 @@ it("honors <base target> unless the form names its own target", async () => {
   });
 }, 60_000);
 
-it("sends one request at a time, but never holds back a native submission", async () => {
+it("controls named action, method or target do not shadow the form's settings", async () => {
+  await withAjax(async (view) => {
+    const call = await view.evaluate(`(() => {
+      press("shadowed-save");
+      return { url: calls[0]?.url, method: calls[0]?.init.method, body: String(calls[0]?.init.body), native };
+    })()`);
+    expect(call).toEqual({
+      url: expect.stringMatching(/\/tests\/browser\/save$/),
+      method: "post",
+      body: "action=publish&method=put&target=_blank",
+      native: [false],
+    });
+  });
+}, 60_000);
+
+it("an empty formtarget overrides <base target> and means the page itself", async () => {
+  await withAjax(async (view) => {
+    const result = await view.evaluate(`(() => {
+      const base = document.head.appendChild(document.createElement("base"));
+      base.target = "_blank";
+      document.getElementById("post-save").setAttribute("formtarget", "");
+      press("post-save");
+      return { calls: calls.length, native };
+    })()`);
+    expect(result).toEqual({ calls: 1, native: [false] });
+  });
+}, 60_000);
+
+it("sends one request at a time,but never holds back a native submission", async () => {
   await withAjax(async (view) => {
     expect(
       await view.evaluate(

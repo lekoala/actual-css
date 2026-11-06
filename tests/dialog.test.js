@@ -656,6 +656,43 @@ test("Escape cancel uses view-transition close path when enabled", async () => {
   expect(transitions.length).toBeGreaterThan(0);
 });
 
+test("view-transition submit close follows the submitter's formmethod", async () => {
+  setupDOM(`
+    <button id="open" commandfor="prefs" command="show-modal">Open</button>
+    <dialog id="prefs" data-dialog-view-transition>
+      <form method="dialog">
+        <input name="method" value="put">
+        <button id="save" formmethod="post">Save</button>
+        <button id="cancel">Cancel</button>
+      </form>
+    </dialog>
+  `);
+  patchDialogMethods();
+  document.startViewTransition = (update) => {
+    update();
+    return { finished: Promise.resolve() };
+  };
+  await import(`../src/js/dialog.js?test=${++importId}`);
+  click(document.getElementById("open"));
+  const dialog = document.getElementById("prefs");
+  const submit = (id) => {
+    const event = new window.SubmitEvent("submit", {
+      bubbles: true,
+      cancelable: true,
+      submitter: document.getElementById(id),
+    });
+    dialog.querySelector("form").dispatchEvent(event);
+    return event.defaultPrevented;
+  };
+
+  // The control named "method" must not hide method="dialog".
+  expect(submit("save")).toBe(false);
+  expect(dialog.open).toBe(true);
+  expect(submit("cancel")).toBe(true);
+  await nextMicrotask();
+  expect(dialog.open).toBe(false);
+});
+
 test("view-transition opt-in does not throw when unsupported", async () => {
   await loadDialog(
     '<button commandfor="prefs" command="show-modal">Open</button><dialog id="prefs" data-dialog-view-transition></dialog>',

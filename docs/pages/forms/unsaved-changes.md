@@ -159,9 +159,15 @@ let lastSubmit = null;
 const leavesBySubmit = (form) => {
   if (lastSubmit?.target !== form || lastSubmit.defaultPrevented) return false;
   const { submitter } = lastSubmit;
-  const method = submitter?.getAttribute("formmethod") || form.method;
-  const target = submitter?.getAttribute("formtarget") || form.target;
-  if (target && !["_self", "_top", "_parent"].includes(target)) return false;
+  // Attributes, not form.method / form.target: a control with that name
+  // shadows the property. An empty formtarget="" still means the page itself.
+  const method = submitter?.getAttribute("formmethod") ?? form.getAttribute("method") ?? "";
+  const target =
+    submitter?.getAttribute("formtarget") ??
+    form.getAttribute("target") ??
+    document.querySelector("base[target]")?.getAttribute("target") ??
+    "";
+  if (target && !["_self", "_top", "_parent"].includes(target.toLowerCase())) return false;
   return method.toLowerCase() !== "dialog";
 };
 const guard = (event) => {
