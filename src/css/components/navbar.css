@@ -10,6 +10,7 @@
  * Public hooks:
  * --nav-current-bg (fallback-only: current-link fill)
  * --nav-current-fg (fallback-only: current-link ink)
+ * --nav-list-indent (fallback-only: nested .nav-list inset)
  *
  * Internal:
  * --gap (local value for the shared gap token)
@@ -60,6 +61,8 @@
 .nav-link {
   display: inline-flex;
   align-items: center;
+  /* Icon + label rows; a text-only link has one flex item and shows no gap. */
+  gap: var(--space-20);
   min-block-size: var(--control-size-sm);
   padding-block: 0;
   padding-inline: var(--space-20);
@@ -141,6 +144,43 @@
   inline-size: 100%;
 }
 
+/* Collapsible group: <details> in a row, <summary class="nav-link"> as its
+   label, a nested .nav-list as its links. The summary takes the link's row,
+   hover and focus; display: inline-flex already drops the list-item marker,
+   the WebKit pseudo is Safari's own. */
+.nav-list summary.nav-link {
+  list-style: none;
+}
+
+.nav-list summary.nav-link::-webkit-details-marker {
+  display: none;
+}
+
+/* The open state is the native [open], so the chevron needs no script. */
+.nav-list summary.nav-link::after {
+  content: "";
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+  inline-size: 1rem;
+  block-size: 1rem;
+  background-color: currentColor;
+  -webkit-mask: var(--icon-chevron) center / contain no-repeat;
+  mask: var(--icon-chevron) center / contain no-repeat;
+  transition: transform var(--duration);
+}
+
+.nav-list details[open] > summary.nav-link::after {
+  transform: rotate(180deg);
+}
+
+/* A nested list is indented so its labels start under the parent's label,
+   past a 1em leading icon and the link gap. Fallback-only: a base
+   declaration on .nav-list would reset an override at every level. */
+.nav-list .nav-list {
+  margin-block-start: var(--gap);
+  padding-inline-start: var(--nav-list-indent, calc(1em + var(--space-20)));
+}
+
 /* Forced colors drops the fill and maps both inks to LinkText, so the current
    link would be indistinguishable: it gets a shape instead. A vertical row
    takes an inline-start trait, centered in the link's inline padding with
@@ -153,6 +193,12 @@
 
   .nav-list .nav-link:is([aria-current="page"], [aria-current="location"]) {
     text-decoration: none;
+  }
+
+  /* The chevron is a mask over a fill that forced colors would remap to
+     Canvas, as in accordion.css. */
+  .nav-list summary.nav-link::after {
+    background-color: CanvasText;
   }
 
   .nav-list .nav-link:is([aria-current="page"], [aria-current="location"])::before {

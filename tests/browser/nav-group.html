@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nav group fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    /* A 1em icon box stands in for an icon font. */
+    .icon { display: inline-block; inline-size: 1em; block-size: 1em; background: currentColor; }
+    nav { inline-size: max-content; }
+  </style>
+</head>
+<body>
+  <nav aria-label="Fixture">
+    <ul class="nav-list">
+      <li>
+        <details id="group" open>
+          <summary class="nav-link" id="summary"><span class="icon" aria-hidden="true"></span><span id="parent-label">Payments</span></summary>
+          <ul class="nav-list">
+            <li><a class="nav-link" href="#a" id="child"><span id="child-label">Transactions</span></a></li>
+          </ul>
+        </details>
+      </li>
+      <li><a class="nav-link" href="#b" id="text-only">Reports</a></li>
+    </ul>
+  </nav>
+</body>
+</html>

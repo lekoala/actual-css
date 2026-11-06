@@ -571,16 +571,19 @@
     ],
     "publicHooks": [
       "--nav-current-bg",
-      "--nav-current-fg"
+      "--nav-current-fg",
+      "--nav-list-indent"
     ],
     "internalHooks": [
       "--gap"
     ],
     "states": [
-      "aria-current"
+      "aria-current",
+      "open"
     ],
     "pseudoElements": {
       ".nav-link": [
+        "::after",
         "::before"
       ]
     }

@@ -24,11 +24,7 @@
      *   .app-stat / .app-stat-value
      *     -> compact stat card composition (gap: stat card component).
      *   .app-sidebar .nav-link / .app-sidebar .nav-link .badge
-     *     -> sidebar nav with icon + text + trailing badge (gap: side nav link).
-     *   .app-sidebar .nav-list-sub
-     *     -> indented sub-navigation (gap: sub-nav indent).
-     *   .app-sidebar details > summary
-     *     -> collapsible section with chevron rotation (gap: collapsible nav).
+     *     -> denser sidebar rows with a trailing badge (local design).
      *
      * Everything else (avatars, buttons, badges, cards, tables, dialogs,
      * drawer, menus, alerts, forms, status bar) comes straight from the
@@ -155,7 +151,6 @@
     .app-sidebar .nav-link {
       min-block-size: 2.25rem;
       padding: 0.5rem 0.65rem;
-      gap: 0.6rem;
       font-weight: var(--font-weight-semibold);
     }
 
@@ -177,58 +172,16 @@
       color: currentColor;
     }
 
-    .app-sidebar .nav-list-sub {
-      padding-inline-start: 1.65rem;
-      margin-block-start: 0.15rem;
+    /* Sub-links start under the parent label: the icons here are 1.125rem. */
+    .app-sidebar {
+      --nav-list-indent: calc(1.125rem + var(--space-20));
     }
 
-    .app-sidebar .nav-list-sub .nav-link {
+    .app-sidebar .nav-list .nav-list .nav-link {
       font-size: 0.875rem;
       font-weight: var(--font-weight-medium);
       min-block-size: 1.85rem;
       padding-block: 0.3rem;
-    }
-
-    .app-sidebar details>summary {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      inline-size: 100%;
-      padding: 0.5rem 0.65rem;
-      border-radius: var(--radius);
-      color: var(--text-muted);
-      font-weight: var(--font-weight-semibold);
-      cursor: pointer;
-      list-style: none;
-    }
-
-    .app-sidebar details>summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .app-sidebar details>summary i:first-child {
-      font-size: 1.125rem;
-    }
-
-    .app-sidebar details>summary::after {
-      content: "";
-      inline-size: 1rem;
-      block-size: 1rem;
-      margin-inline-start: auto;
-      background-color: currentColor;
-      -webkit-mask-image: var(--icon-chevron);
-      mask-image: var(--icon-chevron);
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-      -webkit-mask-size: contain;
-      mask-size: contain;
-      -webkit-mask-position: center;
-      mask-position: center;
-      transition: transform var(--duration);
-    }
-
-    .app-sidebar details[open]>summary::after {
-      transform: rotate(180deg);
     }
 
     @media (min-width: 64rem) {
@@ -331,11 +284,11 @@
           </li>
           <li>
             <details open>
-              <summary>
+              <summary class="nav-link">
                 <i class="ti ti-credit-card" aria-hidden="true"></i>
                 Payments
               </summary>
-              <ul class="nav-list nav-list-sub">
+              <ul class="nav-list">
                 <li><a class="nav-link" href="#transactions" aria-current="page">All transactions</a></li>
                 <li><a class="nav-link" href="#payments-list">Payments</a></li>
                 <li><a class="nav-link" href="#disputes">Disputes</a></li>
@@ -744,8 +697,8 @@
         <li><a class="nav-link" href="#dashboard"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</a></li>
         <li>
           <details>
-            <summary><i class="ti ti-credit-card" aria-hidden="true"></i> Payments</summary>
-            <ul class="nav-list" style="padding-inline-start: 1.65rem; margin-block-start: 0.15rem;">
+            <summary class="nav-link"><i class="ti ti-credit-card" aria-hidden="true"></i> Payments</summary>
+            <ul class="nav-list">
               <li><a class="nav-link" href="#transactions" aria-current="page">All transactions</a></li>
               <li><a class="nav-link" href="#payments-list">Payments</a></li>
               <li><a class="nav-link" href="#disputes">Disputes</a></li>

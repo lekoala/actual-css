@@ -12,6 +12,8 @@
 - `data-dialog-open` opens a dialog at load; on a dialog that also has `open`, it upgrades the no-JS rendering to a modal.
 - `actual-css/js/focus`: `nextTabStop(node)` returns the first tab stop after an element, outside it.
 - `.nav-link`: `--nav-current-bg` and `--nav-current-fg` restyle the current link.
+- `.nav-link`: a default `gap` for icon + label rows.
+- `.nav-list`: a `<summary class="nav-link">` gets a chevron that follows `[open]`, and a nested `.nav-list` is indented (`--nav-list-indent`).
 
 ### Changed
 - `.nav-link`: the current link takes `--text` ink on a fill one step above hover instead of the selected accent; `--state-selected-text` no longer applies to it.

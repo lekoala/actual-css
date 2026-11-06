@@ -126,7 +126,8 @@ test("a file outside core cannot silently call a public global token internal", 
    the link's ::before. A classless owner is scoped by the leading class. */
 test("pseudoElements name the element whose slot is taken", () => {
   const byName = (name) => catalog.find((entry) => entry.name === name).pseudoElements;
-  expect(byName("navbar")).toEqual({ ".nav-link": ["::before"] });
+  // ::after is the chevron of a group's summary.nav-link.
+  expect(byName("navbar")).toEqual({ ".nav-link": ["::after", "::before"] });
   expect(byName("accordion")).toEqual({ ".accordion summary": ["::after"] });
   expect(byName("button")).toBeUndefined();
 });
