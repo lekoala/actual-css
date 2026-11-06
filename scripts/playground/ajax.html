@@ -153,6 +153,25 @@ line two</textarea>
       </section>
 
       <section class="card stack">
+        <h2>CSRF, single-use tokens</h2>
+        <p class="muted">
+          Each accepted save burns its token. Reloading the page issues fresh ones.
+        </p>
+        <h3>Re-rendered form</h3>
+        <p class="muted">
+          The target contains the form: each answer brings a new token, so
+          every save succeeds.
+        </p>
+        <div id="csrf-render">{{csrf-render}}</div>
+        <h3>Message only</h3>
+        <p class="muted">
+          The answer goes to #out and the form keeps its spent token: the first
+          save succeeds, the second gets a 419 the page turns into a status.
+        </p>
+        {{csrf-message}}
+      </section>
+
+      <section class="card stack">
         <h2>With validation</h2>
         <form class="stack" action="/echo" method="post" novalidate
               data-enhance="validation ajax" data-ajax-target="#out" aria-busy="false">
@@ -259,6 +278,12 @@ line two</textarea>
     const say = (source, message, intent) =>
       source.dispatchEvent(new CustomEvent("actual:status", { bubbles: true, detail: { message, intent } }));
     document.addEventListener("actual:ajax-response", ({ detail: { form, response } }) => {
+      // An expired token (419, or 403 elsewhere) is never displayed by the
+      // module; the application tells the user and offers a reload.
+      if (response.status === 419) {
+        say(form, "Page expired (419): reload to get a fresh token", "warning");
+        return;
+      }
       const dialog = form.closest("dialog");
       if (!dialog) return;
       if (response.ok) {

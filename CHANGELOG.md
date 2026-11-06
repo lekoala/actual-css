@@ -35,6 +35,7 @@
 - Docs: Accessibility page shows a label hidden on narrow screens only, with the `.sr-only` declarations in a media query.
 - Docs: product-wide density is `class="compact"` on `<html>`.
 - Docs: `.join` takes `role="group"` only for several controls acting as a set, not for an input with one attached button.
+- Docs: Ajax — a server that issues a CSRF token per submission re-renders the form with its answer.
 - Docs: Flyout "Panel with actions" — a named `<form>` flyout, and closing a validating form with `closeSurface()` from its success path.
 
 ### Changed

@@ -15,6 +15,8 @@
  * /redirect?to=done|foreign   303 to /done, or to the foreign origin (fetch
  *                             then fails on CORS: the ajax-error path)
  * /swap      re-renders the form that contains it
+ * /csrf      single-use tokens: 419 on a spent one; ?mode=render answers
+ *            with the form and a fresh token, ?mode=message without
  */
 import { join } from "node:path";
 import { readFlags } from "../utils/browser.js";
@@ -112,6 +114,28 @@ const latency = (entries) => {
 
 let swaps = 0;
 
+// Single-use CSRF tokens, as a strict per-request scheme issues them: each
+// accepted submission burns its token and issues a new one.
+const tokens = new Set();
+const issueToken = () => {
+  const token = crypto.randomUUID().slice(0, 8);
+  tokens.add(token);
+  return token;
+};
+
+// mode "render": the answer re-renders the whole form, fresh token included.
+// mode "message": the answer is a message, the page keeps the spent token.
+const csrfForm = (mode, token) => {
+  const target = mode === "render" ? "#csrf-render" : "#out";
+  return `<form action="/csrf?mode=${mode}" method="post" class="cluster"
+      data-enhance="ajax" data-ajax-target="${target}" aria-busy="false">
+    <input type="hidden" name="_token" value="${token}">
+    <code>_token=${token}</code>
+    <button class="btn" type="submit">Save</button>
+    <span class="spinner" aria-hidden="true"></span>
+  </form>`;
+};
+
 async function handle(request, foreign) {
   const url = new URL(request.url);
   const path = url.pathname;
@@ -134,10 +158,10 @@ async function handle(request, foreign) {
   if (foreign) return new Response("Not found", { status: 404 });
 
   if (path === "/") {
-    const page = (await Bun.file(PAGE).text()).replaceAll(
-      "{{foreign}}",
-      `http://localhost:${foreignPort}`,
-    );
+    const page = (await Bun.file(PAGE).text())
+      .replaceAll("{{foreign}}", `http://localhost:${foreignPort}`)
+      .replace("{{csrf-render}}", csrfForm("render", issueToken()))
+      .replace("{{csrf-message}}", csrfForm("message", issueToken()));
     return new Response(page, {
       headers: {
         "content-type": "text/html; charset=utf-8",
@@ -162,6 +186,23 @@ async function handle(request, foreign) {
         <button class="btn" type="submit">Replace me again</button>
         <span class="spinner" aria-hidden="true"></span>
       </form>`,
+    );
+  }
+  if (path === "/csrf") {
+    const { entries } = await readSubmission(request, url);
+    await Bun.sleep(latency([]));
+    const sent = option(entries, "_token");
+    // 419 is Laravel's "Page Expired"; other stacks answer 403. Neither is
+    // displayed by the module: the page handles it from ajax-response.
+    if (!tokens.delete(sent)) {
+      return html(request, `<p>Page expired: token ${escapeHtml(sent)} is spent.</p>`, 419);
+    }
+    const mode = url.searchParams.get("mode");
+    return html(
+      request,
+      mode === "render"
+        ? csrfForm("render", issueToken())
+        : `<p>Saved with <code>${escapeHtml(sent)}</code>. The form still holds it: send again.</p>`,
     );
   }
   // src/ imports packages by name, which a browser cannot resolve: bundle the

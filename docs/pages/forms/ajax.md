@@ -57,7 +57,9 @@ The target is updated when the response is `text/html` with a 2xx or `422`
 status, the usual status for server-rendered errors. Any other answer leaves
 it alone. The answer is read as UTF-8. The target may contain the form: a
 server that re-renders the whole form with its errors replaces it, and the new
-form is enhanced again. A redirect, such as post/redirect/get, navigates the
+form is enhanced again. A CSRF token in a hidden field is sent like any other
+field; when the server issues a new token per submission, re-render the form
+with the answer, or the next submission sends a spent token. A redirect, such as post/redirect/get, navigates the
 page; `fetch` has already followed it, so the destination loads twice.
 
 Every response reaches `actual:ajax-response` with
