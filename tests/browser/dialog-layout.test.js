@@ -37,6 +37,34 @@ it("confirmation copy shares one column and its title centers on the icon", asyn
   );
 });
 
+/* .stack and .cluster reset their children's margins; a modal child lost its
+ * UA margin: auto and opened pinned to the top until .modal restated it. */
+it("a modal inside .stack or .cluster still opens centered", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        const margins = (id) => {
+          const dialog = document.getElementById(id);
+          dialog.showModal();
+          // Used margins, not the rect: the entry lift offsets the box.
+          const { marginTop, marginBottom } = getComputedStyle(dialog);
+          dialog.close();
+          return [parseFloat(marginTop), parseFloat(marginBottom)];
+        };
+        return [margins("in-stack"), margins("in-cluster")];
+      })()`);
+
+      // A short dialog in a tall viewport: centered means equal, non-zero margins.
+      for (const [top, bottom] of result) {
+        expect(top).toBeGreaterThan(0);
+        expect(Math.abs(top - bottom)).toBeLessThanOrEqual(1);
+      }
+    },
+    { artifactName: "dialog-layout" },
+  );
+});
+
 /* The action band is pure composition, so this guards the specificity
  * contract: the footer's default row must lose to a one-class utility. */
 it("a .bleed footer forms an edge band that a justify utility splits", async () => {

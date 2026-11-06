@@ -115,8 +115,10 @@ function connectForm(form) {
 
   const send = async (submitter, { url, init }) => {
     pending = true;
-    const busy = [form, submitter].filter(Boolean);
-    for (const el of busy) el.setAttribute(BUSY, "true");
+    // Restored afterwards, not removed: an authored aria-busy="false" is what
+    // keeps a last-child .spinner hidden at rest (busy.css).
+    const busy = [form, submitter].filter(Boolean).map((el) => [el, el.getAttribute(BUSY)]);
+    for (const [el] of busy) el.setAttribute(BUSY, "true");
     emit(EVENTS.ajaxStart, { submitter });
     try {
       const response = await fetch(url, { ...init, signal: lifetime.signal });
@@ -132,7 +134,10 @@ function connectForm(form) {
       if (!lifetime.signal.aborted) emit(EVENTS.ajaxError, { submitter, error });
     } finally {
       pending = false;
-      for (const el of busy) el.removeAttribute(BUSY);
+      for (const [el, rest] of busy) {
+        if (rest === null) el.removeAttribute(BUSY);
+        else el.setAttribute(BUSY, rest);
+      }
     }
   };
 

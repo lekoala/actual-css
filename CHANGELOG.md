@@ -45,8 +45,11 @@
 - Docs: demo previews sit on a faintly tinted stage with more padding; the code below them returns to the plain surface.
 - Docs: demo code opens with a bar holding its language and the Copy button, which no longer covers the first line.
 - `.rating`: stars sit `--space-10` apart instead of `0.1rem`, and each radio's hit area is `--space-20` taller than its star.
+- `[aria-busy]` overlay: fades in after `--busy-delay`, so a fast request no longer flashes it.
 
 ### Fixed
+- `.modal`: a modal authored inside `.stack` or `.cluster` opens centered instead of pinned to the top of the viewport.
+- `ajax.js`: restores the form's and submitter's authored `aria-busy` after a request instead of removing it, so a resting last-child `.spinner` stays hidden.
 - `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.
 - `--dismiss`: focus inside the dismissed target moves to the next tab stop instead of staying on the hidden close button.
 - `validation.js`: picking a radio in a required group clears `aria-invalid` on every radio of the group, so its `.field-error` hides.

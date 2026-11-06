@@ -7,8 +7,13 @@
  * shows that spinner as a centered overlay over a faded surface. Buttons keep
  * their spinners inline (e.g. .btn[aria-busy] > .spinner stays inline-flex).
  *
+ * The overlay fades in after --busy-delay, so a fast request leaves the
+ * content untouched instead of flashing it. Reduced motion drops the delay
+ * with every other animation (reset.css): the overlay then shows at once.
+ *
  * Public hooks:
  * --busy-overlay-bg
+ * --busy-delay
  *
  * Internal:
  * --spinner-size (overlay copy of the shared spinner hook)
@@ -42,6 +47,26 @@
     z-index: 2;
     margin: auto;
     display: block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [aria-busy="true"]:not(.btn):has(> .spinner:last-child)::before {
+      animation: actual-busy-reveal var(--duration-slow) var(--busy-delay, 300ms) ease both;
+    }
+
+    /* Restates the spin: one animation list replaces spinner.css's. */
+    [aria-busy="true"]:not(.btn) > .spinner:last-child {
+      animation:
+        actual-busy-reveal var(--duration-slow) var(--busy-delay, 300ms) ease both,
+        actual-spin var(--duration-spin) linear infinite;
+    }
+  }
+}
+
+/* `both` holds the from-frame through the delay. */
+@keyframes actual-busy-reveal {
+  from {
+    opacity: 0;
   }
 }
 

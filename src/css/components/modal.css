@@ -55,6 +55,9 @@
   /* Keep the surface anchored to the viewport in the top layer. This also
      provides the containing block for the absolutely positioned close button. */
   position: fixed;
+  /* Restates the UA centering: a modal authored inside .stack or .cluster
+     would otherwise take their child margin reset and pin to the top. */
+  margin: auto;
 
   /* The root is :where(dialog).modal (0-1-0), so a single author class can
      outrank these defaults — no fallback-only indirection needed here. */

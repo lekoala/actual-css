@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ajax playground</title>
+  <link rel="stylesheet" href="/src/css/actual.full.css">
+  <script type="module" src="/runtime.js"></script>
+  <style>
+    body { padding: 2rem; max-width: 72rem; margin-inline: auto; }
+    .playground { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2rem; align-items: start; }
+    .log { position: sticky; top: 1rem; max-height: calc(100dvh - 2rem); overflow: auto; }
+    .log ol { font-family: ui-monospace, monospace; font-size: 0.8125rem; padding: 0; list-style: none; }
+    pre { white-space: pre-wrap; word-break: break-all; }
+    @media (width < 60rem) { .playground { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="stack">
+  <h1>Ajax playground</h1>
+  <p class="muted">
+    Runs <code>src/</code> as-is. Without <code>_delay</code>, the server answers
+    fast or slow at random: only a slow answer should show the busy overlay.
+    A native submission leaves the page: come back with the browser.
+  </p>
+
+  <div class="playground">
+    <div class="stack">
+      <section class="card stack">
+        <h2>Encoding</h2>
+        <form class="stack" action="/echo" method="post" enctype="multipart/form-data"
+              data-enhance="ajax" data-ajax-target="#out" aria-busy="false">
+          <label class="field">
+            <span class="field-label">Text</span>
+            <input class="input" name="text" value="héllo & bye">
+          </label>
+          <label class="field">
+            <span class="field-label">Multiline (CRLF expected)</span>
+            <textarea class="textarea" name="notes">line one
+line two</textarea>
+          </label>
+          <label class="field">
+            <span class="field-label">Files</span>
+            <input class="file" type="file" name="docs" multiple>
+          </label>
+          <fieldset class="field-group">
+            <legend class="field-label">Tags (repeated name)</legend>
+            <div class="cluster">
+              <label class="choice-card chip"><input type="checkbox" name="tags" value="a" checked> a</label>
+              <label class="choice-card chip"><input type="checkbox" name="tags" value="b" checked> b</label>
+              <label class="choice-card chip"><input type="checkbox" name="tags" value="c"> c</label>
+            </div>
+          </fieldset>
+          <label><input type="checkbox" name="agree" checked> Agree</label>
+          <div class="cluster">
+            <button class="btn primary" type="submit" name="op" value="save">Multipart</button>
+            <button class="btn" type="submit" name="op" value="url"
+                    formenctype="application/x-www-form-urlencoded">URL-encoded</button>
+            <button class="btn" type="submit" name="op" value="get"
+                    formmethod="get" formaction="/echo?dropped=1">GET</button>
+          </div>
+          <p class="muted">Left to the browser:</p>
+          <div class="cluster">
+            <button class="btn" type="submit" formtarget="_blank">_blank</button>
+            <button class="btn" type="submit" formenctype="text/plain"
+                    formaction="/echo" formmethod="post">text/plain</button>
+            <button class="btn" type="submit" formaction="{{foreign}}/echo">Foreign origin</button>
+          </div>
+          <span class="spinner" aria-hidden="true"></span>
+        </form>
+      </section>
+
+      <section class="card stack">
+        <h2>Responses</h2>
+        <form class="cluster" action="/echo" method="post" data-enhance="ajax" data-ajax-target="#out" aria-busy="false">
+          <input type="hidden" name="field" value="value">
+          <button class="btn" type="submit" formaction="/echo?_status=422">422</button>
+          <button class="btn" type="submit" formaction="/echo?_status=500">500 (no display)</button>
+          <button class="btn" type="submit" formaction="/echo?_type=json">JSON (no display)</button>
+          <button class="btn" type="submit" formaction="/echo?_delay=3000">Slow 3 s</button>
+          <button class="btn" type="submit" formaction="/redirect?to=done">Redirect</button>
+          <button class="btn" type="submit" formaction="/redirect?to=foreign">Redirect off-origin (error)</button>
+          <span class="spinner" aria-hidden="true"></span>
+        </form>
+        <dl class="prose sm">
+          <dt>422 Unprocessable Content</dt>
+          <dd>
+            The request arrived and was understood, but the data is invalid: a
+            taken email, a date in the past. The server answers with the form's
+            errors as HTML, so the target <strong>is updated</strong>. It is the
+            usual status for server-side validation, and the one case outside
+            2xx the module displays. <code>response.ok</code> is false: the
+            application knows nothing was saved.
+          </dd>
+          <dt>500 Internal Server Error</dt>
+          <dd>
+            The server failed: an exception, a database down. Its body is an
+            error page or a stack trace, not something to show inside a form,
+            so the target <strong>stays as it was</strong>. The event still
+            fires with the response; the application decides what to say.
+          </dd>
+          <dt>JSON</dt>
+          <dd>
+            A 200, but not HTML: the module never guesses how to render data.
+            The target <strong>stays as it was</strong>; the response reaches
+            <code>ajax-response</code>, where the application reads it.
+          </dd>
+          <dt>Slow 3 s</dt>
+          <dd>
+            Past <code>--busy-delay</code>: the form overlay fades in. Further
+            clicks are ignored until the answer arrives (one request at a time).
+          </dd>
+          <dt>Redirect</dt>
+          <dd>
+            The server answers 303 to /done (post/redirect/get, the usual
+            answer after a save). <code>fetch</code> follows it, then the module
+            navigates to /done like a native submission: the page
+            <strong>leaves</strong>, and /done is requested twice.
+          </dd>
+          <dt>Redirect off-origin</dt>
+          <dd>
+            The 303 points to another origin, which sends no CORS headers, so
+            <code>fetch</code> fails: <code>ajax-error</code>, no response, the
+            target unchanged. The same happens when the network drops. A login
+            redirect to an SSO provider takes this path.
+          </dd>
+        </dl>
+      </section>
+
+      <section class="card stack">
+        <h2>Abort</h2>
+        <p class="muted">Send, then remove the form while it waits: no event follows.</p>
+        <div id="abort-slot">
+          <form class="cluster" action="/echo?_delay=5000" method="post" data-enhance="ajax" data-ajax-target="#out" aria-busy="false">
+            <button class="btn" type="submit">Slow 5 s</button>
+            <span class="spinner" aria-hidden="true"></span>
+          </form>
+        </div>
+        <div class="cluster">
+          <button class="btn" type="button" id="abort-remove">Remove form</button>
+          <button class="btn" type="button" id="abort-restore">Restore</button>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <h2>Target containing the form</h2>
+        <div id="swap-card">
+          <form action="/swap" method="post" class="cluster" data-enhance="ajax" data-ajax-target="#swap-card" aria-busy="false">
+            <span>Original form</span>
+            <button class="btn" type="submit">Replace me</button>
+            <span class="spinner" aria-hidden="true"></span>
+          </form>
+        </div>
+      </section>
+
+      <section class="card stack">
+        <h2>With validation</h2>
+        <form class="stack" action="/echo" method="post" novalidate
+              data-enhance="validation ajax" data-ajax-target="#out" aria-busy="false">
+          <label class="field">
+            <span class="field-label">Email</span>
+            <input class="input" type="email" name="email" required>
+          </label>
+          <div class="cluster form-actions">
+            <button class="btn" type="submit">Send</button>
+          </div>
+          <span class="spinner" aria-hidden="true"></span>
+        </form>
+      </section>
+
+      <section class="card stack">
+        <h2>Dialog</h2>
+        <div>
+          <button class="btn" type="button" command="show-modal" commandfor="dialog"
+                  aria-haspopup="dialog" aria-controls="dialog">Open dialog</button>
+        </div>
+        <dialog class="modal" id="dialog">
+          <!-- No form overlay: it would cover Cancel. The busy submitter shows
+               the spinner instead. -->
+          <form action="/echo?_delay=2000" method="post" data-enhance="ajax" data-ajax-target="#out">
+            <header>
+              <h3>Save draft</h3>
+              <p>Save takes 2 s and only its button shows progress, so Cancel
+                stays clickable and closes the dialog meanwhile. On success the
+                page closes the dialog and shows a status; on failure the dialog
+                stays open.</p>
+            </header>
+            <label class="field">
+              <span class="field-label">Title</span>
+              <input class="input" name="title" value="Draft">
+            </label>
+            <footer class="cluster justify-content-end">
+              <button class="btn" type="submit" formmethod="dialog">Cancel</button>
+              <button class="btn" type="submit" formaction="/echo?_delay=1000&amp;_status=500"
+                      aria-busy="false">Save (fails) <span class="spinner" aria-hidden="true"></span></button>
+              <button class="btn primary" type="submit" aria-busy="false">Save <span class="spinner" aria-hidden="true"></span></button>
+            </footer>
+          </form>
+        </dialog>
+      </section>
+    </div>
+
+    <div class="stack log">
+      <section class="card stack">
+        <h2>Response</h2>
+        <div id="out" role="status">Nothing sent yet.</div>
+      </section>
+      <section class="card stack">
+        <div class="cluster">
+          <h2>Events</h2>
+          <button class="btn" type="button" id="log-clear">Clear</button>
+        </div>
+        <ol id="log"></ol>
+      </section>
+    </div>
+  </div>
+
+  <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script type="module">
+    const log = document.getElementById("log");
+    const write = (text) => {
+      const item = document.createElement("li");
+      item.textContent = `${new Date().toLocaleTimeString()}  ${text}`;
+      log.prepend(item);
+    };
+    const label = (el) => (el ? `${el.tagName.toLowerCase()} "${el.textContent.trim()}"` : "none");
+
+    // On window: after the enhancers' document listeners, so "prevented" is final.
+    window.addEventListener("submit", (event) => {
+      write(`submit · submitter ${label(event.submitter)} · prevented ${event.defaultPrevented}`);
+    });
+    document.addEventListener("actual:ajax-start", ({ detail }) => {
+      write(`ajax-start · ${label(detail.submitter)}`);
+    });
+    document.addEventListener("actual:ajax-response", ({ detail }) => {
+      const { response } = detail;
+      write(`ajax-response · ${response.status} · ${response.headers.get("content-type")}`
+        + `${response.redirected ? ` · redirected to ${response.url}` : ""}`);
+    });
+    document.addEventListener("actual:ajax-error", ({ detail }) => {
+      write(`ajax-error · ${detail.error}`);
+    });
+    document.addEventListener("actual:invalid", () => write("invalid"));
+
+    const slot = document.getElementById("abort-slot");
+    const original = slot.innerHTML;
+    document.getElementById("abort-remove").onclick = () => {
+      slot.replaceChildren();
+      write("form removed");
+    };
+    document.getElementById("abort-restore").onclick = () => {
+      slot.innerHTML = original;
+    };
+    document.getElementById("dialog").addEventListener("close", () => write("dialog closed"));
+
+    /* Application code, not the module: ajax.js never decides that a response
+       means "saved". A success closes the dialog first, so the status shows in
+       the page; a failure keeps it open and the status mounts inside it. */
+    const say = (source, message, intent) =>
+      source.dispatchEvent(new CustomEvent("actual:status", { bubbles: true, detail: { message, intent } }));
+    document.addEventListener("actual:ajax-response", ({ detail: { form, response } }) => {
+      const dialog = form.closest("dialog");
+      if (!dialog) return;
+      if (response.ok) {
+        dialog.close();
+        say(document, "Saved", "success");
+      } else {
+        say(form, `Save failed (${response.status})`, "danger");
+      }
+    });
+    document.addEventListener("actual:ajax-error", ({ detail: { form } }) => {
+      if (form.closest("dialog")) say(form, "Network error: not saved", "danger");
+    });
+    document.getElementById("log-clear").onclick = () => log.replaceChildren();
+  </script>
+</body>
+</html>

@@ -96,3 +96,5 @@ surface; buttons keep their spinners inline instead (see Button).
 - `--spinner-value` — the moving gap; swap the two for an inverted spinner.
 - `--busy-overlay-bg` — background of the busy overlay. Set it on a surface you
   paint yourself so the overlay blends with that surface.
+- `--busy-delay` — how long the overlay waits before fading in, so a fast
+  request never flashes it. Reduced motion shows it at once.

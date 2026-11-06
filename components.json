@@ -187,7 +187,8 @@
     "cssImport": "actual-css/css/components/busy",
     "docs": "https://lekoala.github.io/actual-css/site/components/spinner.html",
     "publicHooks": [
-      "--busy-overlay-bg"
+      "--busy-overlay-bg",
+      "--busy-delay"
     ],
     "internalHooks": [
       "--spinner-size"

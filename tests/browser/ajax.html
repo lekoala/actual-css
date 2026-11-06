@@ -32,6 +32,11 @@
     <button id="misconfigured-save" type="submit">Save</button>
   </form>
 
+  <form id="resting" action="save" method="post" data-enhance="ajax" aria-busy="false">
+    <button id="resting-save" type="submit">Save</button>
+    <span class="spinner"></span>
+  </form>
+
   <form id="checked" action="save" method="post" data-enhance="validation dirty ajax">
     <input id="email" name="email" type="email" required>
     <button id="checked-save" type="submit">Save</button>

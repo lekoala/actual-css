@@ -96,6 +96,16 @@ it("a POST sends what a native submission would, and shows an HTML answer", asyn
   });
 }, 60_000);
 
+it("restores an authored aria-busy instead of removing it", async () => {
+  await withAjax(async (view) => {
+    await view.evaluate(`(() => { press("resting-save"); reply(""); })()`);
+    await waitForBrowser(view, `document.getElementById("resting").ariaBusy === "false"`);
+    expect(
+      await view.evaluate(`document.getElementById("resting-save").hasAttribute("aria-busy")`),
+    ).toBe(false);
+  });
+}, 60_000);
+
 it("formmethod=get replaces the query string", async () => {
   await withAjax(async (view) => {
     const call = await view.evaluate(`(() => {

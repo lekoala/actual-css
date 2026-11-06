@@ -39,7 +39,11 @@ The browser keeps the submissions the module cannot reproduce:
 
 While a request runs, the form and its submitter carry `aria-busy="true"`,
 which picks up the [busy button](../components/button.md) styles. Add a
-`.spinner` inside the button for a visible indicator. Further submissions are
+`.spinner` inside the button for a visible indicator, or as the form's last
+child for a [busy overlay](../components/spinner.md#busy-state) that fades in
+only when the request is slow; give the element `aria-busy="false"` so the
+spinner stays hidden at rest, the module restores it after each request.
+Further submissions are
 ignored until the answer arrives; a submission left to the browser, such as a
 dialog's cancel button, still goes through. Removing the form aborts its
 request.
