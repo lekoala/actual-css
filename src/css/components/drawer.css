@@ -13,14 +13,17 @@
  * navigation content inside uses .nav-link and .accordion, which carry their
  * own link/summary styling.
  *
+ * Sides: start (default), end, and bottom (a bottom sheet) via data-side.
+ *
  * Public hooks:
- * --drawer-size
+ * --drawer-size (width on start/end, maximum height on bottom)
  * --drawer-pad
  *
  * The corner close control is .close (components/close.css).
  *
  * Internal:
  * --drawer-closed-translate (side/RTL positioning state)
+ * --drawer-closed-transform (closed position; bottom changes its axis)
  * --drawer-focus-bleed
  * --drawer-close-reserve (header room for a corner close; zero without a close)
  * --drawer-motion-duration (shared by panel and ::backdrop so exit duration
@@ -33,6 +36,9 @@
   /* The inset a direct .bleed child cancels (components/bleed.css). */
   --surface-pad: var(--drawer-pad);
   --drawer-closed-translate: -100%;
+  /* The closed position as one transform, so a side can change axis without
+     a rule that would tie with [open] on specificity. */
+  --drawer-closed-transform: translateX(var(--drawer-closed-translate));
   /* Header room for a corner close. Unconditional baseline: without :has()
      (Degraded tier) a header keeps too much room rather than a title running
      under the close. Zeroed when the drawer has no close. */
@@ -71,7 +77,7 @@
   color: var(--text);
   box-shadow: var(--shadow);
   opacity: 0;
-  transform: translateX(var(--drawer-closed-translate));
+  transform: var(--drawer-closed-transform);
   /* Unsupported discrete behavior drops alone, preserving opacity/transform. */
   transition-property: opacity, transform, overlay, display;
   transition-duration: var(--drawer-motion-duration);
@@ -125,10 +131,32 @@
   opacity: 1;
 }
 
+/* Bottom sheet: the same drawer on the block-end edge, sized by its content
+   up to --drawer-size, which reads as a height here. :where() keeps the size
+   at the base rule's weight, so an application class still overrides it. */
+:where(dialog).drawer:where([data-side="bottom"]) {
+  --drawer-size: 32rem;
+  --drawer-closed-transform: translateY(100%);
+}
+
+:where(dialog).drawer[data-side="bottom"] {
+  inset-block: auto 0;
+  inset-inline: 0;
+  inline-size: 100%;
+  block-size: auto;
+  max-block-size: min(calc(var(--viewport-block) * 0.85), var(--drawer-size));
+  /* The home indicator sits over the panel's last line otherwise. */
+  padding-block-end: calc(var(--drawer-pad) + env(safe-area-inset-bottom, 0px));
+  border-inline-end: 0;
+  border-block-start: var(--border-width) solid var(--border);
+  border-start-start-radius: var(--radius-lg);
+  border-start-end-radius: var(--radius-lg);
+}
+
 @starting-style {
   :where(dialog).drawer[open] {
     opacity: 0;
-    transform: translateX(var(--drawer-closed-translate));
+    transform: var(--drawer-closed-transform);
   }
 
   :where(dialog).drawer[open]::backdrop {

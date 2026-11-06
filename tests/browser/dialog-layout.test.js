@@ -447,3 +447,95 @@ it("a scrolling drawer body keeps the panel padding on both sides of its content
     { width: 800, height: 600, artifactName: "drawer-scrollbar-edge" },
   );
 });
+
+/* A bottom sheet is the drawer on the block-end edge: content-sized up to
+ * --drawer-size, footer always on screen, the body scrolling between. */
+const BOTTOM_SHEET = `(content) => {
+  const drawer = document.createElement("dialog");
+  drawer.className = "drawer";
+  drawer.dataset.side = "bottom";
+  drawer.innerHTML =
+    '<form method="dialog"><header><strong>Filters</strong></header>' +
+    '<div class="stack">' + content + "</div>" +
+    '<footer class="cluster"><button class="btn" id="sheet-apply">Apply</button></footer></form>';
+  document.body.append(drawer);
+  drawer.showModal();
+  return drawer;
+}`;
+
+const sheetGeometry = (content) => `(async () => {
+  const drawer = (${BOTTOM_SHEET})(${JSON.stringify(content)});
+  await Promise.all(drawer.getAnimations().map((a) => a.finished));
+  const panel = drawer.getBoundingClientRect();
+  const cs = getComputedStyle(drawer);
+  const body = drawer.querySelector(".stack");
+  const footer = drawer.querySelector("footer").getBoundingClientRect();
+  return {
+    viewport: { width: innerWidth, height: innerHeight },
+    panel: { top: panel.top, bottom: panel.bottom, left: panel.left, width: panel.width, height: panel.height },
+    footerBottom: footer.bottom,
+    bodyScrolls: body.scrollHeight > body.clientHeight + 1,
+    maxHeight: parseFloat(cs.maxBlockSize),
+    topRadius: parseFloat(cs.borderStartStartRadius),
+    bottomRadius: parseFloat(cs.borderEndStartRadius),
+    transform: cs.transform,
+    closed: cs.getPropertyValue("--drawer-closed-transform").trim(),
+  };
+})()`;
+
+it("a bottom sheet hugs the bottom edge at its content's height", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const sheet = await view.evaluate(sheetGeometry("<p>Remote</p><p>In person</p>"));
+      expect(sheet.panel.bottom).toBeCloseTo(sheet.viewport.height, 0);
+      expect(sheet.panel.left).toBeCloseTo(0, 0);
+      expect(sheet.panel.width).toBeCloseTo(sheet.viewport.width, 0);
+      expect(sheet.panel.height).toBeLessThan(sheet.maxHeight);
+      expect(sheet.topRadius).toBeGreaterThan(0);
+      expect(sheet.bottomRadius).toBe(0);
+      // Open at rest; closed off the bottom edge, on the block axis.
+      expect(["none", "matrix(1, 0, 0, 1, 0, 0)"]).toContain(sheet.transform);
+      expect(sheet.closed).toBe("translateY(100%)");
+    },
+    { width: 400, height: 800, artifactName: "drawer-bottom-short" },
+  );
+});
+
+it("a tall bottom sheet caps its height, keeps the footer on screen and scrolls its body", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const sheet = await view.evaluate(sheetGeometry("<p>Option</p>".repeat(80)));
+      expect(sheet.panel.height).toBeCloseTo(sheet.maxHeight, 0);
+      expect(sheet.panel.height).toBeLessThan(sheet.viewport.height);
+      expect(sheet.panel.bottom).toBeCloseTo(sheet.viewport.height, 0);
+      expect(sheet.footerBottom).toBeLessThanOrEqual(sheet.viewport.height);
+      expect(sheet.bodyScrolls).toBe(true);
+    },
+    { width: 400, height: 800, artifactName: "drawer-bottom-tall" },
+  );
+});
+
+it("side drawers keep their inline motion", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const closed = await view.evaluate(`(() => {
+        const read = (side) => {
+          const drawer = document.createElement("dialog");
+          drawer.className = "drawer";
+          if (side) drawer.dataset.side = side;
+          document.body.append(drawer);
+          // A closed dialog is display: none, so its transform reads "none";
+          // the resolved closed position is the variable.
+          return getComputedStyle(drawer).getPropertyValue("--drawer-closed-transform").trim();
+        };
+        return { start: read(""), end: read("end") };
+      })()`);
+      expect(closed.start).toBe("translateX(-100%)");
+      expect(closed.end).toBe("translateX(100%)");
+    },
+    { width: 400, height: 800, artifactName: "drawer-side-motion" },
+  );
+});

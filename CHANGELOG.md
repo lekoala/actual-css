@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Added
+- `.drawer`: `data-side="bottom"` makes a bottom sheet, content-sized up to `--drawer-size` or 85% of the viewport, clear of the iOS home indicator.
+- `adaptive-surface.html`: the bottom drawer uses `data-side="bottom"`; the page keeps only the choice of surface.
 - `.sidebar-shell`: a persistent `aside` beside the main region from `64rem`, each scrolling on its own; below, the aside hides and the document scrolls (`--sidebar-shell-size`).
 - Docs: Sidebar Shell page with the drawer-closing `matchMedia` recipe; the navigation-list page links to it instead of printing a `.shell-sidebar` recipe.
 - `actual-css/js/dirty`: `data-enhance="dirty"` sets `data-dirty` on a form while its submittable data differs from the baseline, and dispatches `actual:dirty-change`.

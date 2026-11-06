@@ -1,15 +1,15 @@
 # Drawer
 
-> Modal side-sheet that overlays the page for navigation or filters.
+> Modal side or bottom sheet that overlays the page for navigation, filters or actions.
 
-**Related terms:** off-canvas, side panel, side sheet, navigation drawer.
+**Related terms:** off-canvas, side panel, side sheet, navigation drawer, bottom sheet, action sheet.
 
 ## Class reference
 
-| Class     | Kind        | Description                                              |
-| --------- | ----------- | -------------------------------------------------------- |
-| `.drawer` | Component   | Modal side-sheet built on the native `<dialog>` element. |
-| `.close`  | Composition | Icon-only close button, at the top end.                  |
+| Class     | Kind        | Description                                          |
+| --------- | ----------- | ---------------------------------------------------- |
+| `.drawer` | Component   | Modal side or bottom sheet on the native `<dialog>`. |
+| `.close`  | Composition | Icon-only close button, at the top end.              |
 
 ## Usage
 
@@ -20,7 +20,8 @@
   only gates backdrop click: Escape and the close button always close.
 - Use `closedby="none"` when the drawer must not be dismissed by the user at all
   (e.g. a form with unsaved changes): no backdrop close and no Escape close.
-- Use `[data-side="end"]` for a right-side drawer.
+- Use `[data-side="end"]` for a right-side drawer, `[data-side="bottom"]` for
+  a [bottom sheet](#bottom-sheet).
 - Put the body between a `header` and a `footer`: the panel is a three-row grid
   whose middle region scrolls, so the footer stays reachable however long the
   content gets.
@@ -119,9 +120,52 @@ so the two never double-handle. Without `data-dialog-dismissible`, a native
 light dismiss briefly flash instead of closing when the backdrop is clicked —
 useful for drawers that should not be dismissed accidentally.
 
+## Bottom sheet
+
+`data-side="bottom"` puts the drawer on the bottom edge: full width, as tall as
+its content up to `--drawer-size` or 85% of the viewport, with rounded top
+corners. The header, scrolling body and footer work as on a side drawer, and
+the bottom padding clears the iOS home indicator. Use it for filters, pickers
+and contextual actions on a phone.
+
+```html demo
+<button class="btn"
+        type="button"
+        command="show-modal"
+        commandfor="sort-sheet"
+        aria-haspopup="dialog"
+        aria-controls="sort-sheet">
+  Sort
+</button>
+
+<dialog class="drawer" id="sort-sheet" data-side="bottom" aria-labelledby="sort-sheet-title" closedby="any">
+  <form method="dialog">
+    <header>
+      <strong id="sort-sheet-title">Sort by</strong>
+      <button class="close" type="submit" aria-label="Close"></button>
+    </header>
+
+    <fieldset class="field-group flush stack">
+      <legend class="sr-only">Sort by</legend>
+      <label class="choice"><input class="radio" type="radio" name="sort" value="relevance" checked><span>Relevance</span></label>
+      <label class="choice"><input class="radio" type="radio" name="sort" value="date"><span>Soonest date</span></label>
+      <label class="choice"><input class="radio" type="radio" name="sort" value="price"><span>Lowest price</span></label>
+    </fieldset>
+
+    <footer class="cluster justify-content-end">
+      <button class="btn primary" value="apply">Apply</button>
+    </footer>
+  </form>
+</dialog>
+```
+
+No drag handle and no swipe to close: those are gestures, not layout. When the
+same task is a flyout on a desktop and a sheet on a phone, the page picks the
+surface; see [Adaptive filter surface](../../demo/templates/adaptive-surface.html).
+
 ## CSS hooks
 
-- `--drawer-size` — panel width.
+- `--drawer-size` — panel width; the maximum height of a bottom sheet.
 - `--drawer-pad` — panel padding.
 - `--close-size` / `--close-icon-size` — size of the corner [`.close`](close.md)
   and of its X. The header reserves the close size plus `--space-30` on its

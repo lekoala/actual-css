@@ -338,6 +338,7 @@
     ],
     "internalHooks": [
       "--drawer-closed-translate",
+      "--drawer-closed-transform",
       "--drawer-focus-bleed",
       "--drawer-close-reserve",
       "--drawer-motion-duration",

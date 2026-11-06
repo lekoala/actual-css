@@ -59,9 +59,8 @@
       --grid-min: 15rem;
     }
 
-    /* A bottom sheet is a product-specific presentation of the existing
-       drawer. The framework keeps drawer side-oriented; this experiment owns
-       the alternate edge, size and corner treatment locally. */
+    /* The page owns the choice of surface; the bottom sheet itself is
+       dialog.drawer[data-side="bottom"]. */
     @media (pointer: coarse) and (max-width: 48rem) {
       .adaptive-desktop-trigger {
         display: none;
@@ -69,34 +68,6 @@
 
       .adaptive-mobile-trigger {
         display: inline-flex;
-      }
-
-      dialog.drawer.adaptive-drawer {
-        inset-block: auto 0;
-        inset-inline: 0;
-        inline-size: 100%;
-        block-size: auto;
-        max-block-size: min(calc(var(--viewport-block) * 0.75), 32rem);
-        margin: auto 0 0;
-        border-inline: 0;
-        border-block-start: var(--border-width) solid var(--border);
-        border-start-start-radius: var(--radius-lg);
-        border-start-end-radius: var(--radius-lg);
-        transform: translateY(100%);
-      }
-
-      dialog.drawer.adaptive-drawer[open] {
-        transform: translateY(0);
-      }
-
-      dialog.drawer.adaptive-drawer > form {
-        min-block-size: 0;
-      }
-
-      @starting-style {
-        dialog.drawer.adaptive-drawer[open] {
-          transform: translateY(100%);
-        }
       }
     }
   </style>
@@ -214,7 +185,8 @@
     </section>
   </main>
 
-  <dialog class="drawer adaptive-drawer"
+  <dialog class="drawer"
+          data-side="bottom"
           id="adaptive-drawer"
           aria-labelledby="adaptive-drawer-title"
           closedby="any"
