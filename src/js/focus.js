@@ -59,6 +59,18 @@ function isRadioTabStop(el) {
   );
 }
 
+/* The first tab stop after `node` in document order, outside `node` itself.
+   Document order, not tabindex order: positive tabindex is not a supported
+   pattern here. */
+export function nextTabStop(node) {
+  return getFocusable(node.ownerDocument)
+    .filter(isRadioTabStop)
+    .find(
+      (el) =>
+        !node.contains(el) && node.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+}
+
 export function focusFirstDescendant(root) {
   const target = getFocusable(root).filter(isRadioTabStop)[0];
   target?.focus();

@@ -10,9 +10,11 @@
 - `actual:ajax-start`, `actual:ajax-response` and `actual:ajax-error` report an ajax submission; see the Ajax Submission page.
 - `actual:tab-change` bubbles from a tablist after the selected tab changes, with `{ tab, panel, previousTab }`.
 - `data-dialog-open` opens a dialog at load; on a dialog that also has `open`, it upgrades the no-JS rendering to a modal.
+- `actual-css/js/focus`: `nextTabStop(node)` returns the first tab stop after an element, outside it.
 
 ### Fixed
 - `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.
+- `--dismiss`: focus inside the dismissed target moves to the next tab stop instead of staying on the hidden close button.
 
 ### Removed
 - Docs: the Ajax forms recipe in the progressive enhancement guide; use `data-enhance="ajax"`.

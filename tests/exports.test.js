@@ -23,7 +23,7 @@ const JS_EXPORT_INVENTORY = {
   "./js/enhance": ["default", "applyEnhancement", "registerEnhancement"],
   "./js/escape": ["registerEscapeDismissal"],
   "./js/events": ["EVENTS", "ACTUAL_EVENT_PREFIX"],
-  "./js/focus": ["isElementVisible", "getFocusable", "focusFirstDescendant"],
+  "./js/focus": ["isElementVisible", "getFocusable", "nextTabStop", "focusFirstDescendant"],
   "./js/focus-group": ["connectFocusGroup"],
   "./js/keys": ["firstItem", "lastItem", "nextItem", "itemForKey", "shouldIgnoreKey"],
   "./js/menu": [

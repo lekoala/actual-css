@@ -387,9 +387,14 @@ or a direct dialog API call to delegate their commands to Actual.
 
 ### Dismiss command
 
-The runtime includes a generic `--dismiss` command for hiding any resolved
-target. It prevents the trigger's default action, sets `hidden`, and emits a
-bubbling `actual:dismiss` event with the trigger in `event.detail.trigger`.
+The runtime includes a generic `--dismiss` command for hiding the element its
+`commandfor` names; without a resolved target it does nothing. It prevents the
+trigger's default action, sets `hidden`, and emits a bubbling `actual:dismiss`
+event with the trigger in `event.detail.trigger`.
+
+When focus was inside the target, it moves to the next tab stop after the
+target, or to the nearest ancestor with a `tabindex` when nothing follows. A
+listener that places focus itself keeps it.
 On an open surface (flyout, context menu), the surface consumes the event to
 close through its own lifecycle instead of staying hidden — by the time the
 event reaches document listeners, `hidden` has already been lifted again and

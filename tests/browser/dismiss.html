@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dismiss focus fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <main id="main" tabindex="-1" class="stack">
+    <a id="start" href="#start">Start</a>
+
+    <div class="alert" id="first" role="status">
+      <p>First notice.</p>
+      <button class="close" id="close-first" type="button" commandfor="first" command="--dismiss" aria-label="Dismiss"></button>
+    </div>
+    <div class="alert" id="second" role="status">
+      <p>Second notice.</p>
+      <button class="close" id="close-second" type="button" commandfor="second" command="--dismiss" aria-label="Dismiss"></button>
+    </div>
+
+    <!-- Never a successor: disabled, hidden, inert. -->
+    <button id="disabled" type="button" disabled>Disabled</button>
+    <div hidden><a href="#hidden">Hidden</a></div>
+    <div inert><a href="#inert">Inert</a></div>
+
+    <a id="next" href="#next">Next</a>
+
+    <button id="external" class="btn" type="button" commandfor="third" command="--dismiss">Dismiss third</button>
+    <div class="alert" id="third" role="status"><p>Third notice.</p></div>
+
+    <div class="alert" id="last" role="status">
+      <p>Last notice.</p>
+      <button class="close" id="close-last" type="button" commandfor="last" command="--dismiss" aria-label="Dismiss"></button>
+    </div>
+  </main>
+</body>
+</html>

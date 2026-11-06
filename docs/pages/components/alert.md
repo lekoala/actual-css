@@ -140,7 +140,7 @@ center.
 
 ## Dismiss
 
-Add a `.close` button to let a user remove an inline alert. Inside an alert it is compact and at reduced opacity, and it follows the alert's ink with any intent. The runtime `--dismiss` command removes the alert — no custom script.
+Add a `.close` button to let a user remove an inline alert. Inside an alert it is compact and at reduced opacity, and it follows the alert's ink with any intent. Give the alert an `id` and point the button at it with `commandfor` and `command="--dismiss"`: the runtime hides the alert (`hidden`) and moves focus to the next control — no custom script. See [Dismiss command](../guides/progressive-enhancement.md#dismiss-command).
 
 ```html demo
 <div class="alert warning" id="warning-alert">
