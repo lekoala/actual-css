@@ -2,7 +2,7 @@
 
 > One compact choice among a few options, on a shared track with the selected segment raised.
 
-**Related terms:** segmented control, toggle group, pill tabs, view switcher, button group.
+**Related terms:** segmented control, toggle group, pill tabs, view switcher, button group, option list, preset list, vertical radio group.
 
 `.segmented` is the track and each `.segment` a direct child. The look is
 shared; the semantics come from the markup, so pick the anatomy by what the
@@ -57,6 +57,23 @@ runtime unchanged: it reads the roles, not the classes.
   <a class="segment" href="#week">Week</a>
   <a class="segment" href="#month">Month</a>
 </nav>
+```
+
+## Vertical
+
+`.vertical` stacks the segments in one column with their labels at the inline
+start — a preset list (Today, Last 7 days, All time), a settings switcher. It
+changes the layout only. A tablist sets `aria-orientation="vertical"` instead,
+which both stacks it and gives the tabs runtime Up and Down.
+
+```html demo
+<fieldset class="segmented vertical">
+  <legend class="sr-only">Date range</legend>
+  <label class="segment"><input type="radio" name="preset" value="today">Today</label>
+  <label class="segment"><input type="radio" name="preset" value="7d" checked>Last 7 days</label>
+  <label class="segment"><input type="radio" name="preset" value="30d">Last 30 days</label>
+  <label class="segment"><input type="radio" name="preset" value="all">All time</label>
+</fieldset>
 ```
 
 ## When to use something else

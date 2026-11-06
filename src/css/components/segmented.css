@@ -13,7 +13,8 @@
  * fill and focus ring, and the native radio stays visible to carry both.
  *
  * One row of equal shares (grid-auto-columns: 1fr), at least --control-size
- * tall so it lines up with .btn and .input. Labels wrap instead of truncating;
+ * tall so it lines up with .btn and .input; .vertical stacks the segments in
+ * one column instead. Labels wrap instead of truncating;
  * a word longer than its share breaks, so the control never overflows its
  * container. A strip too long for one row is .tabs, which scrolls.
  *
@@ -28,6 +29,9 @@
  * --segmented-fg
  * --segmented-selected-bg
  * --segmented-selected-border
+ *
+ * Internal:
+ * --segment-min-size
  */
 .segmented {
   --segmented-bg: var(--surface-subtle);
@@ -65,8 +69,14 @@
      own min-block-size: a <fieldset> lays its content in an anonymous box
      sized to the content, so a minimum on the track left the segments short.
      A minimum, not a height: a wrapped label grows the whole row. */
-  min-block-size: calc(var(--control-size) - 2 * (var(--segmented-pad) + var(--border-width)));
+  --segment-min-size: calc(var(--control-size) - 2 * (var(--segmented-pad) + var(--border-width)));
+
+  min-block-size: var(--segment-min-size);
+  /* why: the block padding gives a wrapped label room, but must never push
+     one line past the minimum: .compact keeps the 16px font in a 32px control,
+     where a fixed 2px made the track 33px against .btn's 32px. */
   padding: calc(var(--space-10) / 2) var(--space-30);
+  padding-block: clamp(0px, (var(--segment-min-size) - 1lh) / 2, var(--space-10) / 2);
   border: 0;
   border-radius: calc(var(--segmented-radius) - var(--segmented-pad));
   background: transparent;
@@ -85,6 +95,19 @@
     background-color var(--duration),
     color var(--duration),
     box-shadow var(--duration);
+}
+
+/* Vertical: one segment per row, labels at the inline start. .vertical for
+   radios and links, where aria-orientation is not a valid attribute; a
+   vertical tablist already carries aria-orientation (what the tabs runtime
+   reads for Up/Down), so the layout follows it and cannot disagree. */
+.segmented:is(.vertical, [aria-orientation="vertical"]) {
+  grid-auto-flow: row;
+}
+
+.segmented:is(.vertical, [aria-orientation="vertical"]) > .segment {
+  justify-content: flex-start;
+  text-align: start;
 }
 
 .segment > input {

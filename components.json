@@ -666,7 +666,8 @@
     "docs": "https://lekoala.github.io/actual-css/site/components/segmented.html",
     "classes": [
       "segment",
-      "segmented"
+      "segmented",
+      "vertical"
     ],
     "publicHooks": [
       "--segmented-bg",
@@ -676,9 +677,13 @@
       "--segmented-selected-bg",
       "--segmented-selected-border"
     ],
+    "internalHooks": [
+      "--segment-min-size"
+    ],
     "states": [
       "aria-current",
       "aria-disabled",
+      "aria-orientation",
       "aria-selected",
       "checked",
       "disabled"

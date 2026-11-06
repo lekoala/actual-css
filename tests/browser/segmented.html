@@ -52,5 +52,17 @@
     <a class="segment" href="#d" aria-current="page">Day</a>
     <a class="segment" href="#w">Week</a>
   </nav>
+
+  <fieldset class="segmented vertical" id="vertical">
+    <legend class="sr-only">Presets</legend>
+    <label class="segment"><input type="radio" name="preset" value="today">Today</label>
+    <label class="segment"><input type="radio" name="preset" value="week" checked>Last 7 days</label>
+    <label class="segment"><input type="radio" name="preset" value="all">All time</label>
+  </fieldset>
+
+  <div class="segmented" id="vertical-tabs" role="tablist" aria-orientation="vertical" aria-label="Settings">
+    <button class="segment" type="button" role="tab" aria-selected="true">Profile</button>
+    <button class="segment" type="button" role="tab" aria-selected="false" tabindex="-1">Notifications</button>
+  </div>
 </body>
 </html>

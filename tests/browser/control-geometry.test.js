@@ -119,3 +119,44 @@ it("spinner follows its context instead of imposing a size", async () => {
     expect(s.inSm).toBeLessThan(s.inLg);
   });
 });
+
+/* .segmented reaches --control-size through its segments (track padding and
+   border subtracted), so its outer box matches a .btn, .input and .select of
+   the same size, in every density, whichever anatomy carries it. */
+it("segmented matches btn, input and select at each size and density", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const rows = await view.evaluate(`(() => {
+      const anatomies = {
+        radios: '<fieldset class="segmented SIZE"><legend class="sr-only">t</legend><label class="segment"><input type="radio" name="NAME" checked>A</label><label class="segment"><input type="radio" name="NAME">B</label></fieldset>',
+        tabs: '<div class="segmented SIZE" role="tablist" aria-label="t"><button class="segment" type="button" role="tab" aria-selected="true">A</button><button class="segment" type="button" role="tab" aria-selected="false">B</button></div>',
+        links: '<nav class="segmented SIZE" aria-label="t"><a class="segment" href="#a" aria-current="page">A</a><a class="segment" href="#b">B</a></nav>',
+      };
+      const out = [];
+      let n = 0;
+      for (const density of ["", "compact", "spacious"]) {
+        for (const size of ["sm", "", "lg"]) {
+          const host = document.createElement("div");
+          host.className = density;
+          host.style.cssText = "display: flex; align-items: start; gap: 8px";
+          host.innerHTML =
+            '<button class="btn SIZE" type="button">B</button><input class="input SIZE" aria-label="t"><select class="select SIZE" aria-label="t"><option>S</option></select>'.replaceAll("SIZE", size) +
+            Object.values(anatomies).map((html) => html.replaceAll("SIZE", size).replaceAll("NAME", "g" + n++)).join("");
+          document.body.append(host);
+          const [btn, ...rest] = [...host.children].map((el) => el.getBoundingClientRect().height);
+          out.push({ density, size, btn, rest });
+          host.remove();
+        }
+      }
+      return out;
+    })()`);
+    for (const { density, size, btn, rest } of rows) {
+      for (const h of rest) {
+        expect({ density, size, h: Math.round(h * 10) / 10 }).toEqual({
+          density,
+          size,
+          h: Math.round(btn * 10) / 10,
+        });
+      }
+    }
+  });
+});

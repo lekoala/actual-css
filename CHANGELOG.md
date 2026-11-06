@@ -14,6 +14,7 @@
 - `.nav-link`: `--nav-current-bg` and `--nav-current-fg` restyle the current link.
 - `.nav-link`: a default `gap` for icon + label rows.
 - `.nav-list`: a `<summary class="nav-link">` gets a chevron that follows `[open]`, and a nested `.nav-list` is indented (`--nav-list-indent`).
+- `.segmented.vertical` stacks the segments in one column; a segmented tablist with `aria-orientation="vertical"` does the same.
 
 ### Changed
 - `.nav-link`: the current link takes `--text` ink on a fill one step above hover instead of the selected accent; `--state-selected-text` no longer applies to it.
@@ -22,6 +23,8 @@
 ### Fixed
 - `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.
 - `--dismiss`: focus inside the dismissed target moves to the next tab stop instead of staying on the hidden close button.
+- `.segmented` in `.compact` matches the `.btn` height instead of standing 1px taller.
+- `.select` with the customizable picker in `.compact` matches the `.input` height instead of standing 2px taller.
 
 ### Removed
 - Docs: the Ajax forms recipe in the progressive enhancement guide; use `data-enhance="ajax"`.

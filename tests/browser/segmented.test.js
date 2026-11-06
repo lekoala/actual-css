@@ -95,6 +95,32 @@ it("one row of equal shares, control height, legend outside the grid", async () 
   );
 });
 
+it(".vertical and a vertical tablist stack one segment per row, labels at the start", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      for (const id of ["vertical", "vertical-tabs"]) {
+        const t = await view.evaluate(track(id));
+        const tops = t.segments.map((s) => s.top);
+        for (let i = 1; i < tops.length; i++) expect(tops[i]).toBeGreaterThan(tops[i - 1]);
+        for (const s of t.segments) {
+          expect(s.left).toBeCloseTo(t.segments[0].left, 0);
+          expect(s.width).toBeCloseTo(t.segments[0].width, 0);
+        }
+        const starts =
+          await view.evaluate(`[...document.querySelectorAll("#${id} .segment")].map((s) => {
+          const range = document.createRange();
+          range.selectNodeContents(s);
+          return range.getBoundingClientRect().left - s.getBoundingClientRect().left - parseFloat(getComputedStyle(s).paddingInlineStart);
+        })`);
+        // Labels hug the inline start instead of centering in the row.
+        for (const start of starts) expect(start).toBeLessThan(1);
+      }
+    },
+    { artifactName: "segmented-vertical" },
+  );
+});
+
 it("a constrained track wraps its labels and stays inside its container", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),

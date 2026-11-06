@@ -2,6 +2,8 @@
 
 > Inline status messages for confirmations, warnings, and errors, with intents, icons, and action lists.
 
+**Related terms:** banner, callout, notice, inline notification, install prompt, trailing action.
+
 - Supports intent colors.
 - Supports longer text and lists.
 - Links inherit alert color by default.
@@ -103,19 +105,32 @@ intent treatment when the color itself carries the meaning.
 The grid pins `.alert-icon` and `.close` to the outer columns. A
 trailing link or button is content, not anatomy, so it lives in the text column:
 wrap the row in a `.cluster` and push the two ends apart. Same recipe as any
-split / spread row — there is no `.alert-action` class.
+split / spread row — there is no `.alert-action` class. The action sits before
+`.close` on a wide alert and wraps under the message on a narrow one.
 
 The alert aligns its columns to the block start, so a multi-line message keeps
-its icon on the first line. A trailing control makes that row taller than a line
-of text: add `.items-center` to put the icon, the text and the button on one
-center.
+its icon and `.close` on the first line. A trailing control makes a one-line
+row taller than its text: add `.items-center` to put the icon, the text and the
+button on one center. Leave it off when the message can wrap — the icon would
+center on the whole block.
 
 ```html demo
-<div class="alert surface items-center">
-  <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
-  <div class="cluster justify-content-space-between">
-    <strong>New message!</strong>
-    <a class="btn sm outline" href="#">Open</a>
+<div class="stack">
+  <div class="alert surface items-center">
+    <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+    <div class="cluster justify-content-space-between">
+      <strong>New message!</strong>
+      <a class="btn sm outline" href="#">Open</a>
+    </div>
+  </div>
+
+  <div class="alert primary" id="install-alert">
+    <i class="ti ti-download alert-icon" aria-hidden="true"></i>
+    <div class="cluster justify-content-space-between">
+      <p><strong>Recommended</strong> · Install the desktop app for notifications and offline access.</p>
+      <a class="btn sm" href="#">Install app</a>
+    </div>
+    <button class="close" type="button" commandfor="install-alert" command="--dismiss" aria-label="Dismiss"></button>
   </div>
 </div>
 ```
