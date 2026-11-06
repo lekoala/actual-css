@@ -17,10 +17,12 @@
  * --rating-color
  * --rating-empty
  * --rating-star
+ * --rating-star-empty (the empty star's shape; the filled one by default)
  * --rating-value (display: the shown value, fractions allowed)
  * --rating-max (display: the number of stars)
  *
  * Internal:
+ * --rating-shape
  * --rating-fill
  * --rating-direction
  */
@@ -30,10 +32,12 @@
 
 .rating {
   --rating-size: 1.25rem;
-  --rating-gap: 0.1rem;
+  --rating-gap: var(--space-10);
   --rating-color: var(--intent, var(--warning));
   --rating-empty: var(--border);
   --rating-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 2 16 16'%3E%3Cpath d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.783.57-1.838-.196-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z'/%3E%3C/svg%3E");
+  /* An outline here turns the empty stars into a shape cue (see the docs). */
+  --rating-star-empty: var(--rating-star);
 
   display: inline-flex;
   gap: 0;
@@ -44,19 +48,29 @@
   appearance: none;
   flex: 0 0 auto;
   inline-size: calc(var(--rating-size) + var(--rating-gap));
-  block-size: var(--rating-size);
+  /* Taller than the star: the hit area grows, the drawing does not. */
+  block-size: calc(var(--rating-size) + var(--space-20));
   margin: 0;
   border: 0;
   background: var(--rating-empty);
   /* Contiguous radio boxes own hit-testing; the centered mask preserves the
-     star's proportions while leaving a purely visual gap between values. */
-  -webkit-mask: var(--rating-star) center / var(--rating-size) var(--rating-size) no-repeat;
-  mask: var(--rating-star) center / var(--rating-size) var(--rating-size) no-repeat;
+     star's proportions while leaving a purely visual gap between values.
+     A rule that fills a star sets --rating-shape, never mask-image: a state
+     selector outranks the forced-colors mask: none below, and its mask-image
+     would clip the native radio there. */
+  -webkit-mask:
+    var(--rating-shape, var(--rating-star-empty)) center / var(--rating-size) var(--rating-size)
+    no-repeat;
+  mask:
+    var(--rating-shape, var(--rating-star-empty)) center / var(--rating-size) var(--rating-size)
+    no-repeat;
   cursor: pointer;
   transition: background-color var(--duration);
 }
 
 .rating > input[type="radio"]:checked {
+  --rating-shape: var(--rating-star);
+
   background: var(--rating-color);
 }
 
@@ -68,6 +82,8 @@
 .rating > input[type="radio"]:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus);
   outline-offset: var(--focus-outline-offset);
+  --rating-shape: var(--rating-star);
+
   background: var(--rating-color);
 }
 
@@ -75,18 +91,24 @@
    star. The enhancement only adds cumulative checked and hover previews. */
 @supports selector(:has(*)) {
   .rating > input[type="radio"]:has(~ input[type="radio"]:checked) {
+    --rating-shape: var(--rating-star);
+
     background: var(--rating-color);
   }
 
   @media (hover: hover) {
     .rating > input[type="radio"]:not(:disabled):hover,
     .rating > input[type="radio"]:has(~ input[type="radio"]:not(:disabled):hover) {
+      --rating-shape: var(--rating-star);
+
       background: var(--rating-color);
     }
 
     /* A hovered value previews exactly that value: later stars are emptied,
        including a previously checked star beyond the pointer. */
     .rating > input[type="radio"]:not(:disabled):hover ~ input[type="radio"] {
+      --rating-shape: var(--rating-star-empty);
+
       background: var(--rating-empty);
     }
   }
@@ -115,6 +137,29 @@
   mask:
     var(--rating-star) left center / calc(var(--rating-size) + var(--rating-gap)) var(--rating-size)
     repeat-x;
+}
+
+/* The filled share in the filled shape, the rest in the empty one:
+   (filled star ∩ value band) ∪ empty star. With the default empty shape it
+   draws exactly the single layer above. Guarded on purpose: the declaration
+   holds var(), so an engine without composite keywords would not drop it at
+   parse time but invalidate it at computed time, leaving no mask at all — a
+   solid bar. Without it (Chromium before 120), a custom empty shape shows as
+   filled-shape empty stars. */
+@supports (mask-composite: intersect) {
+  .rating[role="img"] {
+    mask:
+      var(--rating-star) left center / calc(var(--rating-size) + var(--rating-gap))
+      var(--rating-size) repeat-x intersect,
+      linear-gradient(
+        var(--rating-direction),
+        #000 var(--rating-fill),
+        transparent var(--rating-fill)
+      )
+      add,
+      var(--rating-star-empty) left center / calc(var(--rating-size) + var(--rating-gap))
+      var(--rating-size) repeat-x;
+  }
 }
 
 /* The fill starts at the inline start; only the direction changes, so the

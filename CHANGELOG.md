@@ -15,10 +15,13 @@
 - `.nav-link`: a default `gap` for icon + label rows.
 - `.nav-list`: a `<summary class="nav-link">` gets a chevron that follows `[open]`, and a nested `.nav-list` is indented (`--nav-list-indent`).
 - `.segmented.vertical` stacks the segments in one column; a segmented tablist with `aria-orientation="vertical"` does the same.
+- `.rating`: `--rating-star-empty` draws empty stars in their own shape, such as an outline, on inputs and read-only displays.
+- Docs: Rating page shows the component in context and with custom star shapes.
 
 ### Changed
 - `.nav-link`: the current link takes `--text` ink on a fill one step above hover instead of the selected accent; `--state-selected-text` no longer applies to it.
 - `.nav-list`: the current-link trait only shows in forced colors; horizontal `.nav-link` gets an underline there.
+- `.rating`: stars sit `--space-10` apart instead of `0.1rem`, and each radio's hit area is `--space-20` taller than its star.
 
 ### Fixed
 - `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.

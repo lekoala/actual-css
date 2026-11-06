@@ -1824,7 +1824,16 @@ test("rating keeps radio order and cumulative fill progressive", () => {
   expect(css).toContain(':hover ~ input[type="radio"]');
   expect(css).toMatch(/\.rating\s*\{[^}]*?gap:\s*0;/s);
   expect(css).toContain("inline-size: calc(var(--rating-size) + var(--rating-gap));");
-  expect(css).toContain("mask: var(--rating-star) center / var(--rating-size)");
+  // An unfilled radio draws the empty shape; each of the four fill rules
+  // (checked, focus, before-checked, hover preview) swaps in the filled one
+  // through --rating-shape, never mask-image: a state rule outranks the
+  // forced-colors mask: none, and its mask-image clipped the native radio.
+  expect(css).toMatch(/\bmask:\s*var\(--rating-shape, var\(--rating-star-empty\)\) center/);
+  expect(css.match(/--rating-shape: var\(--rating-star\);/g)).toHaveLength(4);
+  expect(css).not.toMatch(/^\s*(-webkit-)?mask-image:/m);
+  // The read-only display's composite mask holds var(): unguarded, an engine
+  // without composite keywords invalidates it at computed time (no mask).
+  expect(css).toMatch(/@supports \(mask-composite: intersect\) \{\s*\.rating\[role="img"\]/);
   expect(css).toContain("background: var(--rating-empty);");
   expect(css).toContain("background: var(--rating-color);");
   expect(css).not.toContain("opacity: 0.25");

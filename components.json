@@ -631,10 +631,12 @@
       "--rating-color",
       "--rating-empty",
       "--rating-star",
+      "--rating-star-empty",
       "--rating-value",
       "--rating-max"
     ],
     "internalHooks": [
+      "--rating-shape",
       "--rating-fill",
       "--rating-direction"
     ],
