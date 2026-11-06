@@ -76,9 +76,11 @@
   cursor: pointer;
 }
 
-/* nav-link serves two contracts: plain page navigation (aria-current="page")
-   and scrollspy, which toggles aria-current="location" on the active link.
-   Those two values are the contract; any other, "false" included, is inert.
+/* nav-link serves three contracts: plain page navigation (aria-current="page"),
+   scrollspy, which toggles aria-current="location" on the active link, and
+   section navigation (aria-current="true"): a link whose section holds the
+   current page without being it, as on .tab. Those three values are the
+   contract; any other, "false" included, is inert.
    Selection never changes text metrics: the shared medium weight is kept.
 
    The current link is neutral: full --text ink over a stronger tint of it,
@@ -93,7 +95,7 @@
 
 /* Current last, equal specificity to :hover (0,2,0): a hovered current link
    keeps its current fill. */
-.nav-link:is([aria-current="page"], [aria-current="location"]) {
+.nav-link:is([aria-current="page"], [aria-current="location"], [aria-current="true"]) {
   background: var(--nav-current-bg, var(--surface-subtle));
   color: var(--nav-current-fg, var(--text));
 }
@@ -110,7 +112,7 @@
     color: var(--ui-fg, var(--text));
   }
 
-  .nav-link:is([aria-current="page"], [aria-current="location"]) {
+  .nav-link:is([aria-current="page"], [aria-current="location"], [aria-current="true"]) {
     background: var(--nav-current-bg, color-mix(in oklch, currentColor 18%, transparent));
     color: var(--nav-current-fg, var(--ui-fg, var(--text)));
   }
@@ -186,12 +188,12 @@
    takes an inline-start trait, centered in the link's inline padding with
    rounded ends; a horizontal link an underline. */
 @media (forced-colors: active) {
-  .nav-link:is([aria-current="page"], [aria-current="location"]) {
+  .nav-link:is([aria-current="page"], [aria-current="location"], [aria-current="true"]) {
     text-decoration: underline;
     text-underline-offset: 0.25em;
   }
 
-  .nav-list .nav-link:is([aria-current="page"], [aria-current="location"]) {
+  .nav-list .nav-link:is([aria-current="page"], [aria-current="location"], [aria-current="true"]) {
     text-decoration: none;
   }
 
@@ -201,7 +203,8 @@
     background-color: CanvasText;
   }
 
-  .nav-list .nav-link:is([aria-current="page"], [aria-current="location"])::before {
+  .nav-list
+    .nav-link:is([aria-current="page"], [aria-current="location"], [aria-current="true"])::before {
     content: "";
     position: absolute;
     inset-block: var(--space-20);

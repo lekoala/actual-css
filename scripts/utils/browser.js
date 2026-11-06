@@ -344,7 +344,10 @@ export async function clickSelector(view, selector) {
   return point;
 }
 
-/* `rawKeyDown` + `keyUp` is the CDP pair the tmp/0.11 Tab walkers converge on. */
+/* `rawKeyDown` + `keyUp` is the CDP pair the tmp/0.11 Tab walkers converge on.
+   Enter also needs its `char` event: Chrome activates a button or a link on
+   the keypress, so without it Enter reached keydown handlers but never
+   clicked a native command button (the docs Menu stayed shut). */
 export async function pressKey(view, key = "Tab", { code, windowsVirtualKeyCode, modifiers } = {}) {
   const defaults = { Tab: 9, Enter: 13, Escape: 27, " ": 32 };
   const virtual = windowsVirtualKeyCode ?? defaults[key];
@@ -352,6 +355,9 @@ export async function pressKey(view, key = "Tab", { code, windowsVirtualKeyCode,
   if (virtual !== undefined) event.windowsVirtualKeyCode = virtual;
   if (modifiers !== undefined) event.modifiers = modifiers;
   await view.cdp("Input.dispatchKeyEvent", { type: "rawKeyDown", ...event });
+  if (key === "Enter") {
+    await view.cdp("Input.dispatchKeyEvent", { type: "char", text: "\r", ...event });
+  }
   await view.cdp("Input.dispatchKeyEvent", { type: "keyUp", ...event });
 }
 

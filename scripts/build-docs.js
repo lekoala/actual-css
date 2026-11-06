@@ -20,7 +20,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { render } from "./docs/markdown.js";
 import { loadNavigation } from "./docs/navigation.js";
 import { buildSearchIndex } from "./docs/search.js";
-import { renderHome, renderNavGroups, renderPage } from "./docs/templates.js";
+import { renderDestinations, renderHome, renderNavGroups, renderPage } from "./docs/templates.js";
 import { loadThemes } from "./docs/themes.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -113,7 +113,9 @@ function writePages(navigation, rendered, themes) {
       description: page.description,
       content: result.html,
       toc: result.toc,
-      navGroups: renderNavGroups(navigation, page),
+      navGroups: renderNavGroups(page),
+      destinations: renderDestinations(navigation, page),
+      drawerDestinations: renderDestinations(navigation, page, { icons: true }),
       actualCss: repoAsset(from, join(ROOT, "src", "css", "actual.full.css")),
       themesCss: repoAsset(from, THEMES_BUNDLE),
       docsCss: repoAsset(from, join(CHROME, "docs.css")),

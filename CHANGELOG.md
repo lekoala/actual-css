@@ -13,11 +13,13 @@
 - `actual-css/js/focus`: `nextTabStop(node)` returns the first tab stop after an element, outside it.
 - `.nav-link`: `--nav-current-bg` and `--nav-current-fg` restyle the current link.
 - `.nav-link`: a default `gap` for icon + label rows.
+- `.nav-link`: `aria-current="true"` marks a section link whose section holds the current page, as on `.tab`.
 - `.nav-list`: a `<summary class="nav-link">` gets a chevron that follows `[open]`, and a nested `.nav-list` is indented (`--nav-list-indent`).
 - `.segmented.vertical` stacks the segments in one column; a segmented tablist with `aria-orientation="vertical"` does the same.
 - `.rating`: `--rating-star-empty` draws empty stars in their own shape, such as an outline, on inputs and read-only displays.
 - Docs: Rating page shows the component in context and with custom star shapes.
 - Docs: Anatomy trees on the Rating, Alert, Segmented and Color swatches pages.
+- Docs: six destinations in the header (`destinations` in `docs/navigation.json`); the sidebar lists the current one's groups, the drawer all of them as a grid.
 - Docs: the homepage opens on six working panels composed from the framework (appearance, review, order, invoices, sharing, chat).
 - Docs: Rating page has a required-rating scenario with its field error.
 
@@ -34,6 +36,7 @@
 - `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.
 - `--dismiss`: focus inside the dismissed target moves to the next tab stop instead of staying on the hidden close button.
 - `validation.js`: picking a radio in a required group clears `aria-invalid` on every radio of the group, so its `.field-error` hides.
+- `.drawer`: the body's scrollbar sits on the panel edge and the content keeps `--drawer-pad` on both sides instead of running up to the scrollbar.
 - `.btn.icon-only` stays square beside a full-width control in a `.join` or flex row instead of shrinking.
 - `.segmented` in `.compact` matches the `.btn` height instead of standing 1px taller.
 - `.select` with the customizable picker in `.compact` matches the `.input` height instead of standing 2px taller.

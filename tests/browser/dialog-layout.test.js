@@ -409,3 +409,41 @@ it("reduced motion keeps the transition declarations but collapses the duration"
     },
   );
 });
+
+/* The drawer body's scrollport reaches the panel's inline-end edge, so the
+ * scrollbar sits on the edge and the content keeps the panel padding on both
+ * sides instead of running up to the scrollbar. */
+it("a scrolling drawer body keeps the panel padding on both sides of its content", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        const drawer = document.createElement("dialog");
+        drawer.className = "drawer";
+        drawer.innerHTML = '<header><strong>Menu</strong></header><div><p id="scroll-content">' +
+          "Line. ".repeat(600) + "</p></div>";
+        document.body.append(drawer);
+        drawer.showModal();
+        const panel = drawer.getBoundingClientRect();
+        const body = drawer.children[1];
+        const content = document.getElementById("scroll-content").getBoundingClientRect();
+        const pad = parseFloat(getComputedStyle(drawer).paddingInlineStart);
+        const border = parseFloat(getComputedStyle(drawer).borderInlineEndWidth);
+        return {
+          pad,
+          scrolls: body.scrollHeight > body.clientHeight,
+          bodyEnd: panel.right - border - body.getBoundingClientRect().right,
+          start: content.left - panel.left,
+          // The gap from the content to the scrollbar, or to the edge without one.
+          end: body.getBoundingClientRect().left + body.clientLeft + body.clientWidth - content.right,
+        };
+      })()`);
+
+      expect(result.scrolls).toBe(true);
+      expect(result.bodyEnd).toBeCloseTo(0, 0);
+      expect(result.start).toBeCloseTo(result.pad, 0);
+      expect(result.end).toBeCloseTo(result.pad, 0);
+    },
+    { width: 800, height: 600, artifactName: "drawer-scrollbar-edge" },
+  );
+});

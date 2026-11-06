@@ -156,6 +156,12 @@
      under the header or footer. */
   margin: calc(var(--drawer-focus-bleed) * -1);
   padding: var(--drawer-focus-bleed);
+  /* The scrollport reaches the panel's inline-end edge and takes the panel
+     padding back inside: the scrollbar sits on the edge and the content keeps
+     --drawer-pad on both sides. Inside the content box, the scrollbar sat a
+     focus bleed from the text with the panel padding wasted beyond it. */
+  margin-inline-end: calc(var(--drawer-pad) * -1);
+  padding-inline-end: var(--drawer-pad);
   overflow: auto;
   overscroll-behavior: contain;
 }

@@ -1,4 +1,12 @@
 {
+  "destinations": [
+    { "title": "Get started", "icon": "rocket", "groups": ["guides", "foundations", "examples"] },
+    { "title": "Layout", "icon": "layout-grid", "groups": ["layout"] },
+    { "title": "Components", "icon": "components", "groups": ["components", "patterns"] },
+    { "title": "Forms", "icon": "forms", "groups": ["forms"] },
+    { "title": "Utilities", "icon": "tool", "groups": ["utilities"] },
+    { "title": "Enhancements", "icon": "bolt", "groups": ["enhancements"] }
+  ],
   "groups": [
     {
       "title": "Guides",

@@ -7,8 +7,12 @@
 - Horizontal links live in a `.cluster`; its items are `.nav-link`.
 - `.nav-list` is the shared vertical navigation list, reused by `.drawer` for stacked links.
 - Mark the current page with `aria-current="page"` on the active `.nav-link`,
-  or the current section of the page with `aria-current="location"` (what
-  scrollspy sets). Any other value is inert.
+  the current section of the page with `aria-current="location"` (what
+  scrollspy sets), or a section link whose section holds the current page with
+  `aria-current="true"` (a top bar of site sections). Any other value is inert.
+  Mark one current item per navigation; a header and a sidebar are two
+  navigations, so each has its own — "Components" (`true`) in the header and
+  "Rating" (`page`) in the sidebar.
 
 For a public or normally scrolling page, `.navbar` belongs inside the semantic
 site header. Do not use `.topbar` or `.app-layout` unless the page actually has

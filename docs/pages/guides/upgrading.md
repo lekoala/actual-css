@@ -137,8 +137,8 @@ row, set `--step-min: 7rem` on it.
 
 ### Current links and rows
 
-`.nav-link` shows its current state only for `aria-current="page"` or
-`aria-current="location"`, and `a.list-item` only for `aria-current="page"` or
+`.nav-link` shows its current state only for `aria-current="page"`,
+`aria-current="location"` or `aria-current="true"`, and `a.list-item` only for `aria-current="page"` or
 `aria-current="true"`. Search markup for other values on these classes and
 use the matching one.
 

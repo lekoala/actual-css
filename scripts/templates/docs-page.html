@@ -37,6 +37,12 @@
           <span class="docs-brand-text">Actual CSS</span>
         </a>
 
+        <nav class="docs-destinations" aria-label="Sections">
+          <ul class="cluster">
+{{destinations}}
+          </ul>
+        </nav>
+
         <div class="cluster">
           <label class="docs-theme-field">
             <span class="sr-only">Color scheme</span>
@@ -101,17 +107,22 @@
         <button class="close" type="submit" aria-label="Close navigation"></button>
       </form>
     </header>
-    <div class="docs-drawer-theme">
+    <!-- One body child: the drawer scrolls its single middle track. -->
+    <div class="stack">
       <label class="docs-theme-field">
         <span class="sr-only">Color scheme</span>
         <select class="select" data-docs-theme>
           {{themeOptions}}
         </select>
       </label>
+      <nav class="stack" aria-label="Documentation">
+        <ul class="grid docs-destination-grid">
+{{drawerDestinations}}
+        </ul>
+        <hr>
+{{navGroups}}
+      </nav>
     </div>
-    <nav aria-label="Documentation">
-      {{navGroups}}
-    </nav>
   </dialog>
 
   <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">

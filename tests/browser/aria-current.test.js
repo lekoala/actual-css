@@ -1,6 +1,6 @@
 /*
  * Current states name their aria-current value: "page" or "true" (a flyout
- * section) on .tab, "page" or "location" on .nav-link, "page" or "true" (a
+ * section) on .tab, "page", "location" or "true" (a section) on .nav-link, "page" or "true" (a
  * master/detail item) on .list-item.
  * Any other value — including the "false" React and Vue serialize for a false
  * binding — renders like an absent attribute.

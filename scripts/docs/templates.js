@@ -41,22 +41,60 @@ export function relHref(fromUrl, toUrl) {
   return relative(fromDir, toUrl).replaceAll(sep, "/");
 }
 
-export function renderNavGroups(navigation, current) {
-  return navigation.groups
-    .map((group) => {
-      const links = group.pages
-        .map((page) => {
-          const entry = page.entry;
-          const active = entry === current;
-          const title = escapeHtml(entry.title ?? entry.slug);
-          const href = current ? relHref(current.url, entry.url) : entry.url;
-          return `        <li><a class="nav-link" href="${href}"${active ? ' aria-current="page"' : ""}>${title}</a></li>`;
-        })
-        .join("\n");
-      return `      <p class="docs-nav-group">${escapeHtml(group.title)}</p>
-      <ul class="nav-list">
-${links}
+/*
+ * The current destination's groups only; the header and the drawer grid reach
+ * the others. Several groups become collapsible rows (open), one group is a
+ * plain list: the destination already names it.
+ */
+export function renderNavGroups(current) {
+  if (!current) return "";
+  const link = (entry, indent) => {
+    const active = entry === current;
+    const title = escapeHtml(entry.title ?? entry.slug);
+    return `${indent}<li><a class="nav-link" href="${relHref(current.url, entry.url)}"${active ? ' aria-current="page"' : ""}>${title}</a></li>`;
+  };
+  const { groups } = current.destination;
+
+  if (groups.length === 1) {
+    return `      <ul class="nav-list">
+${groups[0].pages.map((page) => link(page.entry, "        ")).join("\n")}
       </ul>`;
+  }
+
+  const rows = groups
+    .map(
+      (group) => `        <li>
+          <details open>
+            <summary class="nav-link">${escapeHtml(group.title)}</summary>
+            <ul class="nav-list">
+${group.pages.map((page) => link(page.entry, "              ")).join("\n")}
+            </ul>
+          </details>
+        </li>`,
+    )
+    .join("\n");
+  return `      <ul class="nav-list">
+${rows}
+      </ul>`;
+}
+
+/*
+ * Destination links. The one holding the current page takes
+ * aria-current="true", or "page" on its own first page. `icons` adds the
+ * leading glyph the drawer grid shows.
+ */
+export function renderDestinations(navigation, current, { icons = false } = {}) {
+  const from = current?.url ?? "index.html";
+  return navigation.destinations
+    .map((destination) => {
+      const state =
+        current === destination.home
+          ? ' aria-current="page"'
+          : current?.destination === destination
+            ? ' aria-current="true"'
+            : "";
+      const icon = icons ? `<i class="ti ti-${destination.icon}" aria-hidden="true"></i>` : "";
+      return `          <li><a class="nav-link" href="${relHref(from, destination.home.url)}"${state}>${icon}${escapeHtml(destination.title)}</a></li>`;
     })
     .join("\n");
 }
@@ -213,7 +251,8 @@ export function renderHome({
     .replace(/\{\{homeStats\}\}/g, renderHomeStats(themes))
     .replace(/\{\{themeCards\}\}/g, renderThemeCards(themes))
     .replace(/\{\{componentsGrid\}\}/g, renderComponentsGrid(navigation))
-    .replace(/\{\{navGroups\}\}/g, renderNavGroups(navigation, null));
+    .replace(/\{\{destinations\}\}/g, renderDestinations(navigation, null))
+    .replace(/\{\{drawerDestinations\}\}/g, renderDestinations(navigation, null, { icons: true }));
 }
 
 function renderPrev(page) {
@@ -247,6 +286,8 @@ export function renderPage({
   content,
   toc,
   navGroups,
+  destinations,
+  drawerDestinations,
   actualCss,
   themesCss,
   docsCss,
@@ -277,6 +318,8 @@ export function renderPage({
     .replace(/\{\{siteRoot\}\}/g, siteRoot)
     .replace(/\{\{home\}\}/g, home)
     .replace(/\{\{navGroups\}\}/g, navGroups)
+    .replace(/\{\{destinations\}\}/g, destinations)
+    .replace(/\{\{drawerDestinations\}\}/g, drawerDestinations)
     .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
     .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
     .replace(/\{\{content\}\}/g, wrapDocsContent(content))

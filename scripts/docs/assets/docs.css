@@ -88,6 +88,32 @@
   min-inline-size: 0;
 }
 
+.docs-destinations {
+  display: none;
+}
+
+.docs-destinations .cluster {
+  --gap: var(--space-10);
+}
+
+.docs-destinations ul,
+.docs-destination-grid {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Drawer: every destination at a glance, two per row from a 375px phone,
+   one at 320px, where "Enhancements" no longer fits half the body. */
+.docs-destination-grid {
+  --grid-min: 7.5rem;
+  --gap: var(--space-10);
+}
+
+.docs-destination-grid .nav-link {
+  inline-size: 100%;
+}
+
 .docs-nav-group {
   margin: var(--space-40) 0 var(--space-20);
   color: var(--text-muted);
@@ -114,10 +140,6 @@
 }
 
 .docs-drawer-header {
-  margin-block-end: var(--space-30);
-}
-
-.docs-drawer-theme {
   margin-block-end: var(--space-30);
 }
 
@@ -567,9 +589,6 @@
     padding-inline-end: var(--space-20);
   }
 
-  .docs-menu-toggle {
-    display: none;
-  }
 }
 
 /* The header keeps the theme select while the single-row layout has room for
@@ -605,9 +624,19 @@
   }
 }
 
+/* Destinations live in the header from 64rem and in the drawer below it, so
+   Menu stays until then: the sidebar from 56rem lists one destination only. */
 @media (min-width: 64rem) {
   .docs-header-inner {
     --cluster-wrap: nowrap;
+  }
+
+  .docs-destinations {
+    display: block;
+  }
+
+  .docs-menu-toggle {
+    display: none;
   }
 }
 

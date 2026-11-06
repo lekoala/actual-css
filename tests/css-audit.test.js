@@ -16,7 +16,7 @@ function readRules(path) {
 
 /* The .nav-link current state: its two values, as regex source for patterns
    that go on to match the declaration block. */
-const NAV_CURRENT_RE = String.raw`:is\(\[aria-current="page"\], \[aria-current="location"\]\)`;
+const NAV_CURRENT_RE = String.raw`:is\(\[aria-current="page"\], \[aria-current="location"\], \[aria-current="true"\]\)`;
 
 function mediaBodies(source, query) {
   const bodies = [];
@@ -618,8 +618,9 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   expect(css).toMatch(
     /\.nav-link:hover \{[^}]*background: color-mix\(in oklch, currentColor 10%, transparent\);/,
   );
-  // nav-link is deliberately two-valued: page navigation ("page") and
-  // scrollspy ("location") share the current state.
+  // nav-link is deliberately three-valued: page navigation ("page"),
+  // scrollspy ("location") and a section holding the page ("true") share the
+  // current state.
   // The current link is neutral (--text ink over a tint a step above hover),
   // never the brand accent: on light presets the accent sits at 4.5:1 on the
   // page, so a fill strong enough to carry the state pushed it under.
@@ -645,7 +646,8 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   const forced = css.slice(css.indexOf("@media (forced-colors: active)"));
   expect(forced).toMatch(
     new RegExp(
-      `\\.nav-list \\.nav-link${NAV_CURRENT_RE}::before \\{[^}]*border-inline-start: 2px solid currentColor;`,
+      // \s+: the formatter wraps this long selector after `.nav-list`.
+      `\\.nav-list\\s+\\.nav-link${NAV_CURRENT_RE}::before \\{[^}]*border-inline-start: 2px solid currentColor;`,
     ),
   );
   expect(forced).toMatch(
