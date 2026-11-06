@@ -365,6 +365,31 @@
   padding-block: var(--space-50);
 }
 
+/* Homepage showcase: three columns of panels, one at a time on a phone. The
+   minimum fits the invoice table's three columns. */
+.docs-showcase {
+  --grid-min: 20rem;
+
+  align-items: start;
+}
+
+.docs-showcase h3 {
+  font-size: var(--font-size-lg);
+}
+
+/* A tool-call trace inside an answer: a quiet .accordion.flush, secondary to
+   the reply it precedes. Editorial, so local. */
+.docs-showcase .chat .accordion {
+  --accordion-pad: var(--space-10);
+
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.docs-showcase .chat .accordion summary {
+  font-weight: var(--font-weight-normal);
+}
+
 .docs-icon {
   display: inline-grid;
   place-items: center;

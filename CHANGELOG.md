@@ -18,6 +18,7 @@
 - `.rating`: `--rating-star-empty` draws empty stars in their own shape, such as an outline, on inputs and read-only displays.
 - Docs: Rating page shows the component in context and with custom star shapes.
 - Docs: Anatomy trees on the Rating, Alert, Segmented and Color swatches pages.
+- Docs: the homepage opens on six working panels composed from the framework (appearance, review, order, invoices, sharing, chat).
 - Docs: Rating page has a required-rating scenario with its field error.
 
 ### Changed

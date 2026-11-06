@@ -79,6 +79,173 @@
         </div>
       </section>
 
+      <!-- Showcase: real compositions of the framework's own parts. Every
+           visible action works; the script at the end of the page drives the
+           four that need one. Layout is three .stack columns in a .grid, so
+           the panels keep their reading order when the columns collapse. -->
+      <section class="docs-section center stack" aria-labelledby="showcase-title">
+        <h2 id="showcase-title" class="sr-only">Built from the same parts</h2>
+        <div class="grid docs-showcase">
+          <div class="stack">
+            <article class="card stack" id="showcase-appearance" aria-labelledby="showcase-appearance-title">
+              <h3 id="showcase-appearance-title">Appearance</h3>
+              <fieldset class="segmented">
+                <legend class="sr-only">Theme</legend>
+                <label class="segment"><input type="radio" name="showcase-theme" value="light">Light</label>
+                <label class="segment"><input type="radio" name="showcase-theme" value="dark">Dark</label>
+                <label class="segment"><input type="radio" name="showcase-theme" value="" checked>System</label>
+              </fieldset>
+              <fieldset class="field-group flush">
+                <legend>Accent</legend>
+                <div class="cluster">
+                  <label class="color-swatch" style="--color-swatch-value: #7c3aed"><input type="radio" name="showcase-accent" value="violet" aria-label="Violet" checked></label>
+                  <label class="color-swatch" style="--color-swatch-value: #2563eb"><input type="radio" name="showcase-accent" value="blue" aria-label="Blue"></label>
+                  <label class="color-swatch" style="--color-swatch-value: #059669"><input type="radio" name="showcase-accent" value="green" aria-label="Green"></label>
+                  <label class="color-swatch" style="--color-swatch-value: #e11d48"><input type="radio" name="showcase-accent" value="rose" aria-label="Rose"></label>
+                  <label class="color-swatch" style="--color-swatch-value: #111827"><input type="radio" name="showcase-accent" value="ink" aria-label="Ink"></label>
+                </div>
+              </fieldset>
+              <label class="field">
+                <span class="field-label">Text size</span>
+                <input class="range" type="range" min="0" max="4" value="2">
+              </label>
+              <label class="choice">
+                <input class="switch" type="checkbox" role="switch">
+                <span>Reduce motion</span>
+              </label>
+            </article>
+
+            <article class="card stack" aria-labelledby="showcase-order-title">
+              <div class="cluster justify-content-space-between">
+                <h3 id="showcase-order-title">Order #1042</h3>
+                <span class="badge soft primary">Shipped</span>
+              </div>
+              <ol class="steps steps-horizontal">
+                <li class="step-complete"><span class="step-label">Placed</span></li>
+                <li class="step-complete"><span class="step-label">Packed</span></li>
+                <li aria-current="step"><span class="step-label">Shipped</span></li>
+                <li><span class="step-label">Arrived</span></li>
+              </ol>
+              <p class="muted">Arrives Thursday, 14 November.</p>
+            </article>
+          </div>
+
+          <div class="stack">
+            <form class="card stack" id="showcase-review" aria-labelledby="showcase-review-title">
+              <h3 id="showcase-review-title">Rate this release</h3>
+              <fieldset class="field-group flush">
+                <legend>Your rating</legend>
+                <div class="rating">
+                  <input type="radio" name="showcase-rating" value="1" aria-label="1 star">
+                  <input type="radio" name="showcase-rating" value="2" aria-label="2 stars">
+                  <input type="radio" name="showcase-rating" value="3" aria-label="3 stars">
+                  <input type="radio" name="showcase-rating" value="4" aria-label="4 stars" checked>
+                  <input type="radio" name="showcase-rating" value="5" aria-label="5 stars">
+                </div>
+              </fieldset>
+              <fieldset class="field-group flush">
+                <legend>What stood out</legend>
+                <div class="cluster tight">
+                  <label class="choice-card chip"><input type="checkbox" name="showcase-tags" value="docs" checked>Docs</label>
+                  <label class="choice-card chip"><input type="checkbox" name="showcase-tags" value="theming">Theming</label>
+                  <label class="choice-card chip"><input type="checkbox" name="showcase-tags" value="size">Bundle size</label>
+                  <label class="choice-card chip"><input type="checkbox" name="showcase-tags" value="a11y">Accessibility</label>
+                </div>
+              </fieldset>
+              <label class="field">
+                <span class="field-label">Anything else?</span>
+                <textarea class="textarea" name="showcase-comment" rows="2"></textarea>
+              </label>
+              <div class="cluster">
+                <button class="btn primary" type="submit">Send feedback</button>
+              </div>
+              <p class="alert success" role="status" hidden>Thanks! Nothing was sent: this page has no server.</p>
+            </form>
+
+            <article class="card stack" aria-labelledby="showcase-share-title">
+              <h3 id="showcase-share-title">Share project</h3>
+              <ul class="list">
+                <li class="list-item">
+                  <span class="avatar sm"><abbr title="Ada Morgan">AM</abbr></span>
+                  <span class="list-item-content">
+                    <strong class="list-item-title">Ada Morgan</strong>
+                    <span class="list-item-text">ada@example.com</span>
+                  </span>
+                  <span class="list-item-trailing muted">Owner</span>
+                </li>
+                <li class="list-item">
+                  <span class="avatar sm"><abbr title="Lin Chen">LC</abbr></span>
+                  <span class="list-item-content">
+                    <strong class="list-item-title">Lin Chen</strong>
+                    <span class="list-item-text">lin@example.com</span>
+                  </span>
+                  <span class="list-item-trailing">
+                    <select class="select sm fit" aria-label="Lin Chen's access">
+                      <option>Edit</option>
+                      <option selected>View</option>
+                    </select>
+                  </span>
+                </li>
+              </ul>
+              <div class="cluster justify-content-space-between">
+                <span class="muted">Anyone with the link can view.</span>
+                <button class="btn sm outline" type="button" id="showcase-copy">Copy link</button>
+              </div>
+            </article>
+          </div>
+
+          <div class="stack">
+            <article class="card stack" id="showcase-invoices" aria-labelledby="showcase-invoices-title">
+              <h3 id="showcase-invoices-title">Invoices</h3>
+              <div class="table-wrap">
+                <table class="table">
+                  <thead>
+                    <tr><th scope="col">Invoice</th><th scope="col">Amount</th><th scope="col">Status</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>INV-1048</td><td>€1,200</td><td><span class="badge soft success">Paid</span></td></tr>
+                    <tr><td>INV-1047</td><td>€640</td><td><span class="badge soft warning">Due</span></td></tr>
+                    <tr><td>INV-1046</td><td>€2,310</td><td><span class="badge soft success">Paid</span></td></tr>
+                  </tbody>
+                  <tbody hidden>
+                    <tr><td>INV-1045</td><td>€980</td><td><span class="badge soft danger">Overdue</span></td></tr>
+                    <tr><td>INV-1044</td><td>€410</td><td><span class="badge soft success">Paid</span></td></tr>
+                    <tr><td>INV-1043</td><td>€1,575</td><td><span class="badge soft success">Paid</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <nav aria-label="Invoice pages">
+                <ol class="pagination sm">
+                  <li><button class="btn ghost" type="button" aria-current="page" aria-label="Page 1">1</button></li>
+                  <li><button class="btn ghost" type="button" aria-label="Page 2">2</button></li>
+                </ol>
+              </nav>
+            </article>
+
+            <article class="card stack" aria-labelledby="showcase-chat-title">
+              <h3 id="showcase-chat-title">Ask the docs</h3>
+              <div class="stack" aria-label="Conversation">
+                <div class="chat chat-end">
+                  <div class="chat-bubble primary">How do I put one button left and one right?</div>
+                </div>
+                <div class="chat chat-start">
+                  <div class="chat-bubble stack">
+                    <div class="accordion flush">
+                      <details>
+                        <summary>Searched the docs: “split row”</summary>
+                        <p>layout/cluster.md · utilities/flex.md</p>
+                      </details>
+                    </div>
+                    <p>A <code>.cluster</code> with <code>justify-content-space-between</code>: the two ends split the row and wrap on a phone.</p>
+                  </div>
+                </div>
+                <span class="shimmer" role="status">Checking the examples…</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section class="docs-section center" aria-label="At a glance">
         <div class="grid docs-stats">
 {{homeStats}}
@@ -422,6 +589,51 @@
       <p class="muted">A native <code>&lt;dialog&gt;</code> side-sheet, opened with the <code>command</code> attribute.</p>
     </div>
   </dialog>
+
+  <!-- Showcase behaviour: page-local, so no panel looks usable and does
+       nothing. Nothing leaves the page. -->
+  <script>
+    (() => {
+      const appearance = document.getElementById("showcase-appearance");
+      // A data-theme island: the panel previews the scheme, the page keeps its own.
+      appearance?.addEventListener("change", (event) => {
+        if (event.target.name !== "showcase-theme") return;
+        if (event.target.value) appearance.dataset.theme = event.target.value;
+        else delete appearance.dataset.theme;
+      });
+
+      const review = document.getElementById("showcase-review");
+      review?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        review.querySelector('[role="status"]').hidden = false;
+      });
+
+      const invoices = document.getElementById("showcase-invoices");
+      invoices?.querySelector(".pagination").addEventListener("click", (event) => {
+        const button = event.target.closest("button");
+        if (!button) return;
+        const buttons = [...invoices.querySelectorAll(".pagination button")];
+        const pages = invoices.querySelectorAll("tbody");
+        for (const [i, other] of buttons.entries()) {
+          const current = other === button;
+          if (current) other.setAttribute("aria-current", "page");
+          else other.removeAttribute("aria-current");
+          pages[i].hidden = !current;
+        }
+      });
+
+      const copy = document.getElementById("showcase-copy");
+      copy?.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(location.href);
+          copy.textContent = "Copied";
+          setTimeout(() => (copy.textContent = "Copy link"), 1500);
+        } catch {
+          // Clipboard unavailable (file://, permissions): keep the label.
+        }
+      });
+    })();
+  </script>
 </body>
 
 </html>
