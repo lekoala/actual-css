@@ -101,11 +101,11 @@
    radios and links, where aria-orientation is not a valid attribute; a
    vertical tablist already carries aria-orientation (what the tabs runtime
    reads for Up/Down), so the layout follows it and cannot disagree. */
-.segmented:is(.vertical, [aria-orientation="vertical"]) {
+.segmented:is(.vertical, :where([aria-orientation="vertical"])) {
   grid-auto-flow: row;
 }
 
-.segmented:is(.vertical, [aria-orientation="vertical"]) > .segment {
+.segmented:is(.vertical, :where([aria-orientation="vertical"])) > .segment {
   justify-content: flex-start;
   text-align: start;
 }

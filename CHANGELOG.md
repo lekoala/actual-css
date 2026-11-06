@@ -26,6 +26,15 @@
 - Docs: six destinations in the header (`destinations` in `docs/navigation.json`); the sidebar lists the current one's groups, the drawer all of them as a grid.
 - Docs: the homepage opens on six working panels composed from the framework (appearance, review, order, invoices, sharing, chat).
 - Docs: Rating page has a required-rating scenario with its field error.
+- `.flyout.scrollable`: the header and footer stay in view while the one body region scrolls.
+- Docs: Table "Sticky headers" — a header stuck to the page, and a header row and first column stuck in a scroll box.
+- Docs: Empty State pattern, with the no-results case returning focus to the search field.
+- Docs: Stat pattern — label, value, detail and a signed trend, inverted when lower is better.
+- Docs: Column Layout "Uneven feature grids" for bento and mosaic layouts with `grid-row`.
+- Docs: Accessibility page shows a label hidden on narrow screens only, with the `.sr-only` declarations in a media query.
+- Docs: product-wide density is `class="compact"` on `<html>`.
+- Docs: `.join` takes `role="group"` only for several controls acting as a set, not for an input with one attached button.
+- Docs: Flyout "Panel with actions" — a named `<form>` flyout, and closing a validating form with `closeSurface()` from its success path.
 
 ### Changed
 - `.nav-link`: the current link takes `--text` ink on a fill one step above hover instead of the selected accent; `--state-selected-text` no longer applies to it.

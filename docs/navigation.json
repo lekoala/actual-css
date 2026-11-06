@@ -129,7 +129,9 @@
         "hierarchical-nav",
         "code-block",
         "exclusive-accordion",
-        "intent-nesting"
+        "intent-nesting",
+        "empty-state",
+        "stat"
       ]
     },
     {

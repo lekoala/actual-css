@@ -2,25 +2,26 @@
 
 > Positioned surface attached to a trigger, commonly used for action lists and small panels.
 
-**Related terms:** popover, dropdown, dropdown menu, action menu, context menu, bottom sheet, action sheet, anchored panel.
+**Related terms:** popover, dropdown, dropdown menu, action menu, context menu, bottom sheet, action sheet, anchored panel, filter panel, sticky footer, apply button.
 
 ## Class reference
 
-| Class             | Kind        | Description                                 |
-| ----------------- | ----------- | ------------------------------------------- |
-| `.flyout-trigger` | Composition | Positioning wrapper for trigger and panel.  |
-| `.stretch`        | Modifier    | Spans a `.flyout-trigger` to its container. |
-| `.flyout`         | Component   | Floating surface, positioned by JavaScript. |
-| `.menu`           | Component   | Action-list primitive.                      |
-| `.menu-item`      | Component   | One action row; joins roving focus.         |
-| `.menu-item-icon` | Slot        | Fixed leading column for an icon.           |
-| `.menu-item-text` | Slot        | Flexible label column; truncates.           |
-| `.menu-item-end`  | Slot        | Trailing shortcut, badge or status.         |
+| Class             | Kind        | Description                                    |
+| ----------------- | ----------- | ---------------------------------------------- |
+| `.flyout-trigger` | Composition | Positioning wrapper for trigger and panel.     |
+| `.stretch`        | Modifier    | Spans a `.flyout-trigger` to its container.    |
+| `.flyout`         | Component   | Floating surface, positioned by JavaScript.    |
+| `.scrollable`     | Modifier    | Header and footer stay while the body scrolls. |
+| `.menu`           | Component   | Action-list primitive.                         |
+| `.menu-item`      | Component   | One action row; joins roving focus.            |
+| `.menu-item-icon` | Slot        | Fixed leading column for an icon.              |
+| `.menu-item-text` | Slot        | Flexible label column; truncates.              |
+| `.menu-item-end`  | Slot        | Trailing shortcut, badge or status.            |
+| `.menu-label`     | Variant     | Muted, non-interactive group heading.          |
+| `.menu-separator` | Variant     | Divider between menu groups (`<hr>`).          |
+| `.sm` / `.lg`     | Size        | Smaller or larger menu rows and type.          |
 
 `.menu` has a strict `.menu > li > .menu-item` anatomy.
-| `.menu-label`     | Variant     | Muted section heading inside a menu; not interactive.                |
-| `.menu-separator` | Variant     | Divider between menu groups (`<hr>`).                               |
-| `.sm` / `.lg`     | Size        | Smaller or larger menu rows and type.                                |
 
 ## Usage
 
@@ -430,6 +431,74 @@ a separate `dialog.drawer` when the content needs a modal mobile presentation.
     </li>
   </ul>
 </nav>
+```
+
+## Panel with actions
+
+A filter, picker or quick-edit panel with an Apply row: a `<form>` as the
+flyout, named by its visible title. A named form is a landmark, which is the
+name the panel needs; do not add `role="dialog"`, since the flyout runtime is
+not a non-modal dialog manager. Use `data-flyout-auto-close="outside"` so
+clicks inside the form keep it open.
+
+Add `.scrollable` to keep the header and footer in view while the body
+scrolls: a long option list, or a panel the positioner squeezes near the
+viewport edge, keeps its Apply button on screen. The panel takes a `<header>`,
+one body region and a `<footer>`; a menu or a multi-section nav panel has no
+single body and stays without it. Columns go inside the body.
+
+```html demo
+<div class="flyout-trigger">
+  <button class="btn outline"
+          type="button"
+          data-enhance="flyout"
+          aria-expanded="false"
+          aria-controls="issue-filters">
+    <i class="ti ti-filter" aria-hidden="true"></i>
+    Filters
+  </button>
+
+  <form class="flyout scrollable"
+        id="issue-filters"
+        aria-labelledby="issue-filters-title"
+        data-flyout-auto-close="outside"
+        style="--flyout-pad: var(--space-30)"
+        hidden>
+    <header><strong id="issue-filters-title">Labels</strong></header>
+    <div class="stack">
+      <label><input type="checkbox" name="label" value="bug"> Bug</label>
+      <label><input type="checkbox" name="label" value="feature"> Feature</label>
+      <label><input type="checkbox" name="label" value="docs"> Docs</label>
+      <label><input type="checkbox" name="label" value="chore"> Chore</label>
+      <label><input type="checkbox" name="label" value="security"> Security</label>
+      <label><input type="checkbox" name="label" value="performance"> Performance</label>
+      <label><input type="checkbox" name="label" value="design"> Design</label>
+      <label><input type="checkbox" name="label" value="infra"> Infra</label>
+      <label><input type="checkbox" name="label" value="release"> Release</label>
+      <label><input type="checkbox" name="label" value="question"> Question</label>
+      <label><input type="checkbox" name="label" value="support"> Support</label>
+      <label><input type="checkbox" name="label" value="triage"> Needs triage</label>
+    </div>
+    <footer class="cluster justify-content-end">
+      <button class="btn ghost sm" type="reset">Reset</button>
+      <button class="btn primary sm" type="button" data-flyout-close>Apply</button>
+    </footer>
+  </form>
+</div>
+```
+
+`data-flyout-close` closes on click, before the form validates or submits.
+That suits a panel applying local values, as above. A form that validates or
+saves keeps the control a plain submit button and closes from its success
+path, so an invalid field or a failed save leaves the panel open:
+
+```js
+import { closeSurface } from "actual-css/js/surface";
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (await save(new FormData(form))) closeSurface(form);
+});
 ```
 
 ## Context menu

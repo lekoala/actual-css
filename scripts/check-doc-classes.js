@@ -46,6 +46,7 @@ const DOC_DEMO_CLASSES = new Set([
   "site-links",
   "site-menu",
   "tertiary",
+  "toolbar-label",
 ]);
 
 /* Pages whose snippets deliberately show another framework's vocabulary

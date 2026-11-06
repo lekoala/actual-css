@@ -195,7 +195,10 @@ export function analyzeCss(root) {
    * keep, easy for an innocent refactor to drop.
    */
   for (const file of files) {
-    for (const prelude of selectorPreludes(readFileSync(file, "utf8"))) {
+    // Comments are stripped: a ")" in the prose above a rule was counted as
+    // closing its :where() and failed a wrapped selector.
+    const uncommented = readFileSync(file, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    for (const prelude of selectorPreludes(uncommented)) {
       for (const match of prelude.matchAll(/\[aria-orientation/g)) {
         const before = prelude.slice(0, match.index);
         const opened = (before.match(/:where\(/g) ?? []).length;

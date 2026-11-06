@@ -197,7 +197,7 @@ root; keyboard focus and an open custom select keep it.
 - For a switch, use `class="switch"` and `role="switch"`.
 - `.range` skins the native range control (`appearance: none` track, thumb, and focus ring). Add `data-enhance="range"` for the fill share, named `datalist` values, and output sync.
 - `.form-actions` is the role of a `.cluster` row (`class="cluster form-actions"`) and carries no outer margin: `.stack` on the form spaces it from the fields. It is class-only and may live inside or outside `<form>`. See Detached Actions below.
-- `.join` visually joins adjacent controls into a single unit. Use `.join-addon` for static prefix/suffix content. The container still carries `role="group"` for accessibility.
+- `.join` visually joins adjacent controls into a single unit. Use `.join-addon` for static prefix/suffix content. The container carries `role="group"` and a label only when it holds several controls acting as a set.
 
 ## Optional automatic required marks
 

@@ -2,6 +2,9 @@
 
 Text hidden visually but still available to assistive technology.
 
+**Related terms:** visually hidden, screen-reader text, hide label on mobile,
+icon-only on small screens.
+
 ## Class reference
 
 | Class      | Kind    | Description                                                     |
@@ -19,19 +22,38 @@ Use `.sr-only` for text that should be available to assistive technology but vis
 </button>
 ```
 
+### Hidden on narrow screens only
+
+A toolbar label that shows beside its icon on wide screens and stays only as
+the accessible name on narrow ones. `.sr-only` has no responsive variant:
+repeat its declarations in your own query. Never use `display: none`, which
+removes the name too.
+
 ```css
-.sr-only {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+@media (width < 48rem) {
+  .toolbar-label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
 }
 ```
+
+```html
+<button class="btn ghost" type="button">
+  <i class="ti ti-download" aria-hidden="true"></i>
+  <span class="toolbar-label">Export</span>
+</button>
+```
+
+The hidden text is positioned absolutely, so give it a positioned ancestor
+inside any scroll container, as `.table-wrap` does.
 
 ## Touch targets
 

@@ -9,6 +9,9 @@ are a collection, a known density, peers that switch together, or a main region
 with an aside, one of the other primitives already says so — and says it with
 intrinsic responsive behavior this one does not have.
 
+**Related terms:** twelve-column grid, bento, bento grid, mosaic, uneven
+feature grid, offset column.
+
 ```css
 .article-main {
   --column-span: 8;
@@ -110,6 +113,23 @@ guarantee. This is the case no other primitive can replace.
 Both sections use start 3 and span 8, so their content shares a left edge and
 an alignment gutter without a wrapping grid. In an application, give that pair
 one class and reuse it.
+
+## Uneven feature grids
+
+A bento or mosaic layout is spans plus a row span. The canvas places columns;
+`grid-row` on the region adds the height, as plain CSS Grid.
+
+```html demo
+<div class="column-layout">
+  <article class="card" style="--column-span: 6; grid-row: span 2">Featured — 6 columns, 2 rows</article>
+  <article class="card" style="--column-span: 6">6</article>
+  <article class="card" style="--column-span: 3">3</article>
+  <article class="card" style="--column-span: 3">3</article>
+</div>
+```
+
+Give the tiles a class and recompose them in your container query like any
+other region.
 
 ## The responsive contract
 
@@ -215,14 +235,8 @@ its track. Define a narrow representation where the composition needs one.
 
 The primitive is horizontal only. There are no row, area, or order hooks, and no
 breakpoint variants — those would move responsive strategy back into markup.
-For genuinely two-dimensional placement, use CSS Grid directly on your own
-class:
-
-```css
-.dashboard-summary {
-  grid-row: 1 / span 2;
-}
-```
+Row placement is plain CSS Grid on your own class, as in
+[uneven feature grids](#uneven-feature-grids).
 
 The column count is fixed at twelve and is not configurable. Twelve is what
 makes the coordinates shared and lets `6 + 6`, `4 + 4 + 4`, `3 + 3 + 3 + 3`,

@@ -11,6 +11,9 @@
  * Runtime marker (managed by surface.js): .is-open marks an open flyout.
  * --surface-anchor-width is set by surface.js while an open flyout is positioned.
  *
+ * Modifier: .scrollable keeps a header and footer in view while the one body
+ * region between them scrolls.
+ *
  * Public hooks:
  * --flyout-inline-size
  * --flyout-max-inline-size
@@ -18,6 +21,7 @@
  *
  * Internal:
  * --menu-item-size (derived from --control-size for menu rows)
+ * --flyout-focus-bleed (focus reserve of the .scrollable body)
  * --available-height (measured by the positioner)
  * --surface-anchor-width (measured by surface.js)
  */
@@ -166,6 +170,39 @@
 
 .flyout > section > ul > li {
   margin: 0;
+}
+
+/* .scrollable: the .modal.scrollable contract on a panel with a header, one
+   body and a footer — the header and footer keep their size and the body
+   absorbs the overflow, so an Apply row stays in view however long the list
+   or however little room the positioner leaves. Opt-in, because a menu or a
+   multi-section nav panel has no single body to scroll. :where() keeps the
+   display at .flyout's weight, so [hidden] and the closed popover still win
+   whatever the source order. */
+.flyout:where(.scrollable) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.flyout.scrollable > :is(header, footer) {
+  flex: none;
+}
+
+.flyout.scrollable > :not(:is(header, footer)) {
+  /* Declared here, not as a :root alias: an inherited alias arrives already
+     computed, so a --focus-ring-width override on the panel would not reach
+     it. */
+  --flyout-focus-bleed: calc(var(--focus-outline-offset) + var(--focus-ring-width));
+
+  flex: 1 1 auto;
+  min-block-size: 0;
+  /* Keep focus paint inside the clip without moving the content: the reserve
+     reaches into the panel gap and padding, both --space-10 by default. */
+  margin: calc(var(--flyout-focus-bleed) * -1);
+  padding: var(--flyout-focus-bleed);
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 /* Vertical dividers — .menu-separator (menu.css) is the canonical way to

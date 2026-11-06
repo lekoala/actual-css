@@ -149,6 +149,9 @@ and collapses the shared edges.
 </div>
 ```
 
+Name a button group with `role="group"` and a label; an input with one
+attached button takes neither (see [joined controls](../forms/joined-controls.md)).
+
 Use the same variant across a group. Change a button's variant to mark a
 meaningful state, such as a solid pressed [toggle](#toggle) among outlines.
 For one choice among a few on a shared track, use a

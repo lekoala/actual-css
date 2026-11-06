@@ -98,6 +98,75 @@ table width before the wrapper scrolls horizontally.
 </div>
 ```
 
+## Sticky headers
+
+Frozen header row, fixed header, frozen first column. `.table-wrap` scrolls
+horizontally, which makes it a scroll container on both axes: a sticky
+`thead` sticks inside the wrap, never to the page. Pick the scroller first.
+
+**Header stuck to the page.** `overflow: clip` keeps the wrap's rounded clip
+without making it a scroll container, so the header sticks to the page. The
+wrap no longer scrolls: use it for a table that fits its column.
+
+```css
+.members-table {
+  overflow: clip;
+}
+
+.members-table thead th {
+  position: sticky;
+  inset-block-start: 0; /* the height of a sticky page header, if any */
+  background: var(--table-header-bg, var(--surface-subtle));
+  box-shadow: inset 0 calc(var(--border-width) * -1) var(--border);
+}
+```
+
+**Header and first column stuck in a scroll box.** Give the wrap a block size;
+the header row sticks to its top and the row headers to its inline start.
+
+```css
+.revenue-table {
+  max-block-size: 24rem;
+  overflow: auto;
+}
+
+.revenue-table thead th {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  background: var(--table-header-bg, var(--surface-subtle));
+  box-shadow: inset 0 calc(var(--border-width) * -1) var(--border);
+}
+
+.revenue-table thead th:first-child {
+  inset-inline-start: 0;
+  z-index: 2;
+}
+
+.revenue-table tbody th {
+  position: sticky;
+  inset-inline-start: 0;
+  background: var(--surface-raised);
+}
+
+.revenue-table tbody tr:hover > th {
+  background-image: linear-gradient(var(--hover-overlay), var(--hover-overlay));
+}
+
+.revenue-table th[scope="rowgroup"] > span {
+  position: sticky;
+  inset-block-start: 3rem; /* below the header row */
+}
+```
+
+- Sticky cells need an opaque fill, or the rows scroll through them. The fill
+  also hides the row's hover band, so the hover rule repaints it on the cell.
+- A collapsed border stays with the table, not the cell: the header's rule is
+  an inset shadow so it travels with the row.
+- A row-group label (`th scope="rowgroup"` with `rowspan`) cannot stick as a
+  cell; wrap its text, and the wrapper sticks inside the spanning cell.
+- Keep `role="region"`, `aria-labelledby` and `tabindex="0"` on the scroll box.
+
 ## Compact tables
 
 `.compact` lowers cell padding and establishes compact density for controls or

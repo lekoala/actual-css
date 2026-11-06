@@ -15,7 +15,12 @@ choice among a few on a shared track, use a
 | `.join`       | Composition | Joins adjacent controls into a single unit. |
 | `.join-addon` | Composition | Static prefix or suffix content.            |
 
-Add `.join` to the wrapper that groups the controls. Use `.join-addon` for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`. The wrapper should still carry `role="group"` with a label for accessibility.
+Add `.join` to the wrapper that groups the controls. Use `.join-addon` for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`.
+
+Give the wrapper `role="group"` and a label when it holds several controls
+that act as a set, such as a button group. A labelled input with an addon or
+one attached button takes no group role: the field label already names the
+input, and the group would repeat it.
 
 Each child keeps its own variant. Use the same variant across the group, and
 change it only to mark state, such as a solid pressed toggle among outlines.
@@ -25,8 +30,8 @@ controls it groups so joined corners take precedence.
 
 ```html demo
 <div class="field">
-  <label class="field-label" id="amount-label" for="amount">Amount</label>
-  <div class="join" role="group" aria-labelledby="amount-label">
+  <label class="field-label" for="amount">Amount</label>
+  <div class="join">
     <span class="join-addon">$</span>
     <input class="input" id="amount" name="amount" inputmode="decimal" />
     <button class="btn outline" type="button">Clear</button>

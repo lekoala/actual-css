@@ -383,6 +383,7 @@
       "flyout",
       "flyout-trigger",
       "is-open",
+      "scrollable",
       "stretch"
     ],
     "publicHooks": [
@@ -392,6 +393,7 @@
     ],
     "internalHooks": [
       "--menu-item-size",
+      "--flyout-focus-bleed",
       "--available-height",
       "--surface-anchor-width"
     ],

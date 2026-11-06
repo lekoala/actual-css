@@ -166,7 +166,8 @@ inside them. `.sm` on a plain element has no effect.
 
 Density affects controls and layout spacing. Badges, avatars, spinners,
 ratings, keys, prose, and inline choices keep their own size. One density
-class applies to the whole subtree:
+class applies to the whole subtree; for a product-wide density, put
+`class="compact"` on `<html>`:
 
 ```html demo
 <div class="compact stack">

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flyout scrollable fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+  <style>
+    body { margin: 0; padding: var(--space-40); }
+    .row { display: flex; gap: var(--space-60); }
+    /* Pinned to the viewport bottom: the positioner has to place the panel
+       above and cap it with --available-height. */
+    .bottom { position: fixed; inset-block-end: var(--space-40); inset-inline-start: var(--space-40); }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <div class="flyout-trigger">
+      <button class="btn outline" type="button" id="t-short" data-enhance="flyout"
+              aria-expanded="false" aria-controls="short">Short</button>
+      <form class="flyout scrollable" id="short" aria-label="Status filter"
+            data-flyout-auto-close="outside" style="--flyout-pad: var(--space-30)" hidden>
+        <header><strong>Status</strong></header>
+        <div class="stack">
+          <label><input type="checkbox"> Open</label>
+          <label><input type="checkbox"> Closed</label>
+        </div>
+        <footer class="cluster justify-content-end">
+          <button class="btn primary sm" type="button" data-flyout-close>Apply</button>
+        </footer>
+      </form>
+    </div>
+
+    <div class="flyout-trigger">
+      <button class="btn outline" type="button" id="t-long" data-enhance="flyout"
+              aria-expanded="false" aria-controls="long">Long</button>
+      <form class="flyout scrollable" id="long" aria-label="Owner filter"
+            data-flyout-auto-close="outside" style="--flyout-pad: var(--space-30)" hidden>
+        <header><strong>Owner</strong></header>
+        <div class="stack">
+          <label><input type="checkbox"> Alice</label>
+          <label><input type="checkbox"> Bob</label>
+          <label><input type="checkbox"> Carol</label>
+          <label><input type="checkbox"> Dave</label>
+          <label><input type="checkbox"> Erin</label>
+          <label><input type="checkbox"> Frank</label>
+          <label><input type="checkbox"> Grace</label>
+          <label><input type="checkbox"> Heidi</label>
+          <label><input type="checkbox"> Ivan</label>
+          <label><input type="checkbox"> Judy</label>
+          <label><input type="checkbox"> Mallory</label>
+          <label><input type="checkbox"> Niaj</label>
+          <label><input type="checkbox"> Olivia</label>
+          <label><input type="checkbox"> Peggy</label>
+          <label><input type="checkbox"> Rupert</label>
+          <label><input type="checkbox" id="long-last"> Sybil</label>
+        </div>
+        <footer class="cluster justify-content-end">
+          <button class="btn primary sm" type="button" data-flyout-close>Apply</button>
+        </footer>
+      </form>
+    </div>
+
+    <!-- Control: the same panel without .scrollable scrolls as a whole. -->
+    <div class="flyout-trigger">
+      <button class="btn outline" type="button" id="t-plain" data-enhance="flyout"
+              aria-expanded="false" aria-controls="plain">Plain</button>
+      <div class="flyout" id="plain" aria-label="Plain panel" hidden>
+        <section>
+          <ul>
+            <li><a href="#a">Link 1</a></li><li><a href="#a">Link 2</a></li>
+            <li><a href="#a">Link 3</a></li><li><a href="#a">Link 4</a></li>
+            <li><a href="#a">Link 5</a></li><li><a href="#a">Link 6</a></li>
+            <li><a href="#a">Link 7</a></li><li><a href="#a">Link 8</a></li>
+            <li><a href="#a">Link 9</a></li><li><a href="#a">Link 10</a></li>
+            <li><a href="#a">Link 11</a></li><li><a href="#a">Link 12</a></li>
+            <li><a href="#a">Link 13</a></li><li><a href="#a">Link 14</a></li>
+          </ul>
+        </section>
+        <footer><a href="#a" class="btn primary">See all</a></footer>
+      </div>
+    </div>
+  </div>
+
+  <div class="flyout-trigger bottom">
+    <button class="btn outline" type="button" id="t-bottom" data-enhance="flyout"
+            aria-expanded="false" aria-controls="bottom">Near bottom</button>
+    <form class="flyout scrollable" id="bottom" aria-label="Label filter"
+          data-flyout-auto-close="outside" style="--flyout-pad: var(--space-30)" hidden>
+      <header><strong>Labels</strong></header>
+      <div class="stack">
+        <label><input type="checkbox"> Bug</label>
+        <label><input type="checkbox"> Feature</label>
+        <label><input type="checkbox"> Docs</label>
+        <label><input type="checkbox"> Chore</label>
+        <label><input type="checkbox"> Security</label>
+        <label><input type="checkbox"> Performance</label>
+        <label><input type="checkbox"> Design</label>
+        <label><input type="checkbox"> Infra</label>
+      </div>
+      <footer class="cluster justify-content-end">
+        <button class="btn primary sm" type="button" data-flyout-close>Apply</button>
+      </footer>
+    </form>
+  </div>
+</body>
+</html>
