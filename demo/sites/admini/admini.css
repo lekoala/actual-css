@@ -59,7 +59,11 @@
   gap: var(--space-40);
   inline-size: 17rem;
   padding: var(--space-40);
-  border-inline-end: var(--border-width) solid var(--border);
+  /* Width and style only: the colour is the rail's translucent edge. The
+     shorthand would repaint it with the pinned-light --border, a white line
+     against a dark page. */
+  border-inline-end-width: var(--border-width);
+  border-inline-end-style: solid;
 }
 
 .admini-main {
@@ -97,8 +101,13 @@
   padding-block-start: var(--space-40);
 }
 
-.admini-hide-mobile {
-  display: none;
+/* Hide below the breakpoint instead of restoring a display above it: a
+   `display: initial` comeback overrode the select's own flex box, so its
+   label lost vertical centering. */
+@media (width < 56rem) {
+  .admini-hide-mobile {
+    display: none;
+  }
 }
 
 .admini-nav .nav-link {
@@ -142,10 +151,6 @@
 }
 
 @media (min-width: 56rem) {
-  .admini-hide-mobile {
-    display: initial;
-  }
-
   .admini-topbar {
     padding-block: var(--space-30);
   }
