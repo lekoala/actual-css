@@ -269,11 +269,19 @@ function validateField(el, trigger) {
 
   if (!wantsTrigger && !alreadyInvalid) return;
 
-  if (checkRules(el)) {
-    markValid(el);
-  } else {
-    markInvalid(el);
+  const valid = checkRules(el);
+  for (const member of radioGroup(el)) {
+    if (valid) markValid(member);
+    else markInvalid(member);
   }
+}
+
+// A radio's validity is its group's: picking one fills a required group, so
+// the result applies to every radio of the name. Marking only the picked one
+// left its siblings aria-invalid and the field error showing.
+function radioGroup(el) {
+  if (el.type !== "radio" || !el.name || !el.form) return [el];
+  return [...el.form.elements].filter((other) => other.type === "radio" && other.name === el.name);
 }
 
 function connectForm(form) {

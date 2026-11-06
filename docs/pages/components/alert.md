@@ -37,6 +37,23 @@ itself needs to change, not `.soft`.
 | Shared variants  | Variant     | `.solid`, `.outline`, `.surface`.               |
 | Density contexts | Density     | Descendant rhythm; inline padding stays stable. |
 
+## Anatomy
+
+```text
+.alert
+├── .alert-icon        (optional)
+├── content            any HTML, one or more blocks
+└── .close             (optional)
+
+.alert.admonition
+├── .alert-title
+│   ├── icon           (optional)
+│   ├── title text
+│   └── .close         (optional)
+└── .alert-body
+    └── content        any HTML
+```
+
 ## Basic usage
 
 `.surface` comes first on purpose: it keeps the theme's own chrome and puts the
@@ -66,16 +83,12 @@ intent treatment when the color itself carries the meaning.
   </div>
 
   <div class="alert danger" role="alert">
-    <strong>Error!</strong>
-    <div>Something went wrong.</div>
+    <strong>Couldn't save the draft.</strong>
+    <div>The connection dropped. Your changes are kept on this device.</div>
   </div>
 
   <div class="alert danger" role="alert">
-    I'm a simple error
-  </div>
-
-  <div class="alert danger" role="alert">
-    I'm a simple error <a href="#">with a link and no joke</a>
+    Your session expired. <a href="#">Sign in again</a>.
   </div>
 </div>
 ```

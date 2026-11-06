@@ -144,6 +144,12 @@
   font-size: var(--font-size-lg);
 }
 
+/* Anatomy trees are `text` fences: the prose line height broke the
+   box-drawing verticals into dashes. Tight enough for the glyphs to meet. */
+.docs-prose pre:has(> code.language-text) {
+  line-height: 1.3;
+}
+
 .docs-prevnext {
   --cluster-justify: space-between;
   margin-block-start: var(--space-60);

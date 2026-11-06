@@ -104,6 +104,31 @@ test("an application-supplied .danger is not removed by a blur-validated valid f
   expect(field.classList.contains("danger")).toBe(true);
 });
 
+test("picking a radio clears the whole required group, not only the picked radio", async () => {
+  await loadValidation(`
+    <form data-enhance="validation">
+      <fieldset class="field">
+        <input type="radio" name="stay" value="1" required aria-describedby="stay-error" />
+        <input type="radio" name="stay" value="2" required aria-describedby="stay-error" />
+        <input type="radio" name="stay" value="3" required aria-describedby="stay-error" />
+        <span class="field-error" id="stay-error"></span>
+      </fieldset>
+    </form>
+  `);
+  const form = document.querySelector("form");
+  const field = form.querySelector(".field");
+  const radios = [...form.querySelectorAll('[name="stay"]')];
+
+  form.requestSubmit();
+  expect(radios.every((radio) => radio.getAttribute("aria-invalid") === "true")).toBe(true);
+
+  radios[1].checked = true;
+  radios[1].dispatchEvent(new Event("input", { bubbles: true }));
+
+  expect(radios.some((radio) => radio.hasAttribute("aria-invalid"))).toBe(false);
+  expect(field.classList.contains("danger")).toBe(false);
+});
+
 test("setErrors resolves collection property names and radio groups by field name", async () => {
   const { default: FormValidator } = await loadValidation(`
     <form data-enhance="validation">

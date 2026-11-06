@@ -16,23 +16,62 @@ filled while the control remains fully functional.
 | `.rating[role="img"]` | Component | Read-only display of a value.    |
 | `.sm` / `.lg`         | Size      | Smaller or larger star geometry. |
 
+## Anatomy
+
+```text
+fieldset.field
+├── legend.field-label         names the group
+└── .rating
+    └── input[type="radio"]    ×1..N, ascending values, aria-label each
+
+.rating[role="img"]            empty; aria-label and --rating-value
+```
+
+## Rate this item
+
 ```html demo
 <fieldset class="field">
-  <legend class="field-label">Rate your experience</legend>
+  <legend class="field-label">Rate this item</legend>
   <div class="rating">
-    <input type="radio" name="experience" value="1" aria-label="1 star" />
-    <input type="radio" name="experience" value="2" aria-label="2 stars" />
-    <input type="radio" name="experience" value="3" aria-label="3 stars" checked />
-    <input type="radio" name="experience" value="4" aria-label="4 stars" />
-    <input type="radio" name="experience" value="5" aria-label="5 stars" />
+    <input type="radio" name="item" value="1" aria-label="1 star" />
+    <input type="radio" name="item" value="2" aria-label="2 stars" />
+    <input type="radio" name="item" value="3" aria-label="3 stars" checked />
+    <input type="radio" name="item" value="4" aria-label="4 stars" />
+    <input type="radio" name="item" value="5" aria-label="5 stars" />
   </div>
 </fieldset>
 ```
 
 Use a visible `<legend>` to name the group and an `aria-label` on every radio
-to name its value. Add `required` to the radios when the form must receive a
-rating. In forced-colors mode the stars deliberately return to native platform
-radios so checked and focus states remain unambiguous.
+to name its value. In forced-colors mode the stars deliberately return to
+native platform radios so checked and focus states remain unambiguous.
+
+## Required rating
+
+Add `required` to the radios. With [form validation](../forms/validation.md),
+the `.field-error` appears once the reader leaves the stars empty or submits,
+never on page load, and picking a star clears it.
+
+```html demo
+<form class="stack needs-validation" data-enhance="validation" novalidate>
+  <fieldset class="field">
+    <legend class="field-label">Rate your stay</legend>
+    <div class="rating">
+      <input type="radio" name="stay" value="1" aria-label="1 star" required aria-describedby="stay-error" />
+      <input type="radio" name="stay" value="2" aria-label="2 stars" required aria-describedby="stay-error" />
+      <input type="radio" name="stay" value="3" aria-label="3 stars" required aria-describedby="stay-error" />
+      <input type="radio" name="stay" value="4" aria-label="4 stars" required aria-describedby="stay-error" />
+      <input type="radio" name="stay" value="5" aria-label="5 stars" required aria-describedby="stay-error" />
+    </div>
+    <span class="field-error" id="stay-error">Pick a rating to continue.</span>
+  </fieldset>
+  <div class="cluster">
+    <button class="btn primary" type="submit">Send review</button>
+  </div>
+</form>
+```
+
+## Sizes and intents
 
 Intent classes change the active color without changing the interaction model.
 
@@ -69,9 +108,9 @@ value; without `role="img"` nothing is drawn, so a display cannot ship
 without an accessible name. Do not present a value with disabled radios.
 
 ```html demo
-<p>
-  <span class="rating" role="img" aria-label="4.5 out of 5 stars" style="--rating-value: 4.5"></span>
-  4.5 from 312 reviews
+<p class="cluster">
+  <span class="rating" role="img" aria-label="4.6 out of 5 stars" style="--rating-value: 4.6"></span>
+  <span><strong>4.6</strong> out of 5 from 128 reviews</span>
 </p>
 
 <span class="rating sm primary" role="img" aria-label="7 out of 10" style="--rating-value: 7; --rating-max: 10"></span>

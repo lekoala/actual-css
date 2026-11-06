@@ -17,6 +17,8 @@
 - `.segmented.vertical` stacks the segments in one column; a segmented tablist with `aria-orientation="vertical"` does the same.
 - `.rating`: `--rating-star-empty` draws empty stars in their own shape, such as an outline, on inputs and read-only displays.
 - Docs: Rating page shows the component in context and with custom star shapes.
+- Docs: Anatomy trees on the Rating, Alert, Segmented and Color swatches pages.
+- Docs: Rating page has a required-rating scenario with its field error.
 
 ### Changed
 - `.nav-link`: the current link takes `--text` ink on a fill one step above hover instead of the selected accent; `--state-selected-text` no longer applies to it.
@@ -30,6 +32,7 @@
 ### Fixed
 - `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.
 - `--dismiss`: focus inside the dismissed target moves to the next tab stop instead of staying on the hidden close button.
+- `validation.js`: picking a radio in a required group clears `aria-invalid` on every radio of the group, so its `.field-error` hides.
 - `.btn.icon-only` stays square beside a full-width control in a `.join` or flex row instead of shrinking.
 - `.segmented` in `.compact` matches the `.btn` height instead of standing 1px taller.
 - `.select` with the customizable picker in `.compact` matches the `.input` height instead of standing 2px taller.
