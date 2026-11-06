@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Material table hover</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <link rel="stylesheet" href="../../src/css/themes/material.css">
+  <style>
+    body { padding: 1rem; }
+  </style>
+</head>
+<body class="stack" data-theme="material">
+  <div class="table-wrap">
+    <table id="invoices" class="table">
+      <thead><tr><th>Customer</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr id="row-1"><td>Lumen Labs</td><td>Paid</td></tr>
+        <tr id="row-2"><td>Harbor &amp; Co.</td><td>Pending</td></tr>
+        <tr id="row-3"><td>Fieldwork<br>Two-line row</td><td>Overdue</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-wrap">
+    <table id="other" class="table">
+      <tbody><tr id="other-row"><td>Second table</td><td>Own anchor</td></tr></tbody>
+    </table>
+  </div>
+</body>
+</html>

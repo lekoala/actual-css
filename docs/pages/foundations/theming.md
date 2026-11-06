@@ -273,6 +273,7 @@ lets the core derive everything else.
 - `gradient`: outer focus halos on fields.
 - `neo-brutalist`: hard shadows, pastel fills, and plus-shaped accordion
   markers. Use it as a page skin: its rules cross nested theme boundaries.
-- `material`: filled underline fields and pill buttons.
+- `material`: filled underline fields, pill buttons, and a table hover that
+  slides between rows.
 - `glass`: translucent surfaces over a backdrop. Keep `--surface-opaque` and
   `--surface-solid-fg` opaque, and check soft fills against the actual backdrop.

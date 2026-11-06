@@ -3,8 +3,8 @@
  * carry the palette, shape and the fields' bottom line, and small recipes
  * carry the look that tokens cannot express — filled field segments, a focus
  * line that thickens the bottom line, pill buttons, the outline action of a
- * field group as one more filled segment, and chips whose dot grows into a
- * tonal fill. */
+ * field group as one more filled segment, chips whose dot grows into a
+ * tonal fill, and a table row highlight that slides between rows. */
 [data-theme="material"] {
   /* Base palette is the light half; the dark pairing is only announced where
      light-dark() exists, in the @supports block below. */
@@ -173,5 +173,48 @@
     transition:
       clip-path var(--choice-chip-grow),
       background-color var(--choice-chip-grow);
+  }
+}
+
+/* Table hover: one state layer anchored to the hovered body row, so moving
+   between rows slides it instead of switching two backgrounds. Without anchor
+   positioning the core per-row hover stays, hence the guard.
+   The anchor disappears the moment no row is hovered, and an unresolvable
+   anchor() falls back to the static position. So the slide transition lives
+   on the hovered state only: entering snaps onto the row (auto -> length does
+   not interpolate) and fades in, leaving hides at once like the core hover.
+   Under the cells (z-index -1 in the table's own stacking context), so a
+   painted cell or a sticky header covers it; the wrap's rounded scroller
+   clips it. Reduced motion needs nothing: the reset shortens transitions. */
+@supports (anchor-name: --x) {
+  [data-theme="material"] .table {
+    /* Containing block for the layer, and its anchors stay per table. */
+    position: relative;
+    isolation: isolate;
+    anchor-scope: --table-row;
+  }
+
+  [data-theme="material"] .table tbody tr:hover {
+    anchor-name: --table-row;
+    background-color: transparent;
+  }
+
+  [data-theme="material"] .table::after {
+    content: "";
+    position: absolute;
+    position-anchor: --table-row;
+    inset-block: anchor(start) anchor(end);
+    inset-inline: 0;
+    z-index: -1;
+    background: var(--hover-overlay);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  [data-theme="material"] .table:has(tbody tr:hover)::after {
+    opacity: 1;
+    transition:
+      opacity var(--duration-fast),
+      inset-block var(--duration-slow) var(--ease-enter);
   }
 }

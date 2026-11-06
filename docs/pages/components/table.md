@@ -193,6 +193,14 @@ vocabulary as `.card.compact`.
 </div>
 ```
 
+## Sliding row hover
+
+The core hover switches each row's background instantly. For a highlight that
+slides from row to row (animated hover, moving indicator), a theme anchors one
+layer to the hovered row with CSS anchor positioning; the `material` theme in
+`src/css/themes/material.css` is a recipe to copy. Browsers without anchor
+positioning keep the core hover.
+
 ## When a table stops reading as a table
 
 Responsive strategy is horizontal overflow: the wrap scrolls, the table keeps

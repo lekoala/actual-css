@@ -28,6 +28,7 @@
 - Docs: the homepage opens on six working panels composed from the framework (appearance, review, order, invoices, sharing, chat).
 - Docs: Rating page has a required-rating scenario with its field error.
 - `.flyout.scrollable`: the header and footer stay in view while the one body region scrolls.
+- The `material` theme slides the `.table` row hover between rows through anchor positioning.
 - Docs: Table "Sticky headers" — a header stuck to the page, and a header row and first column stuck in a scroll box.
 - Docs: Empty State pattern, with the no-results case returning focus to the search field.
 - Docs: Stat pattern — label, value, detail and a signed trend, inverted when lower is better.
