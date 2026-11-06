@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- `demo/templates/changelog.html`: a release changelog composed from `.timeline`, with a meta column and a scroll-driven light on the rail.
 - `.drawer`: `data-side="bottom"` makes a bottom sheet, content-sized up to `--drawer-size` or 85% of the viewport, clear of the iOS home indicator.
 - `adaptive-surface.html`: the bottom drawer uses `data-side="bottom"`; the page keeps only the choice of surface.
 - `.sidebar-shell`: a persistent `aside` beside the main region from `64rem`, each scrolling on its own; below, the aside hides and the document scrolls (`--sidebar-shell-size`).

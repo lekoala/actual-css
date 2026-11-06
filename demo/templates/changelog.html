@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Changelog - Actual CSS</title>
+  <meta name="description" content="A release changelog composed from .timeline: version and date beside the rail on wide containers, and a light on the rail that runs from the first release to the last as the page scrolls.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <style>
+    /*
+     * Changelog — .timeline plus a reading light.
+     *
+     * An application recipe, not a framework variant. The timeline keeps its
+     * own geometry: the meta column is laid out outside the list's rail, so no
+     * dot or segment rule is restated.
+     *
+     * Findings, rule by rule:
+     * 1. The meta column needs no timeline hook: the list is padded and the
+     *    header is pulled into that padding.
+     * 2. The fading tail under the last event restates the segment geometry
+     *    (rail centre, first line box). It is the only rule that does.
+     * 3. The light needs one element spanning the whole rail. The list's own
+     *    ::after is free, so no markup is added.
+     * 4. The light and the dots read one reading line, so a dot lights up
+     *    exactly while the streak crosses it, with no position to sync. The
+     *    line is capped below the first dot's place at the top of the page,
+     *    so the light starts on it; the space under the last release lets the
+     *    last dot reach the line.
+     */
+
+    body {
+      --center-size: 60rem;
+    }
+
+    .changelog-site {
+      padding-block: var(--space-40);
+    }
+
+    /* Airy page: the room is in the page's own rhythm, not in the components. */
+    .changelog-page {
+      gap: clamp(3rem, 8vw, 5rem);
+      padding-block: clamp(3rem, 10vw, 7rem) clamp(4rem, 10vw, 8rem);
+    }
+
+    .changelog-intro {
+      --gap: var(--space-40);
+
+      max-inline-size: 40rem;
+    }
+
+    .changelog-intro h1 {
+      font-size: clamp(2.25rem, 6vw, 3.5rem);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .changelog-intro small {
+      color: var(--text-muted);
+    }
+
+    .changelog {
+      --timeline-dot-size: 0.75rem;
+      --timeline-inline-gap: var(--space-50);
+      --timeline-gap: var(--space-60);
+      --changelog-meta-size: 10rem;
+      --changelog-rail-start: 0px;
+      --changelog-glow: var(--primary);
+      --changelog-glow-length: 8rem;
+      /* From the top of the viewport. The cap keeps it above the first dot
+         when the page is at its top, on any viewport height. */
+      --changelog-reading-line: min(40vh, 24rem);
+
+      position: relative;
+      padding-inline-start: var(--changelog-rail-start);
+    }
+
+    .changelog > li {
+      --gap: var(--space-40);
+    }
+
+    /* A ring of the page's own color: invisible at rest, it cuts the streak
+       around the dot while the light passes under it. */
+    .changelog > li::before {
+      box-shadow: 0 0 0 0.25rem var(--surface-opaque);
+    }
+
+    /* Room for the last dot to climb to the reading line at the end of the
+       page; the rail's tail fills it. The rem accounts for what always
+       follows: the release's own content, the page padding and the footer. */
+    .changelog > li:last-child {
+      padding-block-end: max(var(--space-60), calc(100vh - var(--changelog-reading-line) - 16rem));
+    }
+
+    /* Tail: the rail runs on under the last release and fades out. */
+    .changelog > li:last-child::after {
+      content: "";
+      position: absolute;
+      inset-block: calc((var(--timeline-line-box) + var(--timeline-rail-size)) / 2) 0;
+      inset-inline-start: calc((var(--timeline-rail-size) - var(--timeline-line-size)) / 2);
+      border-inline-start: var(--timeline-line-size) solid var(--border);
+      mask-image: linear-gradient(black, transparent);
+    }
+
+    .changelog-meta {
+      --cluster-align: baseline;
+    }
+
+    .changelog-meta h2 {
+      font-size: var(--font-size-md);
+    }
+
+    .changelog-meta time {
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    /* Type label then text, the text column aligned within a release. */
+    .changelog-changes {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      gap: var(--space-30) var(--space-40);
+    }
+
+    .changelog-changes > li {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+      align-items: baseline;
+    }
+
+    .changelog-changes .badge {
+      justify-self: start;
+    }
+
+    /* Wide: version and date in a column of their own, left of the rail. The
+       header leaves the flow, so a release must always have more content than
+       meta — true of any changelog entry. */
+    @container actual-container (min-width: 40rem) {
+      .changelog {
+        --changelog-rail-start: calc(var(--changelog-meta-size) + var(--timeline-inline-gap));
+      }
+
+      .changelog-meta {
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-end: calc(100% + var(--timeline-inline-gap));
+        inline-size: var(--changelog-meta-size);
+        --cluster-align: start;
+
+        flex-direction: column;
+        gap: var(--space-10);
+      }
+    }
+
+    .changelog-footer {
+      --cluster-justify: space-between;
+
+      padding-block: var(--space-50);
+      border-block-start: var(--border-width) solid var(--border);
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+    }
+
+    /* The light. Scroll drives it, so it never moves while the page is still
+       and follows the reader both ways. Reduced motion keeps the plain
+       timeline. Forced colors drop the gradients and the shadows. */
+    @media (prefers-reduced-motion: no-preference) {
+      /* A dot lights up while the streak crosses it: its own view timeline is
+         a band one streak long around the reading line. Without scroll
+         timelines this is a 0s animation without fill, so nothing shows. */
+      .changelog > li::before {
+        animation: changelog-dot linear;
+        animation-timeline: view(
+          block calc(var(--changelog-reading-line) - var(--changelog-glow-length) / 2)
+            calc(100% - var(--changelog-reading-line) - var(--changelog-glow-length) / 2)
+        );
+      }
+
+      /* A lane over the rail, painting one streak: a bright core on the line
+         that fades at both ends. drop-shadow follows what is painted, so the
+         glow takes the streak's shape.
+
+         The lane overhangs the list by half a streak at each end, and the
+         range starts and ends half a streak inside it: the streak's centre
+         rides the reading line from the first dot down, and is parked whole
+         on the first dot before that and at the end of the rail after.
+
+         The guard is load-bearing: without scroll timelines the filled
+         animation would park the light at the end of the list. */
+      @supports (animation-timeline: view()) {
+        /* Lines, then the light, then the dots: the light passes under the
+           dot it lights. The isolated list keeps the order local. */
+        .changelog {
+          isolation: isolate;
+        }
+
+        .changelog > li::before {
+          z-index: 2;
+        }
+
+        .changelog::after {
+          --changelog-glow-size: 1.5rem;
+
+          content: "";
+          z-index: 1;
+          position: absolute;
+          inset-block: calc(var(--line-height) * 0.5em - var(--changelog-glow-length) / 2)
+            calc(var(--changelog-glow-length) / -2);
+          inset-inline-start: calc(
+            var(--changelog-rail-start) + (var(--timeline-rail-size) - var(--changelog-glow-size)) / 2
+          );
+          inline-size: var(--changelog-glow-size);
+          background: linear-gradient(transparent, var(--changelog-glow), transparent) center 0 /
+            calc(var(--timeline-line-size) * 2) var(--changelog-glow-length) no-repeat;
+          filter: drop-shadow(0 0 0.375rem color-mix(in oklab, var(--changelog-glow) 80%, transparent));
+          pointer-events: none;
+          animation: changelog-light linear both;
+          animation-timeline: view(
+            block var(--changelog-reading-line) calc(100% - var(--changelog-reading-line))
+          );
+          animation-range: cover calc(var(--changelog-glow-length) / 2)
+            cover calc(100% - var(--changelog-glow-length) / 2);
+        }
+      }
+    }
+
+    @keyframes changelog-light {
+      from {
+        background-position-y: 0%;
+      }
+
+      to {
+        background-position-y: 100%;
+      }
+    }
+
+    /* Lit through the middle of the band, easing in and out with the
+       streak's own fade. */
+    @keyframes changelog-dot {
+      35%,
+      65% {
+        background: var(--changelog-glow);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="center changelog-site">
+    <nav class="navbar" aria-label="Main">
+      <a class="navbar-brand" href="#top">Actual CSS</a>
+      <ul class="cluster">
+        <li><a class="nav-link" href="#releases">Docs</a></li>
+        <li><a class="nav-link" href="#releases">Components</a></li>
+        <li><a class="nav-link" href="#releases" aria-current="page">Changelog</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="center stack changelog-page" id="top">
+    <header class="stack changelog-intro">
+      <h1>Changelog</h1>
+      <p class="lead">
+        New components, fixes and breaking changes, release by release. Every
+        package ships under one version number.
+      </p>
+      <small>Sample release notes. Scroll: the light on the rail follows the page.</small>
+    </header>
+
+    <div class="container-query" id="releases">
+      <ol class="timeline changelog">
+        <li class="stack primary">
+          <header class="cluster changelog-meta">
+            <h2 id="release-0-17-0">0.17.0</h2>
+            <time datetime="2026-11-06">November 6, 2026</time>
+            <span class="badge primary">Latest</span>
+          </header>
+          <ul class="list-reset changelog-changes">
+            <li><span class="badge success">Added</span> <span>Bottom sheet: a <code>.drawer</code> docked to the block end, with a drag handle and snap points.</span></li>
+            <li><span class="badge success">Added</span> <span><code>.sidebar</code> collapses to an icon rail below its threshold, without JavaScript.</span></li>
+            <li><span class="badge info">Changed</span> <span>The timeline dot centres on the first line box of the event, whichever element opens it.</span></li>
+            <li><span class="badge danger">Removed</span> <span><code>.inverted</code>: use a <code>data-theme</code> island instead.</span></li>
+          </ul>
+          <a href="#release-0-17-0">Read the full notes</a>
+        </li>
+
+        <li class="stack">
+          <header class="cluster changelog-meta">
+            <h2 id="release-0-16-2">0.16.2</h2>
+            <time datetime="2026-10-28">October 28, 2026</time>
+          </header>
+          <ul class="list-reset changelog-changes">
+            <li><span class="badge">Fixed</span> <span>A nested <code>.aura</code> no longer inherits the intent of its parent frame.</span></li>
+            <li><span class="badge">Fixed</span> <span>Tooltips keep their arrow when the anchor sits in a transformed ancestor.</span></li>
+          </ul>
+          <a href="#release-0-16-2">Read the full notes</a>
+        </li>
+
+        <li class="stack">
+          <header class="cluster changelog-meta">
+            <h2 id="release-0-16-1">0.16.1</h2>
+            <time datetime="2026-10-21">October 21, 2026</time>
+          </header>
+          <ul class="list-reset changelog-changes">
+            <li><span class="badge">Fixed</span> <span>The focus line of joined fields stays inside the group in forced colors.</span></li>
+          </ul>
+          <a href="#release-0-16-1">Read the full notes</a>
+        </li>
+
+        <li class="stack">
+          <header class="cluster changelog-meta">
+            <h2 id="release-0-16-0">0.16.0</h2>
+            <time datetime="2026-10-14">October 14, 2026</time>
+          </header>
+          <ul class="list-reset changelog-changes">
+            <li><span class="badge success">Added</span> <span><code>.timeline</code>: an activity feed with intent dots, avatar and icon slots.</span></li>
+            <li><span class="badge success">Added</span> <span>Card rail recipe: a grid on wide containers, a scroll-snap rail with scroll markers on narrow ones.</span></li>
+            <li><span class="badge success">Added</span> <span><code>--soft-border-mix</code> sets how strongly soft badges and alerts draw their border.</span></li>
+            <li><span class="badge info">Changed</span> <span>Badges are soft by default; <code>.solid</code> keeps the filled look for counters.</span></li>
+            <li><span class="badge info">Changed</span> <span>The focus ring is one token, <code>--focus</code>, inset on fields and offset on actions.</span></li>
+            <li><span class="badge">Fixed</span> <span>Segmented tabs keep their indicator in view when the row scrolls.</span></li>
+          </ul>
+          <a href="#release-0-16-0">Read the full notes</a>
+        </li>
+
+        <li class="stack">
+          <header class="cluster changelog-meta">
+            <h2 id="release-0-15-0">0.15.0</h2>
+            <time datetime="2026-09-30">September 30, 2026</time>
+          </header>
+          <ul class="list-reset changelog-changes">
+            <li><span class="badge success">Added</span> <span>Tooltips render in the top layer through the Popover API.</span></li>
+            <li><span class="badge success">Added</span> <span><code>.aura</code> and <code>.aura-glow</code>: a decorative intent-colored frame.</span></li>
+            <li><span class="badge info">Changed</span> <span>The <code>[hidden]</code> attribute is honoured only where an author wrote it.</span></li>
+          </ul>
+          <a href="#release-0-15-0">Read the full notes</a>
+        </li>
+
+        <li class="stack">
+          <header class="cluster changelog-meta">
+            <h2 id="release-0-14-0">0.14.0</h2>
+            <time datetime="2026-09-12">September 12, 2026</time>
+          </header>
+          <ul class="list-reset changelog-changes">
+            <li><span class="badge success">Added</span> <span>The <code>actual-container</code> query protocol, read by grids and steps.</span></li>
+            <li><span class="badge">Fixed</span> <span>Stacks inside a stretched grid cell keep their rhythm.</span></li>
+          </ul>
+          <a href="#release-0-14-0">Read the full notes</a>
+        </li>
+      </ol>
+    </div>
+  </main>
+
+  <footer class="center">
+    <div class="cluster changelog-footer">
+      <p>Showing the 6 most recent releases.</p>
+      <ul class="cluster">
+        <li><a href="#top">Every release</a></li>
+        <li><a href="#top">GitHub releases</a></li>
+        <li><a href="#top">Back to top</a></li>
+      </ul>
+    </div>
+  </footer>
+</body>
+</html>

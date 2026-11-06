@@ -31,6 +31,7 @@ Whole pages, composed the way a real product would.
 - [Workspaces](../../demo/templates/workspaces.html) - sectioned sidebar, master/detail list with native current state, and workspace cards
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type
 - [Blog](../../demo/templates/blog.html) - article page with prose
+- [Changelog](../../demo/templates/changelog.html) - release notes on a `.timeline`: version and date beside the rail on wide containers, and a light on the rail that runs from the first release to the last as the page scrolls
 - [Settings modal](../../demo/templates/settings-modal.html) - two-pane preferences dialog opening on load with `data-dialog-open`, with the local CSS it needs audited rule by rule
 - [Modal patterns](../../demo/templates/modal-patterns.html) - eight application modals, each the modal surface plus the smallest application CSS it needs
 - [Workspace settings](../../demo/templates/settings-pricing.html) - plans with visible native choices, preferences and segmented tabs

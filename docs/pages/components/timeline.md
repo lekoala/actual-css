@@ -13,7 +13,9 @@ log, changelog, order tracking.
 For progress through a process (checkout, onboarding), use
 [Steps](steps.md): a timeline records what happened, steps show where you
 are. For a horizontal, alternating or time-scaled chronology, or a Gantt
-chart, render a diagram: see [Diagrams](diagrams.md).
+chart, render a diagram: see [Diagrams](diagrams.md). For release notes with
+the version beside the rail, see the
+[Changelog template](../../demo/templates/changelog.html).
 
 ## Basic usage
 
