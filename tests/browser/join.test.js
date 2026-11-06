@@ -61,6 +61,36 @@ it("icon-only buttons stretch to the height of labelled siblings", async () => {
   );
 });
 
+it("an icon-only button beside a full-width input stays square", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        // DOMRect does not serialize: copy the edges.
+        const box = (el) => {
+          const { left, right, width, height } = el.getBoundingClientRect();
+          return { left, right, width, height };
+        };
+        const input = document.getElementById("join-full-input");
+        return {
+          icon: box(document.getElementById("join-full-icon")),
+          input: box(input),
+          join: box(input.parentElement),
+          field: box(input.closest(".field")),
+        };
+      })()`);
+
+      // The join fills its field without an author width, and the input the row.
+      expect(result.join.width).toBeCloseTo(result.field.width, 0);
+      expect(result.input.left).toBeCloseTo(result.join.left, 0);
+      expect(result.icon.right).toBeCloseTo(result.join.right, 0);
+      // The input's 100% width does not squeeze the button.
+      expect(result.icon.width).toBeCloseTo(result.icon.height, 0);
+    },
+    { artifactName: "join-full-width" },
+  );
+});
+
 it("a keyboard-focused field stacks above the adjacent field", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),

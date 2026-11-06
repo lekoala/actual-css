@@ -21,11 +21,14 @@
 ### Changed
 - `.nav-link`: the current link takes `--text` ink on a fill one step above hover instead of the selected accent; `--state-selected-text` no longer applies to it.
 - `.nav-list`: the current-link trait only shows in forced colors; horizontal `.nav-link` gets an underline there.
+- `.color-swatch`: the checked mark is one `--text` ring outside the swatch, past a transparent gap, instead of a double ring inset on the color.
+- `.color-swatch`: `--color-swatch-radius` inherits, so one declaration on the palette shapes every swatch.
 - `.rating`: stars sit `--space-10` apart instead of `0.1rem`, and each radio's hit area is `--space-20` taller than its star.
 
 ### Fixed
 - `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.
 - `--dismiss`: focus inside the dismissed target moves to the next tab stop instead of staying on the hidden close button.
+- `.btn.icon-only` stays square beside a full-width control in a `.join` or flex row instead of shrinking.
 - `.segmented` in `.compact` matches the `.btn` height instead of standing 1px taller.
 - `.select` with the customizable picker in `.compact` matches the `.input` height instead of standing 2px taller.
 

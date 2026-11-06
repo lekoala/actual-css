@@ -106,6 +106,9 @@
 }
 
 .btn.icon-only {
+  /* why: beside a full-width control (.join, a flex row) it would share the
+     shrink and stop being square. */
+  flex: none;
   inline-size: var(--btn-min-size);
   block-size: var(--btn-min-size);
   padding: 0;

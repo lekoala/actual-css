@@ -16,11 +16,11 @@
  * rows sit one gap apart like columns. Edge, selection ring and focus ring all
  * belong to the visible swatch.
  *
- * The color is arbitrary, so nothing drawn on it may assume a contrast: the
- * selected mark is a double ring (--text outside, --surface-opaque inside) that
- * reads on any fill, and a hairline edge keeps a near-white color apart from
- * the page. ::before opts out of forced colors to keep the color, so it takes
- * system colors itself there.
+ * The color is arbitrary, so nothing is drawn on it: the selected mark is a
+ * --text ring outside the swatch (::after), past a transparent gap, so it reads
+ * on any color and any background and leaves the color whole. A hairline edge
+ * keeps a near-white color apart from the page. Both pseudo-elements opt out of
+ * forced colors to keep the color, so they take system colors themselves there.
  *
  * Without :has() the native radio stays visible in the swatch and carries the
  * state; the ring needs :has() to mirror it.
@@ -28,16 +28,18 @@
  * Public hooks:
  * --color-swatch-value (fallback-only: the color, set per swatch)
  * --color-swatch-size
- * --color-swatch-radius
+ * --color-swatch-radius (fallback-only: set it on the palette or a swatch)
  */
 .color-swatch {
   /* The .switch track height (switch.css); a browser test holds them equal. */
   --color-swatch-size: calc(var(--choice-control-size) + 0.125em);
-  --color-swatch-radius: var(--radius-full);
   /* Internal: what the hit area adds to the swatch, half on each side. One gap
      at most, so two neighbours never claim the same point — a wider reach let
      the next swatch take a click on this one's center. */
   --color-swatch-reach: clamp(0px, var(--control-size) - var(--color-swatch-size), var(--gap));
+  /* Internal: how far the selection ring (gap + stroke) reaches past the
+     swatch. The focus ring moves out by as much on a checked swatch. */
+  --color-swatch-ring: 4px;
 
   position: relative;
   display: inline-grid;
@@ -69,13 +71,29 @@
   block-size: var(--color-swatch-size);
   box-sizing: border-box;
   border: var(--border-width) solid var(--border-control);
-  border-radius: var(--color-swatch-radius);
+  border-radius: var(--color-swatch-radius, var(--radius-full));
   background: var(--color-swatch-value, transparent) padding-box;
   /* The color is the content, as on .color (native.css). */
   forced-color-adjust: none;
-  transition:
-    border-color var(--duration),
-    box-shadow var(--duration);
+  transition: border-color var(--duration);
+}
+
+/* Selection ring, drawn on every swatch and colored when checked. Its negative
+   margin lays it out at the swatch size: a ring wider than the grid track
+   would widen it and push the swatch off-center in a tight palette. */
+.color-swatch::after {
+  content: "";
+  grid-area: 1 / 1;
+  inline-size: calc(var(--color-swatch-size) + 2 * var(--color-swatch-ring));
+  block-size: calc(var(--color-swatch-size) + 2 * var(--color-swatch-ring));
+  margin: calc(-1 * var(--color-swatch-ring));
+  box-sizing: border-box;
+  border: calc(var(--color-swatch-ring) / 2) solid transparent;
+  border-radius: calc(var(--color-swatch-radius, var(--radius-full)) + var(--color-swatch-ring));
+  pointer-events: none;
+  /* The gap stays transparent; forced colors would paint it. */
+  forced-color-adjust: none;
+  transition: border-color var(--duration);
 }
 
 /* Shares the swatch's cell and paints after ::before, so a native radio left
@@ -107,10 +125,8 @@
   border-color: var(--text-subtle);
 }
 
-.color-swatch:has(> input:checked)::before {
-  box-shadow:
-    inset 0 0 0 2px var(--text),
-    inset 0 0 0 4px var(--surface-opaque);
+.color-swatch:has(> input:checked)::after {
+  border-color: var(--text);
 }
 
 /* The ring goes around the visible swatch, not the larger hit area. */
@@ -126,6 +142,11 @@
 .color-swatch:has(> input:focus-visible)::before {
   outline: var(--focus-ring-width) solid var(--focus);
   outline-offset: var(--focus-outline-offset);
+}
+
+/* Outside the selection ring, so the two never share a stroke. */
+.color-swatch:has(> input:checked:focus-visible)::before {
+  outline-offset: calc(var(--focus-outline-offset) + var(--color-swatch-ring));
 }
 
 .color-swatch:disabled {
@@ -147,10 +168,8 @@
     border-color: CanvasText;
   }
 
-  .color-swatch:has(> input:checked)::before {
-    box-shadow:
-      inset 0 0 0 2px CanvasText,
-      inset 0 0 0 4px Canvas;
+  .color-swatch:has(> input:checked)::after {
+    border-color: CanvasText;
   }
 
   .color-swatch:disabled::before {

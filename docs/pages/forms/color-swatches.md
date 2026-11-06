@@ -7,7 +7,8 @@
 `.color-swatch` is a `<label>` wrapping a native radio, with the color in
 `--color-swatch-value`. The radio stays the control: it submits, takes the
 arrow keys and carries the name in `aria-label`. The checked swatch shows a
-double ring that reads on any color. Use checkboxes for several colors at once.
+ring around the color, which reads on any color and any background. Use
+checkboxes for several colors at once.
 
 For a free color, use the native [`.color`](controls.md) picker; a custom
 spectrum or RGB sliders are outside Actual.
@@ -28,6 +29,21 @@ the column count with `--grid-columns: repeat(6, max-content)` on `.grid`.
   <label class="color-swatch" style="--color-swatch-value: #f59e0b"><input type="radio" name="category" value="#f59e0b" aria-label="Amber"></label>
   <label class="color-swatch" style="--color-swatch-value: #e11d48"><input type="radio" name="category" value="#e11d48" aria-label="Rose"></label>
   <label class="color-swatch" style="--color-swatch-value: #ffffff"><input type="radio" name="category" value="#ffffff" aria-label="White"></label>
+</fieldset>
+```
+
+## Shape
+
+Set `--color-swatch-radius` on the palette for square or rounded swatches; the
+selection ring follows the corners.
+
+```html demo
+<fieldset class="field-group cluster" style="--color-swatch-radius: var(--radius-sm)">
+  <legend>Label color</legend>
+  <label class="color-swatch" style="--color-swatch-value: #7c3aed"><input type="radio" name="label" value="#7c3aed" aria-label="Violet" checked></label>
+  <label class="color-swatch" style="--color-swatch-value: #0891b2"><input type="radio" name="label" value="#0891b2" aria-label="Cyan"></label>
+  <label class="color-swatch" style="--color-swatch-value: #65a30d"><input type="radio" name="label" value="#65a30d" aria-label="Lime"></label>
+  <label class="color-swatch" style="--color-swatch-value: #111827"><input type="radio" name="label" value="#111827" aria-label="Black"></label>
 </fieldset>
 ```
 
@@ -128,4 +144,5 @@ The color dialog is the browser's own and looks different on each platform.
 - `--color-swatch-value` — the color, set on each swatch.
 - `--color-swatch-size` — visible swatch size, the height of a `.switch` track
   by default. `.sm` and `.lg` scale it and the hit area.
-- `--color-swatch-radius` — corner radius; round by default.
+- `--color-swatch-radius` — corner radius; round by default. Inherited, so one
+  declaration on the palette shapes every swatch.

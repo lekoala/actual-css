@@ -1,8 +1,8 @@
 /*
  * Real-browser .color-swatch contract, driven over Bun.WebView.
  *
- * A swatch whose selected mark (a double ring) reads on any color, with the
- * action focus ring outside it; forced colors keep the color. Its hit area
+ * A swatch whose selected mark (a ring outside the color) reads on any color,
+ * with the action focus ring outside it; forced colors keep the color. Its hit area
  * reaches half the gap past it, so neighbours in a tight palette never overlap.
  * In a flyout it becomes a palette picker: a pointer pick closes the panel,
  * while arrow keys move through the colors without closing it, and the panel
@@ -31,11 +31,13 @@ if (!bundle.success) throw new AggregateError(bundle.logs, "Runtime test bundle 
 const runtime = await bundle.outputs[0].text();
 
 const ARROW_RIGHT = { code: "ArrowRight", windowsVirtualKeyCode: 39 };
+const TRANSPARENT = "rgba(0, 0, 0, 0)";
 
 const swatch = (id) => `(() => {
   const el = document.getElementById(${JSON.stringify(id)});
   const cs = getComputedStyle(el);
   const color = getComputedStyle(el, "::before");
+  const ring = getComputedStyle(el, "::after");
   const probe = document.createElement("div");
   probe.style.blockSize = "var(--control-size)";
   // Inside the swatch: .sm sets --control-size on the swatch itself.
@@ -48,8 +50,11 @@ const swatch = (id) => `(() => {
     controlSize,
     visible: parseFloat(color.height),
     fill: color.backgroundColor,
-    ring: color.boxShadow,
+    ring: ring.borderTopColor,
+    // How far the selection ring reaches past the visible swatch.
+    ringReach: (parseFloat(ring.width) - parseFloat(color.width)) / 2,
     adjust: color.forcedColorAdjust,
+    ringAdjust: ring.forcedColorAdjust,
     // The focus ring belongs to the visible swatch, not the hit area.
     hostOutline: cs.outlineStyle,
     outlineStyle: color.outlineStyle,
@@ -93,9 +98,10 @@ it("a switch-sized swatch on a larger target, ringed when checked", async () => 
       })()`);
       expect(spacing.visible).toBeCloseTo(spacing.gap, 0);
       expect(blue.fill).toBe("rgb(37, 99, 235)");
-      // Two rings: one for light colors, one for dark ones.
-      expect(blue.ring.match(/inset/g)?.length).toBe(2);
-      expect((await view.evaluate(swatch("white"))).ring).toBe("none");
+      // The selection ring sits outside the swatch, so it never covers the color.
+      expect(blue.ring).not.toBe(TRANSPARENT);
+      expect(blue.ringReach).toBeGreaterThan(0);
+      expect((await view.evaluate(swatch("white"))).ring).toBe(TRANSPARENT);
 
       const small = await view.evaluate(swatch("small"));
       expect(small.visible).toBeLessThan(blue.visible);
@@ -103,7 +109,7 @@ it("a switch-sized swatch on a larger target, ringed when checked", async () => 
 
       // The radio is still the control: it submits, and a disabled one dims.
       await view.evaluate(`document.getElementById("navy").click()`);
-      expect((await view.evaluate(swatch("navy"))).ring).not.toBe("none");
+      expect((await view.evaluate(swatch("navy"))).ring).not.toBe(TRANSPARENT);
       expect(
         await view.evaluate(`new FormData(document.getElementById("form")).get("category")`),
       ).toBe("#0b1a3a");
@@ -178,7 +184,8 @@ it("keyboard focus draws the action ring outside the selection ring", async () =
       expect(await tabUntil(view, `document.activeElement?.closest("#blue")`)).toBe(true);
       const ring = await view.evaluate(swatch("blue"));
       expect(ring.outlineStyle).toBe("solid");
-      expect(ring.outlineOffset).toBeGreaterThan(0);
+      // Blue is checked: the focus ring clears the selection ring.
+      expect(ring.outlineOffset).toBeGreaterThan(ring.ringReach);
       expect(ring.hostOutline).toBe("none");
       expect((await view.evaluate(swatch("white"))).outlineStyle).toBe("none");
     },
@@ -193,7 +200,9 @@ it("forced colors keep the color and mark the selection in system colors", async
       const blue = await view.evaluate(swatch("blue"));
       expect(blue.adjust).toBe("none");
       expect(blue.fill).toBe("rgb(37, 99, 235)");
-      expect(blue.ring.match(/inset/g)?.length).toBe(2);
+      expect(blue.ringAdjust).toBe("none");
+      expect(blue.ring).not.toBe(TRANSPARENT);
+      expect((await view.evaluate(swatch("white"))).ring).toBe(TRANSPARENT);
       expect((await view.evaluate(swatch("white"))).fill).toBe("rgb(255, 255, 255)");
     },
     {
@@ -249,11 +258,16 @@ it("arrow keys browse the palette without closing it; Escape returns", async () 
       const room = await view.evaluate(`(() => {
         const panel = document.getElementById("accent-palette");
         const swatch = document.getElementById("a-amber");
-        const cs = getComputedStyle(swatch);
+        // Measured from the visible swatch, which carries the focus ring.
+        const cs = getComputedStyle(swatch, "::before");
         const p = panel.getBoundingClientRect();
         const s = swatch.getBoundingClientRect();
+        const inset = (s.width - parseFloat(cs.width)) / 2;
         return {
-          gap: Math.min(s.top - p.top, p.bottom - s.bottom, p.right - s.right) - panel.clientTop,
+          gap:
+            Math.min(s.top - p.top, p.bottom - s.bottom, p.right - s.right) +
+            inset -
+            panel.clientTop,
           ring: parseFloat(cs.outlineOffset) + parseFloat(cs.outlineWidth),
         };
       })()`);

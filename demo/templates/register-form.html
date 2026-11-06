@@ -212,11 +212,10 @@
 
         <div class="field">
           <label class="field-label" for="password">Password</label>
-          <div class="join register-password" style="inline-size: 100%;">
+          <div class="join register-password">
             <input class="input" type="password" name="password" id="password"
                    minlength="8" autocomplete="new-password" required
-                   aria-describedby="password-help password-error"
-                   style="flex: 1;">
+                   aria-describedby="password-help password-error">
             <meter class="meter register-strength" id="password-strength-meter" value="0"
                    min="0" max="1" low="0.34" high="0.66" optimum="1"
                    aria-label="Password strength"></meter>
@@ -235,11 +234,11 @@
 
         <div class="field">
           <label class="field-label" for="password-confirm">Confirm password</label>
-          <div class="join" style="inline-size: 100%;">
+          <div class="join">
             <input class="input" type="password" name="password-confirm" id="password-confirm"
                    data-validation-rules="same #password"
                    autocomplete="new-password" required
-                   aria-describedby="password-confirm-error" style="flex: 1;">
+                   aria-describedby="password-confirm-error">
             <button class="btn outline icon-only" type="button" commandfor="password-confirm"
                     command="--password-toggle" aria-controls="password-confirm"
                     aria-label="Show password confirmation" aria-pressed="false">

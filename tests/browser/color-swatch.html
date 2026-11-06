@@ -6,7 +6,8 @@
   <title>Color swatch fixture</title>
   <link rel="stylesheet" href="../../src/css/actual.full.css">
   <style>
-    * { transition-duration: 0s !important; }
+    /* The rings live on pseudo-elements, which `*` alone does not match. */
+    *, ::before, ::after { transition-duration: 0s !important; }
   </style>
 </head>
 <body>
