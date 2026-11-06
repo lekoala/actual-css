@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.17.0] - 2026-11-06
 ### Added
 - `demo/templates/changelog.html`: a release changelog composed from `.timeline`, with a meta column and a scroll-driven light on the rail.
 - `.drawer`: `data-side="bottom"` makes a bottom sheet, content-sized up to `--drawer-size` or 85% of the viewport, clear of the iOS home indicator.
