@@ -112,6 +112,10 @@ describe("render", () => {
     expect(result.html).toContain('<div class="docs-example">');
     expect(result.html).toContain('<div class="docs-preview">');
     expect(result.html).toContain('<div class="docs-code">');
+    // docs.js puts Copy in this bar, so it never covers the code.
+    expect(result.html).toContain(
+      '<div class="docs-code-bar cluster"><span class="docs-code-language">html</span></div>',
+    );
 
     const preview = result.html.match(/class="docs-preview">([\s\S]*?)\n {2}<\/div>/)?.[1];
     expect(preview).toContain('<button class="btn primary" type="button">');

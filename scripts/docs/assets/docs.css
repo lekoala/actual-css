@@ -17,10 +17,10 @@
    .grid-6 -> 6). Work backwards from it.
 
      64rem      preview content box (widest grid threshold)
-   +  2rem      .docs-preview padding-inline (2 x --space-40)
+   +  3rem      .docs-preview padding-inline (2 x --space-50)
    +  0.125rem  .docs-example border
    ------------------------------------------------------------
-     ~66.2rem   minimum .docs-example outer width
+     ~67.2rem   minimum .docs-example outer width
 
    --docs-demo-track sits above that minimum on purpose, so a later padding or
    border tweak cannot silently push every grid demo below a threshold. The
@@ -30,14 +30,14 @@
    The shell then needs the nav track + demo track + TOC track plus two
    column gaps, and .center subtracts 2 x --center-pad from --center-size:
 
-     12 + 1 + 68 + 1 + 11 = 93rem of track -> --center-size 95rem
+     12 + 1 + 69 + 1 + 11 = 94rem of track -> --center-size 96rem
 
    Regression-tested in tests/docs-geometry.test.js. */
 :root {
-  --docs-demo-track: 68rem;
+  --docs-demo-track: 69rem;
   --docs-nav-track: 12rem;
   --docs-toc-track: 11rem;
-  --docs-shell-size: 95rem;
+  --docs-shell-size: 96rem;
 }
 
 /* --- Site chrome --- */
@@ -164,19 +164,36 @@
    example a scroll container, which would capture a sticky demo. */
 .docs-example {
   border: var(--border-width) solid var(--border);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   background: var(--surface-raised);
   overflow: clip;
 }
 
+/* The stage: a faint tint toward --text, not --surface-subtle, which is an
+   expressive fill in several presets and the soft fill of many components —
+   a demo must stand out from its stage in every theme. Raised surfaces
+   (.card, .alert.surface) read as lifted off it. */
 .docs-preview {
   /* A neutral environment: no query container. actual-container is a public
      contract an author declares, so a demo that inherited it here would render
      unlike the snippet printed beside it — and one shared name reaches every
      size-aware component, not just .grid-N. An example that needs the context
      establishes it in its own markup. */
-  padding: var(--space-40);
+  padding: var(--space-60) var(--space-50);
   overflow-x: auto;
+}
+
+@supports (color: color-mix(in oklab, red, white)) {
+  .docs-preview {
+    background: color-mix(in oklab, var(--surface-raised), var(--text) 2.5%);
+  }
+}
+
+/* A phone has no width to spare for a frame: the demo gets it back. */
+@media (max-width: 40rem) {
+  .docs-preview {
+    padding: var(--space-50) var(--space-40);
+  }
 }
 
 /* The opt-in `resize` demo flag turns the preview into a width test bench:
@@ -223,20 +240,10 @@
   --card-max-inline-size: 18rem;
 }
 
-/* --surface-subtle is an expressive tinted surface in several presets (a wide
-   yellow panel under brutalist), which is a lot to ask of a long code listing.
-   Keep a quarter of it so the block still carries the theme, over the neutral
-   raised surface. */
+/* Secondary to the stage: the plain raised surface, a step down in size. */
 .docs-code {
-  position: relative;
   border-block-start: var(--border-width) solid var(--border);
   background: var(--surface-raised);
-}
-
-@supports (color: color-mix(in oklab, red, white)) {
-  .docs-code {
-    background: color-mix(in oklab, var(--surface-raised), var(--surface-subtle) 25%);
-  }
 }
 
 .docs-code pre {
@@ -253,10 +260,21 @@
   font-size: inherit;
 }
 
-.docs-copy {
-  position: absolute;
-  inset-block-start: var(--space-20);
-  inset-inline-end: var(--space-20);
+/* Language on one end, Copy (added by docs.js) on the other. Its own row, so
+   the button never covers a line of code at any width. */
+.docs-code-bar {
+  --cluster-justify: space-between;
+  min-block-size: var(--control-size-sm);
+  padding-inline: var(--space-30) var(--space-20);
+  border-block-end: var(--border-width) solid var(--border);
+}
+
+.docs-code-language {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 /* --- Search --- */

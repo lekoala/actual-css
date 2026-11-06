@@ -62,9 +62,12 @@
 
   /* --- Copy code blocks --- */
 
+  // The button lives in the block's bar, never over the code: an absolutely
+  // placed button covered the first line on narrow screens.
   for (const codeBlock of document.querySelectorAll(".docs-code")) {
     const code = codeBlock.querySelector("code");
-    if (!code) continue;
+    const bar = codeBlock.querySelector(".docs-code-bar");
+    if (!code || !bar) continue;
     const button = document.createElement("button");
     button.type = "button";
     button.className = "btn sm ghost docs-copy";
@@ -78,7 +81,7 @@
         // clipboard unavailable — leave the button inert rather than failing
       }
     });
-    codeBlock.prepend(button);
+    bar.append(button);
   }
 
   /* --- Search --- */

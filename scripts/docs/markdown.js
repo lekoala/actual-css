@@ -163,6 +163,7 @@ function renderDemoBlock(entry) {
 ${entry.content}
   </div>
   <div class="docs-code">
+    <div class="docs-code-bar cluster"><span class="docs-code-language">${language}</span></div>
     <pre><code class="language-${language}">${source}</code></pre>
   </div>
 </div>

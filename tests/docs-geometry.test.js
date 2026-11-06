@@ -40,13 +40,16 @@ function docsRem(name) {
   return Number(match[1]);
 }
 
-/** The rem value of a `padding: var(--space-NN)` declaration in a docs rule. */
+/**
+ * The rem value of the inline padding in a `padding: var(--space-NN)` or
+ * `padding: var(--block) var(--inline)` declaration in a docs rule.
+ */
 function docsRulePaddingRem(selector) {
   const rule = docsCss.match(new RegExp(`\\n${selector}\\s*\\{([\\s\\S]*?)\\n\\}`));
   if (!rule) throw new Error(`docs.css has no ${selector} rule`);
-  const padding = rule[1].match(/padding:\s*var\(--([\w-]+)\)\s*;/);
-  if (!padding) throw new Error(`${selector} does not set padding from a token`);
-  return token(padding[1]);
+  const padding = rule[1].match(/padding:\s*var\(--([\w-]+)\)(?:\s+var\(--([\w-]+)\))?\s*;/);
+  if (!padding) throw new Error(`${selector} does not set padding from tokens`);
+  return token(padding[2] ?? padding[1]);
 }
 
 /** Every @container actual-container threshold declared by the grid primitive. */

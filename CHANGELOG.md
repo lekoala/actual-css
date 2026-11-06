@@ -23,6 +23,8 @@
 - `.nav-list`: the current-link trait only shows in forced colors; horizontal `.nav-link` gets an underline there.
 - `.color-swatch`: the checked mark is one `--text` ring outside the swatch, past a transparent gap, instead of a double ring inset on the color.
 - `.color-swatch`: `--color-swatch-radius` inherits, so one declaration on the palette shapes every swatch.
+- Docs: demo previews sit on a faintly tinted stage with more padding; the code below them returns to the plain surface.
+- Docs: demo code opens with a bar holding its language and the Copy button, which no longer covers the first line.
 - `.rating`: stars sit `--space-10` apart instead of `0.1rem`, and each radio's hit area is `--space-20` taller than its star.
 
 ### Fixed
