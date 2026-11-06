@@ -13,8 +13,8 @@
   <style>
     /* Template-local layout. Each rule papers over a known framework gap.
      *
-     *   .app-sidebar-shell / .app-layout-sidebar / .app-layout-main
-     *     -> app shell with persistent sidebar (gap: layout primitive).
+     *   .app-layout-sidebar / .app-layout-main
+     *     -> sidebar chrome and main column inside .sidebar-shell (local design).
      *   .app-layout-hamburger / .app-layout-hide-mobile
      *     -> sidebar -> drawer handoff at 64rem (gap: responsive sidebar swap).
      *   .app-search / .app-search-input
@@ -33,28 +33,16 @@
      * fixed toast stack.
      */
 
-    .app-sidebar-shell {
-      display: grid;
-      grid-template-columns: 1fr;
-      min-block-size: 100dvh;
-    }
-
-    /* A .stack hidden below the breakpoint: display: none outranks .stack on
-       source order, and the media query below restores flex. */
+    /* Layout and scrolling come from .sidebar-shell; only the chrome is local. */
     .app-layout-sidebar {
-      display: none;
-      inline-size: 16rem;
       padding: 1rem;
       border-inline-end: var(--border-width) solid var(--border);
       background: var(--surface-raised);
-      overflow-y: auto;
     }
 
     .app-layout-main {
       display: flex;
       flex-direction: column;
-      min-inline-size: 0;
-      min-block-size: 100dvh;
     }
 
     /* Sticky/blur shell comes from the framework's .topbar
@@ -185,17 +173,6 @@
     }
 
     @media (min-width: 64rem) {
-      .app-sidebar-shell {
-        grid-template-columns: auto 1fr;
-      }
-
-      .app-layout-sidebar {
-        display: flex;
-        position: sticky;
-        inset-block-start: 0;
-        block-size: 100dvh;
-      }
-
       .app-layout-hamburger {
         display: none;
       }
@@ -208,7 +185,7 @@
 </head>
 
 <body>
-  <div class="app-sidebar-shell">
+  <div class="sidebar-shell">
     <!-- Sidebar (visible >= 64rem); mirrored inside the drawer for mobile. -->
     <aside class="stack app-layout-sidebar app-sidebar" aria-label="Primary">
       <a class="navbar-brand" href="#" style="text-decoration: none; color: inherit;">
@@ -752,6 +729,13 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script>
+    // The drawer mirrors the sidebar; once the sidebar shows (64rem, the
+    // .sidebar-shell breakpoint) an open drawer would sit over it.
+    const wide = matchMedia("(width >= 64rem)");
+    wide.addEventListener("change", () => {
+      if (wide.matches) document.getElementById("main-drawer").close();
+    });
+
     // [data-dismiss] removes the closest .alert. When that empties the
     // notifications list, reveal its empty state.
     document.addEventListener('click', (event) => {

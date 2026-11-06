@@ -1,0 +1,67 @@
+/*
+ * Sidebar shell — a persistent side region beside the main one on a wide
+ * viewport, each scrolling on its own; below 64rem the side region hides and
+ * the document scrolls. The page mirrors the navigation into a dialog.drawer.
+ *
+ * Docs: docs/pages/layout/sidebar-shell.md
+ * Design note: docs/design-notes/app-ui.md#sidebar-shell
+ *
+ * Structure: two direct children, an `aside` (side) and one other element
+ * (main). The breakpoint is a literal; a custom property cannot sit in a
+ * media condition.
+ *
+ * Public hooks:
+ * --sidebar-shell-size
+ */
+.sidebar-shell {
+  --sidebar-shell-size: 16rem;
+}
+
+/* Hidden below, never shown above: the aside keeps the author's display (an
+   aside.stack). Where range syntax is unsupported the rule drops and the
+   sidebar stacks above the content, still reachable. Screen only: a printed
+   page is narrower than 64rem, and print never hides framework content. */
+@media screen and (width < 64rem) {
+  .sidebar-shell > aside {
+    display: none;
+  }
+}
+
+@media (width >= 64rem) {
+  .sidebar-shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-shell-size) minmax(0, 1fr);
+    block-size: var(--viewport-block);
+  }
+
+  /* Each region is its own scroller, so the sidebar stays put. min-block-size
+     lets the grid row hold them to the viewport instead of their content. */
+  .sidebar-shell > * {
+    min-block-size: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .sidebar-shell > aside {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .sidebar-shell > :not(aside) {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
+/* Paper is one flow, side then main, nothing clipped by a scroller. Leaving
+   the sidebar off the page is the application's print stylesheet. */
+@media print {
+  .sidebar-shell {
+    display: block;
+    block-size: auto;
+  }
+
+  .sidebar-shell > * {
+    overflow: visible;
+  }
+}

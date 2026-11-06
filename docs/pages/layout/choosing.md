@@ -9,6 +9,7 @@ number of children visible in one mockup.
 | ----------------------------------------------- | ------------------------------------------- |
 | A normally scrolling page                       | Semantic landmarks, optionally `.app-shell` |
 | Full-width bands over a centered content column | `.center` inside each landmark              |
+| Persistent sidebar + main, drawer on a phone    | `.sidebar-shell`                            |
 | Topbar + scrolling main + adaptive nav          | `.app-layout`                               |
 
 For public, marketing, and editorial pages, use semantic landmarks and add
@@ -22,6 +23,10 @@ rather than the row (see
 [stack](stack.md#dont-wrap-full-width-regions-with-stack)).
 [Marketing](../../demo/templates/marketing.html) and
 [Blog](../../demo/templates/blog.html) compose bands this way.
+
+Use `.sidebar-shell` for an admin or dashboard whose sidebar stays beside the
+content on a wide screen and moves to a drawer on a phone, where the document
+scrolls normally. See [Sidebar Shell](sidebar-shell.md).
 
 Use `.app-layout` for a viewport-sized shell where the main region scrolls
 independently and navigation moves from bottom to side. Follow its

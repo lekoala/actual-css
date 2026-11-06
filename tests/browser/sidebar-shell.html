@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sidebar shell fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    *, ::before, ::after { transition-duration: 0s !important; }
+    /* flex: none — an empty block in the aside.stack column would shrink. */
+    .tall { flex: none; block-size: 300vh; }
+  </style>
+</head>
+<body>
+  <div class="sidebar-shell" id="shell">
+    <!-- .stack: the shell must keep the author's display on the aside. -->
+    <aside class="stack" id="side" aria-label="Primary">
+      <a href="#a" id="side-first">Overview</a>
+      <div class="tall"></div>
+      <a href="#b" id="side-last">Settings</a>
+    </aside>
+    <main id="main">
+      <a href="#c" id="main-first">First</a>
+      <div class="tall"></div>
+    </main>
+  </div>
+
+  <dialog class="drawer" id="drawer" aria-label="Navigation">
+    <a href="#a">Overview</a>
+  </dialog>
+
+  <!-- The documented recipe: close the drawer once the sidebar shows. -->
+  <script>
+    const wide = matchMedia("(width >= 64rem)");
+    wide.addEventListener("change", () => {
+      if (wide.matches) document.getElementById("drawer").close();
+    });
+  </script>
+</body>
+</html>

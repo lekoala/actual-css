@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Added
+- `.sidebar-shell`: a persistent `aside` beside the main region from `64rem`, each scrolling on its own; below, the aside hides and the document scrolls (`--sidebar-shell-size`).
+- Docs: Sidebar Shell page with the drawer-closing `matchMedia` recipe; the navigation-list page links to it instead of printing a `.shell-sidebar` recipe.
 - `actual-css/js/dirty`: `data-enhance="dirty"` sets `data-dirty` on a form while its submittable data differs from the baseline, and dispatches `actual:dirty-change`.
 - `FormDirty.capture()`, `FormDirty.markClean()` and `FormDirty.refresh()` move the baseline after an in-page save or programmatic edits; `data-dirty-ignore` leaves a control out.
 - Docs: Unsaved Changes page with `beforeunload` and autosave recipes.

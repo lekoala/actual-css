@@ -46,6 +46,7 @@
         "scroll-target",
         "frame",
         "app-shell",
+        "sidebar-shell",
         "app-layout"
       ]
     },
