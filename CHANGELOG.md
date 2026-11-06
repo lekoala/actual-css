@@ -11,6 +11,11 @@
 - `actual:tab-change` bubbles from a tablist after the selected tab changes, with `{ tab, panel, previousTab }`.
 - `data-dialog-open` opens a dialog at load; on a dialog that also has `open`, it upgrades the no-JS rendering to a modal.
 - `actual-css/js/focus`: `nextTabStop(node)` returns the first tab stop after an element, outside it.
+- `.nav-link`: `--nav-current-bg` and `--nav-current-fg` restyle the current link.
+
+### Changed
+- `.nav-link`: the current link takes `--text` ink on a fill one step above hover instead of the selected accent; `--state-selected-text` no longer applies to it.
+- `.nav-list`: the current-link trait only shows in forced colors; horizontal `.nav-link` gets an underline there.
 
 ### Fixed
 - `dialog.js`: a dialog closed and reopened in the same task keeps `has-modal-open` and its focus target when the queued `close` event arrives.

@@ -113,21 +113,16 @@
   font-size: 1.125rem;
 }
 
-/* Active item is a selected pill on the dark rail. State tokens keep
-   forced-colors support instead of pinning --primary directly. */
-.admini-rail .admini-nav .nav-link[aria-current="page"] {
-  background: var(--state-selected);
-  color: var(--state-selected-fg);
+/* Active item is a solid selected pill on the dark rail, through the
+   framework's current-link hooks. State tokens keep forced-colors support
+   instead of pinning --primary directly. */
+.admini-rail .admini-nav {
+  --nav-current-bg: var(--state-selected);
+  --nav-current-fg: var(--state-selected-fg);
 }
 
 .admini-rail .admini-nav .nav-link[aria-current="page"] i {
   color: inherit;
-}
-
-/* The pill already carries selection; the framework's inset current trait
-   would double it. */
-.admini-rail .nav-list .nav-link[aria-current="page"]::before {
-  content: none;
 }
 
 .admini-sidebar .flyout-trigger > .btn {

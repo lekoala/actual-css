@@ -7,6 +7,19 @@ sections in order when skipping a release.
 
 **Related terms:** migration, breaking changes, update, version.
 
+## 0.16 to 0.17
+
+### Current nav link
+
+The current `.nav-link` is neutral: `--text` ink on a fill one step above
+hover, no inline-start trait outside forced colors. `--state-selected-text`
+no longer reaches it.
+
+- To keep a colored current link, set `--nav-current-fg` (and
+  `--nav-current-bg`) on the nav; check the pair with `actual-css contrast`.
+- Rules that removed the trait (`.nav-list .nav-link[aria-current]::before {
+  content: none }`) now only remove the forced-colors cue: delete them.
+
 ## 0.14 to 0.15
 
 No class or hook is removed: markup and application CSS keep working.

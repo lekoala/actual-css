@@ -169,10 +169,10 @@
       margin-inline-start: auto;
     }
 
-    /* Current state is framework-owned (.nav-link[aria-current="page"]: selected
-       accent + subtle surface + inset trait in .nav-list, constant metrics).
-       Only the row layout and idle icon tone stay local; the icon follows
-       the accent via currentColor instead of redefining the state. */
+    /* Current state is framework-owned (.nav-link[aria-current="page"]: full
+       ink on a neutral fill, constant metrics). Only the row layout and idle
+       icon tone stay local; the icon follows the link ink via currentColor
+       instead of redefining the state. */
     .app-sidebar .nav-link[aria-current="page"] i {
       color: currentColor;
     }

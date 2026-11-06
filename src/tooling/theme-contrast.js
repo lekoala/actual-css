@@ -210,8 +210,9 @@ export async function measureContrast({ css, themes, label = "default" }) {
         intent,
         value: solid[intent] ? ratio(solid[intent].fg, solid[intent].bg) : null,
       })),
-      // Selected ink on a regular surface (--state-selected-text): text needs
-      // 4.5:1, the current step's ring is a non-text accent at 3:1.
+      // Selected ink on a regular surface (--state-selected-text for tab and
+      // step; --text on its tint for the current nav link): text needs 4.5:1,
+      // the current step's ring is a non-text accent at 3:1.
       selected: SURFACES.flatMap((surface) => {
         const { selected } = soft[surface];
         return [

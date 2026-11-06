@@ -53,6 +53,26 @@ full-row hit target for vertical navigation. The [Workspaces example](../example
 shows the sectioned-sidebar composition: grouped `.nav-list` blocks with
 section titles, a pinned account footer, and the native current state.
 
+## Current link
+
+The current link (active page, selected item, highlighted menu entry) takes
+full text ink on a neutral fill, one step stronger than hover, in a bar and in
+a `.nav-list` alike. Forced colors adds a shape: an underline on horizontal
+links, an inline-start trait in `.nav-list`.
+
+Restyle it with `--nav-current-bg` and `--nav-current-fg`, for example as a
+solid selected pill:
+
+```css
+.app-sidebar {
+  --nav-current-bg: var(--state-selected);
+  --nav-current-fg: var(--state-selected-fg);
+}
+```
+
+Keep the pair's contrast: a brand-colored ink on a tinted fill falls under
+4.5:1 on several light themes.
+
 ## Responsive: navbar + drawer
 
 There is no collapse/toggler mechanism. For a responsive navigation, keep the

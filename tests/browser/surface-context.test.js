@@ -50,6 +50,7 @@ it("contextual-surface contract over one browser pass", async () => {
           refNeutralFg: color("#ref-neutral-fg"),
           refPrimaryFg: color("#ref-primary-fg"),
           refContextHover: bg("#ref-context-hover"),
+          refContextCurrent: bg("#ref-context-current"),
           refRaisedOverlay: bg("#ref-raised-overlay"),
           normalOutlineColor: color("#normal-outline"),
           normalOutlineBorder: border("#normal-outline"),
@@ -138,9 +139,10 @@ it("contextual-surface contract over one browser pass", async () => {
       expect(initial.brandColor).toBe(initial.refSurface);
       expect(initial.linkColor).toBe(initial.refSurface);
 
-      // The current nav link is a tint of the bar's ink, in that ink: the
-      // selected accent has no contrast pair with an arbitrary bar.
-      expect(initial.activeBg).toBe(initial.refContextHover);
+      // The current nav link is a tint of the bar's ink, a step above hover,
+      // in that ink: it reads on an arbitrary bar.
+      expect(initial.activeBg).toBe(initial.refContextCurrent);
+      expect(initial.activeBg).not.toBe(initial.refContextHover);
       expect(initial.activeBg).not.toBe(initial.navbarBg);
       expect(initial.activeColor).toBe(initial.refSurface);
 

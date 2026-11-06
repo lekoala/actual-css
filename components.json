@@ -570,7 +570,8 @@
       "navbar-brand"
     ],
     "publicHooks": [
-      "--state-selected-text"
+      "--nav-current-bg",
+      "--nav-current-fg"
     ],
     "internalHooks": [
       "--gap"

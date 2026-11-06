@@ -616,30 +616,42 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   // tests/browser/surface-context.test.js.
   expect(rules).not.toContain("--ui-hover-bg");
   expect(css).toMatch(
-    /\.nav-link:is\(:hover, \[aria-current="page"\], \[aria-current="location"\]\) \{[^}]*background: color-mix\(in oklch, currentColor 10%, transparent\);/,
+    /\.nav-link:hover \{[^}]*background: color-mix\(in oklch, currentColor 10%, transparent\);/,
   );
   // nav-link is deliberately two-valued: page navigation ("page") and
   // scrollspy ("location") share the current state.
-  // Selection never changes text metrics: the current link shares the base
-  // weight and is carried by the selected accent plus, in .nav-list, an inset
-  // inline-start trait (CONTRIBUTING.md "Forced colors invariant").
-  // The current link is selected ink on a surface, not a selected fill: it
-  // reads --state-selected-text first, with the fallback at the point of use
-  // so a local --state-selected still reaches it.
+  // The current link is neutral (--text ink over a tint a step above hover),
+  // never the brand accent: on light presets the accent sits at 4.5:1 on the
+  // page, so a fill strong enough to carry the state pushed it under.
   expect(css).toMatch(
     new RegExp(
-      `\\.nav-link${NAV_CURRENT_RE} \\{[^}]*color: var\\(--state-selected-text, var\\(--state-selected\\)\\);`,
+      `\\.nav-link${NAV_CURRENT_RE} \\{[^}]*background: var\\(--nav-current-bg, color-mix\\(in oklch, currentColor 18%, transparent\\)\\);`,
     ),
   );
+  expect(css).toMatch(
+    new RegExp(
+      `\\.nav-link${NAV_CURRENT_RE} \\{[^}]*color: var\\(--nav-current-fg, var\\(--ui-fg, var\\(--text\\)\\)\\);`,
+    ),
+  );
+  expect(css).not.toContain("--state-selected");
+  // Selection never changes text metrics.
   expect(css).not.toMatch(/\.nav-link[^{]*aria-current[^{]*\{[^}]*font-weight:/);
   // A hovered current link keeps the selected accent by source order: the
   // current rule follows :hover at equal specificity (0,2,0).
   // The rendered result is asserted in tests/browser/surface-context.test.js.
-  expect(css).toMatch(
+  // Forced colors drops fill and accent: the trait (vertical) and the
+  // underline (horizontal) exist there only (CONTRIBUTING.md "Forced colors
+  // invariant").
+  const forced = css.slice(css.indexOf("@media (forced-colors: active)"));
+  expect(forced).toMatch(
     new RegExp(
       `\\.nav-list \\.nav-link${NAV_CURRENT_RE}::before \\{[^}]*border-inline-start: 2px solid currentColor;`,
     ),
   );
+  expect(forced).toMatch(
+    new RegExp(`\\.nav-link${NAV_CURRENT_RE} \\{[^}]*text-decoration: underline;`),
+  );
+  expect(css.indexOf("::before")).toBeGreaterThan(css.indexOf("@media (forced-colors: active)"));
   // The positioning context lives on every row link, so becoming current never
   // moves an app-positioned decoration to a new containing block.
   expect(css).toMatch(/\.nav-list \.nav-link \{[^}]*position: relative;/);

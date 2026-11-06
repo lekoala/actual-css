@@ -8,7 +8,8 @@
  * list shared with .drawer, fed by the shared --gap token.
  *
  * Public hooks:
- * --state-selected-text (fallback-only: current-link ink, see tokens.css)
+ * --nav-current-bg (fallback-only: current-link fill)
+ * --nav-current-fg (fallback-only: current-link ink)
  *
  * Internal:
  * --gap (local value for the shared gap token)
@@ -75,40 +76,40 @@
 /* nav-link serves two contracts: plain page navigation (aria-current="page")
    and scrollspy, which toggles aria-current="location" on the active link.
    Those two values are the contract; any other, "false" included, is inert.
-   Selection never changes text metrics: the shared medium weight is kept and
-   the current link is carried by the selected accent. */
+   Selection never changes text metrics: the shared medium weight is kept.
+
+   The current link is neutral: full --text ink over a stronger tint of it,
+   against --text-muted at rest. That is a luminance step on both ink and
+   fill, so the state does not rest on hue. A brand-accent ink was measured
+   and dropped: on light presets the accent is already at 4.5:1 on the page,
+   so any fill strong enough to carry the state pushed it under. */
 .nav-link:hover {
   background: var(--surface-subtle);
   color: var(--text);
 }
 
 /* Current last, equal specificity to :hover (0,2,0): a hovered current link
-   keeps the selected accent instead of dropping to --text. The surface fill is
-   shared with the hover rule above. */
+   keeps its current fill. */
 .nav-link:is([aria-current="page"], [aria-current="location"]) {
-  background: var(--surface-subtle);
-  color: var(--state-selected-text, var(--state-selected));
+  background: var(--nav-current-bg, var(--surface-subtle));
+  color: var(--nav-current-fg, var(--text));
 }
 
-/* On a bar with its own --ui-bg/--ui-fg the fill is a tint of the link's own
-   ink, the .btn.ghost hover recipe, so it reads on light and dark bars alike
-   instead of snapping back to --surface-subtle. Not --ui-hover-bg: that is the
-   bar's own hover and can equal its fill. The ink follows --ui-fg too — the
-   selected accent has no contrast pair with an arbitrary bar. The baseline
-   above keeps the light chip where color-mix is missing, with ink that is
-   legible on it. */
+/* Fills are a tint of the link's own ink, the .btn.ghost hover recipe, so they
+   read on light and dark bars alike, including a bar with its own
+   --ui-bg/--ui-fg. Not --ui-hover-bg: that is the bar's own hover and can
+   equal its fill. Current is a step above hover (18% vs 10%), so the current
+   link stays apart while another is hovered. The baseline above keeps a
+   light chip where color-mix is missing. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .nav-link:is(:hover, [aria-current="page"], [aria-current="location"]) {
-    background: color-mix(in oklch, currentColor 10%, transparent);
-  }
-
   .nav-link:hover {
+    background: color-mix(in oklch, currentColor 10%, transparent);
     color: var(--ui-fg, var(--text));
   }
 
-  /* After :hover so a hovered current link keeps the selected accent. */
   .nav-link:is([aria-current="page"], [aria-current="location"]) {
-    color: var(--ui-fg, var(--state-selected-text, var(--state-selected)));
+    background: var(--nav-current-bg, color-mix(in oklch, currentColor 18%, transparent));
+    color: var(--nav-current-fg, var(--ui-fg, var(--text)));
   }
 }
 
@@ -132,23 +133,34 @@
   margin: 0;
 }
 
+/* The positioning context lives on every row link, so becoming current never
+   moves an app-positioned decoration (or the forced-colors trait below) to a
+   new containing block. */
 .nav-list .nav-link {
   position: relative;
   inline-size: 100%;
 }
 
-/* Vertical current indicator: inset inline-start trait in currentColor, so it
-   follows the forced palette without a forced-colors block and never touches
-   the row separators. Navbar horizontal links keep color + surface only. The
-   positioning context lives on every row link, so becoming current never moves
-   an app-positioned decoration to a new containing block.
-   The trait sits centered in the link's inline padding with rounded ends: flush
-   on the edge, a square line read as pasted onto the rounded fill. */
-.nav-list .nav-link:is([aria-current="page"], [aria-current="location"])::before {
-  content: "";
-  position: absolute;
-  inset-block: var(--space-20);
-  inset-inline-start: calc((var(--space-20) - 2px) / 2);
-  border-inline-start: 2px solid currentColor;
-  border-radius: var(--radius-full);
+/* Forced colors drops the fill and maps both inks to LinkText, so the current
+   link would be indistinguishable: it gets a shape instead. A vertical row
+   takes an inline-start trait, centered in the link's inline padding with
+   rounded ends; a horizontal link an underline. */
+@media (forced-colors: active) {
+  .nav-link:is([aria-current="page"], [aria-current="location"]) {
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+  }
+
+  .nav-list .nav-link:is([aria-current="page"], [aria-current="location"]) {
+    text-decoration: none;
+  }
+
+  .nav-list .nav-link:is([aria-current="page"], [aria-current="location"])::before {
+    content: "";
+    position: absolute;
+    inset-block: var(--space-20);
+    inset-inline-start: calc((var(--space-20) - 2px) / 2);
+    border-inline-start: 2px solid currentColor;
+    border-radius: var(--radius-full);
+  }
 }

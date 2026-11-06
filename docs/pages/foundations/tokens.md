@@ -569,7 +569,7 @@ Selected state has three roles:
 
 - `--state-selected` — the selected fill or accent: a pressed button, a checked switch, a completed step.
 - `--state-selected-fg` — ink on that fill.
-- `--state-selected-text` — selected ink on a regular surface: the current nav link, the selected tab, the current step's number and ring.
+- `--state-selected-text` — selected ink on a regular surface: the selected tab, the current step's number and ring.
 
 `--state-selected-text` falls back to `--state-selected` within each theme.
 Set it separately when the selected fill lacks contrast as text, especially
