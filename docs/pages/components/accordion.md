@@ -52,6 +52,14 @@ The default builds one raised shell around the whole group. `.flush` and `.separ
     <summary>Edge to edge</summary>
     <p>The summary and panel follow the surrounding surface's own gutter.</p>
   </details>
+
+  <details>
+    <summary>With a list</summary>
+    <ul>
+      <li>A direct list keeps its marker gutter</li>
+      <li>Even with the inline padding removed</li>
+    </ul>
+  </details>
 </div>
 ```
 

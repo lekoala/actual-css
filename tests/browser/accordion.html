@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Accordion fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+  </style>
+</head>
+<body>
+  <!-- A list directly after <summary> keeps its marker gutter in every
+       treatment and writing direction. -->
+  <div id="default" class="accordion">
+    <details open><summary>Ul</summary><ul><li>Item</li></ul></details>
+    <details open><summary>Ol</summary><ol><li>Item</li></ol></details>
+  </div>
+
+  <div id="flush" class="accordion flush">
+    <details open><summary>Ul</summary><ul><li>Item</li></ul></details>
+    <details open><summary>Ol</summary><ol><li>Item</li></ol></details>
+  </div>
+
+  <div id="flush-rtl" class="accordion flush" dir="rtl">
+    <details open><summary>Ul</summary><ul><li>Item</li></ul></details>
+    <details open><summary>Ol</summary><ol><li>Item</li></ol></details>
+  </div>
+</body>
+</html>

@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Fixed
+- `.accordion.flush`: a `<ul>` or `<ol>` panel directly after `<summary>` keeps its marker gutter instead of hanging its bullets outside the panel.
 
 ## [0.17.0] - 2026-11-06
 ### Added

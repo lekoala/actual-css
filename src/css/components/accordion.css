@@ -104,12 +104,6 @@
   margin-block-start: 0;
 }
 
-.accordion details > summary + ul,
-.accordion details > summary + ol {
-  margin: 0;
-  padding-inline-start: 2rem;
-}
-
 /* Flush — the shell is dropped and only the shared item separators remain.
    Zero inline padding puts the group edge to edge inside the surface that
    already frames it, so no override is repeated per embedding. */
@@ -128,6 +122,16 @@
    inset left for a .bleed child to cancel. */
 .accordion.flush details > summary + * {
   --surface-pad: 0px;
+}
+
+/* A list panel keeps its marker gutter in every treatment. The .flush
+   selector is required, not redundant: .flush zeroes the panel's inline
+   padding at higher specificity, which would push the bullets out of the
+   panel. */
+.accordion details > summary + :is(ul, ol),
+.accordion.flush details > summary + :is(ul, ol) {
+  margin: 0;
+  padding-inline-start: 2rem;
 }
 
 /* Separated — each item owns a full card. The item's own border beats the
