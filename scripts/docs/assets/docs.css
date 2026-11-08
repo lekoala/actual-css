@@ -363,8 +363,17 @@
 .docs-code-bar {
   --cluster-justify: space-between;
   min-block-size: var(--control-size-sm);
-  padding-inline: var(--space-30) var(--space-20);
+  padding-block: var(--space-10);
+  padding-inline: var(--space-30) var(--space-10);
   border-block-end: var(--border-width) solid var(--border);
+}
+
+/* Below the .sm scale so its hover fill sits inside the bar instead of
+   touching its edges. */
+.docs-copy {
+  --control-size: 1.5rem;
+  --control-font-size: var(--font-size-xs);
+  --control-pad-x: var(--space-20);
 }
 
 .docs-code-language {
