@@ -128,6 +128,7 @@ export const NOT_EXPORTED = {
     "soft-border-mix",
     "soft-hover-alpha",
     "soft-fg-mix",
+    "border-control-mix",
     "focus-outline-color",
   ],
   "soft recipe, exported with the components": [

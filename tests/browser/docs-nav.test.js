@@ -16,7 +16,12 @@ const isOpen = (slug) => `document.querySelector('${group(slug)}').open`;
 it("a collapsed sidebar group stays collapsed, except around the current page", async () => {
   await withBrowserPage(fixtureUrl("site/components/rating.html"), async (view) => {
     await clickSelector(view, `${group("patterns")} > summary`);
-    await waitForBrowser(view, `!${isOpen("patterns")}`);
+    // The store is written on the async toggle event, after `open` flips;
+    // navigating before it lands raced the write and failed in CI.
+    await waitForBrowser(
+      view,
+      `(sessionStorage.getItem("actual-docs-collapsed") ?? "").includes('"patterns"')`,
+    );
     const patternPage = await view.evaluate(
       `document.querySelector('${group("patterns")} a').href`,
     );
