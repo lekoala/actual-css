@@ -57,6 +57,25 @@ it("label-first and control-first cells render every state identically", async (
   );
 });
 
+// Trap: the base-select padding reset (custom-select.css) outranked the
+// headroom .floating-field reserves, so the always-floated label sat on the
+// selected value.
+it("a floating select keeps the headroom of a floating input", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const read = await view.evaluate(`(() => {
+      const pad = (sel) => getComputedStyle(document.querySelector(sel)).paddingBlockStart;
+      return {
+        appearance: getComputedStyle(document.querySelector('[data-case="select"] .select')).appearance,
+        select: pad('[data-case="select"] .select'),
+        input: pad('[data-case="filled"] .input'),
+      };
+    })()`);
+    // The bug only exists under the enhancement; prove it is the one measured.
+    expect(read.appearance).toBe("base-select");
+    expect(read.select).toBe(read.input);
+  });
+});
+
 it("focus floats the label in both orders", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),

@@ -32,6 +32,7 @@
 - Docs: the Aura, Chat, Floating action button, Shimmer, Floating labels and OTP pages open on their description, not their module note.
 
 ### Fixed
+- `.floating-field`: a `.select` keeps its label headroom under the `appearance: base-select` enhancement instead of drawing the label over the value.
 - `.accordion.flush`: a `<ul>` or `<ol>` panel directly after `<summary>` keeps its marker gutter instead of hanging its bullets outside the panel.
 - Docs: the homepage alerts use `danger` and `primary` (`error` and `info` do not exist) and drop `role="alert"`.
 - Docs: `check:doc-classes` also checks the docs page templates.

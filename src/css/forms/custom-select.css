@@ -17,14 +17,19 @@
     pointer: fine
   ) {
   @supports (appearance: base-select) {
+    /* why: base-select brings a UA padding-block (0.25em) that the native
+       select lacks; with a 24px line it pushed a .compact select to 34px
+       against --control-size 32px. min-block-size and align-items already
+       center the value. Zero specificity: the reset only has to beat the UA
+       sheet, and at (0,3,0) it erased the headroom .floating-field reserves,
+       so the floated label sat on the value. */
+    :where(.select:not([multiple], .native, [size]:not([size="1"]))) {
+      padding-block: 0;
+    }
+
     .select:not([multiple], .native, [size]:not([size="1"])) {
       appearance: base-select;
       align-items: center;
-      /* why: base-select brings a UA padding-block (0.25em) that the native
-         select lacks; with a 24px line it pushed a .compact select to 34px
-         against --control-size 32px. min-block-size and align-items already
-         center the value. */
-      padding-block: 0;
 
       &::picker(select) {
         appearance: base-select;
