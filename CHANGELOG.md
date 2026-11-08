@@ -13,6 +13,7 @@
 
 ### Changed
 - `--border-control` derives from `--text` and `--surface`, reaching 3:1 on the default palette; it no longer equals `--border`.
+- `.input-icon`: the text sits half a `--control-pad-x` from the icon instead of a full one, on both sides.
 - `.join`: adjacent filled buttons (default, `.solid`, `.soft`) draw a hairline seam, so the group no longer reads as one button.
 - `.alert.callout`: the leading corners take `--radius-sm`, so the flag stays a straight bar.
 - `--line-height-relaxed` is 1.6 (was 1.75); `.lead` and `.text-lead` read tighter.

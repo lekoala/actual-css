@@ -49,14 +49,16 @@
   block-size: 1em;
 }
 
-/* Leading: input gets start padding to clear the icon */
+/* Leading: input gets start padding to clear the icon. The text sits half a
+   pad from the icon: a full pad, the same as the icon's inset from the edge,
+   read as two separate items rather than an icon labelling its field. */
 .input-icon > :first-child:where(:not(.input)) ~ .input {
-  padding-inline-start: calc(var(--control-pad-x) * 2 + var(--input-icon-size));
+  padding-inline-start: calc(var(--control-pad-x) * 1.5 + var(--input-icon-size));
 }
 
 /* Trailing: the input has a following sibling → end padding. Not tied to the
    input being first child, so a leading icon does not disable the trailing
    icon's reserved space. */
 .input-icon > .input:where(:not(:last-child)) {
-  padding-inline-end: calc(var(--control-pad-x) * 2 + var(--input-icon-size));
+  padding-inline-end: calc(var(--control-pad-x) * 1.5 + var(--input-icon-size));
 }

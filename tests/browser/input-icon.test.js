@@ -58,6 +58,18 @@ it("input-icon positions one or two icons and reserves their space", async () =>
             padRight: input("both").paddingRight,
             ...edges("both", 2),
           },
+          // Icon box end and text start, from the icon's own em box (its
+          // requested size), not the glyph: the fixture's letter is narrower.
+          spacing: (() => {
+            const field = document.querySelector("#leading > .input");
+            const s = getComputedStyle(field);
+            const glyph = document.querySelector("#leading > :not(.input)");
+            const inset = rect(glyph).left - wrap("leading").left;
+            const iconEnd = inset + Number.parseFloat(getComputedStyle(glyph).fontSize);
+            const textStart =
+              Number.parseFloat(s.borderLeftWidth) + Number.parseFloat(s.paddingLeft);
+            return { inset, gap: textStart - iconEnd };
+          })(),
           large: {
             padLeft: input("large").paddingLeft,
             contentStart: rect(document.querySelector("#large > .input")).left,
@@ -89,6 +101,12 @@ it("input-icon positions one or two icons and reserves their space", async () =>
       expect(snapshot.both.padLeft).toBe(snapshot.leading.padLeft);
       expect(snapshot.both.padRight).toBe(snapshot.trailing.padRight);
       expect(snapshot.both.padLeft).toBe(snapshot.both.padRight);
+
+      // The text sits nearer the icon than the icon sits to the edge: a gap
+      // equal to the inset split the icon from the field it labels.
+      const { inset, gap } = snapshot.spacing;
+      expect(gap).toBeGreaterThan(0);
+      expect(gap).toBeLessThan(inset);
 
       // Oversized icon: the glyph must sit inside the space the input reserves,
       // i.e. the inset and the padding share the control's frame.
