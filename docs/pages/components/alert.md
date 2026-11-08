@@ -122,10 +122,12 @@ split / spread row — there is no `.alert-action` class. The action sits before
 `.close` on a wide alert and wraps under the message on a narrow one.
 
 The alert aligns its columns to the block start, so a multi-line message keeps
-its icon and `.close` on the first line. A trailing control makes a one-line
-row taller than its text: add `.items-center` to put the icon, the text and the
-button on one center. Leave it off when the message can wrap — the icon would
-center on the whole block.
+its icon and `.close` on the first line. A trailing control makes that line
+taller than its text and pushes the text down. On a one-line message, add
+`.items-center` to put the icon, the text and the button on one center. When
+the message can wrap, add `.items-baseline` instead: it keeps the icon and
+`.close` on the first line of text, where `.items-center` would center them on
+the whole block.
 
 ```html demo
 <div class="stack">
@@ -137,7 +139,7 @@ center on the whole block.
     </div>
   </div>
 
-  <div class="alert primary" id="install-alert">
+  <div class="alert primary items-baseline" id="install-alert">
     <i class="ti ti-download alert-icon" aria-hidden="true"></i>
     <div class="cluster justify-content-space-between">
       <p><strong>Recommended</strong> · Install the desktop app for notifications and offline access.</p>
