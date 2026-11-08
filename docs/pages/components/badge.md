@@ -171,15 +171,16 @@ keeps its height and `.sm` / `.lg` scale both together. Wrap the chips in a
     @rin-moreau
   </a>
   <span class="badge primary">
-    <span class="avatar"><abbr>AM</abbr></span>
+    <span class="avatar"><abbr title="Ada Morgan">A</abbr></span>
     Ada Morgan
     <button class="close" type="button" aria-label="Remove Ada Morgan"></button>
   </span>
 </div>
 ```
 
-Keep `alt=""` when the handle or name sits next to the image. Initials fit
-the default and `.lg` sizes; use an image on `.sm`.
+Keep `alt=""` when the handle or name sits next to the image. On the default
+and `.sm` badges, prefer a photo or a single initial; two-letter initials need
+`.lg` to stay legible.
 
 ## Loading status
 

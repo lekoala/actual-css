@@ -23,6 +23,7 @@
 - `forest`, `sunset`, `ocean` themes: `--border-control` mixes 49% ink, clearing 3.2:1 in light.
 - `glass` theme: `--border-control` is a light rim (75% ink), clearing 3:1 over the whole backdrop.
 - Demo and docs templates load Tabler Icons `3.46.0` instead of `@latest` or `@3`.
+- Docs: Badge recommends a photo or a single initial in default and `.sm` person chips; two-letter initials need `.lg`.
 - Docs: the Aura, Chat, Floating action button, Shimmer, Floating labels and OTP pages open on their description, not their module note.
 
 ### Fixed
