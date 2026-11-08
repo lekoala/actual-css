@@ -44,7 +44,8 @@ export function relHref(fromUrl, toUrl) {
 /*
  * The current destination's groups only; the header and the drawer grid reach
  * the others. Several groups become collapsible rows (open), one group is a
- * plain list: the destination already names it.
+ * plain list: the destination already names it. docs.js restores the rows a
+ * reader collapsed, keyed by group slug.
  */
 export function renderNavGroups(current) {
   if (!current) return "";
@@ -64,7 +65,7 @@ ${groups[0].pages.map((page) => link(page.entry, "        ")).join("\n")}
   const rows = groups
     .map(
       (group) => `        <li>
-          <details open>
+          <details open data-docs-nav-group="${group.slug}">
             <summary class="nav-link">${escapeHtml(group.title)}</summary>
             <ul class="nav-list">
 ${group.pages.map((page) => link(page.entry, "              ")).join("\n")}

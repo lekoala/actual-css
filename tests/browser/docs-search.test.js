@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import { searchEntries } from "../../scripts/docs/search.js";
 import {
   browserAvailable,
+  clickSelector,
   fixtureUrl,
   waitForBrowser,
   withBrowserPage,
@@ -23,8 +24,8 @@ async function key(view, name, code, modifiers = 0) {
   }
 }
 
-const withSearch = (run, text = "select") =>
-  withBrowserPage(fixtureUrl("site/index.html"), async (view) => {
+const withSearch = (run, text = "select", url = fixtureUrl("site/index.html")) =>
+  withBrowserPage(url, async (view) => {
     await key(view, "/", 191);
     await waitForBrowser(view, `document.activeElement === document.querySelector('${INPUT}')`);
     await view.cdp("Input.insertText", { text });
@@ -32,7 +33,7 @@ const withSearch = (run, text = "select") =>
       view,
       `document.querySelectorAll("[data-docs-search-results] li").length > 1`,
     );
-    await run(view);
+    return run(view);
   });
 
 it("Enter on the search close button closes without navigating", async () => {
@@ -84,6 +85,29 @@ it("Enter opens the same #section the result link points to", async () => {
     expect(await view.evaluate("location.href")).toBe(href);
   }, "class reference");
 }, 60_000);
+
+// Trap: a #section on the current page navigates without unloading, so the
+// modal stayed open over the section it had just scrolled to.
+for (const via of ["Enter", "click"]) {
+  it(`${via} on a result in the current page closes the search`, async () => {
+    const page = await withSearch(
+      (view) => view.evaluate(`document.querySelector("#docs-search-opt-0 a").href.split("#")[0]`),
+      "class reference",
+    );
+    await withSearch(
+      async (view) => {
+        const href = await view.evaluate(`document.querySelector("#docs-search-opt-0 a").href`);
+        expect(href.split("#")[0]).toBe(page);
+        if (via === "Enter") await key(view, "Enter", 13);
+        else await clickSelector(view, "#docs-search-opt-0 a");
+        await waitForBrowser(view, `location.href === ${JSON.stringify(href)}`);
+        await waitForBrowser(view, `!document.getElementById("docs-search-dialog").open`);
+      },
+      "class reference",
+      page,
+    );
+  }, 60_000);
+}
 
 it("IME confirmation and canceled keys are not result navigation", async () => {
   await withSearch(async (view) => {

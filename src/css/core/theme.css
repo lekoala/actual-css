@@ -124,11 +124,24 @@
      alone), where --border sat at ~1.3:1. The mix is not a guarantee for every
      palette: a low-contrast ink lands under 3:1, which the contrast report
      (control edge) shows. Mixed into the opaque surface so a translucent theme
-     still draws a solid edge. */
-  --border-control: color-mix(in oklab, var(--text) 45%, var(--surface-opaque));
+     still draws a solid edge. The plain fallback matters: without color-mix
+     the var() is invalid at computed time and takes the whole border
+     shorthand with it, erasing every field and choice outline. */
+  --border-control: var(--border);
   /* Inherited resting field fill, shared with external control bridges.
      Component state rules still own readonly, disabled and invalid fills. */
   --control-default-bg: var(--surface);
+}
+
+@supports (color: color-mix(in oklab, red, white)) {
+  :root,
+  [data-theme] {
+    --border-control: color-mix(
+      in oklab,
+      var(--text) var(--border-control-mix),
+      var(--surface-opaque)
+    );
+  }
 }
 
 /* Soft foreground hooks — the soft ink is the intent rebated toward the local

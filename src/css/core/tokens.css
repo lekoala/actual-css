@@ -206,6 +206,9 @@
      the hovered soft fill instead (theme.css); this mix is the fallback a
      theme without hooks falls back to. */
   --soft-fg-mix: 100%;
+  /* Control edge: the share of ink in --border-control (theme.css). Raise it
+     when a tinted or translucent surface pulls the edge under 3:1. */
+  --border-control-mix: 45%;
 
   /* Shared icon assets. Override these URLs when a strict CSP disallows data:. */
   --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238a8594' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");

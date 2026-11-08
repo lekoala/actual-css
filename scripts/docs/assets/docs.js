@@ -43,6 +43,33 @@
     applyTheme(current);
   }
 
+  /* --- Collapsed nav groups --- */
+
+  /* A collapsed group would reopen on every page, since each page renders its
+     groups open. Remember the collapsed ones for the session, but never hide
+     the current page's link: its group opens whatever was stored. Storage can
+     throw (blocked site data); the nav then just stays open. Restored before
+     the reveal below, which measures the open layout. */
+  const NAV_KEY = "actual-docs-collapsed";
+  const navGroups = [...document.querySelectorAll("details[data-docs-nav-group]")];
+  if (navGroups.length > 0) {
+    let collapsed = new Set();
+    try {
+      collapsed = new Set(JSON.parse(sessionStorage.getItem(NAV_KEY) ?? "[]"));
+    } catch {}
+    for (const group of navGroups) {
+      const current = group.querySelector('[aria-current="page"]');
+      group.open = Boolean(current) || !collapsed.has(group.dataset.docsNavGroup);
+      group.addEventListener("toggle", () => {
+        if (group.open) collapsed.delete(group.dataset.docsNavGroup);
+        else collapsed.add(group.dataset.docsNavGroup);
+        try {
+          sessionStorage.setItem(NAV_KEY, JSON.stringify([...collapsed]));
+        } catch {}
+      });
+    }
+  }
+
   /* --- Reveal active nav item --- */
 
   /* The sidebar is its own scroll container, so a deep link loads with the
@@ -278,11 +305,23 @@
     current.scrollIntoView({ block: "nearest" });
   }
 
+  // A #section on the current page navigates without unloading it, so the
+  // modal would stay open over the section it was asked to show.
+  function closeForSamePage(link) {
+    const target = new URL(link.href);
+    if (target.pathname === location.pathname && target.search === location.search) {
+      searchDialog.close();
+    }
+  }
+
   // The rendered link is the one destination: click and Enter must agree,
   // including the #section a result adds when a heading matched.
   function goToResult(index) {
     const link = searchResults.querySelector(`#docs-search-opt-${index} a`);
-    if (link) location.assign(link.href);
+    if (!link) return;
+    const href = link.href;
+    closeForSamePage(link);
+    location.assign(href);
   }
 
   if (searchDialog && searchInput && searchResults) {
@@ -327,6 +366,11 @@
     searchResults.addEventListener("mousemove", (event) => {
       const item = event.target.closest("li[data-index]");
       if (item) setActive(Number(item.dataset.index));
+    });
+
+    searchResults.addEventListener("click", (event) => {
+      const link = event.target.closest("a[href]");
+      if (link) closeForSamePage(link);
     });
 
     searchDialog.querySelector("[data-docs-search-form]")?.addEventListener("submit", (event) => {

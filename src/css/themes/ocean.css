@@ -27,7 +27,7 @@
 
   --border: hsl(198 30% 84%);
   /* The tinted light surface pulls the core 45% control edge under 3:1. */
-  --border-control: color-mix(in oklab, var(--text) 49%, var(--surface-opaque));
+  --border-control-mix: 49%;
   /* Mid-tone of the primary hue, one value for both schemes: the focus line
      must hold 3:1 on --surface and --surface-solid alike. */
   --focus: hsl(198 75% 42%);

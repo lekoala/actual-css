@@ -131,7 +131,9 @@ is the resting edge that tells a control apart from the surface — fields,
 checkboxes and radios, switches, OTP cells, choice cards, join addons, the color
 and file inputs. It is derived from `--text` and `--surface`; on the default
 palette it holds 3:1 against the surface, and `actual-css contrast` reports it
-for your theme. Set it alone to soften or strengthen controls (input border,
+for your theme. `--border-control-mix` sets the ink share; raise it when a
+tinted surface pulls the edge under 3:1. Without `color-mix()` it falls back to
+`--border`. Set `--border-control` itself to soften or strengthen controls (input border,
 field outline, form control contrast) without touching any separator. Hover, checked, invalid and disabled states keep
 their own colors.
 
@@ -540,7 +542,7 @@ A full theme can override:
 - intent colors and foreground pairs
 - surface, text, border, focus, and overlay colors
 - `--surface-opaque` and `--surface-solid-fg`, when surfaces are translucent
-- `--border-control`, when controls need a stronger edge than separators
+- `--border-control-mix` or `--border-control`, when controls need a stronger edge than separators
 - radius tokens
 - optional shadow, motion, typography, and soft-variant mix tokens
 

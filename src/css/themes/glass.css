@@ -37,7 +37,7 @@
   --border: rgb(255 255 255 / 20%);
   /* A light rim: the core mid-tone edge fades over the bright backdrop spots.
      Holds 3:1 over the whole backdrop, not inside a card on its brightest. */
-  --border-control: color-mix(in oklab, var(--text) 75%, var(--surface-opaque));
+  --border-control-mix: 75%;
   /* Mid-tone: holds 3:1 on the light --surface-solid and on the dark backdrop. */
   --focus: hsl(200 80% 45%);
   --hover-overlay: rgb(255 255 255 / 8%);

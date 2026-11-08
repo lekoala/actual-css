@@ -45,3 +45,15 @@ it("controls take --border-control and separators keep --border", async () => {
     { artifactName: "border-control" },
   );
 });
+
+// Themes tune the edge through the mix, never by redeclaring the color-mix():
+// an unguarded redeclaration erased every control outline without color-mix.
+it("--border-control-mix sets the ink share of the derived edge", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const [edge, expected] = await view.evaluate(`[
+      getComputedStyle(document.querySelector("[data-mix]")).borderBlockStartColor,
+      getComputedStyle(document.querySelector("[data-mix-expected]")).color,
+    ]`);
+    expect(edge).toBe(expected);
+  });
+});

@@ -3,16 +3,18 @@
 ## [Unreleased]
 ### Added
 - Docs: a "Skip to content" link is the first tab stop on every page.
-- Docs: search results link to the matching section, show their group, and say when nothing matched.
+- Docs: search results link to the matching section, show their group, and say when nothing matched; a result on the current page closes the search.
+- Docs: collapsed sidebar groups stay collapsed for the session; the current page's group always opens.
 - Docs: search matches `--hooks` and `.classes` as whole names.
 - Docs: live color swatches on the Tokens page follow the selected scheme and theme.
 - `actual-css contrast` and `report:theme-contrast` measure the resting edge of a field, checkbox and radio (3:1).
 - Docs: a Components overview lists every component and pattern as a card; the Components destination opens on it.
 - Docs: `<!--docs-index:<group>-->` in a page expands to a card per page of that group.
+- `--border-control-mix` sets the ink share of `--border-control` (45%).
 - `check:templates` rejects `@latest` and bare-major CDN URLs in demo and docs templates.
 
 ### Changed
-- `--border-control` derives from `--text` and `--surface`, reaching 3:1 on the default palette; it no longer equals `--border`.
+- `--border-control` derives from `--text` and `--surface`, reaching 3:1 on the default palette; it equals `--border` only without `color-mix()`.
 - `.nav-link`: the current and hover fills are paler, 8% and 5% of the link's ink (were 18% and 10%), so a current row no longer reads as a pressed button.
 - `.input-icon`: the text sits half a `--control-pad-x` from the icon instead of a full one, on both sides.
 - `.join`: adjacent filled buttons (default, `.solid`, `.soft`) draw a hairline seam, so the group no longer reads as one button.
@@ -22,8 +24,8 @@
 - Docs: page titles use sentence case, and the Components navigation is alphabetical.
 - Docs: tables span the content column; class reference tables reflow on phones.
 - Docs: the homepage presents the named themes as demos of the theme contract and counts components instead of themes.
-- `forest`, `sunset`, `ocean` themes: `--border-control` mixes 49% ink, clearing 3.2:1 in light.
-- `glass` theme: `--border-control` is a light rim (75% ink), clearing 3:1 over the whole backdrop.
+- `forest`, `sunset`, `ocean` themes: `--border-control-mix: 49%`, clearing 3.2:1 in light.
+- `glass` theme: `--border-control-mix: 75%`, a light rim clearing 3:1 over the whole backdrop.
 - Demo and docs templates load Tabler Icons `3.46.0` instead of `@latest` or `@3`.
 - Docs: Badge recommends a photo or a single initial in default and `.sm` person chips; two-letter initials need `.lg`.
 - Docs: the Aura, Chat, Floating action button, Shimmer, Floating labels and OTP pages open on their description, not their module note.
