@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.17.1] - 2026-11-08
 ### Added
 - Docs: a "Skip to content" link is the first tab stop on every page.
 - Docs: search results link to the matching section, show their group, and say when nothing matched; a result on the current page closes the search.
