@@ -1,4 +1,4 @@
-# Ajax Submission
+# Ajax submission
 
 > Submit a form with `fetch` and show the server's HTML answer in place.
 

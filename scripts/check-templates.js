@@ -8,6 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const TEMPLATES_DIR = join(ROOT, "demo", "templates");
 const SITES_DIR = join(ROOT, "demo", "sites");
+const DOCS_TEMPLATES_DIR = join(ROOT, "scripts", "templates");
 const THEME_PICKER = join(ROOT, "demo", "scripts", "theme-picker.js");
 
 function countBraces(css) {
@@ -63,6 +64,20 @@ function checkThemeCopy(source) {
     : [];
 }
 
+/*
+ * An `@latest` or bare-major CDN URL renders whatever was published last, so
+ * a page can change with no commit (Tabler icons once loaded from `@3`). Pin
+ * third-party packages to an exact version; Actual's own minor pin, moved by
+ * the release script, stays legal.
+ */
+function checkCdnPins(source) {
+  const loose =
+    /https:\/\/(?:cdn\.jsdelivr\.net\/npm|unpkg\.com)\/((?:@[\w.-]+\/)?[\w.-]+)@(latest|\d+)\//g;
+  return [...source.matchAll(loose)].map(
+    ([, pkg, version]) => `${pkg}@${version} is not pinned: use an exact version`,
+  );
+}
+
 function checkThemePickerList(themeNames) {
   const source = readFileSync(THEME_PICKER, "utf8");
   const list = source.match(/const THEMES = \[([\s\S]*?)\]/)?.[1] ?? "";
@@ -83,8 +98,14 @@ function checkFile(file, published) {
   }
   issues.push(...checkAssets(file, published));
   issues.push(...checkThemeCopy(source));
+  issues.push(...checkCdnPins(source));
 
   return issues;
+}
+
+/* The docs chrome is not a demo: only its CDN pins apply. */
+function checkDocsTemplate(file) {
+  return checkCdnPins(readFileSync(file, "utf8"));
 }
 
 function main() {
@@ -93,6 +114,7 @@ function main() {
   const themeNames = loadThemes(ROOT).map((theme) => theme.name);
   const reports = [
     ...files.map((file) => [file, checkFile(file, published)]),
+    ...collectHtml(DOCS_TEMPLATES_DIR).map((file) => [file, checkDocsTemplate(file)]),
     [THEME_PICKER, checkThemePickerList(themeNames)],
   ];
   let failed = false;

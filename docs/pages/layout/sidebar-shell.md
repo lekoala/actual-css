@@ -1,4 +1,4 @@
-# Sidebar Shell
+# Sidebar shell
 
 > A persistent sidebar beside the main region on a wide screen, each scrolling on its own; a drawer on a phone.
 

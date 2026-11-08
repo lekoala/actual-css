@@ -47,7 +47,7 @@ it("every combination is a variant, default first; soft recipes are shared", asy
   const [input] = built.Input.variants;
   expect(input.box).toMatchObject({ hug: false, fixedHeight: true, justify: "start" });
   expect(input.box.height).toBe(38);
-  expect(input.box.stroke.token).toBe("border");
+  expect(input.box.stroke.token).toBe("border-control");
   expect(input.texts[0].label).toBe("Input");
 
   const [badge] = built.Badge.variants;

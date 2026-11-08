@@ -1,4 +1,4 @@
-# Scroll Target
+# Scroll target
 
 Anchor scroll offset: keep `#hash` and `scrollIntoView()` targets clear of sticky headers.
 

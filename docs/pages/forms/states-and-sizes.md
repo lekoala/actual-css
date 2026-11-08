@@ -1,4 +1,4 @@
-# States And Sizes
+# States and sizes
 
 > Read-only, disabled, and shared size modifiers for form controls.
 

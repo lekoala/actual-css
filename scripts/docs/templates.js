@@ -151,7 +151,11 @@ export function renderThemeInit(themes) {
  * before it builds docs. Reading a report written later in the same pipeline
  * publishes the previous run's numbers.
  */
-export function renderHomeStats(themes) {
+function readCatalog() {
+  return JSON.parse(readFileSync(join(__dirname, "..", "..", "components.json"), "utf8"));
+}
+
+export function renderHomeStats() {
   let report;
   try {
     report = JSON.parse(readFileSync(join(__dirname, "..", "..", "size-report.json"), "utf8"));
@@ -170,7 +174,9 @@ export function renderHomeStats(themes) {
     ["0", "Third-party dependencies"],
     [kb(report.full.brotli), "Full build, brotli"],
     [kb(report.core.brotli), "Core, brotli"],
-    [String(themes.length + 2), "Themes, light and dark included"],
+    // Counted from the derived catalog, which covers shipped components only.
+    // Not a theme count: the named themes are demos and do not ship.
+    [String(readCatalog().length), "Components"],
   ];
 
   return stats
@@ -215,17 +221,45 @@ const COMPONENT_FEATURED = [
   "pagination",
 ];
 
+function renderPageCard(page, href) {
+  return `          <a class="card stack docs-component-card" href="${href}">
+            <h3>${escapeHtml(page.title)}</h3>
+            <p class="muted">${escapeHtml(page.description)}</p>
+          </a>`;
+}
+
 export function renderComponentsGrid(navigation) {
   return navigation.pages
     .filter((page) => page.groupSlug === "components" && COMPONENT_FEATURED.includes(page.slug))
     .sort((a, b) => COMPONENT_FEATURED.indexOf(a.slug) - COMPONENT_FEATURED.indexOf(b.slug))
-    .map(
-      (page) => `          <a class="card stack docs-component-card" href="${page.url}">
-            <h3>${escapeHtml(page.title)}</h3>
-            <p class="muted">${escapeHtml(page.description)}</p>
-          </a>`,
-    )
+    .map((page) => renderPageCard(page, page.url))
     .join("\n");
+}
+
+const PAGE_INDEX = /<!--docs-index:([a-z-]+)-->/g;
+
+/*
+ * Expands `<!--docs-index:<group slug>-->` in a rendered page into a card per
+ * page of that group, from navigation.json order and each page's own lead, so
+ * an overview never restates what the pages say. Overview pages are skipped:
+ * the authored section links its group's overview. Runs after every page is
+ * rendered, since it reads the other pages' titles and descriptions.
+ */
+export function expandPageIndexes(html, navigation, current) {
+  return html.replace(PAGE_INDEX, (_marker, slug) => {
+    const group = navigation.groups.find((candidate) => candidate.slug === slug);
+    if (!group) throw new Error(`${current.file}: docs-index names unknown group "${slug}"`);
+    const cards = group.pages
+      .map((page) => page.entry)
+      .filter((entry) => entry.slug !== "overview")
+      .map((entry) => renderPageCard(entry, relHref(current.url, entry.url)))
+      .join("\n");
+    return `${DOCS_PROSE_END}
+<div class="grid docs-components-grid">
+${cards}
+</div>
+${DOCS_PROSE_START}`;
+  });
 }
 
 export function renderHome({
@@ -248,7 +282,7 @@ export function renderHome({
     .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
     .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
     .replace(/\{\{themeCount\}\}/g, String(themes.length))
-    .replace(/\{\{homeStats\}\}/g, renderHomeStats(themes))
+    .replace(/\{\{homeStats\}\}/g, renderHomeStats())
     .replace(/\{\{themeCards\}\}/g, renderThemeCards(themes))
     .replace(/\{\{componentsGrid\}\}/g, renderComponentsGrid(navigation))
     .replace(/\{\{destinations\}\}/g, renderDestinations(navigation, null))

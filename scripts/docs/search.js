@@ -27,6 +27,8 @@ export function buildSearchIndex(navigation, rendered) {
       group: page.groupTitle,
       url: page.url,
       headings: result.toc.map((heading) => heading.label),
+      // Parallel to headings: lets a result deep-link to the matching section.
+      anchors: result.toc.map((heading) => heading.id),
       aliases: result.aliases ?? [],
       text: stripHtml(result.html),
     };
@@ -46,9 +48,17 @@ function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+/* \b needs a word character on the query's side, so "--card-pad" or ".card"
+   never matched as a whole word. A query that opens with punctuation is an
+   identifier (--hook, .class): both edges are bounded by "no word character
+   or hyphen", so "--card-pad" does not match inside "--card-padding". Plain
+   words keep \b, where a hyphen still separates ("select" in "multi-select"). */
 function hasWord(haystack, query) {
   if (!query) return false;
-  return new RegExp(`\\b${escapeRegExp(query)}\\b`).test(haystack);
+  const identifier = !/^\w/.test(query);
+  const start = identifier ? "(?<![\\w-])" : "\\b";
+  const end = identifier || !/\w$/.test(query) ? "(?![\\w-])" : "\\b";
+  return new RegExp(`${start}${escapeRegExp(query)}${end}`).test(haystack);
 }
 
 /*

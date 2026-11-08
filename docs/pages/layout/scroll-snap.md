@@ -1,4 +1,4 @@
-# Scroll Snap
+# Scroll snap
 
 Horizontal rails that stay useful without JavaScript and snap in modern browsers.
 

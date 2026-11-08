@@ -20,6 +20,16 @@ test("a resting soft pair under 4.5:1 counts as a miss", () => {
   expect(formatContrast([row({ rest: 4.5, hover: 4.5 })]).misses).toBe(0);
 });
 
+test("a control edge under 3:1 counts as a miss", () => {
+  const edge = (value) => ({
+    ...row({ rest: 5, hover: 5 }),
+    controls: [{ kind: "radio", value }],
+  });
+  expect(formatContrast([edge(2.9)]).misses).toBe(1);
+  expect(formatContrast([edge(3)]).misses).toBe(0);
+  expect(formatContrast([edge(null)]).misses).toBe(0);
+});
+
 test("a translucent pair reads n/a and is not a miss", () => {
   const { text, misses } = formatContrast([row({ rest: null, hover: 5 })]);
   expect(misses).toBe(0);

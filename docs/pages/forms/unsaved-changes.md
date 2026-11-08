@@ -1,4 +1,4 @@
-# Unsaved Changes
+# Unsaved changes
 
 > Track whether a form holds data that differs from what was last saved.
 

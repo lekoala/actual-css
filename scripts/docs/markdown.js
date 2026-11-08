@@ -183,7 +183,13 @@ export function wrapTables(html) {
 
   while (match) {
     out.push(html.slice(last, match.index));
-    out.push('<div class="table-wrap">');
+    // Class reference tables share one header; docs.css reflows them on
+    // phones. Named here so that rule never reaches another 3-column table.
+    const headers = [...match[0].matchAll(/<th[^>]*>([\s\S]*?)<\/th>/g)]
+      .map((cell) => cell[1].replace(/<[^>]+>/g, "").trim())
+      .join("|");
+    const reference = headers === "Class|Kind|Description" ? " docs-class-reference" : "";
+    out.push(`<div class="table-wrap${reference}">`);
     out.push(match[0].replace("<table", '<table class="table"'));
     out.push("</div>");
     last = match.index + match[0].length;

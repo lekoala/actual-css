@@ -1,4 +1,4 @@
-# Sidebar Layout
+# Sidebar layout
 
 Use `.sidebar-layout` for a main region followed by a secondary region. It
 switches intrinsically according to its own available width: the regions sit

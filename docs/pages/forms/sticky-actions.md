@@ -1,4 +1,4 @@
-# Sticky Actions
+# Sticky actions
 
 > Use `.cluster.form-actions.sticky` when long forms need reachable submit actions while scrolling.
 

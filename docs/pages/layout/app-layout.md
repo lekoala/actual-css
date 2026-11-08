@@ -1,4 +1,4 @@
-# App Layout
+# App layout
 
 > Specialized application recipe with a topbar, independently scrolling content, and one adaptive primary navigation landmark.
 

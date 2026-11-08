@@ -1,8 +1,34 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Added
+- Docs: a "Skip to content" link is the first tab stop on every page.
+- Docs: search results link to the matching section, show their group, and say when nothing matched.
+- Docs: search matches `--hooks` and `.classes` as whole names.
+- Docs: live color swatches on the Tokens page follow the selected scheme and theme.
+- `actual-css contrast` and `report:theme-contrast` measure the resting edge of a field, checkbox and radio (3:1).
+- Docs: a Components overview lists every component and pattern as a card; the Components destination opens on it.
+- Docs: `<!--docs-index:<group>-->` in a page expands to a card per page of that group.
+- `check:templates` rejects `@latest` and bare-major CDN URLs in demo and docs templates.
+
+### Changed
+- `--border-control` derives from `--text` and `--surface`, reaching 3:1 on the default palette; it no longer equals `--border`.
+- `.join`: adjacent filled buttons (default, `.solid`, `.soft`) draw a hairline seam, so the group no longer reads as one button.
+- `.alert.callout`: the leading corners take `--radius-sm`, so the flag stays a straight bar.
+- `--line-height-relaxed` is 1.6 (was 1.75); `.lead` and `.text-lead` read tighter.
+- `.prose`: `pre` and tables use `--line-height` instead of the prose reading leading.
+- Docs: page titles use sentence case, and the Components navigation is alphabetical.
+- Docs: tables span the content column; class reference tables reflow on phones.
+- Docs: the homepage presents the named themes as demos of the theme contract and counts components instead of themes.
+- `forest`, `sunset`, `ocean` themes: `--border-control` mixes 49% ink, clearing 3.2:1 in light.
+- `glass` theme: `--border-control` is a light rim (75% ink), clearing 3:1 over the whole backdrop.
+- Demo and docs templates load Tabler Icons `3.46.0` instead of `@latest` or `@3`.
+- Docs: the Aura, Chat, Floating action button, Shimmer, Floating labels and OTP pages open on their description, not their module note.
+
 ### Fixed
 - `.accordion.flush`: a `<ul>` or `<ol>` panel directly after `<summary>` keeps its marker gutter instead of hanging its bullets outside the panel.
+- Docs: the homepage alerts use `danger` and `primary` (`error` and `info` do not exist) and drop `role="alert"`.
+- Docs: `check:doc-classes` also checks the docs page templates.
 
 ## [0.17.0] - 2026-11-06
 ### Added

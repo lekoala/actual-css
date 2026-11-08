@@ -98,6 +98,19 @@
   margin-inline-start: calc(var(--border-width) * -1);
 }
 
+/* Seam between adjacent filled buttons (default, .solid, .soft): their border
+   is transparent, so "Left Middle Right" read as one button. A quarter of the
+   ink turns that edge into a hairline; the mix keeps a soft rim set by
+   --soft-border-mix. Variants that already draw an edge, or have no fill, keep
+   their border untouched. */
+.join > .btn + .btn:not(.outline, .surface, .ghost, .link) {
+  border-inline-start-color: color-mix(
+    in oklab,
+    var(--btn-border-color, var(--btn-border)),
+    var(--btn-fg) 25%
+  );
+}
+
 .join > :is(:hover, :focus, :focus-within) {
   z-index: 1;
 }

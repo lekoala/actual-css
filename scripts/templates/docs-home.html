@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{{actualCss}}">
   <link rel="stylesheet" href="{{themesCss}}">
   <link rel="stylesheet" href="{{docsCss}}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-core.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
   <script src="{{actualJs}}" defer></script>
@@ -21,6 +21,7 @@
 </head>
 
 <body>
+  <a class="btn primary docs-skip" href="#content">Skip to content</a>
   <div class="app-shell">
     <header class="docs-header">
       <div class="center cluster docs-header-inner">
@@ -30,7 +31,7 @@
                so the mark stays legible on every preset instead of tracking
                only the OS scheme. -->
           <svg class="docs-brand-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><title>Actual</title>
-            <style>.ring { fill: var(--text, #52396F); } .bar { fill: var(--primary, #9B7BCB); } }</style>
+            <style>.ring { fill: var(--text, #52396F); } .bar { fill: var(--primary, #9B7BCB); }</style>
             <path class="ring" fill-rule="evenodd" d="M124.7,451.9 L475.4,451.9 L300.1,71.9ZM406.6,407.9 L193.5,407.9 L300.1,177.0Z"/>
             <path class="bar" d="M36.6,451.9 L85.1,451.9 L241.7,112.6 L217.4,60.1Z"/>
           </svg>
@@ -57,7 +58,7 @@
       </div>
     </header>
 
-    <main class="docs-home">
+    <main class="docs-home" id="content">
       <section class="docs-hero center stack text-center">
         <!-- Wordmark inlined from docs/brand/logo.svg (C2PA-free copy of the
              supplied master). Same theme-aware fills as the header lockup.
@@ -320,7 +321,7 @@
           <article class="card stack">
             <span class="docs-icon" aria-hidden="true"><i class="ti ti-palette"></i></span>
             <h3>Themable</h3>
-            <p class="muted">Light, dark and {{themeCount}} named themes, all driven by tokens. Bring your own theme with a few custom properties.</p>
+            <p class="muted">Light and dark ship. Your brand is a theme: a few custom properties on one token contract.</p>
           </article>
         </div>
       </section>
@@ -347,9 +348,9 @@
             <span class="badge soft danger">Danger</span>
           </div>
           <div class="cluster">
-            <div class="alert success" role="alert"><strong>Saved.</strong> Your changes are up to date.</div>
-            <div class="alert error" role="alert"><strong>Error.</strong> Something went wrong.</div>
-            <div class="alert info" role="alert"><strong>Heads up.</strong> A new version is available.</div>
+            <div class="alert success"><strong>Saved.</strong> Your changes are up to date.</div>
+            <div class="alert danger"><strong>Error.</strong> Something went wrong.</div>
+            <div class="alert primary"><strong>Heads up.</strong> A new version is available.</div>
           </div>
         </div>
       </section>
@@ -495,8 +496,8 @@
       </section>
 
       <section class="docs-section docs-theme-showcase center stack">
-        <h2>Pick a theme</h2>
-        <p class="muted">Light, dark and {{themeCount}} named themes. Each card below previews one — that is a <code>data-theme</code> island doing its job.</p>
+        <h2>One contract, {{themeCount}} demo themes</h2>
+        <p class="muted">None of these ship. Each card is a <code>data-theme</code> island built on the same tokens your theme sets. <a href="foundations/theming.html">Write your own</a>.</p>
         <div class="grid docs-theme-grid">
           {{themeCards}}
         </div>
@@ -569,6 +570,7 @@
         <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="docs-search-results" aria-autocomplete="list" />
       </form>
       <ul class="docs-search-results stack" data-docs-search-results id="docs-search-results" role="listbox" aria-label="Search results"></ul>
+      <p class="muted docs-search-empty" data-docs-search-empty role="status"></p>
     </div>
   </dialog>
 

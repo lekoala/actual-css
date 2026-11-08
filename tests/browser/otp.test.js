@@ -61,7 +61,7 @@ it("disabled OTP cells are visibly distinct from enabled", async () => {
         };
       })()`);
 
-      // Enabled baseline cells: page surface with the normal border color.
+      // Enabled baseline cells: page surface with the control edge.
       expect(snapshot.enabled.bg).toBe(snapshot.ref.surface);
       expect(snapshot.enabled.border).toBe(snapshot.ref.border);
       expect(snapshot.enabled.opacity).toBe("1");

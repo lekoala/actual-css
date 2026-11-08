@@ -5,6 +5,7 @@
  * (`bun run report:theme-contrast`).
  *
  * Measured per island (one per color scheme the theme declares):
+ *   - the resting edge of a field, checkbox and radio against --surface (3:1)
  *   - soft ink against the resting and the hovered soft fill (4.5:1), on each
  *     surface a soft element sits on
  *   - the solid pairs, -fg on the intent fill (4.5:1); a fill painted by a
@@ -64,8 +65,20 @@ function islandMarkup(id, scheme) {
     <span data-pair="focus-solid" style="color: var(--focus); background: var(--surface-solid)"></span>
     <span data-pair="inverse" style="color: var(--surface-solid-fg); background: var(--surface-solid)"></span>
     <input class="input" aria-invalid="true" data-pair="invalid-field" aria-label="t">
+    <div data-controls style="background: var(--surface)">
+      ${CONTROLS.map(([kind, markup]) => markup.replace("<input", `<input data-control="${kind}" aria-label="t"`)).join("")}
+    </div>
   </div>`;
 }
+
+/* Controls whose resting edge is all that identifies them (WCAG 1.4.11): the
+   edge against the surface around them needs 3:1. The field is read on its
+   block-end side, the one an underline-only theme (material) keeps. */
+export const CONTROLS = [
+  ["field", '<input class="input">'],
+  ["checkbox", '<input class="check" type="checkbox">'],
+  ["radio", '<input class="radio" type="radio">'],
+];
 
 const ratio = (fg, bg) => (fg[3] < 255 || bg[3] < 255 ? null : contrast(fg, bg));
 
@@ -186,12 +199,20 @@ export async function measureContrast({ css, themes, label = "default" }) {
           selected,
         };
       }
-      return { pairs, soft, solid };
+      const box = island.querySelector("[data-controls]");
+      const controls = { backdrop: rgba(cs(box).backgroundColor), edges: {} };
+      for (const el of box.querySelectorAll("[data-control]")) {
+        const s = cs(el);
+        controls.edges[el.dataset.control] = rgba(
+          el.dataset.control === "field" ? s.borderBlockEndColor : s.borderTopColor,
+        );
+      }
+      return { pairs, soft, solid, controls };
     });
   })()`);
 
   return islands.map(({ theme, scheme }, i) => {
-    const { pairs, soft, solid } = colors[i];
+    const { pairs, soft, solid, controls } = colors[i];
     const pair = (key) => ratio(pairs[key].fg, pairs[key].bg);
     // Fill over the surface, then ink over the fill: the colors the page shows.
     const shown = (fg, fill, backdrop) => {
@@ -232,6 +253,15 @@ export async function measureContrast({ css, themes, label = "default" }) {
           hover: shown(fills[intent].fg, fills[intent].hover, backdrop),
         }));
       }),
+      // A translucent edge is composited over the surface; a translucent
+      // surface has no defined backdrop and reads n/a.
+      controls: CONTROLS.map(([kind]) => ({
+        kind,
+        value:
+          controls.backdrop[3] < 255
+            ? null
+            : ratio(composite(controls.edges[kind], controls.backdrop), controls.backdrop),
+      })),
       focusSurface: pair("focus-surface"),
       focusSolid: pair("focus-solid"),
       invalidFocus: pair("invalid-field"),
@@ -326,6 +356,15 @@ export function formatContrast(rows) {
     lines.push(
       `${head(row)}  ${cells[0].text.padStart(8)}  ${cells[1].text.padStart(8)}${flag(cells, 3)}`,
     );
+  }
+
+  lines.push("", "Control edge at rest (--border-control vs --surface), needs 3:1.", "");
+  lines.push(`${"theme".padEnd(width)}  scheme  control      ratio`);
+  for (const row of rows) {
+    for (const { kind, value } of row.controls ?? []) {
+      const c = cell(value, 3);
+      lines.push(`${head(row)}  ${kind.padEnd(9)} ${c.text.padStart(8)}${flag([c], 3)}`);
+    }
   }
 
   // Documented exception (focus.css): an invalid field focuses in

@@ -1,4 +1,4 @@
-# Column Layout
+# Column layout
 
 `.column-layout` is an explicit twelve-column composition canvas. Each direct
 child places itself with two numbers: `--column-span` (how many units) and

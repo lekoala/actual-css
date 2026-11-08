@@ -1,4 +1,4 @@
-# Progressive Enhancements
+# Progressive enhancements
 
 > The optional JavaScript runtime that completes Actual's interactive components — dialog, drawer, flyout, tooltip, tabs, scrollspy, and status bar — through progressive enhancement.
 
@@ -56,5 +56,5 @@ after opening. The runtime warns in the console when a second copy loads.
 
 Each interactive component has its own page documenting the exact markup its
 enhancement expects: Dialog, Drawer, Flyout, Tooltip, Tabs, Scrollspy, and
-Status Bar. The full runtime is loaded on the docs pages, so the examples
+Status bar. The full runtime is loaded on the docs pages, so the examples
 work with the documented markup alone.

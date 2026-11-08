@@ -1,4 +1,4 @@
-# Structured Lists
+# Structured lists
 
 Choose list markup from the content semantics, then add only the layout or
 component contract the collection needs.

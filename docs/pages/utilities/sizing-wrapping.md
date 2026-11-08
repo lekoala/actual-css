@@ -1,4 +1,4 @@
-# Sizing And Wrapping
+# Sizing and wrapping
 
 Small layout corrections for controls, labels, and compact rails.
 

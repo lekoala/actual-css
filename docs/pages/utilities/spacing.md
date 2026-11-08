@@ -1,4 +1,4 @@
-# Spacing Helpers
+# Spacing helpers
 
 Semantic step helpers for gap, padding, and margin — the most common inline-style escape hatches.
 

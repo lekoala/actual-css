@@ -1,4 +1,4 @@
-# Layout Overview
+# Layout overview
 
 Layout provides a small set of composable building blocks for common page, app, and content structure. It is not a utility-first framework, and the twelve-column canvas it does ship (`.column-layout`) is an opt-in vocabulary for deliberate composition rather than the default way to build a page.
 

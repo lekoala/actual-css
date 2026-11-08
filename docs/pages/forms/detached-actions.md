@@ -1,4 +1,4 @@
-# Detached Actions
+# Detached actions
 
 > `.form-actions` is class-only. It may live inside or outside the `<form>`. Use the native `form` attribute to connect a detached submit button to its form.
 

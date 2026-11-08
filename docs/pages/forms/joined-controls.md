@@ -1,4 +1,4 @@
-# Joined Controls
+# Joined controls
 
 > Use `.join` when controls need to be visually joined into a single unit.
 

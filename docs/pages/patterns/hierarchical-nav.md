@@ -1,4 +1,4 @@
-# Hierarchical Scrollable Nav
+# Hierarchical scrollable nav
 
 App shell with a collapsible nav tree. Uses existing primitives only — no treeview component.
 

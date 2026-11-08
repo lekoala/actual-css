@@ -231,6 +231,10 @@
   border: 0;
   border-inline-start: var(--alert-border-inline-start-width, 4px) solid
     var(--alert-border-inline-start-color, var(--intent, var(--neutral)));
+  /* why: a thick flag under the large radius curves into a crescent. The
+     leading corners take the small radius so the flag stays a straight bar. */
+  border-start-start-radius: var(--radius-sm);
+  border-end-start-radius: var(--radius-sm);
 }
 
 /* Admonition — structured static box with a tinted title bar and a body

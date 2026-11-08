@@ -163,6 +163,9 @@
 
 /* Overflow containment is global on `pre` (base.css); only the box is prose's. */
 .prose :where(pre) {
+  /* why: code is scanned line by line, not read as running text; the prose
+     reading leading spread a block to ~1.7 lines per line of code. */
+  line-height: var(--line-height);
   padding: 1em;
   border: var(--border-width) solid var(--border);
   border-radius: var(--radius);
@@ -192,6 +195,9 @@
 }
 
 .prose :where(table) {
+  /* why: tables are scanned cell by cell, like code; the reading leading made
+     every wrapped cell tall and loose. */
+  line-height: var(--line-height);
   inline-size: 100%;
   border-collapse: collapse;
 }

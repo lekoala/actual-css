@@ -68,7 +68,7 @@ marker to that background rather than to the neutral intent.
 </div>
 ```
 
-### Hooks
+## Hooks
 
 - `--meter-track` — track color; raise it when the meter sits on a
   `--surface-subtle` card, where the default track would disappear.

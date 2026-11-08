@@ -27,10 +27,10 @@ function usage() {
     "Penpot plugin that builds them. Needs Bun (bunx --bun actual-css design ...).",
     "",
     "contrast: measure the pairs a theme tunes by hand in headless Chrome, in every",
-    "scheme it declares: soft ink on its resting and hovered fill, the focus line on",
-    "--surface and --surface-solid, the invalid-field focus line, and the inverse",
-    "text. Exits 1 when a pair misses its threshold. Needs Bun (bunx --bun actual-css",
-    "contrast ...).",
+    "scheme it declares: soft ink on its resting and hovered fill, the resting edge",
+    "of a field, checkbox and radio, the focus line on --surface and --surface-solid,",
+    "the invalid-field focus line, and the inverse text. Exits 1 when a pair misses",
+    "its threshold. Needs Bun (bunx --bun actual-css contrast ...).",
   ].join("\n");
 }
 

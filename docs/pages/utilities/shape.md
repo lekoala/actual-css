@@ -1,4 +1,4 @@
-# Shape Helpers
+# Shape helpers
 
 Rare shape utilities for cases that must be perfectly round or square.
 

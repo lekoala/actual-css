@@ -20,6 +20,7 @@ import { loadReservedClasses } from "./utils/load-reserved-classes.js";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 const PAGES = join(ROOT, "docs", "pages");
+const TEMPLATES = join(ROOT, "scripts", "templates");
 const RESERVED = loadReservedClasses(join(ROOT, "reserved-classes.json"));
 
 /* Demo-only and example classes deliberately absent from the framework. Only
@@ -33,6 +34,8 @@ const DOC_DEMO_CLASSES = new Set([
   "choice-tile",
   "code-block",
   "docs-fab-preview",
+  "docs-swatch",
+  "docs-swatches",
   "editorial-grid",
   "profile-aside",
   "profile-layout",
@@ -102,6 +105,28 @@ function main() {
             `${relFile}:${line}: unknown class "${name}" in snippet — add it to Actual (generate:reserved) or whitelist it as demo-only`,
           );
         }
+      }
+    }
+  }
+
+  // The docs chrome templates are markup too: the homepage once showcased
+  // `.alert.error` / `.alert.info`, which do not exist and rendered neutral.
+  // `docs-*` classes are owned by docs.css; `{{…}}` are build placeholders;
+  // `language-*` feeds the highlighter. Inline SVG classes are scoped by the
+  // SVG's own <style>, so those blocks are blanked (newlines kept for lines).
+  for (const name of ["docs-home.html", "docs-page.html"]) {
+    const file = join(TEMPLATES, name);
+    const markup = readFileSync(file, "utf8").replace(/<svg[\s\S]*?<\/svg>/g, (svg) =>
+      svg.replace(/[^\n]/g, ""),
+    );
+    const attrRe = /class\s*=\s*(["'])([\s\S]*?)\1/g;
+    let match;
+    for (match = attrRe.exec(markup); match; match = attrRe.exec(markup)) {
+      const line = 1 + (markup.slice(0, match.index).match(/\n/g)?.length ?? 0);
+      for (const cls of match[2].split(/\s+/)) {
+        if (!cls || /^(docs|language)-/.test(cls) || cls.includes("{{")) continue;
+        if (known.has(cls) || isExternalIcon(cls)) continue;
+        issues.push(`${rel(file)}:${line}: unknown class "${cls}" in docs template`);
       }
     }
   }

@@ -1,10 +1,12 @@
 # Floating labels
 
-> **Module** — import `actual-css/css/forms/floating-field` or `actual-css/css/forms/all`.
-
 `.floating-field` turns a control and its label into a floating-label cell:
 the label rests inside the control and floats to the top when the control is
-focused or filled. It composes the existing `.field` layout and the text
+focused or filled.
+
+> **Module** — import `actual-css/css/forms/floating-field` or `actual-css/css/forms/all`.
+
+It composes the existing `.field` layout and the text
 controls (`.input`, `.textarea`, `.select`) with zero JavaScript.
 
 The cell holds exactly one control and its label, in either order: a form

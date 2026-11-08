@@ -1,4 +1,4 @@
-# Form Actions
+# Form actions
 
 > `.form-actions` is the role of the `.cluster` row that closes a form. It may
 > live inside or outside the `<form>` (see Detached Actions) and has an opt-in

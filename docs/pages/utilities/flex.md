@@ -1,4 +1,4 @@
-# Flex Helpers
+# Flex helpers
 
 Small flex helpers for grow behavior and other one-line needs.
 

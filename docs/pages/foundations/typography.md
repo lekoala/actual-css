@@ -142,7 +142,7 @@ The framework exposes three line-height tokens:
 
 - `--line-height-tight` (1.25) — used by global headings and by display / title classes
 - `--line-height` (1.5) — body default
-- `--line-height-relaxed` (1.75) — used by `.lead` and `.text-lead` for intro text
+- `--line-height-relaxed` (1.6) — used by `.lead` and `.text-lead` for intro text
 
 There is no `--line-height-normal`. It would be redundant with `--line-height`. Prose overrides line-height through `--prose-line-height` and `--prose-heading-line-height` because the readable values for long-form text are different from app UI.
 

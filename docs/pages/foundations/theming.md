@@ -220,8 +220,8 @@ bunx --bun actual-css contrast --theme src/theme.css
 ```
 
 It reads the theme in headless Chrome, in every scheme it declares, and exits 1
-when a soft, focus, invalid-focus or inverse pair misses its threshold, so it
-can gate a CI job.
+when a soft, control-edge, focus, invalid-focus or inverse pair misses its
+threshold, so it can gate a CI job.
 
 Starting from a color scale (Open Props, Radix Colors, Uchū, Tailwind
 `--color-zinc-*`, a brand ramp): map one step per role rather than importing

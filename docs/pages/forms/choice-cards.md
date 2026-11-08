@@ -1,4 +1,4 @@
-# Choice Cards
+# Choice cards
 
 > Card-style radio and checkbox labels where the whole card acts as a clickable target.
 

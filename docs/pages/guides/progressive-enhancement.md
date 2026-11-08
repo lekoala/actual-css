@@ -1,4 +1,4 @@
-# The JavaScript Runtime
+# The JavaScript runtime
 
 > The optional JavaScript runtime that progressively enhances Actual's semantic markup — self-registering side-effect modules, the `enhance()` DOM lifecycle, stateless command routing, and the floating and surface contracts for custom widgets.
 

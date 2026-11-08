@@ -1,4 +1,4 @@
-# Navigation List
+# Navigation list
 
 Use `.nav-list` for a vertical list of navigation links: it removes native list
 chrome, stacks the rows and stretches each `.nav-link` across the row. For a
@@ -89,7 +89,7 @@ A project may add `.site-header` when it needs a visual shell.
 }
 ```
 
-### App Shell With Sidebar
+### App shell with sidebar
 
 A persistent sidebar beside the content — a dashboard, an admin panel — is
 [`.sidebar-shell`](../layout/sidebar-shell.md): side by side from `64rem`, each

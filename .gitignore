@@ -49,3 +49,6 @@ local/
 
 # Claude
 /.claude/settings.local.json
+
+# Impeccable design critique snapshots
+/.impeccable/

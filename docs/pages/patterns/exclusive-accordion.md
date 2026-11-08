@@ -1,4 +1,4 @@
-# Exclusive Accordion
+# Exclusive accordion
 
 Browsers that support the `name` attribute on `<details>` get native exclusive accordions — no JS engine needed. Omit `name` to allow several open at once.
 

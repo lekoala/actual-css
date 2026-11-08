@@ -1,4 +1,4 @@
-# Input Policy
+# Input policy
 
 > Native input intent first. Actual's runtime filters values only when explicitly asked, and fixed-shape masks stay opt-in through `data-mask`.
 

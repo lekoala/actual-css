@@ -1,4 +1,4 @@
-# List Helpers
+# List helpers
 
 Utilities for list chrome reset, readable measure, and editorial kicker labels.
 

@@ -17,7 +17,7 @@ Use patterns when a semantic element needs a small amount of normalization befor
 - Avoid broad element selectors such as `nav ul` or `.alert menu`.
 - A pattern should be useful in more than one component or context.
 
-## Relationship With Layout
+## Relationship with layout
 
 Patterns often compose with layout primitives.
 

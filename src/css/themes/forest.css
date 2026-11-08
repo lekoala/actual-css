@@ -26,6 +26,8 @@
   --text-subtle: hsl(125 8% 50%);
 
   --border: hsl(105 18% 78%);
+  /* The tinted light surface pulls the core 45% control edge under 3:1. */
+  --border-control: color-mix(in oklab, var(--text) 49%, var(--surface-opaque));
   --focus: hsl(175 48% 38%);
   --soft-fg-mix: 45%;
   /* Pre-light-dark() tier, mirroring the light half below. */

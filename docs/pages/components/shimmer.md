@@ -1,9 +1,9 @@
 # Shimmer
 
-> **Module** — import `actual-css/css/effects/shimmer` or `actual-css/css/effects`.
-
 Shimmer sweeps a highlight across a text label to show an activity in
 progress: an agent working, a chatbot composing, a job processing.
+
+> **Module** — import `actual-css/css/effects/shimmer` or `actual-css/css/effects`.
 
 ```html demo
 <div class="stack">

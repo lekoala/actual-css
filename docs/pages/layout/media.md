@@ -1,4 +1,4 @@
-# Media Object
+# Media object
 
 Fixed-width leading element (avatar, icon, image) paired with flexible trailing content.
 

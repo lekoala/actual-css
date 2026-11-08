@@ -1,4 +1,4 @@
-# Password Toggle
+# Password toggle
 
 > A password field reveals its value through a linked button. The markup is a
 > plain command invoker; the behavior ships with the full JS runtime

@@ -1,4 +1,4 @@
-# Intent Nesting
+# Intent nesting
 
 An intent applies to the component carrying it. Nested components keep their
 own default intent unless you give them one:

@@ -89,6 +89,7 @@
   const searchDialog = document.getElementById("docs-search-dialog");
   const searchInput = searchDialog?.querySelector("input[type='search']");
   const searchResults = document.querySelector("[data-docs-search-results]");
+  const searchEmpty = document.querySelector("[data-docs-search-empty]");
 
   let index = [];
   let indexLoading = null;
@@ -145,7 +146,10 @@
 
   function hasWord(haystack, query) {
     if (!query) return false;
-    return new RegExp(`\\b${escapeRegExp(query)}\\b`).test(haystack);
+    const identifier = !/^\w/.test(query);
+    const start = identifier ? "(?<![\\w-])" : "\\b";
+    const end = identifier || !/\w$/.test(query) ? "(?![\\w-])" : "\\b";
+    return new RegExp(`${start}${escapeRegExp(query)}${end}`).test(haystack);
   }
 
   function score(entry, query) {
@@ -201,25 +205,41 @@
     return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
-  function renderResults() {
+  // The first heading containing the query, so a result opens on its section.
+  function matchedHeading(entry, q) {
+    const i = (entry.headings ?? []).findIndex((label) => label.toLowerCase().includes(q));
+    return i < 0 ? null : { label: entry.headings[i], id: entry.anchors?.[i] };
+  }
+
+  function renderResults(query = "") {
     if (!searchResults) return;
     activeIndex = -1;
     searchInput?.removeAttribute("aria-activedescendant");
     searchInput?.setAttribute("aria-expanded", String(results.length > 0));
+    if (searchEmpty) {
+      searchEmpty.textContent =
+        query && results.length === 0
+          ? `No results for “${query}”. Try a class, a hook or a component name.`
+          : "";
+    }
     if (results.length === 0) {
       searchResults.innerHTML = "";
       return;
     }
+    const q = query.toLowerCase();
     searchResults.innerHTML = results
-      .map(
-        (entry, i) =>
+      .map((entry, i) => {
+        const heading = matchedHeading(entry, q);
+        const hash = heading?.id ? `#${heading.id}` : "";
+        const meta = [entry.group, entry.description].filter(Boolean).map(escapeHtml).join(" · ");
+        return (
           `<li id="docs-search-opt-${i}" role="option" aria-selected="false" data-index="${i}">` +
-          `<a href="${siteRoot()}${entry.url}" tabindex="-1">${escapeHtml(entry.title)}` +
-          (entry.description
-            ? `<span class="docs-search-match"> — ${escapeHtml(entry.description)}</span>`
-            : "") +
-          `</a></li>`,
-      )
+          `<a href="${siteRoot()}${entry.url}${hash}" tabindex="-1">${escapeHtml(entry.title)}` +
+          (heading ? ` › ${escapeHtml(heading.label)}` : "") +
+          (meta ? `<span class="docs-search-match"> — ${meta}</span>` : "") +
+          `</a></li>`
+        );
+      })
       .join("");
   }
 
@@ -236,7 +256,7 @@
       .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
       .slice(0, 8)
       .map((item) => item.entry);
-    renderResults();
+    renderResults(q);
   }
 
   // Focus stays in the input; arrows move the highlight via
@@ -258,8 +278,11 @@
     current.scrollIntoView({ block: "nearest" });
   }
 
-  function goToResult(target) {
-    if (target?.url) location.assign(siteRoot() + target.url);
+  // The rendered link is the one destination: click and Enter must agree,
+  // including the #section a result adds when a heading matched.
+  function goToResult(index) {
+    const link = searchResults.querySelector(`#docs-search-opt-${index} a`);
+    if (link) location.assign(link.href);
   }
 
   if (searchDialog && searchInput && searchResults) {
@@ -294,10 +317,9 @@
         event.preventDefault();
         setActive(results.length - 1);
       } else if (event.key === "Enter") {
-        const target = results[activeIndex >= 0 ? activeIndex : 0];
-        if (target) {
+        if (results.length > 0) {
           event.preventDefault();
-          goToResult(target);
+          goToResult(Math.max(activeIndex, 0));
         }
       }
     });
@@ -308,11 +330,10 @@
     });
 
     searchDialog.querySelector("[data-docs-search-form]")?.addEventListener("submit", (event) => {
-      const target = results[activeIndex >= 0 ? activeIndex : 0];
       // Always cancel: implicit submission would request-close the dialog
       // without navigating.
       event.preventDefault();
-      if (target) goToResult(target);
+      if (results.length > 0) goToResult(Math.max(activeIndex, 0));
     });
 
     document.addEventListener("keydown", (event) => {

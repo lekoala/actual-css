@@ -1,4 +1,4 @@
-# App Navigation
+# App navigation
 
 > Primary application destinations in a persistent bottom bar or labelled side navigation.
 
@@ -36,7 +36,7 @@ permits. The component contains no JavaScript and does not manage routing.
 The icon slot accepts SVGs, images, and decorative elements such as icon-font
 `i` elements marked with `aria-hidden="true"`.
 
-### Hooks
+## Hooks
 
 - `--app-nav-size` controls the minimum bottom-bar size.
 - `--app-nav-gap` controls spacing between destinations.

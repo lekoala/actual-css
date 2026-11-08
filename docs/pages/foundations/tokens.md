@@ -58,6 +58,28 @@ children consume them; check their component pages when nesting layouts.
 
 Intent tokens are used by `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, and `.neutral`. They are curated color/foreground pairs. Actual CSS does not compute foregrounds automatically in the core theme contract.
 
+The swatches read the live tokens, so they follow the scheme and theme picked
+in the header.
+
+```html demo
+<div class="grid docs-swatches">
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--primary)"></span><figcaption><code>--primary</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--secondary)"></span><figcaption><code>--secondary</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--success)"></span><figcaption><code>--success</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--warning)"></span><figcaption><code>--warning</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--danger)"></span><figcaption><code>--danger</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--neutral)"></span><figcaption><code>--neutral</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--surface)"></span><figcaption><code>--surface</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--surface-subtle)"></span><figcaption><code>--surface-subtle</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--surface-solid)"></span><figcaption><code>--surface-solid</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--text)"></span><figcaption><code>--text</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--text-muted)"></span><figcaption><code>--text-muted</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--border)"></span><figcaption><code>--border</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--border-control)"></span><figcaption><code>--border-control</code></figcaption></figure>
+  <figure class="stack tight"><span class="docs-swatch" style="background: var(--focus)"></span><figcaption><code>--focus</code></figcaption></figure>
+</div>
+```
+
 The values below are the light fallback. In browsers with `light-dark()` support, the default theme re-declares the same tokens as light/dark pairs so dark mode follows the OS automatically; without support, browsers receive the light fallback.
 
 ```css
@@ -107,9 +129,10 @@ A theme with translucent surfaces overrides both with opaque values.
 `--border` separates surfaces: cards, tables, dividers, panels. `--border-control`
 is the resting edge that tells a control apart from the surface — fields,
 checkboxes and radios, switches, OTP cells, choice cards, join addons, the color
-and file inputs. It defaults to `--border`; set it alone to make controls
-stand out (input border, field outline, form control contrast) without
-darkening every separator. Hover, checked, invalid and disabled states keep
+and file inputs. It is derived from `--text` and `--surface`; on the default
+palette it holds 3:1 against the surface, and `actual-css contrast` reports it
+for your theme. Set it alone to soften or strengthen controls (input border,
+field outline, form control contrast) without touching any separator. Hover, checked, invalid and disabled states keep
 their own colors.
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.

@@ -99,7 +99,7 @@ shows a current row with trailing actions and a flyout. Navigable rows usually
 want a non-zero `--list-item-pad-inline`: without that gutter, the current
 indicator touches the leading region and the trailing touches the row edge.
 
-### Hooks
+## Hooks
 
 - `--list-item-min-size` controls the row's minimum touch height.
 - `--list-item-pad-block` and `--list-item-pad-inline` control row padding.

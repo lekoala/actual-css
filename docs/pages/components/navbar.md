@@ -27,7 +27,7 @@ normal document scrolling. `.app-nav` is not merely a stacked-icon flavour of it
 reach for that component only when the destinations are part of a persistent
 application shell — bottom navigation or labelled side navigation via
 `.app-layout`. The choice follows the shell contract, not a preference for
-icons. See [App Navigation](app-navigation.md).
+icons. See [App navigation](app-navigation.md).
 
 ## Class reference
 

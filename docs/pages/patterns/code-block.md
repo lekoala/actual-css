@@ -1,4 +1,4 @@
-# Code Block With Copy Button
+# Code block with copy button
 
 A self-contained copy-button recipe composed from `.btn`, a `pre > code` block, and the `enhance()` lifecycle.
 

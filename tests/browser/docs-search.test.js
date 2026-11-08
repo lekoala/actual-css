@@ -23,11 +23,11 @@ async function key(view, name, code, modifiers = 0) {
   }
 }
 
-const withSearch = (run) =>
+const withSearch = (run, text = "select") =>
   withBrowserPage(fixtureUrl("site/index.html"), async (view) => {
     await key(view, "/", 191);
     await waitForBrowser(view, `document.activeElement === document.querySelector('${INPUT}')`);
-    await view.cdp("Input.insertText", { text: "select" });
+    await view.cdp("Input.insertText", { text });
     await waitForBrowser(
       view,
       `document.querySelectorAll("[data-docs-search-results] li").length > 1`,
@@ -71,6 +71,18 @@ it("search arrows keep input focus and Enter follows the selected result", async
     await waitForBrowser(view, `location.href === ${JSON.stringify(href)}`);
     expect(await view.evaluate("location.href")).toBe(href);
   });
+}, 60_000);
+
+// Trap: the link carried the matched section's #id while Enter navigated to
+// the bare page URL, so click and keyboard opened different places.
+it("Enter opens the same #section the result link points to", async () => {
+  await withSearch(async (view) => {
+    const href = await view.evaluate(`document.querySelector("#docs-search-opt-0 a").href`);
+    expect(href).toContain("#class-reference");
+    await key(view, "Enter", 13);
+    await waitForBrowser(view, `location.href === ${JSON.stringify(href)}`);
+    expect(await view.evaluate("location.href")).toBe(href);
+  }, "class reference");
 }, 60_000);
 
 it("IME confirmation and canceled keys are not result navigation", async () => {
@@ -148,7 +160,16 @@ it("ranks the same ordered URLs as searchEntries() for index-derived queries", a
       const hrefs = await view.evaluate(
         `[...document.querySelectorAll("[data-docs-search-results] li a")].map((a) => a.getAttribute("href"))`,
       );
-      expect({ query, hrefs }).toEqual({ query, hrefs: expected });
+      // Ranking parity is per page; a result may add the #id of its matched
+      // section, which must be one of that page's indexed anchors.
+      const pages = hrefs.map((href) => href.split("#")[0]);
+      expect({ query, hrefs: pages }).toEqual({ query, hrefs: expected });
+      for (const href of hrefs) {
+        const [url, hash] = href.split("#");
+        if (!hash) continue;
+        const entry = index.find((item) => url.endsWith(item.url));
+        expect(entry?.anchors).toContain(hash);
+      }
     }
   });
 }, 120_000);

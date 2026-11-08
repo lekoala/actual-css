@@ -93,4 +93,14 @@ describe("scoreEntry", () => {
     const hits = searchEntries([a, b], "shared");
     expect(hits.map((entry) => entry.title)).toEqual(["Alpha", "Beta"]);
   });
+
+  it("matches a hook or class as a whole word, not inside a longer name", () => {
+    const page = (text) => ({ title: "Page", description: "", headings: [], aliases: [], text });
+    const exact = page("set --card-pad on the card");
+    const longer = page("set --card-padding on the card");
+    expect(scoreEntry(exact, "--card-pad")).toBeGreaterThan(scoreEntry(longer, "--card-pad"));
+    expect(scoreEntry(page("add .compact here"), ".compact")).toBeGreaterThan(
+      scoreEntry(page("add .compact-x here"), ".compact"),
+    );
+  });
 });

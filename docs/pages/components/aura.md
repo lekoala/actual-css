@@ -1,9 +1,9 @@
 # Aura
 
-> **Module** — import `actual-css/css/effects/aura` or `actual-css/css/effects`.
-
 Aura adds a decorative intent-colored border and halo around one direct child.
 It is visual emphasis only and does not change the child's semantics.
+
+> **Module** — import `actual-css/css/effects/aura` or `actual-css/css/effects`.
 
 ```html demo
 <div class="cluster" style="gap: 2.5rem">

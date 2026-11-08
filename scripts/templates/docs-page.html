@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="{{actualCss}}">
   <link rel="stylesheet" href="{{themesCss}}">
   <link rel="stylesheet" href="{{docsCss}}">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-core.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
   <script src="{{actualJs}}" defer></script>
@@ -21,6 +21,7 @@
 </head>
 
 <body>
+  <a class="btn primary docs-skip" href="#content">Skip to content</a>
   <div class="app-shell">
     <header class="docs-header">
       <div class="center cluster docs-header-inner">
@@ -30,7 +31,7 @@
                so the mark stays legible on every preset instead of tracking
                only the OS scheme. -->
           <svg class="docs-brand-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><title>Actual</title>
-            <style>.ring { fill: var(--text, #52396F); } .bar { fill: var(--primary, #9B7BCB); } }</style>
+            <style>.ring { fill: var(--text, #52396F); } .bar { fill: var(--primary, #9B7BCB); }</style>
             <path class="ring" fill-rule="evenodd" d="M124.7,451.9 L475.4,451.9 L300.1,71.9ZM406.6,407.9 L193.5,407.9 L300.1,177.0Z"/>
             <path class="bar" d="M36.6,451.9 L85.1,451.9 L241.7,112.6 L217.4,60.1Z"/>
           </svg>
@@ -62,7 +63,7 @@
         {{navGroups}}
       </aside>
 
-      <main class="docs-main">
+      <main class="docs-main" id="content">
         <article class="docs-article stack">
           <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
@@ -140,6 +141,7 @@
         <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="docs-search-results" aria-autocomplete="list" />
       </form>
       <ul class="docs-search-results stack" data-docs-search-results id="docs-search-results" role="listbox" aria-label="Search results"></ul>
+      <p class="muted docs-search-empty" data-docs-search-empty role="status"></p>
     </div>
   </dialog>
 </body>

@@ -42,6 +42,21 @@
 
 /* --- Site chrome --- */
 
+/* Skip link: the header and sidebar hold ~50 tab stops before <main>. Parked
+   off-screen rather than hidden, so it stays in the tab order and the
+   accessibility tree; focus brings it into view. */
+.docs-skip {
+  position: fixed;
+  inset-block-start: var(--space-30);
+  inset-inline-start: var(--space-30);
+  z-index: 10;
+  translate: 0 calc(-100% - var(--space-50));
+}
+
+.docs-skip:focus-visible {
+  translate: none;
+}
+
 .docs-header {
   border-block-end: var(--border-width) solid var(--border);
   background: var(--surface-raised);
@@ -164,6 +179,61 @@
   border-inline-start: 0;
   color: var(--text-muted);
   font-size: var(--font-size-lg);
+}
+
+/* The reading measure belongs to running text, not to the column: code blocks
+   and demos already span the demo track, and a class-reference table capped
+   at 70ch gave a page two right edges and squeezed its description column.
+   Tables take the track; every other block keeps the prose measure. */
+.docs-prose {
+  max-inline-size: none;
+}
+
+.docs-prose > :not(.table-wrap) {
+  max-inline-size: var(--prose-measure);
+}
+
+/* Class reference tables (Class | Kind | Description, tagged by
+   markdown.js wrapTables). On a phone the description went one word per line,
+   so a row reflows: class and kind share a line, the description takes the
+   width below. The row draws the separator the cells drew. Chromium keeps the
+   row/cell roles through the display change (tests/browser/docs-tables). */
+@media (width < 40rem) {
+  .docs-class-reference tr {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    border-block-end: var(--border-width) solid var(--border);
+  }
+
+  .docs-class-reference tr > * {
+    border-block-end: 0;
+  }
+
+  .docs-class-reference tr > :nth-child(3) {
+    grid-column: 1 / -1;
+    padding-block-start: 0;
+  }
+
+  .docs-class-reference tbody > tr:last-child {
+    border-block-end: 0;
+  }
+}
+
+/* Token swatches (foundations/tokens.md). The inset ring keeps a swatch that
+   matches the preview surface (--surface, --border) from vanishing. */
+.docs-swatches {
+  --grid-min: 8rem;
+}
+
+.docs-swatches figure {
+  margin: 0;
+}
+
+.docs-swatch {
+  display: block;
+  block-size: 3rem;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 var(--border-width) color-mix(in oklab, var(--text) 15%, transparent);
 }
 
 /* Anatomy trees are `text` fences: the prose line height broke the
@@ -350,6 +420,12 @@
 
 .docs-search-results .docs-search-active a {
   background: var(--surface-subtle);
+}
+
+/* Stays rendered while empty: a live region that appears with its message is
+   not announced reliably. Empty, it has no height. */
+.docs-search-empty {
+  margin: 0;
 }
 
 /* --- Homepage --- */

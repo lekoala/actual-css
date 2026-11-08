@@ -1,4 +1,4 @@
-# App Shell
+# App shell
 
 Full-height, single-column document flow. Use it as the outer shell for ordinary pages,
 simple applications, and other layouts that need a header / main / footer structure spanning the viewport.

@@ -1,4 +1,4 @@
-# Text Helpers
+# Text helpers
 
 Lightweight helpers for muted or secondary text without a full color scale.
 

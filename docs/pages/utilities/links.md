@@ -1,4 +1,4 @@
-# Link Variants
+# Link variants
 
 Link styling for chrome that is conceptually a link but should not look like prose.
 

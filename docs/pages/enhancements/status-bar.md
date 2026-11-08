@@ -1,4 +1,4 @@
-# Status Bar
+# Status bar
 
 > Singleton floating area for short, non-critical, transient feedback.
 

@@ -1,4 +1,4 @@
-# Icon Input
+# Icon input
 
 Use `.input-icon` for a search or filter input with a leading icon.
 
