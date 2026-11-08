@@ -13,6 +13,7 @@
 
 ### Changed
 - `--border-control` derives from `--text` and `--surface`, reaching 3:1 on the default palette; it no longer equals `--border`.
+- `.nav-link`: the current and hover fills are paler, 8% and 5% of the link's ink (were 18% and 10%), so a current row no longer reads as a pressed button.
 - `.input-icon`: the text sits half a `--control-pad-x` from the icon instead of a full one, on both sides.
 - `.join`: adjacent filled buttons (default, `.solid`, `.soft`) draw a hairline seam, so the group no longer reads as one button.
 - `.alert.callout`: the leading corners take `--radius-sm`, so the flag stays a straight bar.

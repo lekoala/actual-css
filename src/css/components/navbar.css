@@ -100,20 +100,23 @@
   color: var(--nav-current-fg, var(--text));
 }
 
-/* Fills are a tint of the link's own ink, the .btn.ghost hover recipe, so they
+/* Fills are a tint of the link's own ink, like the .btn.ghost hover, so they
    read on light and dark bars alike, including a bar with its own
    --ui-bg/--ui-fg. Not --ui-hover-bg: that is the bar's own hover and can
-   equal its fill. Current is a step above hover (18% vs 10%), so the current
-   link stays apart while another is hovered. The baseline above keeps a
-   light chip where color-mix is missing. */
+   equal its fill. Current is a step above hover (8% vs 5%), so the current
+   link stays apart while another is hovered. Both stay paler than the ghost
+   button: a nav row is wide, and at 18% a full-width current row read as a
+   pressed button. The fill only seconds the ink step, so it needs no 3:1 of
+   its own. The baseline above keeps a light chip where color-mix is
+   missing. */
 @supports (color: color-mix(in oklch, red, white)) {
   .nav-link:hover {
-    background: color-mix(in oklch, currentColor 10%, transparent);
+    background: color-mix(in oklch, currentColor 5%, transparent);
     color: var(--ui-fg, var(--text));
   }
 
   .nav-link:is([aria-current="page"], [aria-current="location"], [aria-current="true"]) {
-    background: var(--nav-current-bg, color-mix(in oklch, currentColor 18%, transparent));
+    background: var(--nav-current-bg, color-mix(in oklch, currentColor 8%, transparent));
     color: var(--nav-current-fg, var(--ui-fg, var(--text)));
   }
 }

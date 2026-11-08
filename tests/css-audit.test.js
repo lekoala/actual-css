@@ -616,7 +616,7 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   // tests/browser/surface-context.test.js.
   expect(rules).not.toContain("--ui-hover-bg");
   expect(css).toMatch(
-    /\.nav-link:hover \{[^}]*background: color-mix\(in oklch, currentColor 10%, transparent\);/,
+    /\.nav-link:hover \{[^}]*background: color-mix\(in oklch, currentColor 5%, transparent\);/,
   );
   // nav-link is deliberately three-valued: page navigation ("page"),
   // scrollspy ("location") and a section holding the page ("true") share the
@@ -626,7 +626,7 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   // page, so a fill strong enough to carry the state pushed it under.
   expect(css).toMatch(
     new RegExp(
-      `\\.nav-link${NAV_CURRENT_RE} \\{[^}]*background: var\\(--nav-current-bg, color-mix\\(in oklch, currentColor 18%, transparent\\)\\);`,
+      `\\.nav-link${NAV_CURRENT_RE} \\{[^}]*background: var\\(--nav-current-bg, color-mix\\(in oklch, currentColor 8%, transparent\\)\\);`,
     ),
   );
   expect(css).toMatch(

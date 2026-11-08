@@ -50,6 +50,7 @@ it("contextual-surface contract over one browser pass", async () => {
           refNeutralFg: color("#ref-neutral-fg"),
           refPrimaryFg: color("#ref-primary-fg"),
           refContextHover: bg("#ref-context-hover"),
+          refContextNavHover: bg("#ref-context-nav-hover"),
           refContextCurrent: bg("#ref-context-current"),
           refRaisedOverlay: bg("#ref-raised-overlay"),
           normalOutlineColor: color("#normal-outline"),
@@ -142,7 +143,7 @@ it("contextual-surface contract over one browser pass", async () => {
       // The current nav link is a tint of the bar's ink, a step above hover,
       // in that ink: it reads on an arbitrary bar.
       expect(initial.activeBg).toBe(initial.refContextCurrent);
-      expect(initial.activeBg).not.toBe(initial.refContextHover);
+      expect(initial.activeBg).not.toBe(initial.refContextNavHover);
       expect(initial.activeBg).not.toBe(initial.navbarBg);
       expect(initial.activeColor).toBe(initial.refSurface);
 
