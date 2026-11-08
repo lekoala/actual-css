@@ -4,6 +4,7 @@
 ### Added
 - Docs: a "Skip to content" link is the first tab stop on every page.
 - Docs: search results link to the matching section, show their group, and say when nothing matched; a result on the current page closes the search.
+- Docs: the homepage links to the Actual Blocks gallery under "Start building".
 - Docs: collapsed sidebar groups stay collapsed for the session; the current page's group always opens.
 - Docs: search matches `--hooks` and `.classes` as whole names.
 - Docs: live color swatches on the Tokens page follow the selected scheme and theme.
