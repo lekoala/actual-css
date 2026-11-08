@@ -43,7 +43,7 @@
       border: 0;
     }
 
-    .dg-status {
+    .dg-hint {
       padding-block-start: var(--space-30);
       border-block-start: var(--border-width) solid var(--border);
       color: var(--text-muted);
@@ -336,7 +336,7 @@
         </table>
       </data-grid>
 
-      <p class="dg-status" id="invoices-status" role="status">Try sorting a column, filtering by status, or deleting a row.</p>
+      <p class="dg-hint">Try sorting a column, filtering by status, or deleting a row.</p>
     </section>
 
     <section class="card stack" aria-label="Team">
@@ -350,7 +350,7 @@
 
       <div id="team-grid"></div>
 
-      <p class="dg-status" id="team-status" role="status">Select rows to reveal the bulk action bar.</p>
+      <p class="dg-hint">Select rows to reveal the bulk action bar.</p>
     </section>
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
@@ -358,6 +358,9 @@
         <code>themes/actual.css</code> and Actual control classes.</span>
     </footer>
   </main>
+
+  <!-- Action feedback lands here, visible wherever the grid is scrolled. -->
+  <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
 
   <script src="../../dist/actual.full.js"></script>
   <script type="module">
@@ -370,20 +373,21 @@
       select: "select sm",
     });
 
+    const notify = (message, intent) =>
+      document.dispatchEvent(new CustomEvent("actual:status", { detail: { message, intent } }));
+
     const invoicesGrid = document.getElementById("invoices-grid");
-    const invoicesStatus = document.getElementById("invoices-status");
 
     invoicesGrid.addEventListener("action", (ev) => {
       const { name, row, rowKey } = ev.detail;
       if (name === "delete") {
         invoicesGrid.removeRow(rowKey);
-        invoicesStatus.textContent = `Invoice ${row.invoice} removed from the local dataset.`;
+        notify(`Invoice ${row.invoice} deleted.`, "success");
       } else if (name === "view") {
-        invoicesStatus.textContent = `Viewing ${row.invoice} — demo only, no navigation.`;
+        notify(`Viewing ${row.invoice} — demo only, no navigation.`);
       }
     });
 
-    const teamStatus = document.getElementById("team-status");
     const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
     const teamRows = [
@@ -466,14 +470,17 @@
     });
     document.getElementById("team-grid").appendChild(teamGrid);
 
+    const bulkDone = { "mark-active": "set active", archive: "archived" };
+
     teamGrid.addEventListener("bulkAction", (ev) => {
       const { name, selection } = ev.detail;
-      teamStatus.textContent = `${name}: ${selection.ids.size} selected — demo only, no server call.`;
+      const count = selection.ids.size;
+      notify(`${count} ${count === 1 ? "member" : "members"} ${bulkDone[name]} — demo only, nothing saved.`, "success");
     });
 
     teamGrid.addEventListener("action", (ev) => {
       const { name, row } = ev.detail;
-      teamStatus.textContent = `${name}: ${row.name} — demo only, no navigation.`;
+      notify(`${name === "profile" ? "Profile" : "Viewing"}: ${row.name} — demo only, no navigation.`);
     });
   </script>
 </body>
