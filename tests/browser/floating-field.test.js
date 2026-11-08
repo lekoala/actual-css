@@ -65,13 +65,17 @@ it("a floating select keeps the headroom of a floating input", async () => {
     const read = await view.evaluate(`(() => {
       const pad = (sel) => getComputedStyle(document.querySelector(sel)).paddingBlockStart;
       return {
+        enhanced: matchMedia("(hover: hover) and (pointer: fine)").matches && CSS.supports("appearance: base-select"),
         appearance: getComputedStyle(document.querySelector('[data-case="select"] .select')).appearance,
         select: pad('[data-case="select"] .select'),
         input: pad('[data-case="filled"] .input'),
       };
     })()`);
-    // The bug only exists under the enhancement; prove it is the one measured.
-    expect(read.appearance).toBe("base-select");
+    // The bug only exists under the enhancement, which custom-select.css gates
+    // on hover + fine pointer. The Ubuntu CI runner's headless Chrome reports
+    // neither, and CDP cannot emulate them, so CI measures the native select.
+    // Where the gate matches, prove the enhancement is the one measured.
+    if (read.enhanced) expect(read.appearance).toBe("base-select");
     expect(read.select).toBe(read.input);
   });
 });
