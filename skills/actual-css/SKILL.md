@@ -36,6 +36,16 @@ node <skill>/scripts/inspect-actual-css.mjs --enhancements
 
 If `PROJECT.md` exists beside this file, read it after resolving the Actual CSS API. It contains application-specific choices, not framework API.
 
+## Design direction
+
+If `DESIGN.md` (and `PRODUCT.md`) exists at the project root, read it after `PROJECT.md`. It says what the interface should look like; this skill says how to write it in Actual CSS.
+
+- Express its roles through the class mapping in `PROJECT.md` and the decision order below. Never invent a class, variant, or hook to match its wording.
+- `DESIGN.md` records the approved direction; the theme stylesheet defines the values actually shipped. When they disagree, neither wins by default: report the drift and ask whether the design changed on purpose or the code drifted, then update the stale document or fix the theme. Never silently copy a value either way.
+- A product-specific requirement no token, hook, or component expresses is focused application CSS, derived from theme tokens. Report a missing hook only when the need is generic and recurring. Never override a component's internal state or behavior.
+
+When a design skill (Impeccable or similar) is active, it owns direction, critique, and `DESIGN.md`; this skill still owns vocabulary and the completion check. Fix its findings through the decision order, confirm computed sizes and colors on the rendered page rather than from a source scan, and never copy its preview snippets (`.impeccable/design.json`) into application code.
+
 ## Decision order
 
 Before writing application CSS, ask in this order:
@@ -204,9 +214,10 @@ Useful project-specific additions include:
 - server-side component/template wrappers already available;
 - application class naming rules;
 - stricter browser-support requirements;
-- product-specific composition conventions.
+- product-specific composition conventions;
+- the mapping from `DESIGN.md` roles to Actual classes.
 
-Start from `PROJECT.md.example`.
+Start from `PROJECT.md.example`. Visual direction belongs in `DESIGN.md`, not here.
 
 Project rules may narrow how Actual CSS is used, but must not invent or redefine Actual CSS public API.
 

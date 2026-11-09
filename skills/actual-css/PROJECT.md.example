@@ -4,6 +4,8 @@ Copy this file to `PROJECT.md` beside `SKILL.md` and keep only decisions that ar
 
 This file narrows **how the application uses Actual CSS**. It does not redefine Actual CSS API.
 
+Visual direction (mood, color roles, depth, named rules) lives in `DESIGN.md` at the project root, and the shipped values live in the theme stylesheet. Keep only implementation facts here.
+
 ## Imports
 
 CSS loaded by this project:
@@ -20,15 +22,24 @@ JavaScript enhancers loaded by this project:
 
 ## Theme
 
-Theme root / selector:
+Theme stylesheet and root / selector:
 
 ```text
 TODO
 ```
 
-Application-owned brand tokens or theme conventions:
+Application-owned tokens derived from the theme:
 
 ```text
+- TODO
+```
+
+## Design mapping
+
+Roles named in `DESIGN.md`, expressed with Actual classes and hooks:
+
+```text
+- Primary action → .btn.primary
 - TODO
 ```
 

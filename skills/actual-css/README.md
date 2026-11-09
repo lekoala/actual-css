@@ -39,7 +39,12 @@ SKILL.md + references
 
 PROJECT.md
         -> how this application chooses to use it
+
+DESIGN.md (project root, optional)
+        -> what this application should look like, and why
 ```
+
+`DESIGN.md` follows the [DESIGN.md format](https://github.com/google-labs-code/design.md) and is usually maintained with a design skill such as Impeccable. Actual CSS does not ship one: it has no house style to impose. See the [Coding agents and DESIGN.md](https://lekoala.github.io/actual-css/site/guides/coding-agents.html) guide.
 
 ## Why the skill does not bundle the catalog
 

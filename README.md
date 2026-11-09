@@ -228,7 +228,9 @@ layout primitives and progressive enhancements without recreating framework
 behavior in application CSS.
 
 Copy it into your project's agent skills and extend it with your application's
-theme, loaded modules and local conventions.
+theme, loaded modules and local conventions. Visual direction belongs in your
+own `DESIGN.md`; see
+[Coding agents and DESIGN.md](https://lekoala.github.io/actual-css/site/guides/coding-agents.html).
 
 ## License
 
