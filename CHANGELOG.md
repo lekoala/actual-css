@@ -9,8 +9,19 @@
 - `.list.grouped`: opt-in raised surface, border, rounded shell and inline gutter for standalone lists; `--list-radius` is the new hook.
 - `neo-brutalist` and `glass` themes: `.list.grouped` joins the framed-surface and frosted-panel treatments.
 - Docs: the List page composes grouped active-sessions and member rows, including a `surface sm` pill action, a badge and a row flyout.
+- `.timeline-dates-end`: each event's `<time>` sits at the end of its first line instead of above it.
+- `.timeline`: an icon slot with an intent gets a soft tinted disc, rim and ink, following `--soft-bg-mix` and `--soft-border-mix`.
+- `--timeline-glyph-size`: icon and spinner size in a timeline slot, half the slot by default.
+- `--timeline-marker-nudge`: optical offset of the timeline marker below the first line's centre, `(1cap - 1ex) / 2` by default.
+- Docs: the Timeline page shows an in-progress event with a `.spinner` inside the icon slot.
+- Docs: the Timeline page composes an activity feed with avatars, a `.chat-bubble` comment, a `.badge` status and a file `.btn`.
+
+### Changed
+- `.timeline`: `--timeline-slot-size` defaults to `2rem`, and the dateline uses tabular numerals.
+- `.timeline`: markers centre on the title's x-height instead of its line box.
 
 ### Fixed
+- `.timeline`: an avatar or icon slot taller than the line box stays inside its event instead of overflowing the list and eating into `--timeline-gap`.
 - `.alert-icon`: centred on the first line box from `--alert-line-height`, `--alert-font-size` and `--alert-icon-size` instead of a fixed `0.125em`; `--alert-line-height` and `--alert-icon-nudge` are the new hooks.
 - `.alert.admonition > .alert-title > .alert-icon`: an icon in the admonition title bar takes `.alert-icon` and follows `--alert-icon-nudge`.
 - `.alert > .close`: centred on the first line box and no longer grows the title row, which pushed the body down.

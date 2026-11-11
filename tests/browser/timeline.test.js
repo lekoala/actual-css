@@ -40,6 +40,15 @@ const MEASURE = `
     return [...range.getClientRects()].find((rect) => rect.width > 0).left;
   };
   const center = (rect) => ({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 });
+  // The middle of the event's first line box, below any marker inset.
+  const firstLine = (li) => {
+    const style = getComputedStyle(li);
+    return li.getBoundingClientRect().top + px(style.paddingTop) + px(style.lineHeight) / 2;
+  };
+  // The optical nudge, resolved on the <li>: 0 when the list opts out.
+  const shift = (li) => px(getComputedStyle(li).getPropertyValue("--timeline-marker-shift"));
+  // Where a marker centres: the first line's middle, moved by the nudge.
+  const markerLine = (li) => firstLine(li) + shift(li);
 `;
 
 it("the marker sits on the first line, whichever element opens the event", async () => {
@@ -55,9 +64,9 @@ it("the marker sits on the first line, whichever element opens the event", async
           lineBox,
           timeHeight: timeFirst.querySelector("time").getBoundingClientRect().height,
           timeDot: center(pseudo(timeFirst, "::before")).y,
-          timeLine: center(timeFirst.querySelector("time").getBoundingClientRect()).y,
+          timeLine: center(timeFirst.querySelector("time").getBoundingClientRect()).y + shift(timeFirst),
           textDot: center(pseudo(textFirst, "::before")).y,
-          textLine: textFirst.getBoundingClientRect().top + lineBox / 2,
+          textLine: markerLine(textFirst),
           // A sentence mixing text and links stays one line of block flow.
           sentenceLines: new Set(
             [...textFirst.querySelectorAll("a")].map((a) => Math.round(a.getBoundingClientRect().top)),
@@ -88,14 +97,23 @@ it("slots replace the dot on a rail shared by the whole list", async () => {
         const avatar = avatarItem.querySelector(".avatar").getBoundingClientRect();
         const icon = iconItem.querySelector("[aria-hidden]").getBoundingClientRect();
         const dot = pseudo(dotItem, "::before");
-        const lineBox = px(getComputedStyle(avatarItem).lineHeight);
+        const box = (el) => {
+          const { top, bottom } = el.getBoundingClientRect();
+          return { top, bottom };
+        };
         return {
           avatarDot: pseudo(avatarItem, "::before"),
           iconDot: pseudo(iconItem, "::before"),
           avatar: { w: avatar.width, h: avatar.height, ...center(avatar) },
           icon: { w: icon.width, ...center(icon) },
           dot: center(dot),
-          avatarLine: avatarItem.getBoundingClientRect().top + lineBox / 2,
+          avatarLine: markerLine(avatarItem),
+          // A slot taller than the line box stays inside its event, even on
+          // a one-line event.
+          slotBoxes: [avatarItem, iconItem].map((li) => ({
+            item: box(li),
+            slot: box(li.querySelector(":scope > :first-child")),
+          })),
           timeStart: avatarItem.querySelector("time").getBoundingClientRect().left,
           textStart: textStart(dotItem),
           plainRail: pseudo(document.querySelector("#dots > li"), "::before").width,
@@ -113,6 +131,10 @@ it("slots replace the dot on a rail shared by the whole list", async () => {
       expect(Math.abs(result.icon.x - result.dot.x)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(result.timeStart - result.textStart)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(result.avatar.y - result.avatarLine)).toBeLessThanOrEqual(0.5);
+      for (const { item, slot } of result.slotBoxes) {
+        expect(slot.top).toBeGreaterThanOrEqual(item.top - 0.5);
+        expect(slot.bottom).toBeLessThanOrEqual(item.bottom + 0.5);
+      }
       // A list without slots keeps the narrow rail.
       expect(result.plainRail).toBeLessThan(result.avatar.w);
     },
@@ -160,6 +182,113 @@ it("each segment runs from one marker to the next, and the last has none", async
       expect(result.lastHasLine).toBe(false);
     },
     { artifactName: "timeline-segments" },
+  );
+});
+
+it(".timeline-dates-end puts the dateline at the end of the first line", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        ${MEASURE}
+        // A DOMRect serializes to {}: copy the edges out.
+        const rect = (el) => {
+          const { top, right, bottom, left, height } = el.getBoundingClientRect();
+          return { top, right, bottom, left, height };
+        };
+        // A zero-size inline-block sits on the baseline of the line it opens.
+        const baseline = (el) => {
+          const probe = document.createElement("span");
+          probe.style.cssText = "display: inline-block; width: 0; height: 0";
+          el.prepend(probe);
+          const y = probe.getBoundingClientRect().bottom;
+          probe.remove();
+          return y;
+        };
+        const large = document.getElementById("end-large");
+        const title = document.getElementById("end-title");
+        const avatarItem = document.getElementById("end-avatar");
+        const rtl = document.getElementById("end-rtl");
+        return {
+          titleTime: rect(title.querySelector("time")),
+          titleText: rect(title.querySelector("strong")),
+          titleNote: rect(title.querySelector("p")),
+          titleItem: rect(title),
+          lineBox: px(getComputedStyle(title).lineHeight),
+          titleLine: firstLine(title),
+          baselines: [title, large].map((li) => ({
+            time: baseline(li.querySelector("time")),
+            text: baseline(li.querySelector("strong") ?? li),
+          })),
+          dot: center(pseudo(title, "::before")).y,
+          titleMarker: markerLine(title),
+          avatarTime: rect(avatarItem.querySelector("time")),
+          avatarItem: rect(avatarItem),
+          avatarLine: firstLine(avatarItem),
+          avatar: center(rect(avatarItem.querySelector(".avatar"))).y,
+          avatarMarker: markerLine(avatarItem),
+          sentenceLines: new Set(
+            [...avatarItem.querySelectorAll("a")].map((a) => Math.round(rect(a).top)),
+          ).size,
+          rtlTime: rect(rtl.querySelector("time")),
+          rtlItem: rect(rtl),
+        };
+      })()`);
+
+      const near = (a, b) => expect(Math.abs(a - b)).toBeLessThanOrEqual(0.5);
+      // Same line as the title, at the inline end; the marker beside it.
+      near(result.titleTime.right, result.titleItem.right);
+      near(result.titleTime.top + result.titleTime.height / 2, result.titleLine);
+      near(result.titleTime.height, result.lineBox);
+      // The smaller dateline shares the title's baseline, not just its centre.
+      for (const { time, text } of result.baselines) near(time, text);
+      near(result.dot, result.titleMarker);
+      // The title clears the dateline, and the next line starts below it.
+      expect(result.titleText.right).toBeLessThan(result.titleTime.left);
+      expect(result.titleNote.top).toBeGreaterThanOrEqual(result.titleTime.bottom - 0.5);
+      // A slot does not displace the float, and a mixed sentence stays one line.
+      near(result.avatarTime.right, result.avatarItem.right);
+      near(result.avatarTime.top + result.avatarTime.height / 2, result.avatarLine);
+      near(result.avatar, result.avatarMarker);
+      expect(result.sentenceLines).toBe(1);
+      // Inline end follows the writing direction.
+      near(result.rtlTime.left, result.rtlItem.left);
+    },
+    { artifactName: "timeline-dates-end" },
+  );
+});
+
+it("the marker drops to the x-height centre, unless the nudge is zero", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        ${MEASURE}
+        // Real glyph metrics of the event's own font.
+        const li = document.getElementById("time-first");
+        const style = getComputedStyle(li);
+        const ctx = document.createElement("canvas").getContext("2d");
+        ctx.font = style.fontWeight + " " + style.fontSize + " " + style.fontFamily;
+        const cap = ctx.measureText("H").actualBoundingBoxAscent;
+        const x = ctx.measureText("x").actualBoundingBoxAscent;
+        const icon = document.getElementById("strict-icon");
+        const dot = document.getElementById("strict-dot");
+        return {
+          shift: shift(li),
+          expected: (cap - x) / 2,
+          strictIcon: center(icon.querySelector("[aria-hidden]").getBoundingClientRect()).y,
+          strictIconLine: firstLine(icon),
+          strictDot: center(pseudo(dot, "::before")).y,
+          strictDotLine: firstLine(dot),
+        };
+      })()`);
+
+      expect(result.shift).toBeGreaterThan(0);
+      expect(Math.abs(result.shift - result.expected)).toBeLessThanOrEqual(0.75);
+      expect(Math.abs(result.strictIcon - result.strictIconLine)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(result.strictDot - result.strictDotLine)).toBeLessThanOrEqual(0.5);
+    },
+    { artifactName: "timeline-nudge" },
   );
 });
 

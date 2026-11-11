@@ -855,18 +855,27 @@
     "cssImport": "actual-css/css/components/timeline",
     "docs": "https://lekoala.github.io/actual-css/site/components/timeline.html",
     "classes": [
-      "timeline"
+      "timeline",
+      "timeline-dates-end"
     ],
     "publicHooks": [
       "--timeline-dot-size",
       "--timeline-slot-size",
+      "--timeline-glyph-size",
       "--timeline-gap",
       "--timeline-inline-gap",
-      "--timeline-line-size"
+      "--timeline-line-size",
+      "--timeline-marker-nudge"
     ],
     "internalHooks": [
       "--timeline-rail-size",
-      "--timeline-line-box"
+      "--timeline-line-box",
+      "--timeline-marker-shift",
+      "--timeline-marker-inset",
+      "--timeline-marker-center",
+      "--timeline-slot-bg",
+      "--timeline-slot-border",
+      "--timeline-slot-fg"
     ],
     "states": [
       "aria-hidden"
@@ -874,6 +883,9 @@
     "pseudoElements": {
       ".timeline li": [
         "::after",
+        "::before"
+      ],
+      ".timeline-dates-end time": [
         "::before"
       ]
     }
