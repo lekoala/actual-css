@@ -18,7 +18,7 @@
 - Docs: the Timeline page composes an activity feed with avatars, a `.chat-bubble` comment, a `.badge` status and a file `.btn`.
 
 ### Changed
-- `--font-sans` and `--font-mono`: quality-ordered local stacks (Inter, Segoe UI Variable, Roboto, Noto Sans; Cascadia Code, JetBrains Mono) instead of a bare `system-ui` fallback.
+- `--font-sans` and `--font-mono`: quality-ordered local stacks — Inter and Noto Sans ahead of `system-ui`; Cascadia Code and JetBrains Mono ahead of `ui-monospace`.
 - `.btn.outline`: a neutral outline takes `--border-control`; an explicit intent keeps its color.
 - Docs: the search panel opens on its destination quick links, keeps the close in the header row, and pins a keyboard footer below a scrolling result list.
 - Docs: the header search opener is a quiet surface button on the control edge that shows `⌘ K` on macOS and `Ctrl K` elsewhere.

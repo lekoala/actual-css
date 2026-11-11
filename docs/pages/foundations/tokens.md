@@ -295,8 +295,8 @@ Typography tokens cover the document baseline and common component needs.
 
 ```css
 :root {
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: Inter, "Noto Sans", system-ui, sans-serif;
+  --font-mono: "Cascadia Code", "JetBrains Mono", ui-monospace, Menlo, monospace;
   --font-width: 100%;
 
   --line-height: 1.5;

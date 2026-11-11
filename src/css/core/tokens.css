@@ -23,19 +23,17 @@
    */
 
   /* Typography */
-  /* Ordered by quality, not by OS: a reader who already has Inter gets it,
-     everyone else falls through to the best face their platform ships. Windows
-     11 answers "Segoe UI Variable", Windows 10 "Segoe UI", Android and
-     ChromeOS "Roboto", a modern Linux "Noto Sans", and system-ui (SF) covers
-     macOS and whatever is left. --font-mono puts the two code faces developers
+  /* Locally installed faces only, ordered by quality: a reader who already has
+     Inter gets it, everyone else falls through to the best face their platform
+     ships. Naming Segoe UI, Roboto or Helvetica behind system-ui buys nothing,
+     because system-ui is exactly what that engine resolves them to; Noto Sans
+     is the exception, since Linux takes its UI font from fontconfig and can
+     settle on a softer default. --font-mono puts the two code faces developers
      install by hand (Cascadia Code with VS Code, JetBrains Mono with the
-     JetBrains IDEs) ahead of the platform mono. */
-  --font-sans:
-    Inter, "Segoe UI Variable", "Segoe UI", Roboto, "Noto Sans", system-ui, "Helvetica Neue", Arial,
-    sans-serif;
-  --font-mono:
-    "Cascadia Code", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
-    "DejaVu Sans Mono", monospace;
+     JetBrains IDEs) ahead of the platform mono, holding Menlo only for macOS
+     engines older than ui-monospace. */
+  --font-sans: Inter, "Noto Sans", system-ui, sans-serif;
+  --font-mono: "Cascadia Code", "JetBrains Mono", ui-monospace, Menlo, monospace;
   --font-width: 100%;
   --line-height: 1.5;
   --line-height-tight: 1.25;
