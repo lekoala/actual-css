@@ -51,7 +51,12 @@
               {{themeOptions}}
             </select>
           </label>
-          <button class="btn sm" type="button" data-docs-search>Search <kbd class="key">Ctrl K</kbd></button>
+          <button class="btn sm surface docs-search-trigger" type="button" data-docs-search
+            aria-haspopup="dialog" aria-controls="docs-search-dialog" aria-keyshortcuts="Control+K Meta+K /">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            Search
+            <kbd class="key">Ctrl K</kbd>
+          </button>
           <button class="btn sm ghost docs-menu-toggle" type="button" commandfor="docs-nav-drawer" command="show-modal"
             aria-haspopup="dialog" aria-controls="docs-nav-drawer" aria-label="Open navigation">Menu</button>
         </div>
@@ -556,22 +561,42 @@
     </div>
   </dialog>
 
-  <dialog class="modal docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
-    <button class="close"
-            type="button"
-            commandfor="docs-search-dialog"
-            command="request-close"
-            aria-controls="docs-search-dialog"
-            aria-label="Close search"></button>
-    <div class="stack">
-      <header>
-        <h2 class="docs-search-title">Search documentation</h2>
-      </header>
-      <form method="dialog" data-docs-search-form>
-        <input class="input docs-search-input" type="search" placeholder="Search docs…" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="docs-search-results" aria-autocomplete="list" />
+  <dialog class="modal scrollable docs-search-dialog" id="docs-search-dialog" closedby="any" aria-label="Search documentation">
+    <header class="background-raised docs-search-header">
+      <h2 class="docs-search-title">Search documentation</h2>
+      <div class="cluster">
+        <button class="close"
+                type="button"
+                commandfor="docs-search-dialog"
+                command="request-close"
+                aria-controls="docs-search-dialog"
+                aria-label="Close search"></button>
+      </div>
+    </header>
+    <div class="stack docs-search-panel">
+      <form class="docs-search-form" method="dialog" data-docs-search-form>
+        <label class="input-icon">
+          <i class="ti ti-search" aria-hidden="true"></i>
+          <input class="input docs-search-input" type="search"
+            placeholder="Search components, classes, tokens…" aria-label="Search documentation"
+            autocomplete="off" role="combobox" aria-expanded="true" aria-controls="docs-search-results"
+            aria-autocomplete="list" />
+        </label>
       </form>
-      <ul class="docs-search-results stack" data-docs-search-results id="docs-search-results" role="listbox" aria-label="Search results"></ul>
-      <p class="muted docs-search-empty" data-docs-search-empty role="status"></p>
+      <div class="stack docs-search-body" data-docs-search-body>
+        <p class="docs-search-group-label" data-docs-search-label>Start here</p>
+        <ul class="docs-search-results stack" data-docs-search-results id="docs-search-results" role="listbox" aria-label="Start here">
+{{searchLinks}}
+        </ul>
+        <p class="muted docs-search-empty" data-docs-search-empty role="status"></p>
+      </div>
+      <footer class="bleed cluster docs-search-footer">
+        <span class="cluster docs-search-hints">
+          <span class="docs-search-hint"><kbd class="key">↑</kbd><kbd class="key">↓</kbd> <span class="docs-search-hint-label">Navigate</span></span>
+          <span class="docs-search-hint"><kbd class="key">↵</kbd> <span class="docs-search-hint-label">Open</span></span>
+        </span>
+        <span class="docs-search-hint"><kbd class="key">Esc</kbd> <span class="docs-search-hint-label">Close</span></span>
+      </footer>
     </div>
   </dialog>
 

@@ -100,6 +100,22 @@ export function renderDestinations(navigation, current, { icons = false } = {}) 
     .join("\n");
 }
 
+/*
+ * The search panel's empty state. It mirrors the destinations, which already
+ * name the site's top-level sections and carry an icon each, so this never
+ * drifts into a second hand-maintained list. Fixed ids keep the panel's
+ * aria-activedescendant contract identical whether it shows links or results.
+ */
+export function renderSearchLinks(navigation, current) {
+  const from = current?.url ?? "index.html";
+  return navigation.destinations
+    .map(
+      (destination, i) =>
+        `        <li id="docs-search-opt-${i}" role="option" aria-selected="false" data-index="${i}"><a class="docs-search-link" href="${relHref(from, destination.home.url)}" tabindex="-1"><i class="ti ti-${destination.icon}" aria-hidden="true"></i>${escapeHtml(destination.title)}</a></li>`,
+    )
+    .join("\n");
+}
+
 export function renderToc(toc) {
   return toc
     .map(
@@ -287,7 +303,8 @@ export function renderHome({
     .replace(/\{\{themeCards\}\}/g, renderThemeCards(themes))
     .replace(/\{\{componentsGrid\}\}/g, renderComponentsGrid(navigation))
     .replace(/\{\{destinations\}\}/g, renderDestinations(navigation, null))
-    .replace(/\{\{drawerDestinations\}\}/g, renderDestinations(navigation, null, { icons: true }));
+    .replace(/\{\{drawerDestinations\}\}/g, renderDestinations(navigation, null, { icons: true }))
+    .replace(/\{\{searchLinks\}\}/g, renderSearchLinks(navigation, null));
 }
 
 function renderPrev(page) {
@@ -323,6 +340,7 @@ export function renderPage({
   navGroups,
   destinations,
   drawerDestinations,
+  searchLinks,
   actualCss,
   themesCss,
   docsCss,
@@ -355,6 +373,7 @@ export function renderPage({
     .replace(/\{\{navGroups\}\}/g, navGroups)
     .replace(/\{\{destinations\}\}/g, destinations)
     .replace(/\{\{drawerDestinations\}\}/g, drawerDestinations)
+    .replace(/\{\{searchLinks\}\}/g, searchLinks)
     .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
     .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
     .replace(/\{\{content\}\}/g, wrapDocsContent(content))

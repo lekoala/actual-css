@@ -27,14 +27,168 @@ async function key(view, name, code, modifiers = 0) {
 const withSearch = (run, text = "select", url = fixtureUrl("site/index.html")) =>
   withBrowserPage(url, async (view) => {
     await key(view, "/", 191);
-    await waitForBrowser(view, `document.activeElement === document.querySelector('${INPUT}')`);
-    await view.cdp("Input.insertText", { text });
     await waitForBrowser(
       view,
-      `document.querySelectorAll("[data-docs-search-results] li").length > 1`,
+      `document.activeElement === document.querySelector('${INPUT}') &&
+       getComputedStyle(document.getElementById("docs-search-dialog")).opacity === "1"`,
+    );
+    await view.cdp("Input.insertText", { text });
+    // Quick links are already options before the query, so "more than one
+    // li" is not evidence that the results replaced them. Wait for the label
+    // to leave the empty state as well.
+    await waitForBrowser(
+      view,
+      `document.querySelector("[data-docs-search-label]").hidden === true &&
+       document.querySelectorAll("[data-docs-search-results] li").length > 1`,
     );
     return run(view);
   });
+
+const withOpenSearch = (run, url = fixtureUrl("site/index.html")) =>
+  withBrowserPage(url, async (view) => {
+    await key(view, "/", 191);
+    await waitForBrowser(
+      view,
+      `document.activeElement === document.querySelector('${INPUT}') &&
+       document.querySelector("[data-docs-search-label]").hidden === false &&
+       getComputedStyle(document.getElementById("docs-search-dialog")).opacity === "1"`,
+    );
+    return run(view);
+  });
+
+it("opens on quick links and restores them when the query clears", async () => {
+  await withOpenSearch(async (view) => {
+    const count = `document.querySelectorAll("[data-docs-search-results] li").length`;
+    expect(await view.evaluate(count)).toBeGreaterThanOrEqual(5);
+    expect(
+      await view.evaluate(`document.querySelector('${INPUT}').getAttribute("aria-expanded")`),
+    ).toBe("true");
+    expect(
+      await view.evaluate(`document.querySelector("[data-docs-search-empty]").textContent`),
+    ).toBe("");
+
+    await view.cdp("Input.insertText", { text: "select" });
+    await waitForBrowser(
+      view,
+      `document.querySelector("[data-docs-search-label]").hidden === true &&
+       document.querySelectorAll("[data-docs-search-results] li").length > 1`,
+    );
+
+    await view.evaluate(`(() => {
+      const input = document.querySelector('${INPUT}');
+      input.value = "";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    })()`);
+    await waitForBrowser(
+      view,
+      `document.querySelector("[data-docs-search-label]").hidden === false &&
+       document.querySelectorAll("[data-docs-search-results] li").length >= 5`,
+    );
+    expect(
+      await view.evaluate(`document.querySelector("[data-docs-search-empty]").textContent`),
+    ).toBe("");
+  });
+}, 60_000);
+
+it("a query with no results leaves the panel compact", async () => {
+  await withOpenSearch(async (view) => {
+    await view.cdp("Input.insertText", { text: "zzzzzz" });
+    await waitForBrowser(
+      view,
+      `document.querySelector("[data-docs-search-empty]").textContent.length > 0 &&
+       document.querySelectorAll("[data-docs-search-results] li").length === 0`,
+    );
+    const shape = await view.evaluate(`(() => {
+      const dialog = document.getElementById("docs-search-dialog").getBoundingClientRect();
+      return { height: dialog.height, viewport: innerHeight };
+    })()`);
+    // The panel shrinks to its content: no result-area min height reserved.
+    expect(shape.height).toBeLessThan(shape.viewport / 2);
+  });
+}, 60_000);
+
+it("quick links are keyboard navigable and Enter opens the selected one", async () => {
+  await withOpenSearch(async (view) => {
+    await key(view, "ArrowDown", 38);
+    await waitForBrowser(
+      view,
+      `document.querySelector('${INPUT}').getAttribute("aria-activedescendant") === "docs-search-opt-0"`,
+    );
+    const href = await view.evaluate(`document.querySelector("#docs-search-opt-0 a").href`);
+    await key(view, "Enter", 13);
+    await waitForBrowser(view, `location.href === ${JSON.stringify(href)}`);
+    expect(await view.evaluate("location.href")).toBe(href);
+  });
+}, 60_000);
+
+it("the close matches the field edge and the footer stays while results scroll", async () => {
+  await withOpenSearch(async (view) => {
+    const edges = await view.evaluate(`(() => {
+      const close = document.querySelector("#docs-search-dialog .docs-search-header .close");
+      const rect = close.getBoundingClientRect();
+      const input = document.querySelector('${INPUT}').getBoundingClientRect();
+      const style = getComputedStyle(close);
+      return {
+        close: rect.right,
+        input: input.right,
+        position: style.position,
+        background: style.backgroundColor,
+      };
+    })()`);
+    expect(Math.abs(edges.close - edges.input)).toBeLessThanOrEqual(1);
+    // In-flow and bare: the corner overlay would sit a --space-20 inset off
+    // the field edge and paint --surface-subtle behind the X.
+    expect(edges.position).toBe("static");
+    expect(edges.background).toBe("rgba(0, 0, 0, 0)");
+    // The form is not a scrollport: .scrollable would otherwise clip the
+    // field's focus ring.
+    expect(
+      await view.evaluate(`getComputedStyle(document.querySelector(".docs-search-form")).overflow`),
+    ).toBe("visible");
+
+    await view.cdp("Emulation.setDeviceMetricsOverride", {
+      width: 480,
+      height: 380,
+      deviceScaleFactor: 1,
+      mobile: false,
+    });
+    await view.cdp("Input.insertText", { text: "class" });
+    await waitForBrowser(
+      view,
+      `document.querySelector("[data-docs-search-label]").hidden === true &&
+       (() => {
+         const body = document.querySelector("[data-docs-search-body]");
+         return body.scrollHeight > body.clientHeight;
+       })()`,
+    );
+
+    const before = await view.evaluate(
+      `document.querySelector(".docs-search-footer").getBoundingClientRect().top`,
+    );
+    await view.evaluate(`document.querySelector("[data-docs-search-body]").scrollTop = 9999`);
+    const after = await view.evaluate(
+      `document.querySelector(".docs-search-footer").getBoundingClientRect().top`,
+    );
+    expect(after).toBe(before);
+
+    await view.cdp("Emulation.setDeviceMetricsOverride", {
+      width: 320,
+      height: 640,
+      deviceScaleFactor: 1,
+      mobile: false,
+    });
+    await waitForBrowser(
+      view,
+      `getComputedStyle(document.querySelector(".docs-search-hint-label")).display === "none"`,
+    );
+    const width = await view.evaluate(`(() => {
+      const panel = document.getElementById("docs-search-dialog").getBoundingClientRect();
+      return { left: panel.left, right: panel.right, viewport: innerWidth };
+    })()`);
+    expect(width.left).toBeGreaterThanOrEqual(0);
+    expect(width.right).toBeLessThanOrEqual(width.viewport);
+  });
+}, 60_000);
 
 it("Enter on the search close button closes without navigating", async () => {
   await withSearch(async (view) => {

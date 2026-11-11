@@ -386,10 +386,12 @@
 
 /* --- Search --- */
 
-/* Fill up to the modal's own cap so the panel does not resize while results
-   load; sizing the content instead overflowed the viewport gap on phones. */
+/* The search panel is a small documentation navigator: a header row, one
+   field, a scrolling middle, and a footer that stays put. The external header
+   keeps the close inside the row, so its edge matches the field below; the
+   scrollable anatomy pins the footer while results move. */
 .docs-search-dialog {
-  --modal-size: 28rem;
+  --modal-size: 32rem;
 
   inline-size: 100%;
 }
@@ -399,14 +401,72 @@
   font-size: var(--font-size-lg);
 }
 
+/* 40px target without the permanent fill of the corner close. In the header
+   row the dialog's corner rule does not apply, so only size and ink do. The
+   panel's own top padding is the gap to the field, so the header keeps its
+   bottom edge flush with it. */
+.docs-search-dialog > .docs-search-header {
+  --close-size: 2.5rem;
+
+  padding-block-end: 0;
+}
+
+.docs-search-header .close {
+  --close-icon-size: 1.125rem;
+
+  color: var(--text-muted);
+}
+
+@media (hover: hover) {
+  .docs-search-header .close:hover {
+    color: var(--text);
+  }
+}
+
+/* The header row already separates the title from the field; the panel top
+   only needs to seat the form's focus bleed. */
+.docs-search-dialog > .docs-search-panel {
+  padding-block-start: var(--space-20);
+}
+
+/* .scrollable shares free space between every non-chrome child; the field
+   keeps its own size so only the body scrolls. It is not a scrollport itself:
+   inheriting `overflow: auto` clipped the field's focus ring. The attribute
+   selector outranks that structural rule. */
+.docs-search-dialog > .docs-search-panel > .docs-search-form[data-docs-search-form] {
+  flex: none;
+  overflow: visible;
+}
+
+/* Sits on the panel rather than a second surface: the border and the focus
+   ring are the field's identity. */
 .docs-search-input {
-  inline-size: 100%;
+  --control-default-bg: transparent;
+}
+
+.docs-search-body {
+  gap: var(--space-20);
+}
+
+.docs-search-group-label {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .docs-search-results {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* Keep the active row's rounded highlight off the scrollport edge when
+   scrollIntoView brings it into view. */
+.docs-search-results li {
+  scroll-margin-block: var(--space-20);
 }
 
 .docs-search-results a {
@@ -417,8 +477,22 @@
   text-decoration: none;
 }
 
+/* Quick links carry a destination icon; results are a title and its context. */
+.docs-search-results .docs-search-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-30);
+}
+
+.docs-search-link .ti {
+  flex: none;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+}
+
 .docs-search-results a:hover,
-.docs-search-results a:focus-visible {
+.docs-search-results a:focus-visible,
+.docs-search-results .docs-search-active a {
   background: var(--surface-subtle);
 }
 
@@ -427,14 +501,60 @@
   font-size: var(--font-size-sm);
 }
 
-.docs-search-results .docs-search-active a {
-  background: var(--surface-subtle);
-}
-
 /* Stays rendered while empty: a live region that appears with its message is
    not announced reliably. Empty, it has no height. */
 .docs-search-empty {
   margin: 0;
+}
+
+/* A structural footer under .scrollable: fixed row, full-width rule, muted
+   hints. It disappears on its own when the results are short, so the panel
+   never keeps an artificial empty height. */
+.docs-search-dialog .docs-search-footer {
+  --cluster-justify: space-between;
+
+  padding-block: var(--space-20);
+  border-block-start: var(--border-width) solid var(--border);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.docs-search-hints {
+  --gap: var(--space-30);
+}
+
+.docs-search-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-20);
+}
+
+.docs-search-footer .key {
+  font-size: var(--font-size-xs);
+}
+
+@media (max-width: 30rem) {
+  .docs-search-hint-label {
+    display: none;
+  }
+}
+
+/* The header opener is a quiet way in, not a primary action: a surface fill,
+   the icon, and the platform shortcut. */
+.docs-search-trigger {
+  color: var(--text-muted);
+}
+
+.docs-search-trigger .ti {
+  color: var(--text-muted);
+}
+
+.docs-search-trigger .key {
+  color: var(--text-muted);
+}
+
+.docs-search-trigger:hover {
+  color: var(--text);
 }
 
 /* --- Homepage --- */

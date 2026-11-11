@@ -117,6 +117,22 @@
   const searchInput = searchDialog?.querySelector("input[type='search']");
   const searchResults = document.querySelector("[data-docs-search-results]");
   const searchEmpty = document.querySelector("[data-docs-search-empty]");
+  const searchLabel = document.querySelector("[data-docs-search-label]");
+
+  // The empty state is authored markup: keep it once, then put it back after a
+  // query clears instead of rebuilding a second list in this file.
+  const quickLinks = searchResults?.innerHTML ?? "";
+
+  // The header prints the shortcut the platform actually uses; the handler
+  // below accepts both, so this is presentation only.
+  const isMac = /mac|iphone|ipad|ipod/i.test(
+    navigator.userAgentData?.platform ?? navigator.platform ?? navigator.userAgent,
+  );
+  if (isMac) {
+    for (const key of document.querySelectorAll("[data-docs-search] .key")) {
+      key.textContent = "⌘ K";
+    }
+  }
 
   let index = [];
   let indexLoading = null;
@@ -238,51 +254,55 @@
     return i < 0 ? null : { label: entry.headings[i], id: entry.anchors?.[i] };
   }
 
+  function optionCount() {
+    return searchResults?.querySelectorAll("li[data-index]").length ?? 0;
+  }
+
   function renderResults(query = "") {
     if (!searchResults) return;
+    const q = query.trim();
     activeIndex = -1;
     searchInput?.removeAttribute("aria-activedescendant");
-    searchInput?.setAttribute("aria-expanded", String(results.length > 0));
+    if (searchLabel) searchLabel.hidden = q !== "";
+    if (q === "") {
+      searchResults.innerHTML = quickLinks;
+    } else {
+      const needle = q.toLowerCase();
+      searchResults.innerHTML = results
+        .map((entry, i) => {
+          const heading = matchedHeading(entry, needle);
+          const hash = heading?.id ? `#${heading.id}` : "";
+          const meta = [entry.group, entry.description].filter(Boolean).map(escapeHtml).join(" · ");
+          return (
+            `<li id="docs-search-opt-${i}" role="option" aria-selected="false" data-index="${i}">` +
+            `<a href="${siteRoot()}${entry.url}${hash}" tabindex="-1">${escapeHtml(entry.title)}` +
+            (heading ? ` › ${escapeHtml(heading.label)}` : "") +
+            (meta ? `<span class="docs-search-match"> — ${meta}</span>` : "") +
+            `</a></li>`
+          );
+        })
+        .join("");
+    }
+    searchResults.setAttribute("aria-label", q === "" ? "Start here" : "Search results");
     if (searchEmpty) {
       searchEmpty.textContent =
-        query && results.length === 0
-          ? `No results for “${query}”. Try a class, a hook or a component name.`
+        q && results.length === 0
+          ? `No results for “${q}”. Try a class, a hook or a component name.`
           : "";
     }
-    if (results.length === 0) {
-      searchResults.innerHTML = "";
-      return;
-    }
-    const q = query.toLowerCase();
-    searchResults.innerHTML = results
-      .map((entry, i) => {
-        const heading = matchedHeading(entry, q);
-        const hash = heading?.id ? `#${heading.id}` : "";
-        const meta = [entry.group, entry.description].filter(Boolean).map(escapeHtml).join(" · ");
-        return (
-          `<li id="docs-search-opt-${i}" role="option" aria-selected="false" data-index="${i}">` +
-          `<a href="${siteRoot()}${entry.url}${hash}" tabindex="-1">${escapeHtml(entry.title)}` +
-          (heading ? ` › ${escapeHtml(heading.label)}` : "") +
-          (meta ? `<span class="docs-search-match"> — ${meta}</span>` : "") +
-          `</a></li>`
-        );
-      })
-      .join("");
+    searchInput?.setAttribute("aria-expanded", String(optionCount() > 0));
   }
 
   function runSearch(query) {
     const q = query.trim();
-    if (!q) {
-      results = [];
-      renderResults();
-      return;
-    }
-    results = index
-      .map((entry) => ({ entry, score: score(entry, q) }))
-      .filter((item) => item.score > 0)
-      .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
-      .slice(0, 8)
-      .map((item) => item.entry);
+    results = q
+      ? index
+          .map((entry) => ({ entry, score: score(entry, q) }))
+          .filter((item) => item.score > 0)
+          .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
+          .slice(0, 8)
+          .map((item) => item.entry)
+      : [];
     renderResults(q);
   }
 
@@ -325,19 +345,36 @@
   }
 
   if (searchDialog && searchInput && searchResults) {
-    const openSearch = async () => {
-      await loadIndex();
+    // The quick links need no index, so the panel opens at once; typing during
+    // the first load awaits the same promise and searches the loaded index.
+    const openSearch = () => {
       if (!searchDialog.open) searchDialog.showModal();
       searchInput.value = "";
       runSearch("");
       searchInput.focus();
+      void loadIndex();
     };
 
     for (const trigger of document.querySelectorAll("[data-docs-search]")) {
       trigger.addEventListener("click", openSearch);
     }
 
-    searchInput.addEventListener("input", () => runSearch(searchInput.value));
+    searchInput.addEventListener("input", async () => {
+      const query = searchInput.value;
+      // On a cold open the index can still be in flight; never leave the quick
+      // links under a query they do not answer.
+      if (!index.length && query.trim() && indexLoading) {
+        activeIndex = -1;
+        searchInput.removeAttribute("aria-activedescendant");
+        searchResults.innerHTML = "";
+        searchResults.setAttribute("aria-label", "Search results");
+        if (searchLabel) searchLabel.hidden = true;
+        if (searchEmpty) searchEmpty.textContent = "Searching…";
+        searchInput.setAttribute("aria-expanded", "false");
+      }
+      await loadIndex();
+      if (searchInput.value === query) runSearch(query);
+    });
 
     // Only the input owns result navigation: dialog buttons and result links
     // keep their native activation, and IME confirmation stays in the editor.
@@ -348,15 +385,15 @@
         setActive(activeIndex + 1);
       } else if (event.key === "ArrowUp") {
         event.preventDefault();
-        setActive(activeIndex < 0 ? results.length - 1 : activeIndex - 1);
+        setActive(activeIndex < 0 ? optionCount() - 1 : activeIndex - 1);
       } else if (event.key === "Home") {
         event.preventDefault();
         setActive(0);
       } else if (event.key === "End") {
         event.preventDefault();
-        setActive(results.length - 1);
+        setActive(optionCount() - 1);
       } else if (event.key === "Enter") {
-        if (results.length > 0) {
+        if (optionCount() > 0) {
           event.preventDefault();
           goToResult(Math.max(activeIndex, 0));
         }
@@ -377,7 +414,7 @@
       // Always cancel: implicit submission would request-close the dialog
       // without navigating.
       event.preventDefault();
-      if (results.length > 0) goToResult(Math.max(activeIndex, 0));
+      if (optionCount() > 0) goToResult(Math.max(activeIndex, 0));
     });
 
     document.addEventListener("keydown", (event) => {

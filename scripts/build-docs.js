@@ -26,6 +26,7 @@ import {
   renderHome,
   renderNavGroups,
   renderPage,
+  renderSearchLinks,
 } from "./docs/templates.js";
 import { loadThemes } from "./docs/themes.js";
 
@@ -122,6 +123,7 @@ function writePages(navigation, rendered, themes) {
       navGroups: renderNavGroups(page),
       destinations: renderDestinations(navigation, page),
       drawerDestinations: renderDestinations(navigation, page, { icons: true }),
+      searchLinks: renderSearchLinks(navigation, page),
       actualCss: repoAsset(from, join(ROOT, "src", "css", "actual.full.css")),
       themesCss: repoAsset(from, THEMES_BUNDLE),
       docsCss: repoAsset(from, join(CHROME, "docs.css")),

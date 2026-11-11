@@ -18,6 +18,8 @@
 - Docs: the Timeline page composes an activity feed with avatars, a `.chat-bubble` comment, a `.badge` status and a file `.btn`.
 
 ### Changed
+- Docs: the search panel opens on its destination quick links, keeps the close in the header row, and pins a keyboard footer below a scrolling result list.
+- Docs: the header search opener is a quiet surface button that shows `⌘ K` on macOS and `Ctrl K` elsewhere.
 - `.timeline`: `--timeline-slot-size` defaults to `2rem`, and the dateline uses tabular numerals.
 - `.timeline`: markers centre on the title's x-height instead of its line box.
 - `.alert-icon` and `.alert > .close`: centred on the first line's x-height, measured from the font with `cap` and `ex`, instead of its line box.
