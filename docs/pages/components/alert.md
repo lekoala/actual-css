@@ -289,7 +289,7 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
 - `--alert-font-size` — base font size. Keep it in `rem` or `px`: the icon offset is a `calc()` evaluated on the icon, where an `em` would resolve against the icon's size.
 - `--alert-line-height` — the alert's line box. The icon offset is derived from it, so change the rhythm here rather than with `line-height`.
 - `--alert-icon-size` — size of a leading `.alert-icon`. Set it from the text (`calc(var(--alert-font-size) * 1.25)`) when the icon should scale with the type.
-- `--alert-icon-nudge` — additive correction to the derived icon offset, for a theme whose icon border box is larger than `--alert-icon-size` (the neo-brutalist tile), or a glyph drawn off-centre in its box: `.ti-alert-triangle.alert-icon { --alert-icon-nudge: 0.05em; }`. An `em` here follows the icon size.
+- `--alert-icon-nudge` — additive correction to the derived icon offset, which centres the icon on the first line's x-height, measured from the font; for a theme whose icon border box is larger than `--alert-icon-size` (the neo-brutalist tile), or a glyph drawn off-centre in its box: `.ti-alert-triangle.alert-icon { --alert-icon-nudge: 0.05em; }`. An `em` here follows the icon size.
 - `--close-size` / `--close-icon-size` — the alert declares compact values for its `.close`; set them on the alert to change them.
 - `--alert-radius` — corner radius, when the default `--radius-lg` does not fit.
 - `--alert-border-inline-start-color` / `--alert-border-inline-start-width` — extension points for a callout-style colored flag on the leading edge instead of a uniform border.

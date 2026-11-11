@@ -232,6 +232,5 @@ The gap between events follows the density context: `.compact` and
 - `--timeline-gap` — space between events; follows `--density-space`.
 - `--timeline-inline-gap` — space between the rail and the content.
 - `--timeline-line-size` — rail line thickness.
-- `--timeline-marker-nudge` — how far the marker sits below the centre of the
-  first line, so it reads centred on the lowercase text; derived from the
-  font's cap height and x-height. `0px` centres it on the line box.
+- `--timeline-marker-nudge` — additive correction to the marker position,
+  which centres on the first line's x-height, measured from the font.

@@ -258,7 +258,7 @@ it(".timeline-dates-end puts the dateline at the end of the first line", async (
   );
 });
 
-it("the marker drops to the x-height centre, unless the nudge is zero", async () => {
+it("the marker drops to the x-height centre, and the nudge adds to it", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
@@ -271,22 +271,27 @@ it("the marker drops to the x-height centre, unless the nudge is zero", async ()
         ctx.font = style.fontWeight + " " + style.fontSize + " " + style.fontFamily;
         const cap = ctx.measureText("H").actualBoundingBoxAscent;
         const x = ctx.measureText("x").actualBoundingBoxAscent;
-        const icon = document.getElementById("strict-icon");
-        const dot = document.getElementById("strict-dot");
+        const icon = document.getElementById("nudged-icon");
+        const dot = document.getElementById("nudged-dot");
         return {
           shift: shift(li),
           expected: (cap - x) / 2,
-          strictIcon: center(icon.querySelector("[aria-hidden]").getBoundingClientRect()).y,
-          strictIconLine: firstLine(icon),
-          strictDot: center(pseudo(dot, "::before")).y,
-          strictDotLine: firstLine(dot),
+          nudgedShift: shift(icon),
+          nudgedIcon: center(icon.querySelector("[aria-hidden]").getBoundingClientRect()).y,
+          nudgedIconLine: firstLine(icon),
+          nudgedDot: center(pseudo(dot, "::before")).y,
+          nudgedDotLine: firstLine(dot),
         };
       })()`);
 
       expect(result.shift).toBeGreaterThan(0);
       expect(Math.abs(result.shift - result.expected)).toBeLessThanOrEqual(0.75);
-      expect(Math.abs(result.strictIcon - result.strictIconLine)).toBeLessThanOrEqual(0.5);
-      expect(Math.abs(result.strictDot - result.strictDotLine)).toBeLessThanOrEqual(0.5);
+      // The 3px nudge of the fixture lands on top of the optical shift, for a
+      // slot and a dot alike.
+      expect(Math.abs(result.nudgedShift - result.shift - 3)).toBeLessThanOrEqual(0.01);
+      const moved = result.shift + 3;
+      expect(Math.abs(result.nudgedIcon - result.nudgedIconLine - moved)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(result.nudgedDot - result.nudgedDotLine - moved)).toBeLessThanOrEqual(0.5);
     },
     { artifactName: "timeline-nudge" },
   );

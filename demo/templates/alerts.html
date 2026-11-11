@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alert icon alignment - Actual CSS</title>
-  <meta name="description" content="The alert leading icon against the first line box: icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes and the theme nudge.">
+  <meta name="description" content="The alert leading icon against the first line's x-height: icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes and the theme nudge.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
@@ -98,10 +98,11 @@
       <p class="overline">Actual CSS</p>
       <h1>Alert icon alignment</h1>
       <p class="lead">
-        The leading icon is centred on the first line box. That offset is derived from
-        <code>--alert-font-size</code>, <code>--alert-line-height</code> and
-        <code>--alert-icon-size</code>, so each stage below changes one hook and every icon
-        should stay level.
+        The leading icon is centred on the first line box, then lowered onto the x-height by
+        half the gap between the font's cap height and x-height. That offset is derived from
+        <code>--alert-font-size</code>, <code>--alert-line-height</code>,
+        <code>--alert-icon-size</code> and the font itself, so each stage below changes one
+        hook and every icon should stay level.
       </p>
       <div class="cluster">
         <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
@@ -314,9 +315,9 @@
     <section class="center align-section" id="text-fonts">
       <h2>Text fonts</h2>
       <p class="align-note">
-        The offset centres the icon on the line box, which needs no font metrics. Where the
-        capitals sit inside that line box is the font's: the same icon can read level in one
-        face and high or low in another.
+        The line box is the same in every face; where its lowercase text sits is not. The
+        icon follows the x-height through <code>cap</code> and <code>ex</code>, which the
+        browser measures on the font in use, so each face below should read level.
       </p>
 
       <div class="align-island" style="font-family: system-ui, sans-serif">
@@ -729,7 +730,7 @@
       <p class="align-note">
         The icon column is the alert's, whatever the surface: the callout keeps its flag, the
         admonition puts the icon in the title bar and hands it to the title bar's flex
-        centring, not to the derived offset.
+        centring, lowered by the same optical shift.
       </p>
 
       <div class="grid align-grid">

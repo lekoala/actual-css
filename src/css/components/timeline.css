@@ -54,9 +54,10 @@
   initial-value: 0px;
 }
 
-/* Registered for the same reason: the nudge is written in cap and ex, which
-   must resolve against the event's text, not a slot's glyph size. An engine
-   without those units leaves it at the initial 0px, a strict centring. */
+/* Registered for the same reason: the shift is written in cap and ex, and an
+   author nudge may be in em, all of which must resolve against the event's
+   text, not a slot's glyph size. An engine without cap leaves it at the
+   initial 0px, a strict centring. */
 @property --timeline-marker-shift {
   syntax: "<length>";
   inherits: true;
@@ -70,11 +71,6 @@
   --timeline-gap: var(--density-space);
   --timeline-inline-gap: var(--space-30);
   --timeline-line-size: var(--border-width);
-  /* Optical, not geometric: the eye centres a marker on the lowercase mass of
-     the title, which sits below the centre of the line box. Half the gap
-     between cap height and x-height moves the marker from the caps' centre to
-     the x-height's, measured from the font itself. */
-  --timeline-marker-nudge: calc((1cap - 1ex) / 2);
   --timeline-rail-size: var(--timeline-dot-size);
 
   display: grid;
@@ -107,10 +103,16 @@
    inset pushes the first line down until the marker, nudge included, starts
    at the top, and the minimum size ends the event at the marker's bottom, so
    the event box always holds its marker. Every marker position derives from
-   the one centre. */
+   the one centre.
+
+   The shift is optical, not geometric: the eye centres a marker on the
+   lowercase mass of the title, below the line box's centre. Half the gap
+   between cap height and x-height moves it from the caps' centre to the
+   x-height's, measured from the font itself. --timeline-marker-nudge adds an
+   author correction, the way --alert-icon-nudge does. */
 .timeline > li {
   --timeline-line-box: calc(var(--line-height) * 1em);
-  --timeline-marker-shift: var(--timeline-marker-nudge);
+  --timeline-marker-shift: calc((1cap - 1ex) / 2 + var(--timeline-marker-nudge, 0px));
   --timeline-marker-inset: max(
     0px,
     (var(--timeline-rail-size) - var(--timeline-line-box)) /

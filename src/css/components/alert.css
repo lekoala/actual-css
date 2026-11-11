@@ -22,6 +22,7 @@
  * --alert-border-inline-start-width
  *
  * Internal:
+ * --alert-icon-shift
  * --alert-default-bg
  * --alert-default-fg
  * --alert-default-border
@@ -29,6 +30,16 @@
  * --alert-fg
  * --alert-border
  */
+/* The optical offset of the leading icon, registered so cap and ex resolve
+   against the alert's text and inherit as a length: in the icon they would
+   follow --alert-icon-size. An engine without those units keeps the initial
+   0px, a strict centring on the line box. */
+@property --alert-icon-shift {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
 :where(.alert) {
@@ -46,6 +57,10 @@
   --alert-font-size: var(--font-size-md);
   --alert-line-height: var(--line-height);
   --alert-icon-size: 1.25rem;
+  /* The eye centres an icon on the lowercase mass of the text beside it,
+     below the line box's centre: half the gap between cap height and
+     x-height moves it from the caps' centre to the x-height's. */
+  --alert-icon-shift: calc((1cap - 1ex) / 2);
   --alert-default-bg: var(--surface-subtle);
   --alert-default-fg: var(--intent, var(--text));
   --alert-default-border: var(--border);
@@ -210,18 +225,19 @@
   grid-row: 1 / span 2;
   display: inline-grid;
   place-items: center;
-  /* Centre the icon box on the first line box — within a pixel of the cap
-     centre, and the only target that needs no font metrics (the cap offset
-     inside a line box is font-dependent; CI does not use Segoe UI).
+  /* Centre the icon box on the first line box, then lower it by the optical
+     shift onto the x-height. The line box is font-independent; the shift is
+     measured from the font by the browser, so neither needs a tuned number.
      `em` would resolve against the icon's own font-size, which is
      --alert-icon-size: the 0.125em this replaces drifted with every icon
      size and text size. --alert-font-size must stay in rem or px for the
      same reason. --alert-icon-nudge adds an author correction for an icon
      whose border box is larger than --alert-icon-size (neo-brutalist's
-     tile), rather than restating the formula. */
+     tile) or a glyph drawn off-centre, rather than restating the formula. */
   margin-block-start: calc(
     (var(--alert-line-height) * var(--alert-font-size) - var(--alert-icon-size)) /
     2 +
+    var(--alert-icon-shift) +
     var(--alert-icon-nudge, 0px)
   );
 }
@@ -244,8 +260,11 @@
   /* why: the button is taller than the line, so top-aligned it sat 2px below
      the title centre, opposite an icon centred on it, and grew row 1, pushing
      the body down. Equal negative margins centre it on the first line box and
-     let it overflow into the padding instead; the hit area is unchanged. */
+     let it overflow into the padding instead; the hit area is unchanged.
+     It takes the icon's optical shift too, as a translate so the row keeps
+     its height: icon and cross on one row read as a pair. */
   margin-block: calc((var(--alert-line-height) * var(--alert-font-size) - var(--close-size)) / 2);
+  translate: 0 var(--alert-icon-shift);
 }
 /* Links */
 .alert :where(a:not(.btn)) {
@@ -297,10 +316,10 @@
   border-start-end-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
 }
 
-/* The title bar centres its icon with flex, so the nudge corrects a glyph
-   drawn off-centre with translate: a margin would be re-centred away. */
+/* The title bar centres its icon with flex, so the optical shift and the
+   nudge apply with translate: a margin would be re-centred away. */
 .alert.admonition > .alert-title > .alert-icon {
-  translate: 0 var(--alert-icon-nudge, 0px);
+  translate: 0 calc(var(--alert-icon-shift) + var(--alert-icon-nudge, 0px));
 }
 
 /* Close inside an admonition title bar rides the inline end. */
