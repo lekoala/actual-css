@@ -33,6 +33,13 @@
     <input class="radio" type="radio" name="plan">
     <span>Plan</span>
   </label>
+  <button class="btn outline" data-control type="button">Outline</button>
+
+  <!-- The neutral outline's edge is a local customization point. -->
+  <button class="btn outline" id="custom-outline" type="button" style="--border-control: rebeccapurple">
+    Custom edge
+  </button>
+  <span id="ref-text" style="color: var(--text)"></span>
 
   <div class="card" data-separator>Card</div>
   <hr class="divider" data-separator>

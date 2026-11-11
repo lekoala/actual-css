@@ -128,14 +128,15 @@ A theme with translucent surfaces overrides both with opaque values.
 
 `--border` separates surfaces: cards, tables, dividers, panels. `--border-control`
 is the resting edge that tells a control apart from the surface — fields,
-checkboxes and radios, switches, OTP cells, choice cards, join addons, the color
-and file inputs. It is derived from `--text` and `--surface`; on the default
-palette it holds 3:1 against the surface, and `actual-css contrast` reports it
-for your theme. `--border-control-mix` sets the ink share; raise it when a
-tinted surface pulls the edge under 3:1. Without `color-mix()` it falls back to
-`--border`. Set `--border-control` itself to soften or strengthen controls (input border,
-field outline, form control contrast) without touching any separator. Hover, checked, invalid and disabled states keep
-their own colors.
+checkboxes and radios, switches, OTP cells, choice cards, join addons, neutral
+outline buttons, the color and file inputs. It is derived from `--text` and
+`--surface`; on the default palette it holds 3:1 against the surface, and
+`actual-css contrast` reports it for your theme. `--border-control-mix` sets
+the ink share; raise it when a tinted surface pulls the edge under 3:1. Without
+`color-mix()` it falls back to `--border`. Set `--border-control` itself to
+soften or strengthen controls (input border, field outline, form control
+contrast) without touching any separator. Hover, checked, invalid and disabled
+states keep their own colors.
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 

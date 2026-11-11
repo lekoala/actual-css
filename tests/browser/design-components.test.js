@@ -84,8 +84,10 @@ it("Button colors bind to theme tokens or recipes; lengths are measured px", asy
   // No theme token paints a soft fill: it becomes a recipe.
   expect(pick("danger", "soft").box.fill.token).toBe("soft-danger-bg");
 
-  // currentColor variants take the island's ink, not body's.
-  expect(pick("default", "outline").box.stroke.token).toBe("text");
+  // A neutral outline draws the control edge; its ink and the ghost label take
+  // the island's ink, not body's.
+  expect(pick("default", "outline").box.stroke.token).toBe("border-control");
+  expect(pick("default", "outline").texts[0].color.token).toBe("text");
   expect(pick("default", "ghost").texts[0].color.token).toBe("text");
 
   const link = pick("default", "link", "sm");

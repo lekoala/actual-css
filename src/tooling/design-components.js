@@ -124,8 +124,8 @@ function measureSpecimens({ css, islands, specimens, width }) {
     if (attribute) island.dataset.theme = attribute;
     if (scheme) island.style.colorScheme = scheme;
     // What body gives the page: an island does not reset `color`, and the
-    // currentColor variants (outline, ghost, link) would otherwise inherit
-    // the ink of body's scheme instead of this island's.
+    // currentColor inks (outline, ghost, link) would otherwise inherit the
+    // ink of body's scheme instead of this island's.
     island.style.color = "var(--text)";
     island.innerHTML = specimens
       .map((html) => `<div style="inline-size: ${width}">${html}</div>`)

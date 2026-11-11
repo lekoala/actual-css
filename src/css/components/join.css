@@ -151,13 +151,6 @@
 
 /* Text controls paint their own inset focus outline (control.css), so a
    .join never moves the ring to the group: button-only groups and wrapped
-   inputs alike keep per-control focus, with no :has() group treatment. */
-
-/* A default outline action belongs to the composite field border. An explicit
-   intent still provides its own outline color — --intent is guaranteed-invalid
-   for a neutral button (the :where(.btn) boundary), so the fallback applies.
-   The second :has() covers a control nested one wrapper level deep. */
-.join:has(> :is(.input, .textarea, .select)) > .btn.outline,
-.join:has(> * > :is(.input, .textarea, .select)) > .btn.outline {
-  --btn-border-color: var(--intent, var(--border-control));
-}
+   inputs alike keep per-control focus, with no :has() group treatment.
+   A neutral outline action draws the same --border-control edge as the field
+   by its own base rule, so the group needs no special case. */

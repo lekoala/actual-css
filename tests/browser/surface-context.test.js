@@ -3,8 +3,9 @@
  *
  * An application paints a contrasting band with local CSS (the theming.md
  * recipe; Actual ships no class for it). Covers what components owe such a
- * context: transparent treatments follow its ink, explicit intents and filled
- * controls keep their own, surface-owning descendants are boundaries, a
+ * context: transparent inks follow it, a neutral outline keeps the control
+ * edge, explicit intents and filled controls keep their own, surface-owning
+ * descendants are boundaries, a
  * navbar with its own --ui-* keeps readable states, and every focus line is
  * the same --focus. The browser lifecycle (one headless Chrome per Bun
  * process, one tab per view) is owned by Bun.WebView; this file only
@@ -46,6 +47,7 @@ it("contextual-surface contract over one browser pass", async () => {
           refNeutral: bg("#ref-neutral"),
           refPrimary: bg("#ref-primary"),
           refText: color("#ref-text"),
+          refBorderControl: color("#ref-border-control"),
           refTextMuted: color("#ref-text-muted"),
           refNeutralFg: color("#ref-neutral-fg"),
           refPrimaryFg: color("#ref-primary-fg"),
@@ -93,17 +95,19 @@ it("contextual-surface contract over one browser pass", async () => {
 
       const initial = await snapshot();
 
-      // Transparent treatments inherit ordinary foreground context. An explicit
-      // intent remains stronger than that contextual color.
+      // Transparent treatments inherit ordinary foreground context. A neutral
+      // outline keeps the theme's control edge, and an explicit intent remains
+      // stronger than that contextual color.
       expect(initial.normalOutlineColor).toBe(initial.refText);
-      expect(initial.normalOutlineBorder).toBe(initial.refText);
+      expect(initial.normalOutlineBorder).toBe(initial.refBorderControl);
+      expect(initial.normalOutlineBorder).not.toBe(initial.refText);
       expect(initial.wrapperBg).toBe(initial.refSolid);
       expect(initial.wrapperColor).toBe(initial.refSurface);
       expect(initial.wrapperHeadingColor).toBe(initial.refSurface);
       expect(initial.wrapperLinkColor).toBe(initial.refSurface);
       expect(initial.contextOutlineBg).toBe("rgba(0, 0, 0, 0)");
       expect(initial.contextOutlineColor).toBe(initial.refSurface);
-      expect(initial.contextOutlineBorder).toBe(initial.refSurface);
+      expect(initial.contextOutlineBorder).toBe(initial.refBorderControl);
       expect(initial.contextGhostColor).toBe(initial.refSurface);
       expect(initial.contextLinkButtonColor).toBe(initial.refSurface);
       expect(initial.contextPrimaryOutlineColor).toBe(initial.refPrimary);
@@ -121,7 +125,7 @@ it("contextual-surface contract over one browser pass", async () => {
       expect(initial.nestedCardColor).toBe(initial.refText);
       expect(initial.nestedHeadingColor).toBe(initial.refText);
       expect(initial.nestedOutlineColor).toBe(initial.refText);
-      expect(initial.nestedOutlineBorder).toBe(initial.refText);
+      expect(initial.nestedOutlineBorder).toBe(initial.refBorderControl);
       expect(initial.nestedBusyOverlay).toBe(initial.refRaisedOverlay);
       expect(initial.nestedAccordionBg).toBe(initial.refRaised);
       expect(initial.nestedAccordionSummary).toBe(initial.refText);

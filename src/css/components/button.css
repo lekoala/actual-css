@@ -122,6 +122,13 @@
   --ui-border: transparent;
 }
 
+/* A neutral outline is a quiet action, so its edge is the control edge that
+   identifies a field, not the full text ink. An explicit intent still wins
+   through --intent, and --border-control stays the theme's override point. */
+.btn.outline {
+  --ui-border: var(--intent, var(--border-control));
+}
+
 /* Solid keeps the overlay darkening on hover; soft/outline/ghost/link stay
    flat. The soft hover is its own fill change (--soft-hover-alpha) — a second
    overlay on top would double the fill step and drag its ink below the resting

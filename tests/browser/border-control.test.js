@@ -39,10 +39,32 @@ it("controls take --border-control and separators keep --border", async () => {
         "color-swatch rgb(255, 0, 0)",
         "join-addon rgb(255, 0, 0)",
         "choice-card rgb(255, 0, 0)",
+        "btn rgb(255, 0, 0)",
       ]);
       expect(edges.separators).toEqual(["card rgb(200, 200, 200)", "divider rgb(200, 200, 200)"]);
     },
     { artifactName: "border-control" },
+  );
+});
+
+// A neutral outline joins the control role: a local --border-control moves its
+// edge and leaves the label on --text.
+it("a neutral outline takes --border-control without recoloring its text", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const state = await view.evaluate(`(() => {
+        const button = getComputedStyle(document.querySelector("#custom-outline"));
+        return {
+          border: button.borderBlockStartColor,
+          color: button.color,
+          text: getComputedStyle(document.querySelector("#ref-text")).color,
+        };
+      })()`);
+      expect(state.border).toBe("rgb(102, 51, 153)");
+      expect(state.color).toBe(state.text);
+    },
+    { artifactName: "border-control-custom" },
   );
 });
 

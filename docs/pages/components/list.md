@@ -53,7 +53,8 @@ existing surface already frames the rows.
 
 The end-session actions are `.btn surface sm` with
 `--btn-radius: var(--radius-full)`: a neutral pill with the theme's muted border
-and the normal text color, rather than `.outline`'s currentColor edge.
+and the normal text color, rather than `.outline`'s transparent fill and control
+edge.
 
 Leading and trailing content are unconstrained: avatars, native choices,
 badges, text, switches, and buttons retain their own component sizing. In a

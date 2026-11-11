@@ -101,3 +101,24 @@ it("docs header stays a single row", async () => {
     { artifactName: "docs-header-row" },
   );
 });
+
+/* The search opener stays .surface, but the docs shell opts it into the same
+ * control edge as the theme select. A variant-only change would not reach the
+ * header; this guards the local alignment decision. */
+it("docs header search shares the theme control edge", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const edges = await view.evaluate(`(() => {
+        const edge = (selector) =>
+          getComputedStyle(document.querySelector(selector)).borderBlockStartColor;
+        return {
+          select: edge(".docs-theme-field .select"),
+          search: edge("[data-docs-search]"),
+        };
+      })()`);
+      expect(edges.search).toBe(edges.select);
+    },
+    { artifactName: "docs-header-edge" },
+  );
+});

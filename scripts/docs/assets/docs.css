@@ -540,7 +540,12 @@
 }
 
 /* The header opener is a quiet way in, not a primary action: a surface fill,
-   the icon, and the platform shortcut. */
+   the icon, and the platform shortcut. The control edge aligns it with the
+   theme select beside it; .surface keeps its softer --border elsewhere. */
+.docs-header [data-docs-search] {
+  --btn-border-color: var(--border-control);
+}
+
 .docs-search-trigger {
   color: var(--text-muted);
 }

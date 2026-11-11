@@ -15,8 +15,8 @@
     <input class="input" id="join-second" aria-label="Last" value="Lovelace">
   </div>
 
-  <!-- In a field join, a default outline action adopts the field border; an
-       explicit intent (.danger, .neutral) keeps its own outline color. -->
+  <!-- A neutral outline adopts the field border everywhere, not only in a
+       field join; an explicit intent (.danger, .neutral) keeps its own edge. -->
   <div class="join" role="group">
     <input class="input" id="join-input" value="x">
     <button class="btn outline" id="join-default" type="button">Clear</button>
@@ -26,6 +26,10 @@
     <input class="input">
     <button class="btn danger outline" id="join-danger" type="button">Delete</button>
   </div>
+
+  <!-- The same edge outside a join: the button's own variant owns it. -->
+  <input class="input" id="plain-input" aria-label="Plain field" value="x">
+  <button class="btn outline" id="plain-outline" type="button">Clear</button>
 
   <!-- A control edge themed apart from --border: the action follows the
        field, not the structural border. -->

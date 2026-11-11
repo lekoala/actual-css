@@ -85,7 +85,8 @@ The shared visual variants are:
 
 - `.solid`: full background, paired foreground. This is the default for buttons.
 - `.soft`: lightly tinted background, colored text. Good for alerts, badges, and secondary actions.
-- `.outline`: transparent background, colored border and text.
+- `.outline`: transparent background, colored text, and a text-colored border;
+  a neutral `.btn.outline` takes the `--border-control` edge instead.
 - `.surface`: the page surface with the theme border, and the intent only in the text. The neutral chrome neither `.soft` (the intent-tinted treatment) nor `.outline` (no fill) can give.
 
 Buttons also support two button-only variants:

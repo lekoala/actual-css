@@ -4,23 +4,23 @@ Actions and navigation with shared intents, variants, sizes, and loading, presse
 
 ## Class reference
 
-| Class         | Kind      | Description                                        |
-| ------------- | --------- | -------------------------------------------------- |
-| `.btn`        | Component | Base button, solid by default.                     |
-| `.primary`    | Intent    | Primary action.                                    |
-| `.secondary`  | Intent    | Secondary action.                                  |
-| `.success`    | Intent    | Positive outcome.                                  |
-| `.warning`    | Intent    | Caution.                                           |
-| `.danger`     | Intent    | Destructive action.                                |
-| `.neutral`    | Intent    | Neutral tone (the `.btn` default).                 |
-| `.soft`       | Variant   | Muted intent-tinted surface.                       |
-| `.outline`    | Variant   | Transparent with an intent-colored border.         |
-| `.solid`      | Variant   | Filled intent background — the `.btn` default.     |
-| `.surface`    | Variant   | Page surface, neutral border, intent on the label. |
-| `.ghost`      | Variant   | Borderless text button (button-only).              |
-| `.link`       | Variant   | Underlined text button (button-only).              |
-| `.sm` / `.lg` | Size      | Compact or large control height.                   |
-| `.icon-only`  | Variant   | Square icon button sized to the control height.    |
+| Class         | Kind      | Description                                             |
+| ------------- | --------- | ------------------------------------------------------- |
+| `.btn`        | Component | Base button, solid by default.                          |
+| `.primary`    | Intent    | Primary action.                                         |
+| `.secondary`  | Intent    | Secondary action.                                       |
+| `.success`    | Intent    | Positive outcome.                                       |
+| `.warning`    | Intent    | Caution.                                                |
+| `.danger`     | Intent    | Destructive action.                                     |
+| `.neutral`    | Intent    | Neutral tone (the `.btn` default).                      |
+| `.soft`       | Variant   | Muted intent-tinted surface.                            |
+| `.outline`    | Variant   | Transparent with a control edge; an intent recolors it. |
+| `.solid`      | Variant   | Filled intent background — the `.btn` default.          |
+| `.surface`    | Variant   | Page surface, neutral border, intent on the label.      |
+| `.ghost`      | Variant   | Borderless text button (button-only).                   |
+| `.link`       | Variant   | Underlined text button (button-only).                   |
+| `.sm` / `.lg` | Size      | Compact or large control height.                        |
+| `.icon-only`  | Variant   | Square icon button sized to the control height.         |
 
 ## Basic usage
 
@@ -75,13 +75,15 @@ component with shared variants reads, so the same declaration works on a badge:
 The rule ties with the variant's own `--ui-bg` on specificity, so load it after
 Actual CSS or import `actual.layer.css`.
 
-Transparent treatments (`.outline`, `.ghost`, `.link`) follow the surrounding
-foreground by default, including on a band your application paints. A local
-intent class still wins: `.danger.outline` uses the danger color in any
-context, and nothing tunes that color for a surface you paint yourself. For
-intent ink on a dark band, use a `data-theme` island, whose palette is tuned
-for its surface. Filled buttons own their surface and keep their normal intent
-recipe.
+Transparent treatments (`.outline`, `.ghost`, `.link`) take their text from the
+surrounding foreground by default, including on a band your application paints.
+A neutral outline draws its border with `--border-control`, the theme's control
+edge, so it matches an adjacent field rather than the band ink; set
+`--ui-border` when the border must follow the band. A local intent class still
+wins: `.danger.outline` uses the danger color in any context, and nothing tunes
+that color for a surface you paint yourself. For intent ink on a dark band, use
+a `data-theme` island, whose palette is tuned for its surface. Filled buttons
+own their surface and keep their normal intent recipe.
 
 A dark button (inverse, contrast) is a custom intent on the button itself, so
 every variant keeps working — `.outline` and `.ghost` take the solid ink:

@@ -153,10 +153,12 @@ application CSS and keep forms and intent ink out of it:
 }
 ```
 
-Transparent treatments (`.btn.outline`, `.ghost`, `.link`) and headings follow
-that ink; fields, their labels and help text, and intent colors keep the page
-palette, which nothing tunes for `--surface-solid`. Focus lines stay readable
-there: the theme contract keeps `--focus` at 3:1 on `--surface-solid`.
+Transparent inks (`.btn.outline`, `.ghost`, `.link`) and headings follow that
+ink; a neutral `.btn.outline` draws its border with `--border-control`, so the
+edge stays visible without being derived from the band. Fields, their labels
+and help text, and intent colors keep the page palette, which nothing tunes for
+`--surface-solid`. Focus lines stay readable there: the theme contract keeps
+`--focus` at 3:1 on `--surface-solid`.
 
 → Foundations · Tokens (theme contract) · Examples · Contrast contexts
 

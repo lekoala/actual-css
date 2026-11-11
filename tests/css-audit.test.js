@@ -554,13 +554,18 @@ test("card derives contextual tokens from the surface it owns", () => {
   expect(css).toMatch(/\.card \{[\s\S]*--busy-overlay-bg: var\(--card-bg\);/);
 });
 
-test("transparent treatments follow currentColor, including hover", () => {
+test("transparent treatments follow currentColor ink, including hover", () => {
   const variants = readCss("src/css/core/variants.css");
   const button = readCss("src/css/components/button.css");
   const badge = readCss("src/css/components/badge.css");
 
   expect(variants).toMatch(/\.outline \{[\s\S]*--ui-fg: var\(--intent, currentColor\);/);
   expect(variants).toMatch(/\.outline \{[\s\S]*--ui-border: var\(--intent, currentColor\);/);
+  // A neutral button outline is the exception: its border is the control edge,
+  // so it matches a field instead of inheriting the label's full ink.
+  expect(button).toMatch(
+    /\.btn\.outline \{[\s\S]*--ui-border: var\(--intent, var\(--border-control\)\);/,
+  );
   expect(button).toMatch(/\.btn\.ghost \{[\s\S]*--ui-fg: var\(--intent, currentColor\);/);
   expect(button).toMatch(/\.btn\.link \{[\s\S]*--ui-fg: var\(--intent, currentColor\);/);
   expect(button).toContain("color-mix(in oklch, currentColor 10%, transparent)");
@@ -1887,12 +1892,14 @@ test("text controls keep per-control inset focus, even joined or themed", () => 
   expect(readRules("src/css/components/join.css")).not.toContain(":focus-visible");
   expect(joinCss).not.toContain("box-shadow: none;");
   // One wrapper level is supported generically: corners inherit, the flex
-  // item wrapper carries the primary-edge z-index, and a default outline
-  // action still belongs to the composite border.
+  // item wrapper carries the primary-edge z-index, and the outline action's
+  // own variant supplies the composite border.
   expect(joinCss).toContain(".join > * > :is(.input, .textarea, .select)");
   expect(joinCss).toMatch(/border-radius:\s*inherit;/);
   expect(joinCss).toContain(".join > :has(> :is(.input, .textarea, .select))");
-  expect(joinCss).toContain(".join:has(> * > :is(.input, .textarea, .select)) > .btn.outline");
+  // The outline's own --border-control edge makes the old field-join override
+  // redundant, and without it a pressed outline keeps its state border.
+  expect(joinCss).not.toContain("--btn-border-color: var(--intent, var(--border-control))");
   expect(joinCss).not.toContain("combo-box");
   // The custom-select open state follows the same inset recipe.
   expect(customCss).toMatch(new RegExp(String.raw`&:open \{[^}]*` + FIELD_INSET_OUTLINE.source));
