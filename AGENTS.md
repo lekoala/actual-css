@@ -177,6 +177,10 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 - Changelog: one line per entry, always. An entry needing a second sentence is
   two entries or a pointer to a note. Name the class, hook, export, or file an
   adopter would search for.
+- A component page leads with the problem, not the API: a one-sentence
+  summary, the first live demo, then explanation. Usage bullets belong under a
+  `Usage` heading after that first example, where a reader who has already seen
+  the thing can read them.
 
 ## Documentation and implementation
 

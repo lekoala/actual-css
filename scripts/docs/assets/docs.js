@@ -43,33 +43,6 @@
     applyTheme(current);
   }
 
-  /* --- Collapsed nav groups --- */
-
-  /* A collapsed group would reopen on every page, since each page renders its
-     groups open. Remember the collapsed ones for the session, but never hide
-     the current page's link: its group opens whatever was stored. Storage can
-     throw (blocked site data); the nav then just stays open. Restored before
-     the reveal below, which measures the open layout. */
-  const NAV_KEY = "actual-docs-collapsed";
-  const navGroups = [...document.querySelectorAll("details[data-docs-nav-group]")];
-  if (navGroups.length > 0) {
-    let collapsed = new Set();
-    try {
-      collapsed = new Set(JSON.parse(sessionStorage.getItem(NAV_KEY) ?? "[]"));
-    } catch {}
-    for (const group of navGroups) {
-      const current = group.querySelector('[aria-current="page"]');
-      group.open = Boolean(current) || !collapsed.has(group.dataset.docsNavGroup);
-      group.addEventListener("toggle", () => {
-        if (group.open) collapsed.delete(group.dataset.docsNavGroup);
-        else collapsed.add(group.dataset.docsNavGroup);
-        try {
-          sessionStorage.setItem(NAV_KEY, JSON.stringify([...collapsed]));
-        } catch {}
-      });
-    }
-  }
-
   /* --- Reveal active nav item --- */
 
   /* The sidebar is its own scroll container, so a deep link loads with the

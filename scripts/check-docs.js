@@ -23,6 +23,8 @@ const ROOT = join(__dirname, "..");
 const PAGES = join(ROOT, "docs", "pages");
 const NOTES = join(ROOT, "docs", "design-notes");
 const SITE = join(ROOT, "site");
+const SRC_CSS = join(ROOT, "src", "css");
+const CHROME_CSS = join(ROOT, "scripts", "docs", "assets", "docs.css");
 
 const FENCE_LANGUAGES = new Set(["html", "css", "js", "javascript", "json", "sh", "text"]);
 const KNOWN_FENCE_FLAGS = new Set(["demo", "bare", "resize", "sticky"]);
@@ -135,14 +137,18 @@ function isExternal(href) {
   return /^(?:[a-z]+:)?\/\//iu.test(href) || /^(?:mailto|tel):/iu.test(href);
 }
 
-function walkMarkdown(dir) {
+function walkFiles(dir, extension) {
   const files = [];
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name);
-    if (entry.isDirectory()) files.push(...walkMarkdown(full));
-    else if (entry.name.endsWith(".md")) files.push(full);
+    if (entry.isDirectory()) files.push(...walkFiles(full, extension));
+    else if (entry.name.endsWith(extension)) files.push(full);
   }
   return files;
+}
+
+function walkMarkdown(dir) {
+  return walkFiles(dir, ".md");
 }
 
 function rel(file) {
@@ -175,9 +181,47 @@ function cdnPinIssues(files) {
   return issues;
 }
 
+/*
+ * The site chrome consumes framework tokens. A token nothing declares makes
+ * the whole declaration invalid at computed-value time, and the property takes
+ * its initial value — for a color, currentColor. A hover border written as
+ * `var(--border-strong)`, a token that never existed, drew a full-contrast
+ * ring: legal CSS, no lint finding, no failing test. A var() with a fallback
+ * stays allowed, since that is how an unset hook is consumed.
+ */
+function chromeTokenIssues() {
+  const declared = new Set();
+  for (const file of walkFiles(SRC_CSS, ".css")) {
+    for (const match of readFileSync(file, "utf8").matchAll(/(?<![-\w])(--[a-z0-9-]+)\s*:/gi)) {
+      declared.add(match[1]);
+    }
+  }
+
+  // Comments hold prose, including token names that do not exist; blanking
+  // them in place keeps the reported line numbers honest.
+  const chrome = readFileSync(CHROME_CSS, "utf8").replace(/\/\*[\s\S]*?\*\//g, (comment) =>
+    comment.replace(/[^\n]/g, " "),
+  );
+  for (const match of chrome.matchAll(/(?<![-\w])(--[a-z0-9-]+)\s*:/gi)) declared.add(match[1]);
+
+  const issues = [];
+  for (const [index, line] of chrome.split("\n").entries()) {
+    for (const match of line.matchAll(/var\(\s*(--[a-z0-9-]+)\s*([,)])/gi)) {
+      const [, token, terminator] = match;
+      if (terminator === ")" && !declared.has(token)) {
+        issues.push(
+          `${rel(CHROME_CSS)}:${index + 1}: var(${token}) — no such token; check the name or give it a fallback`,
+        );
+      }
+    }
+  }
+  return issues;
+}
+
 function main() {
   const issues = [];
   const navigation = loadNavigation(ROOT);
+  issues.push(...chromeTokenIssues());
   const manifestFiles = new Map(
     navigation.pages.map((page) => [join(PAGES, page.file), { page, toc: [] }]),
   );

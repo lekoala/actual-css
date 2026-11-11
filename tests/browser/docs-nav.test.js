@@ -1,56 +1,29 @@
 import { expect, test } from "bun:test";
-import {
-  browserAvailable,
-  clickSelector,
-  fixtureUrl,
-  waitForBrowser,
-  withBrowserPage,
-} from "../../scripts/utils/browser.js";
+import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
 
 const it = (await browserAvailable()) ? test : test.skip;
-const group = (slug) => `details[data-docs-nav-group="${slug}"]`;
-const isOpen = (slug) => `document.querySelector('${group(slug)}').open`;
 
-// Trap: each page renders its groups open, so a collapsed group reopened on
-// the next page and collapsing was pointless.
-it("a collapsed sidebar group stays collapsed, except around the current page", async () => {
+// The sidebar is a static scrollport, so a deep page loads with its current
+// link wherever it falls. docs.js centers it only when the link is clipped;
+// this asserts where that lands: inside the sidebar's own box.
+it("keeps the current page visible in a static sidebar", async () => {
   await withBrowserPage(
-    fixtureUrl("site/components/rating.html"),
+    fixtureUrl("site/components/table.html"),
     async (view) => {
-      // A real click lands at the summary's viewport point. The sidebar scrolls
-      // on its own, and CI's wider fallback font pushed the summary below the
-      // fold, so the click hit nothing; bring it in view as a reader would. The
-      // short viewport keeps that case covered on every machine.
-      const summary = `${group("patterns")} > summary`;
-      await view.evaluate(
-        `document.querySelector('${summary}').scrollIntoView({ block: "center" })`,
-      );
-      await waitForBrowser(
-        view,
-        `(() => { const r = document.querySelector('${summary}').getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight; })()`,
-      );
-      await clickSelector(view, summary);
-      // The store is written on the async toggle event, after `open` flips:
-      // wait for the write itself before leaving the page.
-      await waitForBrowser(
-        view,
-        `(sessionStorage.getItem("actual-docs-collapsed") ?? "").includes('"patterns"')`,
-      );
-      const patternPage = await view.evaluate(
-        `document.querySelector('${group("patterns")} a').href`,
-      );
-
-      await view.navigate(fixtureUrl("site/components/badge.html"));
-      await waitForBrowser(view, `!${isOpen("patterns")}`);
-      expect(await view.evaluate(isOpen("components"))).toBe(true);
-
-      await view.navigate(patternPage);
-      await waitForBrowser(view, isOpen("patterns"));
-      expect(
-        await view.evaluate(
-          `document.querySelector('${group("patterns")} [aria-current="page"]') !== null`,
-        ),
-      ).toBe(true);
+      const state = await view.evaluate(`(() => {
+        const sidebar = document.querySelector(".docs-sidebar");
+        const link = sidebar.querySelector('a[aria-current="page"]');
+        const box = sidebar.getBoundingClientRect();
+        const rect = link.getBoundingClientRect();
+        return {
+          visible: rect.top >= box.top && rect.bottom <= box.bottom,
+          collapsible: sidebar.querySelectorAll("details").length,
+          headings: [...sidebar.querySelectorAll(".docs-nav-group")].map((h) => h.textContent),
+        };
+      })()`);
+      expect(state.headings).toEqual(["Components", "Patterns"]);
+      expect(state.collapsible).toBe(0);
+      expect(state.visible).toBe(true);
     },
     { height: 600 },
   );

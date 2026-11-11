@@ -66,10 +66,27 @@ describe("rendering", () => {
 
   it("lists only the current destination's groups in the sidebar", () => {
     const sidebar = renderNavGroups(rating);
-    expect(sidebar).toContain('<summary class="nav-link">Patterns</summary>');
+    expect(sidebar).toContain('<p class="docs-nav-group">Patterns</p>');
     expect(sidebar).toContain('href="segmented.html"');
     expect(sidebar).not.toContain("forms/");
     expect(renderNavGroups(null)).toBe("");
+  });
+
+  // A page never indents: its depth is the heading above it, not an inset, so
+  // one alignment holds whatever the group. No row is collapsible either — a
+  // reader looking for a page should not have to open a tree.
+  it("keeps every page link on one alignment under its group heading", () => {
+    const sidebar = renderNavGroups(rating);
+    expect(sidebar).not.toContain("<details");
+    expect(sidebar).not.toContain("<summary");
+    expect(sidebar.match(/<ul class="nav-list">/g)).toHaveLength(2);
+  });
+
+  it("skips the heading when the destination has a single group", () => {
+    const grid = navigation.pages.find((page) => page.url === "layout/grid.html");
+    const sidebar = renderNavGroups(grid);
+    expect(sidebar).not.toContain("docs-nav-group");
+    expect(sidebar).toContain('href="grid.html" aria-current="page"');
   });
 
   it("opens Components on its overview", () => {

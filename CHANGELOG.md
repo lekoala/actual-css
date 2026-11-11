@@ -18,14 +18,20 @@
 - Docs: the Timeline page composes an activity feed with avatars, a `.chat-bubble` comment, a `.badge` status and a file `.btn`.
 
 ### Changed
+- `--font-sans` and `--font-mono`: quality-ordered local stacks (Inter, Segoe UI Variable, Roboto, Noto Sans; Cascadia Code, JetBrains Mono) instead of a bare `system-ui` fallback.
 - `.btn.outline`: a neutral outline takes `--border-control`; an explicit intent keeps its color.
 - Docs: the search panel opens on its destination quick links, keeps the close in the header row, and pins a keyboard footer below a scrolling result list.
 - Docs: the header search opener is a quiet surface button on the control edge that shows `⌘ K` on macOS and `Ctrl K` elsewhere.
+- Docs: the sidebar lists one destination's pages as static group sections instead of collapsible, indented rows.
+- Docs: page-end navigation is two cards (Previous / Next); the source links are quiet text links.
+- Docs: the header marks the active section by ink alone, so only the sidebar row is filled.
 - `.timeline`: `--timeline-slot-size` defaults to `2rem`, and the dateline uses tabular numerals.
 - `.timeline`: markers centre on the title's x-height instead of its line box.
 - `.alert-icon` and `.alert > .close`: centred on the first line's x-height, measured from the font with `cap` and `ex`, instead of its line box.
 
 ### Fixed
+- Docs: card hover lifts to `--border-control`; the former `--border-strong` was never a token, so `border-color` fell back to `currentColor` and drew a full-contrast ring.
+- `check:docs` rejects a `var()` in the site chrome whose token no stylesheet declares.
 - `.timeline`: an avatar or icon slot taller than the line box stays inside its event instead of overflowing the list and eating into `--timeline-gap`.
 - `.alert-icon`: centred on the first line box from `--alert-line-height`, `--alert-font-size` and `--alert-icon-size` instead of a fixed `0.125em`; `--alert-line-height` and `--alert-icon-nudge` are the new hooks.
 - `.alert.admonition > .alert-title > .alert-icon`: an icon in the admonition title bar takes `.alert-icon` and follows `--alert-icon-nudge`.

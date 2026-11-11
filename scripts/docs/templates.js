@@ -43,9 +43,13 @@ export function relHref(fromUrl, toUrl) {
 
 /*
  * The current destination's groups only; the header and the drawer grid reach
- * the others. Several groups become collapsible rows (open), one group is a
- * plain list: the destination already names it. docs.js restores the rows a
- * reader collapsed, keyed by group slug.
+ * the others. A group is a static section: its heading names it and the links
+ * sit flush below, so a page never changes alignment with its depth and the
+ * reader never has to open a tree to find a page. One group is a plain list:
+ * the destination already names it.
+ *
+ * The wrapper is one block per set of groups so the drawer's .stack spaces
+ * groups apart instead of spacing a heading from its own list.
  */
 export function renderNavGroups(current) {
   if (!current) return "";
@@ -62,21 +66,17 @@ ${groups[0].pages.map((page) => link(page.entry, "        ")).join("\n")}
       </ul>`;
   }
 
-  const rows = groups
+  const sections = groups
     .map(
-      (group) => `        <li>
-          <details open data-docs-nav-group="${group.slug}">
-            <summary class="nav-link">${escapeHtml(group.title)}</summary>
-            <ul class="nav-list">
-${group.pages.map((page) => link(page.entry, "              ")).join("\n")}
-            </ul>
-          </details>
-        </li>`,
+      (group) => `        <p class="docs-nav-group">${escapeHtml(group.title)}</p>
+        <ul class="nav-list">
+${group.pages.map((page) => link(page.entry, "          ")).join("\n")}
+        </ul>`,
     )
     .join("\n");
-  return `      <ul class="nav-list">
-${rows}
-      </ul>`;
+  return `      <div>
+${sections}
+      </div>`;
 }
 
 /*
@@ -239,7 +239,7 @@ const COMPONENT_FEATURED = [
 ];
 
 function renderPageCard(page, href) {
-  return `          <a class="card stack docs-component-card" href="${href}">
+  return `          <a class="card stack docs-component-card docs-card-link" href="${href}">
             <h3>${escapeHtml(page.title)}</h3>
             <p class="muted">${escapeHtml(page.description)}</p>
           </a>`;
@@ -307,16 +307,18 @@ export function renderHome({
     .replace(/\{\{searchLinks\}\}/g, renderSearchLinks(navigation, null));
 }
 
-function renderPrev(page) {
-  return page.previous
-    ? `          <a class="btn outline" href="${relHref(page.url, page.previous.url)}">&larr; ${escapeHtml(page.previous.title)}</a>`
-    : "";
-}
-
-function renderNext(page) {
-  return page.next
-    ? `          <a class="btn outline" href="${relHref(page.url, page.next.url)}">${escapeHtml(page.next.title)} &rarr;</a>`
-    : "";
+/*
+ * End-of-page navigation: two surfaces, not two secondary buttons. The whole
+ * card is the target; the label names the direction, the page title carries the
+ * weight. The stylesheet places card one and two, so a page with a single
+ * neighbour keeps it on the side its direction implies.
+ */
+function renderPageLink(url, entry, direction) {
+  const label = direction === "previous" ? "Previous" : "Next";
+  return `          <a class="card stack docs-page-link docs-card-link docs-page-link-${direction}" href="${relHref(url, entry.url)}">
+            <span class="docs-page-label">${label}</span>
+            <span class="docs-page-title">${escapeHtml(entry.title)}</span>
+          </a>`;
 }
 
 /** Compose narrative Markdown sections with component demos at page level. */
@@ -378,8 +380,8 @@ export function renderPage({
     .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
     .replace(/\{\{content\}\}/g, wrapDocsContent(content))
     .replace(/\{\{toc\}\}/g, renderToc(toc))
-    .replace(/\{\{prev\}\}/g, renderPrev(page))
-    .replace(/\{\{next\}\}/g, renderNext(page))
+    .replace(/\{\{prev\}\}/g, page.previous ? renderPageLink(url, page.previous, "previous") : "")
+    .replace(/\{\{next\}\}/g, page.next ? renderPageLink(url, page.next, "next") : "")
     .replace(/\{\{editUrl\}\}/g, `${REPO}/edit/master/docs/pages/${sourceFile}`)
     .replace(/\{\{markdownUrl\}\}/g, `${REPO}/blob/master/docs/pages/${sourceFile}`);
 }
