@@ -45,10 +45,6 @@ const MEASURE = `
     const style = getComputedStyle(li);
     return li.getBoundingClientRect().top + px(style.paddingTop) + px(style.lineHeight) / 2;
   };
-  // The optical nudge, resolved on the <li>: 0 when the list opts out.
-  const shift = (li) => px(getComputedStyle(li).getPropertyValue("--timeline-marker-shift"));
-  // Where a marker centres: the first line's middle, moved by the nudge.
-  const markerLine = (li) => firstLine(li) + shift(li);
 `;
 
 it("the marker sits on the first line, whichever element opens the event", async () => {
@@ -64,9 +60,9 @@ it("the marker sits on the first line, whichever element opens the event", async
           lineBox,
           timeHeight: timeFirst.querySelector("time").getBoundingClientRect().height,
           timeDot: center(pseudo(timeFirst, "::before")).y,
-          timeLine: center(timeFirst.querySelector("time").getBoundingClientRect()).y + shift(timeFirst),
+          timeLine: center(timeFirst.querySelector("time").getBoundingClientRect()).y,
           textDot: center(pseudo(textFirst, "::before")).y,
-          textLine: markerLine(textFirst),
+          textLine: firstLine(textFirst),
           // A sentence mixing text and links stays one line of block flow.
           sentenceLines: new Set(
             [...textFirst.querySelectorAll("a")].map((a) => Math.round(a.getBoundingClientRect().top)),
@@ -107,7 +103,9 @@ it("slots replace the dot on a rail shared by the whole list", async () => {
           avatar: { w: avatar.width, h: avatar.height, ...center(avatar) },
           icon: { w: icon.width, ...center(icon) },
           dot: center(dot),
-          avatarLine: markerLine(avatarItem),
+          avatarLine: firstLine(avatarItem),
+          iconLine: firstLine(iconItem),
+          dotLine: firstLine(dotItem),
           // A slot taller than the line box stays inside its event, even on
           // a one-line event.
           slotBoxes: [avatarItem, iconItem].map((li) => ({
@@ -131,6 +129,8 @@ it("slots replace the dot on a rail shared by the whole list", async () => {
       expect(Math.abs(result.icon.x - result.dot.x)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(result.timeStart - result.textStart)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(result.avatar.y - result.avatarLine)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(result.icon.y - result.iconLine)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(result.dot.y - result.dotLine)).toBeLessThanOrEqual(0.5);
       for (const { item, slot } of result.slotBoxes) {
         expect(slot.top).toBeGreaterThanOrEqual(item.top - 0.5);
         expect(slot.bottom).toBeLessThanOrEqual(item.bottom + 0.5);
@@ -221,12 +221,12 @@ it(".timeline-dates-end puts the dateline at the end of the first line", async (
             text: baseline(li.querySelector("strong") ?? li),
           })),
           dot: center(pseudo(title, "::before")).y,
-          titleMarker: markerLine(title),
+          titleMarker: firstLine(title),
           avatarTime: rect(avatarItem.querySelector("time")),
           avatarItem: rect(avatarItem),
           avatarLine: firstLine(avatarItem),
           avatar: center(rect(avatarItem.querySelector(".avatar"))).y,
-          avatarMarker: markerLine(avatarItem),
+          avatarMarker: firstLine(avatarItem),
           sentenceLines: new Set(
             [...avatarItem.querySelectorAll("a")].map((a) => Math.round(rect(a).top)),
           ).size,
@@ -258,43 +258,65 @@ it(".timeline-dates-end puts the dateline at the end of the first line", async (
   );
 });
 
-it("the marker drops to the x-height centre, and the nudge adds to it", async () => {
+it("an explicit marker nudge follows the event font and keeps slots contained", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       const result = await view.evaluate(`(() => {
         ${MEASURE}
-        // Real glyph metrics of the event's own font.
-        const li = document.getElementById("time-first");
-        const style = getComputedStyle(li);
-        const ctx = document.createElement("canvas").getContext("2d");
-        ctx.font = style.fontWeight + " " + style.fontSize + " " + style.fontFamily;
-        const cap = ctx.measureText("H").actualBoundingBoxAscent;
-        const x = ctx.measureText("x").actualBoundingBoxAscent;
-        const icon = document.getElementById("nudged-icon");
-        const dot = document.getElementById("nudged-dot");
-        return {
-          shift: shift(li),
-          expected: (cap - x) / 2,
-          nudgedShift: shift(icon),
-          nudgedIcon: center(icon.querySelector("[aria-hidden]").getBoundingClientRect()).y,
-          nudgedIconLine: firstLine(icon),
-          nudgedDot: center(pseudo(dot, "::before")).y,
-          nudgedDotLine: firstLine(dot),
-        };
+        const list = document.getElementById("nudged");
+        // The glyph is deliberately a different size: em must resolve on the event.
+        list.style.setProperty("--timeline-glyph-size", "10px");
+        return ["3px", "-0.25em", "0px"].flatMap((nudge) => {
+          list.style.setProperty("--timeline-marker-nudge", nudge);
+          return [...list.children].map((li) => {
+            const slot = li.querySelector(":scope > [aria-hidden], :scope > .avatar");
+            const marker = slot ? slot.getBoundingClientRect() : pseudo(li, "::before");
+            const item = li.getBoundingClientRect();
+            return {
+              expected: nudge.endsWith("em") ? -0.25 * px(getComputedStyle(li).fontSize) : px(nudge),
+              offset: center(marker).y - firstLine(li),
+              contained: marker.top >= item.top - 0.5 && marker.top + marker.height <= item.bottom + 0.5,
+            };
+          });
+        });
       })()`);
 
-      expect(result.shift).toBeGreaterThan(0);
-      expect(Math.abs(result.shift - result.expected)).toBeLessThanOrEqual(0.75);
-      // The 3px nudge of the fixture lands on top of the optical shift, for a
-      // slot and a dot alike.
-      expect(Math.abs(result.nudgedShift - result.shift - 3)).toBeLessThanOrEqual(0.01);
-      const moved = result.shift + 3;
-      expect(Math.abs(result.nudgedIcon - result.nudgedIconLine - moved)).toBeLessThanOrEqual(0.5);
-      expect(Math.abs(result.nudgedDot - result.nudgedDotLine - moved)).toBeLessThanOrEqual(0.5);
+      for (const { expected, offset, contained } of result) {
+        expect(Math.abs(offset - expected)).toBeLessThanOrEqual(0.5);
+        expect(contained).toBe(true);
+      }
     },
     { artifactName: "timeline-nudge" },
   );
+});
+
+it("a local glyph correction leaves the disc, text and rail in place", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const result = await view.evaluate(`(() => {
+      ${MEASURE}
+      const li = document.getElementById("icon");
+      const slot = li.querySelector("[aria-hidden]");
+      const glyph = slot.querySelector("svg");
+      const read = () => ({
+        glyph: center(glyph.getBoundingClientRect()),
+        disc: center(slot.getBoundingClientRect()),
+        rail: pseudo(li, "::after"),
+        line: firstLine(li),
+        next: firstLine(li.nextElementSibling),
+      });
+      const before = read();
+      glyph.style.translate = "0 3px";
+      return { before, after: read() };
+    })()`);
+    const { before, after } = result;
+    expect(Math.abs(before.glyph.y - before.disc.y)).toBeLessThanOrEqual(0.5);
+    expect(Math.abs(after.glyph.y - before.glyph.y - 3)).toBeLessThanOrEqual(0.5);
+    expect(after.disc).toEqual(before.disc);
+    expect(after.rail).toEqual(before.rail);
+    expect(after.line).toBe(before.line);
+    expect(after.next).toBe(before.next);
+  });
 });
 
 it("the rail follows the writing direction, and a stretched list keeps its gap", async () => {

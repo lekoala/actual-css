@@ -48,7 +48,6 @@
       "--alert-border-inline-start-width"
     ],
     "internalHooks": [
-      "--alert-icon-shift",
       "--alert-default-bg",
       "--alert-default-fg",
       "--alert-default-border",

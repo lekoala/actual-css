@@ -38,7 +38,7 @@ the version beside the rail, see the
 </ol>
 ```
 
-The dot lines up with the first line of the event, whether it opens with the
+The dot centres on the first line box of the event, whether it opens with the
 `<time>` or with text. Block children drop their margins; wrap the content in
 a [`.stack`](../layout/stack.md) when an event needs more spacing.
 
@@ -71,6 +71,11 @@ An [`.avatar`](avatar.md) or an `aria-hidden` icon written first in the `<li>`
 replaces the dot. One such event widens the rail for the whole list, so dots
 and slots stay aligned. An icon sits in a disc; the event's intent tints it
 like a soft badge.
+
+Dots, discs and avatars share the same alignment with the first line box.
+For an off-centre icon, wrap the glyph in an `aria-hidden` slot and apply a
+local `translate` to the inner glyph. Keep the disc in place:
+`--timeline-marker-nudge` moves the whole marker and its rail geometry.
 
 ```html demo
 <ol class="timeline">
@@ -232,5 +237,5 @@ The gap between events follows the density context: `.compact` and
 - `--timeline-gap` — space between events; follows `--density-space`.
 - `--timeline-inline-gap` — space between the rail and the content.
 - `--timeline-line-size` — rail line thickness.
-- `--timeline-marker-nudge` — additive correction to the marker position,
-  which centres on the first line's x-height, measured from the font.
+- `--timeline-marker-nudge` — correction to the whole marker's centring on the
+  first line box; an `em` resolves against the event's text size.

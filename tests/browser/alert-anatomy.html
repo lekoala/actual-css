@@ -53,6 +53,10 @@
       <i class="alert-icon" aria-hidden="true"></i>
       <div>Message</div>
     </div>
+    <div class="alert" id="measure-multiline">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <div>First line<br>Second line</div>
+    </div>
 
     <!-- The dismiss button is taller than the line: centred on it like the
          icon, and without growing the title row. -->
@@ -66,6 +70,14 @@
       <i class="alert-icon" aria-hidden="true"></i>
       <div>Message</div>
       <button type="button" class="close" aria-label="Dismiss"></button>
+    </div>
+    <div class="alert admonition" id="admonition">
+      <div class="alert-title">
+        <svg class="alert-icon" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="currentColor"/></svg>
+        <span>Title</span>
+        <button type="button" class="close" aria-label="Dismiss"></button>
+      </div>
+      <div class="alert-body"><p>Body</p></div>
     </div>
   </div>
 </body>

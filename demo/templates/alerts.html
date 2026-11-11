@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Alert icon alignment - Actual CSS</title>
-  <meta name="description" content="The alert leading icon against the first line's x-height: icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes and the theme nudge.">
+  <meta name="description" content="First-line alignment of alert icons and timeline markers: icon sources, fonts, sizes, message shapes and local optical corrections.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
@@ -59,6 +59,14 @@
       color: var(--text-muted);
     }
 
+    /* Framed so a .timeline-dates-end dateline, flush with the case's end
+       edge, reads as part of its own list rather than the next column's. */
+    .align-case > .timeline {
+      padding: var(--space-40);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+    }
+
     .align-island {
       margin-block-start: var(--space-40);
       padding: var(--space-40);
@@ -98,11 +106,10 @@
       <p class="overline">Actual CSS</p>
       <h1>Alert icon alignment</h1>
       <p class="lead">
-        The leading icon is centred on the first line box, then lowered onto the x-height by
-        half the gap between the font's cap height and x-height. That offset is derived from
+        The leading icon is centred on the first line box. Its offset is derived from
         <code>--alert-font-size</code>, <code>--alert-line-height</code>,
-        <code>--alert-icon-size</code> and the font itself, so each stage below changes one
-        hook and every icon should stay level.
+        <code>--alert-icon-size</code>. Corrections for an off-centre drawing stay local to
+        that icon through <code>--alert-icon-nudge</code>.
       </p>
       <div class="cluster">
         <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
@@ -315,9 +322,9 @@
     <section class="center align-section" id="text-fonts">
       <h2>Text fonts</h2>
       <p class="align-note">
-        The line box is the same in every face; where its lowercase text sits is not. The
-        icon follows the x-height through <code>cap</code> and <code>ex</code>, which the
-        browser measures on the font in use, so each face below should read level.
+        The line box is the same in every face; where its lowercase text sits is not.
+        The icon keeps the same geometric centre. Compare the visible text without
+        assuming that its ink fills the line box.
       </p>
 
       <div class="align-island" style="font-family: system-ui, sans-serif">
@@ -730,7 +737,7 @@
       <p class="align-note">
         The icon column is the alert's, whatever the surface: the callout keeps its flag, the
         admonition puts the icon in the title bar and hands it to the title bar's flex
-        centring, lowered by the same optical shift.
+        centring. Both accept a local icon nudge.
       </p>
 
       <div class="grid align-grid">
@@ -796,9 +803,8 @@
             </div>
           </div>
           <p class="align-label">
-            The title icon is smaller (1em), and at that size the glyph is drawn a little
-            higher in its box. 0.05em leaves it slightly high, so the title bar gets its own
-            value.
+            Compare this stronger correction with the unadjusted glyph and 0.05em above;
+            the title bar uses a smaller icon than the leading column.
           </p>
         </div>
 
@@ -826,6 +832,40 @@
               <p>No nudge.</p>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="timeline-markers">
+      <h2>Timeline markers</h2>
+      <p class="align-note">
+        Points, discs and avatars centre on the first line box. A correction to the
+        triangle inside a disc leaves the disc and the rail in place.
+      </p>
+      <div class="grid align-grid">
+        <div class="align-case">
+          <code class="align-label">mixed markers · dateline first</code>
+          <ol class="timeline">
+            <li><span class="avatar primary"><abbr>AM</abbr></span><time datetime="2026-11-11">Today</time><strong>Changes approved</strong><p>Ada reviewed the update.</p></li>
+            <li class="success"><i class="ti ti-circle-check" aria-hidden="true"></i><time datetime="2026-11-10">Yesterday</time>Changes saved.</li>
+            <li><time datetime="2026-11-09">Monday</time>Review requested.</li>
+          </ol>
+        </div>
+        <div class="align-case">
+          <code class="align-label">mixed markers · title first</code>
+          <ol class="timeline timeline-dates-end">
+            <li><span class="avatar primary"><abbr>AM</abbr></span><time datetime="2026-11-11">Today</time><strong>Changes approved</strong><p>Ada reviewed the update.</p></li>
+            <li class="success"><i class="ti ti-circle-check" aria-hidden="true"></i><time datetime="2026-11-10">Yesterday</time>Changes saved.</li>
+            <li><time datetime="2026-11-09">Monday</time>Review requested.</li>
+          </ol>
+        </div>
+        <div class="align-case">
+          <code class="align-label">triangle · unchanged disc</code>
+          <ol class="timeline">
+            <li class="warning"><span aria-hidden="true"><i class="ti ti-alert-triangle"></i></span>No glyph correction</li>
+            <li class="warning"><span aria-hidden="true"><i class="ti ti-alert-triangle" style="translate: 0 0.05em"></i></span>Glyph lowered by 0.05em</li>
+            <li>Shared rail</li>
+          </ol>
         </div>
       </div>
     </section>

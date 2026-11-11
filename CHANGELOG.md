@@ -5,7 +5,7 @@
 - Docs: "Coding agents and DESIGN.md" guide — the skill, `PRODUCT.md`/`DESIGN.md`/`PROJECT.md` ownership, and working with a design skill such as Impeccable.
 - Starter skill: reads the project's `DESIGN.md` after `PROJECT.md`.
 - Starter skill: `PROJECT.md.example` gains a "Design mapping" section from `DESIGN.md` roles to Actual classes.
-- `demo/templates/alerts.html`: alert icon alignment bench — icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes, actions and lists, variants and the neo-brutalist tile, with optional box guides.
+- `demo/templates/alerts.html`: alert icon alignment bench — icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes, actions and lists, variants, mixed timeline markers and the neo-brutalist tile, with optional box guides.
 - `demo/templates/carousel.html`: a hero carousel from one scroll-snap list, with full-width slides, native scroll buttons for previous/next and scroll markers as dots.
 - `.list.grouped`: opt-in raised surface, border, rounded shell and inline gutter for standalone lists; `--list-radius` is the new hook.
 - `neo-brutalist` and `glass` themes: `.list.grouped` joins the framed-surface and frosted-panel treatments.
@@ -13,7 +13,7 @@
 - `.timeline-dates-end`: each event's `<time>` sits at the end of its first line instead of above it.
 - `.timeline`: an icon slot with an intent gets a soft tinted disc, rim and ink, following `--soft-bg-mix` and `--soft-border-mix`.
 - `--timeline-glyph-size`: icon and spinner size in a timeline slot, half the slot by default.
-- `--timeline-marker-nudge`: additive correction to the timeline marker position, like `--alert-icon-nudge`.
+- `--timeline-marker-nudge`: moves the whole timeline marker off the first line box's centre, like `--alert-icon-nudge`.
 - Docs: the Timeline page shows an in-progress event with a `.spinner` inside the icon slot.
 - Docs: the Timeline page composes an activity feed with avatars, a `.chat-bubble` comment, a `.badge` status and a file `.btn`.
 
@@ -26,8 +26,6 @@
 - Docs: page-end navigation is two cards (Previous / Next); the source links are quiet text links.
 - Docs: the header marks the active section by ink alone, so only the sidebar row is filled.
 - `.timeline`: `--timeline-slot-size` defaults to `2rem`, and the dateline uses tabular numerals.
-- `.timeline`: markers centre on the title's x-height instead of its line box.
-- `.alert-icon` and `.alert > .close`: centred on the first line's x-height, measured from the font with `cap` and `ex`, instead of its line box.
 
 ### Fixed
 - Docs: card hover lifts to `--border-control`; the former `--border-strong` was never a token, so `border-color` fell back to `currentColor` and drew a full-contrast ring.

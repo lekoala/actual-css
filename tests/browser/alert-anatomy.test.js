@@ -1,7 +1,7 @@
 /*
  * Alert anatomy: the title and body of an icon alert keep the content rhythm
  * whatever the icon height and the alert height, and the icon stays centred on
- * the first line's x-height whatever the text size, line height or icon size.
+ * the first line box whatever the font, text size, line height or icon size.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -49,22 +49,14 @@ it("centres the dismiss button with the icon without growing the row", async () 
           alert.querySelector("p").getBoundingClientRect().top - alert.getBoundingClientRect().top,
         );
       };
-      const ctx = document.createElement("canvas").getContext("2d");
       return {
         // The line is a block, so its rect is the line box, not the
-        // content area an inline <strong> would report. The cross takes the
-        // icon's optical shift, so the target is the line centre plus that
-        // shift, from the line's real glyph metrics.
+        // content area an inline <strong> would report.
         offsets: Object.fromEntries(
           ["dismiss", "dismiss-small-text"].map((id) => {
             const alert = document.getElementById(id);
             const line = alert.querySelector(":scope > div");
-            const style = getComputedStyle(line);
-            ctx.font = style.fontWeight + " " + style.fontSize + " " + style.fontFamily;
-            const shift =
-              (ctx.measureText("H").actualBoundingBoxAscent -
-                ctx.measureText("x").actualBoundingBoxAscent) / 2;
-            return [id, centre(alert.querySelector(":scope > .close")) - centre(line) - shift];
+            return [id, centre(alert.querySelector(":scope > .close")) - centre(line)];
           }),
         ),
         depth: bodyDepth("dismiss"),
@@ -79,36 +71,61 @@ it("centres the dismiss button with the icon without growing the row", async () 
   });
 });
 
-// The target is the line box lowered by the optical shift onto the x-height
-// centre. Both are font-agnostic in the test: the line box is geometry, and the
-// expected shift comes from the real glyph metrics of whatever font CI has
-// (it does not run Segoe UI). A single-line block's rect is that line box.
-it("centres the icon on the first line's x-height at any text, line or icon size", async () => {
+// A one-line block's rect is the line box. Multiline content must keep that
+// same first-line target instead of centring the icon on the entire message.
+it("centres the icon on the first line box across fonts, sizes and multiline content", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
     const result = await view.evaluate(`(() => {
-      const ctx = document.createElement("canvas").getContext("2d");
-      return Object.fromEntries(
-        ["measure", "measure-small-text", "measure-tight-leading", "measure-large-icon"].map((id) => {
+      return ["system-ui", "serif", "monospace"].flatMap((font) => {
+        document.body.style.fontFamily = font;
+        return ["measure", "measure-small-text", "measure-tight-leading", "measure-large-icon",
+          "measure-multiline", "plain", "tall", "stretched"].map((id) => {
           const alert = document.getElementById(id);
           const icon = alert.querySelector(":scope > .alert-icon").getBoundingClientRect();
-          const line = alert.querySelector(":scope > div");
+          const line = alert.querySelector(":scope > div, :scope > strong");
           const box = line.getBoundingClientRect();
-          const style = getComputedStyle(line);
-          ctx.font = style.fontWeight + " " + style.fontSize + " " + style.fontFamily;
-          const shift =
-            (ctx.measureText("H").actualBoundingBoxAscent -
-              ctx.measureText("x").actualBoundingBoxAscent) / 2;
-          return [
-            id,
-            { offset: icon.top + icon.height / 2 - (box.top + box.height / 2), shift },
-          ];
-        }),
-      );
+          const lineHeight = parseFloat(getComputedStyle(line).lineHeight);
+          return { id, font, offset: icon.top + icon.height / 2 - (box.top + lineHeight / 2) };
+        });
+      });
     })()`);
 
-    for (const [id, { offset, shift }] of Object.entries(result)) {
-      expect(`${id}: ${shift > 0}`).toBe(`${id}: true`);
-      expect(`${id}: ${Math.abs(offset - shift) <= 1}`).toBe(`${id}: true`);
+    for (const { id, font, offset } of result) {
+      expect(`${id} (${font}): ${Math.abs(offset) <= 0.5}`).toBe(`${id} (${font}): true`);
+    }
+  });
+});
+
+it("nudges only the icon in standard alerts and admonition titles", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const result = await view.evaluate(`(() => {
+      const rect = (el) => {
+        const { top, height } = el.getBoundingClientRect();
+        return { top, height, center: top + height / 2 };
+      };
+      return ["dismiss", "admonition"].flatMap((id) => {
+        const alert = document.getElementById(id);
+        const read = () => ({
+          icon: rect(alert.querySelector(".alert-icon")),
+          close: rect(alert.querySelector(".close")),
+          text: rect(alert.querySelector(".alert-title > span, :scope > div")),
+          body: rect(alert.querySelector("p")),
+        });
+        const base = read();
+        const cases = [3, -3].map((nudge) => {
+          alert.style.setProperty("--alert-icon-nudge", nudge + "px");
+          return { id, nudge, base, moved: read() };
+        });
+        alert.style.removeProperty("--alert-icon-nudge");
+        return cases;
+      });
+    })()`);
+    for (const { nudge, base, moved } of result) {
+      expect(Math.abs(base.icon.center - base.text.center)).toBeLessThanOrEqual(0.5);
+      expect(Math.abs(moved.icon.center - base.icon.center - nudge)).toBeLessThanOrEqual(0.5);
+      expect(moved.close).toEqual(base.close);
+      expect(moved.text).toEqual(base.text);
+      expect(moved.body).toEqual(base.body);
     }
   });
 });
