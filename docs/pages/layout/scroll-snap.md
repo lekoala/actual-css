@@ -147,4 +147,4 @@ CSS scroll buttons and markers add previous/next arrows and dots to a snapped ra
 
 - `::scroll-button()` scrolls one page and disables itself at the end of the rail, so `:disabled` is the edge state.
 - `::scroll-marker` dots need a `data-marker-label` on each item for their accessible name, as in the pagination recipe above.
-- These are progressive enhancements: without them the rail keeps its native scrollbar and swipe. Use a dedicated carousel library such as Swiper for mouse drag, looping, autoplay, or the same controls in every browser.
+- These are progressive enhancements: without them the rail keeps its native scrollbar and swipe. Use a dedicated carousel library such as [Swiper](https://swiperjs.com/) for mouse drag, looping, autoplay, or the same controls in every browser.
