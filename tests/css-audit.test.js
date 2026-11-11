@@ -1456,6 +1456,18 @@ test("application lists provide optional regions without owning their controls",
   expect(css).toContain("min-block-size: var(--list-item-min-size);");
   expect(css).toContain("border-block-start: var(--list-divider);");
   expect(css).not.toContain("border-block: var(--list-divider);");
+  // Grouped is opt-in: a bare list leaves the surface to its container, and
+  // the grouped shell rounds the first and last row instead of clipping, so a
+  // row flyout can still escape it.
+  expect(css).not.toMatch(/\.list \{[^}]*background:/);
+  expect(css).toMatch(/\.list\.grouped \{[^}]*background: var\(--surface-raised\);/);
+  expect(css).toMatch(
+    /\.list\.grouped \{[^}]*border: var\(--border-width\) solid var\(--border\);/,
+  );
+  expect(css).not.toMatch(/\.list\.grouped \{[^}]*overflow:/);
+  expect(css).toContain(
+    "border-start-start-radius: max(0px, calc(var(--list-radius) - var(--border-width)));",
+  );
   expect(css).toContain(".list-item-content");
   // The content keeps its automatic (longest-word) minimum so the row wraps;
   // tests/browser/list-item.test.js measures the narrow cases.

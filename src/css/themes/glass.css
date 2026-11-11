@@ -71,7 +71,7 @@
 }
 
 /* Panels on the backdrop frost what passes beneath them. */
-[data-theme="glass"] :is(.card, .alert, .navbar, .topbar, .modal, .drawer) {
+[data-theme="glass"] :is(.card, .alert, .navbar, .topbar, .modal, .drawer, .list.grouped) {
   backdrop-filter: blur(18px) saturate(140%);
 }
 
@@ -119,7 +119,8 @@
     --surface-subtle: color-mix(in oklab, white 6%, var(--surface-opaque));
   }
 
-  [data-theme="glass"] :is(.card, .alert, .navbar, .topbar, .modal, .drawer, .flyout) {
+  [data-theme="glass"]
+    :is(.card, .alert, .navbar, .topbar, .modal, .drawer, .flyout, .list.grouped) {
     backdrop-filter: none;
   }
 

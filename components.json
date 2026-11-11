@@ -464,6 +464,7 @@
     "cssImport": "actual-css/css/components/list",
     "docs": "https://lekoala.github.io/actual-css/site/components/list.html",
     "classes": [
+      "grouped",
       "list",
       "list-item",
       "list-item-content",
@@ -476,7 +477,8 @@
       "--list-item-pad-block",
       "--list-item-pad-inline",
       "--list-item-gap",
-      "--list-divider"
+      "--list-divider",
+      "--list-radius"
     ],
     "states": [
       "aria-current"

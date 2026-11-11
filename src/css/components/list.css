@@ -11,6 +11,7 @@
  * --list-item-pad-inline
  * --list-item-gap
  * --list-divider
+ * --list-radius
  */
 .list {
   --list-item-min-size: var(--control-size-lg);
@@ -30,6 +31,37 @@
 
 .list > li {
   margin: 0;
+}
+
+/*
+ * Grouped — the list owns a raised surface for rows that stand alone: a
+ * settings group, a member list, an active-sessions panel. A bare list (the
+ * default) leaves the surface to its container, so the shell is opt-in.
+ *
+ * The shell replaces the leading divider with its own border. It is not a
+ * scroll container: a row flyout must be able to escape it. The first and last
+ * rows carry the matching corner radius directly instead, which keeps a hover
+ * or current fill inside the shell without clipping the panel.
+ */
+.list.grouped {
+  --list-item-pad-inline: var(--space-40);
+  --list-radius: var(--radius-lg);
+
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--list-radius);
+  background: var(--surface-raised);
+}
+
+/* A row's fill sits inside the shell's border box, so its inner radius is the
+   shell radius minus that border — and never negative on a square theme. */
+.list.grouped > :where(li:first-child > .list-item, .list-item:first-child) {
+  border-start-start-radius: max(0px, calc(var(--list-radius) - var(--border-width)));
+  border-start-end-radius: max(0px, calc(var(--list-radius) - var(--border-width)));
+}
+
+.list.grouped > :where(li:last-child > .list-item, .list-item:last-child) {
+  border-end-start-radius: max(0px, calc(var(--list-radius) - var(--border-width)));
+  border-end-end-radius: max(0px, calc(var(--list-radius) - var(--border-width)));
 }
 
 /*

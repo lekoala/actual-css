@@ -6,6 +6,9 @@
 - Starter skill: reads the project's `DESIGN.md` after `PROJECT.md`.
 - Starter skill: `PROJECT.md.example` gains a "Design mapping" section from `DESIGN.md` roles to Actual classes.
 - `demo/templates/alerts.html`: alert icon alignment bench — icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes, variants and the neo-brutalist tile, with optional box guides.
+- `.list.grouped`: opt-in raised surface, border, rounded shell and inline gutter for standalone lists; `--list-radius` is the new hook.
+- `neo-brutalist` and `glass` themes: `.list.grouped` joins the framed-surface and frosted-panel treatments.
+- Docs: the List page composes grouped active-sessions and member rows, including a `surface sm` pill action, a badge and a row flyout.
 
 ### Fixed
 - `.alert-icon`: centred on the first line box from `--alert-line-height`, `--alert-font-size` and `--alert-icon-size` instead of a fixed `0.125em`; `--alert-line-height` and `--alert-icon-nudge` are the new hooks.

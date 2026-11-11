@@ -156,6 +156,7 @@
   .alert:not(.callout),
   .accordion:not(.flush, .separated),
   .accordion.separated > details,
+  .list.grouped,
   .table-wrap
 ) {
   box-shadow: var(--shadow);
@@ -163,7 +164,7 @@
 
 [data-theme="neo-brutalist"]
   :is(.card, .alert, .modal, .drawer, .flyout)
-  :is(.card, .alert, .accordion, .accordion > details, .table-wrap) {
+  :is(.card, .alert, .accordion, .accordion > details, .list.grouped, .table-wrap) {
   box-shadow: none;
 }
 
