@@ -23,17 +23,11 @@
    */
 
   /* Typography */
-  /* Locally installed faces only, ordered by quality: a reader who already has
-     Inter gets it, everyone else falls through to the best face their platform
-     ships. Naming Segoe UI, Roboto or Helvetica behind system-ui buys nothing,
-     because system-ui is exactly what that engine resolves them to; Noto Sans
-     is the exception, since Linux takes its UI font from fontconfig and can
-     settle on a softer default. --font-mono puts the two code faces developers
-     install by hand (Cascadia Code with VS Code, JetBrains Mono with the
-     JetBrains IDEs) ahead of the platform mono, holding Menlo only for macOS
-     engines older than ui-monospace. */
-  --font-sans: Inter, "Noto Sans", system-ui, sans-serif;
-  --font-mono: "Cascadia Code", "JetBrains Mono", ui-monospace, Menlo, monospace;
+  /* The platform's own faces, never a download: a framework cannot assume a
+     locally installed family, and naming one renders the same page differently
+     on two machines of the same OS. The docs site loads a webfont instead. */
+  --font-sans: system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-width: 100%;
   --line-height: 1.5;
   --line-height-tight: 1.25;

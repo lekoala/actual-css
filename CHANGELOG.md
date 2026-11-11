@@ -18,7 +18,7 @@
 - Docs: the Timeline page composes an activity feed with avatars, a `.chat-bubble` comment, a `.badge` status and a file `.btn`.
 
 ### Changed
-- `--font-sans` and `--font-mono`: quality-ordered local stacks — Inter and Noto Sans ahead of `system-ui`; Cascadia Code and JetBrains Mono ahead of `ui-monospace`.
+- Docs: the site loads Inter for its own pages; the framework keeps the platform faces, so a consumer's page depends on no locally installed family.
 - `.btn.surface`: hover paints an opaque ink mix, so a surface button still shows feedback on a dark theme.
 - `demo/templates/data-grid.html`: `data-grid-component` 3.10.0, with the grouped page-size footer, the floating bulk bar and one quiet control edge.
 - `.btn.outline`: a neutral outline takes `--border-control`; an explicit intent keeps its color.

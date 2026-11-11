@@ -116,9 +116,10 @@ the document) and `--font-mono` (for `code` / `kbd` / `samp` / `pre`). There is 
 theme-level token in your own theme when a project actually needs one; the
 baseline stays sans so app UI inherits predictably.
 
-Both are ordered stacks of locally installed faces, never a download: a reader
-who already has Inter gets it, everyone else falls through to the best face
-their platform ships. Override the slot to opt into a webfont.
+Both resolve to the platform's own faces, never a download, so two machines on
+the same OS render alike and the package ships no font bytes. Override the slot
+to opt into a webfont; this documentation site does it to load Inter for its own
+pages.
 
 ### Font width
 

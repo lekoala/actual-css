@@ -38,6 +38,12 @@
   --docs-nav-track: 12rem;
   --docs-toc-track: 11rem;
   --docs-shell-size: 96rem;
+
+  /* Docs-only typeface. The framework keeps the platform UI face, so a
+     consumer's page depends on nothing but the OS; this site loads Inter
+     (the docs templates) because its prose and screenshots must read the same
+     on every machine. */
+  --font-sans: "Inter Variable", system-ui, sans-serif;
 }
 
 /* --- Site chrome --- */
