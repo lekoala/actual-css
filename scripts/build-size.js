@@ -35,7 +35,7 @@ const DIST = join(ROOT, "dist");
  */
 const BUDGETS = {
   coreCssBrotli: 2900, // src/css/actual.css, minified in memory
-  fullCssBrotli: 21700, // actual.full.min.css
+  fullCssBrotli: 22200, // actual.full.min.css (current ~21859; timeline dates-end, alert optical alignment)
   fullJsBrotli: 20500, // actual.full.js
 };
 
