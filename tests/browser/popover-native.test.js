@@ -19,6 +19,7 @@ import { expect, test } from "bun:test";
 import {
   browserAvailable,
   fixtureUrl,
+  sampleTransition,
   waitForBrowser,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
@@ -28,11 +29,6 @@ const TIMEOUT = 60_000;
 
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
-
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// --duration-fast is 100ms; sample the transitions well inside that window.
-const MID_TRANSITION_MS = 40;
 
 function reader(view) {
   return async (id) => {
@@ -70,11 +66,12 @@ it("a closed native popover is not rendered, and an open one fades in and out", 
 
       // Entry fades from the closed opacity rather than appearing at full.
       await show("native-flyout");
-      await sleep(MID_TRANSITION_MS);
       const entering = await read("native-flyout");
+      const midEnter = parseFloat(await sampleTransition(view, "#native-flyout", { at: 0.4 }));
       expect(entering.open).toBe(true);
       expect(entering.display).toBe("grid");
-      expect(entering.opacity).toBeLessThan(1);
+      expect(midEnter).toBeGreaterThan(0);
+      expect(midEnter).toBeLessThan(1);
 
       await waitForBrowser(
         view,
@@ -86,11 +83,12 @@ it("a closed native popover is not rendered, and an open one fades in and out", 
 
       // Exit: still painted (overlay/display held discrete) while fading out.
       await hide("native-flyout");
-      await sleep(MID_TRANSITION_MS);
       const exiting = await read("native-flyout");
+      const midExit = parseFloat(await sampleTransition(view, "#native-flyout", { at: 0.4 }));
       expect(exiting.open).toBe(false);
       expect(exiting.display).toBe("grid");
-      expect(exiting.opacity).toBeLessThan(1);
+      expect(midExit).toBeGreaterThan(0);
+      expect(midExit).toBeLessThan(1);
 
       await waitForBrowser(
         view,
@@ -109,9 +107,9 @@ it("a closed native popover is not rendered, and an open one fades in and out", 
       expect((await read("native-tooltip")).opacity).toBe(1);
 
       await hide("native-tooltip");
-      await sleep(MID_TRANSITION_MS);
-      const tipExiting = await read("native-tooltip");
-      expect(tipExiting.opacity).toBeLessThan(1);
+      const midTipExit = parseFloat(await sampleTransition(view, "#native-tooltip", { at: 0.4 }));
+      expect(midTipExit).toBeGreaterThan(0);
+      expect(midTipExit).toBeLessThan(1);
 
       await waitForBrowser(
         view,

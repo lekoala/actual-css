@@ -35,6 +35,31 @@ export function waitForBrowser(view, expression, { timeoutMs = 5000 } = {}) {
   })`);
 }
 
+/*
+ * Computed value of a transitioned property at a fraction of the transition's
+ * duration. Seeks the animation instead of sleeping: before the first frame
+ * after the state change the computed value is still the transition's start
+ * value, so a wall-clock sample of an exit fade read the opacity it started
+ * from (fully opaque) on a throttled tab, and an entry sample read 0 — both
+ * passed an inequality that described no interpolation. Seeking is
+ * deterministic and asserts the motion the transition declares.
+ *
+ * Returns null when the property is not transitioning, so a caller fails on
+ * the missing motion rather than on an unrelated value.
+ */
+export async function sampleTransition(view, selector, { property = "opacity", at = 0.5 } = {}) {
+  return view.evaluate(`(() => {
+    const el = document.querySelector(${JSON.stringify(selector)});
+    const transition = el?.getAnimations().find(
+      (animation) => animation.transitionProperty === ${JSON.stringify(property)}
+    );
+    if (!transition) return null;
+    const { duration } = transition.effect.getComputedTiming();
+    transition.currentTime = duration * ${at};
+    return getComputedStyle(el)[${JSON.stringify(property)}];
+  })()`);
+}
+
 export function fixtureUrl(page, cwd = process.cwd()) {
   if (/^https?:/.test(page)) return page;
   return pathToFileURL(isAbsolute(page) ? page : join(cwd, page)).href;

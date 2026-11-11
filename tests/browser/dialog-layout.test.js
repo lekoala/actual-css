@@ -3,6 +3,7 @@ import { expect, test } from "bun:test";
 import {
   browserAvailable,
   fixtureUrl,
+  sampleTransition,
   setViewport,
   waitForBrowser,
   withBrowserPage,
@@ -341,8 +342,9 @@ const EASE_ENTER = "cubic-bezier(0.2,0,0,1)";
 const EASE_EXIT = "cubic-bezier(0.4,0,1,1)";
 
 /* The transition refactor changed how presence motion is declared, not what it
- * does. The mid-transition sample is the only timed wait here: the interpolation
- * is the contract, so elapsed time is part of what is asserted. */
+ * does. The interpolation is the contract, so the samples seek the running
+ * transition to a fraction of its duration — a wall-clock sleep reads the
+ * transition's start value until the next frame. */
 it("modal enter/exit keeps its easing and interpolates, dialog and backdrop", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
@@ -371,14 +373,10 @@ it("modal enter/exit keeps its easing and interpolates, dialog and backdrop", as
       expect(state.backdropProperty).toContain("opacity");
       expect(normalizeCss(state.backdropTiming)).toBe("ease");
 
-      const midOpen = await view.evaluate(`(async () => {
-        const d = document.getElementById("scroll-both");
-        d.showModal();
-        const ms = parseFloat(getComputedStyle(d).transitionDuration) * 1000;
-        await new Promise((resolve) => setTimeout(resolve, ms * 0.25));
-        return getComputedStyle(d).opacity;
-      })()`);
-      expect(parseFloat(midOpen) < 1).toBe(true);
+      await view.evaluate(`document.getElementById("scroll-both").showModal()`);
+      const midOpen = parseFloat(await sampleTransition(view, "#scroll-both", { at: 0.25 }));
+      expect(midOpen).toBeGreaterThan(0);
+      expect(midOpen).toBeLessThan(1);
       await waitForBrowser(
         view,
         'getComputedStyle(document.getElementById("scroll-both")).opacity === "1"',
@@ -388,14 +386,10 @@ it("modal enter/exit keeps its easing and interpolates, dialog and backdrop", as
       expect(state.open).toBe(true);
       expect(normalizeCss(state.timing)).toBe(EASE_ENTER);
 
-      const midClose = await view.evaluate(`(async () => {
-        const d = document.getElementById("scroll-both");
-        const ms = parseFloat(getComputedStyle(d).transitionDuration) * 1000;
-        d.close();
-        await new Promise((resolve) => setTimeout(resolve, ms * 0.25));
-        return getComputedStyle(d).opacity;
-      })()`);
-      expect(parseFloat(midClose) < 1).toBe(true);
+      await view.evaluate(`document.getElementById("scroll-both").close()`);
+      const midClose = parseFloat(await sampleTransition(view, "#scroll-both", { at: 0.25 }));
+      expect(midClose).toBeGreaterThan(0);
+      expect(midClose).toBeLessThan(1);
     },
     { artifactName: "dialog-motion" },
   );
