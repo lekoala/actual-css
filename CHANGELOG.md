@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.18.0] - 2026-11-11
 ### Added
 - Docs: "Coding agents and DESIGN.md" guide — the skill, `PRODUCT.md`/`DESIGN.md`/`PROJECT.md` ownership, and working with a design skill such as Impeccable.
 - Starter skill: reads the project's `DESIGN.md` after `PROJECT.md`.

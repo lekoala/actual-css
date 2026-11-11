@@ -67,7 +67,7 @@ size is not worth optimizing:
 ```
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/actual-css@0.17/dist/actual.full.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/actual-css@0.18/dist/actual.full.min.css">
 ```
 
 ## Usage
@@ -144,7 +144,7 @@ registries:
 * **Full runtime, zero-config** — every built-in enhancer, compiled:
 
   ```html
-  <script src="https://cdn.jsdelivr.net/npm/actual-css@0.17/dist/actual.full.js" type="module"></script>
+  <script src="https://cdn.jsdelivr.net/npm/actual-css@0.18/dist/actual.full.js" type="module"></script>
   ```
 
 * **Your own build** — copy the package's `src/js/full.js` as your entry,
@@ -186,8 +186,8 @@ Actual CSS is before 1.0:
 * A patch release (`0.12.0` → `0.12.1`) keeps every class and hook. It fixes
   bugs and may add hooks, so a fix can still move a rendering by a few pixels.
 
-The floating `actual-css@0.17` CDN path takes patches automatically. Pin the exact
-version (`actual-css@0.17.0`) when the rendering must not change without a
+The floating `actual-css@0.18` CDN path takes patches automatically. Pin the exact
+version (`actual-css@0.18.0`) when the rendering must not change without a
 review.
 
 ## Browser support
