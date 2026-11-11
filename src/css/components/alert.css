@@ -88,7 +88,7 @@
    siblings instead of a wrapper carrying an inline --gap. What made that pair
    read as detached is the UA paragraph margin: trimming only the outer edges
    left it in place between them. Content keeps its own internal rhythm — a
-   nested list keeps its bullets and padding, a .prose child keeps its flow.
+   list keeps its bullets, a .prose child keeps its flow.
    The slots are excluded because they are anatomy, not content: an
    admonition's title bar has to stay flush against its body. The list follows
    the anatomy, so it grows with it. */
@@ -100,6 +100,13 @@
   > :not(:where(.alert-icon, .close, .alert-title, .alert-body))
   + :not(:where(.alert-icon, .close, .alert-title, .alert-body)) {
   margin-block-start: var(--space-10);
+}
+
+/* why: the UA indent (40px) set a list's bullets in a column of their own,
+   detached from the title above it. The bullets start on the text column's
+   edge instead, the way an error summary reads. */
+.alert > :where(ul, ol) {
+  padding-inline-start: 1.25em;
 }
 
 /* Alerts are soft by default. The recipe writes local defaults rather than

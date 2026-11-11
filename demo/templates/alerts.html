@@ -632,6 +632,98 @@
       </div>
     </section>
 
+    <section class="center align-section" id="actions-and-lists">
+      <h2>Actions and lists</h2>
+      <p class="align-note">
+        A trailing button is content: a <code>.cluster</code> pushes it to the end and centres
+        it on the text block, while the icon stays on the first line. A list is a plain
+        sibling of the title and keeps its bullets. <code>.close</code> takes the first line
+        whatever follows the title.
+      </p>
+
+      <div class="grid align-grid align-pairs">
+        <div class="align-case">
+          <code class="align-label">title + body + action</code>
+          <div class="alert primary">
+            <i class="ti ti-sparkles alert-icon" aria-hidden="true"></i>
+            <div class="cluster justify-content-space-between">
+              <div class="stack" style="--gap: var(--space-10)">
+                <strong>Your free plan is almost full</strong>
+                <p>Move to Pro to keep adding projects.</p>
+              </div>
+              <a class="btn primary sm" href="#">Go Pro</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">one line + action</code>
+          <div class="alert success items-center">
+            <i class="ti ti-cloud-check alert-icon" aria-hidden="true"></i>
+            <div class="cluster justify-content-space-between">
+              <span>Backup restored.</span>
+              <a class="btn success sm outline" href="#">View files</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">title + list</code>
+          <div class="alert danger" role="alert">
+            <i class="ti ti-alert-circle alert-icon" aria-hidden="true"></i>
+            <strong>3 fields need attention</strong>
+            <ul>
+              <li><a href="#">Billing address: add a postal code.</a></li>
+              <li><a href="#">Card number: this number looks incomplete, check the last four digits.</a></li>
+              <li><a href="#">Terms: accept them to continue.</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">title + list + close</code>
+          <div class="alert warning" id="align-list-dismiss">
+            <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+            <strong>Before you publish</strong>
+            <ul>
+              <li>Two images have no alt text.</li>
+              <li>The summary is over 160 characters.</li>
+            </ul>
+            <button class="close" type="button" commandfor="align-list-dismiss" command="--dismiss" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">title + body + close</code>
+          <div class="alert secondary" id="align-tip-dismiss">
+            <i class="ti ti-bulb alert-icon" aria-hidden="true"></i>
+            <strong>Shortcut</strong>
+            <p>Hold Shift while dragging to snap to the grid.</p>
+            <button class="close" type="button" commandfor="align-tip-dismiss" command="--dismiss" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">title + body + action + close · avoid</code>
+          <div class="alert primary" id="align-action-dismiss">
+            <i class="ti ti-download alert-icon" aria-hidden="true"></i>
+            <div class="cluster justify-content-space-between">
+              <div class="stack" style="--gap: var(--space-10)">
+                <strong>Version 4.2 is ready</strong>
+                <p>Restart to apply the update.</p>
+              </div>
+              <a class="btn primary sm" href="#">Restart</a>
+            </div>
+            <button class="close" type="button" commandfor="align-action-dismiss" command="--dismiss" aria-label="Dismiss alert"></button>
+          </div>
+          <p class="align-label">
+            The button centres on the text block, the close sits on the first line: two
+            controls on the same edge at two heights. Keep one of them.
+          </p>
+        </div>
+      </div>
+    </section>
+
     <section class="center align-section" id="variants">
       <h2>Variants</h2>
       <p class="align-note">

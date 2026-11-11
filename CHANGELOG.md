@@ -5,7 +5,7 @@
 - Docs: "Coding agents and DESIGN.md" guide — the skill, `PRODUCT.md`/`DESIGN.md`/`PROJECT.md` ownership, and working with a design skill such as Impeccable.
 - Starter skill: reads the project's `DESIGN.md` after `PROJECT.md`.
 - Starter skill: `PROJECT.md.example` gains a "Design mapping" section from `DESIGN.md` roles to Actual classes.
-- `demo/templates/alerts.html`: alert icon alignment bench — icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes, variants and the neo-brutalist tile, with optional box guides.
+- `demo/templates/alerts.html`: alert icon alignment bench — icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes, actions and lists, variants and the neo-brutalist tile, with optional box guides.
 - `.list.grouped`: opt-in raised surface, border, rounded shell and inline gutter for standalone lists; `--list-radius` is the new hook.
 - `neo-brutalist` and `glass` themes: `.list.grouped` joins the framed-surface and frosted-panel treatments.
 - Docs: the List page composes grouped active-sessions and member rows, including a `surface sm` pill action, a badge and a row flyout.
@@ -14,6 +14,7 @@
 - `.alert-icon`: centred on the first line box from `--alert-line-height`, `--alert-font-size` and `--alert-icon-size` instead of a fixed `0.125em`; `--alert-line-height` and `--alert-icon-nudge` are the new hooks.
 - `.alert.admonition > .alert-title > .alert-icon`: an icon in the admonition title bar takes `.alert-icon` and follows `--alert-icon-nudge`.
 - `.alert > .close`: centred on the first line box and no longer grows the title row, which pushed the body down.
+- `.alert > ul`, `.alert > ol`: bullets start on the text column's edge instead of the 40px UA indent.
 
 ## [0.17.1] - 2026-11-08
 ### Added
