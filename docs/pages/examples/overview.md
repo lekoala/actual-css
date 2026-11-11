@@ -49,6 +49,7 @@ One mechanism at a time, with its contract and its pitfalls.
 - [Grid density](../../demo/templates/grid.html) - the grid contracts on resizable stages, with the pitfalls called out
 - [Column layout](../../demo/templates/column-layout.html) - the twelve-column canvas: spans, starts, and the narrow-container recomposition the framework leaves to the application
 - [Density](../../demo/templates/density.html) - compact control density
+- [Alert icon alignment](../../demo/templates/alerts.html) - the leading icon against the first line box: icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes, variants and the neo-brutalist tile, with optional box guides
 
 ### System benches
 

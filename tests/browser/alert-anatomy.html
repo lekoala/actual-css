@@ -12,6 +12,10 @@
     /* Taller than one line, shorter than title + body: the contract. */
     .tall { --alert-icon-size: 2.5rem; }
     .stretched { block-size: 12rem; }
+    /* Alignment cases: the derived offset must follow each hook. */
+    .small-text { --alert-font-size: 0.875rem; }
+    .tight-leading { --alert-line-height: 1.25; }
+    .large-icon { --alert-icon-size: 1.5rem; }
   </style>
 </head>
 <body>
@@ -30,6 +34,38 @@
       <i class="alert-icon" aria-hidden="true"></i>
       <strong>Title</strong>
       <p>Body</p>
+    </div>
+
+    <!-- One block, one line: its rect is the line box the icon is centred on. -->
+    <div class="alert" id="measure">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <div>Message</div>
+    </div>
+    <div class="alert small-text" id="measure-small-text">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <div>Message</div>
+    </div>
+    <div class="alert tight-leading" id="measure-tight-leading">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <div>Message</div>
+    </div>
+    <div class="alert large-icon" id="measure-large-icon">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <div>Message</div>
+    </div>
+
+    <!-- The dismiss button is taller than the line: centred on it like the
+         icon, and without growing the title row. -->
+    <div class="alert" id="dismiss">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <div>Title</div>
+      <p>Body</p>
+      <button type="button" class="close" aria-label="Dismiss"></button>
+    </div>
+    <div class="alert small-text" id="dismiss-small-text">
+      <i class="alert-icon" aria-hidden="true"></i>
+      <div>Message</div>
+      <button type="button" class="close" aria-label="Dismiss"></button>
     </div>
   </div>
 </body>

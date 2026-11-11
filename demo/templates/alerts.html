@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Alert icon alignment - Actual CSS</title>
+  <meta name="description" content="The alert leading icon against the first line box: icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes and the theme nudge.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Red+Hat+Text:wght@400;700&family=Source+Serif+4:wght@400;700&display=swap">
+  <link rel="stylesheet" href="../styles/demo.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <style>
+    .align-page {
+      padding-block: var(--space-60);
+    }
+
+    .align-intro {
+      --center-size: 72rem;
+
+      margin-block-end: var(--space-50);
+    }
+
+    .align-section {
+      --center-size: 72rem;
+
+      padding-block: var(--space-60);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .align-note {
+      max-inline-size: 64ch;
+      color: var(--text-muted);
+    }
+
+    .align-grid {
+      --grid-min: 17rem;
+
+      align-items: start;
+      margin-block-start: var(--space-40);
+    }
+
+    /* Two per row so a size and its two icon sources stay side by side. */
+    .align-grid.align-pairs {
+      --grid-min: 26rem;
+    }
+
+    .align-case {
+      display: grid;
+      gap: var(--space-20);
+      align-content: start;
+      min-inline-size: 0;
+    }
+
+    .align-label {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+    }
+
+    .align-island {
+      margin-block-start: var(--space-40);
+      padding: var(--space-40);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+    }
+
+    /* Upstream SVGs as masks: each set's own file, painted with the alert's
+       ink like a webfont glyph, without copying paths into the page. */
+    .set-icon {
+      /* 1em like a glyph in the title bar; the alert's icon column sizes it there. */
+      flex: none;
+      inline-size: 1em;
+      block-size: 1em;
+      background: currentColor;
+      mask: var(--set-icon) center / contain no-repeat;
+    }
+
+    .align-island > .align-label {
+      display: block;
+      margin-block-end: var(--space-30);
+    }
+
+    /* Guides: the icon box and the text block side by side, so a misalignment
+       shows as an offset between two boxes instead of an impression. */
+    body:has(#align-guides:checked) .alert-icon,
+    body:has(#align-guides:checked) .alert > :not(.alert-icon, .close, .alert-title, .alert-body) {
+      outline: 1px dashed color-mix(in oklab, var(--focus) 80%, transparent);
+      outline-offset: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="align-page">
+    <header class="center stack align-intro">
+      <p class="overline">Actual CSS</p>
+      <h1>Alert icon alignment</h1>
+      <p class="lead">
+        The leading icon is centred on the first line box. That offset is derived from
+        <code>--alert-font-size</code>, <code>--alert-line-height</code> and
+        <code>--alert-icon-size</code>, so each stage below changes one hook and every icon
+        should stay level.
+      </p>
+      <div class="cluster">
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+        <label class="choice"><input class="switch" type="checkbox" role="switch" id="align-guides"><span>Outline the boxes</span></label>
+      </div>
+    </header>
+
+    <section class="center align-section" id="icon-sources">
+      <h2>Icon sources</h2>
+      <p class="align-note">
+        A webfont glyph and an inline SVG in a 24 or a 16 viewBox all fill the same
+        <code>--alert-icon-size</code> box, so they share one centre. The SVG carries its own
+        stroke or fill; the webfont glyph takes the alert's ink.
+      </p>
+
+      <div class="grid align-grid">
+        <div class="align-case">
+          <code class="align-label">webfont</code>
+          <div class="alert success">
+            <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
+            <div>Changes saved.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">svg, 24 viewBox</code>
+          <div class="alert success">
+            <svg class="alert-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            <div>Changes saved.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">svg, 16 viewBox</code>
+          <div class="alert success">
+            <svg class="alert-icon" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm3.36 5.06-4 4a.75.75 0 0 1-1.06 0l-2-2a.75.75 0 1 1 1.06-1.06L6.83 8.6l3.47-3.47a.75.75 0 1 1 1.06 1.06Z"/></svg>
+            <div>Changes saved.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">svg, warning</code>
+          <div class="alert warning">
+            <svg class="alert-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+            <div>Please review the failed checks.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="icon-sets">
+      <h2>Icon sets</h2>
+      <p class="align-note">
+        The same warning from each set, in the same box. The box is centred; where the ink
+        sits inside it is the set's drawing, so an outline triangle can read high and a filled
+        one grounded. A set-specific correction belongs to the application, through
+        <code>--alert-icon-nudge</code>: the second case lowers the Tabler triangle by 1px.
+      </p>
+      <p class="align-note">
+        Why Tabler reads high: on its 24 grid the triangle's ink runs from 1.67 to 21, so
+        1.67 of margin on top and 3 below — its centre sits 2.8% above the box centre, and
+        the ink fills only 80% of the box. Bootstrap Icons' triangle runs from 1 to 15 on a
+        16 grid: centred, filling 87.5%. Both effects lift Tabler's base, the edge the eye
+        compares with the baseline, by about 1px; a thin outline apex lifts it further.
+      </p>
+
+      <div class="grid align-grid">
+        <div class="align-case">
+          <code class="align-label">tabler webfont</code>
+          <div class="alert warning">
+            <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">tabler webfont · nudge 0.05em</code>
+          <div class="alert warning" style="--alert-icon-nudge: 0.05em">
+            <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">tabler svg · outline</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@tabler/icons@3.46.0/icons/outline/alert-triangle.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">tabler svg · filled</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@tabler/icons@3.46.0/icons/filled/alert-triangle.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">lucide</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/lucide-static@0.460.0/icons/triangle-alert.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">heroicons · outline</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/heroicons@2.1.5/24/outline/exclamation-triangle.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">heroicons · solid</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/heroicons@2.1.5/24/solid/exclamation-triangle.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">bootstrap icons · outline</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/exclamation-triangle.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">bootstrap icons · fill</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/exclamation-triangle-fill.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">phosphor · regular</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@phosphor-icons/core@2.1.1/assets/regular/warning.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">phosphor · fill</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@phosphor-icons/core@2.1.1/assets/fill/warning-fill.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">material symbols · outlined</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@material-symbols/svg-400@0.23.0/outlined/warning.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">material symbols · fill</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@material-symbols/svg-400@0.23.0/outlined/warning-fill.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">font awesome · solid</code>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/svgs/solid/triangle-exclamation.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="text-fonts">
+      <h2>Text fonts</h2>
+      <p class="align-note">
+        The offset centres the icon on the line box, which needs no font metrics. Where the
+        capitals sit inside that line box is the font's: the same icon can read level in one
+        face and high or low in another.
+      </p>
+
+      <div class="align-island" style="font-family: system-ui, sans-serif">
+        <code class="align-label">system-ui</code>
+        <div class="grid align-grid" style="margin-block-start: 0">
+          <div class="alert warning">
+            <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/svgs/solid/triangle-exclamation.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+          <div class="alert info">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Hamburgefonstiv, one line.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="align-island" style="font-family: Inter, sans-serif">
+        <code class="align-label">Inter</code>
+        <div class="grid align-grid" style="margin-block-start: 0">
+          <div class="alert warning">
+            <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/svgs/solid/triangle-exclamation.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+          <div class="alert info">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Hamburgefonstiv, one line.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="align-island" style="font-family: 'Red Hat Text', sans-serif">
+        <code class="align-label">Red Hat Text</code>
+        <div class="grid align-grid" style="margin-block-start: 0">
+          <div class="alert warning">
+            <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/svgs/solid/triangle-exclamation.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+          <div class="alert info">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Hamburgefonstiv, one line.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="align-island" style="font-family: 'Source Serif 4', serif">
+        <code class="align-label">Source Serif 4</code>
+        <div class="grid align-grid" style="margin-block-start: 0">
+          <div class="alert warning">
+            <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+          <div class="alert warning">
+            <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/svgs/solid/triangle-exclamation.svg)" aria-hidden="true"></span>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" aria-label="Dismiss alert"></button>
+          </div>
+          <div class="alert info">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Hamburgefonstiv, one line.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="text-size">
+      <h2>Text size</h2>
+      <p class="align-note">
+        <code>--alert-font-size</code> changes the line box; the icon follows it instead of
+        keeping a fixed nudge.
+      </p>
+
+      <div class="grid align-grid align-pairs">
+        <div class="align-case">
+          <code class="align-label">0.875rem · webfont</code>
+          <div class="alert" style="--alert-font-size: 0.875rem">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>A step smaller.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">0.875rem · svg</code>
+          <div class="alert" style="--alert-font-size: 0.875rem">
+            <svg class="alert-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <div>A step smaller.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">1rem (default) · webfont</code>
+          <div class="alert">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>The body size.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">1rem (default) · svg</code>
+          <div class="alert">
+            <svg class="alert-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <div>The body size.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">1.125rem · webfont</code>
+          <div class="alert" style="--alert-font-size: 1.125rem">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>A step larger.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">1.125rem · svg</code>
+          <div class="alert" style="--alert-font-size: 1.125rem">
+            <svg class="alert-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <div>A step larger.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="line-height">
+      <h2>Line height</h2>
+      <p class="align-note">
+        Keep the rhythm in <code>--alert-line-height</code>. A tight leading lifts the icon
+        with the line, a relaxed one lowers it; setting <code>line-height</code> alone would
+        leave the icon behind.
+      </p>
+
+      <div class="grid align-grid">
+        <div class="align-case">
+          <code class="align-label">--alert-line-height: 1.2</code>
+          <div class="alert" style="--alert-line-height: 1.2">
+            <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
+            <div>Tight leading.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">--alert-line-height: 1.5</code>
+          <div class="alert">
+            <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
+            <div>Default leading.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">--alert-line-height: 1.8</code>
+          <div class="alert" style="--alert-line-height: 1.8">
+            <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
+            <div>Relaxed leading.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="icon-size">
+      <h2>Icon size</h2>
+      <p class="align-note">
+        <code>--alert-icon-size</code> sets the box. The last case is taller than a line: the
+        icon spans the title and body rows, so it must not open a gap under the title.
+      </p>
+
+      <div class="grid align-grid">
+        <div class="align-case">
+          <code class="align-label">1em</code>
+          <div class="alert" style="--alert-icon-size: 1em">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Smaller icon.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">1.25rem (default)</code>
+          <div class="alert">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Default icon.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">1.5rem</code>
+          <div class="alert" style="--alert-icon-size: 1.5rem">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Larger icon.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">2.5rem, title + body</code>
+          <div class="alert" style="--alert-icon-size: 2.5rem">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <strong>Taller than one line</strong>
+            <p>The body keeps its distance from the title.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="proportional-icon">
+      <h2>Icon size follows the text</h2>
+      <p class="align-note">
+        Set <code>--alert-icon-size: calc(var(--alert-font-size) * 1.25)</code> when the icon
+        should scale with the type instead of staying at <code>1.25rem</code>. The derived
+        offset follows both hooks, so the ratio holds at every size.
+      </p>
+
+      <div class="grid align-grid">
+        <div class="align-case">
+          <code class="align-label">0.875rem · icon ×1.25</code>
+          <div class="alert" style="--alert-font-size: 0.875rem; --alert-icon-size: calc(var(--alert-font-size) * 1.25)">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>A step smaller.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">1rem · icon ×1.25</code>
+          <div class="alert" style="--alert-icon-size: calc(var(--alert-font-size) * 1.25)">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>The body size.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">1.125rem · icon ×1.25</code>
+          <div class="alert" style="--alert-font-size: 1.125rem; --alert-icon-size: calc(var(--alert-font-size) * 1.25)">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>A step larger.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">1.5rem · icon ×1.25</code>
+          <div class="alert" style="--alert-font-size: 1.5rem; --alert-icon-size: calc(var(--alert-font-size) * 1.25)">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Heading size.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="message-shapes">
+      <h2>Message shapes</h2>
+      <p class="align-note">
+        A wrapped message keeps the icon and the dismiss button on the first line. A title and
+        a body are plain siblings; the alert owns the space between them.
+      </p>
+
+      <div class="grid align-grid">
+        <div class="align-case">
+          <code class="align-label">one line</code>
+          <div class="alert">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Everything is fine.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">two lines</code>
+          <div class="alert">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Everything is fine, and the second line of a wrapped message stays in the same column as the first one.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">title + body</code>
+          <div class="alert danger">
+            <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+            <strong>Couldn't save the draft.</strong>
+            <p>The connection dropped. Your changes are kept on this device.</p>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">title + body + close</code>
+          <div class="alert warning" id="align-dismiss">
+            <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+            <strong>Token expiring</strong>
+            <p>Rotate it before the next deployment.</p>
+            <button class="close" type="button" commandfor="align-dismiss" command="--dismiss" aria-label="Dismiss alert"></button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="variants">
+      <h2>Variants</h2>
+      <p class="align-note">
+        The icon column is the alert's, whatever the surface: the callout keeps its flag, the
+        admonition puts the icon in the title bar and hands it to the title bar's flex
+        centring, not to the derived offset.
+      </p>
+
+      <div class="grid align-grid">
+        <div class="align-case">
+          <code class="align-label">callout</code>
+          <div class="alert danger callout">
+            <i class="ti ti-user-x alert-icon" aria-hidden="true"></i>
+            <div>Your request to join the team is denied.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">solid</code>
+          <div class="alert success solid">
+            <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
+            <div>Deployment finished.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">surface</code>
+          <div class="alert surface">
+            <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+            <div>Theme chrome, intent in the ink.</div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">admonition</code>
+          <div class="alert warning admonition">
+            <div class="alert-title">
+              <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+              Warning
+            </div>
+            <div class="alert-body">
+              <p>The icon sits in the title bar, outside the icon column.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">admonition · nudge 0.05em</code>
+          <div class="alert warning admonition" style="--alert-icon-nudge: 0.05em">
+            <div class="alert-title">
+              <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+              Warning
+            </div>
+            <div class="alert-body">
+              <p>The same nudge, applied with translate since the bar centres with flex.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">admonition · nudge 0.09em</code>
+          <div class="alert warning admonition" style="--alert-icon-nudge: 0.09em">
+            <div class="alert-title">
+              <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+              Warning
+            </div>
+            <div class="alert-body">
+              <p>A value of its own for the title bar.</p>
+            </div>
+          </div>
+          <p class="align-label">
+            The title icon is smaller (1em), and at that size the glyph is drawn a little
+            higher in its box. 0.05em leaves it slightly high, so the title bar gets its own
+            value.
+          </p>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">admonition · bootstrap icons outline</code>
+          <div class="alert warning admonition">
+            <div class="alert-title">
+              <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/exclamation-triangle.svg)" aria-hidden="true"></span>
+              Warning
+            </div>
+            <div class="alert-body">
+              <p>No nudge.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="align-case">
+          <code class="align-label">admonition · bootstrap icons fill</code>
+          <div class="alert warning admonition">
+            <div class="alert-title">
+              <span class="alert-icon set-icon" style="--set-icon: url(https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/exclamation-triangle-fill.svg)" aria-hidden="true"></span>
+              Warning
+            </div>
+            <div class="alert-body">
+              <p>No nudge.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="center align-section" id="themes">
+      <h2>Themes</h2>
+      <p class="align-note">
+        The neo-brutalist tile grows around the glyph with padding and a border, so it
+        corrects the derived offset with <code>--alert-icon-nudge</code> instead of restating
+        it.
+      </p>
+
+      <div data-theme="neo-brutalist" class="align-island">
+        <div class="grid align-grid" style="margin-block-start: 0">
+          <div class="align-case">
+            <code class="align-label">neo-brutalist · webfont</code>
+            <div class="alert">
+              <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+              <div>The tile is centred on the line.</div>
+            </div>
+          </div>
+
+          <div class="align-case">
+            <code class="align-label">neo-brutalist · title + body</code>
+            <div class="alert warning">
+              <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+              <strong>Stamped tile</strong>
+              <p>The glyph keeps the same centre inside a larger box.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

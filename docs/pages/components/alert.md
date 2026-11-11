@@ -246,13 +246,13 @@ full-bleed notice.
 
 ## Admonition
 
-An admonition is a structured box with a tinted title bar, an optional icon, and body content on the page surface — like the `!!! note` callouts in mkdocs. Use `.alert-title` for the header and `.alert-body` for the content. Intent classes tint the title bar background and the border; shared variants paint the title bar, so `.solid` fills it — and keeps the body's frame neutral — for a notification that needs to stand out.
+An admonition is a structured box with a tinted title bar, an optional icon, and body content on the page surface — like the `!!! note` callouts in mkdocs. Use `.alert-title` for the header and `.alert-body` for the content. An icon in the title takes `.alert-icon`, so `--alert-icon-nudge` reaches it too. Intent classes tint the title bar background and the border; shared variants paint the title bar, so `.solid` fills it — and keeps the body's frame neutral — for a notification that needs to stand out.
 
 ```html demo
 <div class="stack">
   <div class="alert admonition">
     <div class="alert-title">
-      <i class="ti ti-info-circle" aria-hidden="true"></i>
+      <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
       Note
     </div>
     <div class="alert-body">
@@ -262,7 +262,7 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
 
   <div class="alert warning admonition">
     <div class="alert-title">
-      <i class="ti ti-alert-triangle" aria-hidden="true"></i>
+      <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
       Warning
     </div>
     <div class="alert-body">
@@ -272,7 +272,7 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
 
   <div class="alert success admonition solid">
     <div class="alert-title">
-      <i class="ti ti-circle-check" aria-hidden="true"></i>
+      <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
       Saved
     </div>
     <div class="alert-body">
@@ -286,8 +286,10 @@ An admonition is a structured box with a tinted title bar, an optional icon, and
 
 - `--alert-pad-inline` — inline padding. Stays stable across density contexts.
 - `--alert-pad-block` — block padding.
-- `--alert-font-size` — base font size.
-- `--alert-icon-size` — size of a leading `.alert-icon`.
+- `--alert-font-size` — base font size. Keep it in `rem` or `px`: the icon offset is a `calc()` evaluated on the icon, where an `em` would resolve against the icon's size.
+- `--alert-line-height` — the alert's line box. The icon offset is derived from it, so change the rhythm here rather than with `line-height`.
+- `--alert-icon-size` — size of a leading `.alert-icon`. Set it from the text (`calc(var(--alert-font-size) * 1.25)`) when the icon should scale with the type.
+- `--alert-icon-nudge` — additive correction to the derived icon offset, for a theme whose icon border box is larger than `--alert-icon-size` (the neo-brutalist tile), or a glyph drawn off-centre in its box: `.ti-alert-triangle.alert-icon { --alert-icon-nudge: 0.05em; }`. An `em` here follows the icon size.
 - `--close-size` / `--close-icon-size` — the alert declares compact values for its `.close`; set them on the alert to change them.
 - `--alert-radius` — corner radius, when the default `--radius-lg` does not fit.
 - `--alert-border-inline-start-color` / `--alert-border-inline-start-width` — extension points for a callout-style colored flag on the leading edge instead of a uniform border.

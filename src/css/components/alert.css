@@ -14,8 +14,10 @@
  * --alert-pad-block
  * --alert-pad-inline
  * --alert-font-size
+ * --alert-line-height
  * --alert-radius
  * --alert-icon-size
+ * --alert-icon-nudge
  * --alert-border-inline-start-color
  * --alert-border-inline-start-width
  *
@@ -42,6 +44,7 @@
   --alert-pad-block: var(--space-30);
   --alert-pad-inline: var(--space-40);
   --alert-font-size: var(--font-size-md);
+  --alert-line-height: var(--line-height);
   --alert-icon-size: 1.25rem;
   --alert-default-bg: var(--surface-subtle);
   --alert-default-fg: var(--intent, var(--text));
@@ -59,6 +62,11 @@
   border-inline-start-width: var(--alert-border-inline-start-width, var(--border-width));
   border-radius: var(--alert-radius, var(--radius-lg));
   font-size: var(--alert-font-size);
+  /* why: the icon offset below is derived from this line box. Inheriting the
+     leading would leave the formula blind to a container that changed it, so
+     the alert owns its line height the way it owns its font size; an author
+     changing the rhythm sets the hook, not `line-height` directly. */
+  line-height: var(--alert-line-height);
 }
 
 /* Density steps the block padding only: the inline padding is the text
@@ -186,13 +194,29 @@
    icon sat in the title row alone — any icon taller than one line inflated
    that row and pushed the body down. Spanning the title and body rows lets
    its height spread over both; only an icon taller than both together still
-   splits its excess between them. */
+   splits its excess between them. Spanning is also why the icon cannot ride
+   the text baseline (align-self: baseline): a baseline group over both
+   rows would let a tall icon set the row's baseline, inflating row 1 and
+   pushing the title down — the regression alert-anatomy.test.js guards. */
 .alert:has(> .alert-icon) > .alert-icon {
   grid-column: 1;
   grid-row: 1 / span 2;
   display: inline-grid;
   place-items: center;
-  margin-block-start: 0.125em;
+  /* Centre the icon box on the first line box — within a pixel of the cap
+     centre, and the only target that needs no font metrics (the cap offset
+     inside a line box is font-dependent; CI does not use Segoe UI).
+     `em` would resolve against the icon's own font-size, which is
+     --alert-icon-size: the 0.125em this replaces drifted with every icon
+     size and text size. --alert-font-size must stay in rem or px for the
+     same reason. --alert-icon-nudge adds an author correction for an icon
+     whose border box is larger than --alert-icon-size (neo-brutalist's
+     tile), rather than restating the formula. */
+  margin-block-start: calc(
+    (var(--alert-line-height) * var(--alert-font-size) - var(--alert-icon-size)) /
+    2 +
+    var(--alert-icon-nudge, 0px)
+  );
 }
 
 .alert:has(> .alert-icon) > :not(.alert-icon, .close) {
@@ -210,6 +234,11 @@
 .alert:has(> .close) > .close {
   grid-column: -2 / -1;
   grid-row: 1;
+  /* why: the button is taller than the line, so top-aligned it sat 2px below
+     the title centre, opposite an icon centred on it, and grew row 1, pushing
+     the body down. Equal negative margins centre it on the first line box and
+     let it overflow into the padding instead; the hit area is unchanged. */
+  margin-block: calc((var(--alert-line-height) * var(--alert-font-size) - var(--close-size)) / 2);
 }
 /* Links */
 .alert :where(a:not(.btn)) {
@@ -259,6 +288,12 @@
   font-weight: var(--font-weight-semibold);
   border-start-start-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
   border-start-end-radius: calc(var(--alert-radius, var(--radius-lg)) - var(--border-width));
+}
+
+/* The title bar centres its icon with flex, so the nudge corrects a glyph
+   drawn off-centre with translate: a margin would be re-centred away. */
+.alert.admonition > .alert-title > .alert-icon {
+  translate: 0 var(--alert-icon-nudge, 0px);
 }
 
 /* Close inside an admonition title bar rides the inline end. */

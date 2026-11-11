@@ -238,12 +238,13 @@
   --alert-pad-inline: var(--space-50);
 }
 
-/* The glyph stays centred on the title line, where the core puts it
-   (0.125em): the tile grows around it evenly, up into the padding. Without
-   :has() the core alert grid is off too and the icon sits inline: the rule
-   drops with it and the tile keeps its plain top edge. */
+/* The glyph stays centred on the title line: the nudge cancels the tile's
+   padding and border, which grow the box around the glyph. It adds to the
+   core's derived offset instead of restating it. Without :has() the core
+   alert grid is off too and the icon sits inline: the rule drops with it and
+   the tile keeps its plain top edge. */
 [data-theme="neo-brutalist"] .alert:has(> .alert-icon) > .alert-icon {
-  margin-block-start: calc(0.125em - 0.3em - var(--border-width));
+  --alert-icon-nudge: calc(-0.3em - var(--border-width));
 }
 
 /* Forms. What you can operate stands up, what is disabled lies flat: the

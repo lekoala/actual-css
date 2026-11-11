@@ -40,8 +40,10 @@
       "--alert-pad-block",
       "--alert-pad-inline",
       "--alert-font-size",
+      "--alert-line-height",
       "--alert-radius",
       "--alert-icon-size",
+      "--alert-icon-nudge",
       "--alert-border-inline-start-color",
       "--alert-border-inline-start-width"
     ],
