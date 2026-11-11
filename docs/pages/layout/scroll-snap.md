@@ -122,4 +122,29 @@ CSS scroll markers add one dot per item in Chromium. Other browsers drop these d
 
 The [card rail template](../../demo/templates/card-rail.html) has the full recipe, focus ring and forced colors included.
 
-`.scroll-snap` is not a full interactive carousel. For previous/next controls, pagination dots in every browser, mouse drag, looping, autoplay, or robust accessibility behavior, use a dedicated carousel library such as Swiper and compose it with Actual components.
+## Carousel controls
+
+CSS scroll buttons and markers add previous/next arrows and dots to a snapped rail without JavaScript. The [carousel template](../../demo/templates/carousel.html) has the full recipe.
+
+```css
+.carousel-track {
+  scroll-marker-group: after;
+}
+
+.carousel-track::scroll-button(left) {
+  content: "‹" / "Previous slide";
+}
+
+.carousel-track::scroll-button(right) {
+  content: "›" / "Next slide";
+}
+
+.carousel-track::scroll-button(*):disabled {
+  opacity: 0;
+  visibility: hidden;
+}
+```
+
+- `::scroll-button()` scrolls one page and disables itself at the end of the rail, so `:disabled` is the edge state.
+- `::scroll-marker` dots need a `data-marker-label` on each item for their accessible name, as in the pagination recipe above.
+- These are progressive enhancements: without them the rail keeps its native scrollbar and swipe. Use a dedicated carousel library such as Swiper for mouse drag, looping, autoplay, or the same controls in every browser.

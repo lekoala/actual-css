@@ -6,6 +6,7 @@
 - Starter skill: reads the project's `DESIGN.md` after `PROJECT.md`.
 - Starter skill: `PROJECT.md.example` gains a "Design mapping" section from `DESIGN.md` roles to Actual classes.
 - `demo/templates/alerts.html`: alert icon alignment bench — icon sources, icon sets, text fonts, text sizes, line heights, icon sizes, message shapes, actions and lists, variants and the neo-brutalist tile, with optional box guides.
+- `demo/templates/carousel.html`: a hero carousel from one scroll-snap list, with full-width slides, native scroll buttons for previous/next and scroll markers as dots.
 - `.list.grouped`: opt-in raised surface, border, rounded shell and inline gutter for standalone lists; `--list-radius` is the new hook.
 - `neo-brutalist` and `glass` themes: `.list.grouped` joins the framed-surface and frosted-panel treatments.
 - Docs: the List page composes grouped active-sessions and member rows, including a `surface sm` pill action, a badge and a row flyout.

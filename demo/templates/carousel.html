@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Carousel - Actual CSS</title>
+  <meta name="description" content="A hero carousel built from one scroll-snap list: full-width slides, native scroll buttons for previous and next, and scroll markers as dots, with no JavaScript.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <style>
+    /*
+     * A hero carousel with the browser's own carousel primitives.
+     *
+     * .scroll-snap supplies the rail, snap points and focus gutter. This page
+     * adds the full-width slide, the overlay arrows and the dot styling. Where
+     * ::scroll-button() or ::scroll-marker is unsupported, the declarations
+     * drop: the rail keeps a native scrollbar and swipe, so the content is
+     * never gated on the enhancement.
+     */
+
+    .carousel-page {
+      --center-size: 68rem;
+      padding-block: clamp(2rem, 6vw, 5rem);
+    }
+
+    .carousel-intro {
+      max-inline-size: 65ch;
+    }
+
+    .carousel-intro h1 {
+      margin-block: 0;
+    }
+
+    .carousel-track {
+      --scroll-snap-item-size: 100%;
+      --scroll-snap-gap: 0px;
+      --scroll-snap-padding: 0px;
+      /* The slides carry their own inset; the rail's focus gutters would only
+         hold a full-width panel off the page grid. */
+      --scroll-snap-focus-bleed: 0px;
+      --carousel-control-size: 3rem;
+
+      /* The arrows and dot group are anchored to the rail, not the page. */
+      anchor-name: --carousel;
+      scroll-marker-group: after;
+    }
+
+    .carousel-slide {
+      --carousel-from: #3452d8;
+      --carousel-to: #8cb7e1;
+
+      display: grid;
+      align-content: end;
+      min-block-size: clamp(20rem, 48vw, 34rem);
+      padding: clamp(1.5rem, 4vw, 3rem);
+      border-radius: clamp(1rem, 2.5vw, 1.75rem);
+      background:
+        radial-gradient(ellipse at 10% 100%, rgb(0 0 0 / 0.22), transparent 55%),
+        radial-gradient(ellipse at 85% 0%, rgb(255 255 255 / 0.24), transparent 55%),
+        linear-gradient(135deg, var(--carousel-from), var(--carousel-to));
+      box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+      color: #fff;
+    }
+
+    .carousel-slide[data-tone="teal"] {
+      --carousel-from: #115e59;
+      --carousel-to: #2dd4bf;
+    }
+
+    .carousel-slide[data-tone="rust"] {
+      --carousel-from: #9a3412;
+      --carousel-to: #f59e0b;
+    }
+
+    .carousel-slide[data-tone="violet"] {
+      --carousel-from: #5b21b6;
+      --carousel-to: #c084fc;
+    }
+
+    .carousel-slide[data-tone="rose"] {
+      --carousel-from: #9f1239;
+      --carousel-to: #fb7185;
+    }
+
+    .carousel-copy {
+      display: grid;
+      gap: var(--space-20);
+      max-inline-size: 38rem;
+    }
+
+    .carousel-copy > * {
+      margin: 0;
+    }
+
+    .carousel-copy .overline {
+      color: rgb(255 255 255 / 0.75);
+    }
+
+    .carousel-copy h2 {
+      color: inherit;
+      font-size: clamp(1.75rem, 2vw + 1rem, 2.75rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+    }
+
+    .carousel-copy p:last-child {
+      color: rgb(255 255 255 / 0.82);
+      font-size: var(--font-size-lg);
+    }
+
+    /* One circle per direction, centred on the panel. The disabled button is
+       the edge of the rail: only the direction with somewhere to go shows.
+       The chevron is an SVG background so its ink, not the font's glyph
+       metrics, sits on the circle's centre; the control stays white over the
+       artwork in either scheme, and forced colors swaps the icon for a text
+       glyph. */
+    .carousel-track::scroll-button(*) {
+      position: absolute;
+      position-anchor: --carousel;
+      align-self: anchor-center;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      inline-size: var(--carousel-control-size);
+      block-size: var(--carousel-control-size);
+      border: 0;
+      border-radius: var(--radius-full);
+      background-color: #fff;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 1.25rem;
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-size: 2rem;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: var(--shadow-popout);
+      transition: scale var(--duration-fast) ease, opacity var(--duration-fast) ease;
+    }
+
+    .carousel-track::scroll-button(left) {
+      content: "" / "Previous slide";
+      left: calc(anchor(left) + var(--space-30));
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23111' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m15 18-6-6 6-6'/%3E%3C/svg%3E");
+    }
+
+    .carousel-track::scroll-button(right) {
+      content: "" / "Next slide";
+      left: calc(anchor(right) - var(--carousel-control-size) - var(--space-30));
+    }
+
+    .carousel-track::scroll-button(*):hover {
+      scale: 1.06;
+    }
+
+    .carousel-track::scroll-button(*):active {
+      scale: 0.94;
+    }
+
+    .carousel-track::scroll-button(*):focus-visible {
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: var(--focus-outline-offset);
+    }
+
+    .carousel-track::scroll-button(*):disabled {
+      opacity: 0;
+      visibility: hidden;
+      cursor: default;
+    }
+
+    /* The group is a sibling after the rail. Its size is contained by the UA,
+       so reserve the row explicitly instead of letting the dots overflow it. */
+    .carousel-track::scroll-marker-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-20);
+      min-block-size: calc(var(--space-40) + 0.5rem);
+      padding-block-start: var(--space-40);
+    }
+
+    .carousel-track > li::scroll-marker {
+      content: "" / attr(data-marker-label);
+      inline-size: 0.5rem;
+      block-size: 0.5rem;
+      border-radius: var(--radius-full);
+      background: var(--text-subtle);
+      transition: inline-size var(--duration-fast) ease, background-color var(--duration-fast) ease;
+    }
+
+    /* Width, not only color, marks the current slide: forced colors and low
+       vision both read the longer pill. */
+    .carousel-track > li::scroll-marker:target-current {
+      inline-size: 1.75rem;
+      background: var(--text);
+    }
+
+    .carousel-track > li::scroll-marker:focus-visible {
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: var(--focus-outline-offset);
+    }
+
+    /* The dots replace the scrollbar as the position indicator, so hide it
+       only where the markers exist. */
+    @supports (scroll-marker-group: after) {
+      .carousel-track {
+        scrollbar-width: none;
+      }
+
+      .carousel-track::-webkit-scrollbar {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .carousel-track {
+        scroll-behavior: smooth;
+      }
+    }
+
+    @media (forced-colors: active) {
+      .carousel-slide {
+        border: var(--border-width) solid CanvasText;
+        background: Canvas;
+        color: CanvasText;
+      }
+
+      .carousel-copy .overline,
+      .carousel-copy p:last-child {
+        color: CanvasText;
+      }
+
+      .carousel-track::scroll-button(*) {
+        border: var(--border-width) solid ButtonText;
+        background-image: none;
+        background-color: ButtonFace;
+        color: ButtonText;
+      }
+
+      .carousel-track::scroll-button(left) {
+        content: "‹" / "Previous slide";
+      }
+
+      .carousel-track::scroll-button(right) {
+        content: "›" / "Next slide";
+      }
+
+      .carousel-track > li::scroll-marker {
+        background: CanvasText;
+      }
+
+      .carousel-track > li::scroll-marker:target-current {
+        background: Highlight;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack carousel-page">
+    <header class="stack carousel-intro">
+      <p class="overline">Framework tour</p>
+      <h1>One slide at a time</h1>
+      <p>
+        Five stops through the framework. The arrows and dots are native scroll
+        buttons and markers; the rail still swipes and scrolls where they are
+        not supported.
+      </p>
+    </header>
+
+    <section aria-label="Framework tour">
+      <ul class="scroll-snap list-reset carousel-track" data-snap="mandatory">
+        <li class="carousel-slide" data-marker-label="Layout">
+          <div class="carousel-copy">
+            <p class="overline">Layout</p>
+            <h2>Stacks, clusters, grids</h2>
+            <p>Page structure from a few composable primitives.</p>
+          </div>
+        </li>
+        <li class="carousel-slide" data-tone="teal" data-marker-label="Typography">
+          <div class="carousel-copy">
+            <p class="overline">Typography</p>
+            <h2>A scale that holds</h2>
+            <p>From a caption to a display title, without guessing.</p>
+          </div>
+        </li>
+        <li class="carousel-slide" data-tone="rust" data-marker-label="Forms">
+          <div class="carousel-copy">
+            <p class="overline">Forms</p>
+            <h2>Native controls</h2>
+            <p>One focus language across every field and choice.</p>
+          </div>
+        </li>
+        <li class="carousel-slide" data-tone="violet" data-marker-label="Components">
+          <div class="carousel-copy">
+            <p class="overline">Components</p>
+            <h2>Small pieces, composed</h2>
+            <p>Alerts, cards and timelines that fit together.</p>
+          </div>
+        </li>
+        <li class="carousel-slide" data-tone="rose" data-marker-label="Theming">
+          <div class="carousel-copy">
+            <p class="overline">Theming</p>
+            <h2>One token set</h2>
+            <p>Change the palette without touching a component.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <p class="muted">
+      Previous and next are <code>::scroll-button()</code>; the dots are
+      <code>::scroll-marker</code>. Both are progressive: without them, the rail
+      remains a native horizontal scroller.
+    </p>
+  </main>
+</body>
+</html>
