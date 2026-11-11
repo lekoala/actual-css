@@ -19,6 +19,8 @@
 
 ### Changed
 - `--font-sans` and `--font-mono`: quality-ordered local stacks — Inter and Noto Sans ahead of `system-ui`; Cascadia Code and JetBrains Mono ahead of `ui-monospace`.
+- `.btn.surface`: hover paints an opaque ink mix, so a surface button still shows feedback on a dark theme.
+- `demo/templates/data-grid.html`: `data-grid-component` 3.10.0, with the grouped page-size footer, the floating bulk bar and one quiet control edge.
 - `.btn.outline`: a neutral outline takes `--border-control`; an explicit intent keeps its color.
 - Docs: the search panel opens on its destination quick links, keeps the close in the header row, and pins a keyboard footer below a scrolling result list.
 - Docs: the header search opener is a quiet surface button on the control edge that shows `⌘ K` on macOS and `Ctrl K` elsewhere.
@@ -28,6 +30,7 @@
 - `.timeline`: `--timeline-slot-size` defaults to `2rem`, and the dateline uses tabular numerals.
 
 ### Fixed
+- A bare checkbox or radio focuses in `--focus`; the core currentColor fallback painted the ring in the text ink, so it read as untinted on a dark surface.
 - Docs: card hover lifts to `--border-control`; the former `--border-strong` was never a token, so `border-color` fell back to `currentColor` and drew a full-contrast ring.
 - `check:docs` rejects a `var()` in the site chrome whose token no stylesheet declares.
 - `.timeline`: an avatar or icon slot taller than the line box stays inside its event instead of overflowing the list and eating into `--timeline-gap`.

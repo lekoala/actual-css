@@ -8,8 +8,8 @@
   <meta name="description" content="data-grid-component loaded from CDN, themed with Actual CSS tokens. Declarative table and JavaScript API examples.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.8.0/dist/data-grid.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.8.0/themes/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/themes/actual.css">
   <script src="../scripts/theme-picker.js"></script>
   <style>
     .page {
@@ -27,6 +27,15 @@
     data-grid {
       --modal-size: 32rem;
       --modal-pad: var(--space-40);
+    }
+
+    /* The grid is one quiet surface: host fields draw the table line
+       (--border) instead of the 3:1 field edge (--border-control), which reads
+       as a second border colour beside the pager's buttons. Raise the mix on
+       `--border-control` here instead if a field must stay WCAG-identifiable by
+       its edge. */
+    data-grid :is(.input, .select) {
+      --control-border: var(--border);
     }
 
     /* The card heading is the visible label; keep the native caption as the
@@ -354,7 +363,7 @@
     </section>
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
-      <span>Loaded from jsDelivr: <code>data-grid-component@3.8.0</code>, with
+      <span>Loaded from jsDelivr: <code>data-grid-component@3.10.0</code>, with
         <code>themes/actual.css</code> and Actual control classes.</span>
     </footer>
   </main>
@@ -364,13 +373,12 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script type="module">
-    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.8.0/dist/data-grid.min.js";
+    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.js";
 
     DataGrid.setDefaultControlClasses({
       button: "btn surface sm",
       action: "btn surface sm",
       input: "input sm",
-      select: "select sm",
     });
 
     const notify = (message, intent) =>
