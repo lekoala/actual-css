@@ -646,62 +646,204 @@
 
 /* --- Homepage --- */
 
-.docs-hero {
-  padding-block: calc(var(--space-60) * 1.5) var(--space-60);
+.docs-home {
+  --center-size: 76rem;
 }
 
-/* Wordmark inlined from docs/brand/logo.svg. Capped width keeps the 7:1
-   wordmark inside the hero measure; height follows the intrinsic ratio. */
-.docs-hero-logo {
-  display: block;
-  inline-size: min(22rem, 100%);
-  block-size: auto;
-  margin-inline: auto;
+.docs-hero {
+  gap: var(--space-50);
+  padding-block: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 4vw, 3rem);
 }
 
 .docs-hero-title {
-  max-inline-size: 12ch;
+  max-inline-size: 18ch;
   margin-inline: auto;
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  line-height: 1.05;
+  font-size: clamp(2.75rem, 6.5vw, 6rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.docs-hero-title span {
+  color: var(--primary);
 }
 
 .docs-hero .lead {
-  max-inline-size: 36rem;
+  max-inline-size: 34rem;
   margin-inline: auto;
+  color: var(--text-muted);
+  text-wrap: balance;
 }
 
 .docs-hero-cta {
   justify-content: center;
+  padding-block-start: var(--space-20);
 }
 
-.docs-section {
-  padding-block: var(--space-50);
-}
-
-/* Homepage showcase: three columns of panels, one at a time on a phone. The
-   minimum fits the invoice table's three columns. */
-.docs-showcase {
-  --grid-min: 20rem;
-
-  align-items: start;
-}
-
-.docs-showcase h3 {
-  font-size: var(--font-size-lg);
-}
-
-/* A tool-call trace inside an answer: a quiet .accordion.flush, secondary to
-   the reply it precedes. Editorial, so local. */
-.docs-showcase .chat .accordion {
-  --accordion-pad: var(--space-10);
-
-  color: var(--text-muted);
+.docs-hero-note {
   font-size: var(--font-size-sm);
 }
 
-.docs-showcase .chat .accordion summary {
-  font-weight: var(--font-weight-normal);
+.docs-section {
+  gap: var(--space-50);
+  padding-block: clamp(2rem, 5vw, 4rem);
+}
+
+.docs-home h2 {
+  max-inline-size: 26ch;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.docs-section-heading {
+  align-items: end;
+  row-gap: var(--space-40);
+}
+
+.docs-section-heading > a {
+  font-size: var(--font-size-sm);
+}
+
+/* The scene owns presentation; the card still owns its controls and anatomy.
+   Content can grow with text zoom, feedback and translated browser controls. */
+.docs-showcase {
+  --grid-min: 22rem;
+
+  gap: var(--space-60) var(--space-50);
+  align-items: start;
+}
+
+.docs-showcase-section {
+  padding-block-start: var(--space-40);
+}
+
+.docs-specimen {
+  min-inline-size: 0;
+  margin-inline: 0;
+  gap: var(--space-40);
+}
+
+.docs-scene {
+  display: grid;
+  align-items: stretch;
+  min-block-size: 29rem;
+  padding: clamp(0.75rem, 1.6vw, 1.5rem);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-subtle);
+}
+
+.docs-scene-tinted {
+  background: color-mix(in oklab, var(--primary) 5%, var(--surface-subtle));
+}
+
+.docs-specimen-panel {
+  --card-pad: clamp(1rem, 1.8vw, 1.5rem);
+
+  min-inline-size: 0;
+  gap: var(--space-50);
+}
+
+.docs-specimen-panel h3 {
+  font-size: var(--font-size-md);
+  letter-spacing: -0.02em;
+}
+
+.docs-specimen-panel hgroup p,
+.docs-specimen-panel footer,
+.docs-specimen-panel [data-showcase-preferences],
+.docs-specimen figcaption {
+  font-size: var(--font-size-sm);
+}
+
+.docs-specimen figcaption {
+  padding-inline: var(--space-10);
+}
+
+.docs-specimen figcaption a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-20);
+  color: var(--text);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.docs-specimen figcaption a:hover {
+  color: var(--link);
+  text-decoration: underline;
+}
+
+.docs-specimen figcaption p {
+  margin-block: var(--space-10) 0;
+}
+
+@media (min-width: 48rem) {
+  .docs-showcase {
+    /* Share the tallest scene across every row. Captions occupy separate
+       content-sized tracks; longer captions never shorten a preview. */
+    grid-auto-rows: minmax(29rem, 1fr) auto;
+    align-items: stretch;
+  }
+
+  .docs-specimen {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 2;
+  }
+}
+
+.docs-parcel {
+  display: grid;
+  place-items: center;
+  inline-size: 4rem;
+  block-size: 4rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface-subtle);
+  color: var(--primary);
+  font-size: 2rem;
+}
+
+.docs-delivery-title {
+  max-inline-size: 16ch;
+  font-size: 1.75rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.docs-metric-value {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+}
+
+/* A six-month data graphic is specific to this specimen, not a chart API. */
+.docs-revenue-chart {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: end;
+  gap: var(--space-20);
+  block-size: 7rem;
+  border-block-end: var(--border-width) solid var(--border);
+}
+
+.docs-revenue-chart > span {
+  block-size: var(--revenue, 0%);
+  border: var(--border-width) solid var(--primary);
+  border-start-start-radius: var(--radius-sm);
+  border-start-end-radius: var(--radius-sm);
+  background: color-mix(in oklab, var(--primary) 25%, var(--surface-raised));
+}
+
+.docs-revenue-chart > span:last-child {
+  background: var(--primary);
 }
 
 .docs-icon {
@@ -715,7 +857,10 @@
   font-size: 1.25rem;
 }
 
-.docs-feature-grid,
+.docs-feature-grid {
+  --grid-min: 15rem;
+}
+
 .docs-components-grid {
   --grid-min: 12rem;
 }
@@ -776,13 +921,12 @@
   min-block-size: 2.5rem;
 }
 
-.docs-density-grid,
 .docs-theme-grid {
   --grid-min: 12rem;
 }
 
 /* The preview consumes only theme tokens, making each card a compact visual
-   contract check for surfaces, accents, radius, and elevation. Bars take
+   contract check for surfaces, accents and radius. Bars take
    --radius-sm so square themes read as square; the border token is carried by
    the surrounding .card (--border / --border-width). */
 .docs-theme-preview {
@@ -793,7 +937,6 @@
   padding: var(--space-30);
   border-radius: var(--radius);
   background: var(--surface-solid);
-  box-shadow: var(--shadow-popout);
 }
 
 .docs-theme-line {
@@ -822,20 +965,92 @@
   padding-inline: var(--space-40);
 }
 
+.docs-get-started {
+  padding-block-end: clamp(3rem, 7vw, 6rem);
+}
+
 .docs-component-card {
   color: var(--text);
   text-decoration: none;
 }
 
-.docs-install-grid {
-  --grid-min: 15rem;
+.docs-workspace {
+  --card-pad: clamp(1rem, 3vw, 2rem);
+
+  gap: var(--space-50);
 }
 
-.docs-install-grid > * {
+.docs-workspace-project {
+  padding: clamp(1rem, 3vw, 2rem);
+  border: var(--border-width) solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface-subtle);
+  gap: var(--space-50);
+}
+
+.docs-project-title {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.docs-workspace hgroup p,
+.docs-workspace footer,
+.docs-workspace-drawer hgroup p {
+  font-size: var(--font-size-sm);
+}
+
+.docs-publish-dialog {
+  --modal-size: 32rem;
+}
+
+.docs-workspace-drawer {
+  --drawer-size: 28rem;
+  --drawer-pad: var(--space-50);
+}
+
+.docs-settings-body {
+  gap: var(--space-60);
+}
+
+.docs-workspace-drawer h2 {
+  font-size: var(--font-size-lg);
+}
+
+.docs-workspace-drawer h3 {
+  font-size: var(--font-size-md);
+}
+
+.docs-install-card {
+  --card-pad: clamp(1rem, 3vw, 2rem);
+
+  gap: var(--space-50);
+}
+
+.docs-install-panels {
+  display: grid;
+}
+
+/* Once tabs enhance the markup, inactive snippets still size the shared
+   track. Switching to the longer CDN code never moves the call to action.
+   Without JavaScript both sections remain in normal reading order. */
+.docs-install-panels:has([hidden]) > section {
+  grid-area: 1 / 1;
+}
+
+.docs-install-panels > [hidden] {
+  /* Override the reset's hidden display while visibility still removes the
+     inactive panel from painting, focus and the accessibility tree. */
+  display: flex !important;
+  visibility: hidden;
+}
+
+.docs-install-panels > section {
   min-inline-size: 0;
 }
 
-.docs-install-grid pre {
+.docs-install-card pre {
   margin: 0;
   min-inline-size: 0;
   max-inline-size: 100%;

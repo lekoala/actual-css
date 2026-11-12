@@ -223,34 +223,14 @@ export function renderThemeCards(themes) {
     .join("\n");
 }
 
-const COMPONENT_FEATURED = [
-  "button",
-  "card",
-  "badge",
-  "alert",
-  "dialog",
-  "drawer",
-  "table",
-  "navbar",
-  "accordion",
-  "breadcrumb",
-  "meter",
-  "pagination",
-];
+// A small spread of palettes and surface treatments; the header exposes all.
+const HOME_THEME_PREVIEWS = ["forest", "lavender", "neo-brutalist", "cyberpunk", "neon", "glass"];
 
 function renderPageCard(page, href) {
   return `          <a class="card stack docs-component-card docs-card-link" href="${href}">
             <h3>${escapeHtml(page.title)}</h3>
             <p class="muted">${escapeHtml(page.description)}</p>
           </a>`;
-}
-
-export function renderComponentsGrid(navigation) {
-  return navigation.pages
-    .filter((page) => page.groupSlug === "components" && COMPONENT_FEATURED.includes(page.slug))
-    .sort((a, b) => COMPONENT_FEATURED.indexOf(a.slug) - COMPONENT_FEATURED.indexOf(b.slug))
-    .map((page) => renderPageCard(page, page.url))
-    .join("\n");
 }
 
 const PAGE_INDEX = /<!--docs-index:([a-z-]+)-->/g;
@@ -300,8 +280,10 @@ export function renderHome({
     .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
     .replace(/\{\{themeCount\}\}/g, String(themes.length))
     .replace(/\{\{homeStats\}\}/g, renderHomeStats())
-    .replace(/\{\{themeCards\}\}/g, renderThemeCards(themes))
-    .replace(/\{\{componentsGrid\}\}/g, renderComponentsGrid(navigation))
+    .replace(
+      /\{\{themeCards\}\}/g,
+      renderThemeCards(themes.filter((theme) => HOME_THEME_PREVIEWS.includes(theme.name))),
+    )
     .replace(/\{\{destinations\}\}/g, renderDestinations(navigation, null))
     .replace(/\{\{drawerDestinations\}\}/g, renderDestinations(navigation, null, { icons: true }))
     .replace(/\{\{searchLinks\}\}/g, renderSearchLinks(navigation, null));
