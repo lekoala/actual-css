@@ -16,6 +16,8 @@
 - `cyberpunk` theme: ink rating stars with outlined empty stars.
 - `neon` theme: rating stars as lit and unlit primary tubes.
 - `material` theme: Google Yellow rating stars over `--border`.
+- `neo-brutalist` theme: a framed square `.status-bar` instead of the core pill.
+- `demo/templates/neo-brutalist.html`: the cookie notice enters with `.reveal` and confirms the choice in the status bar.
 - `demo/sites/neon-ramen`: read-only ratings on the home stats and the Spicy miso page, a "Rate your last bowl" input on the order page, and neon-tube stars in `neon-site.css`.
 
 ### Changed
@@ -31,11 +33,14 @@
 - `.nav-list`: `--nav-list-icon-size` (the leading icon width) replaces `--nav-list-indent`.
 - `.nav-list`: `--nav-list-rail-color` sets the nested rail; `transparent` hides it and keeps the alignment.
 - `.shimmer`: the band has a fixed width, crosses the whole label, then rests before the next pass.
+- Docs home: the hero title enters with `.reveal` on first render.
 - Docs: Aura repaints every frame; reserve it for one or two objects per view.
 - `--duration-shimmer` slows from 1.2s to 2s, pacing `.shimmer`, `.skeleton` and indeterminate `.progress`.
 - `.switch`: `--switch-knob-margin` increases from 8% to 10% of the track height, giving the knob more breathing room.
 
 ### Fixed
+- A closed `<dialog>` stays hidden when an author class sets `display`, such as `<dialog class="card">`.
+- Docs home test: the menu-to-dialog focus check waits for the close event instead of reading focus before it runs.
 - `fixtureUrl()` keeps a page's query string and hash instead of escaping them into the file name.
 - `.shimmer`: the sweep runs right to left in right-to-left text.
 - `demo/templates/blocks.html`: table filters share one wrapping cluster so the status and owner selects sit side by side when space permits.

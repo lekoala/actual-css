@@ -162,6 +162,9 @@
        framework centres dialogs in the viewport; this one docks at the
        bottom, so its position is product CSS. */
     .nb-cookie {
+      /* Docked at the bottom edge, it rises from farther than inline content. */
+      --reveal-distance: var(--space-60);
+
       position: fixed;
       inset: auto var(--space-40) var(--space-40);
       z-index: var(--z-sticky, 10);
@@ -632,7 +635,8 @@
     </form>
   </dialog>
 
-  <dialog class="card nb-cookie" open aria-labelledby="cookie-title">
+  <!-- Plays its entrance on first render: .reveal needs no runtime. -->
+  <dialog class="card nb-cookie reveal" open aria-labelledby="cookie-title">
     <div class="switcher" style="--switcher-threshold: 44rem; --gap: var(--space-50)">
       <div class="media items-center" style="--gap: var(--space-40)">
         <span class="nb-tile" aria-hidden="true"><i class="ti ti-cookie"></i></span>
@@ -648,8 +652,24 @@
     </div>
   </dialog>
 
+  <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
+
   <script src="../../dist/actual.full.js"></script>
   <script>
+    // The consent form closes the dialog natively (method="dialog"); its
+    // returnValue says which button did it. A command button would cancel the
+    // submission, so the confirmation is dispatched from the close event.
+    const cookie = document.querySelector(".nb-cookie");
+    cookie.addEventListener("close", () => {
+      const message = cookie.returnValue === "all"
+        ? "Counting on. One anonymous number, nothing more."
+        : "Essential only. Nothing gets counted.";
+      cookie.dispatchEvent(new CustomEvent("actual:status", {
+        bubbles: true,
+        detail: { message, intent: "success" },
+      }));
+    });
+
     document.addEventListener("DOMContentLoaded", () => {
       customElements.get("date-picker").setDefaultControlClasses({
         month: "select sm",

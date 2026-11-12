@@ -29,6 +29,16 @@ select {
   display: none !important;
 }
 
+/* The UA hides a closed dialog from its own origin, so any author display
+   wins over it, even at zero specificity: `<dialog class="card">` stayed on
+   screen after its method="dialog" form closed it. Not !important, unlike
+   [hidden]: an important declaration outranks transitions, and the modal's
+   exit fade transitions display. A dialog that needs another closed display
+   says so with a more specific selector. */
+dialog:not([open]) {
+  display: none;
+}
+
 :where(img, svg, video) {
   max-inline-size: 100%;
   block-size: auto;

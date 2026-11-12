@@ -451,6 +451,13 @@
   box-shadow: var(--border-width) 0 0 var(--border);
 }
 
+/* Status bar: a framed square slab like every other surface, not the core
+   pill. The popout shadow already stamps it. */
+[data-theme="neo-brutalist"] .status-bar {
+  border: var(--border-width) solid var(--border);
+  border-radius: 0;
+}
+
 /* Accordion: a plus that turns into a cross, and an open item filled with
    the accent, its summary ruled off from the panel. */
 :where([data-theme="neo-brutalist"]) .accordion {

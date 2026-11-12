@@ -159,12 +159,14 @@ it("workspace menus hand focus to dialogs, settings save or cancel, and installa
         'document.getElementById("docs-home-dialog").open && document.getElementById("docs-home-dialog").contains(document.activeElement)',
       );
       await pressKey(view, "Escape");
-      await waitForBrowser(view, '!document.getElementById("docs-home-dialog").open');
-      expect(
-        await view.evaluate(
-          'document.activeElement === document.getElementById("docs-home-flyout-trigger")',
-        ),
-      ).toBe(true);
+      // The menu row that opened the dialog is hidden, so the native restore
+      // has nowhere to go; the page's close listener moves focus to the
+      // flyout trigger. The close event is a queued task, so `open` reads
+      // false a few milliseconds before focus moves: wait for the focus.
+      await waitForBrowser(
+        view,
+        '!document.getElementById("docs-home-dialog").open && document.activeElement === document.getElementById("docs-home-flyout-trigger")',
+      );
 
       await clickPreview(view, "#docs-settings-trigger");
       await waitForBrowser(view, 'document.getElementById("docs-home-drawer").open');
