@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mark sweep contrast — Actual CSS</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    body { margin: 0; }
+    main { display: grid; grid-template-columns: repeat(2, minmax(max-content, 1fr)); }
+    section {
+      padding: 2rem;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 1.5rem;
+      line-height: 2;
+    }
+    .mark-sweep { padding-inline: 0.15em; }
+  </style>
+</head>
+<body>
+  <main>
+    <section data-theme="light">
+      <h1>Light</h1>
+      <p><mark class="mark-sweep is-pending">Default highlight</mark></p>
+      <p><span class="mark-sweep primary is-pending">Primary highlight</span></p>
+      <p><span class="mark-sweep secondary is-pending">Secondary highlight</span></p>
+      <p><span class="mark-sweep success is-pending">Success highlight</span></p>
+      <p><span class="mark-sweep warning is-pending">Warning highlight</span></p>
+      <p><span class="mark-sweep danger is-pending">Danger highlight</span></p>
+      <p><span class="mark-sweep neutral is-pending">Neutral highlight</span></p>
+    </section>
+    <section data-theme="dark">
+      <h1>Dark</h1>
+      <p><mark class="mark-sweep is-pending">Default highlight</mark></p>
+      <p><span class="mark-sweep primary is-pending">Primary highlight</span></p>
+      <p><span class="mark-sweep secondary is-pending">Secondary highlight</span></p>
+      <p><span class="mark-sweep success is-pending">Success highlight</span></p>
+      <p><span class="mark-sweep warning is-pending">Warning highlight</span></p>
+      <p><span class="mark-sweep danger is-pending">Danger highlight</span></p>
+      <p><span class="mark-sweep neutral is-pending">Neutral highlight</span></p>
+    </section>
+  </main>
+</body>
+</html>

@@ -4,6 +4,7 @@ import {
   clickSelector,
   fixtureUrl,
   pressKey,
+  sampleTransition,
   setViewport,
   waitForBrowser,
   withBrowserPage,
@@ -28,6 +29,61 @@ async function clickPreview(view, selector) {
   );
   await clickSelector(view, selector);
 }
+
+it("home entrances wait for the content rather than the section padding", async () => {
+  for (const width of [390, 1280]) {
+    await withBrowserPage(
+      HOME,
+      async (view) => {
+        await setViewport(view, { width, height: 900 });
+        await view.evaluate("document.fonts.ready.then(() => true)");
+        const title = ".docs-feature-grid";
+        await view.evaluate(`(() => {
+          const section = document.querySelector(${JSON.stringify(title)}).closest("section");
+          window.__entrance = { section, title: section.querySelector("h2"), text: section.querySelector("p"), grid: section.querySelector(".docs-feature-grid") };
+        })()`);
+        await waitForBrowser(view, "window.__entrance.title.classList.contains('is-pending')");
+        // Put only the leading padding on screen, then wait for an actual
+        // intersection delivery before checking that the title stays pending.
+        await view.evaluate(`(() => {
+          const section = window.__entrance.section;
+          scrollTo(0, scrollY + section.getBoundingClientRect().top - innerHeight + parseFloat(getComputedStyle(section).paddingBlockStart) / 2);
+          return new Promise(resolve => {
+            const observer = new IntersectionObserver(entries => {
+              if (!entries.some(entry => entry.isIntersecting)) return;
+              observer.disconnect();
+              resolve(true);
+            });
+            observer.observe(section);
+          });
+        })()`);
+        expect(
+          await view.evaluate("window.__entrance.title.classList.contains('is-pending')"),
+        ).toBe(true);
+        expect(
+          await view.evaluate("window.__entrance.title.getBoundingClientRect().top > innerHeight"),
+        ).toBe(true);
+
+        await view.evaluate(`(() => {
+          const rect = window.__entrance.title.getBoundingClientRect();
+          scrollTo(0, scrollY + rect.top - innerHeight + 96);
+        })()`);
+        await waitForBrowser(view, "!window.__entrance.title.classList.contains('is-pending')");
+        const opacity = await sampleTransition(view, ".docs-section h2.reveal");
+        expect(opacity).not.toBeNull();
+        expect(Number(opacity)).toBeGreaterThan(0);
+        expect(Number(opacity)).toBeLessThan(1);
+        expect(await view.evaluate("window.__entrance.text.classList.contains('is-pending')")).toBe(
+          true,
+        );
+        expect(await view.evaluate("window.__entrance.grid.classList.contains('is-pending')")).toBe(
+          true,
+        );
+      },
+      { sourceCss: true, artifactName: `docs-home-entrance-${width}` },
+    );
+  }
+}, 60_000);
 
 it("home specimens fit narrow viewports, share heights in a grid and appear in the first desktop screen", async () => {
   await withBrowserPage(

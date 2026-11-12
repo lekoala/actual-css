@@ -171,14 +171,21 @@ of the contract itself.
 
 ## Token vocabulary
 
-| Token        | Behavior                                         | Existing class      |
-| ------------ | ------------------------------------------------ | ------------------- |
-| `tabs`       | Tab panel switching, arrow-key navigation        | `.tabs`             |
-| `flyout`     | Trigger → panel positioning, open/close          | `.flyout`           |
-| `range`      | Fill share and named-value synchronization       | `.range`            |
-| `scrollspy`  | Scroll-driven nav highlighting                   | `.scrollspy`        |
-| `validation` | Form validation, focus management, server errors | `.needs-validation` |
-| `dirty`      | Unsaved-changes state on a form                  | —                   |
-| `ajax`       | Form submission through `fetch`                  | —                   |
+| Token        | Behavior                                         | Existing class           |
+| ------------ | ------------------------------------------------ | ------------------------ |
+| `tabs`       | Tab panel switching, arrow-key navigation        | `.tabs`                  |
+| `flyout`     | Trigger → panel positioning, open/close          | `.flyout`                |
+| `range`      | Fill share and named-value synchronization       | `.range`                 |
+| `scrollspy`  | Scroll-driven nav highlighting                   | `.scrollspy`             |
+| `in-view`    | One-shot viewport appearance state               | `.reveal`, `.mark-sweep` |
+| `validation` | Form validation, focus management, server errors | `.needs-validation`      |
+| `dirty`      | Unsaved-changes state on a form                  | —                        |
+| `ajax`       | Form submission through `fetch`                  | —                        |
 
-Seven tokens. Everything else stays self-describing.
+Eight tokens. Everything else stays self-describing.
+
+`in-view` is a presentation trigger, not an animation system: it writes
+`is-pending` while an element waits outside the viewport and removes it on the
+first intersection. The effect's CSS owns what that state looks like, and the
+element is never hidden before the observer's first callback reports it off
+screen.

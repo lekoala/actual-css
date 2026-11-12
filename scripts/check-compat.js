@@ -132,6 +132,9 @@ const FEATURES = [
   /* Chromium-only for now; every use follows a plain declaration of the same
      property, which the engines without it keep. */
   { name: "calc-size()", pattern: /calc-size\(/gi, kind: "safe-drop", tier: "optional" },
+  /* Baseline 2026. Used only as a stagger index: an engine without it drops
+     the declaration and the group reveals together. */
+  { name: "sibling-index()", pattern: /sibling-index\(/gi, kind: "safe-drop", tier: "optional" },
   /* Chromium-only: an engine without it starts the strip at its first item. */
   {
     name: "scroll-initial-target",

@@ -1335,6 +1335,77 @@ test("shimmer never erases its label and carries no state", () => {
   expect(gated).toMatch(/\.shimmer:dir\(rtl\)\s*\{\s*animation-direction: reverse;/);
 });
 
+test("reveal hides only under allowed motion and snaps in under focus", () => {
+  const css = readCss("src/css/effects/reveal.css");
+  const rules = readRules("src/css/effects/reveal.css");
+  const [base, gated] = css.split("@media screen and (prefers-reduced-motion: no-preference)");
+
+  // No motion, no hiding: without JavaScript the class never exists, and
+  // reduced motion and print must not hide content either.
+  expect(base).not.toContain("transition:");
+  expect(base).not.toContain("opacity: 0");
+  expect(gated).toContain(".reveal.is-pending");
+  expect(gated).toContain(".reveal-group.is-pending > *");
+  expect(gated).toContain("opacity: 0;");
+  expect(gated).toContain("translate: 0 var(--reveal-distance);");
+  // The transition lives on the base state, so it still exists once the class
+  // is removed; the stagger is capped and degrades to no delay.
+  expect(gated).toMatch(/\.reveal,\s*\.reveal-group > \*\s*\{\s*transition:/);
+  expect(gated).toContain("calc(min(sibling-index() - 1, 8) * var(--reveal-stagger))");
+  // Nothing leaves the layer: text stays searchable and focusable.
+  expect(rules).not.toMatch(/\b(?:visibility|display|content-visibility)\s*:/);
+  expect(rules).toMatch(/\.reveal:focus-within,[\s\S]*?\{\s*transition: none;/);
+});
+
+test("mark sweep grows the shared highlight and keeps a forced-colors fallback", () => {
+  const css = readRules("src/css/effects/mark-sweep.css");
+  const [base, gated] = css.split("@media screen and (prefers-reduced-motion: no-preference)");
+
+  // The shorthand clears base.css's background-color on <mark>, which would
+  // otherwise paint the whole highlight while pending.
+  expect(base).toContain(
+    "background: linear-gradient(var(--mark-bg), var(--mark-bg)) 0 0 / 100% 100% no-repeat;",
+  );
+  expect(base).toContain("color: var(--mark-fg);");
+  expect(base).not.toContain("background-size: 0");
+  expect(gated).toContain(".mark-sweep.is-pending");
+  expect(gated).toContain("background-size: 0 100%;");
+  expect(gated).toContain(
+    "transition: background-size var(--mark-sweep-duration) var(--ease-enter);",
+  );
+  // The sweep follows the reading direction.
+  expect(css).toMatch(/\.mark-sweep:dir\(rtl\)\s*\{\s*background-position: 100% 0;\s*\}/);
+  // A background image is dropped in forced colors: keep the system pair.
+  expect(css).toMatch(
+    /@media \(forced-colors: active\)[\s\S]*?\.mark-sweep\s*\{\s*background: Mark;\s*color: MarkText;/,
+  );
+  // Solid intent ink can disappear against the uncovered surface. Guard the
+  // tint so engines without color-mix() retain the theme highlight pair.
+  expect(css).not.toContain("var(--intent-fg)");
+  expect(css).toMatch(
+    /@supports \(color: color-mix\(in oklab, red, white\)\)\s*\{\s*\.mark-sweep:is\([^{}]+\)\s*\{\s*--mark-bg: color-mix\(in oklab, var\(--surface\) var\(--soft-bg-mix\), var\(--intent\)\);\s*--mark-fg: var\(--text\);\s*\}\s*\}/,
+  );
+});
+
+test("mark uses the theme highlight pair and the system pair in forced colors", () => {
+  const rules = readRules("src/css/core/base.css");
+  expect(rules).toMatch(/\bmark\s*\{\s*background: var\(--mark-bg\);\s*color: var\(--mark-fg\);/);
+  expect(rules).toMatch(
+    /@media \(forced-colors: active\)\s*\{\s*mark\s*\{\s*background: Mark;\s*color: MarkText;/,
+  );
+
+  const theme = readRules("src/css/core/theme.css");
+  const guard =
+    /@supports \(color: light-dark\(red, blue\)\)\s*\{\s*:root,\s*\[data-theme\]\s*\{\s*--mark-bg: light-dark\([^;]+;\s*--mark-fg: light-dark\([^;]+;\s*\}\s*\}/;
+  expect(theme).toMatch(guard);
+  // Unknown functions in custom properties override earlier declarations;
+  // only the guarded pair may contain light-dark().
+  const fallback = theme.replace(guard, "");
+  expect(fallback).not.toMatch(/--mark-(?:bg|fg): light-dark\(/);
+  expect(fallback).toContain("--mark-bg: hsl(48 95% 68%);");
+  expect(fallback).toContain("--mark-fg: hsl(38 45% 12%);");
+});
+
 test("optional FAB preserves DOM order", () => {
   const css = readCss("src/css/components/fab.css");
 

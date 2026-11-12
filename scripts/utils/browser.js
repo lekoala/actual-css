@@ -188,8 +188,9 @@ export async function browserAvailable(createView = () => new Bun.WebView({ back
  * Opens a headless-Chrome tab, navigates to `url`, and runs `run(view)`.
  * Resolves to the value returned by `run`. The tab is closed on the way out.
  *
- * `mediaFeatures` (e.g. prefers-reduced-motion) are emulated before fixture
- * navigation so the page sees them from the first render. `sourceCss` swaps
+ * `media` overrides the media type (`screen`, `print`) and `mediaFeatures`
+ * (e.g. prefers-reduced-motion) are emulated before fixture navigation so the
+ * page sees them from the first render. `sourceCss` swaps
  * built stylesheets for their sources before `run` (see useSourceCss) and
  * reports the swaps on stderr outside `bun test`. Page `console.*`
  * calls are captured; on failure they are appended to the error and, when
@@ -201,6 +202,7 @@ export async function withBrowserPage(
   {
     width = 1100,
     height = 900,
+    media,
     mediaFeatures = [],
     settleMs = 0,
     sourceCss = false,
@@ -216,11 +218,14 @@ export async function withBrowserPage(
     console: (type, ...args) => consoleLines.push([type, ...args.map(String)]),
   });
 
-  if (mediaFeatures.length > 0) {
+  if (media || mediaFeatures.length > 0) {
     // Bun.WebView creates its CDP session on first navigation. Use a blank
     // document so the fixture itself still loads only once under emulation.
     await view.navigate("about:blank");
-    await view.cdp("Emulation.setEmulatedMedia", { features: mediaFeatures });
+    await view.cdp("Emulation.setEmulatedMedia", {
+      ...(media ? { media } : {}),
+      features: mediaFeatures,
+    });
   }
   await view.navigate(url);
   if (sourceCss) {

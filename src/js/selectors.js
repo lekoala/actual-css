@@ -35,6 +35,9 @@ export const CLASSES = {
   // surface.js — state class on the open flyout/menu/dialog surface.
   // status.js writes the same class on the status bar while a message shows.
   open: "is-open",
+  // in-view.js — transient state on an element that waits outside the viewport
+  // for its first appearance. Each effect's CSS decides how to hide it.
+  pending: "is-pending",
   // dialog.js — transient class for the "can't dismiss" shake animation.
   static: "is-static",
   // dialog.js — written on <html> while any modal dialog is open.

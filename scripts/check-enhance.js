@@ -13,6 +13,7 @@ const TOKENS = new Set([
   "dirty",
   "ajax",
   "dialog",
+  "in-view",
 ]);
 const REGISTRATION = /^\s*registerEnhancement\(\s*["']([a-z][a-z0-9-]*)["']/gm;
 

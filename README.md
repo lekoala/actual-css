@@ -107,6 +107,8 @@ Undocumented `is-*` classes are runtime internals.
 
 **UI components** — dialog, drawer, flyout, tooltip, tabs, scrollspy, context menus, and other components that rely on JavaScript or modern platform behavior.
 
+**Effects** — aura, shimmer, mark sweep, and reveal: purely visual enrichment, with motion that respects reduced-motion.
+
 **Patterns** — navbar and overline. These are regular source files and can be imported only when needed.
 
 **Layout primitives** — `.stack`, `.cluster`, `.grid`, `.switcher`, `.center`, `.media`, `.frame`, `.app-shell`, `.sidebar-layout`, and `.container-query`.
@@ -134,7 +136,7 @@ for the full map of module names to import paths.
 
 ## JavaScript enhancers
 
-Some components can be enhanced with JavaScript: dialog/drawer, flyout, tooltip, tabs, scrollspy, context menu, floating UI, opt-in `data-filter` input filtering, and input masks.
+Some components can be enhanced with JavaScript: dialog/drawer, flyout, tooltip, tabs, scrollspy, context menu, floating UI, opt-in `data-filter` input filtering, input masks, and the one-shot `in-view` trigger behind `.reveal` and `.mark-sweep`.
 
 Presentation (`class`) and behaviour (`data-enhance`) are separate layers — import any primitive independently to build custom widgets. See [enhancement contract](docs/design-notes/enhancement-contract.md) and [widget primitives](docs/design-notes/widget-primitives.md).
 

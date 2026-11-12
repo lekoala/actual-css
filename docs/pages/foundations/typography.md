@@ -38,7 +38,7 @@ It applies everywhere — cards, dialogs, heroes, app shells — not only in pro
 
 It does not own visual hierarchy. No global `font-size` on headings, no global `font-weight` on headings, no global margins on headings, no global `text-decoration` on links. These choices would shape app UI in ways the framework cannot predict.
 
-The mildly opinionated defaults at the baseline are few: line-height on headings (tight, so multi-line headings stay readable), `text-wrap: balance` on headings where supported, the `hr` rule, the `::selection` rule, the `code` / `kbd` / `samp` / `pre` font family, `pre` overflow containment, `small` font size, and a global link underline offset that prose and components reuse. Everything else stays neutral so components and `.prose` can take over without fighting the baseline.
+The mildly opinionated defaults at the baseline are few: line-height on headings (tight, so multi-line headings stay readable), `text-wrap: balance` on headings where supported, the `hr` rule, the `::selection` rule, the `mark` highlight pair, the `code` / `kbd` / `samp` / `pre` font family, `pre` overflow containment, `small` font size, and a global link underline offset that prose and components reuse. Everything else stays neutral so components and `.prose` can take over without fighting the baseline.
 
 Global links inherit color. The visual affordance of a link is the responsibility of `.prose` (for authored content) or of a component (for nav links, button-like links, tabs, breadcrumbs, etc.). Underlining every `a` globally would collide with all of those.
 
@@ -46,7 +46,7 @@ Global links inherit color. The visual affordance of a link is the responsibilit
 
 `.prose` is the opt-in rich-text scope. It owns the visual hierarchy of authored content.
 
-It owns: readable measure, vertical rhythm, heading hierarchy, link affordance, list spacing, description-list treatment, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, mark, and `text-wrap` balance / pretty for authored or generated rich-text descendants.
+It owns: readable measure, vertical rhythm, heading hierarchy, link affordance, list spacing, description-list treatment, code and keyboard treatment, blockquote treatment, table treatment, image / figure / figcaption treatment, and `text-wrap` balance / pretty for authored or generated rich-text descendants.
 
 It does not own: page layout, app cards, alerts, forms, app tables, navigation, component variants, or any automatic styling outside the `.prose` subtree.
 
@@ -186,6 +186,12 @@ Three logical alignment utilities exist (`.text-start`, `.text-center`, `.text-e
 `text-wrap` balance and pretty are exposed as utilities so they can be applied outside `.prose` (e.g. on a card title, a dialog description, a hero subtitle).
 
 `transition: all` is not used. Transitions target specific properties. This is a general rule, not just a typography rule.
+
+## Mark
+
+`mark` is styled at the baseline, not only inside `.prose`: a semantic highlight is a document affordance, and the UA's yellow ignores the theme. The pair is `--mark-bg` and `--mark-fg`, tuned to clear 4.5:1 in both schemes. Forced colors uses the system `Mark` / `MarkText` pair instead.
+
+`<mark>` means the phrase is relevant in its context. A decorative highlight that only marks a phrase visually uses the [Mark Sweep](../components/mark-sweep.md) effect, which reuses the same pair.
 
 ## Small elements
 

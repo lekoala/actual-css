@@ -1,0 +1,62 @@
+/*
+ * Reveal — entrance motion for a block or a group of children.
+ *
+ * Docs: docs/pages/components/reveal.md
+ *
+ * in-view.js owns the state; this file owns the motion. `is-pending` means the
+ * element is waiting outside the viewport. Hiding exists only under
+ * `screen and (prefers-reduced-motion: no-preference)`, which covers three
+ * cases at once: without JavaScript the class never appears, reduced motion
+ * never hides anything, and print never hides anything.
+ *
+ * The transition is declared on the base state, never on `.is-pending` alone,
+ * so it is still defined when the class is removed and the element returns to
+ * rest.
+ *
+ * Public hooks:
+ * --reveal-duration
+ * --reveal-distance
+ * --reveal-stagger
+ */
+.reveal,
+.reveal-group {
+  --reveal-duration: 450ms;
+  --reveal-distance: 0.5rem;
+  --reveal-stagger: 60ms;
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  .reveal,
+  .reveal-group > * {
+    transition:
+      opacity var(--reveal-duration) var(--ease-enter),
+      translate var(--reveal-duration) var(--ease-enter);
+  }
+
+  /* The cap keeps a long list from becoming an endless cascade: the ninth and
+     later items share the eighth step's delay. An engine without
+     sibling-index() drops this declaration alone and reveals the group
+     together, which is the intended degradation. */
+  .reveal-group > * {
+    transition-delay: calc(min(sibling-index() - 1, 8) * var(--reveal-stagger));
+  }
+
+  .reveal.is-pending {
+    opacity: 0;
+    translate: 0 var(--reveal-distance);
+  }
+
+  .reveal-group.is-pending > * {
+    opacity: 0;
+    translate: 0 var(--reveal-distance);
+  }
+}
+
+/* Focus can reach a pending element before it intersects: Tab, an in-page
+   anchor, a find result. in-view.js releases the state on focusin; dropping
+   the transition here makes the content legible on that same frame instead of
+   fading in while focus already sits on it. */
+.reveal:focus-within,
+.reveal-group:focus-within > * {
+  transition: none;
+}

@@ -690,6 +690,15 @@
   padding-block: clamp(2rem, 5vw, 4rem);
 }
 
+/* Observe the content boxes, not the section's leading padding: each entrance
+   should still be playing when its text or cards reach the viewport. */
+.docs-home .reveal,
+.docs-home .reveal-group {
+  --reveal-duration: 800ms;
+  --reveal-distance: var(--space-40);
+  --reveal-stagger: 120ms;
+}
+
 .docs-home h2 {
   max-inline-size: 26ch;
   font-size: clamp(1.75rem, 3vw, 2.5rem);

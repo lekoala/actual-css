@@ -20,6 +20,7 @@ import "./dismiss.js";
 import "./tab.js";
 import "./tooltip.js";
 import "./scrollspy.js";
+import "./in-view.js";
 import "./filter.js";
 import "./mask.js";
 import "./password.js";

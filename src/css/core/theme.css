@@ -77,6 +77,11 @@
   --text-muted: hsl(259 9% 42%);
   --text-subtle: hsl(258 7% 57%);
 
+  /* Highlight pair for <mark> and .mark-sweep: a warm, non-warning yellow that
+     keeps the phrase legible in both schemes. */
+  --mark-bg: hsl(48 95% 68%);
+  --mark-fg: hsl(38 45% 12%);
+
   /* Lines and focus */
   --border: hsl(260 15% 88%);
   /* A primary-hued mid-tone on purpose, one value for both schemes: focus
@@ -131,6 +136,16 @@
   /* Inherited resting field fill, shared with external control bridges.
      Component state rules still own readonly, disabled and invalid fills. */
   --control-default-bg: var(--surface);
+}
+
+/* Custom properties accept unknown functions, so guard the pair to preserve
+   the light fallback. Redeclare on islands to follow their own color-scheme. */
+@supports (color: light-dark(red, blue)) {
+  :root,
+  [data-theme] {
+    --mark-bg: light-dark(hsl(48 95% 68%), hsl(44 55% 30%));
+    --mark-fg: light-dark(hsl(38 45% 12%), hsl(44 60% 94%));
+  }
 }
 
 @supports (color: color-mix(in oklab, red, white)) {

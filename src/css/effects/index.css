@@ -1,3 +1,5 @@
 /* Effects — purely visual enrichments. */
 @import "./aura.css";
+@import "./mark-sweep.css";
+@import "./reveal.css";
 @import "./shimmer.css";

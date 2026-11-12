@@ -20,6 +20,7 @@ const JS_EXPORT_INVENTORY = {
   "./js/password": [],
   "./js/range": [],
   "./js/tab": [],
+  "./js/in-view": [],
   "./js/enhance": ["default", "applyEnhancement", "registerEnhancement"],
   "./js/escape": ["registerEscapeDismissal"],
   "./js/events": ["EVENTS", "ACTUAL_EVENT_PREFIX"],

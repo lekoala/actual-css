@@ -1,0 +1,63 @@
+/*
+ * Mark sweep — a highlight that sweeps in behind a phrase.
+ *
+ * Docs: docs/pages/components/mark-sweep.md
+ *
+ * <mark> carries the semantics of contextually relevant text and is styled by
+ * base.css. `.mark-sweep` is the effect alone and composes on any inline
+ * element. Both read the same --mark-bg / --mark-fg pair, so a theme or an
+ * intent retints the phrase and its sweep together, without a second palette.
+ *
+ * The highlight is a full-size background image at rest. `is-pending` shrinks
+ * it to zero and the transition grows it back from the reading direction's
+ * start edge. Without JavaScript, under reduced motion and in print, the full
+ * highlight is already there.
+ *
+ * Public hooks:
+ * --mark-sweep-duration
+ */
+.mark-sweep {
+  --mark-sweep-duration: 700ms;
+
+  /* The shorthand is deliberate: it also clears the background-color base.css
+     paints on <mark>, which would otherwise show the whole highlight while
+     the element is pending. */
+  background: linear-gradient(var(--mark-bg), var(--mark-bg)) 0 0 / 100% 100% no-repeat;
+  color: var(--mark-fg);
+}
+
+/* The zero-width box is anchored to the reading direction's start edge. Only
+   the anchor changes under RTL; the gradient itself is symmetric. */
+.mark-sweep:dir(rtl) {
+  background-position: 100% 0;
+}
+
+/* Solid intent ink needs its fill to stay legible. A sweep exposes the surface
+   until the fill arrives, so use a soft tint with ordinary theme ink instead.
+   Guard the custom property: unsupported color-mix() would invalidate the
+   background at computed time instead of preserving the theme highlight. */
+@supports (color: color-mix(in oklab, red, white)) {
+  .mark-sweep:is(.primary, .secondary, .success, .warning, .danger, .neutral) {
+    --mark-bg: color-mix(in oklab, var(--surface) var(--soft-bg-mix), var(--intent));
+    --mark-fg: var(--text);
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  .mark-sweep {
+    transition: background-size var(--mark-sweep-duration) var(--ease-enter);
+  }
+
+  .mark-sweep.is-pending {
+    background-size: 0 100%;
+  }
+}
+
+/* Forced colors drops the background image, so the system Mark pair keeps the
+   phrase distinct whether .mark-sweep sits on <mark> or a <span>. */
+@media (forced-colors: active) {
+  .mark-sweep {
+    background: Mark;
+    color: MarkText;
+  }
+}

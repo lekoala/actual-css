@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>In view fixture — Actual CSS</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: system-ui, sans-serif;
+    }
+
+    .reveal,
+    .reveal-group > * {
+      padding: 0.5rem;
+      border: 1px solid currentColor;
+    }
+
+    .spacer {
+      block-size: 140vh;
+    }
+
+    .mark-sweep {
+      padding: 0 0.15em;
+    }
+  </style>
+</head>
+<body>
+  <p><a id="anchor-link" href="#anchor-target">Jump to the anchor target</a></p>
+
+  <section class="reveal" id="visible" data-enhance="in-view">
+    <p>Visible at load. <a id="visible-link" href="#visible">Visible link</a>.</p>
+  </section>
+
+  <section class="reveal" id="static-pending">
+    <p>Manually pending, no enhancer.</p>
+  </section>
+
+  <div class="spacer"></div>
+
+  <section class="reveal" id="offscreen" data-enhance="in-view">
+    <p>Off-screen until scrolled. <a id="offscreen-link" href="#offscreen">Off-screen link</a>.</p>
+  </section>
+
+  <section class="reveal" id="focus-zone" data-enhance="in-view" data-in-view-margin="0px 0px -64px 0px">
+    <p><a id="focus-link" href="#focus-zone">Focus target</a></p>
+  </section>
+
+  <section class="reveal" id="prefocused" data-enhance="in-view" tabindex="-1">
+    <p>Focused before the runtime connected.</p>
+  </section>
+
+  <section class="reveal" id="anchor-target" data-enhance="in-view">
+    <p>The anchor target.</p>
+  </section>
+
+  <section class="reveal" id="removed" data-enhance="in-view" data-in-view-margin="0px 0px -64px 0px">
+    <p>Removed while pending.</p>
+  </section>
+
+  <div class="reveal-group" id="group" data-enhance="in-view">
+    <article>First item</article>
+    <article>Second item</article>
+    <article>Third item</article>
+  </div>
+
+  <p><mark class="mark-sweep" id="mark" data-enhance="in-view">Needle phrase</mark></p>
+
+  <script>
+    /* Records every time a class mutation leaves an element pending. The
+       runtime is injected after load, so this covers its whole lifetime. */
+    window.__pendingLog = [];
+    new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.attributeName !== "class") continue;
+        const element = mutation.target;
+        if (element.id && element.classList.contains("is-pending")) {
+          window.__pendingLog.push(element.id);
+        }
+      }
+    }).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+      subtree: true,
+    });
+  </script>
+</body>
+</html>

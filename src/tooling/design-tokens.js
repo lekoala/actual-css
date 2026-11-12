@@ -51,6 +51,8 @@ export const THEME_COLORS = [
   "shadow-color",
   "selection-bg",
   "selection-fg",
+  "mark-bg",
+  "mark-fg",
   "state-selected",
   "state-selected-fg",
   "state-disabled",

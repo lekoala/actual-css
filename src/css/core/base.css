@@ -97,6 +97,22 @@ small {
   font-size: 0.875em;
 }
 
+/* A semantic highlight. The UA's yellow ignores the theme and clashes with a
+   dark palette, so the pair comes from the theme instead. `.mark-sweep` reuses
+   the same pair for its animated background. Forced colors keep the system
+   Mark pair, the one place the glyph/background relationship is guaranteed. */
+mark {
+  background: var(--mark-bg);
+  color: var(--mark-fg);
+}
+
+@media (forced-colors: active) {
+  mark {
+    background: Mark;
+    color: MarkText;
+  }
+}
+
 ::selection {
   background: var(--selection-bg, var(--primary));
   color: var(--selection-fg, var(--primary-fg));
