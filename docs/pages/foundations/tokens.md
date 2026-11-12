@@ -454,7 +454,7 @@ Motion durations keep transitions consistent and easy to disable.
   --duration-fast: 100ms;     /* quick feedback */
   --duration-slow: 200ms;     /* one-shot open/close */
   --duration-spin: 0.75s;     /* continuous spin (.spinner) */
-  --duration-shimmer: 1.2s;   /* continuous shimmer (.skeleton, indeterminate .progress) */
+  --duration-shimmer: 2s;     /* continuous shimmer (.shimmer, .skeleton, indeterminate .progress) */
   --ease-enter: cubic-bezier(0.2, 0, 0, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 }

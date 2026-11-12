@@ -82,7 +82,7 @@
   --duration-fast: 100ms;
   --duration-slow: 200ms;
   --duration-spin: 0.75s;
-  --duration-shimmer: 1.2s;
+  --duration-shimmer: 2s;
   --ease-enter: cubic-bezier(0.2, 0, 0, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 

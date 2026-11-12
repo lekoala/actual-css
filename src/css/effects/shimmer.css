@@ -10,6 +10,9 @@
  * Public hooks:
  * --shimmer-color
  * --shimmer-highlight
+ *
+ * Internal:
+ * --shimmer-band
  */
 .shimmer {
   --shimmer-color: var(--text-muted);
@@ -24,34 +27,49 @@
    the fill, not `color`: a label class that sets its own color (.muted, a
    caption style) would otherwise win the cascade and paint opaque glyphs over
    the sweep. Reduced motion keeps the plain label — a frozen band would read
-   as a random tint. */
+   as a random tint.
+
+   The band has a fixed width in em, not a share of the label: a proportional
+   band covered most of a short label like "Working…" and lit the whole word
+   instead of crossing it. */
 @supports (background-clip: text) {
   @media (prefers-reduced-motion: no-preference) {
     .shimmer {
+      --shimmer-band: 1.25em;
+
       -webkit-text-fill-color: transparent;
       background:
         linear-gradient(
           90deg,
-          var(--shimmer-color) 40%,
+          var(--shimmer-color) calc(50% - var(--shimmer-band)),
           var(--shimmer-highlight) 50%,
-          var(--shimmer-color) 60%
+          var(--shimmer-color) calc(50% + var(--shimmer-band))
         )
-        0 0 / 300% 100%;
+        0 0 / calc(200% + 2 * var(--shimmer-band)) 100%;
       background-clip: text;
-      animation: actual-shimmer var(--duration-shimmer) linear infinite;
+      animation: actual-shimmer var(--duration-shimmer) ease-in-out infinite;
+    }
+
+    /* The sweep follows the reading direction. Reversing also moves the rest
+       to the start of the cycle, which reads the same in a loop. */
+    .shimmer:dir(rtl) {
+      animation-direction: reverse;
     }
   }
 }
 
-/* The band occupies the middle third of a background three times the label's
-   width, so each pass leaves the end of the label before the next one enters
-   at the start. */
+/* A background of twice the label plus the band puts the band's far edge at
+   the label's start at 100% and its near edge at the label's end at 0%, so
+   every pass enters and leaves completely, whatever the label's length. The
+   last quarter rests off the label: a continuous sweep reads as a machine,
+   the rest between passes as a breath. */
 @keyframes actual-shimmer {
-  from {
+  0% {
     background-position: 100% 0;
   }
 
-  to {
+  75%,
+  100% {
     background-position: 0% 0;
   }
 }

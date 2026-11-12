@@ -25,8 +25,9 @@ looks busy. Assistive technology may hold back changes inside a busy region
 until it is released.
 
 The label rests on `--shimmer-color` and the band passes in
-`--shimmer-highlight`; one pass takes `--duration-shimmer`, the pace shared
-with `.skeleton` and indeterminate `.progress`. With reduced motion, or in a
+`--shimmer-highlight`; one pass and the rest after it take
+`--duration-shimmer`, the pace shared with `.skeleton` and indeterminate
+`.progress`. The band crosses in the reading direction. With reduced motion, or in a
 browser without `background-clip: text`, the label is plain
 `--shimmer-color` text. Recolor a label through these hooks: its own `color`
 shows only where the sweep does not run.

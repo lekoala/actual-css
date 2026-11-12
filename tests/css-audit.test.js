@@ -1329,6 +1329,10 @@ test("shimmer never erases its label and carries no state", () => {
   expect(gated).toContain("-webkit-text-fill-color: transparent;");
   expect(gated).not.toMatch(/(?<![-\w])color: transparent/);
   expect(css).not.toContain("aria-");
+  // A proportional band lit a whole short label; the sweep follows reading
+  // direction.
+  expect(gated).toContain("calc(200% + 2 * var(--shimmer-band))");
+  expect(gated).toMatch(/\.shimmer:dir\(rtl\)\s*\{\s*animation-direction: reverse;/);
 });
 
 test("optional FAB preserves DOM order", () => {
