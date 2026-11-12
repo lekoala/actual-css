@@ -1950,11 +1950,9 @@ test("action focus is a solid --focus line with the shared offset", () => {
 });
 
 /*
- * Two focus contracts (focus.css): text-like elements declare no outline and
- * keep the currentColor fallback; boxed components draw the --focus ring. A
- * third recipe — the fallback token recolored, a hard-coded width, an intent
- * color — is what made .tab and .rating 4px under prefers-contrast while
- * buttons were 3px.
+ * Generic and component outlines share the themed color and width; only the
+ * generic line exposes author replacement hooks. Keep component geometry
+ * independent without introducing hard-coded widths or intent colors.
  */
 test("every framework outline is one of the two focus contracts", () => {
   const cssRoot = join(import.meta.dir, "..", "src", "css");
@@ -1963,7 +1961,7 @@ test("every framework outline is one of the two focus contracts", () => {
     "var(--focus-ring-width) solid var(--focus)",
     "var(--focus-ring-width) solid var(--form-invalid-border, var(--focus))",
     // Generic fallback and its pointer-focus removal.
-    "var(--focus-outline, var(--focus-ring-width) solid var(--focus-outline-color))",
+    "var(--focus-outline, var(--focus-ring-width) solid var(--focus-outline-color, var(--focus)))",
     "none",
     // Forced-colors carriers: the ring itself is a shadow or a Canvas gap.
     "2px solid transparent",
@@ -1991,7 +1989,10 @@ test("every framework outline is one of the two focus contracts", () => {
   expect(found.length).toBeGreaterThan(0);
   for (const { file, prop, value } of found) {
     expect(prop, `${file}: ${prop}: ${value}`).toBe("outline");
-    expect(ALLOWED.has(value), `${file}: outline: ${value}`).toBe(true);
+    expect(
+      [...ALLOWED].some((allowed) => allowed.replace(/\s+/g, "") === value.replace(/\s+/g, "")),
+      `${file}: outline: ${value}`,
+    ).toBe(true);
   }
   // Only the baseline reads the fallback hook.
   expect(found.filter((f) => f.value.includes("--focus-outline,")).map((f) => f.file)).toEqual([

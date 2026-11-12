@@ -2,7 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+- `demo/templates/focus-bench.html`: component focus samples, validation alternatives, surface and theme islands, and computed-style inspection of a live data grid.
+
 ### Changed
+- `:focus` uses local `--focus` for generic outlines; `--focus-outline-color` remains an inherited override, and invalid fields keep their validation color.
 - `.switch`: `--switch-knob-margin` increases from 8% to 10% of the track height, giving the knob more breathing room.
 
 ## [0.18.0] - 2026-11-11

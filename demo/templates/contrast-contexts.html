@@ -104,7 +104,7 @@
     }
 
     .cc-show-focus .cc-sample > a:not(.btn) {
-      outline: var(--focus-ring-width) solid var(--focus-outline-color);
+      outline: var(--focus-ring-width) solid var(--focus-outline-color, var(--focus));
     }
 
     .cc-show-focus :is(.cc-sample > .input, .cc-joins :is(.input, .select, .cb-control)) {
@@ -556,11 +556,11 @@
         const fill = backdrop(el);
         const text = ratio(over(rgba(cs.color), fill), fill);
         // Fields draw their line inside, over their own fill; actions draw it
-        // outside, over the surface around them. The text link's baseline
-        // outline is currentColor.
+        // outside, over the surface around them. Generic links use the same
+        // themed color unless an author overrides the generic color hook.
         const isField = el.matches(".input");
         const isTextLink = el.matches("a:not(.btn)");
-        const line = isTextLink ? rgba(cs.color) : token(el, "var(--focus)");
+        const line = token(el, isTextLink ? "var(--focus-outline-color, var(--focus))" : "var(--focus)");
         const under = isField ? fill : backdrop(figure);
         const focus = ratio(over(line, under), under);
         figure.lastElementChild.innerHTML = badge("Aa", text, 4.5) + badge("◎", focus, 3);

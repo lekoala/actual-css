@@ -58,3 +58,105 @@ it("links and buttons draw the same focus width at root, island and region level
     { width: 800, height: 600, artifactName: "focus-width" },
   );
 });
+
+const readColor = (view) =>
+  view.evaluate(`(() => {
+  const el = document.activeElement;
+  const reference = document.createElement("span");
+  reference.hidden = true;
+  reference.style.color = "var(--focus)";
+  (el.matches("input") ? el.parentElement : el).append(reference);
+  const expected = getComputedStyle(reference).color;
+  reference.remove();
+  const cs = getComputedStyle(el);
+  return { color: cs.outlineColor, expected, visible: el.matches(":focus-visible"), style: cs.outlineStyle };
+})()`);
+
+for (const scheme of ["light", "dark"]) {
+  it(`generic focus follows local theme colors and author hooks in ${scheme}`, async () => {
+    await withBrowserPage(
+      fixtureUrl(FIXTURE),
+      async (view) => {
+        for (const id of [
+          "root-link",
+          "root-btn",
+          "island-link",
+          "island-btn",
+          "local-link",
+          "local-btn",
+          "dark-card",
+          "custom-color",
+          "native-check",
+        ]) {
+          expect(await tabUntil(view, `document.activeElement?.id === ${JSON.stringify(id)}`)).toBe(
+            true,
+          );
+          const result = await readColor(view);
+          expect(result.visible, id).toBe(true);
+          expect(result.style, id).toBe("solid");
+          expect(result.color, id).toBe(
+            id === "custom-color" ? "rgb(150, 30, 80)" : result.expected,
+          );
+        }
+      },
+      {
+        mediaFeatures: [{ name: "prefers-color-scheme", value: scheme }],
+        artifactName: `focus-color-${scheme}`,
+      },
+    );
+  });
+}
+
+it("an inherited generic color override crosses theme islands and native choices", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    await view.evaluate(
+      'document.documentElement.style.setProperty("--focus-outline-color", "rgb(12 34 56)")',
+    );
+    for (const id of [
+      "root-link",
+      "island-link",
+      "local-link",
+      "custom-link",
+      "dark-card",
+      "custom-color",
+      "native-check",
+    ]) {
+      expect(await tabUntil(view, `document.activeElement?.id === ${JSON.stringify(id)}`)).toBe(
+        true,
+      );
+      const result = await readColor(view);
+      // Whole-line and element-local hooks still take precedence.
+      if (id === "custom-link")
+        expect(result.color).toBe(
+          await view.evaluate("getComputedStyle(document.activeElement).color"),
+        );
+      else
+        expect(result.color, id).toBe(
+          id === "custom-color" ? "rgb(150, 30, 80)" : "rgb(12, 34, 56)",
+        );
+    }
+  });
+});
+
+it("generic focus remains an outline in forced colors", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      for (const id of ["root-link", "island-link", "local-link", "dark-card", "native-check"]) {
+        expect(await tabUntil(view, `document.activeElement?.id === ${JSON.stringify(id)}`)).toBe(
+          true,
+        );
+        const result = await readColor(view);
+        expect(result.visible, id).toBe(true);
+        expect(result.style, id).toBe("solid");
+        expect(
+          await view.evaluate("parseFloat(getComputedStyle(document.activeElement).outlineWidth)"),
+        ).toBeGreaterThan(0);
+      }
+    },
+    {
+      mediaFeatures: [{ name: "forced-colors", value: "active" }],
+      artifactName: "focus-color-forced",
+    },
+  );
+});

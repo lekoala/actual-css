@@ -86,15 +86,9 @@
   --ease-enter: cubic-bezier(0.2, 0, 0, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
-  /* Generic focus fallback — an adaptive currentColor line for elements
-     without a component ring (links, summary, plain items). Components draw
-     the themed ring instead: --focus-ring-width solid --focus. See focus.css
-     for the two contracts. Both share --focus-ring-width: they differ in
-     color only. No --focus-outline alias here: declared on :root it would be
-     inherited already computed, so a theme island or a region setting
-     --focus-ring-width would not reach it. focus.css composes the line on the
-     focused element instead. */
-  --focus-outline-color: currentColor;
+  /* Focus geometry is shared by the generic line and component rings.
+     focus.css composes the line on its target; the optional color and whole-
+     outline hooks stay unset so local theme tokens reach their fallbacks. */
   --focus-outline-offset: 2px;
   --focus-ring-width: 2px;
 

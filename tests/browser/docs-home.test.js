@@ -125,7 +125,11 @@ it("workspace menus hand focus to dialogs, settings save or cancel, and installa
         'document.querySelector("#docs-workspace-settings [name=workspaceName]").value = "Discard me"',
       );
       await pressKey(view, "Escape");
-      await waitForBrowser(view, '!document.getElementById("docs-home-drawer").open');
+      // The draft is restored by the queued close event, after .open becomes false.
+      await waitForBrowser(
+        view,
+        '!document.getElementById("docs-home-drawer").open && document.querySelector("#docs-workspace-settings [name=workspaceName]").value === "Design studio"',
+      );
       expect(
         await view.evaluate('document.querySelector("[data-workspace-title]").textContent'),
       ).toBe("Design studio");

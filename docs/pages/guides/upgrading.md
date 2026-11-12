@@ -119,7 +119,7 @@ layout.
 `var(--focus-outline)` and write the generic line instead:
 
 ```css
-outline: var(--focus-ring-width) solid var(--focus-outline-color);
+outline: var(--focus-ring-width) solid var(--focus-outline-color, var(--focus));
 ```
 
 Setting `--focus-outline` still replaces the generic line.

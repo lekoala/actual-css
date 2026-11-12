@@ -226,13 +226,6 @@
   --choice-border: var(--text-subtle);
 }
 
-/* A bare checkbox or radio (a table row selector, an application's native
-   control) is boxed by its own skin, not text-like: it takes the themed ring
-   instead of the core currentColor fallback, which paints the text ink. */
-:where(input[type="checkbox"], input[type="radio"]) {
-  --focus-outline-color: var(--focus);
-}
-
 .check:focus-visible,
 .radio:focus-visible {
   outline: var(--focus-ring-width) solid var(--focus);

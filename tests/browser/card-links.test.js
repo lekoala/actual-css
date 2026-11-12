@@ -88,12 +88,18 @@ for (const scheme of ["light", "dark"]) {
           const focus = await view.evaluate(`(() => {
             const a = document.activeElement;
             const style = getComputedStyle(a);
+            const reference = document.createElement("span");
+            reference.hidden = true;
+            reference.style.color = "var(--focus)";
+            a.append(reference);
+            const expected = getComputedStyle(reference).color;
+            reference.remove();
             return { visible: a.matches(":focus-visible"), width: parseFloat(style.outlineWidth),
-              ink: style.color, outline: style.outlineColor };
+              expected, outline: style.outlineColor };
           })()`);
           expect(focus.visible).toBe(true);
           expect(focus.width).toBeGreaterThan(0);
-          expect(focus.outline).toBe(focus.ink);
+          expect(focus.outline).toBe(focus.expected);
           await check();
         },
         {

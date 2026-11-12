@@ -6,17 +6,11 @@
    for its keyboard focus indicator; forced colors keep outlines and drop
    shadows.
 
-   Two contracts share the job, both --focus-ring-width wide. Text-like
-   elements, whose ink is the thing being focused (links, summary, .nav-link,
-   .menu-item, breadcrumb links, .navbar-brand), declare no outline and take
-   the generic fallback below: a currentColor line that follows whatever the
-   application painted. Boxed components, with a fill or border of their own,
-   draw the themed ring instead — a solid line in --focus: inset on fields
-   (inside their border box), offset by --focus-outline-offset on discrete
-   actions. The color never derives from an intent or a local
-   surface — the theme guarantees --focus at 3:1 against both --surface and
-   --surface-solid, so one token reads on the page, on a solid band and on
-   any nested surface.
+   All default indicators use --focus, independently of intent, selection or
+   text color. Components adapt the geometry: inset on fields (inside their
+   border box), offset by --focus-outline-offset on discrete actions. Themes
+   target 3:1 against --surface and --surface-solid; other painted backgrounds
+   still need their own contrast check.
 
    A .segment is an action but takes the inset ring: its track's padding is
    narrower than an offset ring, which would cover the neighbouring segment.
@@ -28,9 +22,16 @@
 
    Public hooks:
    --focus-outline (fallback-only: replaces the whole generic line)
+   --focus-outline-color (fallback-only: overrides the generic line color)
 */
 :focus {
-  outline: var(--focus-outline, var(--focus-ring-width) solid var(--focus-outline-color));
+  /* Resolve the default on the target: a root alias would freeze --focus
+     before a theme island or a plain region could override it. Keeping the
+     color hook unset also lets an inherited author override cross islands. */
+  outline: var(
+    --focus-outline,
+    var(--focus-ring-width) solid var(--focus-outline-color, var(--focus))
+  );
   outline-offset: var(--focus-outline-offset);
 }
 

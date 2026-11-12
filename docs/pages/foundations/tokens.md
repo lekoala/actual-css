@@ -140,11 +140,13 @@ states keep their own colors.
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 
-Focus uses an outline:
+Focus uses an outline in `--focus`, independently of text color, intent or selection:
 
-- Links, summaries, nav items, and menu items use `--focus-outline-color`.
+- Links, summaries, nav items, and menu items use the generic outside line.
 - Text fields use `--focus` inside their border.
 - Buttons, close controls, choices, and switches use `--focus` outside their border.
+
+Invalid fields keep their validation color on the focus line.
 
 `--focus-ring-width` controls all these lines; `--focus-outline-offset` sets
 the outside gap. Choose `--focus` with at least 3:1 contrast against both
@@ -154,17 +156,18 @@ the outside gap. Choose `--focus` with at least 3:1 contrast against both
 :root {
   --focus: hsl(268 30% 55%);
 
-  --focus-outline-color: currentColor;
   --focus-outline-offset: 2px;
   --focus-ring-width: 2px;
 }
 ```
 
-The line is composed on the focused element, so a theme island or a region
-that sets `--focus-ring-width` widens links and buttons alike. Set
+The line is composed on the focused element, so local `--focus` and
+`--focus-ring-width` overrides reach links and buttons alike. Set
+`--focus-outline-color` to override the generic line color; it has no default
+declaration, and an author override inherits through theme islands. Set
 `--focus-outline` to replace the whole generic line (`4px dashed currentColor`);
 it has no default value. Application CSS that draws the generic line itself
-writes `var(--focus-ring-width) solid var(--focus-outline-color)`.
+writes `var(--focus-ring-width) solid var(--focus-outline-color, var(--focus))`.
 
 ### Palette coherence
 

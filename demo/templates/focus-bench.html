@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Focus bench - Actual CSS</title>
+  <meta name="description" content="Inspect keyboard focus on links, cards, buttons, validation states and a live data grid across surfaces and theme islands.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/themes/actual.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <style>
+    .fb-page {
+      --center-size: 60rem;
+      padding-block: var(--space-50);
+    }
+
+    .fb-stage {
+      padding: var(--space-40);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .fb-stage[data-surface="subtle"] {
+      background: var(--surface-subtle);
+    }
+
+    .fb-stage[data-surface="solid"] {
+      --heading: var(--surface-solid-fg);
+      background: var(--surface-solid);
+      color: var(--surface-solid-fg);
+    }
+
+    .fb-stage[data-surface="intent"] {
+      background: color-mix(in oklab, var(--primary) 45%, var(--surface));
+    }
+
+    .fb-stage data-grid {
+      min-inline-size: 0;
+    }
+
+    .fb-samples {
+      display: grid;
+      gap: var(--space-40);
+    }
+
+    .fb-sample {
+      display: grid;
+      gap: var(--space-20);
+      margin: 0;
+    }
+
+    .fb-sample > figcaption {
+      font-size: var(--font-size-sm);
+    }
+
+    .fb-card {
+      text-decoration: none;
+    }
+
+    .fb-card strong {
+      font-size: var(--font-size-lg);
+    }
+
+    .fb-inspector {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: var(--font-size-sm);
+    }
+
+    .fb-scroll {
+      overflow: auto;
+      padding: calc(var(--focus-ring-width) + var(--focus-outline-offset));
+      border: var(--border-width) dashed var(--border);
+    }
+
+    .fb-scroll .cluster {
+      flex-wrap: nowrap;
+      inline-size: max-content;
+    }
+
+    /* Preview is a labelled simulation, not a second keyboard state. Native
+       Tab with preview off remains the reference for actual interaction. */
+    .fb-preview [data-kind="generic"] {
+      outline: var(--focus-outline, var(--focus-ring-width) solid var(--focus-outline-color, var(--focus)));
+      outline-offset: var(--focus-outline-offset);
+    }
+
+    .fb-preview [data-kind="action"] {
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: var(--focus-outline-offset);
+    }
+
+    .fb-preview [data-kind="field"] {
+      outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
+      outline-offset: calc(var(--focus-ring-width) * -1);
+      box-shadow: var(--control-shadow, none);
+    }
+
+    /* The inset candidate leaves the validation border and a small gap visible.
+       Test compact and joined fields too: extra ink may crowd their content. */
+    .fb-stage [data-validation="inset"]:is(:focus-visible, .fb-preview [data-kind]) {
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: calc(-1 * (var(--focus-ring-width) + var(--border-width) + 2px));
+      box-shadow: var(--control-shadow, none);
+    }
+
+    .fb-stage [data-validation="outer"]:is(:focus-visible, .fb-preview [data-kind]) {
+      outline: var(--focus-ring-width) solid var(--focus);
+      outline-offset: var(--focus-outline-offset);
+      box-shadow: var(--control-shadow, none);
+    }
+
+  </style>
+</head>
+<body>
+  <main class="center stack fb-page">
+    <header class="stack">
+      <p class="overline">Visual test bench</p>
+      <h1>Focus, in context</h1>
+      <p>Inspect the library's keyboard focus across components and surfaces. Validation alternatives stay local to this bench.</p>
+      <p>Turn off preview and use <kbd>Tab</kbd> / <kbd>Shift</kbd> + <kbd>Tab</kbd> for real keyboard focus.
+        Inspect light and dark islands, compact fields and scroll edges before choosing a treatment.</p>
+      <div class="cluster">
+        <theme-picker><select class="select fit" aria-label="Page theme"></select></theme-picker>
+        <label class="choice">Surface
+          <select class="select fit" id="surface">
+            <option value="page">Page palette</option>
+            <option value="subtle">Intermediate surface</option>
+            <option value="solid">Solid band</option>
+            <option value="intent">Mixed primary surface</option>
+            <option value="light">Light theme island</option>
+            <option value="dark">Dark theme island</option>
+            <option value="ocean">Ocean theme island</option>
+          </select>
+        </label>
+        <label class="choice"><input class="check" type="checkbox" id="preview" checked> Preview every ring</label>
+      </div>
+      <p class="muted">Contrast preferences and forced colors follow your system; preview does not emulate them.
+        <a href="contrast-contexts.html">Contrast contexts</a> · <a href="keyboard-controls.html">Keyboard behavior</a></p>
+      <p class="muted">Preview simulates the standard ring geometry. Turn it off to inspect theme-specific focus treatments.</p>
+    </header>
+
+    <section class="fb-stage stack fb-preview" id="stage" aria-label="Focus samples">
+      <section class="stack" aria-labelledby="samples-title">
+        <h2 id="samples-title">Library focus</h2>
+        <div class="fb-samples" id="samples"></div>
+      </section>
+      <section class="stack" aria-labelledby="grid-title">
+        <h2 id="grid-title">Data grid: unchanged integration</h2>
+        <p>Sort a header, select all rows, then select one row. The grid has no bench focus overrides or simulated
+          rings: use the keyboard and read its computed styles below.</p>
+        <p id="grid-status" role="status">Loading data-grid-component 3.10.0 from CDN…</p>
+        <data-grid id="focus-grid" sortable selectable page-size="5">
+          <table>
+            <caption>Focus inspection records</caption>
+            <thead><tr><th scope="col" data-field="name">Name</th><th scope="col" data-field="status">Status</th></tr></thead>
+            <tbody>
+              <tr data-row-key="1"><td>Ada Lovelace</td><td>Active</td></tr>
+              <tr data-row-key="2"><td>Grace Hopper</td><td>Pending</td></tr>
+              <tr data-row-key="3"><td>Alan Turing</td><td>Active</td></tr>
+            </tbody>
+          </table>
+        </data-grid>
+      </section>
+    </section>
+
+    <section class="card stack" aria-labelledby="inspector-title">
+      <h2 id="inspector-title">Last inspected focus</h2>
+      <p>Computed values of the last focused sample, including grid controls. The contrast estimate composites
+        solid background colors through ancestors; images, gradients and neighboring borders need visual inspection.</p>
+      <output class="fb-inspector" id="inspector">Tab into a sample to inspect it.</output>
+    </section>
+    <noscript>This bench needs JavaScript to populate its samples. The grid table remains readable.</noscript>
+  </main>
+
+  <script type="module">
+    const samples = document.getElementById("samples");
+    const stage = document.getElementById("stage");
+    const inspector = document.getElementById("inspector");
+    const field = (treatment, compact = false, joined = false) => {
+      const id = `validation-${treatment}-${compact ? "compact" : "regular"}-${joined ? "joined" : "single"}`;
+      return `<div class="field">
+        <label class="field-label" for="${id}">${treatment === "current" ? "Current red ring" : `${treatment} unified ring`}${compact ? " · compact" : ""}${joined ? " · joined" : ""}</label>
+        <div${joined ? ' class="join"' : ""}>
+          <input class="input${compact ? " sm" : ""}" id="${id}" data-kind="field" data-validation="${treatment}"
+            value="invalid@" type="email" aria-invalid="true" aria-describedby="${id}-error">
+          ${joined ? '<button class="btn outline sm" type="button" data-kind="action">Retry</button>' : ""}
+        </div>
+        <span class="field-error" id="${id}-error">Enter a complete email address.</span>
+      </div>`;
+    };
+
+    samples.innerHTML = `
+          <figure class="fb-sample"><figcaption>Inline link</figcaption>
+            <div class="prose"><p>Read the <a href="#inspector-title" data-kind="generic">focus inspection notes</a> before deciding.</p></div></figure>
+          <figure class="fb-sample"><figcaption>Navigation links, including current state</figcaption>
+            <nav class="cluster" aria-label="Example navigation">
+              <a class="nav-link" href="#inspector-title" data-kind="generic">Overview</a>
+              <a class="nav-link" href="#inspector-title" aria-current="page" data-kind="generic">Settings</a>
+            </nav></figure>
+          <figure class="fb-sample"><figcaption>Neutral / primary / danger × solid / soft / outline / surface</figcaption>
+            <div class="stack">${["neutral", "primary", "danger"].map((intent) => `<div class="cluster">${["solid", "soft", "outline", "surface"].map((variant) => `<button class="btn ${intent} ${variant} sm" type="button" data-kind="action">${intent} ${variant}</button>`).join("")}</div>`).join("")}</div></figure>
+          <figure class="fb-sample"><figcaption>Interactive cards: neutral and dark island</figcaption>
+            <a class="card fb-card" href="#inspector-title" data-kind="generic"><strong>Project overview</strong><span>One link owns the entire card.</span></a>
+            <a class="card fb-card" data-theme="dark" href="#inspector-title" data-kind="generic"><strong>Dark project card</strong><span>Local palette inside the selected surface.</span></a></figure>
+          <figure class="fb-sample"><figcaption>Native and styled choices</figcaption>
+            <div class="cluster">
+              <label class="choice"><input type="checkbox" data-kind="action"> Native</label>
+              <label class="choice"><input class="check" type="checkbox" checked data-kind="action"> Checked</label>
+              <label class="choice"><input class="radio" type="radio" name="choice" checked data-kind="action"> Radio</label>
+              <label class="choice"><input class="switch" type="checkbox" role="switch" data-kind="action"> Switch</label>
+            </div></figure>
+          <label class="field"><span class="field-label">Valid email</span><input class="input" type="email" value="ada@example.com" aria-invalid="false" data-kind="field"></label>
+          <section class="stack" aria-label="Validation treatments">
+            <h3>Focus and validation</h3>
+            <p>Compare both alternatives with the library's red ring, including a compact joined field.</p>
+            ${field("current")}
+            ${field("inset")}
+            ${field("outer")}
+            ${field("current", true, true)}
+            ${field("inset", true, true)}
+            ${field("outer", true, true)}
+          </section>
+          <figure class="fb-sample"><figcaption>Scrollable edge: Tab through the full row</figcaption>
+            <div class="fb-scroll"><div class="cluster">${["First", "Second", "Third", "Fourth", "Last"].map((label) => `<button class="btn outline" type="button" data-kind="action">${label} action</button>`).join("")}</div></div></figure>
+          <p><a href="#inspector-title" data-kind="generic" style="--focus-outline-color: var(--success);">Explicit author color hook</a></p>`;
+
+    let inspected;
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 1;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const rgba = (color) => {
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+      return [r, g, b, a / 255];
+    };
+    const over = (top, bottom) => top.slice(0, 3).map((v, i) => v * top[3] + bottom[i] * (1 - top[3]));
+    const luminance = (rgb) => rgb.slice(0, 3).map((v) => {
+      const c = v / 255;
+      return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    }).reduce((sum, c, i) => sum + c * [0.2126, 0.7152, 0.0722][i], 0);
+    const backdrop = (el) => {
+      const layers = [];
+      for (let node = el; node; node = node.parentElement) {
+        const bg = rgba(getComputedStyle(node).backgroundColor);
+        layers.push(bg);
+        if (bg[3] === 1) break;
+      }
+      return layers.reverse().reduce((bg, layer) => over(layer, bg), [255, 255, 255]);
+    };
+
+    function inspect() {
+      if (!inspected) return;
+      const el = inspected;
+      const cs = getComputedStyle(el);
+      const bg = backdrop(parseFloat(cs.outlineOffset) < 0 ? el : el.parentElement);
+      const line = over(rgba(cs.outlineColor), bg);
+      const [hi, lo] = [luminance(line), luminance(bg)].sort((a, b) => b - a);
+      const name = el.getAttribute("aria-label") || el.labels?.[0]?.textContent.trim() || el.textContent.trim() || el.id || el.localName;
+      inspector.textContent = [
+        `Sample: ${name}`,
+        `Element: ${el.localName}${el.className ? `.${String(el.className).trim().replaceAll(/\s+/g, ".")}` : ""}`,
+        `Source: ${el.closest("data-grid") ? "data-grid integration" : el.dataset.validation && el.dataset.validation !== "current" ? "bench validation alternative" : "library"}`,
+        `Keyboard focus: ${el.matches(":focus-visible")} · Preview: ${stage.classList.contains("fb-preview")}`,
+        `Outline: ${cs.outlineWidth} ${cs.outlineStyle} ${cs.outlineColor} · Offset: ${cs.outlineOffset}`,
+        `Border: ${cs.borderTopWidth} ${cs.borderTopColor} · Background: ${cs.backgroundColor}`,
+        `Composited background estimate: rgb(${bg.map(Math.round).join(" ")})`,
+        `Line/background contrast estimate: ${((hi + 0.05) / (lo + 0.05)).toFixed(2)}:1${cs.outlineStyle === "none" ? " (no visible outline)" : ""}`,
+        `Local --focus: ${cs.getPropertyValue("--focus").trim()}`,
+      ].join("\n");
+    }
+
+    stage.addEventListener("focusin", (event) => {
+      inspected = event.target;
+      inspect();
+    });
+    // A theme change can transition the field fill; report its final contrast too.
+    stage.addEventListener("transitionend", inspect);
+    document.getElementById("preview").addEventListener("change", (event) => {
+      stage.classList.toggle("fb-preview", event.target.checked);
+      inspect();
+    });
+    document.getElementById("surface").addEventListener("change", (event) => {
+      const value = event.target.value;
+      if (["light", "dark", "ocean"].includes(value)) stage.dataset.theme = value;
+      else delete stage.dataset.theme;
+      stage.dataset.surface = value;
+      inspect();
+    });
+    document.querySelector("theme-picker").addEventListener("theme-change", inspect);
+    for (const query of ["(prefers-color-scheme: dark)", "(forced-colors: active)", "(prefers-contrast: more)"]) {
+      matchMedia(query).addEventListener("change", inspect);
+    }
+
+    try {
+      const { DataGrid } = await import("https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.js");
+      DataGrid.setDefaultControlClasses({ button: "btn surface sm", action: "btn surface sm", input: "input sm" });
+      document.getElementById("grid-status").textContent = "Live grid loaded. Preview excludes the grid; Tab to inspect its actual focus.";
+    } catch {
+      document.getElementById("grid-status").textContent = "Grid CDN unavailable. The table below is a static fallback; grid focus has not been tested.";
+    }
+  </script>
+</body>
+</html>
