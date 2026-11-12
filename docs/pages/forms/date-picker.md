@@ -71,14 +71,15 @@ date-calendar {
 }
 
 .dp-picker-panel[popover] {
+  border-width: var(--border-width);
   box-shadow: var(--shadow-popout);
 }
 ```
 
 The picker draws focus as an inset line, like the core, so `--dp-focus` and
 `--dp-focus-width` are the whole focus mapping; the field itself is a plain
-`.input` and keeps the core outline. The panel has no shadow token, so it takes
-`--shadow-popout` directly. It opens as a popover, in the top layer,
+`.input` and keeps the core outline. The panel has no shadow or border-width
+token, so it takes `--shadow-popout` and `--border-width` directly. It opens as a popover, in the top layer,
 so inside a modal, even in a scrolling body, it is neither clipped nor stacked
 under the dialog. The calendar popup is its own
 element, so the `--dp-*` map is declared on `date-picker`/`date-calendar` rather

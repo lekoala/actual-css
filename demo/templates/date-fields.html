@@ -63,9 +63,10 @@
       --dp-picker-button-size: calc(var(--control-pad-x) * 2 + 1em + var(--border-width) * 2);
     }
 
-    /* The picker has no shadow token: the panel takes the theme's popout
-       elevation, like any other floating surface. */
+    /* The picker has no shadow or border-width token: the panel takes the
+       theme's popout elevation and frame width, like any floating surface. */
     .dp-picker-panel[popover] {
+      border-width: var(--border-width);
       box-shadow: var(--shadow-popout);
     }
   </style>
