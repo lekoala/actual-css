@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- `.switch`: `--switch-knob-margin` increases from 8% to 10% of the track height, giving the knob more breathing room.
+
 ## [0.18.0] - 2026-11-11
 ### Added
 - Docs: "Coding agents and DESIGN.md" guide — the skill, `PRODUCT.md`/`DESIGN.md`/`PROJECT.md` ownership, and working with a design skill such as Impeccable.

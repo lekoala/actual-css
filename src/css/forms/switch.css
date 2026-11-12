@@ -34,7 +34,7 @@
   --switch-knob: var(--surface-raised);
   --switch-block-size: calc(var(--choice-control-size) + 0.125em);
   --switch-width: calc(var(--switch-block-size) * 1.8);
-  --switch-knob-margin: calc(var(--switch-block-size) * 0.08);
+  --switch-knob-margin: calc(var(--switch-block-size) * 0.1);
 
   /* The knob is concentric in the track: --switch-block-size is a border-box
      height, so the borders have to come out before the inset is applied on
