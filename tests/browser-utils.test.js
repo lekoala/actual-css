@@ -54,6 +54,13 @@ test("local browser fixtures need no HTTP server port", () => {
   expect(url.port).toBe("");
 });
 
+test("fixture URLs keep their query and hash", () => {
+  const url = new URL(fixtureUrl("scripts/fixtures/aura-paint.html?variant=rotate&n=20#top"));
+  expect(url.pathname.endsWith("/scripts/fixtures/aura-paint.html")).toBe(true);
+  expect(url.searchParams.get("variant")).toBe("rotate");
+  expect(url.hash).toBe("#top");
+});
+
 test("readFlags consumes boolean flags without eating the next argument", () => {
   const args = ["page.html", "--src-css", "--width", "900"];
   const flags = readFlags(args, {

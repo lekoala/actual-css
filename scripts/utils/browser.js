@@ -60,9 +60,12 @@ export async function sampleTransition(view, selector, { property = "opacity", a
   })()`);
 }
 
+/* A query or hash stays one: pathToFileURL would escape `?` into the file name
+ * and the page would load without its parameters (or not at all). */
 export function fixtureUrl(page, cwd = process.cwd()) {
   if (/^https?:/.test(page)) return page;
-  return pathToFileURL(isAbsolute(page) ? page : join(cwd, page)).href;
+  const [, path, suffix = ""] = page.match(/^([^?#]*)(.*)$/);
+  return pathToFileURL(isAbsolute(path) ? path : join(cwd, path)).href + suffix;
 }
 
 /*

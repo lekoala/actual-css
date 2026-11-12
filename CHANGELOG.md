@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- `bun run report:paint`: renderer CPU, main-thread time and frame pacing per page, to compare animation variants.
+- `docs/design-notes/motion-cost.md`: what an animation costs per frame, with the Aura measurements and `scripts/fixtures/aura-paint.html`.
 - `demo/templates/blocks.html`: notification preferences composition with Email and Push switch columns.
 - `demo/templates/focus-bench.html`: component focus samples, validation alternatives, surface and theme islands, and computed-style inspection of a live data grid.
 - `demo/templates/border-contrast.html`: `--border-control` at 25, 35 and 45 % of ink in both schemes and on two surfaces, with the edge measured live against the control fill and the panel, and the mix that silently does nothing on a plain container.
@@ -25,10 +27,12 @@
 - `.nav-list`: `--nav-list-icon-size` (the leading icon width) replaces `--nav-list-indent`.
 - `.nav-list`: `--nav-list-rail-color` sets the nested rail; `transparent` hides it and keeps the alignment.
 - `.shimmer`: the band has a fixed width, crosses the whole label, then rests before the next pass.
+- Docs: Aura repaints every frame; reserve it for one or two objects per view.
 - `--duration-shimmer` slows from 1.2s to 2s, pacing `.shimmer`, `.skeleton` and indeterminate `.progress`.
 - `.switch`: `--switch-knob-margin` increases from 8% to 10% of the track height, giving the knob more breathing room.
 
 ### Fixed
+- `fixtureUrl()` keeps a page's query string and hash instead of escaping them into the file name.
 - `.shimmer`: the sweep runs right to left in right-to-left text.
 - `demo/templates/blocks.html`: table filters share one wrapping cluster so the status and owner selects sit side by side when space permits.
 

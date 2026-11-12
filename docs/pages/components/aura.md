@@ -109,6 +109,9 @@ the accent, or one breath of the glow.
 </div>
 ```
 
+Both animations repaint the aura on every frame, even off screen. Reserve aura
+for the one or two objects a view emphasizes, not for every card in a grid.
+
 Keep exactly one direct child and set `--aura-radius` when its shape differs
 from the common button, card, alert, and badge shapes detected as a visual
 enhancement.

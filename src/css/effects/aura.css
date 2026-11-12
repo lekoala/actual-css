@@ -10,6 +10,11 @@
  * follows the animated gradient, so a rotating aura repaints one blurred layer
  * per frame, not two.
  *
+ * Per-frame cost is the registered --aura-angle animation itself: style and a
+ * full repaint every frame, off screen too. Containment and a static near
+ * halo do not change it; a compositor rotation needs an extra element. Measured
+ * in docs/design-notes/motion-cost.md (bun run report:paint).
+ *
  * Public hooks:
  * --aura-color
  * --aura-width

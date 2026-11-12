@@ -131,6 +131,7 @@
     "report:neutral-ramp": "bun scripts/report-neutral-ramp.js",
     "report:dead-css": "bun scripts/report-dead-css.js",
     "report:overflow": "bun scripts/report-overflow.js",
+    "report:paint": "bun scripts/report-paint.js",
     "check:architecture": "bun scripts/check-css-architecture.js",
     "build:dist": "bun scripts/build-dist.js",
     "build:js": "bun scripts/build-js.js",

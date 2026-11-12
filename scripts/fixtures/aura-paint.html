@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Aura paint cost</title>
+<!-- Sources, not dist/: the bench measures the working tree. -->
+<link rel="stylesheet" href="../../src/css/actual.full.css">
+<style>
+  body { margin: 16px; }
+  .grid { display: flex; flex-wrap: wrap; gap: 24px; }
+  .spacer { block-size: 4000px; }
+  .card { inline-size: 14rem; padding: 1rem; }
+
+  /* Reference: the same auras, not animated. */
+  .v-frozen .aura { animation: none !important; }
+
+  .v-layout .aura { contain: layout; }
+
+  /* Near halo no longer follows the frame, on its own layer so it is
+     rastered once. */
+  .v-static .aura::before {
+    background: conic-gradient(transparent 0 78%, var(--aura-color) 93%, transparent) border-box;
+    will-change: transform;
+  }
+
+  /* The rotating frame alone. */
+  .v-nohalo .aura::before { display: none; }
+
+  /* The common border-beam technique, which needs a beam element in the
+     markup: a static conic square rotated by transform, cut to a ring by a
+     mask on its own element. No halos — the compositor floor, not a
+     like-for-like. */
+  .beam-host { position: relative; display: inline-grid; border-radius: var(--radius-lg); }
+  .beam {
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    container-type: size;
+    pointer-events: none;
+    mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+    mask-clip: content-box, border-box;
+    mask-composite: exclude;
+  }
+  .beam > span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    inline-size: calc(100cqw + 100cqh);
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    background: conic-gradient(transparent 0 78%, var(--primary) 93%, transparent);
+    animation: beam-spin 6s linear infinite;
+  }
+  @keyframes beam-spin { to { rotate: 1turn; } }
+</style>
+</head>
+<body>
+<!--
+  ?variant=current|frozen|glow|layout|static|nohalo|rotate  &n=<count>  &off=<count below the fold>
+  Read with: bun run report:paint (see docs/design-notes/motion-cost.md)
+-->
+<div id="root"></div>
+<script>
+  const params = new URLSearchParams(location.search);
+  const variant = params.get("variant") ?? "current";
+  const n = Number(params.get("n") ?? 1);
+  const off = Number(params.get("off") ?? 0);
+  document.body.classList.add(`v-${variant}`);
+
+  const card = `<article class="card">Pro plan<br>Billed yearly</article>`;
+  const item =
+    variant === "rotate"
+      ? `<span class="beam-host">${card}<span class="beam" aria-hidden="true"><span></span></span></span>`
+      : `<span class="aura ${variant === "glow" ? "aura-glow " : ""}primary">${card}</span>`;
+
+  document.getElementById("root").innerHTML =
+    `<div class="grid">${item.repeat(n - off)}</div>` +
+    (off ? `<div class="spacer"></div><div class="grid">${item.repeat(off)}</div>` : "");
+</script>
+</body>
+</html>
