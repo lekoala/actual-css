@@ -348,19 +348,21 @@
       </section>
     </div>
 
-    <dialog class="dialog" id="link-dialog" aria-labelledby="link-title">
+    <dialog class="modal" id="link-dialog" closedby="any" aria-labelledby="link-title" style="--modal-size: 28rem;">
       <form method="dialog" class="stack" id="link-form" novalidate>
-        <h2 id="link-title" style="margin: 0; font-size: var(--font-size-lg);">Insert link</h2>
+        <header>
+          <h3 id="link-title">Insert link</h3>
+          <p class="muted">Leave empty to remove the link.</p>
+        </header>
         <label class="field">
           <span class="field-label">URL (http, https, mailto, tel or relative)</span>
           <input class="input" type="text" id="link-url" placeholder="https://example.com" aria-describedby="link-error">
           <span class="field-error" id="link-error">This kind of link is not allowed.</span>
         </label>
-        <p class="muted" style="margin: 0; font-size: var(--font-size-sm);">Leave empty to remove the link.</p>
-        <div class="cluster form-actions">
-          <button class="btn neutral outline sm" type="submit" value="cancel" formnovalidate>Cancel</button>
-          <button class="btn primary sm" type="submit" value="save" id="link-save">Apply</button>
-        </div>
+        <footer class="cluster justify-content-end">
+          <button class="btn neutral outline" type="submit" value="cancel" formnovalidate>Cancel</button>
+          <button class="btn primary" type="submit" value="save" id="link-save">Apply</button>
+        </footer>
       </form>
     </dialog>
 
