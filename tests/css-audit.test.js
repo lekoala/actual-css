@@ -1850,8 +1850,14 @@ test("rating keeps radio order and cumulative fill progressive", () => {
   expect(css).toContain("background: var(--rating-empty);");
   expect(css).toContain("background: var(--rating-color);");
   expect(css).not.toContain("opacity: 0.25");
-  expect(css).not.toContain("clip-path");
+  // A declaration, not the clip-path attribute inside the outline star's SVG.
+  expect(css).not.toMatch(/^\s*clip-path:/m);
   expect(css).not.toContain("row-reverse");
+  // The empty fill holds color-mix() in a custom property: unguarded, an
+  // engine without it invalidates the fill instead of keeping --border.
+  expect(css).toMatch(
+    /@supports \(color: color-mix\(in oklab, red, white\)\) \{\s*\.rating \{\s*--rating-empty: color-mix/,
+  );
   expect(css).toContain("@media (forced-colors: active)");
   expect(css).toMatch(/@media \(forced-colors: active\)[\s\S]*?appearance:\s*auto;/);
 });

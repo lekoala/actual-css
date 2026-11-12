@@ -6,8 +6,17 @@
 - `demo/templates/blocks.html`: notification preferences composition with Email and Push switch columns.
 - `demo/templates/focus-bench.html`: component focus samples, validation alternatives, surface and theme islands, and computed-style inspection of a live data grid.
 - `demo/templates/border-contrast.html`: `--border-control` at 25, 35 and 45 % of ink in both schemes and on two surfaces, with the edge measured live against the control fill and the panel, and the mix that silently does nothing on a plain container.
+- `--rating-star-outline`: the default star as an outline, for `--rating-star-empty`.
+- `cyberpunk` theme: ink rating stars with outlined empty stars.
+- `neon` theme: rating stars as lit and unlit primary tubes.
+- `material` theme: Google Yellow rating stars over `--border`.
+- `demo/sites/neon-ramen`: read-only ratings on the home stats and the Spicy miso page, a "Rate your last bowl" input on the order page, and neon-tube stars in `neon-site.css`.
 
 ### Changed
+- `.rating`: stars are gold by default instead of `--warning`; set `--rating-color` on `.rating` to restore it.
+- `.rating`: empty stars tint `--text` into `--surface` instead of using `--border`, so ink-bordered themes no longer draw them black.
+- Docs: the Rating page shows neutral, outlined and custom-symbol stars, and the theme rule that sets them.
+- Docs: Rating form examples use `.field-group.flush`, adding `.field` only with help or error text.
 - Docs: `--border-control` states the `--surface-subtle` ratio, why `--border-control-mix` needs a theme boundary, and the two ways to soften controls — the theme mix or `--control-border` on the fields.
 - Switch docs and demo templates use native checkbox state without redundant `aria-checked` synchronization.
 - `.switch`: the border follows the track fill, including checked and disabled states, and unchecked hover uses a subtle neutral fill.

@@ -640,6 +640,7 @@
       "--rating-empty",
       "--rating-star",
       "--rating-star-empty",
+      "--rating-star-outline",
       "--rating-value",
       "--rating-max"
     ],

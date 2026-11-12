@@ -384,6 +384,16 @@ img { filter: saturate(1.06) contrast(1.03); }
   text-transform: uppercase;
 }
 
+/* ---------------------------------------------------------------- rating */
+/* Stars as neon tubes: the value lit in the brand pink, the rest an unlit
+   outline of the same hue. Set on .rating itself — the component declares its
+   defaults there, so a value on :root would not reach it. */
+.rating {
+  --rating-color: var(--intent, var(--primary));
+  --rating-empty: color-mix(in oklab, var(--rating-color) 45%, var(--surface));
+  --rating-star-empty: var(--rating-star-outline);
+}
+
 /* ------------------------------------------------------- live cart status */
 .cart-status {
   --card-pad: 0;

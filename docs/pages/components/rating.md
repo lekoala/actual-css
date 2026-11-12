@@ -19,7 +19,7 @@ filled while the control remains fully functional.
 ## Anatomy
 
 ```text
-fieldset.field
+fieldset.field-group.flush     + .field with help or error text
 ├── legend.field-label         names the group
 └── .rating
     └── input[type="radio"]    ×1..N, ascending values, aria-label each
@@ -30,7 +30,7 @@ fieldset.field
 ## Rate this item
 
 ```html demo
-<fieldset class="field">
+<fieldset class="field-group flush">
   <legend class="field-label">Rate this item</legend>
   <div class="rating">
     <input type="radio" name="item" value="1" aria-label="1 star" />
@@ -43,7 +43,9 @@ fieldset.field
 ```
 
 Use a visible `<legend>` to name the group and an `aria-label` on every radio
-to name its value. In forced-colors mode the stars deliberately return to
+to name its value. `.field-group.flush` drops the native fieldset frame. Add
+`.field` when the group holds help or error text: it spaces them and shows the
+validation error. In forced-colors mode the stars deliberately return to
 native platform radios so checked and focus states remain unambiguous.
 
 ## Required rating
@@ -54,7 +56,7 @@ never on page load, and picking a star clears it.
 
 ```html demo
 <form class="stack needs-validation" data-enhance="validation" novalidate>
-  <fieldset class="field">
+  <fieldset class="field field-group flush">
     <legend class="field-label">Rate your stay</legend>
     <div class="rating">
       <input type="radio" name="stay" value="1" aria-label="1 star" required aria-describedby="stay-error" />
@@ -77,7 +79,7 @@ Intent classes change the active color without changing the interaction model.
 
 ```html demo
 <div class="cluster">
-  <fieldset class="field">
+  <fieldset class="field-group flush">
     <legend class="field-label">Small rating</legend>
     <div class="rating primary sm">
       <input type="radio" name="small-rating" value="1" aria-label="1 star" />
@@ -86,7 +88,7 @@ Intent classes change the active color without changing the interaction model.
     </div>
   </fieldset>
 
-  <fieldset class="field">
+  <fieldset class="field-group flush">
     <legend class="field-label">Large rating</legend>
     <div class="rating danger lg">
       <input type="radio" name="large-rating" value="1" aria-label="1 star" />
@@ -127,7 +129,7 @@ help text, a review summary, a review line, a row beside a field and a button.
 
 ```html demo
 <div class="stack">
-  <fieldset class="field">
+  <fieldset class="field field-group flush">
     <legend class="field-label">Rate this release</legend>
     <div class="rating">
       <input type="radio" name="release" value="1" aria-label="1 star" />
@@ -157,35 +159,64 @@ help text, a review summary, a review line, a row beside a field and a button.
 </div>
 ```
 
-## Star shapes
+## Color and shape
 
-`--rating-star` draws a star and `--rating-star-empty` an empty one; the empty
-shape is the filled one unless set. An outline makes empty and filled differ by
-shape, not only by color; give it an ink that reads as a line, such as
-`--text-subtle`. The same hooks draw any other symbol, a heart here, in the
-page ink.
+Stars are gold by default. A neutral ink, outlined empty stars, a brand color,
+or another symbol are each one hook away.
 
 ```html demo
 <div class="stack">
-  <span class="rating" role="img" aria-label="3.5 out of 5"
-        style="--rating-value: 3.5; --rating-empty: var(--text-subtle); --rating-star-empty: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%222 2 16 16%22%3E%3CclipPath id=%22c%22%3E%3Cpath d=%22M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.783.57-1.838-.196-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z%22/%3E%3C/clipPath%3E%3Cpath d=%22M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.783.57-1.838-.196-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z%22 fill=%22none%22 stroke=%22black%22 stroke-width=%222.4%22 clip-path=%22url(%23c)%22/%3E%3C/svg%3E')"></span>
-  <span class="rating" role="img" aria-label="4 out of 5"
-        style="--rating-value: 4; --rating-color: var(--text); --rating-star: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.6 4.5c2.1 0 3.6 1.2 4.4 2.6.8-1.4 2.3-2.6 4.4-2.6 3.6 0 5.7 3.9 4.2 7.3C19.5 16.4 12 21 12 21z%22/%3E%3C/svg%3E')"></span>
+  <p class="cluster">
+    <span class="rating" role="img" aria-label="3.5 out of 5" style="--rating-value: 3.5"></span>
+    <span class="muted">Default</span>
+  </p>
+  <p class="cluster">
+    <span class="rating" role="img" aria-label="3.5 out of 5"
+          style="--rating-value: 3.5; --rating-color: var(--text)"></span>
+    <span class="muted">Neutral ink</span>
+  </p>
+  <p class="cluster">
+    <span class="rating" role="img" aria-label="3.5 out of 5"
+          style="--rating-value: 3.5; --rating-star-empty: var(--rating-star-outline); --rating-empty: var(--text-subtle)"></span>
+    <span class="muted">Outlined empty stars</span>
+  </p>
+  <p class="cluster">
+    <span class="rating" role="img" aria-label="4 out of 5"
+          style="--rating-value: 4; --rating-color: var(--danger); --rating-star: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22%3E%3Cpath d=%22M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.6 4.5c2.1 0 3.6 1.2 4.4 2.6.8-1.4 2.3-2.6 4.4-2.6 3.6 0 5.7 3.9 4.2 7.3C19.5 16.4 12 21 12 21z%22/%3E%3C/svg%3E')"></span>
+    <span class="muted">Another symbol</span>
+  </p>
 </div>
 ```
 
-Set the hooks on the `.rating` element or in a rule that targets it: the
-component declares its defaults there, so a value set on an ancestor is
-overridden. A browser without `mask-composite` (Chromium before 120) draws
-custom empty stars of a read-only display in the filled shape.
+The outline makes empty and filled stars differ by shape, not only by color;
+give it an ink that reads as a line, such as `--text-subtle`. It outlines the
+default star only: a custom `--rating-star` brings its own empty shape.
+
+A theme sets the same hooks in a rule on `.rating`. The component declares its
+defaults there, so a value set on `[data-theme]` or another ancestor is
+overridden. Keep `var(--intent, …)` first so intent classes still apply. The
+cyberpunk, neon and material demo themes each restyle the stars this way.
+
+```css
+[data-theme="mine"] .rating {
+  --rating-color: var(--intent, var(--text));
+  --rating-star-empty: var(--rating-star-outline);
+  --rating-empty: var(--text-subtle);
+}
+```
+
+The default gold is below 3:1 on a white surface. Where that matters, set a
+darker `--rating-color`. A browser without `mask-composite` (Chromium before
+120) draws custom empty stars of a read-only display in the filled shape.
 
 ### Hooks
 
 - `--rating-size` — size of each star; `.sm` and `.lg` set this hook.
 - `--rating-gap` — visual space between stars without creating inactive hover zones.
 - `--rating-color` — star color. Prefer an intent class for semantic color.
-- `--rating-empty` — color of unselected stars; use a surface or border token.
+- `--rating-empty` — color of unselected stars; `--text-subtle` suits an outline.
 - `--rating-star` — mask image used to draw a star; override it when a strict CSP disallows data URLs.
 - `--rating-star-empty` — mask image of an empty star; follows `--rating-star` unless set.
+- `--rating-star-outline` — the default star as an outline, ready for `--rating-star-empty`.
 - `--rating-value` — display only: the value shown, fractions allowed.
 - `--rating-max` — display only: the number of stars.

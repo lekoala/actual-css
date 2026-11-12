@@ -2,8 +2,8 @@
  * same shape as indigo.css). Illustrative rather than production: it exists to
  * prove the token contract survives an extreme spec — a saturated yellow
  * canvas, near-black text and borders, dark-on-bright intent pairs, zero
- * radius, 2px strokes, and hard offset shadows — without touching a single
- * component rule. */
+ * radius, 2px strokes, and hard offset shadows — through tokens alone. The one
+ * component rule, .rating, shows a theme restyling a component's own hooks. */
 [data-theme="cyberpunk"] {
   color-scheme: light;
 
@@ -67,4 +67,13 @@
   [data-theme="cyberpunk"] {
     --state-selected-text: color-mix(in oklab, var(--primary) 65%, var(--text));
   }
+}
+
+/* Gold stars vanish on the yellow canvas: ink stars instead, empty ones
+   outlined so value and remainder differ by shape. --intent stays first so
+   an intent class still colors the stars. */
+[data-theme="cyberpunk"] .rating {
+  --rating-color: var(--intent, var(--text));
+  --rating-empty: var(--text);
+  --rating-star-empty: var(--rating-star-outline);
 }

@@ -4,7 +4,8 @@
  * on P3 displays with oklch() support the intents are re-declared with chroma
  * beyond sRGB. This is the pattern for shipping colors sRGB cannot express
  * without breaking older screens or browsers. Also demonstrates the soft-variant
- * tuning knobs and glow shadows on popovers. */
+ * tuning knobs, glow shadows on popovers, and rating stars as lit and unlit
+ * tubes. */
 [data-theme="neon"] {
   color-scheme: dark;
 
@@ -61,5 +62,23 @@
       --danger: oklch(68% 0.26 15);
       --shadow-popout: 0 0 1rem oklch(70% 0.32 340 / 0.3);
     }
+  }
+}
+
+/* Stars as neon tubes: the value lit in the primary, the rest an unlit
+   outline of the same hue. Not a glow: the star is a mask, which clips any
+   shadow or drop-shadow to the shape itself. --intent stays first so an
+   intent class still colors the stars. */
+[data-theme="neon"] .rating {
+  --rating-color: var(--intent, var(--primary));
+  --rating-empty: var(--text-subtle);
+  --rating-star-empty: var(--rating-star-outline);
+}
+
+/* Guarded: color-mix() in a custom property would invalidate the fill
+   rather than keep --text-subtle above. */
+@supports (color: color-mix(in oklab, red, white)) {
+  [data-theme="neon"] .rating {
+    --rating-empty: color-mix(in oklab, var(--rating-color) 45%, var(--surface));
   }
 }

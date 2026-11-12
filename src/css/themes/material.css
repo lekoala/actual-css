@@ -4,7 +4,8 @@
  * carry the look that tokens cannot express — filled field segments, a focus
  * line that thickens the bottom line, pill buttons, the outline action of a
  * field group as one more filled segment, chips whose dot grows into a
- * tonal fill, and a table row highlight that slides between rows. */
+ * tonal fill, a table row highlight that slides between rows, and Google
+ * Yellow rating stars. */
 [data-theme="material"] {
   /* Base palette is the light half; the dark pairing is only announced where
      light-dark() exists, in the @supports block below. */
@@ -123,6 +124,14 @@
 /* Material 3 common buttons are pills. */
 [data-theme="material"] .btn {
   --btn-radius: var(--radius-full);
+}
+
+/* Material 3 has no rating component; Google's own products draw stars in
+   Google Yellow over outline-variant, the role --border holds here. --intent
+   stays first so an intent class still colors the stars. */
+[data-theme="material"] .rating {
+  --rating-color: var(--intent, #fbbc04);
+  --rating-empty: var(--border);
 }
 
 /* In a field group the default outline action becomes one more filled

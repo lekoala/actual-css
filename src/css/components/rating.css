@@ -18,6 +18,7 @@
  * --rating-empty
  * --rating-star
  * --rating-star-empty (the empty star's shape; the filled one by default)
+ * --rating-star-outline (a ready outline of the default star, for the hook above)
  * --rating-value (display: the shown value, fractions allowed)
  * --rating-max (display: the number of stars)
  *
@@ -33,15 +34,35 @@
 .rating {
   --rating-size: 1.25rem;
   --rating-gap: var(--space-10);
-  --rating-color: var(--intent, var(--warning));
+  /* why: gold stars are the convention a reader recognizes, so the default
+     owns its color instead of borrowing --warning's meaning. A literal, not
+     light-dark(): it reads on both schemes, and an unsupported light-dark()
+     here would invalidate the fill. Accepted trade-off: 2.1:1 on a white
+     surface, under the 3:1 graphics target; the value lives in the
+     aria-label, and a theme picks its own ink on .rating. */
+  --rating-color: var(--intent, hsl(38 92% 50%));
   --rating-empty: var(--border);
   --rating-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 2 16 16'%3E%3Cpath d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.783.57-1.838-.196-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z'/%3E%3C/svg%3E");
-  /* An outline here turns the empty stars into a shape cue (see the docs). */
+  /* The default star stroked inside its own clip, so the line never grows
+     the silhouette and a filled and an empty star stay the same size. */
+  --rating-star-outline: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 2 16 16'%3E%3CclipPath id='c'%3E%3Cpath d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.783.57-1.838-.196-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z'/%3E%3C/clipPath%3E%3Cpath d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 0 0 .95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 0 0-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 0 0-1.175 0l-2.8 2.034c-.783.57-1.838-.196-1.539-1.118l1.07-3.292a1 1 0 0 0-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 0 0 .951-.69l1.07-3.292Z' fill='none' stroke='black' stroke-width='2.4' clip-path='url(%23c)'/%3E%3C/svg%3E");
   --rating-star-empty: var(--rating-star);
 
   display: inline-flex;
   gap: 0;
   color: var(--rating-color);
+}
+
+/* why: an empty star is a fill, not a stroke. --border is a stroke token, and
+   a theme with ink-dark borders (brutalist, cyberpunk) turned every empty star
+   solid black, louder than the filled ones. A light ink tint over the surface
+   reads as the same pale star on every theme. Guarded: inside a custom
+   property an unsupported color-mix() would invalidate the fill, not fall back
+   to --border. */
+@supports (color: color-mix(in oklab, red, white)) {
+  .rating {
+    --rating-empty: color-mix(in oklab, var(--text) 15%, var(--surface));
+  }
 }
 
 .rating > input[type="radio"] {
