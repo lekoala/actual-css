@@ -53,13 +53,14 @@ One mechanism at a time, with its contract and its pitfalls.
 
 ### System benches
 
-Contracts you cannot read off a static screenshot: state, motion, focus, and
-extension points.
+Contracts you cannot read off a static screenshot: state, motion, focus, contrast,
+and extension points.
 
 - [Contrast contexts](../../demo/templates/contrast-contexts.html) - the page, `data-theme` islands, a card island, a named theme and an application-painted band side by side, with every intent variant, a full form (combobox and date picker included) and focus line measured live, plus joined fields that need no focus adaptation
 - [Presence motion](../../demo/templates/motion.html) - status bar, tooltip, flyout, modal and drawer replayed side by side, with easing swaps and a reduced-motion simulation
 - [Keyboard controls](../../demo/templates/keyboard-controls.html) - hands-on keyboard support matrix and focus test bench
 - [Focus bench](../../demo/templates/focus-bench.html) - library focus on links, cards, button variants and validation alternatives, with surface and theme-island switches and a live data-grid inspector
+- [Border contrast lab](../../demo/templates/border-contrast.html) - `--border-control` at 25, 35 and 45 % of ink in both schemes and on two surfaces, with the edge measured live against the control fill and the panel, the theme-boundary trap, and how to soften the result
 - [Adaptive filter surface](../../demo/templates/adaptive-surface.html) - app-level flyout/drawer composition with one synchronized filter state
 - [Select intents](../../demo/templates/select-intents.html) - extending the enhancer with a project's own `data-enhance` behavior, injected markup included, with no framework change
 - [Popover transport probe](../../demo/templates/popover-transport.html) - self-scoring bench for the native popover transport go/no-go

@@ -5,8 +5,10 @@
 ### Added
 - `demo/templates/blocks.html`: notification preferences composition with Email and Push switch columns.
 - `demo/templates/focus-bench.html`: component focus samples, validation alternatives, surface and theme islands, and computed-style inspection of a live data grid.
+- `demo/templates/border-contrast.html`: `--border-control` at 25, 35 and 45 % of ink in both schemes and on two surfaces, with the edge measured live against the control fill and the panel, and the mix that silently does nothing on a plain container.
 
 ### Changed
+- Docs: `--border-control` states the `--surface-subtle` ratio, why `--border-control-mix` needs a theme boundary, and the two ways to soften controls — the theme mix or `--control-border` on the fields.
 - Switch docs and demo templates use native checkbox state without redundant `aria-checked` synchronization.
 - `.switch`: the border follows the track fill, including checked and disabled states, and unchecked hover uses a subtle neutral fill.
 - `:focus` uses local `--focus` for generic outlines; `--focus-outline-color` remains an inherited override, and invalid fields keep their validation color.

@@ -130,13 +130,32 @@ A theme with translucent surfaces overrides both with opaque values.
 is the resting edge that tells a control apart from the surface — fields,
 checkboxes and radios, OTP cells, choice cards, join addons, neutral
 outline buttons, the color and file inputs. It is derived from `--text` and
-`--surface`; on the default palette it holds 3:1 against the surface, and
-`actual-css contrast` reports it for your theme. `--border-control-mix` sets
-the ink share; raise it when a tinted surface pulls the edge under 3:1. Without
-`color-mix()` it falls back to `--border`. Set `--border-control` itself to
-soften or strengthen controls (input border, field outline, form control
-contrast) without touching any separator. Hover, checked, invalid and disabled
-states keep their own colors.
+`--surface`; on the default palette it holds 3:1 against `--surface` and
+2.9–3.0 against `--surface-subtle`. `actual-css contrast` reports it for your
+theme. `--border-control-mix` sets the ink share; raise it when a tinted or
+translucent surface pulls the edge under 3:1. The mix resolves at a theme
+boundary: set it on `:root` or a `[data-theme]` island, because a plain container
+inherits the colour already resolved above it. Without `color-mix()` it falls
+back to `--border`. Set `--border-control` itself to soften or strengthen every
+control in a subtree without touching a separator. Hover, checked, invalid and
+disabled states keep their own colors.
+
+```css
+/* Every control in one theme: */
+[data-theme="custom"] {
+  --border-control-mix: 35%;
+}
+
+/* Only the text fields of one form. --control-border is the control's own
+   alias, so it has to be set on the control, not on an ancestor. */
+.my-form :is(.input, .textarea, .select) {
+  --control-border: var(--border);
+}
+```
+
+Both reduce the contrast of the controls they touch; verify them in the context
+they are used. The [border contrast lab](../../demo/templates/border-contrast.html)
+renders the mix at 25, 35 and 45 % and measures both sides of the edge.
 
 Use `*-fg` pairs only for solid backgrounds where the component controls both foreground and background. Do not require a foreground token for every surface token.
 

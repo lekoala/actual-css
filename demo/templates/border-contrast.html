@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Border contrast lab - Actual CSS</title>
+  <meta name="description" content="The ink share in --border-control at 25, 35 and 45 %, in both schemes and on two surfaces, with the edge measured against the control fill and the panel, plus why the mix needs a theme boundary.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <style>
+    /* The mix lives on the island, not on the column: that boundary is the
+       whole point of the lab. Every value is stated, including 45 %, so a
+       change to the framework default cannot silently relabel a column. */
+    [data-theme="mix25"] {
+      --border-control-mix: 25%;
+    }
+
+    [data-theme="mix35"] {
+      --border-control-mix: 35%;
+    }
+
+    [data-theme="mix45"] {
+      --border-control-mix: 45%;
+    }
+
+    .bc-page {
+      --center-size: 76rem;
+
+      padding-block: var(--space-60);
+    }
+
+    /* A data-theme boundary swaps tokens; it does not paint. The bench paints
+       each scheme's canvas so light and dark read as two pages, not as one. */
+    .bc-scheme {
+      display: grid;
+      gap: var(--space-40);
+      padding: var(--space-40);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .bc-context {
+      display: grid;
+      gap: var(--space-30);
+      padding: var(--space-40);
+      border-radius: var(--radius);
+    }
+
+    .bc-context[data-context="surface"] {
+      background: var(--surface);
+    }
+
+    .bc-context[data-context="subtle"] {
+      background: var(--surface-subtle);
+    }
+
+    .bc-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-40);
+      align-items: start;
+    }
+
+    /* Below 60rem the three columns stack: at ~250px each, the join row and
+       the labels leave the control too narrow to read the edge. */
+    @media (width < 60rem) {
+      .bc-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* The column is a theme island (data-theme="mix25"…): it recomputes
+       --border-control from its own mix. It must not paint a canvas — the
+       context card owns the panel colour both ratios are measured against. */
+    .bc-col {
+      display: grid;
+      gap: var(--space-30);
+      padding: var(--space-30);
+      border-radius: var(--radius);
+    }
+
+    .bc-table {
+      inline-size: 100%;
+      border-collapse: collapse;
+      font-size: var(--font-size-sm);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bc-table caption {
+      padding-block-end: var(--space-20);
+      text-align: start;
+      color: var(--text-muted);
+    }
+
+    .bc-table :is(th, td) {
+      padding: var(--space-10) var(--space-20);
+      border-block-end: var(--border-width) solid var(--border);
+      text-align: end;
+    }
+
+    .bc-table :is(thead th, tbody th) {
+      text-align: start;
+      font-weight: 500;
+    }
+
+    .bc-table thead th {
+      font-weight: 600;
+    }
+
+    /* The pairs WCAG measures for a control boundary. A fill ratio is context,
+       not a failure, so it never takes this colour. */
+    .bc-under {
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .bc-trap {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-40);
+      padding: var(--space-40);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    @media (width < 60rem) {
+      .bc-trap {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .bc-trap-card {
+      display: grid;
+      gap: var(--space-20);
+      align-content: start;
+      padding: var(--space-30);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .bc-trap-card > :is(h3, p) {
+      margin: 0;
+    }
+
+    .bc-value {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .bc-legend {
+      display: grid;
+      gap: var(--space-10);
+      margin: 0;
+      padding-inline-start: var(--space-40);
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack bc-page">
+    <header class="stack">
+      <p class="overline">Design lab</p>
+      <h1>Control borders</h1>
+      <p>Explore the balance between subtlety and visibility.</p>
+      <p><code>--border-control</code> is the resting edge of a field, a checkbox, a radio, an OTP cell, a choice
+        card, a join addon, or a neutral outline button. It is derived from the ink: <code>--border-control-mix</code>
+        sets how much of <code>--text</code> goes in, and the rest is the opaque surface.</p>
+      <p>The same form is rendered at 25, 35 and 45 % of ink, in both schemes, on the page and on
+        <code>--surface-subtle</code>. Every ratio below is measured from this page's computed styles — the
+        <code>color-mix(in oklab, …)</code> result included — never copied.</p>
+      <p class="muted"><a href="focus-bench.html">Focus bench</a> · <a href="contrast-contexts.html">Contrast contexts</a></p>
+    </header>
+
+    <section class="stack" aria-labelledby="bench-title">
+      <h2 id="bench-title">Ink contribution</h2>
+      <ul class="bc-legend">
+        <li><strong>edge · fill</strong> — the border against the control's own fill.</li>
+        <li><strong>edge · surface</strong> — the border against the panel behind the control.</li>
+        <li><strong>fill · surface</strong> — the fill itself, the cue a softer edge would lean on.</li>
+        <li>WCAG 1.4.11 asks 3:1 of the visual information that identifies a control, so the two edge rows are the
+          contract and a value under 3:1 is marked <strong>*</strong>. The fill row is context.</li>
+      </ul>
+      <div class="stack" id="bench"></div>
+    </section>
+
+    <section class="stack" aria-labelledby="why-title">
+      <h2 id="why-title">Why 45 %</h2>
+      <p>45 % is the ink share that keeps the default palette at 3:1 against <code>--surface</code>: 3.19 in light,
+        3.60 in dark. It is set by the control whose border is its only visible boundary — an empty field on a white
+        page, an unchecked checkbox. A full-width field and an 18 px checkbox carry the same ratio, so the small one
+        sets the floor.</p>
+      <p>A softer edge works when something else identifies the control: a fill that differs from the panel, a
+        visible label, a filled track. The two sides of the edge are reported above because that substitution is what
+        makes a lighter border defensible.</p>
+      <p>45 % is not a universal guarantee. On <code>--surface-subtle</code> the default palette already measures
+        2.87 (light) and 3.00 (dark), and a tinted or translucent surface pulls it further. Raise the mix when your
+        surfaces do that; <code>actual-css contrast</code> reports the pair for a real theme.</p>
+    </section>
+
+    <section class="stack" aria-labelledby="trap-title">
+      <h2 id="trap-title">Where the mix applies</h2>
+      <p><code>--border-control</code> is declared on <code>:root</code> and on every <code>[data-theme]</code>
+        boundary, so its <code>color-mix()</code> resolves there. Assigning <code>--border-control-mix</code> on an
+        ordinary container changes nothing: the control inherits a colour that was already resolved. Both cards below
+        ask for 35 %; only the island moves.</p>
+      <div class="bc-trap" data-theme="light">
+        <article class="bc-trap-card">
+          <h3>Mix on a plain container</h3>
+          <!-- Inert on purpose: no theme boundary between this wrapper and the
+               resolved --border-control it inherits. -->
+          <div style="--border-control-mix: 35%">
+            <label class="field">
+              <span class="field-label">Amount</span>
+              <input class="input" inputmode="decimal" aria-label="Amount">
+            </label>
+          </div>
+          <p class="muted">Still the inherited 45 % — edge · fill <span class="bc-value" data-trap="plain">…</span></p>
+        </article>
+        <article class="bc-trap-card" data-theme="mix35">
+          <h3>Mix on a theme island</h3>
+          <label class="field">
+            <span class="field-label">Amount</span>
+            <input class="input" inputmode="decimal" aria-label="Amount">
+          </label>
+          <p class="muted">Recomputed here at 35 % — edge · fill <span class="bc-value" data-trap="island">…</span></p>
+        </article>
+      </div>
+      <p>Set the mix on <code>:root</code> or on a <code>[data-theme]</code> island. To soften one family without
+        touching the rest, set <code>--control-border</code> on the component itself: the control declares that alias
+        on its own element, so a plain ancestor cannot override it.</p>
+    </section>
+
+    <noscript>This lab needs JavaScript to build its samples and measure the ratios. The framework behaviour it
+      describes is unchanged: <code>--border-control</code> resolves at a theme boundary.</noscript>
+  </main>
+
+  <script>
+    const MIXES = ["25", "35", "45"];
+    const SCHEMES = [["light", "Light"], ["dark", "Dark"]];
+    const CONTEXTS = [["surface", "Form on --surface"], ["subtle", "Form on --surface-subtle"]];
+
+    // One column per mix. The join addon and the neutral outline button sit in
+    // the row to keep the other consumers of --border-control visible; the
+    // ratios stay on the field, whose fill rules apply to checkbox and radio
+    // too (they all resolve --border-control and paint --surface).
+    const COLUMN = (mix, scheme, context) => `
+      <div class="bc-col" data-theme="mix${mix}" data-mix="${mix}">
+        <h5>${mix} %</h5>
+        <label class="field">
+          <span class="field-label">Email</span>
+          <input class="input" type="email" autocomplete="off">
+        </label>
+        <label class="field">
+          <span class="field-label">Message</span>
+          <textarea class="textarea"></textarea>
+        </label>
+        <label class="field">
+          <span class="field-label">Language</span>
+          <select class="select"><option value=""></option></select>
+        </label>
+        <div class="stack tight">
+          <label class="choice"><input class="check" type="checkbox"><span>Send updates</span></label>
+          <label class="choice"><input class="radio" type="radio" name="plan-${scheme}-${context}-${mix}"><span>Monthly plan</span></label>
+        </div>
+        <div class="field">
+          <span class="field-label">Amount</span>
+          <div class="join" role="group" aria-label="Amount">
+            <span class="join-addon">€</span>
+            <input class="input" inputmode="decimal" aria-label="Amount">
+            <button class="btn outline" type="button">Pay</button>
+          </div>
+        </div>
+        <label class="choice"><input class="switch" type="checkbox" role="switch"><span>Notifications</span></label>
+      </div>`;
+
+    const FACTORS = [
+      ["edgeFill", "edge · fill", true],
+      ["edgeSurface", "edge · surface", true],
+      ["fillSurface", "fill · surface", false],
+    ];
+
+    document.getElementById("bench").innerHTML = SCHEMES.map(([scheme, label]) => `
+      <section class="bc-scheme" data-theme="${scheme}" data-scheme="${scheme}">
+        <h3>${label}</h3>
+        ${CONTEXTS.map(([context, heading]) => `
+          <div class="bc-context" data-context="${context}">
+            <h4>${heading}</h4>
+            <div class="bc-row">${MIXES.map((mix) => COLUMN(mix, scheme, context)).join("")}</div>
+            <table class="bc-table">
+              <caption>Measured on the field; the checkbox and the radio share its edge and its fill.</caption>
+              <thead><tr><th scope="col">Measured against</th>${MIXES.map((mix) => `<th scope="col">${mix} %</th>`).join("")}</tr></thead>
+              <tbody>${FACTORS.map(([key, name]) => `<tr><th scope="row">${name}</th>${MIXES.map((mix) => `<td data-cell="${key}-${mix}"></td>`).join("")}</tr>`).join("")}</tbody>
+            </table>
+          </div>`).join("")}
+      </section>`).join("");
+
+    // Colors come back from getComputedStyle in any CSS syntax (oklab, the
+    // color-mix result); a 1px canvas normalizes them to sRGB bytes.
+    const canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 1;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    const rgba = (value) => {
+      ctx.clearRect(0, 0, 1, 1);
+      ctx.fillStyle = value;
+      ctx.fillRect(0, 0, 1, 1);
+      const [r, g, b, a] = ctx.getImageData(0, 0, 1, 1).data;
+      return [r, g, b, a / 255];
+    };
+    const over = (top, bottom) => top.slice(0, 3).map((v, i) => v * top[3] + bottom[i] * (1 - top[3]));
+    const lin = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+    const lum = (c) => {
+      const [r, g, b] = c.map((v) => lin(v / 255));
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const ratio = (a, b) => {
+      const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+
+    // The opaque colour an element paints on: its own fill composited over
+    // every translucent ancestor fill down to the first opaque one.
+    function backdrop(el) {
+      const layers = [];
+      for (let node = el; node; node = node.parentElement) {
+        const bg = rgba(getComputedStyle(node).backgroundColor);
+        if (bg[3] > 0) layers.push(bg);
+        if (bg[3] === 1) break;
+      }
+      let color = [255, 255, 255];
+      for (const layer of layers.reverse()) color = over(layer, color);
+      return color;
+    }
+
+    // The control's edge against the two colours adjacent to it: its own fill
+    // and the panel behind. The panel is the parent's backdrop, so the control
+    // fill never counts as its own background.
+    function edgeRatios(el) {
+      const style = getComputedStyle(el);
+      const panel = backdrop(el.parentElement);
+      const fill = over(rgba(style.backgroundColor), panel);
+      const edge = rgba(style.borderTopColor);
+      return {
+        edgeFill: ratio(over(edge, fill), fill),
+        edgeSurface: ratio(over(edge, panel), panel),
+        fillSurface: ratio(fill, panel),
+      };
+    }
+
+    function cellText(value) {
+      return `${value.toFixed(2)}:1`;
+    }
+
+    for (const context of document.querySelectorAll(".bc-context")) {
+      for (const column of context.querySelectorAll("[data-mix]")) {
+        const values = edgeRatios(column.querySelector(".input"));
+        for (const [key, , gated] of FACTORS) {
+          const cell = context.querySelector(`[data-cell="${key}-${column.dataset.mix}"]`);
+          const under = gated && values[key] < 3;
+          cell.textContent = cellText(values[key]) + (under ? "*" : "");
+          if (under) cell.classList.add("bc-under");
+        }
+      }
+    }
+
+    // The trap: the same 35 % on a plain wrapper and on a theme island. The
+    // numbers come from the page, so the demonstration cannot rot into a claim.
+    // Scoped to the trap: the bench columns carry the same data-theme values.
+    const trap = document.querySelector(".bc-trap");
+    const trapInputs = [
+      ["plain", trap.querySelector(".bc-trap-card > div .input")],
+      ["island", trap.querySelector('.bc-trap-card[data-theme="mix35"] .input')],
+    ];
+    for (const [key, input] of trapInputs) {
+      document.querySelector(`[data-trap="${key}"]`).textContent = cellText(edgeRatios(input).edgeFill);
+    }
+  </script>
+</body>
+</html>
