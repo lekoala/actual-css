@@ -3,11 +3,17 @@
 ## [Unreleased]
 
 ### Added
+- `demo/templates/blocks.html`: notification preferences composition with Email and Push switch columns.
 - `demo/templates/focus-bench.html`: component focus samples, validation alternatives, surface and theme islands, and computed-style inspection of a live data grid.
 
 ### Changed
+- Switch docs and demo templates use native checkbox state without redundant `aria-checked` synchronization.
+- `.switch`: the border follows the track fill, including checked and disabled states, and unchecked hover uses a subtle neutral fill.
 - `:focus` uses local `--focus` for generic outlines; `--focus-outline-color` remains an inherited override, and invalid fields keep their validation color.
 - `.switch`: `--switch-knob-margin` increases from 8% to 10% of the track height, giving the knob more breathing room.
+
+### Fixed
+- `demo/templates/blocks.html`: table filters share one wrapping cluster so the status and owner selects sit side by side when space permits.
 
 ## [0.18.0] - 2026-11-11
 ### Added

@@ -262,7 +262,7 @@
         </div>
 
         <label class="choice">
-          <input class="switch" type="checkbox" role="switch" name="newsletter" aria-checked="false">
+          <input class="switch" type="checkbox" role="switch" name="newsletter">
           <span>Send me occasional product news.</span>
         </label>
 
@@ -318,14 +318,6 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script>
-    /* The switch enhancement is application code in every template: the
-       component styles [aria-checked], it does not maintain it. */
-    for (const control of document.querySelectorAll('.switch[role="switch"]')) {
-      control.addEventListener("change", () => {
-        control.setAttribute("aria-checked", String(control.checked));
-      });
-    }
-
     const steps = [...document.querySelectorAll("#register-steps [data-step]")];
     const stepOrder = steps.map((step) => step.dataset.step);
 

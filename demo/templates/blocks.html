@@ -38,6 +38,12 @@
       background: var(--surface);
     }
 
+    .block-filter-group {
+      /* Use the space beside the actions before wrapping individual filters. */
+      flex: 1 1 auto;
+      min-inline-size: 0;
+    }
+
     .block-filter-group :where(.input, .select) {
       inline-size: auto;
       min-inline-size: min(100%, 11rem);
@@ -69,6 +75,20 @@
 
     .block-settings-shell {
       max-inline-size: 52rem;
+    }
+
+    .block-notifications :is(th, td) {
+      vertical-align: middle;
+    }
+
+    /* Row headers include help text, which should not inherit header weight. */
+    .block-notifications tbody th {
+      font-weight: var(--font-weight-normal);
+    }
+
+    .block-notifications .block-notification-topic {
+      color: var(--text);
+      font-weight: var(--font-weight-semibold);
     }
 
     .block-detail {
@@ -284,23 +304,18 @@
         <div class="cluster justify-content-space-between">
           <div class="cluster tight block-filter-group">
             <input class="input sm" type="search" aria-label="Search accounts" placeholder="Search accounts">
-            <!-- No --cluster-wrap: nowrap here. Two controls at their 11rem
-                 floor outgrow this column at every width; forcing one row only
-                 moved the overflow onto the page, where a phone felt it. -->
-            <div class="cluster tight">
-              <select class="select sm" aria-label="Filter by status">
-                <option>All statuses</option>
-                <option>Healthy</option>
-                <option>Watch</option>
-                <option>Blocked</option>
-              </select>
-              <select class="select sm" aria-label="Filter by owner">
-                <option>All owners</option>
-                <option>Ada</option>
-                <option>Jana</option>
-                <option>Rin</option>
-              </select>
-            </div>
+            <select class="select sm" aria-label="Filter by status">
+              <option>All statuses</option>
+              <option>Healthy</option>
+              <option>Watch</option>
+              <option>Blocked</option>
+            </select>
+            <select class="select sm" aria-label="Filter by owner">
+              <option>All owners</option>
+              <option>Ada</option>
+              <option>Jana</option>
+              <option>Rin</option>
+            </select>
           </div>
 
           <menu class="cluster tight">
@@ -480,6 +495,66 @@
           </footer>
         </form>
       </div>
+    </section>
+
+    <section class="center block-section" id="notification-preferences">
+      <h2>Notification preferences</h2>
+      <p class="block-note">Two switch columns share topic rows, with native table headers and a separate accessible name for every channel choice.</p>
+
+      <section class="card block-example block-settings-shell" aria-labelledby="notification-preferences-title">
+          <header>
+            <hgroup>
+              <h3 id="notification-preferences-title">Keep in the loop</h3>
+              <p class="muted">Choose how you hear about activity in your workspace.</p>
+            </hgroup>
+          </header>
+
+          <table class="table compact block-notifications">
+            <caption class="sr-only">Notification delivery channels</caption>
+            <colgroup><col style="width: 100%;"><col><col></colgroup>
+            <thead>
+              <tr>
+                <th scope="col">Activity</th>
+                <th scope="col" class="text-center">Email</th>
+                <th scope="col" class="text-center">Push</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">
+                  <strong class="block-notification-topic">Conversations</strong>
+                  <div class="field-help">Replies in threads you follow.</div>
+                </th>
+                <td class="text-center"><input class="switch" type="checkbox" role="switch" name="conversations-email" aria-label="Conversations by email" checked></td>
+                <td class="text-center"><input class="switch" type="checkbox" role="switch" name="conversations-push" aria-label="Conversations by push" checked></td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <strong class="block-notification-topic">Mentions</strong>
+                  <div class="field-help">Someone needs your attention.</div>
+                </th>
+                <td class="text-center"><input class="switch" type="checkbox" role="switch" name="mentions-email" aria-label="Mentions by email" checked></td>
+                <td class="text-center"><input class="switch" type="checkbox" role="switch" name="mentions-push" aria-label="Mentions by push" checked></td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <strong class="block-notification-topic">Releases</strong>
+                  <div class="field-help">Production deploys and failed builds.</div>
+                </th>
+                <td class="text-center"><input class="switch" type="checkbox" role="switch" name="releases-email" aria-label="Releases by email"></td>
+                <td class="text-center"><input class="switch" type="checkbox" role="switch" name="releases-push" aria-label="Releases by push" checked></td>
+              </tr>
+              <tr>
+                <th scope="row">
+                  <strong class="block-notification-topic">Weekly recap</strong>
+                  <div class="field-help">Your workspace at a glance, every Monday.</div>
+                </th>
+                <td class="text-center"><input class="switch" type="checkbox" role="switch" name="recap-email" aria-label="Weekly recap by email" checked></td>
+                <td class="text-center"><input class="switch" type="checkbox" role="switch" name="recap-push" aria-label="Weekly recap by push"></td>
+              </tr>
+            </tbody>
+          </table>
+      </section>
     </section>
 
     <section class="center block-section" id="detail-layout">

@@ -460,7 +460,7 @@
               <span class="list-item-text">Only sites that publish within a week.</span>
             </label>
             <span class="list-item-trailing">
-              <input class="switch" type="checkbox" role="switch" id="f-fast" aria-checked="true" checked>
+              <input class="switch" type="checkbox" role="switch" id="f-fast" checked>
             </span>
           </li>
           <li class="list-item">
@@ -469,7 +469,7 @@
               <span class="list-item-text">Exclude evergreen blogs and directories.</span>
             </label>
             <span class="list-item-trailing">
-              <input class="switch" type="checkbox" role="switch" id="f-news" aria-checked="false">
+              <input class="switch" type="checkbox" role="switch" id="f-news">
             </span>
           </li>
         </ul>
@@ -583,7 +583,7 @@
                 <span class="list-item-text">See when a user moves a conversation in queue to elevated.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="p-transfer" aria-checked="true" checked>
+                <input class="switch" type="checkbox" role="switch" id="p-transfer" checked>
               </span>
             </li>
             <li class="list-item">
@@ -592,7 +592,7 @@
                 <span class="list-item-text">Allow access to archiving and CRUD abilities.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="p-admin" aria-checked="false">
+                <input class="switch" type="checkbox" role="switch" id="p-admin">
               </span>
             </li>
           </ul>
@@ -626,14 +626,6 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script>
-    /* Keeping aria-checked in sync is the switch enhancement from the docs, not
-       something the component does on its own. */
-    for (const control of document.querySelectorAll('.switch[role="switch"]')) {
-      control.addEventListener("change", () => {
-        control.setAttribute("aria-checked", String(control.checked));
-      });
-    }
-
     /* Deep link: opening the page with #p-hero opens that pattern. */
     const deepLink = location.hash.slice(1);
     if (deepLink) document.getElementById(deepLink)?.showModal();

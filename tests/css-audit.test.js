@@ -1253,19 +1253,13 @@ test("checked choices fall back to the selected token, not primary", () => {
 
   // --state-selected defaults to --primary, so nothing renders differently
   // today; the fallback keeps a future --state-selected override working.
-  // Hover is not selected: an unchecked switch keeps the brand fallback.
   expect(choiceCss).toContain("--choice-border: var(--intent, var(--state-selected));");
   expect(choiceCss).toContain("--choice-bg: var(--intent, var(--state-selected));");
   expect(choiceCss).toContain("--choice-mark: var(--intent-fg, var(--state-selected-fg));");
   expect(switchCss).toContain("--switch-bg: var(--intent, var(--state-selected));");
   expect(switchCss).toContain(".switch:checked {");
-  expect(switchCss).toMatch(
-    /\.switch:checked \{[^}]*--switch-border: var\(--intent, var\(--state-selected\)\);/,
-  );
+  expect(switchCss).toContain("--switch-border: var(--switch-bg);");
   expect(switchCss).toContain("--switch-knob: var(--intent-fg, var(--state-selected-fg));");
-  expect(switchCss).toMatch(
-    /\.switch:not\(:checked\):hover:not\(:disabled\) \{[^}]*--switch-border: var\(--intent, var\(--primary\)\);/,
-  );
   expect(choiceCardCss).toContain("--choice-card-border: var(--intent, var(--state-selected));");
   expect(choiceCardCss).toContain("var(--intent, var(--state-selected))");
   expect(choiceCardCss).toContain("var(--intent-fg, var(--state-selected-fg))");

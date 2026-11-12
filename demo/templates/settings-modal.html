@@ -297,7 +297,7 @@
                 </span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-routing" aria-checked="true" checked>
+                <input class="switch" type="checkbox" role="switch" id="pref-routing" checked>
               </span>
             </li>
             <li class="list-item">
@@ -306,7 +306,7 @@
                 <span class="list-item-text">Dictate straight into the composer.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-dictation" aria-checked="true" checked>
+                <input class="switch" type="checkbox" role="switch" id="pref-dictation" checked>
               </span>
             </li>
           </ul>
@@ -333,13 +333,13 @@
                 <span class="list-item-text">Ping me when a scheduled task finishes.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-reminders" aria-checked="true" checked>
+                <input class="switch" type="checkbox" role="switch" id="pref-reminders" checked>
               </span>
             </li>
             <li class="list-item">
               <label class="list-item-content list-item-title" for="pref-sounds">Sounds</label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-sounds" aria-checked="false">
+                <input class="switch" type="checkbox" role="switch" id="pref-sounds">
               </span>
             </li>
           </ul>
@@ -365,7 +365,7 @@
                 <span class="list-item-text">Remember details across conversations.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-memory" aria-checked="true" checked>
+                <input class="switch" type="checkbox" role="switch" id="pref-memory" checked>
               </span>
             </li>
           </ul>
@@ -381,7 +381,7 @@
                 <span class="list-item-text">Let conversations read from connected apps.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-connectors" aria-checked="true" checked>
+                <input class="switch" type="checkbox" role="switch" id="pref-connectors" checked>
               </span>
             </li>
             <li class="list-item">
@@ -390,7 +390,7 @@
                 <span class="list-item-text">Unreleased integrations. Expect breakage.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-beta" aria-checked="false">
+                <input class="switch" type="checkbox" role="switch" id="pref-beta">
               </span>
             </li>
             <li class="list-item">
@@ -423,7 +423,7 @@
                 <span class="list-item-text">Read answers aloud as they arrive.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-autoplay" aria-checked="false">
+                <input class="switch" type="checkbox" role="switch" id="pref-autoplay">
               </span>
             </li>
           </ul>
@@ -492,7 +492,7 @@
                 <span class="list-item-text">Allow new conversations to be used for training.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-training" aria-checked="false">
+                <input class="switch" type="checkbox" role="switch" id="pref-training">
               </span>
             </li>
             <li class="list-item">
@@ -526,7 +526,7 @@
                 <span class="list-item-text">Ask for a code from an authenticator app.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-2fa" aria-checked="true" checked>
+                <input class="switch" type="checkbox" role="switch" id="pref-2fa" checked>
               </span>
             </li>
             <li class="list-item">
@@ -557,7 +557,7 @@
                 <span class="list-item-text">Hide mature topics from this account.</span>
               </label>
               <span class="list-item-trailing">
-                <input class="switch" type="checkbox" role="switch" id="pref-restricted" aria-checked="false">
+                <input class="switch" type="checkbox" role="switch" id="pref-restricted">
               </span>
             </li>
             <li class="list-item">
@@ -577,14 +577,6 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script>
-    /* Keeping aria-checked in sync is the switch enhancement from the docs, not
-       something the component does on its own. */
-    for (const control of document.querySelectorAll('.switch[role="switch"]')) {
-      control.addEventListener("change", () => {
-        control.setAttribute("aria-checked", String(control.checked));
-      });
-    }
-
     /*
      * Filtering a list by a search field is application code — the framework
      * ships input policies (data-filter), not list search. Hiding a tab is all

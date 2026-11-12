@@ -1,7 +1,7 @@
 /*
  * --border-control is the resting edge of neutral controls, apart from the
  * --border that separates surfaces: setting it alone moves every control and
- * no separator.
+ * no separator. Switch tracks keep a uniform fill instead of a control edge.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -35,7 +35,7 @@ it("controls take --border-control and separators keep --border", async () => {
         "select rgb(255, 0, 0)",
         "check rgb(255, 0, 0)",
         "radio rgb(255, 0, 0)",
-        "switch rgb(255, 0, 0)",
+        "switch rgb(200, 200, 200)",
         "color-swatch rgb(255, 0, 0)",
         "join-addon rgb(255, 0, 0)",
         "choice-card rgb(255, 0, 0)",

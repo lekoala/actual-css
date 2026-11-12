@@ -30,7 +30,8 @@
 
 .switch {
   --switch-bg: var(--border);
-  --switch-border: var(--border-control);
+  /* Keep the border in the geometry without outlining the track. */
+  --switch-border: var(--switch-bg);
   --switch-knob: var(--surface-raised);
   --switch-block-size: calc(var(--choice-control-size) + 0.125em);
   --switch-width: calc(var(--switch-block-size) * 1.8);
@@ -97,16 +98,16 @@
     background-color var(--duration);
 }
 
-/* Hover is not selected: an unchecked switch keeps the brand fallback on hover,
-   so a theme that separates --primary from --state-selected never tints an
-   OFF control with the selection accent before it is checked. */
-.switch:not(:checked):hover:not(:disabled) {
-  --switch-border: var(--intent, var(--primary));
+/* Guard the custom property so older browsers keep the resting fill rather
+   than substituting an unsupported mix into both background and border. */
+@supports (color: color-mix(in oklab, black, white)) {
+  .switch:not(:checked):hover:not(:disabled) {
+    --switch-bg: color-mix(in oklab, var(--text) 10%, var(--border));
+  }
 }
 
 .switch:checked {
   --switch-bg: var(--intent, var(--state-selected));
-  --switch-border: var(--intent, var(--state-selected));
   --switch-knob: var(--intent-fg, var(--state-selected-fg));
 }
 
@@ -137,7 +138,6 @@
 
 .switch:disabled {
   --switch-bg: var(--surface-subtle);
-  --switch-border: var(--border);
   --switch-knob: var(--state-disabled);
   opacity: 1;
   cursor: not-allowed;

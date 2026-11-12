@@ -2,24 +2,23 @@
 
 > Toggle controls that share a native checkbox at the markup level, with a switch visual.
 
-- The API is `class="switch"`. Use `role="switch"` for ARIA correctness.
-- The visual state tracks the native `checked` attribute. No JavaScript is required.
-- For strict ARIA correctness, keep `aria-checked` in sync. This is an enhancement, not the baseline.
-
 ```html demo
-<!-- Default: native state, no JS required. -->
-<input class="switch" type="checkbox" role="switch" checked />
+<label class="choice">
+  <input class="switch" type="checkbox" role="switch" checked />
+  <span>Notifications</span>
+</label>
 ```
 
-```html demo
-<!-- Enhancement: keep aria-checked in sync. -->
-<input class="switch"
-       type="checkbox"
-       role="switch"
-       aria-checked="true"
-       checked
-       onchange="this.setAttribute('aria-checked', this.checked)" />
-```
+## Usage
+
+- Apply `class="switch"` to a native checkbox and `role="switch"` for on/off semantics.
+- Give it an accessible name through a label or `aria-label`.
+- Use `checked` for the initial state and `.checked` to change it in JavaScript.
+
+The browser exposes the native checked state to assistive technology; do not
+add `aria-checked` or a change handler to synchronize it. The
+[WAI-ARIA switch pattern](https://www.w3.org/WAI/ARIA/apg/patterns/switch/)
+uses the native checked state for checkbox inputs.
 
 Wrap a switch in `.choice` to pair it with a label. The switch stays
 top-aligned with the first line of text, so labels that wrap onto two lines —
@@ -57,6 +56,13 @@ naturally or via an explicit line break — still sit cleanly.
   </span>
 </label>
 ```
+
+## Notification preferences
+
+For a notification matrix with two switch columns (email and push), see the
+[notification preferences composition](../../demo/templates/blocks.html#notification-preferences).
+Use native table headers for the shared rows and columns, and give each switch
+an accessible name that includes both its topic and channel.
 
 ## Sizing and alignment
 
@@ -125,7 +131,10 @@ same optical line. Change the type or the control size and they stay level:
 </div>
 ```
 
-## CSS hooks
+### Hooks
+
+- `--switch-bg` — track fill; `--switch-border` follows it unless overridden.
+- `--switch-border` — optional distinct edge; validation takes precedence.
 
 - `--choice-control-size` — shared size for inline choices; the switch track is
   this plus `0.125em`, so scaling it scales the checkbox and the switch together.
