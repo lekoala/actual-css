@@ -1,7 +1,6 @@
 # Intent nesting
 
-An intent applies to the component carrying it. Nested components keep their
-own default intent unless you give them one:
+Apply an intent to each component independently, so nested buttons and controls keep their own colors.
 
 ```html
 <div class="alert danger">
@@ -12,4 +11,4 @@ own default intent unless you give them one:
 ```
 
 The alert uses danger colors, Dismiss stays neutral, and Retry uses primary.
-Set an intent on each component that needs it.
+Nested components keep their default intent unless you give them one.

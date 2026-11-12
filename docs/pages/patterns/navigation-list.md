@@ -1,9 +1,6 @@
 # Navigation list
 
-Use `.nav-list` for a vertical list of navigation links: it removes native list
-chrome, stacks the rows and stretches each `.nav-link` across the row. For a
-horizontal row of links, use `.cluster` on the list, which removes the list
-chrome too.
+Arrange navigation links in vertical lists or horizontal rows using `.nav-list` and `.cluster`.
 
 ```html demo
 <div class="stack">
@@ -26,6 +23,12 @@ chrome too.
   </nav>
 </div>
 ```
+
+## Usage
+
+`.nav-list` removes native list chrome, stacks the rows and stretches each
+`.nav-link` across the row. For a horizontal row of links, use `.cluster` on
+the list, which removes the list chrome too.
 
 Do not reset every list inside `nav`.
 

@@ -1,8 +1,8 @@
 # Stat
 
-> One figure with its label, a detail line and an optional trend: KPI tiles,
-> dashboard summaries, metric cards. Composed from a card, a grid and a badge;
-> there is no stat component.
+> Present a key figure with its label, supporting detail and optional trend for dashboards and KPI cards.
+
+Compose it from a card, a grid and a badge; there is no stat component.
 
 **Related terms:** KPI, metric, statistic, figure, stat card, number tile,
 delta, trend indicator.

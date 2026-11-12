@@ -1,6 +1,6 @@
 # Icon input
 
-Use `.input-icon` for a search or filter input with a leading icon.
+Add a leading icon to a search or filter input with `.input-icon`, keeping the text clear of the icon.
 
 ```html demo
 <label class="input-icon">

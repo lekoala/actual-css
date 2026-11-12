@@ -170,6 +170,8 @@ Add relevant guards for future-us when needed based on traps and discoveries.
 
 - Clear and concise. Every sentence must carry something the reader cannot get
   from the code.
+- Pattern pages use their first paragraph as the index card summary. Aim for
+  one sentence of 90–120 rendered characters; keep technical details in the body.
 - Say what a thing is and how to use it. Reasoning belongs in a design note, a
   commit message, or a code comment — not in reference documentation.
 - Cut restatements: a default already visible in the CSS, a rationale already

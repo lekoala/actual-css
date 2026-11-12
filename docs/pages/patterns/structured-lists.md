@@ -1,7 +1,6 @@
 # Structured lists
 
-Choose list markup from the content semantics, then add only the layout or
-component contract the collection needs.
+Choose semantic list markup and compose the layout or component treatment that fits the collection.
 
 | Need                                            | Use                                 |
 | ----------------------------------------------- | ----------------------------------- |

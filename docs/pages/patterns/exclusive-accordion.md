@@ -1,6 +1,6 @@
 # Exclusive accordion
 
-Browsers that support the `name` attribute on `<details>` get native exclusive accordions — no JS engine needed. Omit `name` to allow several open at once.
+Keep one accordion panel open at a time with native `<details>` groups, without a JavaScript engine.
 
 ```html demo
 <details name="faq" open>
@@ -13,4 +13,5 @@ Browsers that support the `name` attribute on `<details>` get native exclusive a
 </details>
 ```
 
-Not shipping an accordion JS engine is a design decision, not a gap.
+Browsers that support the `name` attribute on `<details>` enforce the group.
+Omit `name` to allow several panels open at once.

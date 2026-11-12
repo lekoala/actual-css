@@ -1,8 +1,8 @@
 # Empty state
 
-> A region with nothing to show yet: a first-run list, a cleared inbox, a
-> search with no results. Composed from layout primitives; there is no
-> empty-state component.
+> Guide users when a list is empty or a search has no results, with a message and an optional next action.
+
+Compose the region from layout primitives; there is no empty-state component.
 
 **Related terms:** blank slate, zero state, no data, no results, first run,
 placeholder content.

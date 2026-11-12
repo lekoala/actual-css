@@ -1,9 +1,9 @@
 # Icon slot
 
-> Contained icon zones — a leading icon, an icon disc, a status marker — appear
-> across product UI: notifications, activity feeds, list actions, cards. There
-> is no dedicated primitive; the same small contract is composed from existing
-> pieces.
+> Compose a stable icon box for notifications, activity feeds and cards, using existing layout primitives.
+
+Use an icon slot for a leading icon, an icon disc or a status marker. There
+is no dedicated primitive; compose the contract from existing pieces.
 
 A contained icon zone must be a **stable box** that never shrinks, always
 centers its glyph, and clips overflow:

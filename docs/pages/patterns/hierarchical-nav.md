@@ -1,6 +1,6 @@
 # Hierarchical scrollable nav
 
-App shell with a collapsible nav tree. Uses existing primitives only — no treeview component.
+Build a scrollable sidebar with collapsible navigation groups using native details and existing primitives.
 
 **Related terms:** collapsible sidebar, nav group, sub-navigation, nested menu, expandable section, sidebar tree.
 
