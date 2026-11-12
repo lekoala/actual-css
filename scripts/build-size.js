@@ -34,9 +34,9 @@ const DIST = join(ROOT, "dist");
  * growth, not against a component gaining a layer.
  */
 const BUDGETS = {
-  coreCssBrotli: 2900, // src/css/actual.css, minified in memory
-  fullCssBrotli: 22200, // actual.full.min.css (current ~21859; timeline dates-end, alert optical alignment)
-  fullJsBrotli: 20500, // actual.full.js
+  coreCssBrotli: 3000, // src/css/actual.css, minified in memory (current 2922; mark pair, closed-dialog reset)
+  fullCssBrotli: 22600, // actual.full.min.css (current 22284; reveal, mark sweep)
+  fullJsBrotli: 20900, // actual.full.js (current 20615; in-view)
 };
 
 async function collectCSS(root, base = "") {
@@ -167,9 +167,9 @@ async function main() {
   for (const [label, brotli, limit] of guarded) {
     if (brotli == null) continue;
     const ok = brotli <= limit;
-    console.log(
-      `  ${label}: ${formatBytes(brotli)} brotli (budget ${formatBytes(limit)})${ok ? "" : " — EXCEEDED"}`,
-    );
+    // Exact bytes: budgets are set in bytes, and a one-decimal KB rounding
+    // printed "2.9 KB (budget 2.8 KB)" for an overrun of a few dozen bytes.
+    console.log(`  ${label}: ${brotli} B brotli (budget ${limit} B)${ok ? "" : " — EXCEEDED"}`);
     if (!ok) exceeded.push(label);
   }
 
