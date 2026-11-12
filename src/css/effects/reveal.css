@@ -13,6 +13,13 @@
  * so it is still defined when the class is removed and the element returns to
  * rest.
  *
+ * Contract: the `transition` shorthand replaces whatever the element already
+ * transitions, and effects load after components at equal specificity. Put
+ * `.reveal` (or a `.reveal-group` child) on a presentation wrapper, never on
+ * a component that owns its transitions (`.btn`, `.badge`, `.avatar`). If
+ * Reveal is ever needed on such a component directly, move to an animation
+ * driven by an entered state rather than lifting this restriction.
+ *
  * Public hooks:
  * --reveal-duration
  * --reveal-distance
@@ -50,13 +57,14 @@
     opacity: 0;
     translate: 0 var(--reveal-distance);
   }
-}
 
-/* Focus can reach a pending element before it intersects: Tab, an in-page
-   anchor, a find result. in-view.js releases the state on focusin; dropping
-   the transition here makes the content legible on that same frame instead of
-   fading in while focus already sits on it. */
-.reveal:focus-within,
-.reveal-group:focus-within > * {
-  transition: none;
+  /* Focus can reach a pending element before it intersects: Tab, an in-page
+     anchor, a find result. in-view.js releases the state on focusin; dropping
+     the transition here makes the content legible on that same frame instead
+     of fading in while focus already sits on it. Kept inside the media query
+     so it never touches transitions Reveal did not declare. */
+  .reveal:focus-within,
+  .reveal-group:focus-within > * {
+    transition: none;
+  }
 }

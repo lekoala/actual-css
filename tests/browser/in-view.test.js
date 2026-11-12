@@ -115,11 +115,6 @@ it("visible content is never hidden, and off-screen content is released once", a
         view,
         `[...document.getElementById("group").children].every(child => getComputedStyle(child).opacity === "0")`,
       );
-      expect(
-        await view.evaluate(
-          `[...document.getElementById("group").children].map(child => getComputedStyle(child).opacity)`,
-        ),
-      ).toEqual(["0", "0", "0"]);
       // Visible at load never entered the pending state, so it never flickered.
       expect(await view.evaluate(`window.__pendingLog.includes("visible")`)).toBe(false);
       expect(await view.evaluate(`window.__pendingLog.includes("offscreen")`)).toBe(true);
@@ -157,6 +152,46 @@ it("visible content is never hidden, and off-screen content is released once", a
       ).toBe(1);
     },
     { width: 900, height: 700, artifactName: "in-view-lifecycle" },
+  );
+});
+
+it("a group staggers its children up to the cap and leaves nested components' transitions alone", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const delays = `[...document.getElementById("group").children].map(child => getComputedStyle(child).transitionDelay)`;
+      const buttons = `(() => {
+        const read = id => getComputedStyle(document.getElementById(id)).transitionProperty;
+        return { group: read("group-btn"), plain: read("plain-btn") };
+      })()`;
+
+      // An unsupported sibling-index() collapses every delay to 0s; that is
+      // the documented degradation, but this suite runs a supporting engine.
+      const atRest = await view.evaluate(delays);
+      expect(atRest[0]).toBe("0s");
+      expect(atRest[1]).toBe("0.06s");
+      expect(atRest[7]).toBe("0.42s");
+      expect(atRest[8]).toBe("0.48s");
+
+      const before = await view.evaluate(buttons);
+      expect(before.plain).toContain("background-color");
+      expect(before.group).toBe(before.plain);
+
+      await view.evaluate(`(() => { ${source} })()`);
+      await waitForBrowser(
+        view,
+        `document.getElementById("group").classList.contains("is-pending")`,
+      );
+      expect(await view.evaluate(buttons)).toEqual(before);
+
+      await view.evaluate(`document.getElementById("group").scrollIntoView({ block: "center" })`);
+      await waitForBrowser(
+        view,
+        `!document.getElementById("group").classList.contains("is-pending")`,
+      );
+      expect(await view.evaluate(buttons)).toEqual(before);
+    },
+    { width: 900, height: 700, artifactName: "in-view-stagger" },
   );
 });
 

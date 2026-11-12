@@ -60,11 +60,22 @@
     <p>Removed while pending.</p>
   </section>
 
+  <!-- Nine children: the ninth proves the eight-step stagger cap. The first
+       wraps a button, which must keep its own transitions. -->
   <div class="reveal-group" id="group" data-enhance="in-view">
-    <article>First item</article>
+    <article><a class="btn" id="group-btn" href="#group">First item</a></article>
     <article>Second item</article>
     <article>Third item</article>
+    <article>Fourth item</article>
+    <article>Fifth item</article>
+    <article>Sixth item</article>
+    <article>Seventh item</article>
+    <article>Eighth item</article>
+    <article>Ninth item</article>
   </div>
+
+  <!-- Reference button outside any reveal. -->
+  <p><a class="btn" id="plain-btn" href="#plain-btn">Plain button</a></p>
 
   <p><mark class="mark-sweep" id="mark" data-enhance="in-view">Needle phrase</mark></p>
 

@@ -5,10 +5,12 @@ Reveal fades a block into place the first time it enters the viewport, and never
 > **Module** — import `actual-css/css/effects/reveal` and `actual-css/js/in-view`, or the `actual-css/css/effects` and `actual-css/js/full` bundles.
 
 ```html demo
-<section class="card stack reveal" data-enhance="in-view">
-  <h2>Built for actual interfaces</h2>
-  <p class="muted">This block fades in once, the first time it scrolls into view.</p>
-</section>
+<div class="reveal" data-enhance="in-view">
+  <section class="card stack">
+    <h2>Built for actual interfaces</h2>
+    <p class="muted">This block fades in once, the first time it scrolls into view.</p>
+  </section>
+</div>
 ```
 
 **Related terms:** scroll reveal, fade in on scroll, entrance animation, lazy appearance, on-scroll animation.
@@ -21,6 +23,7 @@ The safety rule comes first: an element that is already visible when the runtime
 
 - Load the runtime with `actual-css/js/full`, or register only `actual-css/js/in-view`.
 - Add `data-enhance="in-view"` next to the effect class; the class alone never hides anything.
+- Put `.reveal` on a wrapper, never on a component with its own transitions such as `.btn`, `.badge` or `.avatar`: Reveal's `transition` replaces theirs.
 - Put the effect on the content box rather than a section with generous leading padding: the observer triggers when the box enters, including its padding.
 - Set `data-in-view-margin="0px 0px -64px 0px"` to start after the box has entered farther into the viewport. The value uses `IntersectionObserver.rootMargin` syntax; it affects the entrance, while initially visible content stays visible.
 - Reveal an element once, not on every pass: the runtime stops observing after the first appearance.
@@ -37,6 +40,16 @@ Put `.reveal-group` on the container instead of `.reveal`. The direct children a
   <li class="card">First</li>
   <li class="card">Second</li>
   <li class="card">Third</li>
+</ul>
+```
+
+The same wrapper rule applies to the children: they carry the motion, so make them plain containers and put interactive components inside them.
+
+```html demo
+<ul class="cluster reveal-group" data-enhance="in-view">
+  <li><a class="btn" href="#one">First</a></li>
+  <li><a class="btn" href="#two">Second</a></li>
+  <li><a class="btn" href="#three">Third</a></li>
 </ul>
 ```
 
