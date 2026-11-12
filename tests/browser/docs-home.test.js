@@ -4,7 +4,6 @@ import {
   clickSelector,
   fixtureUrl,
   pressKey,
-  sampleTransition,
   setViewport,
   waitForBrowser,
   withBrowserPage,
@@ -69,7 +68,15 @@ it("home entrances wait for the content rather than the section padding", async 
           scrollTo(0, scrollY + rect.top - innerHeight + 96);
         })()`);
         await waitForBrowser(view, "!window.__entrance.title.classList.contains('is-pending')");
-        const opacity = await sampleTransition(view, ".docs-section h2.reveal");
+        // Seek the entrance instead of sleeping, for the reason sampleTransition
+        // documents: a wall-clock sample can read either end state.
+        const opacity = await view.evaluate(`(() => {
+          const el = window.__entrance.title;
+          const entrance = el.getAnimations().find(a => a.animationName === "actual-reveal");
+          if (!entrance) return null;
+          entrance.currentTime = entrance.effect.getComputedTiming().duration / 2;
+          return getComputedStyle(el).opacity;
+        })()`);
         expect(opacity).not.toBeNull();
         expect(Number(opacity)).toBeGreaterThan(0);
         expect(Number(opacity)).toBeLessThan(1);

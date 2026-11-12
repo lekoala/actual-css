@@ -3,22 +3,24 @@
  *
  * Docs: docs/pages/components/reveal.md
  *
- * in-view.js owns the state; this file owns the motion. `is-pending` means the
- * element is waiting outside the viewport. Hiding exists only under
- * `screen and (prefers-reduced-motion: no-preference)`, which covers three
- * cases at once: without JavaScript the class never appears, reduced motion
- * never hides anything, and print never hides anything.
+ * The entrance is a one-shot animation, so `.reveal` alone plays it on the
+ * first render, without JavaScript. in-view.js adds the scroll trigger: it
+ * writes `is-pending` on an element that waits outside the viewport, and this
+ * file holds it hidden with the animation removed. Removing the class puts the
+ * animation back, which starts it from the beginning on the first appearance.
  *
- * The transition is declared on the base state, never on `.is-pending` alone,
- * so it is still defined when the class is removed and the element returns to
- * rest.
+ * Everything sits under `screen and (prefers-reduced-motion: no-preference)`:
+ * reduced motion and print neither animate nor hide anything.
  *
- * Contract: the `transition` shorthand replaces whatever the element already
- * transitions, and effects load after components at equal specificity. Put
- * `.reveal` (or a `.reveal-group` child) on a presentation wrapper, never on
- * a component that owns its transitions (`.btn`, `.badge`, `.avatar`). If
- * Reveal is ever needed on such a component directly, move to an animation
- * driven by an entered state rather than lifting this restriction.
+ * An animation rather than a transition, on purpose: the `transition`
+ * shorthand replaced the transitions of the component it sat on (a `.btn`
+ * lost its hover motion). The `animation` shorthand still replaces another
+ * animation on the same element, which is the remaining composition limit.
+ *
+ * Fill mode `backwards` holds the first keyframe through a stagger delay and
+ * leaves no animated value in the cascade once the entrance ends. A pending
+ * element revealed by focus has its new animation finished by in-view.js,
+ * because a :focus-within override lapses on blur and replays the entrance.
  *
  * Public hooks:
  * --reveal-duration
@@ -35,9 +37,7 @@
 @media screen and (prefers-reduced-motion: no-preference) {
   .reveal,
   .reveal-group > * {
-    transition:
-      opacity var(--reveal-duration) var(--ease-enter),
-      translate var(--reveal-duration) var(--ease-enter);
+    animation: actual-reveal var(--reveal-duration) var(--ease-enter) backwards;
   }
 
   /* The cap keeps a long list from becoming an endless cascade: the ninth and
@@ -45,26 +45,20 @@
      sibling-index() drops this declaration alone and reveals the group
      together, which is the intended degradation. */
   .reveal-group > * {
-    transition-delay: calc(min(sibling-index() - 1, 8) * var(--reveal-stagger));
+    animation-delay: calc(min(sibling-index() - 1, 8) * var(--reveal-stagger));
   }
 
-  .reveal.is-pending {
-    opacity: 0;
-    translate: 0 var(--reveal-distance);
-  }
-
+  .reveal.is-pending,
   .reveal-group.is-pending > * {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* The end keyframe is implicit: the element's own opacity and translate. */
+@keyframes actual-reveal {
+  from {
     opacity: 0;
     translate: 0 var(--reveal-distance);
-  }
-
-  /* Focus can reach a pending element before it intersects: Tab, an in-page
-     anchor, a find result. in-view.js releases the state on focusin; dropping
-     the transition here makes the content legible on that same frame instead
-     of fading in while focus already sits on it. Kept inside the media query
-     so it never touches transitions Reveal did not declare. */
-  .reveal:focus-within,
-  .reveal-group:focus-within > * {
-    transition: none;
   }
 }

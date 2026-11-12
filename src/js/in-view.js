@@ -3,7 +3,7 @@
  *
  * Docs: docs/pages/components/reveal.md
  *
- * The runtime knows no animation. It marks an element `is-pending` while it
+ * The runtime names no animation. It marks an element `is-pending` while it
  * waits outside the viewport and removes the class the first time it enters.
  * Each effect's CSS decides what that state looks like, exactly as `is-open`
  * lets flyout.css own the panel's presentation.
@@ -15,10 +15,10 @@
  * masked before a scroll can expose it.
  *
  * A pending element keeps its text in the accessibility tree and in the tab
- * order; effects hide it with opacity alone. `focusin` releases it at once, so
- * keyboard focus never lands on invisible content, and reveal.css drops the
- * transition under :focus-within for the same reason. In-page find still
- * matches the text, because nothing is removed from the layer.
+ * order; effects hide it with opacity alone. `focusin` releases it at once and
+ * finishes the entrance it started, so keyboard focus never lands on invisible
+ * or fading content. In-page find still matches the text, because nothing is
+ * removed from the layer.
  *
  * One initial IntersectionObserver per document protects content already in
  * view. Optional data-in-view-margin values share additional observers for
@@ -89,6 +89,25 @@ function reveal(record) {
   record.observer.unobserve(record.element);
 }
 
+// Focus reached a pending element: the content must be usable on this frame,
+// not after an entrance. Only the animations that releasing the state started
+// are finished, found by difference, so the runtime still names no effect and
+// leaves a nested component's own motion alone. A CSS :focus-within override
+// cannot do this: it lapses on blur and the entrance replays from the start.
+function revealNow(record) {
+  if (record.done) return;
+  const { element } = record;
+  const running = new Set(element.getAnimations({ subtree: true }));
+  reveal(record);
+  // getAnimations() flushes style, so the entrance released above is listed.
+  for (const animation of element.getAnimations({ subtree: true })) {
+    if (running.has(animation)) continue;
+    // finish() throws on an animation that never ends.
+    if (animation.effect?.getComputedTiming().endTime === Infinity) continue;
+    animation.finish();
+  }
+}
+
 function cleanup(record, records) {
   record.controller.abort();
   record.initialObserver.unobserve(record.element);
@@ -121,7 +140,7 @@ function connect(element) {
 
   // Focus moves the page first, so this is the guarantee, not the observer:
   // the element is visible by the time its descendant takes focus.
-  element.addEventListener("focusin", () => reveal(record), {
+  element.addEventListener("focusin", () => revealNow(record), {
     signal: record.controller.signal,
   });
   observer.observe(element);

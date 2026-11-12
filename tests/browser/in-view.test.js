@@ -35,9 +35,22 @@ const read = (id) =>
     return {
       pending: el.classList.contains("is-pending"),
       opacity: style.opacity,
-      duration: style.transitionDuration,
     };
   })()`;
+
+// Lowest opacity each element shows over `ms` of frames. Elapsed time is the
+// contract here: a replayed entrance shows up as a dip during this window.
+const minOpacity = (ids, ms) => `new Promise(resolve => {
+  const els = ${JSON.stringify(ids)}.map(id => document.getElementById(id));
+  const min = els.map(() => 1);
+  const end = performance.now() + ${ms};
+  const tick = () => {
+    els.forEach((el, i) => { min[i] = Math.min(min[i], Number(getComputedStyle(el).opacity)); });
+    if (performance.now() < end) requestAnimationFrame(tick);
+    else resolve(min);
+  };
+  tick();
+})`;
 
 it("mark sweep keeps contrast on both sides of the moving edge in both schemes", async () => {
   await withBrowserPage(
@@ -76,16 +89,33 @@ it("mark sweep keeps contrast on both sides of the moving edge in both schemes",
   );
 });
 
-it("visible content is never hidden, and off-screen content is released once", async () => {
+it("reveal plays its entrance on load without the runtime", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
-      // Before any runtime: nothing is hidden.
-      expect(await view.evaluate(read("visible"))).toMatchObject({
-        pending: false,
-        opacity: "1",
-      });
+      const hero = await view.evaluate(`(() => {
+        const el = document.getElementById("hero");
+        const [animation] = el.getAnimations();
+        return {
+          name: animation?.animationName,
+          state: animation?.playState,
+          opacity: Number(getComputedStyle(el).opacity),
+        };
+      })()`);
+      expect(hero.name).toBe("actual-reveal");
+      expect(hero.state).toBe("running");
+      expect(hero.opacity).toBeLessThan(1);
+      // Without the runtime nothing is pending, so nothing stays hidden.
+      expect(await view.evaluate(`document.querySelectorAll(".is-pending").length`)).toBe(0);
+    },
+    { width: 900, height: 700, artifactName: "in-view-on-load" },
+  );
+});
 
+it("visible content is never made pending, and off-screen content is released once", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
       // Focus already inside an off-screen element before registration: it
       // must not be hidden behind the focused content.
       await view.evaluate(`document.getElementById("prefocused").focus({ preventScroll: true })`);
@@ -96,25 +126,22 @@ it("visible content is never hidden, and off-screen content is released once", a
         `document.getElementById("offscreen").classList.contains("is-pending")`,
       );
 
-      expect(await view.evaluate(read("prefocused"))).toMatchObject({
-        pending: false,
-        opacity: "1",
-      });
+      expect(await view.evaluate(read("prefocused"))).toMatchObject({ pending: false });
       expect(await view.evaluate(`window.__pendingLog.includes("prefocused")`)).toBe(false);
-
-      expect(await view.evaluate(read("visible"))).toMatchObject({ pending: false, opacity: "1" });
-      // The class fades the element out; it is off screen, so the test waits
-      // for the end state instead of sampling the transition's start.
+      // Its load entrance runs out; the runtime never hid it on top of that.
       await waitForBrowser(
         view,
-        `getComputedStyle(document.getElementById("offscreen")).opacity === "0"`,
+        `getComputedStyle(document.getElementById("prefocused")).opacity === "1"`,
       );
+
+      expect(await view.evaluate(read("visible"))).toMatchObject({ pending: false });
       expect(await view.evaluate(read("offscreen"))).toMatchObject({ pending: true, opacity: "0" });
       // A group hides its direct children, not itself.
-      await waitForBrowser(
-        view,
-        `[...document.getElementById("group").children].every(child => getComputedStyle(child).opacity === "0")`,
-      );
+      expect(
+        await view.evaluate(
+          `[...document.getElementById("group").children].every(child => getComputedStyle(child).opacity === "0")`,
+        ),
+      ).toBe(true);
       // Visible at load never entered the pending state, so it never flickered.
       expect(await view.evaluate(`window.__pendingLog.includes("visible")`)).toBe(false);
       expect(await view.evaluate(`window.__pendingLog.includes("offscreen")`)).toBe(true);
@@ -137,6 +164,12 @@ it("visible content is never hidden, and off-screen content is released once", a
         view,
         `!document.getElementById("offscreen").classList.contains("is-pending")`,
       );
+      // Releasing the state starts the entrance afresh.
+      expect(
+        await view.evaluate(
+          `document.getElementById("offscreen").getAnimations().map(a => a.animationName)`,
+        ),
+      ).toEqual(["actual-reveal"]);
       await waitForBrowser(
         view,
         `getComputedStyle(document.getElementById("offscreen")).opacity === "1"`,
@@ -159,7 +192,7 @@ it("a group staggers its children up to the cap and leaves nested components' tr
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
-      const delays = `[...document.getElementById("group").children].map(child => getComputedStyle(child).transitionDelay)`;
+      const delays = `[...document.getElementById("group").children].map(child => getComputedStyle(child).animationDelay)`;
       const buttons = `(() => {
         const read = id => getComputedStyle(document.getElementById(id)).transitionProperty;
         return { group: read("group-btn"), plain: read("plain-btn") };
@@ -215,10 +248,7 @@ it("an entrance margin waits inside the viewport without hiding initially visibl
         view,
         "document.getElementById('offscreen').classList.contains('is-pending')",
       );
-      expect(await view.evaluate(read("visible-edge"))).toMatchObject({
-        pending: false,
-        opacity: "1",
-      });
+      expect(await view.evaluate(read("visible-edge"))).toMatchObject({ pending: false });
       expect(await view.evaluate("window.__pendingLog.includes('visible-edge')")).toBe(false);
       await waitForBrowser(
         view,
@@ -262,8 +292,9 @@ it("pending content stays visible under reduced motion and in print", async () =
   const read = `({
     opacity: getComputedStyle(document.getElementById("static-pending")).opacity,
     mark: getComputedStyle(document.getElementById("mark")).backgroundSize,
+    entrance: getComputedStyle(document.getElementById("hero")).animationName,
   })`;
-  const expected = { opacity: "1", mark: "100% 100%" };
+  const expected = { opacity: "1", mark: "100% 100%", entrance: "none" };
 
   expect(
     await withBrowserPage(
@@ -293,27 +324,79 @@ it("pending content stays visible under reduced motion and in print", async () =
   ).toEqual(expected);
 });
 
-it("Tab releases a pending element before focus lands inside it", async () => {
+it("Tab finishes the entrance it releases, and leaving focus never replays it", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       await view.evaluate(`(() => { ${source} })()`);
       await waitForBrowser(
         view,
-        `document.getElementById("focus-zone").classList.contains("is-pending")`,
+        `["focus-zone", "group"].every(id => document.getElementById(id).classList.contains("is-pending"))`,
       );
+      // A nested component's own finite motion, running before the release.
+      await view.evaluate(`(() => {
+        window.__nested = document.getElementById("nested").animate(
+          [{ opacity: 1 }, { opacity: 0.5 }],
+          { duration: 60000 },
+        );
+      })()`);
 
-      // scrollIntoView inside Tab would also satisfy the observer; the state
-      // read below has to prove the focus path, so it asserts the CSS snapshot
-      // that only :focus-within produces.
+      // scrollIntoView inside Tab would also satisfy the observer, which would
+      // start the entrance; full opacity on the focus frame proves the focus
+      // path finished it.
       expect(await tabUntil(view, `document.activeElement?.id === "focus-link"`)).toBe(true);
-      expect(await view.evaluate(read("focus-zone"))).toEqual({
-        pending: false,
-        opacity: "1",
-        duration: "0s",
-      });
+      expect(await view.evaluate(read("focus-zone"))).toEqual({ pending: false, opacity: "1" });
+      expect(await view.evaluate(`window.__nested.playState`)).toBe("running");
+
+      // Leave 50 ms later, into the pending group: a :focus-within override
+      // lapsed here and the zone dropped back to transparent.
+      await Bun.sleep(50); // the scenario: focus leaves before the entrance would end
+      expect(await tabUntil(view, `document.activeElement?.id === "group-btn"`)).toBe(true);
+      expect(
+        await view.evaluate(
+          `[...document.getElementById("group").children].map(child => getComputedStyle(child).opacity)`,
+        ),
+      ).toEqual(Array(9).fill("1"));
+      expect(await view.evaluate(minOpacity(["focus-zone"], 300))).toEqual([1]);
+
+      // Leaving the group must not bring back the stagger delays either.
+      await Bun.sleep(50); // the scenario: focus leaves before the stagger would end
+      expect(await tabUntil(view, `document.activeElement?.id === "plain-btn"`)).toBe(true);
+      expect(
+        await view.evaluate(`(() => {
+          const kids = [...document.getElementById("group").children];
+          kids.forEach((kid, i) => { kid.id ||= "group-kid-" + i; });
+          return ${minOpacity(["group-kid-0", "group-kid-1", "group-kid-8"], 600)};
+        })()`),
+      ).toEqual([1, 1, 1]);
     },
     { width: 900, height: 700, artifactName: "in-view-focus" },
+  );
+});
+
+it("an entrance replays when its element is rendered again after display: none", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      // Documented behaviour, not a goal: a CSS animation restarts whenever
+      // its element re-enters the rendering, a tab panel or a [hidden] toggle.
+      await view.evaluate(
+        `document.getElementById("hero").getAnimations().forEach(a => a.finish())`,
+      );
+      expect(await view.evaluate(`document.getElementById("hero").getAnimations().length`)).toBe(0);
+      await view.evaluate(`(() => {
+        const hero = document.getElementById("hero");
+        hero.hidden = true;
+        hero.offsetWidth;
+        hero.hidden = false;
+      })()`);
+      expect(
+        await view.evaluate(
+          `document.getElementById("hero").getAnimations().map(a => a.animationName)`,
+        ),
+      ).toEqual(["actual-reveal"]);
+    },
+    { width: 900, height: 700, artifactName: "in-view-replay" },
   );
 });
 

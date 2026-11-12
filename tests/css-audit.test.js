@@ -1335,26 +1335,31 @@ test("shimmer never erases its label and carries no state", () => {
   expect(gated).toMatch(/\.shimmer:dir\(rtl\)\s*\{\s*animation-direction: reverse;/);
 });
 
-test("reveal hides only under allowed motion and snaps in under focus", () => {
-  const css = readCss("src/css/effects/reveal.css");
+test("reveal animates and hides only under allowed motion", () => {
   const rules = readRules("src/css/effects/reveal.css");
-  const [base, gated] = css.split("@media screen and (prefers-reduced-motion: no-preference)");
+  const [base, gated] = rules.split("@media screen and (prefers-reduced-motion: no-preference)");
+  const [inside] = gated.split("@keyframes actual-reveal");
 
-  // No motion, no hiding: without JavaScript the class never exists, and
-  // reduced motion and print must not hide content either.
-  expect(base).not.toContain("transition:");
+  // Reduced motion and print neither animate nor hide: everything that moves
+  // or hides sits under the media query, the keyframes alone stay outside.
+  expect(base).not.toMatch(/\b(?:animation|transition)\s*:/);
   expect(base).not.toContain("opacity: 0");
-  expect(gated).toContain(".reveal.is-pending");
-  expect(gated).toContain(".reveal-group.is-pending > *");
-  expect(gated).toContain("opacity: 0;");
-  expect(gated).toContain("translate: 0 var(--reveal-distance);");
-  // The transition lives on the base state, so it still exists once the class
-  // is removed; the stagger is capped and degrades to no delay.
-  expect(gated).toMatch(/\.reveal,\s*\.reveal-group > \*\s*\{\s*transition:/);
-  expect(gated).toContain("calc(min(sibling-index() - 1, 8) * var(--reveal-stagger))");
+  // An animation, never a transition: the transition shorthand replaced the
+  // hover motion of the component it sat on.
+  expect(rules).not.toMatch(/\btransition\s*:/);
+  expect(inside).toMatch(
+    /\.reveal,\s*\.reveal-group > \*\s*\{\s*animation: actual-reveal var\(--reveal-duration\) var\(--ease-enter\) backwards;/,
+  );
+  expect(inside).toContain("calc(min(sibling-index() - 1, 8) * var(--reveal-stagger))");
+  // Pending removes the animation, so releasing the state starts it afresh.
+  expect(inside).toMatch(
+    /\.reveal\.is-pending,\s*\.reveal-group\.is-pending > \*\s*\{\s*animation: none;\s*opacity: 0;/,
+  );
+  // Focus release is the runtime's job: a :focus-within override lapses on
+  // blur and replays the entrance.
+  expect(rules).not.toContain(":focus-within");
   // Nothing leaves the layer: text stays searchable and focusable.
   expect(rules).not.toMatch(/\b(?:visibility|display|content-visibility)\s*:/);
-  expect(rules).toMatch(/\.reveal:focus-within,[\s\S]*?\{\s*transition: none;/);
 });
 
 test("mark sweep grows the shared highlight and keeps a forced-colors fallback", () => {

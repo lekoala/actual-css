@@ -30,6 +30,10 @@
 <body>
   <p><a id="anchor-link" href="#anchor-target">Jump to the anchor target</a></p>
 
+  <!-- No runtime attribute: the entrance plays on the first render. The long
+       duration keeps it observable after the page has loaded. -->
+  <p class="reveal" id="hero" style="--reveal-duration: 60s">Hero, animated on load.</p>
+
   <section class="reveal" id="visible" data-enhance="in-view">
     <p>Visible at load. <a id="visible-link" href="#visible">Visible link</a>.</p>
   </section>
@@ -45,7 +49,7 @@
   </section>
 
   <section class="reveal" id="focus-zone" data-enhance="in-view" data-in-view-margin="0px 0px -64px 0px">
-    <p><a id="focus-link" href="#focus-zone">Focus target</a></p>
+    <p><a id="focus-link" href="#focus-zone">Focus target</a> <span id="nested">Nested motion</span></p>
   </section>
 
   <section class="reveal" id="prefocused" data-enhance="in-view" tabindex="-1">
@@ -60,8 +64,12 @@
     <p>Removed while pending.</p>
   </section>
 
+  <!-- Keeps the group off screen while focus moves through the sections
+       above, so Tab reaches it still pending. -->
+  <div class="spacer"></div>
+
   <!-- Nine children: the ninth proves the eight-step stagger cap. The first
-       wraps a button, which must keep its own transitions. -->
+       holds a button, which must keep its own transitions. -->
   <div class="reveal-group" id="group" data-enhance="in-view">
     <article><a class="btn" id="group-btn" href="#group">First item</a></article>
     <article>Second item</article>

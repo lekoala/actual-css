@@ -3,7 +3,8 @@
 ## [Unreleased]
 
 ### Added
-- `.reveal` and `.reveal-group`: one-shot entrance effects driven by the new `data-enhance="in-view"` token, with `data-in-view-margin`, `--reveal-duration`, `--reveal-distance`, and `--reveal-stagger`.
+- `.reveal` and `.reveal-group`: one-shot entrance animations that play on first render, with `--reveal-duration`, `--reveal-distance`, and `--reveal-stagger`.
+- `data-enhance="in-view"`: defers an off-screen effect to its first appearance, with `data-in-view-margin`.
 - `.mark-sweep`: a highlight that sweeps in behind a phrase, reusing the new `--mark-bg` / `--mark-fg` theme pair.
 - `mark`: a theme-tuned highlight pair in both schemes, with `Mark` / `MarkText` in forced colors.
 - `bun run report:paint`: renderer CPU, main-thread time and frame pacing per page, to compare animation variants.

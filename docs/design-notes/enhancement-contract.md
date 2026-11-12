@@ -188,4 +188,6 @@ Eight tokens. Everything else stays self-describing.
 `is-pending` while an element waits outside the viewport and removes it on the
 first intersection. The effect's CSS owns what that state looks like, and the
 element is never hidden before the observer's first callback reports it off
-screen.
+screen. Its one concession to motion is focus: a release by `focusin` finishes
+the animations that removing the state started, found by difference, because
+a CSS `:focus-within` override lapses on blur and replays the entrance.
