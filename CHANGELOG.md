@@ -21,6 +21,9 @@
 - Switch docs and demo templates use native checkbox state without redundant `aria-checked` synchronization.
 - `.switch`: the border follows the track fill, including checked and disabled states, and unchecked hover uses a subtle neutral fill.
 - `:focus` uses local `--focus` for generic outlines; `--focus-outline-color` remains an inherited override, and invalid fields keep their validation color.
+- `.nav-list`: a nested `.nav-list` hangs from a rail under the parent's icon, its labels still aligned with the parent label.
+- `.nav-list`: `--nav-list-icon-size` (the leading icon width) replaces `--nav-list-indent`.
+- `.nav-list`: `--nav-list-rail-color` sets the nested rail; `transparent` hides it and keeps the alignment.
 - `.switch`: `--switch-knob-margin` increases from 8% to 10% of the track height, giving the knob more breathing room.
 
 ### Fixed

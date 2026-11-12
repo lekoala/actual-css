@@ -37,9 +37,10 @@ Build a scrollable sidebar with collapsible navigation groups using native detai
 - A group is a `<details>` inside a row `<li>`, never a direct child of the
   `<ul>`. Its `<summary class="nav-link">` takes the row, hover and focus, and
   a chevron that follows the native `[open]` state.
-- The group's links are a nested `.nav-list`, indented so its labels start
-  under the parent label past a 1em icon. Set `--nav-list-indent` on the nav
-  when the icons are larger.
+- The group's links are a nested `.nav-list`: a rail under the centre of the
+  parent's icon, with the labels starting under the parent label. Set
+  `--nav-list-icon-size` on the nav when the icons are not 1em, and
+  `--nav-list-rail-color: transparent` for a plain indent without the line.
 - `.overline` labels a section of the nav.
 - `<details name="…">` makes the groups an exclusive accordion, without
   JavaScript.

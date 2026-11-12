@@ -10,10 +10,12 @@
  * Public hooks:
  * --nav-current-bg (fallback-only: current-link fill)
  * --nav-current-fg (fallback-only: current-link ink)
- * --nav-list-indent (fallback-only: nested .nav-list inset)
+ * --nav-list-icon-size (fallback-only: leading icon width the nested rail centres on)
+ * --nav-list-rail-color (fallback-only: transparent hides the rail, alignment kept)
  *
  * Internal:
  * --gap (local value for the shared gap token)
+ * --nav-list-rail-inset (half the icon on each side of the nested rail)
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity.
@@ -178,12 +180,18 @@
   transform: rotate(180deg);
 }
 
-/* A nested list is indented so its labels start under the parent's label,
-   past a 1em leading icon and the link gap. Fallback-only: a base
-   declaration on .nav-list would reset an override at every level. */
+/* A nested list hangs from a rail under the centre of the parent's leading
+   icon, and its labels start under the parent's label. The two halves of the
+   icon split around the rail, which balances because .nav-link's gap and
+   inline padding are the same step. --nav-list-icon-size is the icon's width,
+   fallback-only: a base declaration on .nav-list would reset an override at
+   every level. */
 .nav-list .nav-list {
   margin-block-start: var(--gap);
-  padding-inline-start: var(--nav-list-indent, calc(1em + var(--space-20)));
+  --nav-list-rail-inset: calc((var(--nav-list-icon-size, 1em) - var(--border-width)) / 2);
+  margin-inline-start: calc(var(--space-20) + var(--nav-list-rail-inset));
+  padding-inline-start: var(--nav-list-rail-inset);
+  border-inline-start: var(--border-width) solid var(--nav-list-rail-color, var(--border));
 }
 
 /* Forced colors drops the fill and maps both inks to LinkText, so the current

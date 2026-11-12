@@ -580,10 +580,12 @@
     "publicHooks": [
       "--nav-current-bg",
       "--nav-current-fg",
-      "--nav-list-indent"
+      "--nav-list-icon-size",
+      "--nav-list-rail-color"
     ],
     "internalHooks": [
-      "--gap"
+      "--gap",
+      "--nav-list-rail-inset"
     ],
     "states": [
       "aria-current",
