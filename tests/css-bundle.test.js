@@ -328,3 +328,128 @@ test("the public CLI bundles custom stylesheets", async () => {
   expect(bundled).not.toContain("remove me");
   expect(bundled).not.toContain('@import "./local.css";');
 });
+
+test("inlineImports rebases relative url() onto the output directory", async () => {
+  const root = await fixture({
+    "src/entry.css": '@import "./fonts/sans.css";\n.hero { background: url(img/hero.webp); }\n',
+    "src/fonts/sans.css": [
+      "@font-face {",
+      '  src: url("./files/sans.woff2") format("woff2"),',
+      "    url('files/sans.woff?#iefix') format(\"woff\");",
+      "}",
+    ].join("\n"),
+  });
+
+  const bundled = await inlineImports(join(root, "src/entry.css"), {
+    outDir: join(root, "public/build"),
+  });
+
+  expect(bundled).toContain('url("../../src/fonts/files/sans.woff2")');
+  expect(bundled).toContain("url('../../src/fonts/files/sans.woff?#iefix')");
+  expect(bundled).toContain("url(../../src/img/hero.webp)");
+});
+
+test("inlineImports leaves absolute, data and fragment url() alone", async () => {
+  const css = [
+    ".a { background: url(data:image/svg+xml,%3Csvg%3E); }",
+    '.b { background: url("/fonts/sans.woff2"); }',
+    ".c { background: url(https://cdn.example/x.png); }",
+    ".d { mask: url(#clip); }",
+  ].join("\n");
+  const root = await fixture({ "src/entry.css": `${css}\n` });
+
+  const bundled = await inlineImports(join(root, "src/entry.css"), {
+    outDir: join(root, "elsewhere"),
+  });
+
+  expect(bundled).toBe(`${css}\n`);
+});
+
+test("inlineImports leaves the framework's data URIs intact when rebasing", async () => {
+  const file = join(ROOT, "src/css/components/rating.css");
+
+  const rebased = await inlineImports(file, { outDir: join(ROOT, "tmp/out") });
+
+  // The outline star clips with url(%23c) inside its quoted data URI.
+  expect(rebased).toContain("clip-path='url(%23c)'");
+  expect(rebased).toBe(await inlineImports(file));
+});
+
+test("inlineImports rebases only url() references, never text that looks like one", async () => {
+  const css = [
+    '.a::before { content: "url(img/a.png)"; }',
+    "/* url(img/b.png) */",
+    "/* a comment over",
+    "   two lines: url(img/c.png) */",
+    ".d { --myurl: myurl(img/d.png); }",
+    ".e { background: url(?v=1), url(''); }",
+    ".f { background: url(img/f.png); }",
+  ].join("\n");
+  const root = await fixture({ "src/entry.css": `${css}\n` });
+
+  const bundled = await inlineImports(join(root, "src/entry.css"), {
+    outDir: join(root, "public"),
+  });
+
+  expect(bundled).toBe(`${css.replace("url(img/f.png)", "url(../src/img/f.png)")}\n`);
+});
+
+test("inlineImports quotes a rebased path an unquoted url() could not hold", async () => {
+  const root = await fixture({ "my assets/entry.css": ".a { background: url(a.png); }\n" });
+
+  const bundled = await inlineImports(join(root, "my assets/entry.css"), {
+    outDir: join(root, "public"),
+  });
+
+  expect(bundled).toContain('url("../my assets/a.png")');
+});
+
+test("inlineImports refuses url() it cannot rebase faithfully", async () => {
+  const escaped = await fixture({ "entry.css": ".a { background: url(a\\ b.png); }\n" });
+  const packaged = await fixture({
+    "entry.css": '@import "./node_modules/pkg/style.css";\n',
+    "node_modules/pkg/style.css": ".a { background: url(./icon.svg); }\n",
+  });
+  const outDir = { outDir: join(escaped, "public") };
+
+  await expect(inlineImports(join(escaped, "entry.css"), outDir)).rejects.toThrow(
+    /Escaped characters/,
+  );
+  await expect(
+    inlineImports(join(packaged, "entry.css"), { outDir: join(packaged, "public") }),
+  ).rejects.toThrow(/node_modules stylesheet/);
+});
+
+test("the public CLI rebases url() from the --out directory", async () => {
+  const root = await fixture({
+    "src/entry.css": '@import "./fonts/sans.css";\n',
+    "src/fonts/sans.css": '@font-face { src: url("files/sans.woff2"); }\n',
+  });
+  const out = join(root, "public", "build", "app.css");
+
+  const run = await spawn(
+    "node",
+    [
+      join(ROOT, "src", "cli", "actual-css.js"),
+      "bundle",
+      join(root, "src/entry.css"),
+      "--out",
+      out,
+    ],
+    { cwd: ROOT },
+  );
+
+  expect(run.code, run.stderr).toBe(0);
+  expect(await readFile(out, "utf8")).toContain('url("../../src/fonts/files/sans.woff2")');
+});
+
+test("inlineImports keeps url() as written without an output directory", async () => {
+  const root = await fixture({
+    "entry.css": '@import "./fonts/sans.css";\n',
+    "fonts/sans.css": '@font-face { src: url("./files/sans.woff2"); }\n',
+  });
+
+  const bundled = await inlineImports(join(root, "entry.css"));
+
+  expect(bundled).toContain('url("./files/sans.woff2")');
+});

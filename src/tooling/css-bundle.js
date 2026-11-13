@@ -6,7 +6,7 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
-import { dirname, resolve } from "node:path";
+import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const IMPORT_PREFIX_RE = /^\s*@import\b/;
@@ -16,6 +16,12 @@ const EXTERNAL_SPECIFIER_RE = /^(?:[a-z][a-z0-9+.-]+:|\/\/|\/)/i;
 const CHARSET_RE = /^\s*@charset\s+["'][^"']*["']\s*;[^\n]*\n?/;
 const LAYER_TRAILER_RE = /^layer(?:\(\s*([A-Za-z_-][\w-]*(?:\.[A-Za-z_-][\w-]*)*)?\s*\))?$/;
 const RESOLVER_STUB = "__actual_css_resolve__.js";
+// url() values that stay valid wherever the bundle lands: a scheme (data:,
+// https:; two characters or more, as above), a root- or protocol-relative
+// path, a bare query or fragment (same document).
+const LOCATION_FREE_URL_RE = /^(?:[a-z][a-z0-9+.-]+:|\/|[?#])/i;
+const IDENT_CHAR_RE = /[\w-]/;
+const NODE_MODULES_SEGMENT = `${sep}node_modules${sep}`;
 
 function skipWhitespace(source, index) {
   let next = index;
@@ -157,7 +163,142 @@ function wrapInLayer(css, name) {
   return `${head}\n${body}\n}\n`;
 }
 
-async function inlineFile(path, stack, preserved, layered) {
+// Index just past the string opened by the quote at `start` (escapes
+// honoured), or the line end when the string is left open.
+function stringEnd(line, start) {
+  const quote = line[start];
+
+  for (let i = start + 1; i < line.length; i += 1) {
+    if (line[i] === "\\") i += 1;
+    else if (line[i] === quote) return i + 1;
+  }
+
+  return line.length;
+}
+
+// Reads the url() whose "(" sits at `open`: { value, quote, end } with `end`
+// just past ")", or null when the call does not close on this line.
+function readUrlCall(line, open) {
+  let i = skipWhitespace(line, open + 1);
+  const quote = line[i] === '"' || line[i] === "'" ? line[i] : "";
+  let value;
+
+  if (quote) {
+    // A string left open runs to the line end, so no ")" follows and the
+    // check below returns null: the slice is never used then.
+    const end = stringEnd(line, i);
+    value = line.slice(i + 1, end - 1);
+    i = skipWhitespace(line, end);
+  } else {
+    const start = i;
+    while (i < line.length && line[i] !== ")" && !/\s/.test(line[i])) {
+      i += line[i] === "\\" ? 2 : 1;
+    }
+    value = line.slice(start, i);
+    i = skipWhitespace(line, i);
+  }
+
+  return line[i] === ")" ? { value, quote, end: i + 1 } : null;
+}
+
+// The url() value pointing at the same file as `value` written from `file`,
+// seen from `base`; null when it does not depend on the stylesheet location.
+function rebasedUrl(value, file, base) {
+  if (value === "" || LOCATION_FREE_URL_RE.test(value)) return null;
+
+  // Escapes would need decoding before the path means anything: refuse
+  // rather than rewrite a path that is not the one the browser reads.
+  if (value.includes("\\")) {
+    throw new Error(
+      `Escaped characters in a relative url() are not supported in ${file}: ${value}`,
+    );
+  }
+  // A package directory is never served: the rewritten reference would only
+  // ever 404. Copy such assets into the served tree and reference them there.
+  if (file.includes(NODE_MODULES_SEGMENT)) {
+    throw new Error(
+      `Relative url() in a node_modules stylesheet cannot be served from the bundle (${file}): ${value}`,
+    );
+  }
+
+  const cut = value.search(/[?#]/);
+  const path = cut === -1 ? value : value.slice(0, cut);
+  const suffix = cut === -1 ? "" : value.slice(cut);
+  const target = resolve(dirname(file), path);
+  const fromBase = relative(base, target);
+  // Another Windows drive has no relative path: fail rather than emit a URL
+  // the browser can never resolve.
+  if (isAbsolute(fromBase)) {
+    throw new Error(`Cannot reach ${target} by a relative url() from ${base} (${file})`);
+  }
+
+  const rebased = fromBase.split(sep).join("/");
+  return `${rebased.startsWith(".") ? "" : "./"}${rebased}${suffix}`;
+}
+
+// Rewrites the relative url() references of one line (see rebasedUrl).
+// Comments and strings are copied verbatim — a url() quoted inside a data URI
+// or a `content` string is text, not a reference; `state.inComment` carries a
+// comment that spans lines. A url() split over several lines is left as is.
+function rebaseUrls(line, file, base, state) {
+  let out = "";
+  let i = 0;
+
+  while (i < line.length) {
+    if (state.inComment) {
+      const close = line.indexOf("*/", i);
+      const end = close === -1 ? line.length : close + 2;
+      out += line.slice(i, end);
+      state.inComment = close === -1;
+      i = end;
+      continue;
+    }
+
+    const char = line[i];
+
+    if (char === "/" && line[i + 1] === "*") {
+      state.inComment = true;
+      out += "/*";
+      i += 2;
+      continue;
+    }
+
+    if (char === '"' || char === "'") {
+      const end = stringEnd(line, i);
+      out += line.slice(i, end);
+      i = end;
+      continue;
+    }
+
+    const call =
+      line.slice(i, i + 4).toLowerCase() === "url(" && !IDENT_CHAR_RE.test(line[i - 1] ?? "")
+        ? readUrlCall(line, i + 3)
+        : null;
+    if (!call) {
+      out += char;
+      i += 1;
+      continue;
+    }
+
+    const rebased = rebasedUrl(call.value, file, base);
+
+    if (rebased === null) {
+      out += line.slice(i, call.end);
+      i = call.end;
+      continue;
+    }
+
+    // Quote whatever an unquoted url() could not hold; escape the quote kept.
+    const quote = call.quote || (/[\s"'()]/.test(rebased) ? '"' : "");
+    const body = quote ? rebased.replaceAll(quote, `\\${quote}`) : rebased;
+    out += `url(${quote}${body}${quote})`;
+    i = call.end;
+  }
+
+  return out;
+}
+
+async function inlineFile(path, stack, preserved, layered, base) {
   if (stack.includes(path)) {
     const chain = [...stack, path].map((item) => item.replace(/.*[/\\]/, ""));
     throw new Error(`Circular CSS import: ${chain.join(" -> ")}`);
@@ -166,6 +307,7 @@ async function inlineFile(path, stack, preserved, layered) {
   const css = await readFile(path, "utf8");
   const nextStack = [...stack, path];
   const chunks = [];
+  const urlState = { inComment: false };
 
   for (const line of css.split(/\r?\n/)) {
     const parsed = parseImportLine(line);
@@ -174,7 +316,7 @@ async function inlineFile(path, stack, preserved, layered) {
       if (IMPORT_PREFIX_RE.test(line)) {
         throw new Error(`Unsupported CSS @import syntax in ${path}: ${line.trim()}`);
       }
-      chunks.push(line);
+      chunks.push(base ? rebaseUrls(line, path, base, urlState) : line);
       continue;
     }
 
@@ -199,16 +341,21 @@ async function inlineFile(path, stack, preserved, layered) {
     }
 
     const target = resolveImportTarget(path, parsed.specifier);
-    const inlined = await inlineFile(target, nextStack, preserved, layered || layer !== null);
+    const inlined = await inlineFile(target, nextStack, preserved, layered || layer !== null, base);
     chunks.push(layer ? wrapInLayer(inlined, layer.name) : inlined);
   }
 
   return `${chunks.join("\n").trim()}\n`;
 }
 
-export async function inlineImports(file) {
+// `outDir`: the directory the bundle will be written to. When given, relative
+// url() references are rewritten to keep pointing at their files from there
+// (fonts, images next to an imported stylesheet); without it they are copied
+// as written, which is only right when the bundle sits beside its entry.
+export async function inlineImports(file, { outDir } = {}) {
   const preserved = [];
-  const body = await inlineFile(resolve(file), [], preserved, false);
+  const base = outDir ? resolve(outDir) : null;
+  const body = await inlineFile(resolve(file), [], preserved, false, base);
 
   if (preserved.length === 0) return body;
 

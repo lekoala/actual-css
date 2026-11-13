@@ -20,6 +20,8 @@ function usage() {
     "bundle: flatten plain CSS @import chains from relative files and actual-css/css/*",
     "subpaths. A layer or layer(name) import is flattened into the @layer block it",
     "stands for. Remote imports are kept and hoisted to the top of the bundle.",
+    "Relative url() references are rewritten to resolve from the output file; the",
+    "assets are not copied, so keep them and the bundle in the served tree.",
     "Leaves modern CSS syntax untouched; this is a bundler, not a transpiler.",
     "",
     "design: export a theme's tokens for Figma, Penpot and a portable DTCG profile,",
@@ -161,7 +163,7 @@ async function contrast({ themeFile, name }) {
 async function bundle({ input, out, minify }) {
   const inputPath = resolve(input);
   const outputPath = resolve(out);
-  const css = await inlineImports(inputPath);
+  const css = await inlineImports(inputPath, { outDir: dirname(outputPath) });
   const code = minify ? minifyCss(css) : css;
 
   await mkdir(dirname(outputPath), { recursive: true });

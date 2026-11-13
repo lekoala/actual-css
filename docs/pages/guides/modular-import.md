@@ -315,13 +315,29 @@ Use an existing CSS pipeline when these features are required.
 
 One further case is refused rather than guessed: a remote import inside a layered subtree, because hoisting it before ordinary rules would move it out of its layer.
 
-The CLI also does not process or rebase asset URLs such as:
+The CLI rewrites relative `url()` references so they still point at the same file from the output's directory. With `--out public/build/app.css`, a stylesheet at `src/fonts/sans.css` that declares:
 
 ```css
-background-image: url("../images/card.svg");
+src: url("files/sans.woff2");
 ```
 
-Those paths remain exactly as written, so projects with relative assets should generally let their existing build pipeline handle CSS imports.
+ends up in the bundle as:
+
+```css
+src: url("../../src/fonts/files/sans.woff2");
+```
+
+Only the reference changes: the assets are not copied, so the emitted URL still leads to the source location. The bundle and every referenced file must therefore sit in the tree your server publishes. In the example above, `src/` itself would have to be served; when only `public/` is published, keep the referenced files under `public/` too — fonts in `public/fonts/` referenced from a bundle in `public/build/` come out as `url("../fonts/…")`.
+
+Left as written: `data:` and other URLs with a scheme, root-relative (`/fonts/sans.woff2`) and protocol-relative paths, a bare query or fragment (`url(?v=1)`, `url(#clip)`), and anything inside a comment or a string, such as a `url()` nested in a quoted data URI or a `content` value.
+
+Refused rather than guessed:
+
+- a relative `url()` in a stylesheet under `node_modules`, which is never served: copy those assets into your published tree and reference them there;
+- a relative `url()` containing CSS escapes (`url(a\ b.png)`);
+- a target on another Windows drive than the output, which no relative path can reach.
+
+A `url()` split over several lines is not rewritten, and neither are the bare-string URLs of `image-set()`, `-webkit-image-set()` or `src()`: they break when the bundle moves.
 
 Remote and absolute imports are preserved rather than fetched and are moved before ordinary rules so they remain valid CSS.
 
