@@ -2,12 +2,15 @@ import { expect, test } from "bun:test";
 import {
   browserAvailable,
   clickSelector,
+  finishAnimations,
   fixtureUrl,
   waitForBrowser,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
 
-const it = (await browserAvailable()) ? test : test.skip;
+const baseTest = (await browserAvailable()) ? test : test.skip;
+// Chrome startup and the source CSS import tree outlast bun's 5s default on CI.
+const it = (name, run) => baseTest(name, run, 60_000);
 
 for (const page of ["reveal", "mark-sweep"]) {
   it(`replays every ${page} demo repeatedly`, async () => {
@@ -23,6 +26,8 @@ for (const page of ["reveal", "mark-sweep"]) {
             example.scrollIntoView({ block: 'center' });
           })()`);
           const target = "#replay-example .docs-preview";
+          await waitForBrowser(view, `!document.querySelector('${target} .is-pending')`);
+          await finishAnimations(view, target);
           await waitForBrowser(
             view,
             `document.querySelector('${target}').getAnimations({ subtree: true }).length === 0`,
@@ -36,6 +41,7 @@ for (const page of ["reveal", "mark-sweep"]) {
             expect(
               await view.evaluate(`document.querySelector('${target} .is-pending') === null`),
             ).toBe(true);
+            await finishAnimations(view, target);
             await waitForBrowser(
               view,
               `document.querySelector('${target}').getAnimations({ subtree: true }).length === 0`,

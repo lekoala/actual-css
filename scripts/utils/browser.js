@@ -36,6 +36,17 @@ export function waitForBrowser(view, expression, { timeoutMs = 5000 } = {}) {
 }
 
 /*
+ * Jumps every animation and transition under `selector` to its end. A test
+ * asserting that an effect starts and then ends needs neither its real
+ * duration: waiting it out made a replay suite spend ~15s watching motion.
+ * finish() throws on an infinite animation, so a runaway loop still fails.
+ */
+export function finishAnimations(view, selector) {
+  return view.evaluate(`document.querySelector(${JSON.stringify(selector)})
+    .getAnimations({ subtree: true }).forEach((animation) => animation.finish())`);
+}
+
+/*
  * Computed value of a transitioned property at a fraction of the transition's
  * duration. Seeks the animation instead of sleeping: before the first frame
  * after the state change the computed value is still the transition's start

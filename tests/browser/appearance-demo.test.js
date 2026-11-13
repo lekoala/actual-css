@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import {
   browserAvailable,
   clickSelector,
+  finishAnimations,
   fixtureUrl,
   setViewport,
   waitForBrowser,
@@ -28,11 +29,11 @@ it("appearance examples release on scroll and replay independently", async () =>
         // The effect, not the stage: a tall stage centred hides its end.
         [...example.querySelectorAll('[data-effect]')].at(-1).scrollIntoView({ block: 'center' });
       })()`);
-        const stage = 'document.querySelector("#active-example .effects-stage")';
-        await waitForBrowser(
-          view,
-          `!${stage}.querySelector('.is-pending') && ${stage}.getAnimations({ subtree: true }).length === 0`,
-        );
+        const stageSelector = "#active-example .effects-stage";
+        const stage = `document.querySelector(${JSON.stringify(stageSelector)})`;
+        await waitForBrowser(view, `!${stage}.querySelector('.is-pending')`);
+        await finishAnimations(view, stageSelector);
+        await waitForBrowser(view, `${stage}.getAnimations({ subtree: true }).length === 0`);
         const source = await view.evaluate(
           'document.querySelector("#active-example [data-source]").textContent',
         );
@@ -47,6 +48,7 @@ it("appearance examples release on scroll and replay independently", async () =>
           expect(
             await view.evaluate('document.activeElement.matches("#active-example [data-replay]")'),
           ).toBe(true);
+          await finishAnimations(view, stageSelector);
           await waitForBrowser(view, `${stage}.getAnimations({ subtree: true }).length === 0`);
         }
         await view.evaluate('document.querySelector("#active-example").removeAttribute("id")');
