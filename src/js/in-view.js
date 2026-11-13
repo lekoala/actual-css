@@ -1,7 +1,7 @@
 /*
  * In view — one-shot appearance trigger for reveal-style effects.
  *
- * Docs: docs/pages/components/reveal.md
+ * Docs: docs/pages/enhancements/in-view.md
  *
  * The runtime names no animation. It marks an element `is-pending` while it
  * waits outside the viewport and removes the class the first time it enters.
@@ -9,10 +9,11 @@
  * lets flyout.css own the panel's presentation.
  *
  * `is-pending` is written only after the observer's first callback reports the
- * element outside the viewport. An element visible at load therefore never
- * flickers: it is never hidden, and it never plays an entrance animation. The
- * first callback runs before the next paint, so an off-screen element is
- * masked before a scroll can expose it.
+ * element outside the viewport. An element visible at load is therefore never
+ * hidden by the runtime; whether it still enters is the effect's choice
+ * (`.reveal` plays its keyframes on first render, `.mark-sweep` stays at
+ * rest). The first callback runs before the next paint, so an off-screen
+ * element is masked before a scroll can expose it.
  *
  * A pending element keeps its text in the accessibility tree and in the tab
  * order; effects hide it with opacity alone. `focusin` releases it at once and

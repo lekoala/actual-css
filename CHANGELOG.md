@@ -7,6 +7,8 @@
 - `data-enhance="in-view"`: defers an off-screen effect to its first appearance, with `data-in-view-margin`.
 - `.mark-sweep`: a highlight that sweeps in behind a phrase, reusing the new `--mark-bg` / `--mark-fg` theme pair.
 - `mark`: a theme-tuned highlight pair in both schemes, with `Mark` / `MarkText` in forced colors.
+- Docs: an In view enhancement page, and a Replay button on every example that holds `.reveal`, `.reveal-group` or `.mark-sweep`.
+- `demo/templates/appearance.html`: scroll reveals, staggered groups, highlight sweeps and site-defined effects, with replay controls.
 - `bun run report:paint`: renderer CPU, main-thread time and frame pacing per page, to compare animation variants.
 - `docs/design-notes/motion-cost.md`: what an animation costs per frame, with the Aura measurements and `scripts/fixtures/aura-paint.html`.
 - `demo/templates/blocks.html`: notification preferences composition with Email and Push switch columns.
