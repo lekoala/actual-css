@@ -98,7 +98,7 @@ describe("documentation demo geometry", () => {
        the demo track never reaches --docs-demo-track at any viewport. */
     const tracks =
       docsRem("docs-nav-track") + docsRem("docs-demo-track") + docsRem("docs-toc-track");
-    const columnGaps = 2 * token("space-40");
+    const columnGaps = 2 * token("space-60");
     const centerPad = 2 * 1; /* --center-pad default, center.css */
 
     expect(docsRem("docs-shell-size")).toBeGreaterThanOrEqual(tracks + columnGaps + centerPad);

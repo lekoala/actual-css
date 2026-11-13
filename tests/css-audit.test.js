@@ -917,7 +917,7 @@ test("scrollspy CSS exposes native target-current enhancement", () => {
   const css = readCss("src/css/components/scrollspy.css");
 
   expect(css).toContain("scroll-target-group: auto;");
-  expect(css).toContain(".scrollspy a:target-current");
+  expect(css).toContain('.scrollspy:not(:has([aria-current="location"])) a:target-current');
 });
 
 test("modal uses scrollbar gutter only for measured classic-scrollbar locks", () => {

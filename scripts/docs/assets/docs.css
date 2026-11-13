@@ -30,14 +30,14 @@
    The shell then needs the nav track + demo track + TOC track plus two
    column gaps, and .center subtracts 2 x --center-pad from --center-size:
 
-     12 + 1 + 69 + 1 + 11 = 94rem of track -> --center-size 96rem
+     12 + 2 + 69 + 2 + 11 = 96rem of track -> --center-size 98rem
 
    Regression-tested in tests/docs-geometry.test.js. */
 :root {
   --docs-demo-track: 69rem;
   --docs-nav-track: 12rem;
   --docs-toc-track: 11rem;
-  --docs-shell-size: 96rem;
+  --docs-shell-size: 98rem;
 
   /* Docs-only typeface. The framework keeps the platform UI face, so a
      consumer's page depends on nothing but the OS; this site loads Inter
@@ -83,8 +83,23 @@
   flex: none;
 }
 
+.docs-header .icon-only {
+  --btn-font-size: var(--font-size-lg);
+}
+
 .docs-theme-field .select {
   min-inline-size: 8rem;
+}
+
+/* Navigation controls share the header surface, including on themes that
+   give form fields an elevation or a separate bottom edge. */
+.docs-header .docs-theme-field .select {
+  --control-border: transparent;
+  --control-border-block-end-color: transparent;
+  --control-default-bg: transparent;
+  --control-fg: var(--text-muted);
+  --control-font-size: var(--font-size-sm);
+  --control-shadow: none;
 }
 
 .docs-shell {
@@ -97,7 +112,7 @@
   grid-template-columns: minmax(0, 1fr);
   gap: var(--gap);
   align-items: start;
-  padding-block: var(--space-40);
+  padding-block: var(--space-60);
 }
 
 .docs-sidebar,
@@ -115,6 +130,15 @@
 
 .docs-destinations .cluster {
   --gap: var(--space-10);
+}
+
+.docs-destinations .nav-link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+}
+
+.docs-destinations .nav-link[aria-current] {
+  font-weight: var(--font-weight-medium);
 }
 
 .docs-destinations ul,
@@ -148,12 +172,34 @@
   margin-block-start: 0;
 }
 
-/* The header marks the section holding the page, not the page itself: it keeps
-   the ink step and drops the fill, so the sidebar's current row is the only
-   filled nav item on screen. The component's own hook is enough — this site
-   does not fight a component rule it does not own. */
+/* Section navigation stays quiet; the sidebar carries the current page. */
 .docs-destinations .nav-link[aria-current] {
   --nav-current-bg: transparent;
+}
+
+.docs-sidebar {
+  --nav-current-bg: transparent;
+  --nav-current-fg: var(--link, var(--primary));
+
+  font-size: var(--font-size-sm);
+}
+
+.docs-sidebar .nav-link {
+  font-weight: var(--font-weight-normal);
+}
+
+.docs-sidebar .nav-link[aria-current="page"] {
+  font-weight: var(--font-weight-medium);
+}
+
+.docs-sidebar .docs-nav-group {
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.docs-sidebar .nav-list + .docs-nav-group {
+  margin-block-start: var(--space-50);
 }
 
 /* The sidebars are scrollports, so an exterior ring clips against the scroll
@@ -163,9 +209,49 @@
   outline-offset: calc(var(--focus-ring-width) * -1);
 }
 
-.docs-toc-list .nav-link[data-level="3"] {
+.docs-toc nav {
+  border-inline-start: var(--border-width) solid var(--border);
   padding-inline-start: var(--space-40);
+}
+
+.docs-toc .docs-nav-group {
+  color: var(--text);
   font-size: var(--font-size-sm);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.docs-toc-list {
+  --gap: 0;
+  --nav-current-bg: transparent;
+  --nav-current-fg: var(--primary);
+}
+
+.docs-toc-list .nav-link {
+  padding-inline: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+}
+
+.docs-toc-list .nav-link[aria-current="location"],
+.docs-toc-list:not(:has([aria-current="location"])) .nav-link:is(:target-current) {
+  color: var(--link, var(--primary));
+  font-weight: var(--font-weight-medium);
+}
+
+/* The trait follows the link's height, including wrapped titles, and shares
+   one rail with native :target-current and the scrollspy enhancement. */
+.docs-toc-list .nav-link[aria-current="location"]::before,
+.docs-toc-list:not(:has([aria-current="location"])) .nav-link:is(:target-current)::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(-1 * (var(--space-40) + var(--border-width)));
+  border-inline-start: 2px solid currentColor;
+}
+
+.docs-toc-list .nav-link[data-level="3"] {
+  padding-inline-start: var(--space-30);
 }
 
 .docs-drawer-header {
@@ -205,6 +291,12 @@
 
 .docs-prose > :not(.table-wrap) {
   max-inline-size: var(--prose-measure);
+}
+
+.docs-prose > h2:not(:first-child) {
+  margin-block-start: calc(var(--space-60) + var(--space-40));
+  padding-block-start: var(--space-50);
+  border-block-start: var(--border-width) solid var(--border);
 }
 
 /* Class reference tables (Class | Kind | Description, tagged by
@@ -258,19 +350,31 @@
 
 /* --- End of page --- */
 
-/* Source links are metadata, not actions: quiet enough that the navigation
-   below stays the last thing worth clicking. */
 .docs-source-links {
+  --cluster-justify: space-between;
   --gap: var(--space-40);
+
+  margin-block-start: calc(var(--space-60) + var(--space-40));
+  padding-block: var(--space-40);
+  border-block-end: var(--border-width) solid var(--border);
 }
 
 .docs-source-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-20);
   color: var(--text-muted);
   font-size: var(--font-size-sm);
+  text-decoration: none;
+}
+
+.docs-source-links a:first-child {
+  color: var(--link, var(--primary));
 }
 
 .docs-source-links a:hover {
   color: var(--text);
+  text-decoration: underline;
 }
 
 /* Two navigation surfaces instead of two outline buttons: the whole card is
@@ -281,9 +385,8 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--gap);
-  margin-block-start: var(--space-60);
+  margin-block-start: var(--space-40);
   padding-block-start: var(--space-40);
-  border-block-start: var(--border-width) solid var(--border);
 }
 
 .docs-page-link {
@@ -310,12 +413,19 @@
 }
 
 .docs-page-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-20);
   color: var(--text-muted);
   font-size: var(--font-size-sm);
 }
 
 .docs-page-title {
   font-weight: var(--font-weight-semibold);
+}
+
+.docs-page-link-next .docs-page-label {
+  justify-content: end;
 }
 
 /* One column on a phone: two half-width titles would wrap to crumbs. */
@@ -327,6 +437,10 @@
   .docs-page-link-next {
     grid-column: 1;
     text-align: start;
+  }
+
+  .docs-page-link-next .docs-page-label {
+    justify-content: start;
   }
 }
 
@@ -619,13 +733,6 @@
   .docs-search-hint-label {
     display: none;
   }
-}
-
-/* The header opener is a quiet way in, not a primary action: a surface fill,
-   the icon, and the platform shortcut. The control edge aligns it with the
-   theme select beside it; .surface keeps its softer --border elsewhere. */
-.docs-header [data-docs-search] {
-  --btn-border-color: var(--border-control);
 }
 
 .docs-search-trigger {
@@ -1091,8 +1198,8 @@
   .docs-toc {
     display: block;
     position: sticky;
-    inset-block-start: var(--space-40);
-    max-block-size: calc(var(--viewport-block) - 2 * var(--space-40));
+    inset-block-start: var(--space-60);
+    max-block-size: calc(var(--viewport-block) - 2 * var(--space-60));
     overflow-y: auto;
     /* Keep the active nav link's background off the scrollbar thumb. The thumb
        chrome and the reserved gutter come from .scroller.stable-gutter on the
@@ -1103,15 +1210,14 @@
 
 }
 
-/* The header keeps the theme select while the single-row layout has room for
-   it: brand 104 + select 128 + Search 131 + Menu 67 + three --gap = 466px.
-   Below 33rem the single row can no longer guarantee that (a scrollbar can
-   subtract another 15px), so the select moves to the drawer and the shortcut
-   hint goes with it, leaving brand + Search + Menu at 267px on the default
-   font. That is only 21px under the 288px content box at 320px, and a wider
-   system font (Linux DejaVu, Verdana) needs ~290px, so the row would wrap.
-   Tightening the header gap and the control padding buys the headroom a
-   wider font needs. */
+@media (min-width: 90rem) {
+  .docs-shell {
+    column-gap: var(--space-60);
+  }
+}
+
+/* Move the theme select into the drawer on phones so Search, GitHub and
+   Menu remain on one row even with wider system-font fallbacks. */
 @media (max-width: 33rem) {
   .docs-header-inner {
     --gap: var(--space-10);
@@ -1136,9 +1242,9 @@
   }
 }
 
-/* Destinations live in the header from 64rem and in the drawer below it, so
-   Menu stays until then: the sidebar from 56rem lists one destination only. */
-@media (min-width: 64rem) {
+/* Destinations need room alongside the theme, search and repository controls.
+   Below this width the drawer keeps every destination reachable. */
+@media (min-width: 72rem) {
   .docs-header-inner {
     --cluster-wrap: nowrap;
   }

@@ -665,6 +665,7 @@
       "scrollspy"
     ],
     "states": [
+      "aria-current",
       "target"
     ],
     "jsImport": "actual-css/js/scrollspy",

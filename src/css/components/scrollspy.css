@@ -18,11 +18,13 @@
  */
 
 @supports selector(.scrollspy a:target-current) {
-  .scrollspy {
+  /* Native and JS activation lines can select different links. Once JS has
+     a current location, it owns the state and the native group must yield. */
+  .scrollspy:not(:has([aria-current="location"])) {
     scroll-target-group: auto;
   }
 
-  .scrollspy a:target-current {
+  .scrollspy:not(:has([aria-current="location"])) a:target-current {
     color: var(--text);
     font-weight: var(--font-weight-medium);
   }

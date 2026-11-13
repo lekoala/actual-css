@@ -102,22 +102,24 @@ it("docs header stays a single row", async () => {
   );
 });
 
-/* The search opener stays .surface, but the docs shell opts it into the same
- * control edge as the theme select. A variant-only change would not reach the
- * header; this guards the local alignment decision. */
-it("docs header search shares the theme control edge", async () => {
+it("docs header search and theme select have no resting frame or fill", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       const edges = await view.evaluate(`(() => {
-        const edge = (selector) =>
-          getComputedStyle(document.querySelector(selector)).borderBlockStartColor;
+        const chrome = (selector) => {
+          const style = getComputedStyle(document.querySelector(selector));
+          return { border: style.borderBlockStartColor, background: style.backgroundColor };
+        };
         return {
-          select: edge(".docs-theme-field .select"),
-          search: edge("[data-docs-search]"),
+          select: chrome(".docs-theme-field .select"),
+          search: chrome("[data-docs-search]"),
         };
       })()`);
-      expect(edges.search).toBe(edges.select);
+      for (const control of [edges.search, edges.select]) {
+        expect(control.border).toBe("rgba(0, 0, 0, 0)");
+        expect(control.background).toBe("rgba(0, 0, 0, 0)");
+      }
     },
     { artifactName: "docs-header-edge" },
   );

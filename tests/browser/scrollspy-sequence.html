@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Scrollspy trailing sections</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <script src="../../dist/actual.full.js" defer></script>
+  <style>
+    #scroller { block-size: 600px; overflow: auto; }
+    section { box-sizing: border-box; }
+    #alpha { block-size: 1450px; }
+    #beta { block-size: 400px; }
+    #gamma { block-size: 150px; }
+    h2 { margin: 0; }
+  </style>
+</head>
+<body>
+  <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-root="#scroller" aria-label="Page sections">
+    <ul class="nav-list">
+      <li><a class="nav-link" href="#alpha">Popover ownership</a></li>
+      <li><a class="nav-link" href="#beta">Modules</a></li>
+      <li><a class="nav-link" href="#gamma">Component pages</a></li>
+    </ul>
+  </nav>
+  <main id="scroller">
+    <section id="alpha"><h2>Popover ownership</h2></section>
+    <section id="beta"><h2>Modules</h2></section>
+    <section id="gamma"><h2>Component pages</h2></section>
+  </main>
+</body>
+</html>

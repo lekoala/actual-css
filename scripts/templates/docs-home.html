@@ -52,12 +52,15 @@
               {{themeOptions}}
             </select>
           </label>
-          <button class="btn sm surface docs-search-trigger" type="button" data-docs-search
+          <button class="btn sm ghost docs-search-trigger" type="button" data-docs-search
             aria-haspopup="dialog" aria-controls="docs-search-dialog" aria-keyshortcuts="Control+K Meta+K /">
             <i class="ti ti-search" aria-hidden="true"></i>
             Search
             <kbd class="key">Ctrl K</kbd>
           </button>
+          <a class="btn sm ghost icon-only" href="https://github.com/lekoala/actual-css" aria-label="Actual CSS on GitHub">
+            <i class="ti ti-brand-github" aria-hidden="true"></i>
+          </a>
           <button class="btn sm ghost docs-menu-toggle" type="button" commandfor="docs-nav-drawer" command="show-modal"
             aria-haspopup="dialog" aria-controls="docs-nav-drawer" aria-label="Open navigation">Menu</button>
         </div>
@@ -212,7 +215,7 @@
               <article class="card raised stack docs-specimen-panel" id="showcase-invoices" aria-labelledby="showcase-invoices-title">
                 <hgroup><h3 id="showcase-invoices-title">All accounted for</h3><p class="muted">Your latest invoices, at a glance.</p></hgroup>
                 <div class="table-wrap" role="region" aria-labelledby="showcase-invoices-title" tabindex="0">
-                  <table class="table" style="--table-min: 20rem">
+                  <table class="table compact">
                     <thead>
                       <tr><th scope="col">Invoice</th><th scope="col">Amount</th><th scope="col">Status</th></tr>
                     </thead>

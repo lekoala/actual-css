@@ -39,6 +39,7 @@
 - `.switch`: `--switch-knob-margin` increases from 8% to 10% of the track height, giving the knob more breathing room.
 
 ### Fixed
+- `.scrollspy`: native selection yields to `aria-current`, and the activation line advances near the scroll end so trailing sections activate in order.
 - A closed `<dialog>` stays hidden when an author class sets `display`, such as `<dialog class="card">`.
 - Docs home test: the menu-to-dialog focus check waits for the close event instead of reading focus before it runs.
 - `fixtureUrl()` keeps a page's query string and hash instead of escaping them into the file name.

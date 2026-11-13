@@ -19,7 +19,7 @@ or style `[aria-current="location"]` yourself.
 - `.scrollspy` marks the region for JS detection. It does not add visual styles.
 - `.nav-list` and `.nav-link` provide the visible list and active link styling.
 - The JS enhancer toggles `aria-current="location"` on the active link. Without JavaScript, the links remain regular anchor links.
-- Detection is geometric and deterministic: on each scroll, the active section is the last one whose top has crossed an activation line. Reaching the end of the scroll always activates the last section, and sitting above the first activates none.
+- The active section is the last heading past the activation line. Over the final viewport of scroll travel, the line advances to the bottom so short trailing sections become active in order. Above the first section, no link is active.
 - `data-scrollspy-root="#container"` measures a scroll container instead of the viewport.
 - `data-scrollspy-offset` moves the activation line: a bare number or `px` value is pixels, a `%` value is a share of the root's visible height. Invalid values fall back to `20%`, and negatives clamp to `0`.
 - The same markup also works with the CSS-native scroll markers path (see below).
@@ -56,16 +56,16 @@ without JavaScript.
 
 ```css
 @supports selector(:target-current) {
-  .scrollspy {
+  .scrollspy:not(:has([aria-current="location"])) {
     scroll-target-group: auto;
   }
 
-  .scrollspy a:target-current {
+  .scrollspy:not(:has([aria-current="location"])) a:target-current {
     color: var(--primary);
     font-weight: var(--font-weight-medium);
   }
 }
 ```
 
-Keep this as progressive enhancement. The JavaScript enhancement remains the
-portable fallback — the same markup serves both paths.
+The native group yields while JavaScript marks a current location, so only one
+link is active. The same markup serves both paths.

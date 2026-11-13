@@ -11,6 +11,7 @@
  * share the viewport — and guesses wrong for sections shorter than the band.
  *
  * activation line = root top + offset      (default 20% of the root's height)
+ * near scroll end = line advances to the root bottom over the last viewport
  * active section  = last section whose top <= activation line
  * scrolled to end = last section, whatever the line says
  * above the first = no active section
@@ -134,7 +135,13 @@ function setupNav(nav) {
       return;
     }
 
-    const line = top + activationOffset(nav, height);
+    const offset = activationOffset(nav, height);
+    // A fixed line followed by an end-of-scroll jump can skip whole sections
+    // on a tall viewport. Advance continuously through the final viewport of
+    // scroll travel so each intervening heading can become current first.
+    const remaining = scrollHeight - height - scrollTop;
+    const progress = height > 0 ? Math.max(0, Math.min(1, 1 - remaining / height)) : 0;
+    const line = top + offset + Math.max(0, height - offset) * progress;
     let active = null;
     for (const { section } of sections) {
       if (section.getBoundingClientRect().top <= line) active = section;

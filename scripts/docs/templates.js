@@ -297,8 +297,9 @@ export function renderHome({
  */
 function renderPageLink(url, entry, direction) {
   const label = direction === "previous" ? "Previous" : "Next";
+  const icon = `<i class="ti ti-arrow-${direction === "previous" ? "left" : "right"}" aria-hidden="true"></i>`;
   return `          <a class="card stack docs-page-link docs-card-link docs-page-link-${direction}" href="${relHref(url, entry.url)}">
-            <span class="docs-page-label">${label}</span>
+            <span class="docs-page-label">${direction === "previous" ? `${icon} ${label}` : `${label} ${icon}`}</span>
             <span class="docs-page-title">${escapeHtml(entry.title)}</span>
           </a>`;
 }

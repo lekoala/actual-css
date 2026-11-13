@@ -52,12 +52,15 @@
               {{themeOptions}}
             </select>
           </label>
-          <button class="btn sm surface docs-search-trigger" type="button" data-docs-search
+          <button class="btn sm ghost docs-search-trigger" type="button" data-docs-search
             aria-haspopup="dialog" aria-controls="docs-search-dialog" aria-keyshortcuts="Control+K Meta+K /">
             <i class="ti ti-search" aria-hidden="true"></i>
             Search
             <kbd class="key">Ctrl K</kbd>
           </button>
+          <a class="btn sm ghost icon-only" href="https://github.com/lekoala/actual-css" aria-label="Actual CSS on GitHub">
+            <i class="ti ti-brand-github" aria-hidden="true"></i>
+          </a>
           <button class="btn sm ghost docs-menu-toggle" type="button" commandfor="docs-nav-drawer" command="show-modal"
             aria-haspopup="dialog" aria-controls="docs-nav-drawer" aria-label="Open navigation">Menu</button>
         </div>
@@ -80,11 +83,12 @@
 
           {{content}}
 
-          <div class="cluster docs-source-links">
-            <a href="{{editUrl}}" rel="noopener noreferrer">Edit on GitHub</a>
-            <a href="{{markdownUrl}}" rel="noopener noreferrer">View Markdown</a>
-          </div>
         </article>
+
+        <footer class="cluster docs-source-links" aria-label="Page source">
+          <a href="{{editUrl}}" rel="noopener noreferrer"><i class="ti ti-edit" aria-hidden="true"></i> Suggest changes to this page</a>
+          <a href="{{markdownUrl}}" rel="noopener noreferrer"><i class="ti ti-markdown" aria-hidden="true"></i> View Markdown</a>
+        </footer>
 
         <nav class="docs-prevnext" aria-label="Page navigation">
           {{prev}}

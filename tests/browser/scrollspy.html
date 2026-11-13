@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Scrollspy state ownership</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    nav { position: fixed; inset: 1rem auto auto 1rem; }
+    main { margin-inline-start: 12rem; }
+    section { min-block-size: 100vh; }
+  </style>
+</head>
+<body>
+  <nav class="scrollspy" aria-label="Page sections">
+    <ul class="nav-list">
+      <li><a class="nav-link" href="#alpha">Alpha</a></li>
+      <li><a class="nav-link" href="#beta">Beta</a></li>
+    </ul>
+  </nav>
+  <main>
+    <section id="alpha"><h1>Alpha</h1></section>
+    <section id="beta"><h2>Beta</h2></section>
+  </main>
+</body>
+</html>

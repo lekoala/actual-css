@@ -81,6 +81,20 @@ test("reaching the end of the document activates the last section", async () => 
   expect(currentLink()).toBe("#gamma");
 });
 
+test("sections near the end become current before the last section takes over", async () => {
+  const layout = await loadScrollspy(NAV, { height: 600, scrollHeight: 2000 });
+  layout.placeAll({ alpha: 0, beta: 1450, gamma: 1850 }, 100);
+
+  await layout.scrollTo(900);
+  expect(currentLink()).toBe("#alpha");
+
+  await layout.scrollTo(1200);
+  expect(currentLink()).toBe("#beta");
+
+  await layout.scrollToEnd();
+  expect(currentLink()).toBe("#gamma");
+});
+
 test("a scroll container is measured instead of the viewport", async () => {
   setupDOM(`
     <div id="scroller">
