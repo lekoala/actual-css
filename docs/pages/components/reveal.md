@@ -19,6 +19,9 @@ Without the runtime, everything plays on load and ends visible. Under reduced mo
 
 ## Usage
 
+Try the [Appearance effects catalogue](../../demo/templates/appearance.html#reveal)
+to compare entrances, adjust the viewing speed, and replay staggered groups.
+
 - Use `.reveal` alone for content in the first screen; add `data-enhance="in-view"` for content below the fold.
 - Load the runtime with `actual-css/js/full`, or register only `actual-css/js/in-view`.
 - Do not combine `.reveal` with another animated class on the same element, such as `.shimmer` or `.spinner`: one `animation` replaces the other. Nest one inside the other instead. Transitions are unaffected, so `.reveal` can sit on a `.btn` or a card.

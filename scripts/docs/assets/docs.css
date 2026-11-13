@@ -233,6 +233,11 @@
   font-weight: var(--font-weight-normal);
 }
 
+.docs-toc-list .nav-link:hover {
+  background: transparent;
+  color: var(--primary);
+}
+
 .docs-toc-list .nav-link[aria-current="location"],
 .docs-toc-list:not(:has([aria-current="location"])) .nav-link:is(:target-current) {
   color: var(--link, var(--primary));

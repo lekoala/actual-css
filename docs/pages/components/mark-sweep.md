@@ -16,6 +16,9 @@ At rest the phrase carries the full highlight, so no JavaScript, reduced motion,
 
 ## Usage
 
+Try the [Appearance effects catalogue](../../demo/templates/appearance.html#mark)
+to replay highlights in theme colors and both reading directions.
+
 - Load the runtime with `actual-css/js/full`, or register only `actual-css/js/in-view`.
 - Put the token and class on the phrase itself, not on the surrounding paragraph: the observer measures the highlighted box.
 - The sweep is one-shot. Use it for a few phrases per page; a paragraph where every other word sweeps reads as an effect demo, not as writing.

@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Appearance effects — Actual CSS</title>
+  <meta name="description" content="Explore scroll reveals, staggered groups, highlight sweeps, and site-defined effects with replay controls and source recipes.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <style>
+    .effects-page {
+      --center-size: 72rem;
+
+      padding-block: var(--space-60);
+      gap: var(--space-60);
+    }
+
+    .effects-intro {
+      padding-block: var(--space-50);
+    }
+
+    .effects-page h2 {
+      font-size: var(--fluid-title);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .effects-page h3 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .effects-section {
+      padding-block-start: var(--space-50);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .effects-columns {
+      --grid-min: 24rem;
+
+      align-items: start;
+    }
+
+    .effects-stage {
+      display: grid;
+      align-content: center;
+      gap: var(--space-40);
+      min-block-size: 18rem;
+      padding: var(--space-50);
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface-subtle);
+    }
+
+    .effects-sample {
+      --card-max-inline-size: 28rem;
+
+      inline-size: 100%;
+      justify-self: center;
+    }
+
+    .effects-number {
+      color: var(--primary);
+      font-size: var(--fluid-title);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .effects-phrase {
+      font-size: var(--fluid-lead);
+      line-height: var(--line-height-relaxed);
+    }
+
+    .effects-code {
+      max-block-size: 28rem;
+      overflow: auto;
+      padding: var(--space-30);
+      background: var(--surface-subtle);
+      border-radius: var(--radius);
+      font-size: var(--font-size-sm);
+    }
+
+    .effects-controls {
+      --cluster-justify: space-between;
+    }
+
+    .effects-readout {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+    }
+
+    @media screen and (prefers-reduced-motion: no-preference) {
+      /* Important beats the tuned sample's inline hook only in slow mode. */
+      .effects-page.is-slow :is(.reveal, .reveal-group) {
+        --reveal-duration: 1800ms !important;
+      }
+
+      .effects-page.is-slow .mark-sweep {
+        --mark-sweep-duration: 2800ms;
+      }
+
+      .effects-page.is-slow .site-arrival {
+        transition-duration: 2800ms;
+      }
+    }
+  </style>
+  <style id="site-effects">
+    /* Site-owned effects: only the in-view state comes from Actual. */
+    @media screen and (prefers-reduced-motion: no-preference) {
+      .site-arrival {
+        transition:
+          opacity 600ms ease-out,
+          translate 600ms ease-out,
+          scale 600ms ease-out;
+      }
+
+      .site-arrival.is-pending {
+        opacity: 0;
+        translate: 0 var(--space-60);
+      }
+
+      .site-arrival-side.is-pending {
+        translate: calc(-1 * var(--space-60)) 0;
+      }
+
+      .site-arrival-zoom.is-pending {
+        translate: none;
+        scale: 0.92;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack effects-page">
+    <header class="stack effects-intro">
+      <div class="cluster effects-controls">
+        <a href="../../site/enhancements/in-view.html">Actual CSS / In view</a>
+        <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+      </div>
+      <p class="overline">Appearance catalogue</p>
+      <h1 class="text-display">A little motion.<br>A clear entrance.</h1>
+      <p class="lead measure">Scroll to meet each effect. Replay it, slow it down, and look at the recipe. The site owns the motion; in-view supplies the trigger.</p>
+      <nav class="cluster" aria-label="Effects">
+        <a class="btn sm ghost" href="#reveal">Reveal</a>
+        <a class="btn sm ghost" href="#groups">Staggered groups</a>
+        <a class="btn sm ghost" href="#mark">Mark sweep</a>
+        <a class="btn sm ghost" href="#custom">Custom effects</a>
+      </nav>
+      <div class="cluster">
+        <label class="cluster"><input id="slow-motion" type="checkbox"> Slow motion</label>
+        <span class="effects-readout" id="motion-preference"></span>
+      </div>
+      <p class="muted">Each scroll trigger runs once. Replay controls belong to this page. Your system's reduced-motion preference always takes priority.</p>
+    </header>
+
+    <section class="stack effects-section" id="reveal" aria-labelledby="reveal-title">
+      <div class="cluster"><span class="badge primary soft">Built in</span><span class="overline">01 / Reveal</span></div>
+      <h2 id="reveal-title">Fade in. Settle into place.</h2>
+      <div class="grid effects-columns">
+        <article class="stack" data-example>
+          <h3>The default entrance</h3>
+          <p>Opacity and a short upward movement. Use it for a content block, an introduction, or a card.</p>
+          <div class="effects-stage">
+            <div class="card stack effects-sample reveal" data-enhance="in-view" data-effect>
+              <span class="overline">Quiet by design</span>
+              <h3>Content comes first.</h3>
+              <p class="muted">An entrance should guide the eye, then get out of the way.</p>
+            </div>
+          </div>
+          <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay</button></div>
+          <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
+        </article>
+        <article class="stack" data-example>
+          <h3>A longer, wider entrance</h3>
+          <p>A local duration and distance, with a negative bottom margin to trigger farther inside the viewport. Initially visible content stays visible.</p>
+          <div class="effects-stage">
+            <div class="card stack effects-sample reveal" data-enhance="in-view" data-in-view-margin="0px 0px -64px 0px" data-effect style="--reveal-duration: 800ms; --reveal-distance: 2rem">
+              <span class="overline">A local adjustment</span>
+              <h3>Give the moment room.</h3>
+              <p class="muted">A little more travel, a little more time.</p>
+            </div>
+          </div>
+          <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay</button></div>
+          <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
+        </article>
+      </div>
+      <p class="muted">Without the runtime, Reveal plays on first render. With <code>data-enhance="in-view"</code>, off-screen content waits for its first entry. <a href="../../site/components/reveal.html">Reveal reference</a></p>
+    </section>
+
+    <section class="stack effects-section" id="groups" aria-labelledby="groups-title" data-example>
+      <div class="cluster"><span class="badge primary soft">Built in</span><span class="overline">02 / Reveal group</span></div>
+      <h2 id="groups-title">One group. A sequence of entrances.</h2>
+      <p class="measure">The container is observed once. Its direct children carry the animation, with a small delay between neighbors. No JavaScript timers or tokens on individual items.</p>
+      <div class="effects-stage">
+        <div class="grid reveal-group" data-enhance="in-view" data-effect style="--grid-min: 12rem; --reveal-stagger: 100ms">
+          <div class="card stack"><span class="effects-number">01</span><h3>Observe</h3><p class="muted">Wait outside the viewport.</p></div>
+          <div class="card stack"><span class="effects-number">02</span><h3>Release</h3><p class="muted">Remove the pending state.</p></div>
+          <div class="card stack"><span class="effects-number">03</span><h3>Animate</h3><p class="muted">Let CSS handle the entrance.</p></div>
+          <div class="card stack"><span class="effects-number">04</span><h3>Read</h3><p class="muted">Leave the content at rest.</p></div>
+        </div>
+      </div>
+      <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay group</button></div>
+      <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
+      <p class="muted">The delay is capped at eight steps. Browsers without <code>sibling-index()</code> reveal the group together. A group is one trigger, even when its cards wrap to several rows.</p>
+    </section>
+
+    <section class="stack effects-section" id="mark" aria-labelledby="mark-title">
+      <div class="cluster"><span class="badge primary soft">Built in</span><span class="overline">03 / Mark sweep</span></div>
+      <h2 id="mark-title">Highlight a thought.</h2>
+      <div class="grid effects-columns">
+        <article class="stack" data-example>
+          <h3>A highlight with meaning</h3>
+          <p>Use <code>&lt;mark&gt;</code> when the phrase is relevant in its context. The background grows while the text stays readable.</p>
+          <div class="effects-stage">
+            <p class="effects-phrase">Build fewer things.<br>Make <mark class="mark-sweep" data-enhance="in-view" data-effect>each one count.</mark></p>
+          </div>
+          <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay</button></div>
+          <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
+        </article>
+        <article class="stack" data-example>
+          <h3>Theme colors and reading direction</h3>
+          <p>Intent classes tint the highlight. An ordinary span keeps a decorative highlight separate from mark semantics.</p>
+          <div class="effects-stage">
+            <p class="effects-phrase">A <span class="mark-sweep primary" data-enhance="in-view" data-effect>clear idea</span>, a <mark class="mark-sweep warning" data-enhance="in-view" data-effect>key detail</mark>.</p>
+            <p class="effects-phrase" dir="rtl" lang="ar">هذه <mark class="mark-sweep success" data-enhance="in-view" data-effect>فكرة مهمة</mark></p>
+          </div>
+          <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay highlights</button></div>
+          <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
+        </article>
+      </div>
+      <p class="muted">Without JavaScript, the full highlight is already visible. Forced colors uses the system highlight pair. <a href="../../site/components/mark-sweep.html">Mark sweep reference</a></p>
+    </section>
+
+    <section class="stack effects-section" id="custom" aria-labelledby="custom-title">
+      <div class="cluster"><span class="badge neutral soft">Site CSS</span><span class="overline">04 / Your own effects</span></div>
+      <h2 id="custom-title">Same trigger. Your visual language.</h2>
+      <p class="measure">These transitions are defined in this page, outside the library. A visible base state and a <code>.is-pending</code> starting state are the entire connection to in-view.</p>
+      <div class="grid effects-columns">
+        <article class="stack" data-example>
+          <h3>A sideways entrance</h3>
+          <p>A site-defined translation and fade. The runtime knows nothing about the direction or the curve.</p>
+          <div class="effects-stage">
+            <div class="card stack effects-sample site-arrival site-arrival-side" data-enhance="in-view" data-effect>
+              <span class="overline">Site-owned transition</span>
+              <h3>Come in from the side.</h3>
+              <p class="muted">Your class. Your timing. The same scroll trigger.</p>
+            </div>
+          </div>
+          <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay</button></div>
+          <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
+        </article>
+        <article class="stack" data-example>
+          <h3>A gentle zoom</h3>
+          <p>Scale and opacity instead of travel. The base state stays readable without the runtime or when motion is reduced.</p>
+          <div class="effects-stage">
+            <div class="card stack effects-sample site-arrival site-arrival-zoom" data-enhance="in-view" data-effect>
+              <span class="overline">Site-owned transition</span>
+              <h3>A change of perspective.</h3>
+              <p class="muted">A small scale change can be enough.</p>
+            </div>
+          </div>
+          <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay</button></div>
+          <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
+        </article>
+      </div>
+      <details><summary>View the site-defined CSS</summary><pre class="effects-code"><code id="custom-source"></code></pre></details>
+    </section>
+
+    <footer class="stack effects-section">
+      <h2>The contract stays small.</h2>
+      <div class="grid">
+        <div class="stack"><h3>Trigger</h3><p><code>data-enhance="in-view"</code> releases off-screen content on its first entry. Use <code>data-in-view-margin</code> to shift the entrance line.</p></div>
+        <div class="stack"><h3>Appearance</h3><p>CSS defines <code>is-pending</code> and the visible base state. Keyboard focus immediately releases pending content and finishes its entrance.</p></div>
+        <div class="stack"><h3>Orchestration</h3><p>The application owns replay. No repeated scroll observation or extra effect catalogue is needed in the runtime.</p></div>
+      </div>
+      <a href="../../site/enhancements/in-view.html">Read the in-view contract →</a>
+      <a href="motion.html">Explore overlay presence motion →</a>
+    </footer>
+  </main>
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const page = document.querySelector(".effects-page");
+    const preference = matchMedia("(prefers-reduced-motion: reduce)");
+    const preferenceLabel = document.getElementById("motion-preference");
+    const slow = document.getElementById("slow-motion");
+
+    function showPreference() {
+      preferenceLabel.textContent = preference.matches ? "Reduced motion: effects stay visible" : "Motion follows your system preference";
+      slow.disabled = preference.matches;
+    }
+    showPreference();
+    preference.addEventListener("change", showPreference);
+    slow.addEventListener("change", () => page.classList.toggle("is-slow", slow.checked));
+
+    for (const example of document.querySelectorAll("[data-example]")) {
+      const stage = example.querySelector(".effects-stage");
+      const effects = [...stage.querySelectorAll("[data-effect]")];
+      const copy = stage.cloneNode(true);
+      for (const element of copy.querySelectorAll("[data-effect]")) {
+        element.removeAttribute("data-effect");
+        element.classList.remove("is-pending");
+      }
+      example.querySelector("[data-source]").textContent = copy.innerHTML.trim();
+
+      function readTiming() {
+        const effect = effects[0];
+        const target = effect.matches(".reveal-group") ? effect.firstElementChild : effect;
+        const style = getComputedStyle(target);
+        const reveal = effect.matches(".reveal, .reveal-group");
+        example.querySelector("[data-readout]").textContent = preference.matches
+          ? "Visible without motion"
+          : reveal
+            ? `${style.getPropertyValue("--reveal-duration").trim()} · ease-out · ${style.getPropertyValue("--reveal-distance").trim()} travel`
+            : `${style.transitionDuration.split(",")[0]} · ${style.transitionTimingFunction.split(/,(?![^(]*\))/)[0]}`;
+      }
+      readTiming();
+      slow.addEventListener("change", readTiming);
+      preference.addEventListener("change", readTiming);
+      stage.addEventListener("animationstart", readTiming);
+      stage.addEventListener("transitionrun", readTiming);
+
+      const replay = example.querySelector("[data-replay]");
+      replay.hidden = false;
+      replay.addEventListener("click", () => {
+        readTiming();
+        for (const effect of effects) {
+          // Do not hide a focused descendant, or rearm a live scroll trigger.
+          if (effect.contains(document.activeElement) || effect.classList.contains("is-pending")) continue;
+          const transition = effect.style.getPropertyValue("transition");
+          const priority = effect.style.getPropertyPriority("transition");
+          effect.style.setProperty("transition", "none");
+          effect.classList.add("is-pending");
+          effect.getAnimations({ subtree: true });
+          if (transition) effect.style.setProperty("transition", transition, priority);
+          else effect.style.removeProperty("transition");
+          effect.classList.remove("is-pending");
+        }
+      });
+    }
+    document.getElementById("custom-source").textContent = document.getElementById("site-effects").textContent.trim();
+  </script>
+</body>
+</html>

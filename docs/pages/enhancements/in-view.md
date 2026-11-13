@@ -14,6 +14,9 @@ In view triggers an appearance effect once when content enters the viewport, for
 
 ## Usage
 
+Explore the [Appearance effects catalogue](../../demo/templates/appearance.html)
+for live examples, replay controls, and site-defined transition recipes.
+
 - Put `data-enhance="in-view"` on the element whose box should trigger the effect.
 - Pair it with [Reveal](../components/reveal.md) for a block or staggered group, or [Mark sweep](../components/mark-sweep.md) for a highlighted phrase.
 - Load the matching effect CSS: `actual-css/css/effects/reveal`, `actual-css/css/effects/mark-sweep`, or the `actual-css/css/effects` bundle.
@@ -28,6 +31,54 @@ Content already visible when the runtime starts is never made pending.
 Reveal keeps its CSS first-render entrance; Mark sweep keeps its full highlight.
 For a staggered reveal, put `.reveal-group` and the token on the container;
 the children need no token of their own.
+
+## Custom effects
+
+Use `in-view` with a site-defined class to create a custom scroll animation.
+No built-in effect CSS is required: the runtime only manages `is-pending`.
+
+```html
+<section class="site-arrival" data-enhance="in-view">
+  <h2>Your own entrance</h2>
+</section>
+```
+
+Keep the base state visible. Declare transitions on that state and the starting
+appearance on `.is-pending`, inside the motion media query:
+
+```css
+@media screen and (prefers-reduced-motion: no-preference) {
+  .site-arrival {
+    transition: opacity 600ms ease-out, translate 600ms ease-out;
+  }
+
+  .site-arrival.is-pending {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+}
+```
+
+The site owns the duration, easing, delay, and visual effect. Content already
+in view stays in its base state; this transition runs only after a pending
+element is released.
+
+Use opacity and motion for the pending appearance; keep content in the
+accessibility tree and tab order. Avoid `display: none` and `visibility: hidden`.
+When focus enters pending content, the runtime finishes the finite animations
+and transitions started by its release, including custom effects.
+
+## Application-controlled replay
+
+After the first release, the runtime no longer observes the element. The
+application can replay its effect independently, without re-registering
+`in-view` or changing `data-enhance`.
+
+For a CSS animation, add `is-pending`, call `element.getAnimations()` to flush
+the starting state, then remove `is-pending`. The pending rule must remove the
+animation, as Reveal's does. For a transition, also disable transitions during
+the reset so the effect starts from its initial appearance immediately; restore
+them when releasing the state. Keep focused content visible during replay.
 
 ## Trigger margin
 
