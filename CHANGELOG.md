@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.19.1] - 2026-11-13
 ### Changed
 - `actual-css bundle` rewrites relative `url()` references to resolve from the `--out` directory, without copying the assets.
 - `actual-css bundle` refuses relative `url()` in `node_modules` stylesheets and relative `url()` with CSS escapes.
