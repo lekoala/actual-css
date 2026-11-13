@@ -22,6 +22,9 @@ At rest the phrase carries the full highlight, so no JavaScript, reduced motion,
 - The base `<mark>` pair comes from the theme. An intent class on the same element gives the sweep a soft tint with theme text: `.primary`, `.secondary`, `.success`, `.warning`, `.danger`, or `.neutral`. The tint uses `--soft-bg-mix`; without `color-mix()`, the theme highlight pair remains.
 - Forced colors replaces the sweep with the system `Mark` / `MarkText` pair, so the phrase stays distinct on both `<mark>` and `<span>`.
 
+See [In view](../enhancements/in-view.md) for trigger margins, pending state,
+and immediate appearance on keyboard focus.
+
 ```html demo
 <p>
   A <mark class="mark-sweep warning" data-enhance="in-view">deadline</mark> is a fact;

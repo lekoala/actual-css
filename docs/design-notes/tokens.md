@@ -75,6 +75,10 @@ Mixing against `black`, `white`, `transparent`, or `currentColor` is exempt and 
 
 Ordinary interaction/state transitions have **no easing token**: they use the CSS default `ease` directly, and the dialog shake feedback plus the `actual-dialog` View Transition keep that default deliberately. The presence pair exists only for one-shot open/close where open and closed states own separate easing values (`.status-bar`/`.is-open`, `dialog.modal[open]`, `dialog.drawer[open]`): `--ease-enter` decelerates the appearance, `--ease-exit` accelerates the departure. The pair follows Material's standard rhythm; the emphasized-decelerate entrance is deliberately not offered because it only pays off at 250–400ms durations, beyond this vocabulary. Backdrops keep `ease` — a scrim only fades, it does not travel — but track their surface's duration. Toggles that share one transition list at `--duration-fast` (flyout, tooltip) also stay on `ease`: at 100ms the curve barely resolves and entry/exit cannot split on a single rule. These absences are deliberate, not gaps; a theme with a different motion character overrides `--ease-enter` / `--ease-exit`.
 
+Reveal and Mark sweep use native `ease-out`: the surface entrance curve
+completes too much of a fade or highlight sweep near the start. Their gentler
+deceleration is local to those effects, rather than another shared easing token.
+
 ## Internal tokens
 
 Internal tokens are allowed when they reduce duplication or make component code clearer.

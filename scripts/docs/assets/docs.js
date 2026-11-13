@@ -1,7 +1,7 @@
 /*
  * Docs site runtime — progressive enhancement only. The documentation and its
  * examples are fully usable without this script; it adds search, theme
- * persistence, and copy buttons.
+ * persistence, copy buttons, and effect replay controls.
  */
 (() => {
   const THEME_KEY = "actual-docs-theme";
@@ -79,6 +79,35 @@
         setTimeout(() => (button.textContent = "Copy"), 1500);
       } catch {
         // clipboard unavailable — leave the button inert rather than failing
+      }
+    });
+    bar.append(button);
+  }
+
+  /* --- Replay appearance demos --- */
+
+  for (const example of document.querySelectorAll(".docs-example")) {
+    const effects = example.querySelectorAll(
+      ".docs-preview :is(.reveal, .reveal-group, .mark-sweep)",
+    );
+    const bar = example.querySelector(".docs-code-bar");
+    if (!effects.length || !bar) continue;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "btn sm ghost docs-replay";
+    button.textContent = "Replay";
+    button.addEventListener("click", () => {
+      for (const effect of effects) {
+        const transition = effect.style.getPropertyValue("transition");
+        const priority = effect.style.getPropertyPriority("transition");
+        // Reset the highlight instantly; reversing a running transition would
+        // shorten the next sweep. Flush pending styles before releasing them.
+        effect.style.setProperty("transition", "none");
+        effect.classList.add("is-pending");
+        effect.getAnimations({ subtree: true });
+        if (transition) effect.style.setProperty("transition", transition, priority);
+        else effect.style.removeProperty("transition");
+        effect.classList.remove("is-pending");
       }
     });
     bar.append(button);

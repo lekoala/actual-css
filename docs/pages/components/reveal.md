@@ -24,8 +24,9 @@ Without the runtime, everything plays on load and ends visible. Under reduced mo
 - Do not combine `.reveal` with another animated class on the same element, such as `.shimmer` or `.spinner`: one `animation` replaces the other. Nest one inside the other instead. Transitions are unaffected, so `.reveal` can sit on a `.btn` or a card.
 - The entrance replays whenever the element is rendered again after `display: none`, for example inside a tab panel or a `[hidden]` toggle. Keep Reveal outside content that toggles if the replay is unwanted.
 - Put the effect on the content box rather than a section with generous leading padding: the observer triggers when the box enters, including its padding.
-- Set `data-in-view-margin="0px 0px -64px 0px"` to start after the box has entered farther into the viewport. The value uses `IntersectionObserver.rootMargin` syntax; it affects the entrance, while initially visible content stays visible.
-- The element keeps its text, tab order, and accessible name while pending. Effects hide it with opacity only, so Tab, an in-page anchor, and find-in-page can still reach it. Focus shows it at once, without an entrance.
+
+See [In view](../enhancements/in-view.md) for trigger margins, pending state,
+and immediate appearance on keyboard focus.
 
 ## Staggered groups
 

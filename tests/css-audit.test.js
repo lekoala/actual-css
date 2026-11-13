@@ -1348,7 +1348,7 @@ test("reveal animates and hides only under allowed motion", () => {
   // hover motion of the component it sat on.
   expect(rules).not.toMatch(/\btransition\s*:/);
   expect(inside).toMatch(
-    /\.reveal,\s*\.reveal-group > \*\s*\{\s*animation: actual-reveal var\(--reveal-duration\) var\(--ease-enter\) backwards;/,
+    /\.reveal,\s*\.reveal-group > \*\s*\{\s*animation: actual-reveal var\(--reveal-duration\) ease-out backwards;/,
   );
   expect(inside).toContain("calc(min(sibling-index() - 1, 8) * var(--reveal-stagger))");
   // Pending removes the animation, so releasing the state starts it afresh.
@@ -1375,9 +1375,7 @@ test("mark sweep grows the shared highlight and keeps a forced-colors fallback",
   expect(base).not.toContain("background-size: 0");
   expect(gated).toContain(".mark-sweep.is-pending");
   expect(gated).toContain("background-size: 0 100%;");
-  expect(gated).toContain(
-    "transition: background-size var(--mark-sweep-duration) var(--ease-enter);",
-  );
+  expect(gated).toContain("transition: background-size var(--mark-sweep-duration) ease-out;");
   // The sweep follows the reading direction.
   expect(css).toMatch(/\.mark-sweep:dir\(rtl\)\s*\{\s*background-position: 100% 0;\s*\}/);
   // A background image is dropped in forced colors: keep the system pair.

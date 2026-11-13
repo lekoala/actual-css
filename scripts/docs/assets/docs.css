@@ -553,12 +553,12 @@
   font-size: inherit;
 }
 
-/* Language on one end, Copy (added by docs.js) on the other. Its own row, so
+/* Language on one end, actions (added by docs.js) together on the other. Its own row, so
    the button never covers a line of code at any width. No rule under it: the
    example already draws one frame, and a second line boxed a bar that is not
    a box. */
 .docs-code-bar {
-  --cluster-justify: space-between;
+  --cluster-justify: flex-start;
   min-block-size: var(--control-size-sm);
   padding-block: var(--space-10);
   padding-inline: var(--space-30) var(--space-10);
@@ -566,13 +566,14 @@
 
 /* Below the .sm scale so its hover fill sits inside the bar instead of
    touching its edges. */
-.docs-copy {
+.docs-code-bar .btn {
   --control-size: 1.5rem;
   --control-font-size: var(--font-size-xs);
   --control-pad-x: var(--space-20);
 }
 
 .docs-code-language {
+  margin-inline-end: auto;
   color: var(--text-muted);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);

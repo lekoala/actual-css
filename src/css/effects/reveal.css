@@ -30,14 +30,16 @@
 .reveal,
 .reveal-group {
   --reveal-duration: 450ms;
-  --reveal-distance: 0.5rem;
+  --reveal-distance: 1rem;
   --reveal-stagger: 60ms;
 }
 
 @media screen and (prefers-reduced-motion: no-preference) {
   .reveal,
   .reveal-group > * {
-    animation: actual-reveal var(--reveal-duration) var(--ease-enter) backwards;
+    /* The gentler ease-out keeps the fade gradual; surface entrance timing
+       makes most of the content visible too early. */
+    animation: actual-reveal var(--reveal-duration) ease-out backwards;
   }
 
   /* The cap keeps a long list from becoming an endless cascade: the ninth and
