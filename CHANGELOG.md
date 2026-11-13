@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-11-13
 ### Added
 - `.reveal` and `.reveal-group`: one-shot entrance animations that play on first render, with `--reveal-duration`, `--reveal-distance`, and `--reveal-stagger`.
 - `data-enhance="in-view"`: defers an off-screen effect to its first appearance, with `data-in-view-margin`.
