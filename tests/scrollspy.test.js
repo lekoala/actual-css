@@ -95,6 +95,52 @@ test("sections near the end become current before the last section takes over", 
   expect(currentLink()).toBe("#gamma");
 });
 
+test("a followed link stays current where the page cannot scroll its heading to the line", async () => {
+  const layout = await loadScrollspy(NAV, { height: 600, scrollHeight: 2000 });
+  layout.placeAll({ alpha: 0, beta: 1450, gamma: 1850 }, 100);
+  await layout.scrollToEnd();
+  expect(currentLink()).toBe("#gamma");
+
+  // The browser scrolls as far as it can, which is where it already is.
+  document.querySelector("a[href='#beta']").click();
+  await layout.scrollToEnd();
+  expect(currentLink()).toBe("#beta");
+
+  // Scrolling on starts from beta. At 1350 the unbent line (560px) has
+  // already passed gamma (500px), but the released link holds the line below
+  // the next heading and lets it fade back.
+  document.dispatchEvent(new Event("wheel"));
+  await layout.scrollTo(1350);
+  expect(currentLink()).toBe("#beta");
+
+  // Back down, the bend has faded by the end and the last section wins.
+  await layout.scrollToEnd();
+  expect(currentLink()).toBe("#gamma");
+});
+
+test("scrolling up from a followed link walks back through the earlier sections", async () => {
+  const layout = await loadScrollspy(NAV, { height: 600, scrollHeight: 2000 });
+  layout.placeAll({ alpha: 0, beta: 1450, gamma: 1850 }, 100);
+  await layout.scrollToEnd();
+  document.querySelector("a[href='#beta']").click();
+  await layout.scrollToEnd();
+
+  document.dispatchEvent(new Event("wheel"));
+  await layout.scrollTo(900);
+  expect(currentLink()).toBe("#alpha");
+});
+
+test("a hash change to a section pins it like a followed link", async () => {
+  const layout = await loadScrollspy(NAV, { height: 600, scrollHeight: 2000 });
+  layout.placeAll({ alpha: 0, beta: 1450, gamma: 1850 }, 100);
+  await layout.scrollToEnd();
+
+  window.location.hash = "#beta";
+  window.dispatchEvent(new Event("hashchange"));
+  await layout.scrollToEnd();
+  expect(currentLink()).toBe("#beta");
+});
+
 test("a scroll container is measured instead of the viewport", async () => {
   setupDOM(`
     <div id="scroller">

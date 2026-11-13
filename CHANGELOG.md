@@ -42,6 +42,7 @@
 
 ### Fixed
 - `.scrollspy`: native selection yields to `aria-current`, and the activation line advances near the scroll end so trailing sections activate in order.
+- `.scrollspy`: a followed link stays current even when the page cannot scroll its heading to the activation line, and scrolling on walks its neighbours in order.
 - A closed `<dialog>` stays hidden when an author class sets `display`, such as `<dialog class="card">`.
 - Docs home test: the menu-to-dialog focus check waits for the close event instead of reading focus before it runs.
 - `fixtureUrl()` keeps a page's query string and hash instead of escaping them into the file name.

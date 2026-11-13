@@ -15,6 +15,9 @@
  * active section  = last section whose top <= activation line
  * scrolled to end = last section, whatever the line says
  * above the first = no active section
+ * followed link   = its section, until the next scroll input
+ *                   (wheel, touch, key, pointer); the line then starts
+ *                   between that heading and the next and fades back
  *
  * Optional root: data-scrollspy-root="#scroll-container" measures against a
  * scroll container instead of the viewport.
@@ -107,6 +110,10 @@ function setupNav(nav) {
   let sections = [];
   let frame = 0;
   let current;
+  // A followed link bends the activation line to sit between its heading and
+  // the next: { section, held, scrollTop, remaining, floor, delta }. Held until
+  // the next scroll input, then faded; floor is where the upward fade ends.
+  let anchor = null;
 
   function activate(section) {
     if (section === current) return;
@@ -127,21 +134,55 @@ function setupNav(nav) {
 
     const root = rootFor(nav);
     const { top, height, scrollTop, scrollHeight } = measureRoot(nav, root);
-
-    // Scrolled to the end: the last section wins even when its top never
-    // crosses the line. This is the case IntersectionObserver cannot express.
-    if (scrollHeight > height && scrollTop + height >= scrollHeight - 1) {
-      activate(sections.at(-1).section);
-      return;
-    }
-
     const offset = activationOffset(nav, height);
     // A fixed line followed by an end-of-scroll jump can skip whole sections
     // on a tall viewport. Advance continuously through the final viewport of
     // scroll travel so each intervening heading can become current first.
     const remaining = scrollHeight - height - scrollTop;
     const progress = height > 0 ? Math.max(0, Math.min(1, 1 - remaining / height)) : 0;
-    const line = top + offset + Math.max(0, height - offset) * progress;
+    let line = top + offset + Math.max(0, height - offset) * progress;
+
+    // A followed link names its section outright. Near the end of the page
+    // the browser cannot scroll that heading up to the line, so geometry
+    // alone would keep a later section. While held (through a smooth scroll
+    // on the way there), the bend is recomputed at each position.
+    if (anchor?.held) {
+      const index = sections.findIndex(({ section }) => section === anchor.section);
+      const next = sections[index + 1]?.section;
+      const low = anchor.section.getBoundingClientRect().top;
+      const high = next ? next.getBoundingClientRect().top - 1 : Infinity;
+      Object.assign(anchor, {
+        scrollTop,
+        remaining,
+        floor: Math.max(0, scrollTop - height),
+        delta: Math.min(Math.max(line, low), high) - line,
+      });
+      line += anchor.delta;
+    } else if (anchor) {
+      // Released, the bend fades over the scroll travel left in each
+      // direction: down to the end of the content, up to one viewport above
+      // the release. Scrolling on then walks the neighbouring sections in
+      // order instead of jumping to whatever the unbent line picks there.
+      // Re-based on every measure, so it only ever shrinks: coming back to the
+      // release position does not bend the line again.
+      const travel = scrollTop - anchor.scrollTop;
+      const span = travel > 0 ? anchor.remaining : anchor.scrollTop - anchor.floor;
+      const delta = span > 0 ? anchor.delta * Math.max(0, 1 - Math.abs(travel) / span) : 0;
+      // Negated so NaN drops too: a pin released before its first measure.
+      if (!(Math.abs(delta) >= 0.5)) anchor = null;
+      else {
+        line += delta;
+        anchor = { ...anchor, scrollTop, remaining, delta };
+      }
+    }
+
+    // Scrolled to the end: the last section wins even when its top never
+    // crosses the line. This is the case IntersectionObserver cannot express.
+    if (!anchor && scrollHeight > height && remaining <= 1) {
+      activate(sections.at(-1).section);
+      return;
+    }
+
     let active = null;
     for (const { section } of sections) {
       if (section.getBoundingClientRect().top <= line) active = section;
@@ -158,7 +199,15 @@ function setupNav(nav) {
   function rebuild() {
     sections = sectionsFor(nav);
     current = undefined;
+    anchor = null;
     measure();
+  }
+
+  function pin(link) {
+    const entry = sections.find((candidate) => candidate.link === link);
+    if (!entry) return;
+    anchor = { section: entry.section, held: true };
+    schedule();
   }
 
   // The scroll root is resolved once when the enhancement connects, and the
@@ -174,6 +223,29 @@ function setupNav(nav) {
     passive: true,
     signal: controller.signal,
   });
+
+  const doc = nav.ownerDocument;
+  nav.addEventListener("click", (event) => pin(event.target.closest?.("a[href^='#']")), {
+    signal: controller.signal,
+  });
+  // Another in-page link, or history navigation, to one of the sections.
+  doc.defaultView?.addEventListener(
+    "hashchange",
+    () => pin(sections.find(({ link }) => link.hash === doc.location.hash)?.link),
+    { signal: controller.signal },
+  );
+  // Scroll input, not the scroll event: the navigation itself scrolls. Capture
+  // runs before the click that may pin again (pointerdown, Enter on a link).
+  for (const type of ["wheel", "touchstart", "keydown", "pointerdown"]) {
+    doc.addEventListener(
+      type,
+      () => {
+        // No measure here: the scroll this input causes runs it.
+        if (anchor) anchor.held = false;
+      },
+      { capture: true, passive: true, signal: controller.signal },
+    );
+  }
 
   // Observer is scoped to the nav subtree — link injection is caught;
   // section-only DOM mutations elsewhere need an explicit refreshScrollspy().
