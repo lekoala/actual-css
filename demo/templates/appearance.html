@@ -52,6 +52,13 @@
       background: var(--surface-subtle);
     }
 
+    /* Taller than most viewports: the phrase at its end is still off-screen
+       when the stage's top edge scrolls in. */
+    .effects-stage-tall {
+      align-content: space-between;
+      min-block-size: 110svh;
+    }
+
     .effects-sample {
       --card-max-inline-size: 28rem;
 
@@ -226,7 +233,26 @@
           <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay highlights</button></div>
           <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
         </article>
+        <article class="stack" data-example>
+          <h3>Across several lines</h3>
+          <p>The highlight follows the phrase as it wraps, and the sweep runs through it in reading order, one line after the next.</p>
+          <div class="effects-stage">
+            <p class="effects-phrase">Good interfaces do not shout. <mark class="mark-sweep" data-enhance="in-view" data-effect>They point at the one sentence that matters and let the rest of the page breathe around it.</mark> Then they step aside.</p>
+          </div>
+          <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay</button></div>
+          <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
+        </article>
       </div>
+      <article class="stack" data-example>
+        <h3>Below the fold</h3>
+        <p>A highlight far down the page waits for its first appearance, so the reader still sees it sweep in on arrival.</p>
+        <div class="effects-stage effects-stage-tall">
+          <p class="muted">Keep scrolling ↓</p>
+          <p class="effects-phrase">You made it this far. <mark class="mark-sweep" data-enhance="in-view" data-effect>This highlight waited for you.</mark></p>
+        </div>
+        <div class="cluster effects-controls"><output class="effects-readout" data-readout></output><button type="button" class="btn sm" data-replay hidden>Replay</button></div>
+        <details><summary>View markup</summary><pre class="effects-code"><code data-source></code></pre></details>
+      </article>
       <p class="muted">Without JavaScript, the full highlight is already visible. Forced colors uses the system highlight pair. <a href="../../site/components/mark-sweep.html">Mark sweep reference</a></p>
     </section>
 

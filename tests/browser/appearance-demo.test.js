@@ -15,15 +15,18 @@ it("appearance examples release on scroll and replay independently", async () =>
   await withBrowserPage(
     page,
     async (view) => {
+      const count = await view.evaluate('document.querySelectorAll("[data-example]").length');
+      expect(count).toBeGreaterThan(0);
       await waitForBrowser(
         view,
-        'document.querySelectorAll("[data-replay]:not([hidden])").length === 7',
+        `document.querySelectorAll("[data-replay]:not([hidden])").length === ${count}`,
       );
-      for (let index = 0; index < 7; index++) {
+      for (let index = 0; index < count; index++) {
         await view.evaluate(`(() => {
         const example = document.querySelectorAll('[data-example]')[${index}];
         example.id = 'active-example';
-        example.querySelector('.effects-stage').scrollIntoView({ block: 'center' });
+        // The effect, not the stage: a tall stage centred hides its end.
+        [...example.querySelectorAll('[data-effect]')].at(-1).scrollIntoView({ block: 'center' });
       })()`);
         const stage = 'document.querySelector("#active-example .effects-stage")';
         await waitForBrowser(
@@ -74,6 +77,23 @@ it("slow motion stretches built-in and site-defined effects", async () => {
         expect(slow[index]).toBeGreaterThan(normal[index]);
       await clickSelector(view, "#slow-motion");
       expect(await timings()).toEqual(normal);
+    },
+    { sourceCss: true },
+  );
+});
+
+it("a below-the-fold highlight stays pending until it is scrolled into view", async () => {
+  await withBrowserPage(
+    page,
+    async (view) => {
+      const mark = 'document.querySelector(".effects-stage-tall .mark-sweep")';
+      await view.evaluate(
+        'document.querySelector(".effects-stage-tall").scrollIntoView({ block: "start" })',
+      );
+      await waitForBrowser(view, `${mark}.classList.contains("is-pending")`);
+      expect(await view.evaluate(`${mark}.getBoundingClientRect().top > innerHeight`)).toBe(true);
+      await view.evaluate(`${mark}.scrollIntoView({ block: "center" })`);
+      await waitForBrowser(view, `!${mark}.classList.contains("is-pending")`);
     },
     { sourceCss: true },
   );
