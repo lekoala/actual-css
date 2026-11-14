@@ -103,9 +103,11 @@ function openContextMenu(context, menu, opts = {}) {
   if (!requestContextMenu(context, menu, opts)) return;
   if (isSurfaceOpen(menu)) closeSurface(menu);
 
-  // Measured after the cancelable event: a handler may have moved the anchor.
+  // A button anchors on its own rect, like a flyout trigger, so alignment and
+  // flipping see its full box. Pointer and keyboard openings anchor on a point,
+  // measured after the cancelable event: a handler may have moved the origin.
   let { x, y } = opts;
-  if (x == null || y == null) {
+  if (!opts.anchor && (x == null || y == null)) {
     const rect = (opts.origin || context).getBoundingClientRect();
     x ??= rect.left;
     y ??= rect.bottom;
@@ -114,6 +116,7 @@ function openContextMenu(context, menu, opts = {}) {
   if (
     openSurface(menu, {
       source: context,
+      trigger: opts.anchor,
       x,
       y,
       placement: opts.placement || "bottom-start",
@@ -237,6 +240,10 @@ function connectContextTarget(target) {
   target.addEventListener(
     "pointerdown",
     (e) => {
+      // Suppression targets the click synthesized by the long press itself. A
+      // fresh press starts a new gesture, so its click (a tap on "…" right
+      // after the menu opened) is legitimate.
+      state.suppressClickUntil = 0;
       const delay = getLongPressDelay(target, menuFor(target));
       if (e.pointerType !== "touch" || delay == null || shouldIgnoreNativeTarget(e.target)) {
         return;
@@ -321,6 +328,7 @@ function connectContextTarget(target) {
 
       openContextMenu(target, menu, {
         distance: 4,
+        anchor: trigger,
         origin: trigger,
         trigger: "button",
         restoreFocusTo: trigger,

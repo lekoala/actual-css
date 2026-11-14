@@ -714,6 +714,59 @@ test("a button-triggered context menu measures the trigger after actual:context-
   expect(menu.style.top).toBe("196px");
 });
 
+test("a button-triggered context menu anchors on the button rect", async () => {
+  await loadContextMenuAndFlyout(`
+    <div id="target" data-context-menu="menu" tabindex="0">
+      <button id="trigger" type="button" data-context-menu-trigger aria-controls="menu">More</button>
+    </div>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Open</button></li>
+    </menu>
+  `);
+  const trigger = document.getElementById("trigger");
+  const menu = document.getElementById("menu");
+  setupGeometry(trigger, menu);
+
+  click(trigger);
+
+  expect(isOpen(menu)).toBe(true);
+  // A rect anchor exposes the trigger width; a zero-size point would not.
+  expect(menu.style.getPropertyValue("--surface-anchor-width")).toBe("120px");
+});
+
+test("a fresh press clears the long-press click suppression", async () => {
+  await loadContextMenu(`
+    <div id="target" data-context-menu="menu" data-context-menu-long-press="0" tabindex="0">
+      <span id="label">Ada</span>
+      <button id="action" type="button">Message</button>
+    </div>
+    <menu id="menu" class="flyout menu" hidden>
+      <li><button class="menu-item" type="button">Open</button></li>
+    </menu>
+  `);
+  const label = document.getElementById("label");
+  const action = document.getElementById("action");
+  const menu = document.getElementById("menu");
+  setupGeometry(label, menu);
+  const touchDown = (el) =>
+    el.dispatchEvent(
+      new window.PointerEvent("pointerdown", { bubbles: true, pointerId: 1, pointerType: "touch" }),
+    );
+  let clicks = 0;
+  action.addEventListener("click", () => clicks++);
+
+  touchDown(label);
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(isOpen(menu)).toBe(true);
+
+  // The click synthesized by the long press itself is swallowed...
+  label.click();
+  // ...but a new tap within the suppression window still activates.
+  touchDown(action);
+  action.click();
+  expect(clicks).toBe(1);
+});
+
 test("pointer context menu focuses the menu container, not the first item", async () => {
   await loadContextMenu(`
     <div id="target" data-context-menu="menu" tabindex="0">File.pdf</div>

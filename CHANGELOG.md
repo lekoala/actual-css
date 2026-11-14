@@ -1,6 +1,12 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Changed
+- `data-context-menu-trigger` anchors the context menu on the button rect instead of its bottom-left point.
+- `data-context-menu-long-press` turns off text selection and the iOS callout on the target on touch-primary devices.
+
+### Fixed
+- `data-context-menu-long-press` no longer swallows a tap that follows the long press within 750 ms.
 
 ## [0.19.1] - 2026-11-13
 ### Changed

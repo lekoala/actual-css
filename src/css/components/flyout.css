@@ -208,3 +208,23 @@
 /* Vertical dividers — .menu-separator (menu.css) is the canonical way to
    separate menu items. Flyout panels that are not menus use auto grid gap
    declared on .flyout itself. */
+
+/* Context-menu long press competes with the native touch gestures: Android
+   starts a text selection and iOS shows its callout under the opening menu.
+   Touch-primary devices only, so mouse users keep selecting card text. */
+@media (pointer: coarse) {
+  [data-context-menu-long-press]:not(
+    [data-context-menu-long-press="false"],
+    [data-context-menu-long-press="none"]
+  ) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* why: an inherited user-select: none blocks typing in fields on iOS. */
+  [data-context-menu-long-press] :is(input, textarea, [contenteditable]) {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+}

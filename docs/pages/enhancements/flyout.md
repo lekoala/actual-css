@@ -530,7 +530,9 @@ matching element. The scope also constrains the available height, so omit it
 when the menu is allowed to escape the card or list item.
 
 Long press is opt-in with `data-context-menu-long-press`. Empty uses the default
-delay; a number sets the delay in milliseconds.
+delay; a number sets the delay in milliseconds. On touch-primary devices the
+target loses text selection and the iOS callout, so the native gesture does not
+compete with the menu; keep the trigger button as the discoverable path.
 
 ```html demo
 <div class="card stack"
