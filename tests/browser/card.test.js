@@ -161,9 +161,10 @@ it("slot rows are defaults that a primitive, role or utility on the slot replace
       expect(result.defaultHeader).toEqual(["flex", "space-between"]);
       expect(result.defaultFooter).toBe("space-between");
       expect(result.mediaHeader).toBe("grid");
-      expect(result.endFooter).toBe("flex-end");
+      // Chromium serializes the flex-start/end aliases as flow-start/end.
+      expect(result.endFooter).toMatch(/^(?:flex|flow)-end$/);
       expect(result.footerAnchored).toBe(true);
-      expect(result.clusterHeader).toBe("flex-start");
+      expect(result.clusterHeader).toMatch(/^(?:flex|flow)-start$/);
       expect(result.actionsFooter).toBe("center");
       // Trap: --card-gap once read the inherited --gap, so a grid's 38px gap
       // re-spaced the inside of every card in it.

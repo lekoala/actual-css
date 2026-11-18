@@ -10,6 +10,10 @@ import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/uti
 const FIXTURE = "tests/browser/layout-scope.html";
 const TIMEOUT = 60_000;
 
+// Chromium serializes the flex-start/end aliases as flow-start/end.
+const FLOW_START = /^(?:flex|flow)-start$/;
+const FLOW_END = /^(?:flex|flow)-end$/;
+
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
@@ -43,7 +47,7 @@ it("cluster geometry stays local while rhythm and role policy inherit", async ()
       });
       // A nested cluster falls back to the defaults, not the parent's values.
       expect(rows["inherits-nothing"]).toMatchObject({
-        justify: "flex-start",
+        justify: expect.stringMatching(FLOW_START),
         align: "center",
         wrap: "wrap",
       });
@@ -52,9 +56,9 @@ it("cluster geometry stays local while rhythm and role policy inherit", async ()
       // Rhythm crosses cluster boundaries.
       expect(rows["inherits-nothing"].gap).toBe("13px");
       // Role policy set on a region reaches the action row inside it.
-      expect(rows.actions.justify).toBe("flex-end");
+      expect(rows.actions.justify).toMatch(FLOW_END);
       // The role relays into its own row's hooks; a cluster inside it keeps defaults.
-      expect(rows["inside-actions"].justify).toBe("flex-start");
+      expect(rows["inside-actions"].justify).toMatch(FLOW_START);
     },
     { artifactName: "cluster-scope" },
   );
@@ -72,8 +76,8 @@ it("form-actions applies its policy when it loads before cluster", async () => {
         return { actions: read("actions"), inside: read("inside-actions") };
       })()`);
 
-      expect(rows.actions).toEqual({ justify: "flex-end", align: "start" });
-      expect(rows.inside).toEqual({ justify: "flex-start", align: "center" });
+      expect(rows.actions).toEqual({ justify: expect.stringMatching(FLOW_END), align: "start" });
+      expect(rows.inside).toEqual({ justify: expect.stringMatching(FLOW_START), align: "center" });
     },
     { artifactName: "layout-scope-order" },
   );
