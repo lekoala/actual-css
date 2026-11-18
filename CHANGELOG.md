@@ -1,6 +1,9 @@
 # Actual CSS Changelog
 
-## [Unreleased]
+## [0.19.2] - 2026-11-18
+### Added
+- `actual-css/js` and `actual-css/js/*` ship TypeScript declarations, including `Enhancer` and `EnhancementHandle` from `actual-css/js/full`.
+
 ### Changed
 - `data-context-menu-trigger` anchors the context menu on the button rect instead of its bottom-left point.
 - `data-context-menu-long-press` turns off text selection and the iOS callout on the target on touch-primary devices.

@@ -79,4 +79,4 @@ jobs:
           --title "$GITHUB_REF_NAME"
           --notes-file "$RUNNER_TEMP/notes.md"
           --verify-tag $PRERELEASE
-          dist/*
+          dist/actual.full.*

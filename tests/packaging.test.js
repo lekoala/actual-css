@@ -11,6 +11,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { publicJsExports, sourceModuleForJsExport } from "./helpers/package-exports.js";
 
 const ROOT = join(import.meta.dir, "..");
 
@@ -68,23 +69,23 @@ test("package ships built assets, not theme demo sources", () => {
   expect(pkg.exports["./css/themes/*"]).toBeNull();
 });
 
-// dist/ is the zero-config half of the contract: the full framework only.
-// Composition goes through `actual-css/css` and `actual-css/js` sources; a
-// compiled core or loader alone would be an alias of those next to them.
-test("dist contains exactly the three published artifacts", () => {
+// The standalone bundles ship alongside declarations for the source exports.
+test("dist contains the published bundles and declarations", () => {
   const files = readdirSync(join(ROOT, "dist")).sort();
-  expect(files).toEqual(["actual.full.css", "actual.full.js", "actual.full.min.css"]);
+  expect(files).toEqual(["actual.full.css", "actual.full.js", "actual.full.min.css", "types"]);
 });
 
-test("every JS export path resolves to an existing source file", () => {
+test("every JS export resolves to source and a generated declaration", () => {
   const pkg = readJson("package.json");
 
-  for (const [exportPath, target] of Object.entries(pkg.exports)) {
-    if (target === null) continue;
-    if (!(exportPath === "./js" || exportPath.startsWith("./js/"))) continue;
-
-    const filePath = join(ROOT, target);
-    expect(existsSync(filePath)).toBe(true);
+  for (const exportPath of publicJsExports()) {
+    const module = sourceModuleForJsExport(exportPath);
+    const target = pkg.exports[exportPath];
+    expect(Object.keys(target)[0], exportPath).toBe("types");
+    expect(target.types, exportPath).toBe(`./dist/types/${module}.d.ts`);
+    expect(target.default, exportPath).toBe(`./src/js/${module}.js`);
+    expect(existsSync(join(ROOT, target.types)), exportPath).toBe(true);
+    expect(existsSync(join(ROOT, target.default)), exportPath).toBe(true);
   }
 });
 
@@ -220,7 +221,7 @@ async function packAvailable() {
 }
 const packTest = (await packAvailable()) ? test : test.skip;
 
-packTest("packed tarball ships every critical public export", async () => {
+packTest("packed tarball ships public exports with usable JS declarations", async () => {
   const dir = mkdtempSync(join(tmpdir(), "actual-pack-"));
   try {
     const pack = await spawn("npm", ["pack", "--pack-destination", dir], { cwd: ROOT });
@@ -239,7 +240,10 @@ packTest("packed tarball ships every critical public export", async () => {
       "package/dist/actual.full.min.css", // actual-css, actual-css/full
       "package/src/css/actual.css", // actual-css/css
       "package/dist/actual.full.js", // zero-config runtime
-      "package/src/js/index.js", // actual-css/js
+      ...publicJsExports().flatMap((exportPath) => {
+        const module = sourceModuleForJsExport(exportPath);
+        return [`package/src/js/${module}.js`, `package/dist/types/${module}.d.ts`];
+      }),
       "package/src/cli/actual-css.js", // actual-css bin
       "package/src/css/layout/index.css", // actual-css/css/layout
       "package/src/css/layout/column-layout.css", // actual-css/css/layout/column-layout
@@ -256,6 +260,32 @@ packTest("packed tarball ships every critical public export", async () => {
     for (const entry of critical) {
       expect(entries, `tarball must contain ${entry}`).toContain(entry);
     }
+
+    const modules = join(dir, "node_modules");
+    mkdirSync(modules);
+    const extract = await spawn("tar", ["-xzf", tarball, "-C", "node_modules"], { cwd: dir });
+    expect(extract.code, `tar failed:\n${extract.stderr}`).toBe(0);
+    renameSync(join(modules, "package"), join(modules, "actual-css"));
+    const imports = publicJsExports().map((path) => `import "actual-css${path.slice(1)}";`);
+    const fixture = readFileSync(join(ROOT, "tests/fixtures/consumer-types.mjs"), "utf8");
+    writeFileSync(join(dir, "consumer.mjs"), [...imports, fixture].join("\n"));
+
+    const run = await spawn(
+      "node",
+      [
+        join(ROOT, "node_modules/typescript/bin/tsc"),
+        "--module",
+        "nodenext",
+        "--allowJs",
+        "--checkJs",
+        "--strict",
+        "--noEmit",
+        "--noUncheckedSideEffectImports",
+        "consumer.mjs",
+      ],
+      { cwd: dir },
+    );
+    expect(run.code, `consumer type check failed:\n${run.stdout}${run.stderr}`).toBe(0);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

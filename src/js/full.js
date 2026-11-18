@@ -32,3 +32,6 @@ import "./status.js";
 import "./index.js";
 
 export { applyEnhancement, default as enhance, registerEnhancement } from "./enhance.js";
+
+/** @typedef {import("./enhance.js").Enhancer} Enhancer */
+/** @typedef {import("./enhance.js").EnhancementHandle} EnhancementHandle */

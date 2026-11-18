@@ -93,7 +93,11 @@ registerEnhancement("autosubmit", (form) => {
 });
 ```
 
-For anything beyond that extension API, keep using `actual-css/js/*`.
+For additional helpers, import the relevant `actual-css/js/*` module. Source
+imports from the same package installation share the runtime instance.
+The npm package includes TypeScript declarations for these imports. Import
+`Enhancer` and `EnhancementHandle` as types from `actual-css/js/full` or
+`actual-css/js/enhance`.
 
 The same entrypoint produces the `dist/actual.full.js` standalone for a
 classic `<script>`, where no global API is exposed. Static HTML that needs to

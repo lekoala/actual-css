@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "module": "NodeNext",
+    "noEmitOnError": true,
+    "strictNullChecks": true,
+    "rootDir": "./src/js",
+    "outDir": "./dist/types"
+  },
+  "include": ["src/js/**/*.js"]
+}

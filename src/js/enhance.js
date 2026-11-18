@@ -28,6 +28,14 @@
  * See docs/design-notes/enhancement-contract.md.
  */
 
+/** @typedef {(el: Element) => (() => void) | void} Enhancer */
+
+/**
+ * @typedef {object} EnhancementHandle
+ * @property {(node: Node) => void} refresh Scan a node and its descendants.
+ * @property {() => void} disconnect Stop observing and run active cleanups.
+ */
+
 const registries = new WeakMap();
 const ownedNames = new WeakMap();
 
@@ -197,7 +205,7 @@ function enhancementSelector(name) {
  * Apply a named opt-in once; presentation selectors remain application-owned.
  * @param {string} name
  * @param {string} selector
- * @param {Document | Element | DocumentFragment} [root] Query scope, excluding itself.
+ * @param {Document | Element | DocumentFragment | null} [root] Query scope, excluding itself.
  * @returns {Element[]} Matched descendants.
  */
 export function applyEnhancement(name, selector, root) {
@@ -224,6 +232,12 @@ export function applyEnhancement(name, selector, root) {
   return elements;
 }
 
+/**
+ * @param {string} name
+ * @param {Enhancer} init
+ * @param {Document | Element | DocumentFragment | null} [root]
+ * @returns {EnhancementHandle}
+ */
 export function registerEnhancement(name, init, root) {
   if (typeof document === "undefined") return noopRuntime();
 
@@ -260,11 +274,11 @@ export function registerEnhancement(name, init, root) {
 }
 
 /**
- * @param {Record<string, (el: Element) => (() => void) | void>} enhancers
- * @param {Document | Element | DocumentFragment} [root]
+ * @param {Record<string, Enhancer>} enhancers
+ * @param {Document | Element | DocumentFragment | null} [root]
  * @param {object} [options]
  * @param {(el: Element) => boolean} [options.accept] Lifecycle eligibility, rechecked on moves.
- * @returns {{ refresh: (node: Node) => void, disconnect: () => void }}
+ * @returns {EnhancementHandle}
  */
 export default function enhance(enhancers, root, { accept } = {}) {
   if (accept !== undefined && typeof accept !== "function") {
