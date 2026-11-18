@@ -72,27 +72,15 @@ function linkTarget(file, href) {
   return resolve(dirname(base), target);
 }
 
-function exportTarget(specifier, packageJson) {
-  const subpath =
-    specifier === packageJson.name ? "." : `.${specifier.slice(packageJson.name.length)}`;
-  const entries = Object.entries(packageJson.exports);
-  const exact = entries.find(([key]) => key === subpath);
-  if (exact) return exact[1];
-
-  const patterns = entries
-    .filter(([key]) => key.includes("*"))
-    .sort(([a], [b]) => b.replace("*", "").length - a.replace("*", "").length);
-
-  for (const [key, target] of patterns) {
-    const [prefix, suffix] = key.split("*");
-    if (!subpath.startsWith(prefix) || !subpath.endsWith(suffix)) continue;
-    if (target == null) return null;
-
-    const wildcard = subpath.slice(prefix.length, subpath.length - suffix.length);
-    return target.replace("*", wildcard);
+function hasPackageEntrypoint(specifier) {
+  try {
+    return existsSync(fileURLToPath(import.meta.resolve(specifier)));
+  } catch (error) {
+    if (error.code === "ERR_MODULE_NOT_FOUND" || error.code === "ERR_PACKAGE_PATH_NOT_EXPORTED") {
+      return false;
+    }
+    throw error;
   }
-
-  return null;
 }
 
 /*
@@ -145,8 +133,7 @@ async function main() {
       entrypoints.add(specifier);
       if (relative(ROOT, file) === MODULAR_IMPORT_GUIDE && REMOVED_ENTRYPOINTS.has(specifier))
         continue;
-      const target = exportTarget(specifier, packageJson);
-      if (typeof target !== "string" || !existsSync(resolve(ROOT, target))) {
+      if (!hasPackageEntrypoint(specifier)) {
         failures.push(`${relativePath(file)}: unsupported package entrypoint ${specifier}`);
       }
     }
