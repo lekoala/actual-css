@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.19.3] - 2026-11-19
 ### Fixed
 - Pressing a `data-tooltip` hover or focus trigger dismisses its tooltip and cancels any pending show, including before a drag.
 
