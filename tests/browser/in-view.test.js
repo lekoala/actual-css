@@ -328,6 +328,9 @@ it("Tab finishes the entrance it releases, and leaving focus never replays it", 
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
+      // Tabbing to the neighboring link would scroll focus-zone into view
+      // before its own Tab stop. Keep this test on the direct focus path.
+      await view.evaluate(`document.getElementById("offscreen-link").tabIndex = -1`);
       await view.evaluate(`(() => { ${source} })()`);
       await waitForBrowser(
         view,
@@ -341,10 +344,11 @@ it("Tab finishes the entrance it releases, and leaving focus never replays it", 
         );
       })()`);
 
-      // scrollIntoView inside Tab would also satisfy the observer, which would
-      // start the entrance; full opacity on the focus frame proves the focus
-      // path finished it.
-      expect(await tabUntil(view, `document.activeElement?.id === "focus-link"`)).toBe(true);
+      expect(await tabUntil(view, `document.activeElement?.id === "visible-link"`)).toBe(true);
+      expect(await view.evaluate(read("focus-zone"))).toEqual({ pending: true, opacity: "0" });
+      expect(await tabUntil(view, `document.activeElement?.id === "focus-link"`, { max: 1 })).toBe(
+        true,
+      );
       expect(await view.evaluate(read("focus-zone"))).toEqual({ pending: false, opacity: "1" });
       expect(await view.evaluate(`window.__nested.playState`)).toBe("running");
 
