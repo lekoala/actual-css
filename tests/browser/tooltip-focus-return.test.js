@@ -13,7 +13,10 @@
 import { expect, test } from "bun:test";
 import {
   browserAvailable,
+  clickSelector,
   fixtureUrl,
+  pressKey,
+  tabUntil,
   waitForBrowser,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
@@ -23,6 +26,12 @@ const TIMEOUT = 60_000;
 
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
+
+const bundle = await Bun.build({ entrypoints: ["src/js/full.js"], format: "iife", write: false });
+if (!bundle.success) throw new AggregateError(bundle.logs, "Runtime test bundle failed");
+const runtime = `(() => {
+  ${await bundle.outputs[0].text()}
+})()`;
 
 const tipOpen = `!!document.querySelector('[role="tooltip"]')?.matches(":popover-open")`;
 
@@ -43,29 +52,15 @@ async function pointerTo(view, id) {
 }
 
 async function click(view, id) {
-  const at = await centre(view, id);
-  await view.cdp("Input.dispatchMouseEvent", { ...at, type: "mouseMoved" });
-  for (const type of ["mousePressed", "mouseReleased"]) {
-    await view.cdp("Input.dispatchMouseEvent", { ...at, type, button: "left", clickCount: 1 });
-  }
-}
-
-async function tab(view, shift = false) {
-  for (const type of ["keyDown", "keyUp"]) {
-    await view.cdp("Input.dispatchKeyEvent", {
-      type,
-      key: "Tab",
-      code: "Tab",
-      windowsVirtualKeyCode: 9,
-      modifiers: shift ? 8 : 0,
-    });
-  }
+  await pointerTo(view, id);
+  await clickSelector(view, `#${id}`);
 }
 
 it("a drawer closed with the pointer does not bring the invoker's tooltip back", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
+      await view.evaluate(runtime);
       await pointerTo(view, "trigger");
       await waitForBrowser(view, tipOpen);
 
@@ -84,12 +79,116 @@ it("a drawer closed with the pointer does not bring the invoker's tooltip back",
       expect(await view.evaluate(tipOpen)).toBe(false);
 
       // Keyboard focus is still a show intent: leave and come back with Tab.
-      await tab(view);
-      await tab(view, true);
+      expect(await tabUntil(view, `document.activeElement?.id === "after"`, { max: 1 })).toBe(true);
+      await pressKey(view, "Tab", { modifiers: 8 });
       await waitForBrowser(view, `document.activeElement?.id === "trigger"`);
       await waitForBrowser(view, tipOpen);
       expect(await view.evaluate(tipOpen)).toBe(true);
     },
     { artifactName: "tooltip-focus-return" },
   );
+});
+
+it("a press dismisses the tooltip through pointer capture, and fresh hover or Tab restores it", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    await view.evaluate(runtime);
+    await view.evaluate(`(() => {
+      const trigger = document.getElementById("trigger");
+      trigger.removeAttribute("command");
+      trigger.addEventListener("pointerdown", (event) => {
+        trigger.setPointerCapture(event.pointerId);
+        event.stopPropagation();
+      }, { once: true });
+      trigger.addEventListener("gotpointercapture", () => { trigger.dataset.captured = "true"; });
+      trigger.addEventListener("lostpointercapture", () => { delete trigger.dataset.captured; });
+    })()`);
+
+    await pointerTo(view, "trigger");
+    await waitForBrowser(view, tipOpen);
+    const trigger = await centre(view, "trigger");
+    const outside = await centre(view, "after");
+    await view.cdp("Input.dispatchMouseEvent", {
+      ...trigger,
+      type: "mousePressed",
+      button: "left",
+      buttons: 1,
+      clickCount: 1,
+    });
+    expect(await view.evaluate(tipOpen)).toBe(false);
+
+    // CDP needs the button on the move as well to preserve mouse capture.
+    await view.cdp("Input.dispatchMouseEvent", {
+      ...outside,
+      type: "mouseMoved",
+      button: "left",
+      buttons: 1,
+    });
+    await waitForBrowser(view, `document.querySelector("#trigger[data-captured]") !== null`);
+    // Cross the show delay while the pointer is held to catch a delayed reopen.
+    await view.evaluate("new Promise((resolve) => setTimeout(resolve, 200))");
+    expect(await view.evaluate(tipOpen)).toBe(false);
+    await view.cdp("Input.dispatchMouseEvent", {
+      ...outside,
+      type: "mouseReleased",
+      button: "left",
+      buttons: 0,
+      clickCount: 1,
+    });
+    await waitForBrowser(view, `document.querySelector("#trigger[data-captured]") === null`);
+    expect(await view.evaluate(tipOpen)).toBe(false);
+
+    await pointerTo(view, "trigger");
+    await waitForBrowser(view, tipOpen);
+    await pointerTo(view, "after");
+    await waitForBrowser(view, `!(${tipOpen})`);
+    expect(await tabUntil(view, `document.activeElement?.id === "after"`, { max: 1 })).toBe(true);
+    await pressKey(view, "Tab", { modifiers: 8 });
+    await waitForBrowser(view, `document.querySelector("#trigger:focus-visible") !== null`);
+    await waitForBrowser(view, tipOpen);
+
+    await click(view, "trigger");
+    expect(await view.evaluate(tipOpen)).toBe(false);
+    expect(await tabUntil(view, `document.activeElement?.id === "after"`, { max: 1 })).toBe(true);
+    await pressKey(view, "Tab", { modifiers: 8 });
+    await waitForBrowser(view, `document.querySelector("#trigger:focus-visible") !== null`);
+    await waitForBrowser(view, tipOpen);
+  });
+});
+
+it("a tap does not open a hover tooltip through compatibility mouse events", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    await view.evaluate(runtime);
+    await view.evaluate(`(() => {
+      const trigger = document.getElementById("trigger");
+      trigger.removeAttribute("command");
+      trigger.addEventListener("click", () => { trigger.dataset.tapped = "true"; });
+    })()`);
+    await view.cdp("Emulation.setTouchEmulationEnabled", { enabled: true });
+
+    const at = await centre(view, "trigger");
+    await view.cdp("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [at] });
+    await view.cdp("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+    await waitForBrowser(view, `document.querySelector("#trigger[data-tapped]") !== null`);
+    expect(await view.evaluate(`document.querySelector('[role="tooltip"]') === null`)).toBe(true);
+  });
+});
+
+it("pressing a text field dismisses its tooltip even when the field gains visible focus", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    await view.evaluate(runtime);
+    await pointerTo(view, "field");
+    await waitForBrowser(view, tipOpen);
+    await click(view, "field");
+    await waitForBrowser(view, `document.querySelector("#field:focus-visible") !== null`);
+    // Wait through the show delay to catch a reopen caused by focusin.
+    await view.evaluate("new Promise((resolve) => setTimeout(resolve, 200))");
+    expect(await view.evaluate(tipOpen)).toBe(false);
+
+    await pressKey(view, "Tab", { modifiers: 8 });
+    await waitForBrowser(view, `document.activeElement?.id === "after"`);
+    expect(
+      await tabUntil(view, `document.querySelector("#field:focus-visible") !== null`, { max: 1 }),
+    ).toBe(true);
+    await waitForBrowser(view, tipOpen);
+  });
 });

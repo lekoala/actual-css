@@ -19,7 +19,7 @@
  *             and all wiring is torn down when the last trigger leaves the DOM.
  *
  * Lazy:       tooltip elements are created (shorthand) or wired (explicit) on
- *             first mouseover / focusin. No page-load scan, no DOM overhead
+ *             first hover / focusin. No page-load scan, no DOM overhead
  *             for tooltips that are never triggered. AJAX-loaded triggers
  *             work automatically via bubbling delegated listeners.
  *
@@ -33,7 +33,8 @@
  *             visible. Focus counts only when it matches :focus-visible, so
  *             a pointer press, or focus handed back by a closing dialog after
  *             a pointer close, shows nothing.
- * Hide:       focus leaving the trigger (focusout), pointer leave, Escape
+ * Hide:       focus leaving the trigger (focusout), pointer leave, pressing
+ *             the trigger, or Escape.
  *
  * Geometry:   a trigger scrolled out of the positioning boundary takes its tip
  *             down and keeps it tracked, so scrolling back brings the same tip
@@ -346,7 +347,7 @@ function wireTip(tip, options = {}) {
   };
 
   tip.addEventListener(
-    "mouseenter",
+    "pointerenter",
     () => {
       state.overTip = true;
       clearHide(tip);
@@ -354,7 +355,7 @@ function wireTip(tip, options = {}) {
     { signal: controller.signal },
   );
   tip.addEventListener(
-    "mouseleave",
+    "pointerleave",
     () => {
       state.overTip = false;
       scheduleHide(tip);
@@ -424,7 +425,7 @@ function ensureTip(trigger) {
 
   const triggerController = new AbortController();
   trigger.addEventListener(
-    "mouseleave",
+    "pointerleave",
     () => {
       state.hovered = false;
       scheduleHide(tip);
@@ -505,29 +506,29 @@ function show(tip, ref, immediate = false) {
   else state.timer = setTimeout(reveal, SHOW_DELAY_MS);
 }
 
-// ── Delegated discovery (mouseover + focusin bubble) ───
+// ── Delegated trigger interactions ───
 
 const SEL = "[data-tooltip]";
+/** @type {WeakRef<Element> | null} */
+let pressedTrigger = null;
 
 function handleTriggerIntent(e) {
   const trigger = e.target.closest?.(SEL);
   if (!trigger) return;
   if (isClickTrigger(trigger) || isAlwaysVisible(trigger)) return;
+  // Touch generates pointerover on contact. A held pointer can cross more
+  // triggers during a drag. Neither is a hover intent.
+  if (e.type === "pointerover" && (e.pointerType === "touch" || e.buttons)) return;
   // A pointer or focus move between the trigger's own children is not a new
   // intent: it must not restart the show delay or rewrite the intent flags.
+  if (e.relatedTarget instanceof Node && trigger.contains(e.relatedTarget)) return;
+
+  // Text fields can match :focus-visible even when the press focused them.
   if (
-    (e.type === "mouseover" || e.type === "focusin") &&
-    e.relatedTarget instanceof Node &&
-    trigger.contains(e.relatedTarget)
+    e.type === "focusin" &&
+    (!e.target.matches(":focus-visible") || pressedTrigger?.deref() === trigger)
   )
     return;
-
-  // why: focus is a show intent only when it is keyboard focus. A pointer
-  // press focuses the trigger too, and a dialog or drawer closed with the
-  // pointer hands focus back to its invoker; neither asks for a label the
-  // user just acted on. :focus-visible is the browser's own modality verdict,
-  // the one the focus rings already follow, so Tab still shows the tip.
-  if (e.type === "focusin" && !e.target.matches(":focus-visible")) return;
 
   const tip = ensureTip(trigger);
   if (!tip) return;
@@ -536,6 +537,23 @@ function handleTriggerIntent(e) {
   if (e.type === "focusin") state.focused = true;
   else state.hovered = true;
   show(tip, trigger);
+}
+
+function handleTriggerPress(e) {
+  const trigger = e.target.closest?.(SEL);
+  pressedTrigger = trigger ? new WeakRef(trigger) : null;
+  if (!trigger || isClickTrigger(trigger) || isAlwaysVisible(trigger)) return;
+
+  const tip = triggerStates.get(trigger)?.tip;
+  const state = tip && tipStates.get(tip);
+  if (!state || state.activeRef !== trigger) return;
+
+  // Also cancel a delayed show or a tip waiting to come back into view.
+  if (!state.timer && !state.wanted && !state.visible) return;
+  state.hovered = false;
+  state.focused = false;
+  state.overTip = false;
+  hideTip(tip, true);
 }
 
 function handleTriggerClick(e) {
@@ -552,8 +570,17 @@ function handleTriggerClick(e) {
 
 // Delegated discovery listeners run at import time; keep SSR imports inert.
 if (typeof document !== "undefined") {
-  document.addEventListener("mouseover", handleTriggerIntent);
+  document.addEventListener("pointerover", handleTriggerIntent);
   document.addEventListener("focusin", handleTriggerIntent);
+  // A drag handler can stop the press before it bubbles to the document.
+  document.addEventListener("pointerdown", handleTriggerPress, { capture: true });
+  document.addEventListener(
+    "keydown",
+    () => {
+      pressedTrigger = null;
+    },
+    { capture: true },
+  );
   document.addEventListener("click", handleTriggerClick);
 
   enhance({

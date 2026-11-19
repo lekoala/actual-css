@@ -43,11 +43,11 @@ const owed = (name, run) => (available ? test : test.skip)(name, run, TIMEOUT);
 // collapses whenever the host machine is in dark mode.
 const OPTIONS = { mediaFeatures: [{ name: "prefers-color-scheme", value: "light" }] };
 
-// Wiring is lazy: ensureTip() runs on the first mouseover, which is the moment
+// Wiring is lazy: ensureTip() runs on the first pointerover, which is the moment
 // the old transport moved an explicit tip out of its scope.
 const hover = (view, selector) =>
   view.evaluate(`document.querySelector(${JSON.stringify(selector)}).dispatchEvent(
-    new MouseEvent("mouseover", { bubbles: true })
+    new PointerEvent("pointerover", { bubbles: true })
   )`);
 
 /*

@@ -41,7 +41,7 @@ const withPage = (name, run) =>
 // delay and positioning to produce an open tip.
 const hover = (view, id) =>
   view.evaluate(`document.getElementById("${id}").dispatchEvent(
-    new MouseEvent("mouseover", { bubbles: true })
+    new PointerEvent("pointerover", { bubbles: true })
   )`);
 
 /*

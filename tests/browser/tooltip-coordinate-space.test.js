@@ -64,7 +64,7 @@ const READERS = `
     return Math.round(p.top >= t.bottom ? p.top - t.bottom : t.top - p.bottom);
   };
   const show = (id) => document.getElementById(id).dispatchEvent(
-    new MouseEvent("mouseover", { bubbles: true })
+    new PointerEvent("pointerover", { bubbles: true })
   );
 `;
 
@@ -230,7 +230,7 @@ it("a tooltip does not change what the page can scroll to", async () => {
       out.push(JSON.parse(await geometry(`returned ${cycle}`)));
 
       await view.evaluate(`(() => {
-        document.getElementById("low-trigger").dispatchEvent(new MouseEvent("mouseleave"));
+        document.getElementById("low-trigger").dispatchEvent(new PointerEvent("pointerleave"));
       })()`);
       await waitForBrowser(view, `!(${tipOpen("low-trigger")})`);
       out.push(JSON.parse(await geometry(`hidden ${cycle}`)));
@@ -247,10 +247,8 @@ it("a tooltip does not change what the page can scroll to", async () => {
 });
 
 /*
- * The touch-device report: focus a trigger, scroll it out of view, scroll back
- * — and the tooltip is gone for good. A second tap on an already-focused
- * trigger fires no focusin, so nothing reaches the runtime; the tip has to
- * come back from position tracking alone.
+ * Scrolling a focused trigger back into view fires no focusin, so position
+ * tracking must bring the tooltip back.
  */
 it("a tip goes down when its trigger leaves the viewport and comes back with it", async () => {
   const states = await withPage("recovery", async (view) => {

@@ -19,12 +19,16 @@ async function loadTooltip(html) {
  */
 const visible = (tip) => api.isTooltipVisible(tip);
 
-function hover(el) {
-  el.dispatchEvent(new MouseEvent("mouseover", { bubbles: true }));
+function hover(el, relatedTarget = null) {
+  el.dispatchEvent(new window.PointerEvent("pointerover", { bubbles: true, relatedTarget }));
 }
 
 function leave(el) {
-  el.dispatchEvent(new MouseEvent("mouseleave"));
+  el.dispatchEvent(new window.PointerEvent("pointerleave"));
+}
+
+function press(el) {
+  el.dispatchEvent(new window.PointerEvent("pointerdown", { bubbles: true }));
 }
 
 function click(el) {
@@ -65,6 +69,7 @@ test("data-tooltip generates a tooltip lazily on first hover", async () => {
   await loadTooltip('<button data-tooltip="Help text">Trigger</button>');
   const trigger = document.querySelector("button");
 
+  press(trigger);
   expect(document.querySelector('[role="tooltip"]')).toBeNull();
 
   hover(trigger);
@@ -78,6 +83,28 @@ test("data-tooltip generates a tooltip lazily on first hover", async () => {
   await waitForShow();
 
   expect(visible(tip)).toBe(true);
+});
+
+test("pressing a trigger cancels its delayed show and ignores moves between its children", async () => {
+  await loadTooltip('<button data-tooltip="Help"><span>One</span><span>Two</span></button>');
+  const [one, two] = document.querySelectorAll("span");
+  hover(one);
+  const tip = document.querySelector('[role="tooltip"]');
+  press(one);
+
+  await waitForShow();
+  expect(visible(tip)).toBe(false);
+
+  hover(two, one);
+  await waitForShow();
+  expect(visible(tip)).toBe(false);
+
+  hover(one, document.body);
+  await waitForShow();
+  expect(visible(tip)).toBe(true);
+  press(one);
+  expect(visible(tip)).toBe(false);
+  expect(one.parentElement.getAttribute("aria-describedby")).toBe(tip.id);
 });
 
 test("shorthand text changed while visible applies on the next show, not mid-flight", async () => {
@@ -147,6 +174,9 @@ test("click-toggle shorthand picks the mutated text up on reopen", async () => {
   const tip = document.querySelector('[role="tooltip"]');
   expect(visible(tip)).toBe(true);
   expect(tip.textContent).toBe("Details");
+
+  press(trigger);
+  expect(visible(tip)).toBe(true);
 
   click(trigger);
   expect(visible(tip)).toBe(false);
@@ -237,6 +267,9 @@ test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async (
   expect(tip).not.toBeNull();
   expect(visible(tip)).toBe(true);
 
+  press(trigger);
+  expect(visible(tip)).toBe(true);
+
   leave(trigger);
   await waitForHide();
   expect(visible(tip)).toBe(true);
@@ -262,11 +295,8 @@ test("data-tooltip-visible starts hidden when its trigger is outside the viewpor
 });
 
 /*
- * The bug this covers, as reported on a touch device: focus a trigger, scroll
- * it out of view, scroll back — and nothing brings the tooltip back. A second
- * tap on an already-focused trigger fires no focusin, so the recovery cannot
- * come from an interaction event; it has to come from the tracker, which means
- * reposition() returning false must not end the tip.
+ * A trigger keeps its keyboard focus when scrolled out of view. Scrolling back
+ * fires no focusin, so the tracker must be able to bring its tooltip back.
  */
 test("a trigger scrolled out of view takes its tooltip down and brings it back", async () => {
   await loadTooltip('<button data-tooltip="Help">Trigger</button>');
@@ -474,6 +504,26 @@ test("a shared explicit tooltip survives the removal of one of its triggers", as
   expect(tip.isConnected).toBe(true);
 });
 
+test("only the active trigger can dismiss a shared tooltip by pressing it", async () => {
+  await loadTooltip(`
+    <button id="a" data-tooltip aria-describedby="shared">A</button>
+    <button id="b" data-tooltip aria-describedby="shared">B</button>
+    <div role="tooltip" id="shared" hidden>Shared help</div>
+  `);
+  const a = document.getElementById("a");
+  const b = document.getElementById("b");
+  const tip = document.getElementById("shared");
+
+  hover(a);
+  hover(b);
+  await waitForShow();
+  expect(visible(tip)).toBe(true);
+  press(a);
+  expect(visible(tip)).toBe(true);
+  press(b);
+  expect(visible(tip)).toBe(false);
+});
+
 test("removing a shorthand trigger removes its generated tooltip", async () => {
   await loadTooltip('<main><button data-tooltip="Help">Trigger</button></main>');
   const trigger = document.querySelector("button");
@@ -666,11 +716,11 @@ test("tooltip stays open while the pointer moves from trigger to tip", async () 
   const tip = document.querySelector('[role="tooltip"]');
 
   leave(trigger);
-  tip.dispatchEvent(new MouseEvent("mouseenter"));
+  tip.dispatchEvent(new window.PointerEvent("pointerenter"));
   await waitForHide();
   expect(visible(tip)).toBe(true);
 
-  tip.dispatchEvent(new MouseEvent("mouseleave"));
+  tip.dispatchEvent(new window.PointerEvent("pointerleave"));
   await waitForHide();
   expect(visible(tip)).toBe(false);
 });
@@ -704,7 +754,7 @@ test("Escape key hides the tooltip", async () => {
  * It reads like a bug from the outside: click a trigger, press Escape, click
  * the same trigger again and nothing happens. The second click reaches nothing
  * — the trigger already has focus, so no focusin fires, and the pointer never
- * left, so no mouseover does either. Re-triggering is what shows it again.
+ * left, so no pointerover does either. Re-triggering is what shows it again.
  *
  * This also pins the boundary with the restore-on-scroll behavior above: a
  * tracking tick may bring back a tip that could not be positioned, never one

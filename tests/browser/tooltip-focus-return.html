@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tooltip focus-return fixture</title>
   <link rel="stylesheet" href="../../src/css/actual.full.css">
-  <script src="../../dist/actual.full.js" defer></script>
 </head>
 <body>
   <!-- A tooltip on the invoker of a drawer: closing the drawer hands focus
@@ -16,6 +15,7 @@
             data-tooltip="Assistant" aria-label="Assistant"
             command="show-modal" commandfor="panel">A</button>
     <button class="btn" type="button" id="after">After</button>
+    <input type="text" id="field" aria-label="Search" data-tooltip="Search the agenda">
   </div>
 
   <dialog class="drawer" id="panel" data-side="end" aria-label="Panel" closedby="any">

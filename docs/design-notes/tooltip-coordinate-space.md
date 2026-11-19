@@ -96,11 +96,9 @@ moves with the tip here, and holds steady for anything else.
 outside the boundary included. `tooltip.js` used to read that as the end of the
 interaction and call `hideTip()`, which stopped position tracking.
 
-On a touch device that loses the tooltip for good: tap a trigger, it takes
-focus and the tip appears; scroll the trigger past the boundary and the tip is
-torn down; scroll back and nothing is watching any more. Tapping again does not
-help either — the trigger is already focused, so no `focusin` fires, and a
-repeat tap on the same element fires no `mouseover`.
+A keyboard-focused trigger keeps its focus when scrolled past the boundary.
+Scrolling back produces no new `focusin`, so the existing tracker must bring
+the tooltip back.
 
 So the runtime now keeps two states. `wanted` is what the interaction asks for
 and only `hideTip()` clears it; `visible` is what is promoted. An

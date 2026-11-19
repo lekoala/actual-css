@@ -1,5 +1,9 @@
 # Actual CSS Changelog
 
+## [Unreleased]
+### Fixed
+- Pressing a `data-tooltip` hover or focus trigger dismisses its tooltip and cancels any pending show, including before a drag.
+
 ## [0.19.2] - 2026-11-18
 ### Added
 - `actual-css/js` and `actual-css/js/*` ship TypeScript declarations, including `Enhancer` and `EnhancementHandle` from `actual-css/js/full`.
