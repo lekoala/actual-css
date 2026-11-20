@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## [0.19.4] - 2026-11-20
 ### Fixed
 - Dialogs opened from a flyout return focus to its opener when the command is no longer focusable.
 - Menu examples show how to move `.menu-separator` from a direct `<hr>` to a `<li>` for valid `<menu>` markup, with existing `<hr>` dividers still styled by the class.
