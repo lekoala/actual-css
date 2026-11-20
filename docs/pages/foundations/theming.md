@@ -160,6 +160,9 @@ and help text, and intent colors keep the page palette, which nothing tunes for
 `--surface-solid`. Focus lines stay readable there: the theme contract keeps
 `--focus` at 3:1 on `--surface-solid`.
 
+For a custom background, check the focus line against that background and
+override `--focus` on the panel if the contrast falls below 3:1.
+
 → Foundations · Tokens (theme contract) · Examples · Contrast contexts
 
 ### Scope a theme to one section / microtheme / theme island

@@ -35,6 +35,7 @@ import { EVENTS } from "./events.js";
 import { submissionSetting } from "./form-submission.js";
 import { afterParse } from "./parsed.js";
 import { CLASSES } from "./selectors.js";
+import { findFocusSurface, surfaceFocusReturns } from "./surface-focus.js";
 
 const dialogMap = new WeakMap();
 const autoOpened = new WeakSet();
@@ -226,18 +227,24 @@ function canViewTransition(dialog, trigger) {
   );
 }
 
+function dialogFocusReturn(dialog, trigger) {
+  const target = trigger || dialog?.ownerDocument?.activeElement;
+  return { target, fallback: surfaceFocusReturns.get(findFocusSurface(target)) };
+}
+
 function openDialogWithViewTransition(dialog, trigger, forcedModal = null) {
   if (!canViewTransition(dialog, trigger)) {
     openDialog(dialog, trigger, forcedModal);
     return;
   }
 
+  const focusReturn = dialogFocusReturn(dialog, trigger);
   setVtName(trigger, VT_NAME);
 
   const transition = dialog.ownerDocument.startViewTransition(() => {
     clearVtName(trigger);
     setVtName(dialog, VT_NAME);
-    openDialog(dialog, trigger, forcedModal);
+    showDialog(dialog, focusReturn, forcedModal);
   });
 
   transition.finished.finally(() => clearVtName(dialog, trigger)).catch(() => {});
@@ -291,7 +298,7 @@ export function closeDialog(dialog, returnValue = "") {
   const state = ensureDelegatedDialog(dialog);
   if (state.closing) return;
 
-  const trigger = state.restoreFocusTo;
+  const trigger = state.focusReturn?.target;
   if (canViewTransition(dialog, trigger)) {
     state.closing = true;
     setVtName(dialog, VT_NAME);
@@ -333,6 +340,10 @@ export function requestDialogClose(dialog, returnValue = "") {
 }
 
 export function openDialog(dialog, trigger = null, forcedModal = null) {
+  showDialog(dialog, dialogFocusReturn(dialog, trigger), forcedModal);
+}
+
+function showDialog(dialog, focusReturn, forcedModal) {
   if (!isDialogElement(dialog) || dialog.open || !dialog.isConnected) return;
 
   const state = ensureDelegatedDialog(dialog);
@@ -340,7 +351,7 @@ export function openDialog(dialog, trigger = null, forcedModal = null) {
   syncDialogSemantics(dialog, state, modal);
 
   state.closing = false;
-  state.restoreFocusTo = trigger || dialog.ownerDocument.activeElement;
+  state.focusReturn = focusReturn;
 
   // showModal()/show() focus the dialog, and Chrome resets the viewport scroll
   // while doing so; capture the position first and restore it so the page does
@@ -408,7 +419,7 @@ function handleDialogSubmit(event) {
   // formmethod on the submitter wins, as natively: a Save posting from a
   // method="dialog" form must not close the dialog.
   if (submissionSetting(form, event.submitter, "method") !== "dialog") return;
-  if (!canViewTransition(dialog, dialogMap.get(dialog)?.restoreFocusTo)) return;
+  if (!canViewTransition(dialog, dialogMap.get(dialog)?.focusReturn?.target)) return;
 
   event.preventDefault();
   closeDialog(dialog, event.submitter?.value || "");
@@ -445,6 +456,16 @@ function handleDialogCancel(event) {
   closeDialog(dialog, state?.returnValue || "");
 }
 
+function restoreFocus(target) {
+  if (!target?.isConnected) return false;
+  // A closing popover can retain a layout box during its exit transition.
+  if (findFocusSurface(target)?.matches(":not(:popover-open)")) return false;
+
+  const root = target.getRootNode();
+  if (root.activeElement !== target) target.focus({ preventScroll: true });
+  return root.activeElement === target;
+}
+
 function handleDialogClose(event) {
   const dialog = event.currentTarget;
   // close is queued as a task: a dialog closed then reopened in the same task
@@ -467,15 +488,13 @@ function handleDialogClose(event) {
   state.modalOpen = false;
   syncModalOpenClass(dialog.ownerDocument);
 
-  const restoreFocusTo = state.restoreFocusTo;
-  state.restoreFocusTo = null;
+  const focusReturn = state.focusReturn;
+  state.focusReturn = null;
 
   // The native dialog restores focus to the previously focused element on
   // close; only step in when it has not (e.g. an explicit trigger we tracked)
   // and avoid scrolling the viewport while doing so.
-  if (restoreFocusTo?.isConnected && dialog.ownerDocument.activeElement !== restoreFocusTo) {
-    restoreFocusTo.focus({ preventScroll: true });
-  }
+  if (!restoreFocus(focusReturn?.target)) restoreFocus(focusReturn?.fallback);
 }
 
 function ensureDialogWired(dialog) {
@@ -488,7 +507,7 @@ function ensureDialogWired(dialog) {
     modalOpen: isModalOpen(dialog),
     ownedAttributes: [],
     requestingClose: false,
-    restoreFocusTo: null,
+    focusReturn: null,
     returnValue: "",
     staticTimer: null,
     backdropPress: false,
@@ -554,7 +573,7 @@ function autoOpen(dialog) {
   if (dialog.open) {
     // No trigger owns this opening: leave focus restoration to the browser,
     // and do not morph the closing dialog into the previously active element.
-    dialogMap.get(dialog).restoreFocusTo = null;
+    dialogMap.get(dialog).focusReturn = null;
     autoOpened.add(dialog);
   }
 }

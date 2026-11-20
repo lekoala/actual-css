@@ -87,6 +87,9 @@ The command runtime is stateless and does not pre-scan triggers.
 Use `command="request-close"` for cancel-style buttons so close requests go
 through the dialog's cancel lifecycle.
 
+When a flyout command opens a dialog, closing the dialog returns focus to the
+command if it can still receive focus, or to the button that opened the flyout.
+
 Use `closedby="any"` as the no-JavaScript light-dismiss path: the native dialog
 closes on backdrop click and Escape. Add `data-dialog-dismissible` so the
 optional runtime takes over backdrop click and closes with the dialog's

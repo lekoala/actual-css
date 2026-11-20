@@ -5,6 +5,7 @@ import { EVENTS } from "./events.js";
 import { positionModeFor } from "./floating-space.js";
 
 import { CLASSES } from "./selectors.js";
+import { surfaceFocusReturns } from "./surface-focus.js";
 
 const openSurfaces = new Set();
 const surfaceMap = new WeakMap();
@@ -297,7 +298,7 @@ export function openSurface(menu, opts = {}) {
   state.shift = opts.shift !== false;
   state.shiftPadding = opts.shiftPadding ?? 4;
   state.scope = opts.scope;
-  state.restoreFocusTo = opts.restoreFocusTo || opts.trigger || opts.source || null;
+  surfaceFocusReturns.set(menu, opts.restoreFocusTo || opts.trigger || opts.source || null);
 
   // Points are client coordinates and therefore always viewport-relative.
   // Element anchors choose their coupled coordinate/CSS mode once per open;
@@ -313,6 +314,7 @@ export function openSurface(menu, opts = {}) {
   // Promote before measuring: a closed popover has no box to position.
   if (!showTransport(menu)) {
     openSurfaces.delete(menu);
+    surfaceFocusReturns.delete(menu);
     return false;
   }
   menu.classList.add(CLASSES.open);
@@ -320,6 +322,7 @@ export function openSurface(menu, opts = {}) {
 
   if (!positionSurface(menu)) {
     closeSurface(menu, { restoreFocus: false });
+    surfaceFocusReturns.delete(menu);
     return false;
   }
 
@@ -360,6 +363,7 @@ export function closeSurface(menu, opts = {}) {
   const state = surfaceMap.get(menu);
   const activeElement = menu.ownerDocument.activeElement;
   const shouldRestoreFocus = opts.restoreFocus ?? menu.contains(activeElement);
+  const restoreFocusTo = surfaceFocusReturns.get(menu);
   menu.classList.remove(CLASSES.open);
   hideTransport(menu);
   openSurfaces.delete(menu);
@@ -368,14 +372,15 @@ export function closeSurface(menu, opts = {}) {
   state?.stopScrollIntent?.();
   state?.stopTracking?.();
 
-  if (shouldRestoreFocus && state?.restoreFocusTo?.isConnected) {
-    state.restoreFocusTo.focus({ preventScroll: true });
+  if (shouldRestoreFocus && restoreFocusTo?.isConnected) {
+    restoreFocusTo.focus({ preventScroll: true });
   }
 }
 
 export function disconnectSurface(menu) {
   if (!menu) return;
   closeSurface(menu);
+  surfaceFocusReturns.delete(menu);
   menu.removeEventListener(EVENTS.dismiss, onSurfaceDismiss);
   const state = surfaceMap.get(menu);
   if (state) {

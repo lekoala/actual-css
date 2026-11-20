@@ -100,7 +100,8 @@ local `translate` to the inner glyph. Keep the disc in place:
 
 `.timeline-dates-end` moves each `<time>` to the end of the event's first
 line, so the titles lead and the dates line up in a column on the right.
-Write the `<time>` first in the event, as usual.
+Write the `<time>` first in the event. An inline link can serve as the title
+and wrap beside the date when space is tight.
 
 It suits a narrow container: a sidebar, a card, a side panel. In a wide
 column the dates drift away from their titles; cap the list's width or keep
@@ -112,7 +113,7 @@ the default dateline.
     <li class="success">
       <i class="ti ti-check" aria-hidden="true"></i>
       <time datetime="2026-11-11T09:40">09:40</time>
-      <strong>Results available</strong>
+      <strong><a href="#">Results available</a></strong>
       <p class="muted">Reviewed by the attending physician.</p>
     </li>
     <li class="primary">

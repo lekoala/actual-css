@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Dialogs opened from a flyout return focus to its opener when the command is no longer focusable.
+
 ## [0.19.3] - 2026-11-19
 ### Fixed
 - Pressing a `data-tooltip` hover or focus trigger dismisses its tooltip and cancels any pending show, including before a drag.

@@ -589,20 +589,6 @@
       const settings = document.getElementById("docs-workspace-settings");
       const settingsDrawer = document.getElementById("docs-home-drawer");
       let savedSettings = { name: "Studio workspace", access: "workspace", updates: true, activity: true };
-      let menuDialog = null;
-
-      document.getElementById("docs-home-flyout").addEventListener("click", (event) => {
-        const command = event.target.closest("[commandfor]");
-        if (command) menuDialog = document.getElementById(command.getAttribute("commandfor"));
-      }, { capture: true });
-
-      function restoreMenuFocus(dialog) {
-        // The menu command disappears on activation. Return to its visible
-        // owner rather than to a row inside the now-closed popover.
-        if (menuDialog !== dialog) return;
-        menuDialog = null;
-        document.getElementById("docs-home-flyout-trigger").focus({ preventScroll: true });
-      }
 
       settingsDrawer.addEventListener("close", () => {
         if (settingsDrawer.returnValue === "save") {
@@ -628,7 +614,6 @@
         settings.elements.updates.checked = savedSettings.updates;
         settings.elements.activity.checked = savedSettings.activity;
         settingsDrawer.returnValue = "";
-        restoreMenuFocus(settingsDrawer);
       });
 
       const publishDialog = document.getElementById("docs-home-dialog");
@@ -637,7 +622,6 @@
           workspaceStatus.textContent = "Preview published in this demo. Keep making good things.";
         }
         publishDialog.returnValue = "";
-        restoreMenuFocus(publishDialog);
       });
 
       const appearance = document.getElementById("showcase-appearance");

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dialog opened from a flyout</title>
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+</head>
+<body>
+  <button id="first-trigger" type="button" data-enhance="flyout" aria-controls="actions">Actions</button>
+  <button id="second-trigger" type="button" data-enhance="flyout" aria-controls="actions">More actions</button>
+  <menu class="flyout menu" id="actions" role="menu" aria-label="Actions" hidden>
+    <li role="none">
+      <button class="menu-item" id="edit" role="menuitem" type="button" command="show-modal" commandfor="details">Edit details</button>
+    </li>
+  </menu>
+  <dialog id="details" aria-label="Edit details">
+    <form method="dialog">
+      <button id="save" type="submit" value="saved">Save</button>
+    </form>
+  </dialog>
+</body>
+</html>
