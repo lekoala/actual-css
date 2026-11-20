@@ -126,19 +126,19 @@ Surfaces are painted material and may be translucent. Two roles must stay opaque
 
 A theme with translucent surfaces overrides both with opaque values.
 
-`--border` separates surfaces: cards, tables, dividers, panels. `--border-control`
-is the resting edge that tells a control apart from the surface — fields,
-checkboxes and radios, OTP cells, choice cards, join addons, neutral
-outline buttons, the color and file inputs. It is derived from `--text` and
-`--surface`; on the default palette it holds 3:1 against `--surface` and
-2.9–3.0 against `--surface-subtle`. `actual-css contrast` reports it for your
-theme. `--border-control-mix` sets the ink share; raise it when a tinted or
-translucent surface pulls the edge under 3:1. The mix resolves at a theme
-boundary: set it on `:root` or a `[data-theme]` island, because a plain container
-inherits the colour already resolved above it. Without `color-mix()` it falls
-back to `--border`. Set `--border-control` itself to soften or strengthen every
-control in a subtree without touching a separator. Hover, checked, invalid and
-disabled states keep their own colors.
+`--border` separates surfaces: cards, tables, dividers, panels.
+`--border-control` is the resting edge that tells a control apart from the
+surface — fields, checkboxes and radios, unchecked switches, OTP cells, choice
+cards, join addons, neutral outline buttons, the color and file inputs. It is
+derived from `--text` and `--surface`; on the default palette it holds 3:1
+against `--surface` and 2.9–3.0 against `--surface-subtle`. `actual-css
+contrast` reports it for your theme. `--border-control-mix` sets the ink share;
+raise it when a tinted or translucent surface pulls the edge under 3:1. The mix
+resolves at a theme boundary: set it on `:root` or a `[data-theme]` island,
+because a plain container inherits the colour already resolved above it. Without
+`color-mix()` it falls back to `--border`. Set `--border-control` itself to
+soften or strengthen every control in a subtree without touching a separator.
+Hover, checked, invalid and disabled states keep their own colors.
 
 ```css
 /* Every control in one theme: */

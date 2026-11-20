@@ -133,8 +133,10 @@ same optical line. Change the type or the control size and they stay level:
 
 ### Hooks
 
-- `--switch-bg` — track fill; `--switch-border` follows it unless overridden.
-- `--switch-border` — optional distinct edge; validation takes precedence.
+- `--switch-bg` — track fill.
+- `--switch-border` — track edge. At rest it is `--border-control`, the 3:1 edge
+  that identifies the unchecked switch on its surface; checked and disabled
+  tracks follow `--switch-bg`. Validation takes precedence.
 
 - `--choice-control-size` — shared size for inline choices; the switch track is
   this plus `0.125em`, so scaling it scales the checkbox and the switch together.

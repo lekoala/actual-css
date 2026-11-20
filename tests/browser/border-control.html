@@ -41,6 +41,13 @@
   </button>
   <span id="ref-text" style="color: var(--text)"></span>
 
+  <!-- A switch keeps the control edge at rest only: checked and disabled
+       tracks are a uniform fill, and validation still wins over the edge. -->
+  <input class="switch" type="checkbox" role="switch" data-switch="checked" checked aria-label="Checked switch">
+  <input class="switch" type="checkbox" role="switch" data-switch="disabled" disabled aria-label="Disabled switch">
+  <input class="switch" type="checkbox" role="switch" data-switch="invalid" aria-invalid="true" aria-label="Invalid switch">
+  <span data-switch-danger style="color: var(--danger)"></span>
+
   <div class="card" data-separator>Card</div>
   <hr class="divider" data-separator>
 

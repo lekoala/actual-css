@@ -1,7 +1,8 @@
 /*
  * --border-control is the resting edge of neutral controls, apart from the
  * --border that separates surfaces: setting it alone moves every control and
- * no separator. Switch tracks keep a uniform fill instead of a control edge.
+ * no separator. An unchecked switch takes it too: its quiet track fill does
+ * not identify it on the surface.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -35,7 +36,7 @@ it("controls take --border-control and separators keep --border", async () => {
         "select rgb(255, 0, 0)",
         "check rgb(255, 0, 0)",
         "radio rgb(255, 0, 0)",
-        "switch rgb(200, 200, 200)",
+        "switch rgb(255, 0, 0)",
         "color-swatch rgb(255, 0, 0)",
         "join-addon rgb(255, 0, 0)",
         "choice-card rgb(255, 0, 0)",
@@ -44,6 +45,32 @@ it("controls take --border-control and separators keep --border", async () => {
       expect(edges.separators).toEqual(["card rgb(200, 200, 200)", "divider rgb(200, 200, 200)"]);
     },
     { artifactName: "border-control" },
+  );
+});
+
+// The edge belongs to the resting state: a checked or disabled track is one
+// uniform fill, and an invalid switch keeps the validation edge.
+it("a switch drops the control edge when checked or disabled", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const state = await view.evaluate(`(() => {
+        const read = (name) => {
+          const s = getComputedStyle(document.querySelector('[data-switch="' + name + '"]'));
+          return { edge: s.borderBlockStartColor, fill: s.backgroundColor };
+        };
+        return {
+          checked: read("checked"),
+          disabled: read("disabled"),
+          invalid: read("invalid").edge,
+          danger: getComputedStyle(document.querySelector("[data-switch-danger]")).color,
+        };
+      })()`);
+      expect(state.checked.edge).toBe(state.checked.fill);
+      expect(state.disabled.edge).toBe(state.disabled.fill);
+      expect(state.invalid).toBe(state.danger);
+    },
+    { artifactName: "border-control-switch" },
   );
 });
 

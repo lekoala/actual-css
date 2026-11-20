@@ -30,8 +30,10 @@
 
 .switch {
   --switch-bg: var(--border);
-  /* Keep the border in the geometry without outlining the track. */
-  --switch-border: var(--switch-bg);
+  /* The quiet --border track does not stand out from the surface: at rest the
+     control edge is what identifies the switch (WCAG 1.4.11, 3:1). Checked and
+     disabled tracks drop it for a uniform fill. */
+  --switch-border: var(--border-control);
   --switch-knob: var(--surface-raised);
   --switch-block-size: calc(var(--choice-control-size) + 0.125em);
   --switch-width: calc(var(--switch-block-size) * 1.8);
@@ -108,6 +110,7 @@
 
 .switch:checked {
   --switch-bg: var(--intent, var(--state-selected));
+  --switch-border: var(--switch-bg);
   --switch-knob: var(--intent-fg, var(--state-selected-fg));
 }
 
@@ -138,6 +141,7 @@
 
 .switch:disabled {
   --switch-bg: var(--surface-subtle);
+  --switch-border: var(--switch-bg);
   --switch-knob: var(--state-disabled);
   opacity: 1;
   cursor: not-allowed;

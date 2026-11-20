@@ -1,6 +1,10 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Fixed
+- An unchecked `.switch` takes `--border-control` as its resting edge again, so it reaches 3:1 against the surface (1.35:1 since 0.19.0 on the default light palette). Checked and disabled tracks keep their uniform fill; validation still overrides the edge.
+- `actual-css contrast` measures the resting edge of an unchecked switch with the field, checkbox and radio.
+
 ### Changed
 - The npm package no longer ships `docs/design-notes/`; README and `llms.txt` link to them on GitHub.
 

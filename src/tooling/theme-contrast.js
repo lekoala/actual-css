@@ -5,7 +5,8 @@
  * (`bun run report:theme-contrast`).
  *
  * Measured per island (one per color scheme the theme declares):
- *   - the resting edge of a field, checkbox and radio against --surface (3:1)
+ *   - the resting edge of a field, checkbox, radio and unchecked switch against
+ *     --surface (3:1)
  *   - soft ink against the resting and the hovered soft fill (4.5:1), on each
  *     surface a soft element sits on
  *   - the solid pairs, -fg on the intent fill (4.5:1); a fill painted by a
@@ -73,11 +74,14 @@ function islandMarkup(id, scheme) {
 
 /* Controls whose resting edge is all that identifies them (WCAG 1.4.11): the
    edge against the surface around them needs 3:1. The field is read on its
-   block-end side, the one an underline-only theme (material) keeps. */
+   block-end side, the one an underline-only theme (material) keeps. An
+   unchecked switch is one of them: its track fill is a quiet --border, so the
+   edge is what tells it apart from the surface. */
 export const CONTROLS = [
   ["field", '<input class="input">'],
   ["checkbox", '<input class="check" type="checkbox">'],
   ["radio", '<input class="radio" type="radio">'],
+  ["switch", '<input class="switch" type="checkbox" role="switch">'],
 ];
 
 const ratio = (fg, bg) => (fg[3] < 255 || bg[3] < 255 ? null : contrast(fg, bg));
