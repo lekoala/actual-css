@@ -4,7 +4,7 @@
 
 ### Fixed
 - Dialogs opened from a flyout return focus to its opener when the command is no longer focusable.
-- `.menu-label` and `.menu-separator` use valid list rows in menu examples.
+- Menu examples show how to move `.menu-separator` from a direct `<hr>` to a `<li>` for valid `<menu>` markup, with existing `<hr>` dividers still styled by the class.
 
 ## [0.19.3] - 2026-11-19
 ### Fixed

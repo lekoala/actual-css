@@ -100,8 +100,9 @@ local `translate` to the inner glyph. Keep the disc in place:
 
 `.timeline-dates-end` moves each `<time>` to the end of the event's first
 line, so the titles lead and the dates line up in a column on the right.
-Write the `<time>` first in the event. An inline link can serve as the title
-and wrap beside the date when space is tight.
+Write the `<time>` first in the event. Use an inline `<a>` for a linked title
+that can wrap beside the date. A `.btn` moves below the date as a unit when
+there is too little room beside it.
 
 It suits a narrow container: a sidebar, a card, a side panel. In a wide
 column the dates drift away from their titles; cap the list's width or keep
