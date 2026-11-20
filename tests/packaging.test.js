@@ -10,7 +10,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, posix } from "node:path";
 import { publicJsExports, sourceModuleForJsExport } from "./helpers/package-exports.js";
 
 const ROOT = join(import.meta.dir, "..");
@@ -260,6 +260,30 @@ packTest("packed tarball ships public exports with usable JS declarations", asyn
     for (const entry of critical) {
       expect(entries, `tarball must contain ${entry}`).toContain(entry);
     }
+
+    // Design notes are contributor material, linked on GitHub, not shipped.
+    expect(entries.filter((entry) => entry.startsWith("package/docs/design-notes/"))).toEqual([]);
+
+    // A shipped document is read from node_modules by agents (llms.txt, the
+    // skill): every relative link must land inside the tarball, so trimming
+    // `files` cannot strand a link the way docs/design-notes would have.
+    // Demo links are the exception: demo/ is published on the site, where
+    // check:links and build:pages verify them.
+    const shipped = new Set(entries);
+    const docs = entries.filter((entry) => /\.md$|llms\.txt$/.test(entry));
+    const broken = [];
+    for (const doc of docs) {
+      const text = readFileSync(join(ROOT, doc.slice("package/".length)), "utf8");
+      for (const [, href] of text.matchAll(/\]\(([^)\s]+)\)/g)) {
+        if (/^(?:[a-z]+:|#)/i.test(href)) continue;
+        const target = posix.join(posix.dirname(doc), href.split("#")[0]).replace(/\/$/, "");
+        if (href.includes("demo/")) continue;
+        const found =
+          shipped.has(target) || entries.some((entry) => entry.startsWith(`${target}/`));
+        if (!found) broken.push(`${doc} -> ${href}`);
+      }
+    }
+    expect(broken, "shipped docs link to files outside the package").toEqual([]);
 
     const modules = join(dir, "node_modules");
     mkdirSync(modules);

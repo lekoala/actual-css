@@ -105,12 +105,11 @@
     "reserved-classes.json",
     "components.json",
     "tokens.json",
-    "docs",
+    "docs/pages",
+    "docs/brand",
     "skills",
     "CHANGELOG.md",
-    "llms.txt",
-    "LICENSE",
-    "README.md"
+    "llms.txt"
   ],
   "engines": {
     "bun": ">=1.4.0",

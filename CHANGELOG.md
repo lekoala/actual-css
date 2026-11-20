@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Changed
+- The npm package no longer ships `docs/design-notes/`; README and `llms.txt` link to them on GitHub.
 
 ## [0.19.4] - 2026-11-20
 ### Fixed

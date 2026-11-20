@@ -36,12 +36,12 @@ named tokens (`tabs`, `flyout`, `range`, `scrollspy`, `in-view`, `validation`,
 Leaf behaviors whose opt-in also carries configuration use their own attribute
 (`data-tooltip`, `data-mask`, `data-filter`, `data-context-menu`), and `<dialog>`
 needs none. See
-[when a token, when a data-*](docs/design-notes/enhancement-contract.md).
+[when a token, when a data-*](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/enhancement-contract.md).
 
 Behaviour primitives are independently importable for building custom widgets,
 including `enhance`, `surface`, `floating`, `focus-group`, `keys`, `input`,
 `command`, `menu`, `focus`, `escape`, and `events`. See
-[widget primitives](docs/design-notes/widget-primitives.md).
+[widget primitives](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/widget-primitives.md).
 
 ## What the vocabulary does not have
 
@@ -55,7 +55,7 @@ including `enhance`, `surface`, `floating`, `focus-group`, `keys`, `input`,
 - Modifiers such as `.ghost`, `.link`, `.flush`, `.raised` only mean something
   on their component; alone they are inert.
 
-See [naming](docs/design-notes/naming.md) and
+See [naming](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/naming.md) and
 [utilities non-goals](docs/pages/utilities/overview.md#non-goals).
 
 ## Choosing a page shell

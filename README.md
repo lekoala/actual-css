@@ -138,7 +138,7 @@ for the full map of module names to import paths.
 
 Some components can be enhanced with JavaScript: dialog/drawer, flyout, tooltip, tabs, scrollspy, context menu, floating UI, opt-in `data-filter` input filtering, input masks, and the one-shot `in-view` trigger behind `.reveal` and `.mark-sweep`.
 
-Presentation (`class`) and behaviour (`data-enhance`) are separate layers — import any primitive independently to build custom widgets. See [enhancement contract](docs/design-notes/enhancement-contract.md) and [widget primitives](docs/design-notes/widget-primitives.md).
+Presentation (`class`) and behaviour (`data-enhance`) are separate layers — import any primitive independently to build custom widgets. See [enhancement contract](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/enhancement-contract.md) and [widget primitives](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/widget-primitives.md).
 
 Two ways to load it — pick one, never both, since each copy owns its own
 registries:
@@ -215,7 +215,7 @@ behavior is not tested or preserved.
 
 ## Cascade layers
 
-Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` file is unlayered. See [`docs/design-notes/cascade-layer.md`](docs/design-notes/cascade-layer.md) for details.
+Actual CSS is layer-compatible, not layer-dependent. The default `actual.css` file is unlayered. See [Cascade layer strategy](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/cascade-layer.md) for details.
 
 ## AI Disclosure
 

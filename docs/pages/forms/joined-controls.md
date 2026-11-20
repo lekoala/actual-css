@@ -57,7 +57,7 @@ any labelled set of related objects. Suppress it on the element:
 ```
 
 Unlike the menu rule in
-[flyout](../enhancements/flyout.html#linting-rolemenu), do not switch this one
+[flyout](../enhancements/flyout.md#linting-rolemenu), do not switch this one
 off globally: it correctly catches `<div role="navigation">`,
 `<div role="button">` and `<div role="separator">`. And drop `role="group"`
 rather than suppressing it when the wrapper has no label to give — an unnamed
