@@ -35,13 +35,11 @@ Two decisions these findings settled:
 - `.join` keeps `role="group"` rather than `role="toolbar"`, which the rule does
   not report. Toolbar owes arrow-key navigation with a roving tabindex, and
   claiming the role without the behaviour is worse than the false positive.
-- `.menu-separator` is a plain `<hr>`. The `role="separator"` these docs used to
-  show is implied by the element, and `a11y/noRedundantRoles` was right to
-  reject it. Nothing in the CSS or the runtime read it.
-
-Only the menu container is ever reported: `role="menuitem"` sits on a `<button>`
-or `<a>`, never on the `<li>`, and an interactive element is a legitimate role
-host. Tabs put `role="tablist"` on a `<div>`, so they are unaffected.
+- `.menu-separator` is an empty `<li>` because list containers require list
+  rows. An ARIA menu exposes that divider with `role="separator"`. A native
+  list hides the decorative row with `aria-hidden="true"` so it contributes no
+  empty list item. Scope any Biome `a11y/useSemanticElements` suppression to
+  the ARIA divider, since its suggested `<hr>` would break the content model.
 
 ## Author Responsibilities
 

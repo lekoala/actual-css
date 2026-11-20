@@ -151,8 +151,33 @@ it("workspace menus hand focus to dialogs, settings save or cancel, and installa
         ),
       ).toBe(5);
       expect(
-        await view.evaluate('!!document.querySelector("#docs-home-flyout .menu-separator")'),
+        await view.evaluate(
+          "!!document.querySelector('#docs-home-flyout > li.menu-separator[role=\"separator\"]')",
+        ),
       ).toBe(true);
+      expect(
+        await view.evaluate(
+          "document.querySelectorAll('#docs-home-flyout > li.menu-label[role=\"none\"]').length",
+        ),
+      ).toBe(2);
+
+      await pressKey(view, "End", { windowsVirtualKeyCode: 35 });
+      await waitForBrowser(
+        view,
+        'document.activeElement.getAttribute("commandfor") === "docs-home-dialog"',
+      );
+      await pressKey(view, "ArrowUp", { windowsVirtualKeyCode: 38 });
+      await waitForBrowser(
+        view,
+        'document.activeElement.getAttribute("commandfor") === "docs-home-drawer"',
+      );
+      // The previous action is across both the section label and the divider.
+      await pressKey(view, "ArrowUp", { windowsVirtualKeyCode: 38 });
+      await waitForBrowser(
+        view,
+        'document.activeElement.getAttribute("href") === "examples/overview.html"',
+      );
+
       await clickPreview(view, '#docs-home-flyout [commandfor="docs-home-dialog"]');
       await waitForBrowser(
         view,

@@ -3,8 +3,8 @@
  *
  * Docs: docs/pages/enhancements/flyout.md
  *
- * Strict anatomy: .menu > li > .menu-item. Separators and section labels
- * sit directly under .menu as siblings of <li>.
+ * Strict anatomy: .menu > li > .menu-item for actions. Section labels and
+ * separators are their own non-interactive <li> rows.
  *
  * Public hooks:
  * --menu-item-icon-size

@@ -4,6 +4,7 @@
 
 ### Fixed
 - Dialogs opened from a flyout return focus to its opener when the command is no longer focusable.
+- `.menu-label` and `.menu-separator` use valid list rows in menu examples.
 
 ## [0.19.3] - 2026-11-19
 ### Fixed

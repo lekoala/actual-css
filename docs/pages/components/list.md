@@ -130,7 +130,7 @@ wiring.
         <menu class="flyout sm menu" id="member-actions" hidden>
           <li><button class="menu-item" type="button">Manage access</button></li>
           <li><button class="menu-item" type="button">Copy invite link</button></li>
-          <hr class="menu-separator">
+          <li class="menu-separator" aria-hidden="true"></li>
           <li><button class="menu-item danger" type="button">Remove member</button></li>
         </menu>
       </div>

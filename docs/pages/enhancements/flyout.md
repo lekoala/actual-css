@@ -18,10 +18,11 @@
 | `.menu-item-text` | Slot        | Flexible label column; truncates.              |
 | `.menu-item-end`  | Slot        | Trailing shortcut, badge or status.            |
 | `.menu-label`     | Variant     | Muted, non-interactive group heading.          |
-| `.menu-separator` | Variant     | Divider between menu groups (`<hr>`).          |
+| `.menu-separator` | Variant     | Divider row between groups.                    |
 | `.sm` / `.lg`     | Size        | Smaller or larger menu rows and type.          |
 
-`.menu` has a strict `.menu > li > .menu-item` anatomy.
+Action rows use `.menu > li > .menu-item`. Labels and dividers use their own
+`<li>` rows.
 
 ## Usage
 
@@ -207,7 +208,7 @@ A list of *actions* the user can take: sign out, copy, delete.
 - Flyout triggers are opt-in: add `data-enhance="flyout"` to the trigger.
 - Wrap the trigger and flyout in `.flyout-trigger` when the flyout should have a local absolute-position fallback before JavaScript positions it. Add `.stretch` when the trigger must span its container, such as the last row of a full-width sidebar nav list.
 - Use `<menu class="flyout menu">` with strict anatomy: `.menu > li > .menu-item`. Items must carry the `.menu-item` class to participate in directional keyboard navigation. ArrowUp/Down and Home/End move focus without rewriting their normal tab stops.
-- Use `.menu-label` on a `li` for a muted section heading inside a menu (e.g. a group title before its items). It is non-interactive and does not participate in roving focus. Use `.menu-separator` (a plain `<hr>`) between groups.
+- Use `<li class="menu-label">` for a section label and `<li class="menu-separator" aria-hidden="true"></li>` for a decorative divider in a plain action list. Keyboard navigation skips both rows.
 - Items are regular `<button>` or `<a>` elements.
 - Use `.sm` or `.lg` to scale one flyout; use a density context for surrounding UI.
 - Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern described below.
@@ -230,7 +231,7 @@ A list of *actions* the user can take: sign out, copy, delete.
         hidden>
     <li><button class="menu-item" type="button">Profile</button></li>
     <li><button class="menu-item" type="button">Settings</button></li>
-    <hr class="menu-separator">
+    <li class="menu-separator" aria-hidden="true"></li>
     <li><button class="menu-item danger" type="button">Sign out</button></li>
   </menu>
 </div>
@@ -247,6 +248,18 @@ tab stop instead.
 
 The runtime owns only focus movement and `tabindex`. The application still owns
 command state and updates attributes such as `aria-checked`.
+
+In an ARIA menu, use `role="separator"` on a divider row and `role="none"` on
+the section label and action wrappers.
+
+```html
+<menu class="menu" role="menu" aria-label="Account actions">
+  <li class="menu-label" role="none">Preferences</li>
+  <li role="none"><button class="menu-item" role="menuitem" type="button">Settings</button></li>
+  <li class="menu-separator" role="separator"></li>
+  <li role="none"><button class="menu-item danger" role="menuitem" type="button">Sign out</button></li>
+</menu>
+```
 
 ### Linting `role="menu"`
 
@@ -271,9 +284,14 @@ Until it is fixed upstream, turn the rule off:
 }
 ```
 
-One line, and no `biome-ignore` comment above every menu in your markup. The
-rest of the `a11y` group stays on and is worth keeping — with just this rule
-off, the menu anatomy above lints clean.
+If HTML linting reports the divider row under `a11y/useSemanticElements`,
+suppress the finding on that row. A direct child of `<menu>` must be a list
+row here.
+
+```html
+<!-- biome-ignore lint/a11y/useSemanticElements: A menu divider must be a list row. -->
+<li class="menu-separator" role="separator"></li>
+```
 
 [Accessibility decisions](https://github.com/lekoala/actual-css/blob/master/docs/design-notes/accessibility-decisions.md)
 records which patterns Biome rejects, and which of its findings were right.
@@ -564,7 +582,7 @@ compete with the menu; keep the trigger button as the discoverable path.
         hidden>
     <li><button class="menu-item" type="button">Open</button></li>
     <li><button class="menu-item" type="button">Rename</button></li>
-    <hr class="menu-separator">
+    <li class="menu-separator" aria-hidden="true"></li>
     <li><button class="menu-item danger" type="button">Delete</button></li>
   </menu>
 </div>
