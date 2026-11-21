@@ -72,12 +72,31 @@
   letter-spacing: -0.02em;
 }
 
+/* Labels are captions, not headings: small, regular and muted, on a tight
+   line, so the value carries the field. */
+[data-theme="minimal"] .field-label {
+  color: var(--text-muted);
+  /* 13px at the default size, following .sm/.lg like the core, with a 12px
+     floor: a .sm caption at 11.4px stopped being readable. */
+  font-size: max(0.75rem, calc(var(--control-font-size) * 0.8125));
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-tight);
+}
+
 /* With no box to sit in, the value starts where its label starts. Zero
    specificity past the theme scope, so a component that reserves its own
    inline space (an .input-icon icon, the select chevron) still wins; a joined
    field and a floating label keep the core inset they are laid out around. */
 [data-theme="minimal"] :where(.input, .textarea, .select):not(:where(.join, .floating-field) > *) {
   padding-inline-start: 0;
+}
+
+/* Without a fill the value, not a box edge, is what sits under the label, so
+   the half-leading of a full control height read as a gap. The line field is
+   one step shorter (still past the 24px target size); a textarea keeps its
+   own minimum. */
+[data-theme="minimal"] :where(.input, .select):not(:where(.join, .floating-field) > *) {
+  min-block-size: calc(var(--control-size) - var(--space-20));
 }
 
 /* The line is the whole field, invalid included. Core paints every side in

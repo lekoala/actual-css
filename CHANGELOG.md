@@ -18,6 +18,7 @@
 - Starter skill: start from content and purpose before components; no invented content or purposeless decoration.
 - `.badge` labels drop one step (`--font-size-xs`, `.lg` to `--font-size-sm`) and `--badge-pad-x` grows to half of `--badge-size`.
 - `.field-label` is set in `--font-weight-medium`; a `.field-group` legend keeps semibold.
+- `.field-label` and the `.field-group.flush` legend drop to 0.875 × `--control-font-size` (14px by default), still following `.sm`/`.lg`.
 - A neutral `.btn.outline` draws `--border`; beside a field in a `.join` it keeps the field edge.
 - Readonly and disabled text controls drop an inherited `--control-border-block-end-color`.
 - Docs site table of contents and the Blog demo use `.nav-list.rail` instead of their own rail and scrollspy CSS.

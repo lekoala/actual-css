@@ -37,11 +37,16 @@
   border-radius: var(--radius);
 }
 
-/* A label names one control at body size: medium separates it from the
-   value without outweighing the field. The legend titles a group, one level
-   up, and is set small inside the frame, so it keeps the heavier weight. */
+/* A label names one control a step below the value it names: at the value's
+   own size the hierarchy rested on weight alone, and a stack of medium
+   labels read louder than the fields. Medium and the full ink keep it a
+   clear read. A fraction of --control-font-size, not a fixed step, so it
+   follows .sm/.lg on the .field whatever element holds the label. The legend
+   titles a group, one level up, and is set small inside the frame, so it
+   keeps the heavier weight. */
 .field-label {
   color: var(--text);
+  font-size: calc(var(--control-font-size) * 0.875);
   font-weight: var(--font-weight-medium);
 }
 
@@ -63,10 +68,11 @@
   border-radius: 0;
 }
 
+/* Same formula as .field-label: the flush legend is that label. */
 .field-group.flush > legend {
   margin-block-end: var(--space-10);
   padding-inline: 0;
-  font-size: var(--control-font-size);
+  font-size: calc(var(--control-font-size) * 0.875);
 }
 
 .field-help {
