@@ -107,9 +107,10 @@ For an underline-only field on a tinted fill, also set
 `--control-default-bg: var(--surface-subtle)`,
 `--control-default-border: transparent` and
 `--control-hover-border: transparent`; without the last one, hover draws a full
-frame around the field. The tint is then the fill readonly and disabled fields
-use too, so those states differ only by their lost lower edge and dimmed text.
-In forced colors every side is drawn again in a system color.
+frame around the field. Readonly and disabled fields keep their quiet
+`--border` frame on that tint; a theme that wants them frameless too sets
+`--control-border: transparent` on those states. In forced colors every side
+is drawn again in a system color.
 
 The recipe covers `.input`, `.textarea`, `.select` and join addons; checkboxes,
 radios and switches keep `--border-control`, their only cue. Readonly and

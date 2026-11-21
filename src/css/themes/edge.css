@@ -1,121 +1,146 @@
-/* Edge - paired light/dark theme that demonstrates component-local
- * border-accent tokens. Buttons become surface controls with an
- * intent-colored lower edge (.solid remains available when an action needs a
- * filled treatment), text controls (input/textarea/select) pick up the same
- * lower-edge accent via --control-border-block-end-*, alerts get an
- * intent-colored leading flag via --alert-border-inline-start-*. Field focus
- * is the core inset outline in --focus, the accent's own color. */
+/* Edge - paired light/dark theme in the manner of an enterprise system
+ * (IBM Carbon was the reference), a stress test of the field lower-edge
+ * contract. Square corners, flat layers (a grey page, borderless white cards),
+ * neutral greys and one blue. Fields are filled and carry their 3:1 edge on
+ * the bottom line only, through the inherited hooks alone: --control-default-bg,
+ * --control-default-border and --control-border-block-end-color, the
+ * documented "bottom border only" recipe. Field focus is the core inset
+ * outline. The selected segment takes an edge through the fallback-only
+ * --segmented-selected-border, as a flat theme does; alerts take an intent
+ * flag through --alert-border-inline-start-*. */
 [data-theme="edge"] {
   /* Base palette is the light half; the dark pairing is only announced where
      light-dark() exists, in the @supports block below. */
   color-scheme: light;
 
-  --primary: hsl(224 72% 42%);
+  --primary: hsl(221 92% 50%);
   --primary-fg: white;
-  --secondary: hsl(166 54% 30%);
+  --secondary: hsl(0 0% 22%);
   --secondary-fg: white;
-  --success: hsl(145 46% 32%);
+  --success: hsl(138 64% 30%);
   --success-fg: white;
-  --warning: hsl(36 80% 40%);
-  --warning-fg: hsl(34 35% 10%);
-  --danger: hsl(354 62% 46%);
+  --warning: hsl(38 92% 42%);
+  --warning-fg: hsl(0 0% 9%);
+  --danger: hsl(357 74% 47%);
   --danger-fg: white;
-  --neutral: hsl(228 9% 42%);
+  --neutral: hsl(0 0% 44%);
   --neutral-fg: white;
 
-  --surface: hsl(40 20% 99%);
+  /* Layers: the page is the grey base, cards rise to white, fields sink back
+     to the base grey inside them. */
+  --surface: hsl(0 0% 96%);
   --surface-raised: hsl(0 0% 100%);
-  --surface-subtle: hsl(220 24% 95%);
-  --surface-solid: hsl(228 26% 12%);
+  --surface-subtle: hsl(0 0% 95%);
+  --surface-solid: hsl(0 0% 9%);
 
-  --text: hsl(228 24% 12%);
-  --text-muted: hsl(228 9% 42%);
-  --text-subtle: hsl(228 7% 56%);
+  --text: hsl(0 0% 9%);
+  --text-muted: hsl(0 0% 32%);
+  --text-subtle: hsl(0 0% 44%);
 
-  --border: hsl(220 14% 86%);
-  --focus: hsl(224 72% 59%);
-  --soft-fg-mix: 65%;
-  --hover-overlay: hsl(228 30% 10% / 0.04);
-  --shadow-color: hsl(228 30% 10%);
+  --border: hsl(0 0% 88%);
+  /* Mid-tone blue, one value for both schemes: the focus line holds 3:1 on
+     --surface and --surface-solid alike. */
+  --focus: hsl(220 100% 55%);
+  --soft-fg-mix: 55%;
+  --hover-overlay: hsl(0 0% 9% / 0.06);
+  --shadow-color: hsl(0 0% 9%);
 
-  --radius: 0.375rem;
-  --radius-sm: 0.25rem;
-  --radius-lg: 0.625rem;
+  --radius: 0;
+  --radius-sm: 0;
+  --radius-lg: 0;
+  /* Flat layers. A real zero shadow, not none: --shadow sits in box-shadow
+     lists (the selected segment), where none would void the declaration. */
+  --shadow: 0 0 0 transparent;
 
-  --btn-default-bg: var(--surface-subtle);
-  --btn-default-border: transparent;
-  --btn-border-color: transparent;
-  --btn-border-block-end-width: 2px;
+  /* Filled fields, one bottom line. The hover border stays clear so a hover
+     never redraws the sides; the fill darkens instead. The line borders the
+     fill, not the page, so it is a set grey that holds 3:1 against the fill
+     and its hover (the derived --border-control is measured on --surface). */
+  --control-default-bg: var(--surface-subtle);
+  --control-default-border: transparent;
+  --control-hover-border: transparent;
+  --control-hover-bg: hsl(0 0% 91%);
+  --control-border-block-end-color: hsl(0 0% 52%);
 
-  --control-border-block-end-color: var(--primary);
-  --control-border-block-end-width: 2px;
+  /* Flat theme: the selected segment needs its edge back. */
+  --segmented-selected-border: var(--text);
 }
 
-/* Intent-dependent button tokens must resolve on the button itself. If these
-   live on [data-theme], var(--intent) computes before local intent classes
-   apply and every button keeps the same primary edge. */
-[data-theme="edge"] .btn:not(.link) {
-  --btn-border-block-end-color: var(--intent, var(--primary));
+/* Field labels are small and quiet, the field carries the weight. */
+[data-theme="edge"] .field-label {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
 }
 
-[data-theme="edge"] .btn:not(:where(.solid, .soft, .outline, .ghost, .link)) {
-  --btn-default-fg: var(--intent, var(--text));
-  --ui-hover-bg: var(--surface-raised);
+/* Text fields take the select's hover fill. */
+[data-theme="edge"] :is(.input, .textarea):hover:not(:disabled) {
+  --control-bg: var(--control-hover-bg);
 }
 
-/* The default button sets the intent as ink on --surface-subtle, where a raw
-   warning reads at 3.6:1: it takes the theme's soft ink derivation, which
-   pulls the intent toward --text. Guarded, as an unsupported color-mix()
-   would leave the ink invalid rather than fall back. */
-@supports (color: color-mix(in oklab, red, white)) {
-  [data-theme="edge"] .btn:not(:where(.solid, .soft, .outline, .ghost, .link)) {
-    --btn-default-fg: color-mix(
-      in oklab,
-      var(--text),
-      var(--intent, var(--text)) var(--soft-fg-mix)
-    );
-  }
+/* Fields the user cannot edit keep the theme's frameless shape: core falls
+   back to a --border box there. Read-only drops the fill for a quiet line. */
+[data-theme="edge"] :is(.input, .textarea, .select):disabled {
+  --control-border: transparent;
 }
 
-[data-theme="edge"] .btn:not(:where(.solid, .soft, .outline, .ghost, .link)) {
-  --btn-hover-overlay: transparent;
+[data-theme="edge"] :is(.input, .textarea)[readonly] {
+  --control-bg: transparent;
+  --control-border: transparent;
+  --control-border-block-end-color: var(--border);
 }
 
-/* Intent-dependent alert token, same reasoning as the button rule above:
-   must resolve on the alert itself so local intent classes (.danger, etc.)
-   win over the bare --primary fallback. */
+/* Cards are a layer, not a frame. Forced colors still outline them (core). */
+[data-theme="edge"] .card {
+  --ui-border: transparent;
+}
+
+/* A bordered switcher: no rail fill, segments flush with the frame. */
+[data-theme="edge"] .segmented {
+  --segmented-bg: transparent;
+  --segmented-pad: 0px;
+  --segmented-selected-bg: var(--border);
+
+  border-color: var(--border-control);
+}
+
+/* Intent-dependent alert token: it must resolve on the alert itself so local
+   intent classes (.danger, etc.) win over the bare --primary fallback. */
 [data-theme="edge"] .alert {
   --alert-border-inline-start-color: var(--intent, var(--primary));
-  --alert-border-inline-start-width: 4px;
+  --alert-border-inline-start-width: 3px;
 }
 
 @supports (color: light-dark(red, blue)) {
   [data-theme="edge"] {
     color-scheme: light dark;
-    --primary: light-dark(hsl(224 72% 42%), hsl(220 80% 76%));
-    --primary-fg: light-dark(white, hsl(224 35% 10%));
-    --secondary: light-dark(hsl(166 54% 30%), hsl(166 58% 70%));
-    --secondary-fg: light-dark(white, hsl(166 35% 9%));
-    --success: light-dark(hsl(145 46% 32%), hsl(145 48% 64%));
-    --success-fg: light-dark(white, hsl(145 35% 8%));
-    --warning: light-dark(hsl(36 80% 40%), hsl(40 72% 66%));
-    --warning-fg: light-dark(hsl(34 35% 10%), hsl(38 35% 10%));
-    --danger: light-dark(hsl(354 62% 46%), hsl(354 66% 72%));
-    --danger-fg: light-dark(white, hsl(354 35% 10%));
-    --neutral: light-dark(hsl(228 9% 42%), hsl(228 12% 72%));
-    --neutral-fg: light-dark(white, hsl(228 24% 10%));
+    /* One saturated blue for fills in both schemes; on a dark page it is too
+       dark for text, so selected ink takes a light tint of it. */
+    --state-selected-text: light-dark(hsl(221 92% 50%), hsl(218 100% 74%));
+    --secondary: light-dark(hsl(0 0% 22%), hsl(0 0% 78%));
+    --secondary-fg: light-dark(white, hsl(0 0% 9%));
+    --success: light-dark(hsl(138 64% 30%), hsl(138 50% 58%));
+    --success-fg: light-dark(white, hsl(138 40% 8%));
+    --warning: light-dark(hsl(38 92% 42%), hsl(45 90% 60%));
+    --warning-fg: light-dark(hsl(0 0% 9%), hsl(40 40% 9%));
+    --danger: light-dark(hsl(357 74% 47%), hsl(0 90% 74%));
+    --danger-fg: light-dark(white, hsl(357 50% 10%));
+    --neutral: light-dark(hsl(0 0% 44%), hsl(0 0% 72%));
+    --neutral-fg: light-dark(white, hsl(0 0% 9%));
 
-    --surface: light-dark(hsl(40 20% 99%), hsl(228 20% 8%));
-    --surface-raised: light-dark(hsl(0 0% 100%), hsl(228 17% 11%));
-    --surface-subtle: light-dark(hsl(220 24% 95%), hsl(228 14% 16%));
-    --surface-solid: light-dark(hsl(228 26% 12%), hsl(0 0% 96%));
+    --surface: light-dark(hsl(0 0% 96%), hsl(0 0% 9%));
+    --surface-raised: light-dark(hsl(0 0% 100%), hsl(0 0% 15%));
+    --surface-subtle: light-dark(hsl(0 0% 95%), hsl(0 0% 21%));
+    --surface-solid: light-dark(hsl(0 0% 9%), hsl(0 0% 96%));
 
-    --text: light-dark(hsl(228 24% 12%), hsl(0 0% 96%));
-    --text-muted: light-dark(hsl(228 9% 42%), hsl(228 8% 68%));
-    --text-subtle: light-dark(hsl(228 7% 56%), hsl(228 7% 55%));
+    --text: light-dark(hsl(0 0% 9%), hsl(0 0% 96%));
+    --text-muted: light-dark(hsl(0 0% 32%), hsl(0 0% 78%));
+    --text-subtle: light-dark(hsl(0 0% 44%), hsl(0 0% 55%));
 
-    --border: light-dark(hsl(220 14% 86%), hsl(228 12% 24%));
-    --hover-overlay: light-dark(hsl(228 30% 10% / 0.04), hsl(0 0% 100% / 0.06));
-    --shadow-color: light-dark(hsl(228 30% 10%), hsl(0 0% 0%));
+    --border: light-dark(hsl(0 0% 88%), hsl(0 0% 27%));
+    --hover-overlay: light-dark(hsl(0 0% 9% / 0.06), hsl(0 0% 100% / 0.08));
+    --shadow-color: light-dark(hsl(0 0% 9%), hsl(0 0% 0%));
+    --control-hover-bg: light-dark(hsl(0 0% 91%), hsl(0 0% 25%));
+    --control-border-block-end-color: light-dark(hsl(0 0% 52%), hsl(0 0% 56%));
   }
 }

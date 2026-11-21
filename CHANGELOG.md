@@ -7,6 +7,7 @@
 - `--control-default-border`: inherited resting edge of `.input`, `.textarea`, `.select` and `.join-addon`.
 - Docs: Theming · "Lighter field borders" recipes (quiet sides or underline only, 3:1 lower edge).
 - Dev: `scripts/playground/compare.html` renders the same cards in Actual CSS (from `src/`) beside Oat, daisyUI, Bootstrap, UIkit, Carbon and GOV.UK Frontend.
+- Dev: the component bench renders the working tree under any demo theme (`&preset=`).
 
 ### Changed
 - Docs: "Coding agents and DESIGN.md" gains "Components are tools, not design decisions".
@@ -17,6 +18,7 @@
 - Readonly and disabled text controls drop an inherited `--control-border-block-end-color`.
 - Docs site table of contents and the Blog demo use `.nav-list.rail` instead of their own rail and scrollspy CSS.
 - The selected `.segment` has no edge by default; `--segmented-selected-border` inherits from a theme root.
+- `edge` demo theme redrawn after IBM Carbon: square, flat layers, filled fields with a 3:1 bottom line; its lower-edge buttons are gone.
 
 ### Fixed
 - An unchecked `.switch` knob takes `--text-muted` in a dark scheme instead of sinking into the track (1.47:1 → 4.75:1 on the default palette).

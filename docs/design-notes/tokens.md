@@ -118,7 +118,7 @@ Components map global tokens to local aliases once at the top of the component a
 }
 ```
 
-The `--btn-*` fallbacks are intentionally inherited extension points for themes that change button grammar — such as turning the default solid button into a surface button with an intent-colored lower edge (the `edge` theme does exactly this). Keep them local until the same need appears across multiple components.
+The `--btn-*` fallbacks are intentionally inherited extension points for themes that change button grammar — such as turning the default solid button into a surface button with an intent-colored lower edge. Keep them local until the same need appears across multiple components.
 
 Text controls (`.input`/`.textarea`/`.select`) expose the same lower-edge extension point: `--control-border-block-end-color` and `--control-border-block-end-width` are unset by default and fall back to the regular border, so a theme can give inputs an underline-style lower edge the same way, without fighting the hover/focus/disabled state rules that still own `--control-border` itself. `--control-default-border` is the inherited resting side edge, the twin of `--control-default-bg`; with the lower-edge hook a theme moves the 3:1 identification to the bottom alone. Readonly and disabled reset the lower edge so an inherited accent never marks a field the user cannot edit.
 
