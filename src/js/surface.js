@@ -428,9 +428,47 @@ function onDocumentClick(e) {
   }
 }
 
+/*
+ * Focus that lands outside an open surface closes it, without moving focus:
+ * Tab, Shift+Tab or a script took it somewhere on purpose. Left open, the
+ * panel could cover the very control that just received focus (WCAG 2.4.11).
+ * Listening to where focus arrives, not to the Tab key, covers every route
+ * and leaves the browser's own sequential navigation untouched.
+ *
+ * What keeps a surface open: focus inside it, or on what opened it — any
+ * trigger naming it through aria-controls, the anchor, the source region of a
+ * context menu, or the element focus returns to. A context menu's trigger may
+ * be a point, so each one is checked as a Node. autoClose "false" is the
+ * application's explicit claim on closing, so focus leaves it alone too.
+ */
+function keepsSurfaceOpen(menu, state, target) {
+  if (menu.contains(target)) return true;
+  const owners = [
+    state.trigger,
+    state.source,
+    surfaceFocusReturns.get(menu),
+    ...linkedTriggers(menu),
+  ];
+  return owners.some((owner) => owner instanceof Node && owner.contains(target));
+}
+
+function onDocumentFocusIn(e) {
+  // composedPath() reaches past a shadow host to the element that took focus.
+  const target = e.composedPath()[0] ?? e.target;
+  if (!(target instanceof Node)) return;
+
+  for (const menu of [...openSurfaces]) {
+    if (menu.ownerDocument !== e.currentTarget) continue;
+    const state = surfaceMap.get(menu);
+    if (!state || state.autoClose === "false") continue;
+    if (!keepsSurfaceOpen(menu, state, target)) closeSurface(menu, { restoreFocus: false });
+  }
+}
+
 function ensureDocumentClick(menu) {
   const doc = menu.ownerDocument;
   if (!doc || clickBoundDocuments.has(doc)) return;
   clickBoundDocuments.add(doc);
   doc.addEventListener("click", onDocumentClick);
+  doc.addEventListener("focusin", onDocumentFocusIn);
 }

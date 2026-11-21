@@ -6,26 +6,6 @@ Scrollspy is a behavior hook, not a visual component. It marks a navigation
 region for the JavaScript enhancement. Pair it with `.nav-list` and `.nav-link`,
 or style `[aria-current="location"]` yourself.
 
-## Class reference
-
-| Class        | Kind        | Description                                                   |
-| ------------ | ----------- | ------------------------------------------------------------- |
-| `.scrollspy` | Component   | Marks the nav region for the enhancer; adds no visual styles. |
-| `.nav-list`  | Composition | Vertical list of navigation links.                            |
-| `.nav-link`  | Component   | Navigation link, current on `aria-current="location"`.        |
-
-## Usage
-
-- `.scrollspy` marks the region for JS detection. It does not add visual styles.
-- `.nav-list` and `.nav-link` provide the visible list and active link styling.
-- The JS enhancer toggles `aria-current="location"` on the active link. Without JavaScript, the links remain regular anchor links.
-- The active section is the last heading past the activation line. Over the final viewport of scroll travel, the line advances to the bottom so short trailing sections become active in order. Above the first section, no link is active.
-- `data-scrollspy-root="#container"` measures a scroll container instead of the viewport.
-- `data-scrollspy-offset` moves the activation line: a bare number or `px` value is pixels, a `%` value is a share of the root's visible height. Invalid values fall back to `20%`, and negatives clamp to `0`.
-- The same markup also works with the CSS-native scroll markers path (see below).
-- Add `.rail` to the `.nav-list` for a table of contents: the current band
-  slides along the rail as the page scrolls, while keyboard focus stays free.
-
 ```html demo
 <nav class="scrollspy" data-enhance="scrollspy" aria-label="Page sections">
   <ol class="nav-list">
@@ -49,6 +29,26 @@ or style `[aria-current="location"]` yourself.
   </section>
 </main>
 ```
+
+## Usage
+
+- `.scrollspy` marks the region for JS detection. It does not add visual styles.
+- `.nav-list` and `.nav-link` provide the visible list and active link styling.
+- The JS enhancer toggles `aria-current="location"` on the active link. Without JavaScript, the links remain regular anchor links.
+- The active section is the last heading past the activation line. Over the final viewport of scroll travel, the line advances to the bottom so short trailing sections become active in order. Above the first section, no link is active.
+- `data-scrollspy-root="#container"` measures a scroll container instead of the viewport.
+- `data-scrollspy-offset` moves the activation line: a bare number or `px` value is pixels, a `%` value is a share of the root's visible height. Invalid values fall back to `20%`, and negatives clamp to `0`.
+- The same markup also works with the CSS-native scroll markers path (see below).
+- Add `.rail` to the `.nav-list` for a table of contents: the current band
+  slides along the rail as the page scrolls, while keyboard focus stays free.
+
+## Class reference
+
+| Class        | Kind        | Description                                                   |
+| ------------ | ----------- | ------------------------------------------------------------- |
+| `.scrollspy` | Component   | Marks the nav region for the enhancer; adds no visual styles. |
+| `.nav-list`  | Composition | Vertical list of navigation links.                            |
+| `.nav-link`  | Component   | Navigation link, current on `aria-current="location"`.        |
 
 ## Table of contents on a rail
 

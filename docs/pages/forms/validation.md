@@ -4,21 +4,6 @@
 
 **Related terms:** inline validation, field error, telephone input.
 
-## Class reference
-
-| Class               | Kind        | Description                                  |
-| ------------------- | ----------- | -------------------------------------------- |
-| `.field-error`      | Composition | Canonical inline error message.              |
-| `.field-help`       | Composition | Canonical helper text.                       |
-| `.field.danger`     | Modifier    | Manual invalid marking on the wrapper.       |
-| `.needs-validation` | Modifier    | Opt-in for the enhancer and `:user-invalid`. |
-| `.was-validated`    | Modifier    | Set by the enhancer after a submit attempt.  |
-| `.status-bar`       | Component   | Optional form-level status element.          |
-
-`.field-error` shows while the field is invalid; `.field-help` carries
-supporting copy before and after validation. `.status-bar` shows
-`data-validation-message` on an invalid submit.
-
 - `.field-error` is the canonical error message. It is wired to `aria-invalid="true"` via the input, so the visual border and the assistive-tech announcement move together.
 - `.field-help` is the canonical helper text. It carries supporting copy before and after validation.
 - Set `aria-invalid="true"` on the input. The `.field-error` element is linked via `aria-describedby`.
@@ -48,6 +33,21 @@ supporting copy before and after validation. `.status-bar` shows
   </div>
 </form>
 ```
+
+## Class reference
+
+| Class               | Kind        | Description                                  |
+| ------------------- | ----------- | -------------------------------------------- |
+| `.field-error`      | Composition | Canonical inline error message.              |
+| `.field-help`       | Composition | Canonical helper text.                       |
+| `.field.danger`     | Modifier    | Manual invalid marking on the wrapper.       |
+| `.needs-validation` | Modifier    | Opt-in for the enhancer and `:user-invalid`. |
+| `.was-validated`    | Modifier    | Set by the enhancer after a submit attempt.  |
+| `.status-bar`       | Component   | Optional form-level status element.          |
+
+`.field-error` shows while the field is invalid; `.field-help` carries
+supporting copy before and after validation. `.status-bar` shows
+`data-validation-message` on an invalid submit.
 
 ## Optional JavaScript enhancer
 

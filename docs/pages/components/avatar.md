@@ -11,18 +11,6 @@
 - Sizes can be adjusted with CSS variables and optional `.sm` or `.lg`.
 - Background is an exposed css variable (and can use `data-tone`).
 
-## Class reference
-
-| Class           | Kind        | Description                            |
-| --------------- | ----------- | -------------------------------------- |
-| `.avatar`       | Component   | Initials or image in a circular box.   |
-| `.avatar-stack` | Composition | Overlapping avatar group.              |
-| `.badge:empty`  | Composition | Status dot, at the bottom-end corner.  |
-| `.sm` / `.lg`   | Size        | Optical size, on an avatar or a stack. |
-
-`.avatar` works on `div`, `a` and `button`. The status dot is an empty
-`.badge` inside an `.avatar`, and needs an `aria-label` of its own.
-
 ## Basic usage
 
 ```html demo
@@ -83,6 +71,18 @@ A trigger that shows initials uses them as its visible label: keep them in the
 accessible name, as in `aria-label="JD, Jane Doe: profile menu"`, so a speech
 user can say what they see (WCAG 2.5.3, *Label in Name*). A name without the
 initials fails that check even when the initials are `aria-hidden`.
+
+## Class reference
+
+| Class           | Kind        | Description                            |
+| --------------- | ----------- | -------------------------------------- |
+| `.avatar`       | Component   | Initials or image in a circular box.   |
+| `.avatar-stack` | Composition | Overlapping avatar group.              |
+| `.badge:empty`  | Composition | Status dot, at the bottom-end corner.  |
+| `.sm` / `.lg`   | Size        | Optical size, on an avatar or a stack. |
+
+`.avatar` works on `div`, `a` and `button`. The status dot is an empty
+`.badge` inside an `.avatar`, and needs an `aria-label` of its own.
 
 ## Avatar stack
 

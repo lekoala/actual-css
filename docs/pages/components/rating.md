@@ -8,25 +8,6 @@ order ascending. The cumulative fill and hover preview use `:has()` as a
 progressive enhancement; older supported browsers show only the selected star
 filled while the control remains fully functional.
 
-## Class reference
-
-| Class                 | Kind      | Description                      |
-| --------------------- | --------- | -------------------------------- |
-| `.rating`             | Component | Radio group presented as stars.  |
-| `.rating[role="img"]` | Component | Read-only display of a value.    |
-| `.sm` / `.lg`         | Size      | Smaller or larger star geometry. |
-
-## Anatomy
-
-```text
-fieldset.field-group.flush     + .field with help or error text
-├── legend.field-label         names the group
-└── .rating
-    └── input[type="radio"]    ×1..N, ascending values, aria-label each
-
-.rating[role="img"]            empty; aria-label and --rating-value
-```
-
 ## Rate this item
 
 ```html demo
@@ -47,6 +28,25 @@ to name its value. `.field-group.flush` drops the native fieldset frame. Add
 `.field` when the group holds help or error text: it spaces them and shows the
 validation error. In forced-colors mode the stars deliberately return to
 native platform radios so checked and focus states remain unambiguous.
+
+## Class reference
+
+| Class                 | Kind      | Description                      |
+| --------------------- | --------- | -------------------------------- |
+| `.rating`             | Component | Radio group presented as stars.  |
+| `.rating[role="img"]` | Component | Read-only display of a value.    |
+| `.sm` / `.lg`         | Size      | Smaller or larger star geometry. |
+
+## Anatomy
+
+```text
+fieldset.field-group.flush     + .field with help or error text
+├── legend.field-label         names the group
+└── .rating
+    └── input[type="radio"]    ×1..N, ascending values, aria-label each
+
+.rating[role="img"]            empty; aria-label and --rating-value
+```
 
 ## Required rating
 

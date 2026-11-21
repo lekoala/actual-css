@@ -61,7 +61,7 @@ export function focusLastMenuItem(menu) {
   lastItem(getMenuItems(menu))?.focus();
 }
 
-export function onMenuKeydown(e, { close, navigate = true }) {
+export function onMenuKeydown(e, { navigate = true } = {}) {
   if (shouldIgnoreKey(e)) return;
   const menu = e.currentTarget;
   if (navigate) {
@@ -77,16 +77,10 @@ export function onMenuKeydown(e, { close, navigate = true }) {
     }
   }
 
-  switch (e.key) {
-    case "Tab":
-      close(menu);
-      break;
-    case "Enter":
-    case " ":
-      if (activateCurrentItem(menu)) {
-        e.preventDefault();
-      }
-      break;
+  // No Tab case: the browser moves focus, and surface.js closes the menu once
+  // focus lands outside it, without bouncing focus through the trigger first.
+  if ((e.key === "Enter" || e.key === " ") && activateCurrentItem(menu)) {
+    e.preventDefault();
   }
 }
 
@@ -96,7 +90,7 @@ export function onMenuKeydown(e, { close, navigate = true }) {
 // Each retain returns a release(); the wiring is torn down on the last one.
 const menuConnections = new WeakMap();
 
-export function connectMenu(menu, { close }) {
+export function connectMenu(menu) {
   let entry = menuConnections.get(menu);
 
   if (!entry) {
@@ -109,15 +103,9 @@ export function connectMenu(menu, { close }) {
           signal: controller.signal,
         })
       : null;
-    menu.addEventListener(
-      "keydown",
-      (event) =>
-        onMenuKeydown(event, {
-          close: () => close(menu),
-          navigate: !focusGroup,
-        }),
-      { signal: controller.signal },
-    );
+    menu.addEventListener("keydown", (event) => onMenuKeydown(event, { navigate: !focusGroup }), {
+      signal: controller.signal,
+    });
     menu.addEventListener(
       "click",
       (event) => {

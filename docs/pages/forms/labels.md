@@ -2,17 +2,6 @@
 
 > The field wrapper is `.field`. Choose between a wrapped `<label>` and a detached `for`/`id` pair based on the layout.
 
-## Class reference
-
-| Class            | Kind        | Description                                       |
-| ---------------- | ----------- | ------------------------------------------------- |
-| `.field`         | Composition | Field wrapper; canonical on `<label>` or `<div>`. |
-| `.field-label`   | Composition | Label text, element-agnostic.                     |
-| `.required-mark` | Composition | Visual required marker (`aria-hidden`).           |
-
-`.field-label` works on a `<span>`, on a detached `<label for>`, or on a
-`<legend>`. `.required-mark` goes inside a label.
-
 Use a **wrapped label** for simple hand-authored forms. The whole label area becomes the click target, there is no `id` noise, and the markup is harder to break.
 
 ```html demo
@@ -43,3 +32,14 @@ Use **`for`/`id`** when the layout needs the label and control in different grid
 ```
 
 The mixed shape `<label for="x">…<input id="x"></label>` is allowed by the spec but rarely useful. Prefer either pure wrapped or pure `for`/`id`.
+
+## Class reference
+
+| Class            | Kind        | Description                                       |
+| ---------------- | ----------- | ------------------------------------------------- |
+| `.field`         | Composition | Field wrapper; canonical on `<label>` or `<div>`. |
+| `.field-label`   | Composition | Label text, element-agnostic.                     |
+| `.required-mark` | Composition | Visual required marker (`aria-hidden`).           |
+
+`.field-label` works on a `<span>`, on a detached `<label for>`, or on a
+`<legend>`. `.required-mark` goes inside a label.

@@ -4,25 +4,29 @@
 
 **Related terms:** popover, dropdown, dropdown menu, action menu, context menu, bottom sheet, action sheet, anchored panel, filter panel, sticky footer, apply button.
 
-## Class reference
+```html demo
+<div class="flyout-trigger">
+  <button class="btn outline"
+          type="button"
+          data-enhance="flyout"
+          aria-expanded="false"
+          aria-controls="account-actions"
+          id="account-flyout-trigger">
+    Account
+    <i class="ti ti-chevron-down" aria-hidden="true"></i>
+  </button>
 
-| Class             | Kind        | Description                                    |
-| ----------------- | ----------- | ---------------------------------------------- |
-| `.flyout-trigger` | Composition | Positioning wrapper for trigger and panel.     |
-| `.stretch`        | Modifier    | Spans a `.flyout-trigger` to its container.    |
-| `.flyout`         | Component   | Floating surface, positioned by JavaScript.    |
-| `.scrollable`     | Modifier    | Header and footer stay while the body scrolls. |
-| `.menu`           | Component   | Action-list primitive.                         |
-| `.menu-item`      | Component   | One action row; joins roving focus.            |
-| `.menu-item-icon` | Slot        | Fixed leading column for an icon.              |
-| `.menu-item-text` | Slot        | Flexible label column; truncates.              |
-| `.menu-item-end`  | Slot        | Trailing shortcut, badge or status.            |
-| `.menu-label`     | Variant     | Muted, non-interactive group heading.          |
-| `.menu-separator` | Variant     | Divider row between groups.                    |
-| `.sm` / `.lg`     | Size        | Smaller or larger menu rows and type.          |
-
-Action rows use `.menu > li > .menu-item`. Labels and dividers use their own
-`<li>` rows.
+  <menu class="flyout sm menu"
+        id="account-actions"
+        aria-labelledby="account-flyout-trigger"
+        hidden>
+    <li><button class="menu-item" type="button">Profile</button></li>
+    <li><button class="menu-item" type="button">Settings</button></li>
+    <li class="menu-separator" aria-hidden="true"></li>
+    <li><button class="menu-item danger" type="button">Sign out</button></li>
+  </menu>
+</div>
+```
 
 ## Usage
 
@@ -183,6 +187,11 @@ flyout when that specific control must close it regardless of the automatic
 policy. This is useful for an Apply or Done action in an `outside` or `false`
 panel. The trigger and Escape continue to close the flyout in every mode.
 
+Focus that moves outside the flyout and its triggers, by Tab, Shift+Tab or a
+script, closes it and stays where it landed; Escape is the key that returns
+focus to the trigger. `false` keeps the flyout open there too, so a persistent
+panel must not cover the controls around it.
+
 Arrow keys and Space in a radio group never close the flyout: they move
 through the options, and a pointer pick closes it. Opening from the keyboard
 focuses a group at its checked radio. The [palette picker](../forms/color-swatches.md#palette-in-a-flyout)
@@ -198,6 +207,26 @@ relies on both.
 </div>
 ```
 
+## Class reference
+
+| Class             | Kind        | Description                                    |
+| ----------------- | ----------- | ---------------------------------------------- |
+| `.flyout-trigger` | Composition | Positioning wrapper for trigger and panel.     |
+| `.stretch`        | Modifier    | Spans a `.flyout-trigger` to its container.    |
+| `.flyout`         | Component   | Floating surface, positioned by JavaScript.    |
+| `.scrollable`     | Modifier    | Header and footer stay while the body scrolls. |
+| `.menu`           | Component   | Action-list primitive.                         |
+| `.menu-item`      | Component   | One action row; joins roving focus.            |
+| `.menu-item-icon` | Slot        | Fixed leading column for an icon.              |
+| `.menu-item-text` | Slot        | Flexible label column; truncates.              |
+| `.menu-item-end`  | Slot        | Trailing shortcut, badge or status.            |
+| `.menu-label`     | Variant     | Muted, non-interactive group heading.          |
+| `.menu-separator` | Variant     | Divider row between groups.                    |
+| `.sm` / `.lg`     | Size        | Smaller or larger menu rows and type.          |
+
+Action rows use `.menu > li > .menu-item`. Labels and dividers use their own
+`<li>` rows.
+
 Flyout covers two distinct patterns, detected by the `<menu>` element or
 `.menu` class on the panel:
 
@@ -212,30 +241,7 @@ A list of *actions* the user can take: sign out, copy, delete.
 - Items are regular `<button>` or `<a>` elements.
 - Use `.sm` or `.lg` to scale one flyout; use a density context for surrounding UI.
 - Add `role="menu"` / `role="menuitem"` only when you intentionally need the ARIA menu pattern described below.
-
-```html demo
-<div class="flyout-trigger">
-  <button class="btn outline"
-          type="button"
-          data-enhance="flyout"
-          aria-expanded="false"
-          aria-controls="account-actions"
-          id="account-flyout-trigger">
-    Account
-    <i class="ti ti-chevron-down" aria-hidden="true"></i>
-  </button>
-
-  <menu class="flyout sm menu"
-        id="account-actions"
-        aria-labelledby="account-flyout-trigger"
-        hidden>
-    <li><button class="menu-item" type="button">Profile</button></li>
-    <li><button class="menu-item" type="button">Settings</button></li>
-    <li class="menu-separator" aria-hidden="true"></li>
-    <li><button class="menu-item danger" type="button">Sign out</button></li>
-  </menu>
-</div>
-```
+- The account menu at the top of this page is a plain action list.
 
 ### ARIA menu pattern
 
@@ -342,7 +348,7 @@ can be multi-column with `<section>` / `<ul>` groups.
 
 - Items are regular `<a href>` links, not `role="menuitem"`.
 - No roving focus — ArrowDown/Enter open the panel and focus the first focusable descendant. Tab from an open trigger also enters the panel. There is no arrow-key navigation between items inside.
-- Just a toggle with outside-click and Escape dismissal.
+- Just a toggle with outside-click, focus-leave and Escape dismissal.
 - Use grid utilities, such as `.grid-3`, for wider multi-column flyouts.
 
 ```html demo
@@ -544,7 +550,6 @@ and Escape closes it and returns focus to the button.
       <div class="flyout"
            id="billing-id-help"
            data-flyout-auto-close="outside"
-           data-flyout-placement="top-start"
            style="--flyout-pad: var(--space-30); --flyout-max-inline-size: 16rem"
            hidden>
         <div class="stack" style="--gap: var(--space-20)">
@@ -561,8 +566,8 @@ and Escape closes it and returns focus to the button.
 - Name the button after its topic, such as "About the billing ID", not "Help".
 - Keep instructions everyone needs in a visible `.field-help`; the panel holds
   the optional explanation.
-- `top-start` keeps the panel off the field, which focus reaches next. The
-  panel stays open until Escape, the button or a click outside closes it.
+- The panel closes when focus moves on to the field, on Escape, or on a click
+  outside, so it never hides the control that takes focus next.
 - The `.stack` drops the paragraph margins inside the panel.
 
 ## Context menu

@@ -31,12 +31,16 @@
 - Docs site table of contents and the Blog demo use `.nav-list.rail` instead of their own rail and scrollspy CSS.
 - The selected `.segment` has no edge by default; `--segmented-selected-border` inherits from a theme root.
 - `edge` demo theme redrawn after IBM Carbon: square, flat layers, filled fields with a 3:1 bottom line; its lower-edge buttons are gone.
+- Docs: component, enhancement and form pages lead with their first demo; `check:docs` fails a section placed before it.
 
 ### Fixed
 - An unchecked `.switch` knob takes `--text` in a dark scheme instead of sinking into the track (1.47:1 → 4.5:1 on the default palette).
 - The selected `.segment` rises above the `.segmented` track in a dark scheme instead of reading as a recess.
 - `in-view`: focus finishes a Reveal entrance still running or delayed after its release, not only a pending one.
-- `ajax`: focus lost with a replaced target lands on the answer's first `aria-invalid="true"` field or `autofocus` element instead of the body.
+- `ajax`: focus lost with a replaced target lands on the answer's first `aria-invalid="true"` field, else its `autofocus` element, instead of the body.
+- Flyouts and context menus close when focus moves outside them and their triggers, without moving focus; `data-flyout-auto-close="false"` keeps them open.
+- Tab out of an action menu goes to the next stop instead of bouncing through the trigger, so Shift+Tab no longer skips it.
+- Tab on a second trigger of an open flyout moves on instead of re-entering the panel, which looped between them.
 - Docs: Validation · "Server and AJAX validation" pointed to a `form[data-ajax]` flow that does not exist.
 - Docs: Reveal · a reveal that holds controls takes `data-enhance="in-view"`; `.reveal` alone does not guard focus.
 

@@ -4,6 +4,73 @@
 
 **Related terms:** modal, alert dialog, confirmation dialog.
 
+## Information modal
+
+Use this shape for contextual information or lightweight secondary content. It
+has no action button; the header close button dismisses the dialog.
+
+```html demo
+<button class="btn"
+        type="button"
+        commandfor="details-dialog"
+        command="show-modal"
+        aria-haspopup="dialog"
+        aria-controls="details-dialog">
+  View details
+</button>
+
+<dialog class="modal"
+        id="details-dialog"
+        closedby="any"
+        data-dialog-dismissible>
+  <button class="close"
+          type="button"
+          commandfor="details-dialog"
+          command="request-close"
+          aria-controls="details-dialog"
+          aria-label="Close dialog"></button>
+
+  <div class="stack">
+    <header>
+      <hgroup>
+        <h3>Release details</h3>
+        <p>Changes included in this version.</p>
+      </hgroup>
+    </header>
+
+    <div>
+      <p>The release improves dialog behavior, scroll handling, and progressive enhancement for modern browsers.</p>
+      <p>There are no decisions to make here; the content can simply be dismissed when finished.</p>
+    </div>
+  </div>
+</dialog>
+```
+
+## Usage
+
+Modals use the platform-native `<dialog class="modal">` element with `commandfor` and `command` buttons.
+
+Use `command="show-modal"` to open a modal dialog, or `command="--show"` to open
+it non-modally.
+
+Add `aria-haspopup="dialog"` and `aria-controls="<id>"` to opening buttons so
+their semantics are present before either native or framework JavaScript runs.
+The command runtime is stateless and does not pre-scan triggers.
+
+Use `command="request-close"` for cancel-style buttons so close requests go
+through the dialog's cancel lifecycle.
+
+When a flyout command opens a dialog, closing the dialog returns focus to the
+command if it can still receive focus, or to the button that opened the flyout.
+
+Use `closedby="any"` as the no-JavaScript light-dismiss path: the native dialog
+closes on backdrop click and Escape. Add `data-dialog-dismissible` so the
+optional runtime takes over backdrop click and closes with the dialog's
+transition; it rewrites `closedby="any"` to `closedby="closerequest"` so the
+native dialog and the runtime never double-handle. `data-dialog-dismissible`
+only gates backdrop click — Escape and explicit close requests always close,
+unless the application cancels the `actual:dialog-cancel` event.
+
 ## Class reference
 
 | Class          | Kind        | Description                                    |
@@ -72,31 +139,6 @@ corner overlay, and the header reserves its room.
 The `.scrollable` row template follows the regions the wrapper actually holds,
 so a modal without a header, without a footer, or with an external header all
 keep the footer reachable and the body scrollable.
-
-## Usage
-
-Modals use the platform-native `<dialog class="modal">` element with `commandfor` and `command` buttons.
-
-Use `command="show-modal"` to open a modal dialog, or `command="--show"` to open
-it non-modally.
-
-Add `aria-haspopup="dialog"` and `aria-controls="<id>"` to opening buttons so
-their semantics are present before either native or framework JavaScript runs.
-The command runtime is stateless and does not pre-scan triggers.
-
-Use `command="request-close"` for cancel-style buttons so close requests go
-through the dialog's cancel lifecycle.
-
-When a flyout command opens a dialog, closing the dialog returns focus to the
-command if it can still receive focus, or to the button that opened the flyout.
-
-Use `closedby="any"` as the no-JavaScript light-dismiss path: the native dialog
-closes on backdrop click and Escape. Add `data-dialog-dismissible` so the
-optional runtime takes over backdrop click and closes with the dialog's
-transition; it rewrites `closedby="any"` to `closedby="closerequest"` so the
-native dialog and the runtime never double-handle. `data-dialog-dismissible`
-only gates backdrop click — Escape and explicit close requests always close,
-unless the application cancels the `actual:dialog-cancel` event.
 
 ## Alert dialog
 
@@ -226,48 +268,6 @@ content and does not need modal focus or a backdrop.
       <button class="btn primary" value="customize">Customize</button>
     </footer>
   </form>
-</dialog>
-```
-
-## Information modal
-
-Use this shape for contextual information or lightweight secondary content. It
-has no action button; the header close button dismisses the dialog.
-
-```html demo
-<button class="btn"
-        type="button"
-        commandfor="details-dialog"
-        command="show-modal"
-        aria-haspopup="dialog"
-        aria-controls="details-dialog">
-  View details
-</button>
-
-<dialog class="modal"
-        id="details-dialog"
-        closedby="any"
-        data-dialog-dismissible>
-  <button class="close"
-          type="button"
-          commandfor="details-dialog"
-          command="request-close"
-          aria-controls="details-dialog"
-          aria-label="Close dialog"></button>
-
-  <div class="stack">
-    <header>
-      <hgroup>
-        <h3>Release details</h3>
-        <p>Changes included in this version.</p>
-      </hgroup>
-    </header>
-
-    <div>
-      <p>The release improves dialog behavior, scroll handling, and progressive enhancement for modern browsers.</p>
-      <p>There are no decisions to make here; the content can simply be dismissed when finished.</p>
-    </div>
-  </div>
 </dialog>
 ```
 

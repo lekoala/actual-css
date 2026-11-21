@@ -2,14 +2,6 @@
 
 > Card-style radio and checkbox labels where the whole card acts as a clickable target.
 
-## Class reference
-
-| Class                     | Kind      | Description                                   |
-| ------------------------- | --------- | --------------------------------------------- |
-| `.choice-card`            | Component | Card-style `<label>` around a native control. |
-| `.chip`                   | Modifier  | Compact pill form: filter chips, tags.        |
-| `.primary` / `.secondary` | Intent    | Accent for the selected state.                |
-
 - Use `.choice-card` on a `<label>` wrapping a native `<input type="radio">` or `<input type="checkbox">`. The input is visually hidden; in browsers without `:has()` it stays visible so selection state never disappears.
 - The control shows before any choice: a ring (radio) or a rounded box (checkbox) on the leading edge, level with the first line. Checked, it fills with a check, and the card takes a primary border and a subtle tint.
 - Each child element of the label sits on its own row beside the indicator — a title and a `.muted` detail need no wrapper. Wrap loose text in an element.
@@ -116,6 +108,14 @@ Sizes follow the shared `.sm` and `.lg` typography scale; the check indicator
 follows through its `em` sizing. Padding is density, so use a `.compact` or
 `.spacious` context to change it. Intent classes (`.primary`, `.secondary`) are
 supported on the `.choice-card` element.
+
+## Class reference
+
+| Class                     | Kind      | Description                                   |
+| ------------------------- | --------- | --------------------------------------------- |
+| `.choice-card`            | Component | Card-style `<label>` around a native control. |
+| `.chip`                   | Modifier  | Compact pill form: filter chips, tags.        |
+| `.primary` / `.secondary` | Intent    | Accent for the selected state.                |
 
 ## Corner badge
 

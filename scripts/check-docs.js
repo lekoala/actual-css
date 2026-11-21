@@ -218,6 +218,48 @@ function chromeTokenIssues() {
   return issues;
 }
 
+/*
+ * A pattern page leads with its first live demo (AGENTS.md § Writing): the
+ * summary, the demo, then explanation. A reference table, an anatomy or a
+ * native baseline before it makes the reader study the API of a thing they
+ * have not seen. One section may still host the demo when it opens straight
+ * onto it ("Basic usage", "Preview", a catalog's first entry), with at most
+ * two short paragraphs and no table between. Pages without a demo are left
+ * alone.
+ */
+const DEMO_FIRST_GROUPS = new Set(["components", "enhancements", "forms"]);
+
+function demoFirstIssues(markdown, fences, label) {
+  const demo = fences.find((fence) => fence.demo);
+  if (!demo) return [];
+  const fenced = new Set(
+    fences.flatMap((fence) =>
+      Array.from({ length: fence.end - fence.start + 1 }, (_, offset) => fence.start + offset),
+    ),
+  );
+  const lines = markdown.split(/\r?\n/u).slice(0, demo.start);
+  const headings = lines.flatMap((line, index) =>
+    !fenced.has(index) && /^##\s/u.test(line) ? [index] : [],
+  );
+  if (headings.length === 0) return [];
+
+  const host = headings.at(-1);
+  const between = lines
+    .slice(host + 1)
+    .join("\n")
+    .trim();
+  const paragraphs = between ? between.split(/\n\s*\n/u) : [];
+  const opensOnDemo =
+    headings.length === 1 &&
+    fences.every((fence) => fence === demo || fence.start > demo.start || fence.end < host) &&
+    paragraphs.length <= 2 &&
+    !/^\s*\|/mu.test(between);
+  if (opensOnDemo) return [];
+  return [
+    `${label}:${headings[0] + 1}: "${lines[headings[0]].trim()}" comes before the first demo — lead with the demo, then explain`,
+  ];
+}
+
 function main() {
   const issues = [];
   const navigation = loadNavigation(ROOT);
@@ -270,6 +312,9 @@ function main() {
     );
 
     issues.push(...tableIssues(markdown, rel(file)));
+    if (DEMO_FIRST_GROUPS.has(page.groupSlug)) {
+      issues.push(...demoFirstIssues(markdown, fences, rel(file)));
+    }
 
     for (const [index, line] of markdown.split(/\r?\n/u).entries()) {
       if (

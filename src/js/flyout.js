@@ -6,6 +6,10 @@ import { connectMenu, focusFirstMenuItem, focusLastMenuItem } from "./menu.js";
 import { closeSurface, isSurfaceOpen, openSurface, retainSurface } from "./surface.js";
 
 const triggerMap = new WeakMap();
+// Which trigger opened each panel. Only that one sends Tab into the panel: a
+// second trigger after the panel would otherwise send focus back in forever
+// (link, second trigger, link…), since the panel's last stop leads to it.
+const openers = new WeakMap();
 
 function readFlyoutOptions(panel) {
   const opts = { autoClose: "true" };
@@ -37,11 +41,13 @@ function isAriaMenu(panel) {
 }
 
 function openFlyout(panel, trigger) {
-  return openSurface(panel, {
+  const opened = openSurface(panel, {
     trigger,
     source: trigger,
     ...readFlyoutOptions(panel),
   });
+  if (opened) openers.set(panel, trigger);
+  return opened;
 }
 
 function openAndFocusPanel(flyout, trigger) {
@@ -87,7 +93,12 @@ function onTriggerKeydown(e) {
         else openAndFocusPanel(panel, trigger);
         break;
       case "Tab":
-        if (isSurfaceOpen(panel) && !e.shiftKey && focusFirstDescendant(panel)) {
+        if (
+          isSurfaceOpen(panel) &&
+          openers.get(panel) === trigger &&
+          !e.shiftKey &&
+          focusFirstDescendant(panel)
+        ) {
           e.preventDefault();
         }
         break;
@@ -160,9 +171,7 @@ function resolvePanel(trigger, state) {
   state.panel = panel;
 
   if (isMenuFlyout(panel)) {
-    state.releaseMenu = connectMenu(panel, {
-      close: (menu) => closeSurface(menu),
-    });
+    state.releaseMenu = connectMenu(panel);
   }
   if (!trigger.hasAttribute("aria-haspopup") && isAriaMenu(panel)) {
     trigger.setAttribute("aria-haspopup", "menu");

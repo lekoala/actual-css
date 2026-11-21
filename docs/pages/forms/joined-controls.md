@@ -8,13 +8,6 @@
 choice among a few on a shared track, use a
 [segmented control](../components/segmented.md).
 
-## Class reference
-
-| Class         | Kind        | Description                                 |
-| ------------- | ----------- | ------------------------------------------- |
-| `.join`       | Composition | Joins adjacent controls into a single unit. |
-| `.join-addon` | Composition | Static prefix or suffix content.            |
-
 Add `.join` to the wrapper that groups the controls. Use `.join-addon` for static prefix/suffix content such as currency symbols, units, or protocol text. Action buttons inside the group should use `.btn`.
 
 Give the wrapper `role="group"` and a label when it holds several controls
@@ -42,6 +35,13 @@ controls it groups so joined corners take precedence.
 
 `.join` handles border-radius and border collapsing between adjacent children. It works with any direct child — `.input`, `.btn`, `.select`, or `.join-addon` — plus one wrapper level (e.g. a combobox element around the native control): the wrapper receives the group corners and the inner control inherits them via `border-radius: inherit`.
 When an `.input`, `.textarea`, or `.select` receives keyboard focus, it keeps its own inset focus outline; the group never moves the ring onto itself, so the focused segment remains identifiable.
+
+## Class reference
+
+| Class         | Kind        | Description                                 |
+| ------------- | ----------- | ------------------------------------------- |
+| `.join`       | Composition | Joins adjacent controls into a single unit. |
+| `.join-addon` | Composition | Static prefix or suffix content.            |
 
 ## Linting `role="group"`
 

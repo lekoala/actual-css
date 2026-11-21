@@ -29,16 +29,6 @@ application shell — bottom navigation or labelled side navigation via
 `.app-layout`. The choice follows the shell contract, not a preference for
 icons. See [App navigation](app-navigation.md).
 
-## Class reference
-
-| Class           | Kind        | Description                                           |
-| --------------- | ----------- | ----------------------------------------------------- |
-| `.navbar`       | Component   | Horizontal bar shell.                                 |
-| `.navbar-brand` | Composition | Brand link at the inline start.                       |
-| `.nav-link`     | Component   | A link item; current page via `aria-current="page"`.  |
-| `.nav-list`     | Component   | Shared vertical navigation list, reused by `.drawer`. |
-| `.rail`         | Modifier    | `.nav-list` as a table of contents on one rail.       |
-
 ## Basic usage
 
 ```html demo
@@ -57,6 +47,16 @@ Links inside `.nav-list` stretch to the available inline size, providing a
 full-row hit target for vertical navigation. The [Workspaces example](../examples/overview.md#page-shapes)
 shows the sectioned-sidebar composition: grouped `.nav-list` blocks with
 section titles, a pinned account footer, and the native current state.
+
+## Class reference
+
+| Class           | Kind        | Description                                           |
+| --------------- | ----------- | ----------------------------------------------------- |
+| `.navbar`       | Component   | Horizontal bar shell.                                 |
+| `.navbar-brand` | Composition | Brand link at the inline start.                       |
+| `.nav-link`     | Component   | A link item; current page via `aria-current="page"`.  |
+| `.nav-list`     | Component   | Shared vertical navigation list, reused by `.drawer`. |
+| `.rail`         | Modifier    | `.nav-list` as a table of contents on one rail.       |
 
 ## Current link
 

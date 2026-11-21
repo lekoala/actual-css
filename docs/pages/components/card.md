@@ -2,27 +2,6 @@
 
 Flexible content container with optional header, body, and footer regions.
 
-## Class reference
-
-| Class      | Kind      | Description                                     |
-| ---------- | --------- | ----------------------------------------------- |
-| `.card`    | Component | Neutral raised surface for grouped content.     |
-| `.raised`  | Variant   | Elevated surface with a soft shadow.            |
-| `.subtle`  | Variant   | Lower contrast against the page surface.        |
-| `.surface` | Variant   | The page surface; intent in the text only.      |
-| `.compact` | Density   | Tighter padding and compact descendant context. |
-
-`.surface` is a shared variant: it paints the page surface instead of
-`--surface-raised` and leaves the intent to the text. For a dark card on a
-light page (or the reverse), put `data-theme="dark"` on the card.
-
-Shared `.soft` with an intent class gives the card a tone: an opaque surface
-tinted by the intent, with the soft ink. See [Tones](#tones).
-
-On `.card.solid`, bare and `.prose` links follow the surrounding text color,
-including hover and keyboard focus, instead of the theme's `--link` ink.
-Nested cards and `data-theme` islands establish their own link context.
-
 ## Basic usage
 
 Use semantic elements inside the card. A direct `<header>` or `<footer>` is the
@@ -58,6 +37,27 @@ to let that primitive control its layout and gap.
   </article>
 </div>
 ```
+
+## Class reference
+
+| Class      | Kind      | Description                                     |
+| ---------- | --------- | ----------------------------------------------- |
+| `.card`    | Component | Neutral raised surface for grouped content.     |
+| `.raised`  | Variant   | Elevated surface with a soft shadow.            |
+| `.subtle`  | Variant   | Lower contrast against the page surface.        |
+| `.surface` | Variant   | The page surface; intent in the text only.      |
+| `.compact` | Density   | Tighter padding and compact descendant context. |
+
+`.surface` is a shared variant: it paints the page surface instead of
+`--surface-raised` and leaves the intent to the text. For a dark card on a
+light page (or the reverse), put `data-theme="dark"` on the card.
+
+Shared `.soft` with an intent class gives the card a tone: an opaque surface
+tinted by the intent, with the soft ink. See [Tones](#tones).
+
+On `.card.solid`, bare and `.prose` links follow the surrounding text color,
+including hover and keyboard focus, instead of the theme's `--link` ink.
+Nested cards and `data-theme` islands establish their own link context.
 
 ## Slot rows
 

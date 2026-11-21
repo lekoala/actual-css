@@ -9,8 +9,7 @@ const releases = [];
 function connect(html) {
   document.body.innerHTML = html;
   const menu = document.querySelector(".menu");
-  const close = () => {};
-  const release = connectMenu(menu, { close });
+  const release = connectMenu(menu);
   releases.push(release);
   return { items: [...menu.querySelectorAll(".menu-item")], menu };
 }
@@ -88,8 +87,8 @@ test("the last menu release restores authored tabindex values", () => {
   `;
   const menu = document.querySelector(".menu");
   const items = [...menu.querySelectorAll(".menu-item")];
-  const firstRelease = connectMenu(menu, { close() {} });
-  const secondRelease = connectMenu(menu, { close() {} });
+  const firstRelease = connectMenu(menu);
+  const secondRelease = connectMenu(menu);
   releases.push(firstRelease, secondRelease);
 
   expect(items.map((item) => item.tabIndex)).toEqual([-1, 0]);
@@ -115,7 +114,7 @@ test("the last menu release removes keydown wiring and allows reconnecting", () 
   press(items[0], "ArrowDown");
   expect(document.activeElement).toBe(items[0]);
 
-  const reRelease = connectMenu(menu, { close() {} });
+  const reRelease = connectMenu(menu);
   releases.push(reRelease);
   expect(items.map((item) => item.getAttribute("tabindex"))).toEqual(["0", "-1"]);
   items[0].focus();

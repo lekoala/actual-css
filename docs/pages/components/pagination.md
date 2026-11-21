@@ -12,13 +12,6 @@
 - Arrows, page numbers, and truncation ellipses share one geometric system: every item gets the same minimum footprint, and wider content (100, 1000, text labels) grows past it naturally.
 - Truncated ranges are plain text with `.muted` and `aria-hidden="true"`, not `.btn` — they are decorative, not actionable.
 
-## Class reference
-
-| Class         | Kind      | Description                    |
-| ------------- | --------- | ------------------------------ |
-| `.pagination` | Component | Ordered list of page controls. |
-| `.sm` / `.lg` | Size      | Control geometry and type.     |
-
 ## Basic usage
 
 ```html demo
@@ -33,6 +26,13 @@
   </ol>
 </nav>
 ```
+
+## Class reference
+
+| Class         | Kind      | Description                    |
+| ------------- | --------- | ------------------------------ |
+| `.pagination` | Component | Ordered list of page controls. |
+| `.sm` / `.lg` | Size      | Control geometry and type.     |
 
 ## Truncated ranges
 

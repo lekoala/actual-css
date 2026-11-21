@@ -2,15 +2,6 @@
 
 > Read-only, disabled, and shared size modifiers for form controls.
 
-## Class reference
-
-| Class | Kind     | Description                              |
-| ----- | -------- | ---------------------------------------- |
-| `.sm` | Modifier | Smaller control geometry and typography. |
-| `.lg` | Modifier | Larger control geometry and typography.  |
-
-Each maps `--control-size` and `--control-font-size` to the matching step.
-
 Use `readonly` for text-like values that can still be focused, selected, and submitted. Use `disabled` for unavailable controls that should not receive focus or submit a value.
 
 The `.sm` and `.lg` modifiers set the shared control tokens used by inputs,
@@ -315,3 +306,12 @@ together. Density contexts leave both unchanged.
   </fieldset>
 </form>
 ```
+
+## Class reference
+
+| Class | Kind     | Description                              |
+| ----- | -------- | ---------------------------------------- |
+| `.sm` | Modifier | Smaller control geometry and typography. |
+| `.lg` | Modifier | Larger control geometry and typography.  |
+
+Each maps `--control-size` and `--control-font-size` to the matching step.

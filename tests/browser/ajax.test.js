@@ -203,9 +203,10 @@ it("focus lost with the replaced content lands on the answer's invalid field or 
     expect(await view.evaluate(active)).toBe("swap-save");
     await view.evaluate(`reply(
       '<form id="swap" action="save" method="post" data-enhance="ajax" data-ajax-target="#card">' +
-      '<input id="name"><input id="email" aria-invalid="true"><button id="swap-save">Save</button></form>',
+      '<input id="name" autofocus><input id="email" aria-invalid="true"><button id="swap-save">Save</button></form>',
       { status: 422 },
     )`);
+    // The invalid field wins over an earlier autofocus.
     await waitForBrowser(view, `document.activeElement?.id === "email"`);
 
     await clickSelector(view, "#swap-save");

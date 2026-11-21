@@ -15,34 +15,6 @@
 
 **Related terms:** form controls, select, custom select, dropdown, input, textarea, checkbox, radio.
 
-## Class reference
-
-| Class           | Kind        | Description                                   |
-| --------------- | ----------- | --------------------------------------------- |
-| `.input`        | Component   | Text input.                                   |
-| `.textarea`     | Component   | Multi-line text control.                      |
-| `.select`       | Component   | Dropdown, native baseline with a CSS chevron. |
-| `.check`        | Component   | Styled checkbox.                              |
-| `.radio`        | Component   | Styled radio button.                          |
-| `.switch`       | Component   | Toggle switch on a `role="switch"` checkbox.  |
-| `.range`        | Component   | Native range slider, theme-aware accent.      |
-| `.file`         | Component   | Native file input, themed picker button.      |
-| `.color`        | Component   | Native color picker in a control-sized box.   |
-| `.color-swatch` | Component   | Palette color on a radio, or its trigger.     |
-| `.field`        | Composition | Field wrapper, on `<label>` or `<div>`.       |
-| `.field-label`  | Composition | Label text, element-agnostic.                 |
-| `.field-help`   | Composition | Supporting helper text under a control.       |
-| `.field-error`  | Composition | Inline error message, shown while invalid.    |
-| `.field-group`  | Composition | `<fieldset>` with a tunable legend gutter.    |
-| `.choice`       | Composition | Choice-label layout around an inline control. |
-| `.form-actions` | Composition | Role of the `.cluster` row closing a form.    |
-
-`.input` shares the text-control recipe with `.textarea` and `.select`, and
-`.select` also has an opt-in enhanced picker. `.field-label` works on a
-`<span>`, a detached `<label>` or a `<legend>`. `.choice` wraps a `.check`,
-`.radio` or `.switch`, and `.form-actions` works inside or outside the
-`<form>`.
-
 ## Example form
 
 A full form using the control classes, field wrappers, and form actions:
@@ -169,6 +141,34 @@ A full form using the control classes, field wrappers, and form actions:
   </div>
 </form>
 ```
+
+## Class reference
+
+| Class           | Kind        | Description                                   |
+| --------------- | ----------- | --------------------------------------------- |
+| `.input`        | Component   | Text input.                                   |
+| `.textarea`     | Component   | Multi-line text control.                      |
+| `.select`       | Component   | Dropdown, native baseline with a CSS chevron. |
+| `.check`        | Component   | Styled checkbox.                              |
+| `.radio`        | Component   | Styled radio button.                          |
+| `.switch`       | Component   | Toggle switch on a `role="switch"` checkbox.  |
+| `.range`        | Component   | Native range slider, theme-aware accent.      |
+| `.file`         | Component   | Native file input, themed picker button.      |
+| `.color`        | Component   | Native color picker in a control-sized box.   |
+| `.color-swatch` | Component   | Palette color on a radio, or its trigger.     |
+| `.field`        | Composition | Field wrapper, on `<label>` or `<div>`.       |
+| `.field-label`  | Composition | Label text, element-agnostic.                 |
+| `.field-help`   | Composition | Supporting helper text under a control.       |
+| `.field-error`  | Composition | Inline error message, shown while invalid.    |
+| `.field-group`  | Composition | `<fieldset>` with a tunable legend gutter.    |
+| `.choice`       | Composition | Choice-label layout around an inline control. |
+| `.form-actions` | Composition | Role of the `.cluster` row closing a form.    |
+
+`.input` shares the text-control recipe with `.textarea` and `.select`, and
+`.select` also has an opt-in enhanced picker. `.field-label` works on a
+`<span>`, a detached `<label>` or a `<legend>`. `.choice` wraps a `.check`,
+`.radio` or `.switch`, and `.form-actions` works inside or outside the
+`<form>`.
 
 ## Hooks
 

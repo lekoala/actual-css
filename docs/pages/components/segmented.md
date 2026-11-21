@@ -20,24 +20,6 @@ any control. A long label wraps instead of truncating, and the row grows with
 it. A parent that stretches its children (`.stack`) makes it full width; add
 `.align-self-start` to keep it at its content width.
 
-## Anatomy
-
-One tree per use; the track and segment classes are the same in all three.
-
-```text
-fieldset.segmented
-├── legend                       (may be .sr-only)
-└── label.segment                ×2..N
-    ├── input[type="radio"]
-    └── label text
-
-.segmented[role="tablist"]
-└── button.segment[role="tab"]   ×2..N, one aria-selected="true"
-
-nav.segmented
-└── a.segment                    ×2..N, at most one aria-current="page"
-```
-
 ## Pick a value
 
 Wrap each radio in its label. The radio is visually hidden but stays focusable
@@ -75,6 +57,24 @@ runtime unchanged: it reads the roles, not the classes.
   <a class="segment" href="#week">Week</a>
   <a class="segment" href="#month">Month</a>
 </nav>
+```
+
+## Anatomy
+
+One tree per use; the track and segment classes are the same in all three.
+
+```text
+fieldset.segmented
+├── legend                       (may be .sr-only)
+└── label.segment                ×2..N
+    ├── input[type="radio"]
+    └── label text
+
+.segmented[role="tablist"]
+└── button.segment[role="tab"]   ×2..N, one aria-selected="true"
+
+nav.segmented
+└── a.segment                    ×2..N, at most one aria-current="page"
 ```
 
 ## Vertical

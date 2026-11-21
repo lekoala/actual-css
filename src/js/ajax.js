@@ -77,7 +77,9 @@ function targetElement(root, selector) {
 // the browser ignores in inserted HTML. A target with a tabindex catches the
 // rest; otherwise focus stays where the browser left it.
 function refocus(target) {
-  const next = target.querySelector('[aria-invalid="true"], [autofocus]');
+  // Two queries, not one list: an invalid field wins over an autofocus that
+  // comes before it in the answer.
+  const next = target.querySelector('[aria-invalid="true"]') ?? target.querySelector("[autofocus]");
   if (next) next.focus();
   else if (target.hasAttribute("tabindex")) target.focus();
 }

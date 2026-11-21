@@ -14,18 +14,6 @@
 - Use `role="status"` with accessible text when the loading state needs to be announced.
 - Put a direct last-child `.spinner` inside a busy region to show a centered loading overlay. In buttons, spinners remain inline.
 
-## Class reference
-
-| Class                | Kind      | Description                                      |
-| -------------------- | --------- | ------------------------------------------------ |
-| `.spinner`           | Component | Circular loading indicator using `currentColor`. |
-| `[aria-busy="true"]` | State     | Loading region; see Busy state below.            |
-| `.sm` / `.lg`        | Size      | Smaller (`0.75em`) or larger (`2rem`) spinner.   |
-| Shared intents       | Intent    | `.primary`, `.secondary`, `.success`, …          |
-
-The shared intents are `.primary`, `.secondary`, `.success`, `.warning` and
-`.danger`.
-
 ## Basic usage
 
 ```html demo
@@ -73,6 +61,18 @@ Announce the loading state when it needs to be spoken.
 ```
 
 Size follows the font (`1em`); use `.sm` / `.lg` rather than sizing it directly.
+
+## Class reference
+
+| Class                | Kind      | Description                                      |
+| -------------------- | --------- | ------------------------------------------------ |
+| `.spinner`           | Component | Circular loading indicator using `currentColor`. |
+| `[aria-busy="true"]` | State     | Loading region; see Busy state below.            |
+| `.sm` / `.lg`        | Size      | Smaller (`0.75em`) or larger (`2rem`) spinner.   |
+| Shared intents       | Intent    | `.primary`, `.secondary`, `.success`, …          |
+
+The shared intents are `.primary`, `.secondary`, `.success`, `.warning` and
+`.danger`.
 
 ## Busy state
 

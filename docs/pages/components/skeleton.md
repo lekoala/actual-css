@@ -13,13 +13,6 @@
 **Related terms:** skeleton screen, shimmer, loading placeholder. For a text
 label showing an activity in progress, see [Shimmer](shimmer.md).
 
-## Class reference
-
-| Class        | Kind      | Description                                         |
-| ------------ | --------- | --------------------------------------------------- |
-| `.skeleton`  | Component | Animated placeholder shape.                         |
-| `data-shape` | Modifier  | Geometry presets: `text`, `title`, `avatar`, `box`. |
-
 ## Basic usage
 
 ```html demo
@@ -33,6 +26,13 @@ label showing an activity in progress, see [Shimmer](shimmer.md).
   </div>
 </article>
 ```
+
+## Class reference
+
+| Class        | Kind      | Description                                         |
+| ------------ | --------- | --------------------------------------------------- |
+| `.skeleton`  | Component | Animated placeholder shape.                         |
+| `data-shape` | Modifier  | Geometry presets: `text`, `title`, `avatar`, `box`. |
 
 ## CSS hooks
 

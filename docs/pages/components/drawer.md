@@ -4,39 +4,6 @@
 
 **Related terms:** off-canvas, side panel, side sheet, navigation drawer, bottom sheet, action sheet.
 
-## Class reference
-
-| Class     | Kind        | Description                                          |
-| --------- | ----------- | ---------------------------------------------------- |
-| `.drawer` | Component   | Modal side or bottom sheet on the native `<dialog>`. |
-| `.close`  | Composition | Icon-only close button, at the top end.              |
-
-## Usage
-
-- Use `dialog.drawer` for modal side-sheets that overlay the page.
-- Use `command="show-modal"` and `commandfor="<id>"` to open the drawer without JavaScript.
-- Use `form method="dialog"` for close buttons inside the drawer.
-- Use `data-dialog-dismissible` when backdrop click should close the drawer. It
-  only gates backdrop click: Escape and the close button always close.
-- Use `closedby="none"` when the drawer must not be dismissed by the user at all
-  (e.g. a form with unsaved changes): no backdrop close and no Escape close.
-- Use `[data-side="end"]` for a right-side drawer, `[data-side="bottom"]` for
-  a [bottom sheet](#bottom-sheet).
-- Put the body between a `header` and a `footer`: the panel is a three-row grid
-  whose middle region scrolls, so the footer stays reachable however long the
-  content gets.
-- Permanent desktop sidebars belong in layout, not here.
-
-The panel is `--viewport-block` tall, so it follows the space a mobile browser
-actually leaves on screen as its URL bar collapses. A shell that fakes a
-viewport (an embedded preview) overrides that token rather than the drawer.
-
-The body region is a scroll container, and browsers make one keyboard-focusable
-so it can be scrolled without a pointer — it takes a focus ring like any other
-focusable element. `showModal()` focuses the first focusable thing in the
-drawer, so put the close button in the `header` (as both examples do) or mark
-your intended target `autofocus`; otherwise the body claims initial focus.
-
 ```html demo
 <button class="btn ghost"
         type="button"
@@ -71,6 +38,39 @@ your intended target `autofocus`; otherwise the body claims initial focus.
   </nav>
 </dialog>
 ```
+
+## Usage
+
+- Use `dialog.drawer` for modal side-sheets that overlay the page.
+- Use `command="show-modal"` and `commandfor="<id>"` to open the drawer without JavaScript.
+- Use `form method="dialog"` for close buttons inside the drawer.
+- Use `data-dialog-dismissible` when backdrop click should close the drawer. It
+  only gates backdrop click: Escape and the close button always close.
+- Use `closedby="none"` when the drawer must not be dismissed by the user at all
+  (e.g. a form with unsaved changes): no backdrop close and no Escape close.
+- Use `[data-side="end"]` for a right-side drawer, `[data-side="bottom"]` for
+  a [bottom sheet](#bottom-sheet).
+- Put the body between a `header` and a `footer`: the panel is a three-row grid
+  whose middle region scrolls, so the footer stays reachable however long the
+  content gets.
+- Permanent desktop sidebars belong in layout, not here.
+
+The panel is `--viewport-block` tall, so it follows the space a mobile browser
+actually leaves on screen as its URL bar collapses. A shell that fakes a
+viewport (an embedded preview) overrides that token rather than the drawer.
+
+The body region is a scroll container, and browsers make one keyboard-focusable
+so it can be scrolled without a pointer — it takes a focus ring like any other
+focusable element. `showModal()` focuses the first focusable thing in the
+drawer, so put the close button in the `header` (as both examples do) or mark
+your intended target `autofocus`; otherwise the body claims initial focus.
+
+## Class reference
+
+| Class     | Kind        | Description                                          |
+| --------- | ----------- | ---------------------------------------------------- |
+| `.drawer` | Component   | Modal side or bottom sheet on the native `<dialog>`. |
+| `.close`  | Composition | Icon-only close button, at the top end.              |
 
 ## Non-dismissible drawer
 

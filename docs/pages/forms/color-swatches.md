@@ -13,18 +13,6 @@ checkboxes for several colors at once.
 For a free color, use the native [`.color`](controls.md) picker; a custom
 spectrum or RGB sliders are outside Actual.
 
-## Anatomy
-
-```text
-fieldset.field-group.cluster     the palette, or a .grid; spaced with --gap
-├── legend
-└── label.color-swatch           ×N, --color-swatch-value
-    └── input[type="radio"]      aria-label names the color; checkbox for several
-
-button.color-swatch              flyout trigger, --color-swatch-value
-└── .sr-only                     the current color's name
-```
-
 ## Palette
 
 Lay the swatches out with `.cluster` or `.grid`, and space them with `--gap`
@@ -42,6 +30,18 @@ the column count with `--grid-columns: repeat(6, max-content)` on `.grid`.
   <label class="color-swatch" style="--color-swatch-value: #e11d48"><input type="radio" name="category" value="#e11d48" aria-label="Rose"></label>
   <label class="color-swatch" style="--color-swatch-value: #ffffff"><input type="radio" name="category" value="#ffffff" aria-label="White"></label>
 </fieldset>
+```
+
+## Anatomy
+
+```text
+fieldset.field-group.cluster     the palette, or a .grid; spaced with --gap
+├── legend
+└── label.color-swatch           ×N, --color-swatch-value
+    └── input[type="radio"]      aria-label names the color; checkbox for several
+
+button.color-swatch              flyout trigger, --color-swatch-value
+└── .sr-only                     the current color's name
 ```
 
 ## Shape

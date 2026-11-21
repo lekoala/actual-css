@@ -144,8 +144,8 @@ test("closeSurface can restore focus to the opening trigger", () => {
   const trigger = document.querySelector("button");
   const menu = document.getElementById("menu");
   mockPlacement(trigger, menu);
+  // Focus stays on the body: moving it outside an open surface would close it.
   openSurface(menu, { trigger });
-  document.body.focus();
 
   closeSurface(menu, { restoreFocus: true });
 
@@ -181,8 +181,10 @@ test("Escape key closes the top surface and restores focus", () => {
     HTMLElement.prototype.focus.call(trigger);
   };
   mockPlacement(trigger, menu);
-  openSurface(menu, { trigger });
+  // Focused before opening, as after a pointer opening that leaves focus
+  // outside: moving focus out of an open surface would close it instead.
   next.focus();
+  openSurface(menu, { trigger });
 
   document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
 

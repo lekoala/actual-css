@@ -181,9 +181,7 @@ function resolveContextMenu(target, state) {
 
   state.release = retainSurface(menu);
   state.menu = menu;
-  state.releaseMenu = connectMenu(menu, {
-    close: (menu) => closeSurface(menu),
-  });
+  state.releaseMenu = connectMenu(menu);
   return menu;
 }
 

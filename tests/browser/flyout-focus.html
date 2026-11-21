@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flyout focus-leave fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    body { padding: 1rem; }
+    section { margin-block-end: 1rem; }
+  </style>
+</head>
+<body>
+  <!-- 1. Contextual help between two fields. -->
+  <section>
+    <input id="help-before" aria-label="Before help">
+    <span class="flyout-trigger">
+      <button id="help-trigger" class="btn" type="button" data-enhance="flyout"
+              aria-controls="help-panel">About</button>
+      <div id="help-panel" class="flyout" data-flyout-auto-close="outside" hidden>
+        <p>Explanation.</p>
+        <a id="help-link" href="#help-panel">More</a>
+      </div>
+    </span>
+    <input id="help-after" aria-label="After help">
+  </section>
+
+  <!-- 2. An ARIA action menu: one roving tab stop. -->
+  <section>
+    <span class="flyout-trigger">
+      <button id="menu-trigger" class="btn" type="button" data-enhance="flyout"
+              aria-controls="actions">Actions</button>
+      <menu id="actions" class="flyout menu" role="menu" aria-label="Actions" hidden>
+        <li><button id="menu-first" class="menu-item" type="button" role="menuitem">Rename</button></li>
+        <li><button id="menu-second" class="menu-item" type="button" role="menuitem">Duplicate</button></li>
+      </menu>
+    </span>
+    <input id="menu-after" aria-label="After menu">
+  </section>
+
+  <!-- 3. A filter panel: focus moves between its own fields. -->
+  <section>
+    <span class="flyout-trigger">
+      <button id="filter-trigger" class="btn" type="button" data-enhance="flyout"
+              aria-controls="filters">Filters</button>
+      <form id="filters" class="flyout" aria-label="Filters" data-flyout-auto-close="outside" hidden>
+        <label><input id="filter-a" type="checkbox"> A</label>
+        <label><input id="filter-b" type="checkbox"> B</label>
+        <button id="filter-apply" type="button">Apply</button>
+      </form>
+    </span>
+    <input id="filter-after" aria-label="After filters">
+  </section>
+
+  <!-- 4. A persistent panel: the application owns closing it. -->
+  <section>
+    <span class="flyout-trigger">
+      <button id="pinned-trigger" class="btn" type="button" data-enhance="flyout"
+              aria-controls="pinned">Pinned</button>
+      <div id="pinned" class="flyout" data-flyout-auto-close="false" hidden>
+        <a id="pinned-link" href="#pinned">Inside</a>
+      </div>
+    </span>
+    <input id="pinned-after" aria-label="After pinned">
+  </section>
+
+  <!-- 5. One panel, two triggers. -->
+  <section>
+    <span class="flyout-trigger">
+      <button id="shared-a" class="btn" type="button" data-enhance="flyout"
+              aria-controls="shared">Open A</button>
+      <div id="shared" class="flyout" data-flyout-auto-close="outside" hidden>
+        <a id="shared-link" href="#shared">Shared</a>
+      </div>
+    </span>
+    <button id="shared-b" class="btn" type="button" data-enhance="flyout"
+            aria-controls="shared">Open B</button>
+    <input id="shared-after" aria-label="After shared">
+  </section>
+
+  <!-- 6. A context menu. -->
+  <section>
+    <div id="row" data-context-menu="ctx" tabindex="0"
+         style="block-size: 4rem; background: #eee">Right-click me</div>
+    <menu id="ctx" class="flyout menu" hidden>
+      <li><button id="ctx-first" class="menu-item" type="button">Rename</button></li>
+    </menu>
+    <input id="ctx-after" aria-label="After context">
+  </section>
+</body>
+</html>

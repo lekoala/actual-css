@@ -7,18 +7,6 @@ its child at the top-end corner. The primitive does not add a background,
 size, border, or contrast ring: compose it with `.badge` or another component
 that owns its appearance.
 
-## Class reference
-
-| Class             | Kind      | Description                                     |
-| ----------------- | --------- | ----------------------------------------------- |
-| `.indicator`      | Component | Positioning context for an overlaid child.      |
-| `.indicator-item` | Part      | Item attached to the top-end corner by default. |
-| `.start`          | Placement | Moves the item to the inline-start corner.      |
-| `.bottom`         | Placement | Moves the item to the bottom corner.            |
-
-Combine `.bottom.start` for bottom-start. Logical inline placement follows the
-document direction automatically.
-
 ```html demo
 <div class="cluster" style="padding: var(--space-40);">
   <button class="btn indicator" type="button">
@@ -33,6 +21,18 @@ document direction automatically.
   </article>
 </div>
 ```
+
+## Class reference
+
+| Class             | Kind      | Description                                     |
+| ----------------- | --------- | ----------------------------------------------- |
+| `.indicator`      | Component | Positioning context for an overlaid child.      |
+| `.indicator-item` | Part      | Item attached to the top-end corner by default. |
+| `.start`          | Placement | Moves the item to the inline-start corner.      |
+| `.bottom`         | Placement | Moves the item to the bottom corner.            |
+
+Combine `.bottom.start` for bottom-start. Logical inline placement follows the
+document direction automatically.
 
 ## Four corners
 
