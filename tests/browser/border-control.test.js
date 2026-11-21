@@ -146,6 +146,37 @@ it("--control-default-border moves field sides and states drop the lower edge", 
   );
 });
 
+it("a resting switch knob stays lighter than its track in a dark scheme", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const [knob, muted] = await view.evaluate(`[
+      getComputedStyle(document.querySelector("[data-dark-switch]"), "::before").backgroundColor,
+      getComputedStyle(document.querySelector("[data-dark-muted]")).color,
+    ]`);
+    expect(knob).toBe(muted);
+  });
+});
+
+// The underline-only recipe hides the sides with a transparent edge; forced
+// colors repaint every border in a system color, so the field keeps a full
+// frame there. Asserted on computed styles: the headless screenshot does not
+// paint the forced palette (see scripts/forced-colors-shot.js).
+it("an underline-only field regains its sides in forced colors", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const sides = await view.evaluate(`(() => {
+        const s = getComputedStyle(document.querySelector('[data-recipe="underline"]'));
+        return [s.borderInlineStartColor, s.borderInlineEndColor, s.borderBlockStartColor];
+      })()`);
+      for (const side of sides) expect(side).not.toMatch(/rgba\(.*, 0\)$|transparent/);
+    },
+    {
+      artifactName: "border-control-forced",
+      mediaFeatures: [{ name: "forced-colors", value: "active" }],
+    },
+  );
+});
+
 // Themes tune the edge through the mix, never by redeclaring the color-mix():
 // an unguarded redeclaration erased every control outline without color-mix.
 it("--border-control-mix sets the ink share of the derived edge", async () => {

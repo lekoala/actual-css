@@ -37,6 +37,7 @@ icons. See [App navigation](app-navigation.md).
 | `.navbar-brand` | Composition | Brand link at the inline start.                       |
 | `.nav-link`     | Component   | A link item; current page via `aria-current="page"`.  |
 | `.nav-list`     | Component   | Shared vertical navigation list, reused by `.drawer`. |
+| `.rail`         | Modifier    | `.nav-list` as a table of contents on one rail.       |
 
 ## Basic usage
 
@@ -76,6 +77,37 @@ solid selected pill:
 
 Keep the pair's contrast: a brand-colored ink on a tinted fill falls under
 4.5:1 on several light themes.
+
+## Rail / table of contents / on this page
+
+`.nav-list.rail` hangs the links on one rail, for a table of contents, docs
+navigation or a settings panel. The current link is a band on the rail
+instead of a fill, and the keyboard focus outline lands its leading edge on
+the same band: focus on the current link continues the band into a frame,
+focus elsewhere draws its own segment, and the band stays where it is.
+
+```html demo
+<nav aria-label="On this page">
+  <ul class="nav-list rail">
+    <li><a class="nav-link" href="#live-demo" aria-current="location">Live demo</a></li>
+    <li><a class="nav-link" href="#overview">Overview</a>
+      <ul class="nav-list">
+        <li><a class="nav-link" href="#formatting">Formatting</a></li>
+        <li><a class="nav-link" href="#content">Content</a></li>
+      </ul>
+    </li>
+    <li><a class="nav-link" href="#behaviors">Behaviors</a></li>
+  </ul>
+</nav>
+```
+
+- The rail, the band and the focus line share `--focus-ring-width`, so they
+  thicken together under `prefers-contrast: more`.
+- A nested `.nav-list` joins the outer rail and indents one step; deeper
+  levels share that indent.
+- The band takes `--focus`; `--nav-list-rail-color` sets the rail. In forced
+  colors the band widens past the rail, since both take the same system color.
+- Pair it with Scrollspy to move the band while the page scrolls.
 
 ## Responsive: navbar + drawer
 

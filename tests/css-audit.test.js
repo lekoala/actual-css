@@ -656,7 +656,13 @@ test("navbar consumes the shared surface contract with an intent boundary", () =
   expect(forced).toMatch(
     new RegExp(`\\.nav-link${NAV_CURRENT_RE} \\{[^}]*text-decoration: underline;`),
   );
-  expect(css.indexOf("::before")).toBeGreaterThan(css.indexOf("@media (forced-colors: active)"));
+  // Outside forced colors, only .nav-list.rail draws a ::before: its band is
+  // the current state by design, not a forced-colors repair.
+  const navbarRules = readRules("src/css/components/navbar.css");
+  const normal = navbarRules.slice(0, navbarRules.indexOf("@media (forced-colors: active)"));
+  for (const selector of normal.match(/[^{}]*::before/g) ?? []) {
+    expect(selector).toContain(".nav-list.rail");
+  }
   // The positioning context lives on every row link, so becoming current never
   // moves an app-positioned decoration to a new containing block.
   expect(css).toMatch(/\.nav-list \.nav-link \{[^}]*position: relative;/);

@@ -60,6 +60,8 @@
     <input class="input" data-recipe="readonly" readonly value="Read only" aria-label="Recipe readonly">
     <input class="input" data-recipe="disabled" disabled aria-label="Recipe disabled">
     <label class="field danger"><input class="input" data-recipe="invalid" aria-label="Recipe invalid"></label>
+    <!-- Underline-only recipe: forced colors must draw its sides again. -->
+    <input class="input" data-recipe="underline" style="--control-default-border: transparent" aria-label="Underline field">
   </div>
 
   <!-- A switch keeps the control edge at rest only: checked and disabled
@@ -68,6 +70,13 @@
   <input class="switch" type="checkbox" role="switch" data-switch="disabled" disabled aria-label="Disabled switch">
   <input class="switch" type="checkbox" role="switch" data-switch="invalid" aria-invalid="true" aria-label="Invalid switch">
   <span data-switch-danger style="color: var(--danger)"></span>
+
+  <!-- A dark scheme lifts --border above the surface: the resting knob must
+       take a light ink, not --surface-raised. -->
+  <div data-theme="dark">
+    <input class="switch" type="checkbox" role="switch" data-dark-switch aria-label="Dark switch">
+    <span data-dark-muted style="color: var(--text-muted)"></span>
+  </div>
 
   <div class="card" data-separator>Card</div>
   <hr class="divider" data-separator>

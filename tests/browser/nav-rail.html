@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nav list rail fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+    body { padding: 2rem; }
+    nav { inline-size: 16rem; margin-block-end: 1rem; }
+  </style>
+</head>
+<body>
+  <nav aria-label="Rail">
+    <ul class="nav-list rail" id="rail">
+      <li><a class="nav-link" href="#a" id="current" aria-current="location">Current</a></li>
+      <li><a class="nav-link" href="#b" id="other">Other</a>
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#c" id="nested">Nested</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <nav aria-label="Rail RTL" dir="rtl">
+    <ul class="nav-list rail" id="rail-rtl">
+      <li><a class="nav-link" href="#a" id="current-rtl" aria-current="location">Current</a></li>
+    </ul>
+  </nav>
+
+  <!-- The band follows the focus ring width, prefers-contrast step included. -->
+  <nav aria-label="Rail thick" style="--focus-ring-width: 4px">
+    <ul class="nav-list rail" id="rail-thick">
+      <li><a class="nav-link" href="#a" id="current-thick" aria-current="location">Current</a></li>
+    </ul>
+  </nav>
+</body>
+</html>

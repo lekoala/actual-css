@@ -195,19 +195,6 @@
 
       /* Column layout and link chrome come from the framework's .grid
          (--grid-min: 12rem) and demo/styles/demo.css's .footer-links. */
-
-      /* Progressive enhancement: native CSS scrollspy when supported.
-         Framework JS handles the fallback. */
-      @supports selector(:target-current) {
-        .scrollspy {
-          scroll-target-group: auto;
-        }
-
-        .scrollspy a:target-current {
-          color: var(--primary);
-          font-weight: var(--font-weight-medium);
-        }
-      }
     </style>
   </head>
   <body>
@@ -567,14 +554,14 @@
               <h3 class="overline" style="margin: 0 0 0.75rem;">
                 On this page
               </h3>
-              <ol class="list-reset" style="display: grid; gap: 0.35rem; font-size: 0.9375rem;">
-                <li><a href="#why-the-baseline-should-stay-mild">Why the baseline should stay mild</a></li>
-                <li><a href="#three-scopes-three-jobs">Three scopes, three jobs</a></li>
-                <li><a href="#a-small-example">A small example</a></li>
-                <li><a href="#what-it-means-in-practice">What it means in practice</a></li>
-                <li><a href="#when-the-rule-applies">When the rule applies</a></li>
-                <li><a href="#what-we-left-out">What we left out</a></li>
-                <li><a href="#closing">Closing</a></li>
+              <ol class="nav-list rail">
+                <li><a class="nav-link" href="#why-the-baseline-should-stay-mild">Why the baseline should stay mild</a></li>
+                <li><a class="nav-link" href="#three-scopes-three-jobs">Three scopes, three jobs</a></li>
+                <li><a class="nav-link" href="#a-small-example">A small example</a></li>
+                <li><a class="nav-link" href="#what-it-means-in-practice">What it means in practice</a></li>
+                <li><a class="nav-link" href="#when-the-rule-applies">When the rule applies</a></li>
+                <li><a class="nav-link" href="#what-we-left-out">What we left out</a></li>
+                <li><a class="nav-link" href="#closing">Closing</a></li>
               </ol>
             </nav>
 

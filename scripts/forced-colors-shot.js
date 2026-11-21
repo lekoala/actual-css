@@ -12,6 +12,13 @@
  *   --src-css render the page's built stylesheets (dist/, the demo themes
  *             bundle) from their sources
  *   --out     output file (default: tmp/forced-colors-<scheme>.png)
+ *
+ * Trap: the emulation forces computed styles (getComputedStyle reports the
+ * system colors, and a transparent border becomes opaque CanvasText) but the
+ * headless screenshot still paints the author colors — red text on yellow
+ * came out red on yellow. The PNG shows which forced-colors rules match, not
+ * the forced palette. Assert forced rendering from computed styles in a test
+ * (withBrowserPage + mediaFeatures), never from this picture.
  */
 import { join } from "node:path";
 import { capture, fixtureUrl, readFlags } from "./utils/browser.js";

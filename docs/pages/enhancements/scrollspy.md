@@ -23,6 +23,8 @@ or style `[aria-current="location"]` yourself.
 - `data-scrollspy-root="#container"` measures a scroll container instead of the viewport.
 - `data-scrollspy-offset` moves the activation line: a bare number or `px` value is pixels, a `%` value is a share of the root's visible height. Invalid values fall back to `20%`, and negatives clamp to `0`.
 - The same markup also works with the CSS-native scroll markers path (see below).
+- Add `.rail` to the `.nav-list` for a table of contents: the current band
+  slides along the rail as the page scrolls, while keyboard focus stays free.
 
 ```html demo
 <nav class="scrollspy" data-enhance="scrollspy" aria-label="Page sections">
@@ -46,6 +48,37 @@ or style `[aria-current="location"]` yourself.
     <h2>Components</h2>
   </section>
 </main>
+```
+
+## Table of contents on a rail
+
+A scroll container keeps the demo self-contained: the band follows the
+section at the top of the panel.
+
+```html demo
+<div class="sidebar-layout">
+  <div class="overflow-auto scroller" id="rail-demo-panel" style="max-block-size: 14rem">
+    <section id="rail-install" tabindex="-1" style="min-block-size: 10rem">
+      <h3>Install</h3>
+      <p>Add the stylesheet, then the enhancer.</p>
+    </section>
+    <section id="rail-theme" tabindex="-1" style="min-block-size: 10rem">
+      <h3>Theme</h3>
+      <p>Replace the palette on <code>:root</code>.</p>
+    </section>
+    <section id="rail-ship" tabindex="-1" style="min-block-size: 10rem">
+      <h3>Ship</h3>
+      <p>Pin the version in your CDN link.</p>
+    </section>
+  </div>
+  <nav class="scrollspy" data-enhance="scrollspy" data-scrollspy-root="#rail-demo-panel" aria-label="Steps">
+    <ol class="nav-list rail">
+      <li><a class="nav-link" href="#rail-install" aria-current="location">Install</a></li>
+      <li><a class="nav-link" href="#rail-theme">Theme</a></li>
+      <li><a class="nav-link" href="#rail-ship">Ship</a></li>
+    </ol>
+  </nav>
+</div>
 ```
 
 ## Native scroll markers

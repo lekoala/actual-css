@@ -111,8 +111,11 @@ which both stacks it and gives the tabs runtime Up and Down.
 - `--segmented-radius` — track corner radius.
 - `--segmented-fg` — label ink of the unselected segments; the selected one
   takes `--text`.
-- `--segmented-selected-bg` — fill of the selected segment. Its shadow follows
-  `--shadow`, so a flat theme removes it at the theme level.
-- `--segmented-selected-border` — hairline around the selected segment. It is
-  what sets the segment apart where its fill is darker than the track; a theme
-  whose fill is lighter can fade it.
+- `--segmented-selected-bg` — fill of the selected segment: `--surface-raised`
+  in a light scheme, lifted above the track in a dark one. Its shadow follows
+  `--shadow`; a flat theme sets `--shadow-color: transparent`, not
+  `--shadow: none`, which would also drop the edge below.
+- `--segmented-selected-border` — hairline around the selected segment, none
+  by default. Set it once on a theme root, for example a flat light theme,
+  where fill and ink alone barely set the selected segment apart from the
+  track.

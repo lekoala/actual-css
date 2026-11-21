@@ -75,6 +75,17 @@
   cursor: pointer;
 }
 
+/* A dark scheme lifts --border above the surface, so a --surface-raised knob
+   sank into the track as a dark hole (1.5:1 on the default palette). The
+   resting knob takes a light ink there instead; a light scheme keeps the
+   white knob. light-dark() follows the switch's own color-scheme, so a theme
+   island resolves its branch. Without it the knob stays --surface-raised. */
+@supports (color: light-dark(red, blue)) {
+  .switch {
+    --switch-knob: light-dark(var(--surface-raised), var(--text-muted));
+  }
+}
+
 /* No elevation on the knob: --shadow is a surface elevation (card, modal,
    drawer, fab), and at this size its 12px blur reads as a smudge that spills
    past the rail while carrying no state. The range thumb — the same kind of

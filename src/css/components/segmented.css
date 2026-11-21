@@ -28,7 +28,8 @@
  * --segmented-radius
  * --segmented-fg
  * --segmented-selected-bg
- * --segmented-selected-border
+ * --segmented-selected-border (fallback-only: no edge by default; a theme sets
+ *   it once on its root, e.g. a flat theme whose selected pill has no shadow)
  *
  * Internal:
  * --segment-min-size
@@ -39,9 +40,6 @@
   --segmented-radius: var(--radius);
   --segmented-fg: var(--text-muted);
   --segmented-selected-bg: var(--surface-raised);
-  /* The edge is what separates the selected segment where --surface-raised
-     is darker than --surface-subtle (the default dark palette). */
-  --segmented-selected-border: var(--border);
 
   display: inline-grid;
   grid-auto-flow: column;
@@ -57,6 +55,21 @@
   background: var(--segmented-bg);
   font-size: var(--control-font-size);
   vertical-align: middle;
+}
+
+/* A dark scheme puts --surface-raised below --surface-subtle, so the selected
+   pill read as a recess in the rail. There it rises above the rail instead,
+   like the switch knob; a light scheme keeps the raised surface.
+   light-dark() follows the track's own color-scheme (theme islands included);
+   without it a dark pill stays --surface-raised, a degraded selection carried
+   by the --text ink against --text-muted. */
+@supports (color: light-dark(red, blue)) {
+  .segmented {
+    --segmented-selected-bg: light-dark(
+      var(--surface-raised),
+      color-mix(in oklab, var(--text) 14%, var(--surface-subtle))
+    );
+  }
 }
 
 .segment {
@@ -136,12 +149,19 @@
 }
 
 /* Separate rules from the :has() forms below: an engine without :has() would
-   discard a shared selector list, ARIA states included. */
+   discard a shared selector list, ARIA states included.
+   The selected pill is set apart by its fill, its shadow and the full --text
+   ink against --text-muted; no edge by default. --segmented-selected-border
+   is read, never declared here, so a theme (a flat one without --shadow) can
+   restore the edge once on its root.
+   Trap: the ring and --shadow share one box-shadow list, and `none` is not a
+   list item. A theme that sets --shadow: none drops the whole declaration,
+   ring included; flatten shadows with --shadow-color: transparent instead. */
 .segment:is([aria-selected="true"], [aria-current="page"], [aria-current="true"]) {
   background: var(--segmented-selected-bg);
   color: var(--text);
   box-shadow:
-    0 0 0 var(--border-width) var(--segmented-selected-border),
+    0 0 0 var(--border-width) var(--segmented-selected-border, transparent),
     var(--shadow);
 }
 
@@ -149,7 +169,7 @@
   background: var(--segmented-selected-bg);
   color: var(--text);
   box-shadow:
-    0 0 0 var(--border-width) var(--segmented-selected-border),
+    0 0 0 var(--border-width) var(--segmented-selected-border, transparent),
     var(--shadow);
 }
 

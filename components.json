@@ -575,7 +575,8 @@
       "nav-link",
       "nav-list",
       "navbar",
-      "navbar-brand"
+      "navbar-brand",
+      "rail"
     ],
     "publicHooks": [
       "--nav-current-bg",
@@ -585,11 +586,13 @@
     ],
     "internalHooks": [
       "--gap",
-      "--nav-list-rail-inset"
+      "--nav-list-rail-inset",
+      "--nav-list-rail-width"
     ],
     "states": [
       "aria-current",
-      "open"
+      "open",
+      "target"
     ],
     "pseudoElements": {
       ".nav-link": [

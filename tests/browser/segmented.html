@@ -64,5 +64,21 @@
     <button class="segment" type="button" role="tab" aria-selected="true">Profile</button>
     <button class="segment" type="button" role="tab" aria-selected="false" tabindex="-1">Notifications</button>
   </div>
+
+  <!-- No edge by default; a theme sets it once on its root and it inherits. -->
+  <div style="--segmented-selected-border: rgb(255 0 0)">
+    <div class="segmented" role="tablist" aria-label="Edged">
+      <button class="segment" type="button" role="tab" aria-selected="true" id="edged-selected">On</button>
+      <button class="segment" type="button" role="tab" aria-selected="false" tabindex="-1">Off</button>
+    </div>
+  </div>
+
+  <!-- Dark scheme: the selected pill must rise above the rail, not sink. -->
+  <div data-theme="dark">
+    <div class="segmented" id="dark-track" role="tablist" aria-label="Dark">
+      <button class="segment" type="button" role="tab" aria-selected="true" id="dark-selected">On</button>
+      <button class="segment" type="button" role="tab" aria-selected="false" tabindex="-1">Off</button>
+    </div>
+  </div>
 </body>
 </html>

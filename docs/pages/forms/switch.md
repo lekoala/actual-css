@@ -137,6 +137,8 @@ same optical line. Change the type or the control size and they stay level:
 - `--switch-border` — track edge. At rest it is `--border-control`, the 3:1 edge
   that identifies the unchecked switch on its surface; checked and disabled
   tracks follow `--switch-bg`. Validation takes precedence.
+- `--switch-knob` — knob fill. At rest it is `--surface-raised` in a light
+  scheme and `--text-muted` in a dark one, so it stays lighter than the track.
 
 - `--choice-control-size` — shared size for inline choices; the switch track is
   this plus `0.125em`, so scaling it scales the checkbox and the switch together.

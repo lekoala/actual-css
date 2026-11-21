@@ -5,7 +5,9 @@
  *
  * .navbar is a horizontal bar; .navbar-brand is the brand link; the inline
  * links are a .cluster using .nav-link items. .nav-list is the vertical nav
- * list shared with .drawer, fed by the shared --gap token.
+ * list shared with .drawer, fed by the shared --gap token. .nav-list.rail is
+ * the table-of-contents form: one rail, the current link a band on it, and a
+ * focus outline that lands on the same band.
  *
  * Public hooks:
  * --nav-current-bg (fallback-only: current-link fill)
@@ -16,6 +18,7 @@
  * Internal:
  * --gap (local value for the shared gap token)
  * --nav-list-rail-inset (half the icon on each side of the nested rail)
+ * --nav-list-rail-width (.rail band width, tied to --focus-ring-width)
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity.
@@ -194,6 +197,70 @@
   border-inline-start: var(--border-width) solid var(--nav-list-rail-color, var(--border));
 }
 
+/* Rail: one band, three independent states. The rail, the current band and
+   the focus line share one width, and every row link reaches under the rail,
+   so the inset focus outline lands its leading edge on the band: focus on the
+   current link continues its band into a frame, focus elsewhere draws its
+   own segment, and the current band stays while focus moves. The width
+   follows --focus-ring-width, prefers-contrast step included, which is what
+   keeps the joint exact. Current is ink plus band, no fill, and the weight
+   stays constant like every .nav-link. */
+.nav-list.rail {
+  --gap: 0;
+  --nav-list-rail-width: var(--focus-ring-width);
+  border-inline-start: var(--nav-list-rail-width) solid var(--nav-list-rail-color, var(--border));
+}
+
+/* A nested list joins the outer rail instead of hanging its own: its links
+   reach the same band and indent one step further. Deeper levels share that
+   indent. */
+.nav-list.rail .nav-list {
+  --gap: 0;
+  margin-inline-start: 0;
+  padding-inline-start: 0;
+  border-inline-start: 0;
+}
+
+.nav-list.rail .nav-link {
+  margin-inline-start: calc(-1 * var(--nav-list-rail-width));
+  inline-size: calc(100% + var(--nav-list-rail-width));
+  padding-inline-start: calc(var(--space-30) + var(--nav-list-rail-width));
+  border-radius: 0;
+}
+
+.nav-list.rail .nav-list .nav-link {
+  padding-inline-start: calc(var(--space-30) * 2 + var(--nav-list-rail-width));
+}
+
+.nav-list.rail
+  .nav-link:is([aria-current="page"], [aria-current="location"], [aria-current="true"]) {
+  background: var(--nav-current-bg, transparent);
+}
+
+/* The band marks aria-current, and :target-current while native scrollspy
+   (scrollspy.css) leads, before the script sets aria-current. :is() is a
+   forgiving list: an engine without :has() or :target-current drops that
+   branch, not the rule. The link stays the subject, so the band is its slot. */
+.nav-list.rail
+.nav-link:is(
+  [aria-current="page"],
+  [aria-current="location"],
+  [aria-current="true"],
+  .nav-list.rail:not(:has([aria-current="location"])) :target-current
+)::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  border-inline-start: var(--nav-list-rail-width) solid var(--focus);
+}
+
+/* Inset, so the leading edge covers the band instead of standing beside it,
+   and a scrollport (a sticky TOC) never clips the ring. */
+.nav-list.rail .nav-link:focus-visible {
+  outline-offset: calc(var(--focus-ring-width) * -1);
+}
+
 /* Forced colors drops the fill and maps both inks to LinkText, so the current
    link would be indistinguishable: it gets a shape instead. A vertical row
    takes an inline-start trait, centered in the link's inline padding with
@@ -222,5 +289,20 @@
     inset-inline-start: calc((var(--space-20) - 2px) / 2);
     border-inline-start: 2px solid currentColor;
     border-radius: var(--radius-full);
+  }
+
+  /* On a rail the trait is the band itself (its position outranks the trait
+     above). Forced colors paint the rail and the band in the same CanvasText,
+     so the band differs by shape, not by a repainted color: it grows inward
+     past the rail, into the link's inline padding. */
+  .nav-list.rail
+  .nav-link:is(
+    [aria-current="page"],
+    [aria-current="location"],
+    [aria-current="true"],
+    .nav-list.rail:not(:has([aria-current="location"])) :target-current
+  )::before {
+    border-inline-start-width: calc(var(--nav-list-rail-width) * 2.5);
+    border-radius: 0;
   }
 }

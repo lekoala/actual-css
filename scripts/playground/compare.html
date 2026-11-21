@@ -291,8 +291,8 @@
     "Roomier badge": ".badge { --badge-font-size: var(--font-size-xs); --badge-pad-x: calc(var(--badge-size) / 2); }",
     "Medium field labels": ".field-label { font-weight: var(--font-weight-medium); }",
     "Card padding 24px": ".card { --card-pad: 1.5rem; }",
-    "Fields: quiet sides, 3:1 bottom edge": ":is(.input, .textarea, .select) { --control-border: var(--border); --control-border-block-end-color: var(--border-control); }",
-    "Fields: tinted fill, 3:1 bottom edge": ":is(.input, .textarea, .select) { --control-bg: var(--surface-subtle); --control-border: transparent; --control-border-block-end-color: var(--border-control); }",
+    "Fields: quiet sides, 3:1 bottom edge": ":root { --control-default-border: var(--border); --control-border-block-end-color: var(--border-control); }",
+    "Fields: tinted fill, 3:1 bottom edge": ":root { --control-default-bg: var(--surface-subtle); --control-default-border: transparent; --control-hover-border: transparent; --control-border-block-end-color: var(--border-control); }",
     "Focus: tinted fill": ":is(.input, .textarea, .select):focus-visible { --control-bg: color-mix(in oklab, var(--focus) 8%, var(--surface)); }",
     "Outline button: quiet edge": ".btn.outline { --ui-border: var(--intent, var(--border)); }",
   };

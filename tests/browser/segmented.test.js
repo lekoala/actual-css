@@ -174,6 +174,41 @@ it("selection follows :checked, aria-selected and aria-current", async () => {
   );
 });
 
+// The selected segment has no edge by default; --segmented-selected-border is
+// read, not declared on .segmented, so a theme root value reaches it.
+it("the selected edge is off by default and inherits from a theme", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const [plain, edged] = await view.evaluate(`[
+      getComputedStyle(document.getElementById("t1")).boxShadow,
+      getComputedStyle(document.getElementById("edged-selected")).boxShadow,
+    ]`);
+    expect(plain.startsWith("rgba(0, 0, 0, 0) 0px 0px 0px 1px")).toBe(true);
+    expect(edged.startsWith("rgb(255, 0, 0) 0px 0px 0px 1px")).toBe(true);
+  });
+});
+
+// In a dark scheme --surface-raised sits below the rail's --surface-subtle;
+// the selected pill must be the lighter of the two, as the switch knob is.
+it("the selected pill is lighter than the rail in a dark scheme", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const [pill, rail] = await view.evaluate(`(() => {
+      const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+      const luma = (c) => {
+        ctx.clearRect(0, 0, 1, 1);
+        ctx.fillStyle = c;
+        ctx.fillRect(0, 0, 1, 1);
+        const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      return [
+        luma(getComputedStyle(document.getElementById("dark-selected")).backgroundColor),
+        luma(getComputedStyle(document.getElementById("dark-track")).backgroundColor),
+      ];
+    })()`);
+    expect(pill).toBeGreaterThan(rail);
+  });
+});
+
 it("keyboard focus draws an inset ring and arrows move the selection", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),

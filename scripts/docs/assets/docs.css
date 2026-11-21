@@ -203,15 +203,10 @@
 }
 
 /* The sidebars are scrollports, so an exterior ring clips against the scroll
-   edge. Keep the ring, pull it inside the row. */
-.docs-sidebar .nav-link:focus-visible,
-.docs-toc .nav-link:focus-visible {
+   edge. Keep the ring, pull it inside the row. (The TOC is a .nav-list.rail,
+   whose ring is already inset.) */
+.docs-sidebar .nav-link:focus-visible {
   outline-offset: calc(var(--focus-ring-width) * -1);
-}
-
-.docs-toc nav {
-  border-inline-start: var(--border-width) solid var(--border);
-  padding-inline-start: var(--space-40);
 }
 
 .docs-toc .docs-nav-group {
@@ -221,42 +216,17 @@
   letter-spacing: normal;
 }
 
-.docs-toc-list {
-  --gap: 0;
-  --nav-current-bg: transparent;
-  --nav-current-fg: var(--primary);
-}
-
+/* Rail, current band and focus come from .nav-list.rail; the TOC only sets
+   its type, one constant weight across states. */
 .docs-toc-list .nav-link {
-  padding-inline: 0;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-normal);
 }
 
-.docs-toc-list .nav-link:hover {
-  background: transparent;
-  color: var(--primary);
-}
-
-.docs-toc-list .nav-link[aria-current="location"],
-.docs-toc-list:not(:has([aria-current="location"])) .nav-link:is(:target-current) {
-  color: var(--link, var(--primary));
-  font-weight: var(--font-weight-medium);
-}
-
-/* The trait follows the link's height, including wrapped titles, and shares
-   one rail with native :target-current and the scrollspy enhancement. */
-.docs-toc-list .nav-link[aria-current="location"]::before,
-.docs-toc-list:not(:has([aria-current="location"])) .nav-link:is(:target-current)::before {
-  content: "";
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: calc(-1 * (var(--space-40) + var(--border-width)));
-  border-inline-start: 2px solid currentColor;
-}
-
+/* The TOC is flat, levels marked by data-level: an h3 entry indents one step
+   past the rail's own label inset (space-30 + the rail band). */
 .docs-toc-list .nav-link[data-level="3"] {
-  padding-inline-start: var(--space-30);
+  padding-inline-start: calc(var(--space-30) * 2 + var(--focus-ring-width));
 }
 
 .docs-drawer-header {
