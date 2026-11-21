@@ -29,11 +29,17 @@
 }
 
 .switch {
-  --switch-bg: var(--border);
-  /* The quiet --border track does not stand out from the surface: at rest the
-     control edge is what identifies the switch (WCAG 1.4.11, 3:1). Checked and
-     disabled tracks drop it for a uniform fill. */
-  --switch-border: var(--border-control);
+  /* At rest the track itself is the 3:1 control edge (WCAG 1.4.11): a filled
+     --border-control pill. The track carries the state (neutral off, intent
+     on) and the knob stays one light part that only moves. Two alternatives
+     were measured and set aside: a --border-control ring over a --border
+     fill read as a circled control beside flat fields and buttons, and a
+     dark knob on a quiet track (the knob as the cue) turned the knob dark
+     when off and light when on, as if from two systems. The border takes the
+     fill, so every state stays one uniform shape; a disabled track keeps a
+     quiet --border edge, as a disabled check does. */
+  --switch-bg: var(--border-control);
+  --switch-border: var(--switch-bg);
   --switch-knob: var(--surface-raised);
   --switch-block-size: calc(var(--choice-control-size) + 0.125em);
   --switch-width: calc(var(--switch-block-size) * 1.8);
@@ -75,14 +81,15 @@
   cursor: pointer;
 }
 
-/* A dark scheme lifts --border above the surface, so a --surface-raised knob
-   sank into the track as a dark hole (1.5:1 on the default palette). The
-   resting knob takes a light ink there instead; a light scheme keeps the
-   white knob. light-dark() follows the switch's own color-scheme, so a theme
-   island resolves its branch. Without it the knob stays --surface-raised. */
+/* In a dark scheme the --border-control track sits above the surface, so a
+   --surface-raised knob would sink into it as a dark hole. The resting knob
+   takes the full ink there (4.5:1 against the track on the default palette,
+   where --text-muted gave 2.1:1); a light scheme keeps the white knob, 3:1
+   against the track. light-dark() follows the switch's own color-scheme, so a
+   theme island resolves its branch. Without it the knob stays --surface-raised. */
 @supports (color: light-dark(red, blue)) {
   .switch {
-    --switch-knob: light-dark(var(--surface-raised), var(--text-muted));
+    --switch-knob: light-dark(var(--surface-raised), var(--text));
   }
 }
 
@@ -115,7 +122,7 @@
    than substituting an unsupported mix into both background and border. */
 @supports (color: color-mix(in oklab, black, white)) {
   .switch:not(:checked):hover:not(:disabled) {
-    --switch-bg: color-mix(in oklab, var(--text) 10%, var(--border));
+    --switch-bg: color-mix(in oklab, var(--text) 15%, var(--border-control));
   }
 }
 
@@ -150,9 +157,13 @@
   outline-offset: var(--focus-outline-offset);
 }
 
+/* why: without an edge a disabled track is --surface-subtle on --surface,
+   about 1.05:1, so the switch all but disappeared next to a disabled check
+   that keeps its --border frame. Disabled controls are exempt from 3:1; the
+   quiet edge only keeps the shape, the same way across choice controls. */
 .switch:disabled {
   --switch-bg: var(--surface-subtle);
-  --switch-border: var(--switch-bg);
+  --switch-border: var(--border);
   --switch-knob: var(--state-disabled);
   opacity: 1;
   cursor: not-allowed;

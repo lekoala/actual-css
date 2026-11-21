@@ -18,6 +18,10 @@
 - Starter skill: start from content and purpose before components; no invented content or purposeless decoration.
 - `.badge` labels drop one step (`--font-size-xs`, `.lg` to `--font-size-sm`) and `--badge-pad-x` grows to half of `--badge-size`.
 - `.field-label` is set in `--font-weight-medium`; a `.field-group` legend keeps semibold.
+- An unchecked `.switch` is a filled `--border-control` pill instead of a ring around a `--border` track; still 3:1.
+- `actual-css contrast` measures an unchecked switch on its stronger cue, track edge or knob.
+- Docs: Switch · "A lighter resting switch" recipe moves the 3:1 cue to a dark knob.
+- A disabled `.switch` keeps a quiet `--border` edge like a disabled `.check`, instead of a borderless track.
 - `.field-label` and the `.field-group.flush` legend drop to 0.875 × `--control-font-size` (14px by default), still following `.sm`/`.lg`.
 - A neutral `.btn.outline` draws `--border`; beside a field in a `.join` it keeps the field edge.
 - Readonly and disabled text controls drop an inherited `--control-border-block-end-color`.
@@ -26,7 +30,7 @@
 - `edge` demo theme redrawn after IBM Carbon: square, flat layers, filled fields with a 3:1 bottom line; its lower-edge buttons are gone.
 
 ### Fixed
-- An unchecked `.switch` knob takes `--text-muted` in a dark scheme instead of sinking into the track (1.47:1 → 4.75:1 on the default palette).
+- An unchecked `.switch` knob takes `--text` in a dark scheme instead of sinking into the track (1.47:1 → 4.5:1 on the default palette).
 - The selected `.segment` rises above the `.segmented` track in a dark scheme instead of reading as a recess.
 
 ## [0.19.5] - 2026-11-20

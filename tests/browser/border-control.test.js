@@ -1,8 +1,8 @@
 /*
  * --border-control is the resting edge of neutral controls, apart from the
  * --border that separates surfaces: setting it alone moves every control and
- * no separator. An unchecked switch takes it too: its quiet track fill does
- * not identify it on the surface.
+ * no separator. An unchecked switch takes it too, as its whole track: the
+ * filled pill is the edge that identifies it on the surface.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -36,7 +36,6 @@ it("controls take --border-control and separators keep --border", async () => {
         "select rgb(255, 0, 0)",
         "check rgb(255, 0, 0)",
         "radio rgb(255, 0, 0)",
-        "switch rgb(255, 0, 0)",
         "color-swatch rgb(255, 0, 0)",
         "join-addon rgb(255, 0, 0)",
         "choice-card rgb(255, 0, 0)",
@@ -51,8 +50,9 @@ it("controls take --border-control and separators keep --border", async () => {
   );
 });
 
-// The edge belongs to the resting state: a checked or disabled track is one
-// uniform fill, and an invalid switch keeps the validation edge.
+// The 3:1 edge belongs to the resting state: a checked track is one uniform
+// fill, a disabled one keeps the quiet --border edge a disabled check has, and
+// an invalid switch keeps the validation edge.
 it("a switch drops the control edge when checked or disabled", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
@@ -62,15 +62,20 @@ it("a switch drops the control edge when checked or disabled", async () => {
           const s = getComputedStyle(document.querySelector('[data-switch="' + name + '"]'));
           return { edge: s.borderBlockStartColor, fill: s.backgroundColor };
         };
+        const quiet = document.createElement("i");
+        quiet.style.color = "var(--border)";
+        document.querySelector('[data-switch="disabled"]').after(quiet);
         return {
           checked: read("checked"),
           disabled: read("disabled"),
+          border: getComputedStyle(quiet).color,
           invalid: read("invalid").edge,
           danger: getComputedStyle(document.querySelector("[data-switch-danger]")).color,
         };
       })()`);
       expect(state.checked.edge).toBe(state.checked.fill);
-      expect(state.disabled.edge).toBe(state.disabled.fill);
+      expect(state.disabled.edge).toBe(state.border);
+      expect(state.disabled.edge).not.toBe(state.disabled.fill);
       expect(state.invalid).toBe(state.danger);
     },
     { artifactName: "border-control-switch" },
@@ -146,13 +151,26 @@ it("--control-default-border moves field sides and states drop the lower edge", 
   );
 });
 
-it("a resting switch knob stays lighter than its track in a dark scheme", async () => {
+// The resting switch is a filled pill: its track is the 3:1 edge color and
+// the border takes the same color instead of drawing a ring around it.
+it("a resting switch is a filled pill, not a ring", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
-    const [knob, muted] = await view.evaluate(`[
+    const [fill, edge] = await view.evaluate(`(() => {
+      const s = getComputedStyle(document.querySelector("[data-resting-switch]"));
+      return [s.backgroundColor, s.borderBlockStartColor];
+    })()`);
+    expect(fill).toBe(edge);
+    expect(edge).toBe("rgb(255, 0, 0)");
+  });
+});
+
+it("a resting switch knob takes the full ink in a dark scheme", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const [knob, ink] = await view.evaluate(`[
       getComputedStyle(document.querySelector("[data-dark-switch]"), "::before").backgroundColor,
-      getComputedStyle(document.querySelector("[data-dark-muted]")).color,
+      getComputedStyle(document.querySelector("[data-dark-ink]")).color,
     ]`);
-    expect(knob).toBe(muted);
+    expect(knob).toBe(ink);
   });
 });
 

@@ -5,8 +5,8 @@
  * (`bun run report:theme-contrast`).
  *
  * Measured per island (one per color scheme the theme declares):
- *   - the resting edge of a field, checkbox, radio and unchecked switch against
- *     --surface (3:1)
+ *   - what identifies a resting control against --surface (3:1): the edge of a
+ *     field, checkbox and radio, the track edge or knob of an unchecked switch
  *   - soft ink against the resting and the hovered soft fill (4.5:1), on each
  *     surface a soft element sits on
  *   - the solid pairs, -fg on the intent fill (4.5:1); a fill painted by a
@@ -75,8 +75,9 @@ function islandMarkup(id, scheme) {
 /* Controls whose resting edge is all that identifies them (WCAG 1.4.11): the
    edge against the surface around them needs 3:1. The field is read on its
    block-end side, the one an underline-only theme (material) keeps. An
-   unchecked switch is one of them: its track fill is a quiet --border, so the
-   edge is what tells it apart from the surface. */
+   unchecked switch is read on its track edge or its knob, whichever is
+   stronger: the core track is the --border-control edge, and a theme may move
+   the cue to a dark knob on a quiet track (docs/pages/forms/switch.md). */
 export const CONTROLS = [
   ["field", '<input class="input">'],
   ["checkbox", '<input class="check" type="checkbox">'],
@@ -144,7 +145,7 @@ export async function measureContrast({ css, themes, label = "default" }) {
   const colors = await view.evaluate(`(() => {
     const rgba = ${RASTERIZE};
     return [...document.querySelectorAll("[id^=island-]")].map((island) => {
-      const cs = (el) => getComputedStyle(el);
+      const cs = (el, pseudo = null) => getComputedStyle(el, pseudo);
       const pairs = {};
       for (const el of island.querySelectorAll("[data-pair]")) {
         // The invalid field's block-end border carries --form-invalid-border,
@@ -205,11 +206,17 @@ export async function measureContrast({ css, themes, label = "default" }) {
       }
       const box = island.querySelector("[data-controls]");
       const controls = { backdrop: rgba(cs(box).backgroundColor), edges: {} };
+      // The cues that can identify each control; the best one counts. A field
+      // shows its lower edge, a switch its track edge or its knob (the core
+      // pill, or a theme's dark knob on a quiet track), any other control its
+      // edge.
+      const cues = {
+        field: (s) => [s.borderBlockEndColor],
+        switch: (s, el) => [cs(el, "::before").backgroundColor, s.borderTopColor],
+      };
       for (const el of box.querySelectorAll("[data-control]")) {
-        const s = cs(el);
-        controls.edges[el.dataset.control] = rgba(
-          el.dataset.control === "field" ? s.borderBlockEndColor : s.borderTopColor,
-        );
+        const read = cues[el.dataset.control] ?? ((s) => [s.borderTopColor]);
+        controls.edges[el.dataset.control] = read(cs(el), el).map(rgba);
       }
       return { pairs, soft, solid, controls };
     });
@@ -264,7 +271,11 @@ export async function measureContrast({ css, themes, label = "default" }) {
         value:
           controls.backdrop[3] < 255
             ? null
-            : ratio(composite(controls.edges[kind], controls.backdrop), controls.backdrop),
+            : Math.max(
+                ...controls.edges[kind].map((cue) =>
+                  ratio(composite(cue, controls.backdrop), controls.backdrop),
+                ),
+              ),
       })),
       focusSurface: pair("focus-surface"),
       focusSolid: pair("focus-solid"),
@@ -362,7 +373,7 @@ export function formatContrast(rows) {
     );
   }
 
-  lines.push("", "Control edge at rest (--border-control vs --surface), needs 3:1.", "");
+  lines.push("", "Control cue at rest (edge, or a switch's knob, vs --surface), needs 3:1.", "");
   lines.push(`${"theme".padEnd(width)}  scheme  control      ratio`);
   for (const row of rows) {
     for (const { kind, value } of row.controls ?? []) {

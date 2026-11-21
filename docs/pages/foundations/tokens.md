@@ -128,7 +128,7 @@ A theme with translucent surfaces overrides both with opaque values.
 
 `--border` separates surfaces: cards, tables, dividers, panels.
 `--border-control` is the resting edge that tells a control apart from the
-surface — fields, checkboxes and radios, unchecked switches, OTP cells, choice
+surface — fields, checkboxes and radios, the unchecked switch track, OTP cells, choice
 cards, join addons and the outline button beside them, the color and file inputs. It is
 derived from `--text` and `--surface`; on the default palette it holds 3:1
 against `--surface` and 2.9–3.0 against `--surface-subtle`. `actual-css

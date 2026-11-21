@@ -355,7 +355,7 @@
 
   function markup(card, k) {
     const field = (label, placeholder, type, value, disabled) => k.field({ label, placeholder, type, value, disabled, id: `f${++uid}` });
-    const sw = (text, sub, checked) => `<label class="switch-row"><span class="switch-copy"><strong>${text}</strong><small>${sub}</small></span>${k.switch((cls) => `<input${cls ? ` class="${cls}"` : ""} type="checkbox" role="switch"${checked ? " checked" : ""} aria-label="${text}">`)}</label>`;
+    const sw = (text, sub, checked, disabled) => `<label class="switch-row"><span class="switch-copy"><strong>${text}</strong><small>${sub}</small></span>${k.switch((cls) => `<input${cls ? ` class="${cls}"` : ""} type="checkbox" role="switch"${checked ? " checked" : ""}${disabled ? " disabled" : ""} aria-label="${text}">`)}</label>`;
     const member = (name, email, initials, role) => row("member-row", `${k.avatar(initials, name)}<div class="member-copy"><strong>${name}</strong><small>${email}</small></div>${k.badge(role, "secondary", role !== "Admin")}`);
     const statement = (label, amount, status, tone) => row("statement-row", `<span>${label}</span>${k.badge(status, tone)}<span>${amount}</span>`);
     switch (card) {
@@ -364,7 +364,7 @@
       case "fields":
         return k.card(`<div class="demo-form">${field("Company", "")}${field("Website", "", "text", "example.com")}${field("Plan", "", "text", "Team", true)}</div>`);
       case "notify":
-        return k.card(heading("Notify me", "You can change this later") + row("switches", sw("Someone replies", "To a thread you're in.") + sw("A deploy fails", "Sent right away, weekends included.", true) + sw("An invoice is ready", "On the 1st of every month.", true)));
+        return k.card(heading("Notify me", "You can change this later") + row("switches", sw("Someone replies", "To a thread you're in.") + sw("A deploy fails", "Sent right away, weekends included.", true) + sw("An invoice is ready", "On the 1st of every month.", true) + sw("Security alerts", "Managed by your workspace admin.", true, true)));
       case "members":
         return k.card(`<div class="demo-heading heading-inline"><h2 class="demo-title">Members <small>3 of 5 users</small></h2>${k.button("Invite", "secondary")}</div>` + row("member-list", member("John Doe", "jdoe@example.com", "PR", "Admin") + member("Jane Doe", "jadoe@example.com", "TB", "Member") + member("Foo Bar", "foo@example.com", "FB", "Billing")));
       case "disk":

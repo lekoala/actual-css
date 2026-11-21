@@ -21,7 +21,9 @@
   <select class="select" data-control aria-label="Select"><option>One</option></select>
   <input class="check" type="checkbox" data-control aria-label="Check">
   <input class="radio" type="radio" data-control aria-label="Radio">
-  <input class="switch" type="checkbox" role="switch" data-control aria-label="Switch">
+  <!-- A switch takes --border-control as its whole resting track, read in its
+       own test: the fill, not a ring. -->
+  <input class="switch" type="checkbox" role="switch" data-resting-switch aria-label="Switch">
   <!-- .color draws its edge on ::-webkit-color-swatch, which getComputedStyle
        cannot read; css-audit checks that rule's source instead. -->
   <label class="color-swatch" data-control data-pseudo="::before"><input type="radio" name="swatch" aria-label="Swatch"></label>
@@ -71,11 +73,11 @@
   <input class="switch" type="checkbox" role="switch" data-switch="invalid" aria-invalid="true" aria-label="Invalid switch">
   <span data-switch-danger style="color: var(--danger)"></span>
 
-  <!-- A dark scheme lifts --border above the surface: the resting knob must
-       take a light ink, not --surface-raised. -->
+  <!-- In a dark scheme the --border-control track sits above the surface: the
+       resting knob must take the full ink, not --surface-raised. -->
   <div data-theme="dark">
     <input class="switch" type="checkbox" role="switch" data-dark-switch aria-label="Dark switch">
-    <span data-dark-muted style="color: var(--text-muted)"></span>
+    <span data-dark-ink style="color: var(--text)"></span>
   </div>
 
   <div class="card" data-separator>Card</div>

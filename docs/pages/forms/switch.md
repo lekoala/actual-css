@@ -133,12 +133,13 @@ same optical line. Change the type or the control size and they stay level:
 
 ### Hooks
 
-- `--switch-bg` — track fill.
-- `--switch-border` — track edge. At rest it is `--border-control`, the 3:1 edge
-  that identifies the unchecked switch on its surface; checked and disabled
-  tracks follow `--switch-bg`. Validation takes precedence.
+- `--switch-bg` — track fill. At rest it is `--border-control`: the filled pill
+  is the 3:1 edge that identifies the unchecked switch on its surface.
+- `--switch-border` — track edge. It follows `--switch-bg`, so the track reads
+  as one shape; a disabled track takes the quiet `--border` of a disabled
+  check. Validation takes precedence.
 - `--switch-knob` — knob fill. At rest it is `--surface-raised` in a light
-  scheme and `--text-muted` in a dark one, so it stays lighter than the track.
+  scheme and `--text` in a dark one, so it contrasts with the track.
 
 - `--choice-control-size` — shared size for inline choices; the switch track is
   this plus `0.125em`, so scaling it scales the checkbox and the switch together.
@@ -147,6 +148,28 @@ same optical line. Change the type or the control size and they stay level:
 - `--switch-knob-margin` — inset between knob and track.
 - `--switch-knob-inline-size` — knob width; wider than its height makes a
   capsule knob. Defaults to the knob height.
+
+### A lighter resting switch
+
+The default puts the 3:1 cue of an unchecked switch on its track: a gray pill
+whose knob only moves. A theme can move the cue to the knob instead, a dark
+knob on a quiet track, which makes "off" lighter:
+
+```css
+.switch:not(:checked):not(:disabled) {
+  --switch-bg: var(--border);
+  --switch-knob: var(--text-muted);
+}
+
+.switch:not(:checked):not(:disabled):hover {
+  --switch-bg: color-mix(in oklab, var(--text) 10%, var(--border));
+}
+```
+
+The trade-off is the knob: dark when off, light on the colored track when on.
+On the default palette the muted knob holds 5.9:1 against the surface in light
+and 7.5:1 in dark. `actual-css contrast` reads a switch on its stronger cue,
+track or knob.
 
 Knob size and travel distance are derived from these hooks; set them rather
 than the derived values. The knob is concentric in its track: the
