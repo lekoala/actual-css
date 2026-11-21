@@ -66,6 +66,31 @@ a `position-anchor` written at runtime, which is the same plumbing the
 positioner already does. Worth doing only alongside a wider move, not as a
 standalone saving.
 
+## A native menu without the positioner
+
+A probe placed a native `popovertarget` menu with anchor positioning alone,
+using the implicit anchor the invoker creates:
+
+```css
+.flyout[popover] {
+  position-area: self-block-end span-self-inline-end;
+  position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+}
+```
+
+In Chromium it placed the menu under its trigger, flipped it near the bottom
+and inline edges, followed scrolling, and worked from a real click. Two
+findings:
+
+- the `self-` keywords are required: plain `block-end span-inline-end` resolve
+  against the containing block, so an RTL menu aligned as in LTR;
+- without anchor support the reset geometry leaves the panel at the viewport's
+  top-left corner, not near its trigger, so the path still needs a positioner
+  where the capability is missing.
+
+It saves bytes only on a page with no tooltip, since the tooltip pulls the same
+positioner. See [composition-weight](composition-weight.md).
+
 ## What would unblock the move
 
 One of:

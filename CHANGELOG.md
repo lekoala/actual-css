@@ -8,6 +8,9 @@
 - Docs: Theming · "Lighter field borders" recipes (quiet sides or underline only, 3:1 lower edge).
 - Dev: `scripts/playground/compare.html` renders the same cards in Actual CSS (from `src/`) beside Oat, daisyUI, Bootstrap, UIkit, Carbon and GOV.UK Frontend.
 - Dev: the component bench renders the working tree under any demo theme (`&preset=`).
+- Dev: `bun run report:composition` prints what a composed page pays in CSS and JS, optionally beside another library (`--ref`).
+- Docs: Dialog · "Without JavaScript" lists what the native path covers and gives up.
+- Design note: `composition-weight.md` records the weight audit and the reductions declined.
 
 ### Changed
 - Docs: "Coding agents and DESIGN.md" gains "Components are tools, not design decisions".

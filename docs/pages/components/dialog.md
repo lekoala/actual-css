@@ -566,6 +566,32 @@ The [Settings modal demo](../../demo/templates/settings-modal.html) uses
 `open data-dialog-open` to show its preferences on load. Close the dialog to
 reach its Open settings button and reopen it with a command.
 
+## Without JavaScript
+
+A page can show dialogs without loading the runtime. In a browser that
+implements invoker commands (`commandfor`) and `closedby`, the markup above
+already opens the modal, closes it on Escape, on a `request-close` button and,
+with `closedby="any"`, on a backdrop click, and returns focus to the element
+that had it before opening (Safari does not focus a clicked button, so a mouse
+opening may return focus to the page).
+
+Without the runtime, the page gives up:
+
+- the trigger itself in browsers without invoker commands, which include part
+  of the supported range below: the button does nothing there;
+- `closedby` where it is not implemented: Escape always closes and the backdrop
+  never does;
+- the page scroll lock behind a modal;
+- the accessible name taken from the dialog's heading: write
+  `aria-labelledby` on the dialog instead;
+- `--show`, `data-dialog-*` options, the static feedback and
+  `actual:dialog-cancel`.
+
+To lock the page without the runtime, the application can add
+`html:has(dialog:modal) { overflow: hidden; }`. Unlike the runtime's lock, it
+cannot tell whether the page had a classic scrollbar, so a scrolling page may
+shift sideways by the scrollbar's width while the modal is open.
+
 ## Browser support
 
 Actual relies on the native `<dialog>` API in its supported JavaScript range
