@@ -17,21 +17,24 @@
  * lost its hover motion). The `animation` shorthand still replaces another
  * animation on the same element, which is the remaining composition limit.
  *
- * Fill mode `backwards` holds the first keyframe through a stagger delay and
- * leaves no animated value in the cascade once the entrance ends. A pending
- * element revealed by focus has its new animation finished by in-view.js,
- * because a :focus-within override lapses on blur and replays the entrance.
+ * Fill mode `backwards` holds the first keyframe through a delay and leaves no
+ * animated value in the cascade once the entrance ends. Focus inside an
+ * element with in-view.js finishes its entrance there, because a :focus-within
+ * override lapses on blur: the entrance resumes from its timeline. `.reveal`
+ * alone has no such guard while its first-render entrance runs.
  *
  * Public hooks:
  * --reveal-duration
  * --reveal-distance
  * --reveal-stagger
+ * --reveal-delay
  */
 .reveal,
 .reveal-group {
   --reveal-duration: 450ms;
   --reveal-distance: 1rem;
   --reveal-stagger: 60ms;
+  --reveal-delay: 0ms;
 }
 
 @media screen and (prefers-reduced-motion: no-preference) {
@@ -40,14 +43,20 @@
     /* The gentler ease-out keeps the fade gradual; surface entrance timing
        makes most of the content visible too early. */
     animation: actual-reveal var(--reveal-duration) ease-out backwards;
+    /* Also the group's delay when sibling-index() is unsupported. */
+    animation-delay: var(--reveal-delay);
   }
 
   /* The cap keeps a long list from becoming an endless cascade: the ninth and
      later items share the eighth step's delay. An engine without
      sibling-index() drops this declaration alone and reveals the group
-     together, which is the intended degradation. */
+     together after the base delay, which is the intended degradation. */
   .reveal-group > * {
-    animation-delay: calc(min(sibling-index() - 1, 8) * var(--reveal-stagger));
+    animation-delay: calc(
+      var(--reveal-delay) +
+      min(sibling-index() - 1, 8) *
+      var(--reveal-stagger)
+    );
   }
 
   .reveal.is-pending,

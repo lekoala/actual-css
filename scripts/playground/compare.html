@@ -308,6 +308,9 @@
     "Roomier badge": ".badge { --badge-font-size: var(--font-size-xs); --badge-pad-x: calc(var(--badge-size) / 2); }",
     "Medium field labels": ".field-label { font-weight: var(--font-weight-medium); }",
     "Card padding 24px": ".card { --card-pad: 1.5rem; }",
+    // Stands in for `.card > footer` (the bench markup has no footer); :root
+    // outranks the glue that zeroes child margins.
+    "Card: half step before actions": ":root .card > .button-row:last-child { margin-block-start: calc(var(--card-gap) / 2); }",
     "Fields: quiet sides, 3:1 bottom edge": ":root { --control-default-border: var(--border); --control-border-block-end-color: var(--border-control); }",
     "Fields: tinted fill, 3:1 bottom edge": ":root { --control-default-bg: var(--surface-subtle); --control-default-border: transparent; --control-hover-border: transparent; --control-border-block-end-color: var(--border-control); }",
     "Focus: tinted fill": ":is(.input, .textarea, .select):focus-visible { --control-bg: color-mix(in oklab, var(--focus) 8%, var(--surface)); }",
@@ -341,17 +344,21 @@
   const heading = (title, desc) => `<div class="demo-heading"><h2 class="demo-title">${title}</h2>${desc ? `<p class="demo-muted">${desc}</p>` : ""}</div>`;
   const row = (cls, body) => `<div class="${cls}">${body}</div>`;
 
+  /* `doc` is the Actual guide for the card, in the built docs site (site/,
+     from build:docs). `simulated` names what the bench wires itself, so the
+     side-by-side look is not mistaken for each library's real behavior. */
   const CARDS = {
-    signup: { name: "Form · Sign up", hint: "Tab through to compare focus" },
-    fields: { name: "Fields at rest", hint: "Empty without placeholder: is it still a field?" },
-    notify: { name: "Switches · Notifications", hint: "Click to compare motion", metric: 'input[role="switch"]' },
-    members: { name: "Avatars, badges · Members" },
-    disk: { name: "Progress, badge · Storage" },
-    profile: { name: "Tabs · Segmented control", hint: "Compare group height and selection", metric: '[role="tablist"]' },
-    deploy: { name: "Actions · Deploy" },
-    faq: { name: "Accordion · FAQ" },
-    invoices: { name: "Badges · Invoices" },
+    signup: { name: "Form · Sign up", hint: "Tab through to compare focus", doc: "forms/overview.html" },
+    fields: { name: "Fields at rest", hint: "Empty without placeholder: is it still a field?", doc: "forms/states-and-sizes.html" },
+    notify: { name: "Switches · Notifications", hint: "Click to compare motion", metric: 'input[role="switch"]', doc: "forms/switch.html", simulated: "Carbon's toggle state" },
+    members: { name: "Avatars, badges · Members", doc: "components/avatar.html" },
+    disk: { name: "Progress, badge · Storage", doc: "components/progress.html" },
+    profile: { name: "Tabs · Segmented control", hint: "Compare group height and selection", metric: '[role="tablist"]', doc: "components/segmented.html", simulated: "tab switching in every column (Left/Right, Home/End), not Actual's tab.js" },
+    deploy: { name: "Actions · Deploy", doc: "components/button.html" },
+    faq: { name: "Accordion · FAQ", doc: "components/accordion.html", simulated: "Carbon and UIkit opening; Actual is native <details>" },
+    invoices: { name: "Badges · Invoices", doc: "components/badge.html" },
   };
+  const escapeHtml = (text) => text.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 
   function markup(card, k) {
     const field = (label, placeholder, type, value, disabled) => k.field({ label, placeholder, type, value, disabled, id: `f${++uid}` });
@@ -517,7 +524,7 @@
         if (onlyCards && !onlyCards.includes(id)) continue;
         const section = document.createElement("section");
         section.className = "pair";
-        section.innerHTML = `<h2>${card.name}${card.hint ? `<small>${card.hint}</small>` : ""}</h2>`;
+        section.innerHTML = `<h2>${card.name}${card.hint ? `<small>${card.hint}</small>` : ""}${card.doc ? `<small><a href="../../site/${card.doc}" target="_blank" rel="noopener">Actual guide</a></small>` : ""}${card.simulated ? `<small>Simulated by the bench: ${escapeHtml(card.simulated)}</small>` : ""}</h2>`;
         const grid = document.createElement("div");
         grid.className = "grid";
         grid.style.setProperty("--cols", libs.length);

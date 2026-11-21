@@ -17,9 +17,10 @@
  *
  * A pending element keeps its text in the accessibility tree and in the tab
  * order; effects hide it with opacity alone. `focusin` releases it at once and
- * finishes the entrance it started, so keyboard focus never lands on invisible
- * or fading content. In-page find still matches the text, because nothing is
- * removed from the layer.
+ * finishes its entrance, also when the element was already released and the
+ * entrance is still running or waiting out a delay, so keyboard focus never
+ * lands on invisible or fading content. In-page find still matches the text,
+ * because nothing is removed from the layer.
  *
  * One initial IntersectionObserver per document protects content already in
  * view. Optional data-in-view-margin values share additional observers for
@@ -82,31 +83,42 @@ function triggerFor(connection, margin) {
   return observer;
 }
 
+// Releasing the state also records the entrance it leaves running, so focus
+// can finish it later. The entrance is what the release started, found by
+// difference, plus what already runs on the element and its direct children:
+// an element visible at load never goes pending and plays its first-render
+// entrance instead. The runtime still names no effect, and a deeper component's
+// own motion is left alone.
 function reveal(record) {
   if (record.done) return;
   record.done = true;
-  record.element.classList.remove(CLASSES.pending);
-  record.initialObserver.unobserve(record.element);
-  record.observer.unobserve(record.element);
-}
-
-// Focus reached a pending element: the content must be usable on this frame,
-// not after an entrance. Only the animations that releasing the state started
-// are finished, found by difference, so the runtime still names no effect and
-// leaves a nested component's own motion alone. A CSS :focus-within override
-// cannot do this: it lapses on blur and the entrance replays from the start.
-function revealNow(record) {
-  if (record.done) return;
   const { element } = record;
   const running = new Set(element.getAnimations({ subtree: true }));
-  reveal(record);
+  element.classList.remove(CLASSES.pending);
+  record.initialObserver.unobserve(element);
+  record.observer.unobserve(element);
   // getAnimations() flushes style, so the entrance released above is listed.
-  for (const animation of element.getAnimations({ subtree: true })) {
-    if (running.has(animation)) continue;
+  record.entrance = element.getAnimations({ subtree: true }).filter((animation) => {
+    const target = animation.effect?.target;
+    const owned = target === element || target?.parentElement === element;
     // finish() throws on an animation that never ends.
-    if (animation.effect?.getComputedTiming().endTime === Infinity) continue;
-    animation.finish();
+    return (
+      (owned || !running.has(animation)) &&
+      animation.effect?.getComputedTiming().endTime !== Infinity
+    );
+  });
+}
+
+// Focus entered the element: the content must be usable on this frame, not at
+// the end of an entrance, whether the element was pending, just released or
+// still playing its first-render entrance. A CSS :focus-within override cannot
+// do this: on blur the entrance resumes from its timeline, or replays.
+function revealNow(record) {
+  reveal(record);
+  for (const animation of record.entrance) {
+    if (animation.playState !== "finished") animation.finish();
   }
+  record.entrance = [];
 }
 
 function cleanup(record, records) {
@@ -127,24 +139,23 @@ function connect(element) {
     initialObserver: observer,
     observer: triggerFor(connection, element.getAttribute("data-in-view-margin")),
     done: false,
+    entrance: [],
     controller: new AbortController(),
   };
   records.set(element, record);
 
-  // Focus may already sit inside the element before this registration (an
-  // autofocused control, a second runtime copy attaching late). Hiding it then
-  // would leave focus invisible until the observer's first callback.
-  if (element.contains(element.ownerDocument.activeElement)) {
-    reveal(record);
-    return () => cleanup(record, records);
-  }
-
   // Focus moves the page first, so this is the guarantee, not the observer:
-  // the element is visible by the time its descendant takes focus.
+  // the element is visible by the time its descendant takes focus. It stays
+  // after the release, while the entrance may still run.
   element.addEventListener("focusin", () => revealNow(record), {
     signal: record.controller.signal,
   });
-  observer.observe(element);
+
+  // Focus may already sit inside the element before this registration (an
+  // autofocused control, a second runtime copy attaching late). Hiding it then
+  // would leave focus invisible until the observer's first callback.
+  if (element.contains(element.ownerDocument.activeElement)) revealNow(record);
+  else observer.observe(element);
 
   return () => cleanup(record, records);
 }

@@ -102,7 +102,9 @@ a surrounding section has generous leading padding.
 
 Pending content remains in the accessibility tree and tab order. When focus
 enters it, the runtime releases it immediately and finishes the entrance so
-the focused control is visible without waiting for motion.
+the focused control is visible without waiting for motion. The same applies
+while an entrance is still running or delayed after its release, including the
+first-render entrance of content visible at load.
 
 Without JavaScript or `IntersectionObserver`, nothing becomes pending:
 Reveal plays on first render and Mark sweep shows its full highlight.

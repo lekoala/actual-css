@@ -23,6 +23,7 @@ Try the [Appearance effects catalogue](../../demo/templates/appearance.html#reve
 to compare entrances, adjust the viewing speed, and replay staggered groups.
 
 - Use `.reveal` alone for content in the first screen; add `data-enhance="in-view"` for content below the fold.
+- Add `data-enhance="in-view"` to a reveal that holds links or controls, even in the first screen: the runtime finishes the entrance as soon as focus enters it. `.reveal` alone leaves a focused control fading in.
 - Load the runtime with `actual-css/js/full`, or register only `actual-css/js/in-view`.
 - Do not combine `.reveal` with another animated class on the same element, such as `.shimmer` or `.spinner`: one `animation` replaces the other. Nest one inside the other instead. Transitions are unaffected, so `.reveal` can sit on a `.btn` or a card.
 - The entrance replays whenever the element is rendered again after `display: none`, for example inside a tab panel or a `[hidden]` toggle. Keep Reveal outside content that toggles if the replay is unwanted.
@@ -52,3 +53,4 @@ The group itself is the observed element; its children carry the motion and need
 - `--reveal-duration` — entrance duration for one element or one group child.
 - `--reveal-distance` — vertical offset the content travels while appearing.
 - `--reveal-stagger` — delay between two consecutive children of `.reveal-group`; it also scales the cap, which stays at eight steps.
+- `--reveal-delay` — pause before the entrance, or before a group's first child; the stagger counts from it.

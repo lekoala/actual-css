@@ -1354,7 +1354,9 @@ test("reveal animates and hides only under allowed motion", () => {
   expect(inside).toMatch(
     /\.reveal,\s*\.reveal-group > \*\s*\{\s*animation: actual-reveal var\(--reveal-duration\) ease-out backwards;/,
   );
-  expect(inside).toContain("calc(min(sibling-index() - 1, 8) * var(--reveal-stagger))");
+  expect(inside).toMatch(
+    /calc\(\s*var\(--reveal-delay\) \+\s*min\(sibling-index\(\) - 1, 8\) \*\s*var\(--reveal-stagger\)\s*\)/,
+  );
   // Pending removes the animation, so releasing the state starts it afresh.
   expect(inside).toMatch(
     /\.reveal\.is-pending,\s*\.reveal-group\.is-pending > \*\s*\{\s*animation: none;\s*opacity: 0;/,

@@ -34,6 +34,17 @@
        duration keeps it observable after the page has loaded. -->
   <p class="reveal" id="hero" style="--reveal-duration: 60s">Hero, animated on load.</p>
 
+  <!-- Visible at load with the runtime: its slow first-render entrance is
+       still running when focus arrives. -->
+  <section class="reveal" id="loaded" data-enhance="in-view" style="--reveal-duration: 60s">
+    <p><button id="loaded-btn" type="button">Loaded button</button></p>
+  </section>
+
+  <!-- The same without the runtime: nothing guards its focus. -->
+  <section class="reveal" id="css-only" style="--reveal-duration: 60s">
+    <p><button id="css-only-btn" type="button">CSS-only button</button></p>
+  </section>
+
   <section class="reveal" id="visible" data-enhance="in-view">
     <p>Visible at load. <a id="visible-link" href="#visible">Visible link</a>.</p>
   </section>
@@ -86,6 +97,11 @@
   <p><a class="btn" id="plain-btn" href="#plain-btn">Plain button</a></p>
 
   <p><mark class="mark-sweep" id="mark" data-enhance="in-view">Needle phrase</mark></p>
+
+  <!-- Released by scrolling, then held transparent by a long base delay. -->
+  <section class="reveal" id="late" data-enhance="in-view" style="--reveal-delay: 60s">
+    <p><button id="late-btn" type="button">Late button</button></p>
+  </section>
 
   <script>
     /* Records every time a class mutation leaves an element pending. The

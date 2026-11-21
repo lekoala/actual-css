@@ -2,47 +2,6 @@
 
 > In-place panel switcher using real tab semantics, with roving tabindex and arrow-key navigation.
 
-## Class reference
-
-| Class            | Kind      | Description                                  |
-| ---------------- | --------- | -------------------------------------------- |
-| `.tabs`          | Component | Tab strip; pairs with `role="tablist"`.      |
-| `.tab`           | Component | One tab trigger; pairs with `role="tab"`.    |
-| `.primary`       | Intent    | Tints the selected tab's indicator and text. |
-| `.tabs-attached` | Component | Joins a horizontal tablist to its panels.    |
-| `.tab-panel`     | Part      | Framed panel inside `.tabs-attached`.        |
-
-## Usage
-
-- Use tabs for distinct sections that switch in place. For a compact choice
-  among views of the same content, see [segmented control](../components/segmented.md).
-- Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
-- On that link variant, `aria-current="page"` gets the same color and
-  underline treatment as `aria-selected="true"` on a widget tab; `primary`
-  tints it. A flyout trigger takes `"true"` (see below); any other value is
-  inert.
-- Tab selection never changes text metrics: the active tab keeps the shared
-  weight and is marked by color and the indicator line.
-- JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
-- In a horizontal tablist, Left/Right select tabs and Down moves focus into
-  the selected panel. For a vertical strip, set `aria-orientation="vertical"`
-  on the tablist. Up/Down then select tabs. Both orientations wrap at the
-  ends and support Home/End.
-- A tab list needs both `.tabs` and `role="tablist"`; `.tab` styles each trigger.
-  A tab belongs to its closest `role="tablist"`. `data-enhance="tabs"` on an
-  element without that role wires nothing and warns in the console.
-- Import `actual-css/js/tab` to register the `data-enhance="tabs"` behavior.
-- A `.tab` with an icon uses `--tab-gap` (default `0.375em`) for the space between icon and label.
-- A tab that is `hidden`, `disabled`, `aria-disabled`, or has no panel is skipped
-  by the arrow keys. An application filtering a tab strip only has to set
-  `hidden`; deciding what to show when the selected tab is filtered out is the
-  application's call.
-- `actual:tab-change` bubbles from the tablist after the user selects another
-  tab, with `{ tab, panel, previousTab }`. It cannot be canceled and does not
-  fire at connect: read `aria-selected` for the initial tab. Use it to sync
-  content outside the panels, such as a summary card that follows the selected
-  tab.
-
 ```html demo
 <div class="tabs" data-enhance="tabs" role="tablist" aria-label="Settings">
   <button class="tab primary"
@@ -83,6 +42,49 @@
   Billing content
 </section>
 ```
+
+## Usage
+
+- Use tabs for distinct sections that switch in place. For a compact choice
+  among views of the same content, see [segmented control](../components/segmented.md).
+- Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
+- On that link variant, `aria-current="page"` gets the same color and
+  underline treatment as `aria-selected="true"` on a widget tab; `primary`
+  tints it. A flyout trigger takes `"true"` (see below); any other value is
+  inert.
+- Tab selection never changes text metrics: the active tab keeps the shared
+  weight and is marked by color and the indicator line.
+- JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
+- In a horizontal tablist, Left/Right select tabs and Down moves focus into
+  the selected panel. For a vertical strip, set `aria-orientation="vertical"`
+  on the tablist. Up/Down then select tabs. Both orientations wrap at the
+  ends and support Home/End.
+- A tab list needs both `.tabs` and `role="tablist"`; `.tab` styles each trigger.
+  A tab belongs to its closest `role="tablist"`. `data-enhance="tabs"` on an
+  element without that role wires nothing and warns in the console.
+- Import `actual-css/js/tab` to register the `data-enhance="tabs"` behavior.
+- A `.tab` with an icon uses `--tab-gap` (default `0.375em`) for the space between icon and label.
+- A tab that is `hidden`, `disabled`, `aria-disabled`, or has no panel is skipped
+  by the arrow keys. An application filtering a tab strip only has to set
+  `hidden`; deciding what to show when the selected tab is filtered out is the
+  application's call.
+- `actual:tab-change` bubbles from the tablist after the user selects another
+  tab, with `{ tab, panel, previousTab }`. It cannot be canceled and does not
+  fire at connect: read `aria-selected` for the initial tab. Use it to sync
+  content outside the panels, such as a summary card that follows the selected
+  tab.
+
+## Class reference
+
+| Class            | Kind      | Description                                  |
+| ---------------- | --------- | -------------------------------------------- |
+| `.tabs`          | Component | Tab strip; pairs with `role="tablist"`.      |
+| `.tab`           | Component | One tab trigger; pairs with `role="tab"`.    |
+| `.primary`       | Intent    | Tints the selected tab's indicator and text. |
+| `.tabs-attached` | Component | Joins a horizontal tablist to its panels.    |
+| `.tab-panel`     | Part      | Framed panel inside `.tabs-attached`.        |
+
+## Navigation tabs
 
 For navigation that only looks like tabs, keep it a plain link list — no
 JavaScript involved:

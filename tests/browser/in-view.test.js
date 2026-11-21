@@ -378,6 +378,72 @@ it("Tab finishes the entrance it releases, and leaving focus never replays it", 
   );
 });
 
+it("focus finishes an entrance already running or delayed after the release", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      await view.evaluate(`(() => { ${source} })()`);
+      await waitForBrowser(
+        view,
+        `document.getElementById("late").classList.contains("is-pending")`,
+      );
+
+      // Visible at load: never pending, its first-render entrance still runs.
+      expect(await view.evaluate(read("loaded"))).toMatchObject({ pending: false });
+      expect(Number((await view.evaluate(read("loaded"))).opacity)).toBeLessThan(1);
+      expect(await tabUntil(view, `document.activeElement?.id === "loaded-btn"`)).toBe(true);
+      expect(await view.evaluate(read("loaded"))).toEqual({ pending: false, opacity: "1" });
+
+      // Leaving must not resume the entrance from its timeline.
+      expect(
+        await tabUntil(view, `document.activeElement?.id === "css-only-btn"`, { max: 1 }),
+      ).toBe(true);
+      expect(await view.evaluate(minOpacity(["loaded"], 300))).toEqual([1]);
+      // Without the runtime nothing guards the first-render entrance; the
+      // Reveal page sends a reveal that holds controls to in-view.
+      expect(Number((await view.evaluate(read("css-only"))).opacity)).toBeLessThan(1);
+
+      // Released by scrolling, then held by its delay: transparent, not pending.
+      await view.evaluate(`document.getElementById("late").scrollIntoView({ block: "center" })`);
+      await waitForBrowser(
+        view,
+        `!document.getElementById("late").classList.contains("is-pending")`,
+      );
+      expect(await view.evaluate(read("late"))).toEqual({ pending: false, opacity: "0" });
+      await view.evaluate(`document.getElementById("plain-btn").focus({ preventScroll: true })`);
+      expect(await tabUntil(view, `document.activeElement?.id === "late-btn"`, { max: 3 })).toBe(
+        true,
+      );
+      expect(await view.evaluate(read("late"))).toEqual({ pending: false, opacity: "1" });
+      await view.evaluate(`document.activeElement.blur()`);
+      expect(await view.evaluate(minOpacity(["late"], 300))).toEqual([1]);
+    },
+    { width: 900, height: 700, artifactName: "in-view-focus-released" },
+  );
+});
+
+it("--reveal-delay offsets an entrance and a group without changing the stagger", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const delays = await view.evaluate(`(() => {
+        document.getElementById("hero").style.setProperty("--reveal-delay", "200ms");
+        document.getElementById("group").style.setProperty("--reveal-delay", "200ms");
+        return {
+          hero: getComputedStyle(document.getElementById("hero")).animationDelay,
+          group: [...document.getElementById("group").children].map(child => getComputedStyle(child).animationDelay),
+        };
+      })()`);
+      expect(delays.hero).toBe("0.2s");
+      expect(delays.group[0]).toBe("0.2s");
+      expect(delays.group[1]).toBe("0.26s");
+      expect(delays.group[7]).toBe("0.62s");
+      expect(delays.group[8]).toBe("0.68s");
+    },
+    { width: 900, height: 700, artifactName: "in-view-delay" },
+  );
+});
+
 it("an entrance replays when its element is rendered again after display: none", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
