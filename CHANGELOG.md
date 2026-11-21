@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 
+## [0.20.1] - 2026-11-21
 ### Fixed
 - `.timeline`: dates, titles and details keep their line spacing in Firefox.
 - `.meter`: native gauges use flat theme colors for all three zones in Firefox.
