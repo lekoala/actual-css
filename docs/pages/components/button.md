@@ -214,6 +214,16 @@ and typography together; `.compact` and `.spacious` only change density.
 </div>
 ```
 
+### Label weight
+
+A distinct `500` (medium) label needs a font face at that weight or a
+variable font whose weight axis includes it. When `400` and `600` are the
+nearest available weights, the browser renders `500` using `400`.
+
+If the font stack lacks `500`, set `font-weight` on `.btn` in your theme.
+Choose `400` (`--font-weight-normal`) for a quieter label or `600`
+(`--font-weight-semibold`) for more emphasis.
+
 ## States
 
 ### Compact filters and actions

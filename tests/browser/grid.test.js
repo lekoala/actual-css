@@ -1,5 +1,5 @@
 /*
- * Real-browser grid contracts, driven over Bun.WebView.
+ * Real-browser grid contracts.
  *
  * Three separate contracts:
  *
@@ -13,31 +13,21 @@
  * fixed-width wrapper, so a passing test proves the behavior follows the space
  * allocated to the grid rather than the viewport.
  */
-import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import { expect } from "bun:test";
+import { fixtureUrl } from "../../scripts/utils/browser.js";
+import { browserSuite } from "./browser-suite.js";
 
 const FIXTURE = "tests/browser/grid.html";
-const TIMEOUT = 60_000;
 const WIDE_VIEWPORT = 1900;
 
 /* Divisors of N, descending — the only column counts a wrapped preset may
    enter. Chosen so no state can split items unevenly (no 5 + 1, no 4 + 2). */
 const DIVISOR_CHAIN = { 2: [2, 1], 3: [3, 1], 4: [4, 2, 1], 6: [6, 3, 2, 1] };
 
-const baseTest = (await browserAvailable()) ? test : test.skip;
-const it = (name, run) => baseTest(name, run, TIMEOUT);
-
-async function setViewport(view, width) {
-  await view.cdp("Emulation.setDeviceMetricsOverride", {
-    width,
-    height: 900,
-    deviceScaleFactor: 1,
-    mobile: false,
-  });
-}
+const { it, setViewport, withBrowserPage } = await browserSuite();
 
 async function firstRowColumns(view, width) {
-  await setViewport(view, width);
+  await setViewport(view, { width });
   return view.evaluate(`(() => {
     const items = [...document.querySelectorAll(".grid > *")];
     const tops = items.map((el) => Math.round(el.getBoundingClientRect().top));
@@ -81,7 +71,7 @@ it(".grid-N keeps every item the same width and never overflows", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
-      await setViewport(view, WIDE_VIEWPORT);
+      await setViewport(view, { width: WIDE_VIEWPORT });
       for (const probe of await readPresets(view)) {
         const label = `grid-${probe.preset} ${probe.mode} @${probe.width}`;
         expect(`${label}: equal=${probe.equalWidths}`).toBe(`${label}: equal=true`);
@@ -96,7 +86,7 @@ it(".grid-N bare stays bounded at N and follows its wrapper, not the viewport", 
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
-      await setViewport(view, WIDE_VIEWPORT);
+      await setViewport(view, { width: WIDE_VIEWPORT });
       const probes = (await readPresets(view)).filter((p) => p.mode === "bare");
       for (const probe of probes) {
         const label = `grid-${probe.preset} @${probe.width}`;
@@ -118,7 +108,7 @@ it(".grid-N in a query container only enters divisors of N", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
-      await setViewport(view, WIDE_VIEWPORT);
+      await setViewport(view, { width: WIDE_VIEWPORT });
       const probes = (await readPresets(view)).filter((p) => p.mode === "cq");
       const forbidden = probes
         .filter((p) => !DIVISOR_CHAIN[p.preset].includes(p.columns))

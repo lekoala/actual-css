@@ -1,13 +1,8 @@
-import { expect, test } from "bun:test";
-import {
-  browserAvailable,
-  clickSelector,
-  fixtureUrl,
-  waitForBrowser,
-  withBrowserPage,
-} from "../../scripts/utils/browser.js";
+import { expect } from "bun:test";
+import { fixtureUrl, waitForBrowser } from "../../scripts/utils/browser.js";
+import { browserSuite } from "./browser-suite.js";
 
-const it = (await browserAvailable()) ? test : test.skip;
+const { it, clickSelector, withBrowserPage } = await browserSuite();
 
 // Exercise the source without depending on a rebuilt distribution bundle.
 const bundle = await Bun.build({ entrypoints: ["src/js/dirty.js"], format: "iife", write: false });
@@ -38,14 +33,14 @@ it("a reset button click returns the form to clean", async () => {
     await waitForBrowser(view, `!document.getElementById("profile").hasAttribute("data-dirty")`);
     expect(await view.evaluate(`document.getElementById("name").value`)).toBe("Alice");
   });
-}, 60_000);
+});
 
 it("a control associated through form= counts", async () => {
   await withForm(async (view) => {
     expect(await view.evaluate(`edit("outside", "2")`)).toBe(true);
     expect(await view.evaluate(`edit("outside", "1")`)).toBe(false);
   });
-}, 60_000);
+});
 
 it("a form-associated custom element counts", async () => {
   await withForm(async (view) => {
@@ -57,7 +52,7 @@ it("a form-associated custom element counts", async () => {
     expect(await rate("5")).toBe(true);
     expect(await rate("3")).toBe(false);
   });
-}, 60_000);
+});
 
 // new FormData(form) fires formdata: a volatile entry added there is compared
 // like any other, unless a data-dirty-ignore control shares its name.
@@ -70,11 +65,11 @@ it("a volatile formdata entry stays out under an ignored name", async () => {
     expect(await view.evaluate(`edit("name", "Alicia")`)).toBe(true);
     expect(await view.evaluate(`edit("name", "Alice")`)).toBe(false);
   }, nonce);
-}, 60_000);
+});
 
 it("a volatile formdata entry without an ignored name keeps the form dirty", async () => {
   await withForm(async (view) => {
     expect(await view.evaluate(`edit("name", "Alicia")`)).toBe(true);
     expect(await view.evaluate(`edit("name", "Alice")`)).toBe(true);
   }, `document.getElementById("nonce").remove(); ${nonce}`);
-}, 60_000);
+});

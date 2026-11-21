@@ -3,19 +3,12 @@
  * share one block geometry per size so .join rows read as a single unit.
  * No new API — this locks the shared --control-size scale in place.
  */
-import { expect, test } from "bun:test";
-import {
-  browserAvailable,
-  fixtureUrl,
-  waitForBrowser,
-  withBrowserPage,
-} from "../../scripts/utils/browser.js";
+import { expect } from "bun:test";
+import { fixtureUrl, waitForBrowser } from "../../scripts/utils/browser.js";
+import { browserSuite } from "./browser-suite.js";
 
 const FIXTURE = "tests/browser/control-geometry.html";
-const TIMEOUT = 60_000;
-
-const baseTest = (await browserAvailable()) ? test : test.skip;
-const it = (name, run) => baseTest(name, run, TIMEOUT);
+const { it, withBrowserPage } = await browserSuite();
 
 function measure(view, ids) {
   return view.evaluate(`(() => {
@@ -66,16 +59,17 @@ it("a button matches the input height on its own, borders included", async () =>
       "s-link",
       "s-file",
     ]);
-    // Exact, not within(): the bug this guards was 2px, one tolerance away.
-    expect(m["s-btn"].h).toBe(m["s-input"].h);
-    expect(m["s-btn-sm"].h).toBe(m["s-input-sm"].h);
-    expect(m["s-btn-lg"].h).toBe(m["s-input-lg"].h);
+    // Allow subpixel rounding between engines while still catching a 2px
+    // mismatch from padding that accounts for the borders incorrectly.
+    expect(m["s-btn"].h).toBeCloseTo(m["s-input"].h, 1);
+    expect(m["s-btn-sm"].h).toBeCloseTo(m["s-input-sm"].h, 1);
+    expect(m["s-btn-lg"].h).toBeCloseTo(m["s-input-lg"].h, 1);
     // A thicker block-end border (the edge theme's) is taken from the padding.
-    expect(m["s-btn-edge"].h).toBe(m["s-input"].h);
+    expect(m["s-btn-edge"].h).toBeCloseTo(m["s-input"].h, 1);
     // .link has no border at all: none may be subtracted from it.
-    expect(m["s-link"].h).toBe(m["s-input"].h);
+    expect(m["s-link"].h).toBeCloseTo(m["s-input"].h, 1);
     // The file selector button follows the same control scale.
-    expect(m["s-file"].h).toBe(m["s-input"].h);
+    expect(m["s-file"].h).toBeCloseTo(m["s-input"].h, 1);
   });
 });
 

@@ -1,5 +1,5 @@
 /*
- * Real-browser .timeline contract, driven over Bun.WebView.
+ * Real-browser .timeline contract.
  *
  * Geometry only a layout engine settles: the marker sits on the first line
  * whichever element opens the event (a smaller <time> must not shift it), a
@@ -7,14 +7,12 @@
  * spans exactly from one marker to the next, and a stretched list keeps its
  * rhythm.
  */
-import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import { expect } from "bun:test";
+import { fixtureUrl } from "../../scripts/utils/browser.js";
+import { browserSuite } from "./browser-suite.js";
 
 const FIXTURE = "tests/browser/timeline.html";
-const TIMEOUT = 60_000;
-
-const baseTest = (await browserAvailable()) ? test : test.skip;
-const it = (name, run) => baseTest(name, run, TIMEOUT);
+const { it, withBrowserPage } = await browserSuite();
 
 const MEASURE = `
   const px = (value) => parseFloat(value);
@@ -55,14 +53,23 @@ it("the marker sits on the first line, whichever element opens the event", async
         ${MEASURE}
         const timeFirst = document.getElementById("time-first");
         const textFirst = document.getElementById("text-first");
-        const lineBox = px(getComputedStyle(timeFirst).lineHeight);
+        const time = timeFirst.querySelector("time");
+        const textBox = (el) => {
+          const range = document.createRange();
+          range.selectNodeContents(el);
+          const { top, bottom } = range.getBoundingClientRect();
+          return { top, bottom };
+        };
         return {
-          lineBox,
-          timeHeight: timeFirst.querySelector("time").getBoundingClientRect().height,
+          lineBox: px(getComputedStyle(timeFirst).lineHeight),
+          timeHeight: time.getBoundingClientRect().height,
           timeDot: center(pseudo(timeFirst, "::before")).y,
-          timeLine: center(timeFirst.querySelector("time").getBoundingClientRect()).y,
+          timeLine: center(time.getBoundingClientRect()).y,
           textDot: center(pseudo(textFirst, "::before")).y,
           textLine: firstLine(textFirst),
+          date: textBox(time),
+          title: textBox(timeFirst.querySelector("strong")),
+          detail: textBox(timeFirst.querySelector("p")),
           // A sentence mixing text and links stays one line of block flow.
           sentenceLines: new Set(
             [...textFirst.querySelectorAll("a")].map((a) => Math.round(a.getBoundingClientRect().top)),
@@ -72,7 +79,10 @@ it("the marker sits on the first line, whichever element opens the event", async
 
       // A smaller <time> keeps the event's line box, so the dot centred on it
       // centres on the dateline too.
+      expect(result.lineBox).toBeGreaterThan(0);
       expect(result.timeHeight).toBe(result.lineBox);
+      expect(result.date.bottom).toBeLessThanOrEqual(result.title.top + 0.5);
+      expect(result.title.bottom).toBeLessThanOrEqual(result.detail.top + 0.5);
       expect(Math.abs(result.timeDot - result.timeLine)).toBeLessThanOrEqual(0.5);
       expect(Math.abs(result.textDot - result.textLine)).toBeLessThanOrEqual(0.5);
       expect(result.sentenceLines).toBe(1);

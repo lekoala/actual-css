@@ -29,9 +29,13 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   `check:templates` and `build:pages` catch. Extend the manifest, never
   commit a build output to make a link resolve.
 - `components.json` is a derived artifact, not a second source of truth. After touching CSS header comments, selectors, `src/js` enhancements, or `package.json#exports`, run `bun run generate:catalog` and let the diff speak; `check:catalog` (in build:all) verifies the committed file matches the derivation.
-- Rendering is `Bun.WebView` driving headless Chrome through
-  `scripts/utils/browser.js`, never Playwright (not a dependency;
-  `node_modules/.bin/playwright` is a stale shim). Use `bun run shot:page`
+- Use `Bun.WebView` through `scripts/utils/browser.js` for Chromium tests,
+  screenshots and probes. Install the Playwright browsers with
+  `bun run playwright install firefox webkit`, then run
+  `bun run test:browsers` (or pass `firefox` or `webkit` to run one).
+  The subset in `scripts/test-browsers.js` reuses tests against source
+  fixtures without Chrome-specific APIs. CI runs WebKit on macOS.
+  Use `bun run shot:page`
   (full page), `bun run shot:multi` (widths), `bun run shot:crop --selector`
   (one element crop per call), `bun run shot:states` (motion/reduced/forced/
   contrast/transparency matrix) or `bun run probe` (numbers, not pixels). Shared helpers

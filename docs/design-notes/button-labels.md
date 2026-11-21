@@ -26,9 +26,8 @@ to move together.
 Same cards in the component bench (`scripts/playground/compare.html`), light
 and dark, beside Carbon and the previous release.
 
-- **16px / 500** (0.19): dense, worst with `system-ui` on Windows, where 500
-  renders close to semibold. With `line-height: 1` a wrapped label's lines
-  touched.
+- **16px / 500** (0.19): dense in Chromium on Windows. With
+  `line-height: 1` a wrapped label's lines touched.
 - **16px / 400**: elegant, but lighter than the 14px / 500 field labels, so
   the label of a field outweighed the action that submits it.
 - **15px / 500**: the cleanest of the first round, but a 0.9375 ratio found
@@ -36,6 +35,12 @@ and dark, beside Carbon and the previous release.
 - **0.875 × control text, 500**: the field label's own ratio. Right at the
   default size, but `.sm` fell to 12.25px. Selecting the type steps instead
   gave 13/14/16.
+
+In the Windows component bench at 14px, `system-ui` draws 500 like 600 in
+Chromium and like 400 in Firefox. When 400 and 600 are the nearest
+available weights, a request for 500 selects 400 under the CSS font matching
+algorithm. Variable fonts such as Geist and Segoe UI Variable can render
+500 through their weight axis.
 
 Carbon sets its productive buttons at 14px / 400, with 12px field labels: what
 reads right is the relation between the label of a field and the label of an

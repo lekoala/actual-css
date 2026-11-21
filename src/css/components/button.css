@@ -95,8 +95,8 @@
      select it, so an author can also set it on a container. */
   font-size: var(--btn-font-size, var(--control-font-size));
   /* why: medium at one step below the field text. Medium at the field text
-     size read dense, worst with system-ui on Windows (500 renders close to
-     semibold); regular read lighter than the medium field labels. */
+     size read dense in Chromium on Windows (system-ui draws 500 like 600).
+     Regular read lighter than the medium field labels. */
   font-weight: var(--font-weight-medium);
   /* why: 1.25, not 1: a wrapped label's lines touched at 1. A single line
      keeps its height, since padding-block is derived from 1lh above. */

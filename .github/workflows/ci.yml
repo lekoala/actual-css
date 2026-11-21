@@ -32,9 +32,29 @@ jobs:
           path: dist/
           if-no-files-found: error
 
+  browser-tests:
+    name: Browser tests (${{ matrix.engine }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - engine: firefox
+            os: ubuntu-24.04
+          - engine: webkit
+            os: macos-15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+      - run: bun install --frozen-lockfile
+      - run: bun run playwright install --with-deps ${{ matrix.engine }}
+      - run: bun run test:browsers ${{ matrix.engine }}
+
   # Settings → Pages → Source must be "GitHub Actions".
   pages:
-    needs: build
+    needs: [build, browser-tests]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04
     permissions:
@@ -52,9 +72,9 @@ jobs:
 
   # Pushing a tag publishes the release: the notes are the dated changelog
   # section for that version, and the build job's dist/ rides along as
-  # assets. Gated on build, so a tag that does not build never gets a release.
+  # assets. A tag must pass the build and browser tests before publishing.
   release:
-    needs: build
+    needs: [build, browser-tests]
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-24.04
     permissions:

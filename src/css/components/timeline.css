@@ -126,7 +126,9 @@
   min-block-size: calc(var(--timeline-marker-center) + var(--timeline-rail-size) / 2);
   padding-block-start: var(--timeline-marker-inset);
   padding-inline-start: calc(var(--timeline-rail-size) + var(--timeline-inline-gap));
-  line-height: var(--timeline-line-box);
+  /* Firefox falls back to the registered property's initial 0px when its em
+     length sets line-height. Compute the inherited length directly. */
+  line-height: calc(var(--line-height) * 1em);
 }
 
 /* The event owns no rhythm beyond its dateline: block children drop their own

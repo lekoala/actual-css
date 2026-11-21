@@ -160,6 +160,7 @@
     "release": "bun scripts/release.js",
     "release:notes": "bun scripts/release-notes.js",
     "test": "bun test",
+    "test:browsers": "bun scripts/test-browsers.js",
     "test:changed": "bun test --changed=master",
     "build:all": "bun run lint && bun run build:dist && bun run build:js && bun run build:types && bun run build:size && bun run format:docs && bun run build:docs && bun run check:docs && bun run check:doc-classes && bun run check:compat && bun run check:css-api && bun run check:color-space && bun run check:architecture && bun run check:enhance && bun run generate:reserved && bun run check:reserved && bun run generate:catalog && bun run check:catalog && bun run check:sync && bun run check:links && bun run check:templates && bun run test",
     "prepublishOnly": "bun run build:all"
@@ -167,6 +168,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
     "happy-dom": "^21.0.1",
+    "playwright": "1.65.1",
     "typescript": "^7.0.0"
   },
   "dependencies": {
