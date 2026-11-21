@@ -64,8 +64,10 @@ and can be bypassed with Git's `--no-verify` option.
 
 `playground/compare.html` is the component bench: the same cards in Actual
 CSS (rendered from `src/`) beside Oat, daisyUI, Bootstrap 5 and 6, UIkit,
-Carbon, GOV.UK Frontend, or the last Actual release, with an overrides box to try a token or hook value live. Open
-it in a browser; `?libs=oat,actual&theme=dark` presets it, which also lets
+Carbon, GOV.UK Frontend, or the last Actual release, with an overrides box to
+try a token or hook value live and a picker for the demo themes of
+`src/css/themes/`. Open it in a browser; `?libs=oat,actual&theme=dark&preset=ocean`
+presets it, which also lets
 `shot:page --width 1600` capture a configuration. A library is one `LIBS`
 entry plus a kit of its markup.
 
