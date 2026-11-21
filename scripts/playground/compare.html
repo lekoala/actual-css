@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Actual CSS — component bench</title>
 <!--
-  Component bench: the same eight cards rendered by Actual CSS (working tree)
+  Component bench: the same cards rendered by Actual CSS (working tree)
   and by other libraries, each in its own iframe so stylesheets never meet.
   Open this file directly in a browser; the references load from CDNs.
   ?libs=oat,daisyui,actual&theme=dark&view=full presets the toolbar;
@@ -57,7 +57,7 @@
 <body data-theme="light">
 <main class="shell">
   <h1>Component bench</h1>
-  <p class="intro">Same content, same composition, each library's own components. Actual CSS renders from <code>src/</code>, so a change shows on reload. Tab into a control to see its real <code>:focus-visible</code>.</p>
+  <p class="intro">Same content, same composition, each library's own components. Actual CSS renders from <code>src/</code>, so a change shows on reload. Tab into a control to see its real <code>:focus-visible</code>. To compare forced colors, turn on DevTools → Rendering → <code>forced-colors: active</code> (headless captures do not paint the forced palette).</p>
 
   <div class="toolbar">
     <div class="tool"><span>Libraries</span><span id="lib-toggles" class="tool"></span></div>
@@ -116,10 +116,11 @@
     theme: (t) => ({ "data-theme": t }),
     cardGap: true,
     card: (body) => `<article class="card">${body}</article>`,
-    button: (text, kind) => `<button type="button" class="btn ${kind === "primary" ? "primary" : "outline"}">${text}</button>`,
+    button: (text, kind, disabled) => `<button type="button" class="btn ${{ primary: "primary", ghost: "ghost", danger: "danger" }[kind] ?? "outline"}"${disabledAttr(disabled)}>${text}</button>`,
     badge: (text, tone, outline) => `<span class="badge ${tone}${outline ? " outline" : ""}">${text}</span>`,
     avatar: (initials, name) => `<div class="avatar" role="img" aria-label="${name}"><span aria-hidden="true">${initials}</span></div>`,
-    field: (f) => `<label class="field"><span class="field-label">${f.label}</span><input class="input" ${attrs(f)}></label>`,
+    field: (f) => `<label class="field"><span class="field-label">${f.label}</span>${control(f, f.options ? "select" : "input")}${f.help ? `<span class="field-help" id="${f.id}-help">${f.help}</span>` : ""}${f.error ? `<span class="field-error" id="${f.id}-error">${f.error}</span>` : ""}</label>`,
+    alert: (tone, title, body) => `<div class="alert${tone === "info" ? "" : ` ${tone}`}" role="status">${title ? `<strong>${title}</strong>` : ""}<div>${body}</div></div>`,
     checkbox: (label) => `<label class="terms choice"><input type="checkbox" class="check" checked><span>${label}</span></label>`,
     switch: (input) => input("switch"),
     tablist: (tabs) => `<div class="segmented" role="tablist" aria-label="Account details">${tabs.map((t) => tab(t, "segment")).join("")}</div>`,
@@ -131,10 +132,11 @@
   const oatKit = {
     theme: (t) => ({ "data-theme": t }),
     card: (body) => `<article class="card">${body}</article>`,
-    button: (text, kind) => `<button type="button"${kind === "primary" ? "" : ' class="outline"'}>${text}</button>`,
+    button: (text, kind, disabled) => `<button type="button"${{ primary: "", ghost: ' class="ghost"', danger: ' data-variant="danger"' }[kind] ?? ' class="outline"'}${disabledAttr(disabled)}>${text}</button>`,
     badge: (text, tone, outline) => `<span class="badge${outline ? " outline" : ""}" data-variant="${tone}">${text}</span>`,
     avatar: (initials, name) => `<figure data-variant="avatar" role="img" aria-label="${name}">${initials}</figure>`,
-    field: (f) => `<label data-field>${f.label}<input ${attrs(f)}></label>`,
+    field: (f) => `<label data-field>${f.label}${control(f)}${f.help ? `<small data-hint id="${f.id}-help">${f.help}</small>` : ""}${f.error ? `<small class="error" id="${f.id}-error">${f.error}</small>` : ""}</label>`,
+    alert: (tone, title, body) => `<div role="alert"${tone === "info" ? "" : ` data-variant="${tone}"`}><div>${title ? `<strong>${title}</strong> ` : ""}${body}</div></div>`,
     checkbox: (label) => `<label class="terms"><input type="checkbox" checked><span>${label}</span></label>`,
     switch: (input) => input(""),
     tablist: (tabs) => `<div role="tablist" aria-label="Account details">${tabs.map((t) => tab(t, "")).join("")}</div>`,
@@ -147,10 +149,14 @@
     theme: (t) => ({ "data-theme": t }),
     cardGap: true,
     card: (body) => `<article class="card card-border bg-base-100"><div class="card-body">${body}</div></article>`,
-    button: (text, kind) => `<button type="button" class="btn ${kind === "primary" ? "btn-primary" : "btn-outline"}">${text}</button>`,
+    button: (text, kind, disabled) => `<button type="button" class="btn ${{ primary: "btn-primary", ghost: "btn-ghost", danger: "btn-error" }[kind] ?? "btn-outline"}"${disabledAttr(disabled)}>${text}</button>`,
     badge: (text, tone, outline) => `<span class="badge ${outline ? "badge-outline" : `badge-soft badge-${tone}`}">${text}</span>`,
     avatar: (initials, name) => `<div class="avatar avatar-placeholder" role="img" aria-label="${name}"><div class="bg-neutral text-neutral-content" style="width:2.5rem;border-radius:50%"><span aria-hidden="true">${initials}</span></div></div>`,
-    field: (f) => `<label class="fieldset" style="padding:0"><span class="fieldset-legend">${f.label}</span><input class="input" style="width:100%" ${attrs(f)}></label>`,
+    field: (f) => {
+      const base = f.options ? "select" : "input";
+      return `<label class="fieldset" style="padding:0"><span class="fieldset-legend">${f.label}</span>${control(f, `${base}${f.error ? ` ${base}-error` : ""}`, ' style="width:100%"')}${f.help ? `<span class="label" id="${f.id}-help">${f.help}</span>` : ""}${f.error ? `<span class="label text-error" id="${f.id}-error">${f.error}</span>` : ""}</label>`;
+    },
+    alert: (tone, title, body) => `<div role="status" class="alert alert-soft alert-${tone === "danger" ? "error" : tone}"><div>${title ? `<strong>${title}</strong> ` : ""}${body}</div></div>`,
     checkbox: (label) => `<label class="terms"><input type="checkbox" class="checkbox" checked><span>${label}</span></label>`,
     switch: (input) => input("toggle"),
     tablist: (tabs) => `<div class="tabs tabs-box" role="tablist" aria-label="Account details">${tabs.map((t) => tab(t, "tab")).join("")}</div>`,
@@ -160,17 +166,21 @@
   };
 
   const bootstrapProgress = (v, label) => `<div class="progress" role="progressbar" aria-label="${label}" aria-valuenow="${v}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:${v}%"></div></div>`;
-  const bootstrapField = (f) => `<div><label class="form-label" for="${f.id}">${f.label}</label><input class="form-control" id="${f.id}" ${attrs(f)}></div>`;
+  // Bootstrap 6 alpha drops .form-select: a select takes .form-control too.
+  const bootstrapField = (selectClass) => (f) =>
+    `<div><label class="form-label" for="${f.id}">${f.label}</label>${control(f, `${f.options ? selectClass : "form-control"}${f.error ? " is-invalid" : ""}`)}${f.help ? `<div class="form-text" id="${f.id}-help">${f.help}</div>` : ""}${f.error ? `<div class="invalid-feedback" id="${f.id}-error">${f.error}</div>` : ""}</div>`;
   const bootstrapTabs = (tabs) => `<div class="nav nav-pills" role="tablist" aria-label="Account details">${tabs.map((t) => tab(t, "nav-link")).join("")}</div>`;
 
   const bootstrap5Kit = {
     theme: (t) => ({ "data-bs-theme": t }),
     card: (body) => `<article class="card"><div class="card-body">${body}</div></article>`,
-    button: (text, kind) => `<button type="button" class="btn ${kind === "primary" ? "btn-primary" : "btn-outline-secondary"}">${text}</button>`,
+    // No ghost button in Bootstrap 5: .btn-link is its quietest action.
+    button: (text, kind, disabled) => `<button type="button" class="btn ${{ primary: "btn-primary", ghost: "btn-link", danger: "btn-danger" }[kind] ?? "btn-outline-secondary"}"${disabledAttr(disabled)}>${text}</button>`,
     badge: (text, tone, outline) => `<span class="badge ${outline ? "border border-secondary-subtle text-body-secondary" : `bg-${tone}-subtle text-${tone}-emphasis`}">${text}</span>`,
     // No avatar component in Bootstrap 5: utilities only.
     avatar: (initials, name) => `<span class="rounded-circle bg-secondary-subtle text-secondary-emphasis" role="img" aria-label="${name}" style="display:inline-flex;align-items:center;justify-content:center;width:2.5rem;height:2.5rem;font-size:.875rem;flex-shrink:0"><span aria-hidden="true">${initials}</span></span>`,
-    field: bootstrapField,
+    field: bootstrapField("form-select"),
+    alert: (tone, title, body) => `<div class="alert alert-${tone}" role="status">${title ? `<strong>${title}</strong> ` : ""}${body}</div>`,
     checkbox: (label) => `<label class="terms"><input type="checkbox" class="form-check-input" checked><span>${label}</span></label>`,
     switch: (input) => `<span class="form-check form-switch" style="margin:0;padding-inline-start:2.5em">${input("form-check-input")}</span>`,
     tablist: bootstrapTabs,
@@ -182,10 +192,12 @@
   const bootstrap6Kit = {
     theme: (t) => ({ "data-bs-theme": t }),
     card: bootstrap5Kit.card,
-    button: (text, kind) => `<button type="button" class="btn ${kind === "primary" ? "btn-solid theme-primary" : "btn-outline theme-secondary"}">${text}</button>`,
+    button: (text, kind, disabled) => `<button type="button" class="btn ${{ primary: "btn-solid theme-primary", ghost: "btn-text theme-secondary", danger: "btn-solid theme-danger" }[kind] ?? "btn-outline theme-secondary"}"${disabledAttr(disabled)}>${text}</button>`,
     badge: (text, tone, outline) => `<span class="badge ${outline ? "badge-outline theme-secondary" : `badge-subtle theme-${tone}`}">${text}</span>`,
     avatar: (initials, name) => `<span class="avatar" role="img" aria-label="${name}" style="flex-shrink:0"><span aria-hidden="true">${initials}</span></span>`,
-    field: bootstrapField,
+    field: bootstrapField("form-control"),
+    // The 6.0 alert is a grid: one wrapper keeps title and text on one line.
+    alert: (tone, title, body) => `<div class="alert theme-${tone}" role="status"><div>${title ? `<strong>${title}</strong> ` : ""}${body}</div></div>`,
     checkbox: (label) => `<label class="terms"><input type="checkbox" class="check" checked><span>${label}</span></label>`,
     switch: (input) => `<span class="switch">${input("")}</span>`,
     tablist: bootstrapTabs,
@@ -203,10 +215,20 @@
     css: ".bench-toggle{position:relative;display:inline-flex}.bench-toggle input{position:absolute;inset:0;z-index:1;margin:0;opacity:0;cursor:pointer}.bench-toggle input:focus-visible+.cds--toggle__appearance{outline:2px solid var(--cds-focus,#0f62fe);outline-offset:2px}",
     // A tile is layer 01; its controls sit on the next layer, as Carbon's <Layer> does.
     card: (body) => `<article class="cds--tile"><div class="cds--layer-two">${body}</div></article>`,
-    button: (text, kind) => `<button type="button" class="cds--btn ${kind === "primary" ? "cds--btn--primary" : "cds--btn--tertiary"}">${text}</button>`,
+    button: (text, kind, disabled) => `<button type="button" class="cds--btn ${{ primary: "cds--btn--primary", ghost: "cds--btn--ghost", danger: "cds--btn--danger" }[kind] ?? "cds--btn--tertiary"}"${disabledAttr(disabled)}>${text}</button>`,
+    // Low-contrast inline notifications, without their icon: the other kits' alerts carry none either.
+    alert: (tone, title, body) => `<div class="cds--inline-notification cds--inline-notification--${tone === "danger" ? "error" : tone} cds--inline-notification--low-contrast" role="status" style="max-inline-size:none"><div class="cds--inline-notification__details"><div class="cds--inline-notification__text-wrapper">${title ? `<div class="cds--inline-notification__title">${title}</div>` : ""}<div class="cds--inline-notification__subtitle">${body}</div></div></div></div>`,
     badge: (text, tone, outline) => `<span class="cds--tag ${outline ? "cds--tag--outline" : `cds--tag--${carbonTone[tone]}`}"><span class="cds--tag__label">${text}</span></span>`,
     avatar: (initials, name) => `<span role="img" aria-label="${name}" style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:50%;background:var(--cds-layer-accent-01,#e0e0e0);font-size:.875rem"><span aria-hidden="true">${initials}</span></span>`,
-    field: (f) => `<div class="cds--form-item cds--text-input-wrapper"><label class="cds--label${f.disabled ? " cds--label--disabled" : ""}" for="${f.id}">${f.label}</label><div class="cds--text-input__field-outer-wrapper"><div class="cds--text-input__field-wrapper"><input class="cds--text-input" id="${f.id}" ${attrs(f)}></div></div></div>`,
+    field: (f) => {
+      const label = `<label class="cds--label${f.disabled ? " cds--label--disabled" : ""}" for="${f.id}">${f.label}</label>`;
+      const help = f.help ? `<div class="cds--form__helper-text" id="${f.id}-help">${f.help}</div>` : "";
+      if (f.options) {
+        return `<div class="cds--form-item"><div class="cds--select">${label}<div class="cds--select-input__wrapper">${control(f, "cds--select-input")}<svg class="cds--select__arrow" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 11L3 6l.7-.7L8 9.6l4.3-4.3.7.7z"/></svg></div>${help}</div></div>`;
+      }
+      const error = f.error ? `<div class="cds--form-requirement" id="${f.id}-error">${f.error}</div>` : "";
+      return `<div class="cds--form-item cds--text-input-wrapper${f.error ? " cds--text-input-wrapper--invalid" : ""}">${label}<div class="cds--text-input__field-outer-wrapper"><div class="cds--text-input__field-wrapper"${f.error ? ' data-invalid="true"' : ""}>${control(f, `cds--text-input${f.error ? " cds--text-input--invalid" : ""}`)}</div>${error}</div>${help}</div>`;
+    },
     checkbox: (label, id) => `<div class="cds--checkbox-wrapper terms"><input type="checkbox" class="cds--checkbox" id="${id}" checked><label class="cds--checkbox-label" for="${id}"><span class="cds--checkbox-label-text">${label}</span></label></div>`,
     switch: (input) => {
       const html = input("");
@@ -239,10 +261,25 @@
     bodyClass: "govuk-template__body govuk-frontend-supported",
     css: ".bench-card{padding:20px;border:1px solid #b1b4b6;background:#fff}.govuk-button{margin-bottom:0}",
     card: (body) => `<article class="bench-card">${body}</article>`,
-    button: (text, kind) => `<button type="button" class="govuk-button${kind === "primary" ? "" : " govuk-button--secondary"}" data-module="govuk-button">${text}</button>`,
+    // No ghost button: GOV.UK sends a minor action to a link.
+    button: (text, kind, disabled) =>
+      kind === "ghost"
+        ? `<button type="button" class="govuk-link" style="border:0;background:none;padding:0;font:inherit;cursor:pointer">${text}</button>`
+        : `<button type="button" class="govuk-button${{ primary: "", danger: " govuk-button--warning" }[kind] ?? " govuk-button--secondary"}" data-module="govuk-button"${disabled ? ' disabled aria-disabled="true"' : ""}>${text}</button>`,
+    // No four-tone alert: a notification banner (info, success), warning text and an error summary.
+    alert: (tone, title, body) => {
+      const text = `${title ? `<strong>${title}</strong> ` : ""}${body}`;
+      if (tone === "warning") return `<div class="govuk-warning-text"><span class="govuk-warning-text__icon" aria-hidden="true">!</span><strong class="govuk-warning-text__text">${text}</strong></div>`;
+      if (tone === "danger") return `<div class="govuk-error-summary" role="alert"><h2 class="govuk-error-summary__title">${title || "There is a problem"}</h2><div class="govuk-error-summary__body"><p class="govuk-body">${body}</p></div></div>`;
+      return `<div class="govuk-notification-banner${tone === "success" ? " govuk-notification-banner--success" : ""}" role="status"><div class="govuk-notification-banner__header"><h2 class="govuk-notification-banner__title">${tone === "success" ? "Success" : "Important"}</h2></div><div class="govuk-notification-banner__content"><p class="govuk-body">${text}</p></div></div>`;
+    },
     badge: (text, tone, outline) => `<strong class="govuk-tag govuk-tag--${outline ? "grey" : govukTone[tone]}">${text}</strong>`,
     avatar: (initials, name) => `<span role="img" aria-label="${name}" style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:50%;background:#f3f2f1;font-size:.875rem"><span aria-hidden="true">${initials}</span></span>`,
-    field: (f) => `<div class="govuk-form-group"><label class="govuk-label" for="${f.id}">${f.label}</label><input class="govuk-input" id="${f.id}" ${attrs(f)}></div>`,
+    // Hint and error sit between the label and the control, as GOV.UK prescribes.
+    field: (f) => {
+      const base = f.options ? "govuk-select" : "govuk-input";
+      return `<div class="govuk-form-group${f.error ? " govuk-form-group--error" : ""}"><label class="govuk-label" for="${f.id}">${f.label}</label>${f.help ? `<div class="govuk-hint" id="${f.id}-help">${f.help}</div>` : ""}${f.error ? `<p class="govuk-error-message" id="${f.id}-error"><span class="govuk-visually-hidden">Error:</span> ${f.error}</p>` : ""}${control(f, `${base}${f.error ? ` ${base}--error` : ""}`)}</div>`;
+    },
     checkbox: (label, id) => `<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes"><div class="govuk-checkboxes__item"><input class="govuk-checkboxes__input" id="${id}" type="checkbox" checked><label class="govuk-label govuk-checkboxes__label" for="${id}">${label}</label></div></div>`,
     switch: (input) => input(""),
     tablist: (tabs) => `<div class="govuk-tabs" style="margin:0"><ul class="govuk-tabs__list" role="tablist" aria-label="Account details">${tabs.map((t) => `<li class="govuk-tabs__list-item${t.selected ? " govuk-tabs__list-item--selected" : ""}" role="presentation">${tab(t, "govuk-tabs__tab")}</li>`).join("")}</ul></div>`,
@@ -260,10 +297,11 @@
     theme: () => ({}),
     schemes: ["light"],
     card: (body) => `<article class="uk-card uk-card-default uk-card-body">${body}</article>`,
-    button: (text, kind) => `<button type="button" class="uk-button ${kind === "primary" ? "uk-button-primary" : "uk-button-default"}">${text}</button>`,
+    button: (text, kind, disabled) => `<button type="button" class="uk-button ${{ primary: "uk-button-primary", ghost: "uk-button-text", danger: "uk-button-danger" }[kind] ?? "uk-button-default"}"${disabledAttr(disabled)}>${text}</button>`,
     badge: (text, tone, outline) => `<span class="uk-label ${outline ? "" : uikitTone[tone]}">${text}</span>`,
     avatar: (initials, name) => `<span role="img" aria-label="${name}" style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:50%;background:#f8f8f8;font-size:.875rem"><span aria-hidden="true">${initials}</span></span>`,
-    field: (f) => `<div><label class="uk-form-label" for="${f.id}">${f.label}</label><div class="uk-form-controls"><input class="uk-input" id="${f.id}" ${attrs(f)}></div></div>`,
+    field: (f) => `<div><label class="uk-form-label" for="${f.id}">${f.label}</label><div class="uk-form-controls">${control(f, `${f.options ? "uk-select" : "uk-input"}${f.error ? " uk-form-danger" : ""}`)}</div>${f.help ? `<div class="uk-text-meta" id="${f.id}-help">${f.help}</div>` : ""}${f.error ? `<div class="uk-text-danger uk-text-small" id="${f.id}-error">${f.error}</div>` : ""}</div>`,
+    alert: (tone, title, body) => `<div class="uk-alert uk-alert-${tone === "info" ? "primary" : tone}" role="status">${title ? `<strong>${title}</strong> ` : ""}${body}</div>`,
     checkbox: (label) => `<label class="terms"><input type="checkbox" class="uk-checkbox" checked><span>${label}</span></label>`,
     switch: (input) => input("uk-checkbox"),
     tablist: (tabs) => `<ul class="uk-subnav uk-subnav-pill" role="tablist" aria-label="Account details" style="margin:0">${tabs.map((t) => `<li class="${t.selected ? "uk-active" : ""}" role="presentation" style="padding:0">${tab(t, "")}</li>`).join("")}</ul>`,
@@ -340,6 +378,15 @@
 
   let uid = 0;
   const attrs = (f) => `type="${f.type || "text"}"${f.placeholder ? ` placeholder="${f.placeholder}"` : ""}${f.value ? ` value="${f.value}"` : ""}${f.disabled ? " disabled" : ""}`;
+  /* The field's control, wired the same way in every kit: aria-invalid for an
+     error, aria-describedby to the help and error ids (`${id}-help`,
+     `${id}-error`) the kit renders, a <select> when the field has options. */
+  const describedBy = (f) => [f.help && `${f.id}-help`, f.error && `${f.id}-error`].filter(Boolean).join(" ");
+  const control = (f, cls = "", extra = "") => {
+    const a = `${cls ? ` class="${cls}"` : ""} id="${f.id}"${f.error ? ' aria-invalid="true"' : ""}${describedBy(f) ? ` aria-describedby="${describedBy(f)}"` : ""}${extra}`;
+    return f.options ? `<select${a}${f.disabled ? " disabled" : ""}>${f.options.map((o) => `<option>${o}</option>`).join("")}</select>` : `<input${a} ${attrs(f)}>`;
+  };
+  const disabledAttr = (disabled) => (disabled ? " disabled" : "");
   const tab = (t, cls) => `<button type="button" role="tab" class="${[cls, t.selected ? "%SEL%" : ""].filter(Boolean).join(" ")}" aria-selected="${t.selected}" id="tab-${t.id}" aria-controls="panel-${t.id}"${t.selected ? "" : ' tabindex="-1"'}>${t.label}</button>`;
   const heading = (title, desc) => `<div class="demo-heading"><h2 class="demo-title">${title}</h2>${desc ? `<p class="demo-muted">${desc}</p>` : ""}</div>`;
   const row = (cls, body) => `<div class="${cls}">${body}</div>`;
@@ -357,11 +404,14 @@
     deploy: { name: "Actions · Deploy", doc: "components/button.html" },
     faq: { name: "Accordion · FAQ", doc: "components/accordion.html", simulated: "Carbon and UIkit opening; Actual is native <details>" },
     invoices: { name: "Badges · Invoices", doc: "components/badge.html" },
+    states: { name: "Fields · Help, error, select", hint: "Is the error tied to its field?", doc: "forms/validation.html" },
+    alerts: { name: "Alerts · Four tones", doc: "components/alert.html" },
+    actions: { name: "Buttons · Hierarchy", hint: "Does one action lead?", doc: "components/button.html" },
   };
   const escapeHtml = (text) => text.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 
   function markup(card, k) {
-    const field = (label, placeholder, type, value, disabled) => k.field({ label, placeholder, type, value, disabled, id: `f${++uid}` });
+    const field = (label, placeholder, type, value, disabled, more = {}) => k.field({ label, placeholder, type, value, disabled, id: `f${++uid}`, ...more });
     const sw = (text, sub, checked, disabled) => `<label class="switch-row"><span class="switch-copy"><strong>${text}</strong><small>${sub}</small></span>${k.switch((cls) => `<input${cls ? ` class="${cls}"` : ""} type="checkbox" role="switch"${checked ? " checked" : ""}${disabled ? " disabled" : ""} aria-label="${text}">`)}</label>`;
     const member = (name, email, initials, role) => row("member-row", `${k.avatar(initials, name)}<div class="member-copy"><strong>${name}</strong><small>${email}</small></div>${k.badge(role, "secondary", role !== "Admin")}`);
     const statement = (label, amount, status, tone) => row("statement-row", `<span>${label}</span>${k.badge(status, tone)}<span>${amount}</span>`);
@@ -384,6 +434,12 @@
         return k.accordion([["Do I need npm?", "No. You can use the library through a CDN link."], ["What if JavaScript is off?", "Native HTML controls and disclosures still work without JavaScript."]]);
       case "invoices":
         return k.card(heading("Invoices") + row("statement-list", statement("Bandwidth", "$1,200.00", "Paid", "success") + statement("CPU", "$340.00", "Due Oct 24", "warning") + statement("Memory", "$89.50", "Card declined", "danger")));
+      case "states":
+        return k.card(heading("Account") + `<div class="demo-form">${field("Username", "", "text", "jane", false, { help: "Letters and numbers only." })}${field("Email", "", "email", "jane@", false, { error: "Enter a valid email address." })}${field("Region", "", "", "", false, { options: ["Europe", "North America", "Asia Pacific"] })}</div>`);
+      case "alerts":
+        return row("alerts", k.alert("info", "New version.", "Reload to update.") + k.alert("success", "", "Your changes have been saved.") + k.alert("warning", "", "Your trial ends in 3 days.") + k.alert("danger", "Payment failed.", "Update your card to keep access."));
+      case "actions":
+        return k.card(heading("Project settings") + row("button-row", k.button("Save", "primary") + k.button("Cancel", "secondary") + k.button("Skip", "ghost") + k.button("Delete", "danger") + k.button("Publish", "primary", true)));
     }
   }
 
@@ -415,6 +471,7 @@
     .statement-list{margin-top:9px}.statement-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;padding:13px 0;border-bottom:1px solid color-mix(in srgb,currentColor 11%,transparent);font-size:.86rem}
     .statement-row:last-child{border:0}.statement-row>span:last-child{text-align:right;white-space:nowrap}
     .demo-feedback{font-size:.78rem;opacity:.65;margin-top:6px}
+    .alerts{display:grid;gap:12px}.alerts>*{margin:0}
     html[data-card-gap] :is(.card,.card-body)>*{margin-block:0}
     .full-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:23px;align-items:start}.full-col{min-width:0;display:grid;gap:23px}
     @media(max-width:600px){body{padding:7px}.demo-title{font-size:1.2rem}.full-grid{grid-template-columns:1fr}}`;

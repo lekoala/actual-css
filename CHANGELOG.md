@@ -8,6 +8,7 @@
 - Docs: Theming · "Lighter field borders" recipes (quiet sides or underline only, 3:1 lower edge).
 - Dev: `scripts/playground/compare.html` renders the same cards in Actual CSS (from `src/`) beside Oat, daisyUI, Bootstrap, UIkit, Carbon and GOV.UK Frontend.
 - Dev: the component bench renders the working tree under any demo theme (`&preset=`).
+- Dev: the component bench adds field states (help, error, select), alerts and a button hierarchy, and links each card to its guide.
 - Dev: `bun run report:composition` prints what a composed page pays in CSS and JS, optionally beside another library (`--ref`).
 - Docs: Dialog · "Without JavaScript" lists what the native path covers and gives up.
 - Design note: `composition-weight.md` records the weight audit and the reductions declined.
@@ -36,6 +37,7 @@
 ### Fixed
 - An unchecked `.switch` knob takes `--text` in a dark scheme instead of sinking into the track (1.47:1 → 4.5:1 on the default palette).
 - The selected `.segment` rises above the `.segmented` track in a dark scheme instead of reading as a recess.
+- An avatar status dot (`.avatar > .badge:empty`) keeps its ink edge in print, like every other `.badge`, instead of vanishing without background graphics.
 - `in-view`: focus finishes a Reveal entrance still running or delayed after its release, not only a pending one.
 - `ajax`: focus lost with a replaced target lands on the answer's first `aria-invalid="true"` field, else its `autofocus` element, instead of the body.
 - Flyouts and context menus close when focus moves outside them and their triggers, without moving focus; `data-flyout-auto-close="false"` keeps them open.

@@ -264,7 +264,10 @@ a.badge[aria-disabled="true"] {
   }
 }
 @media print {
-  .badge {
+  /* :empty is named because its border: 0 outranks .badge: a status dot
+     printed without background graphics would vanish. */
+  .badge,
+  .badge:empty {
     border: var(--border-width) solid CanvasText;
   }
 }
