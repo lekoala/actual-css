@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Native meter fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    .meters {
+      --bar-height: 24px;
+      --success: #286c3a;
+      --warning: #956517;
+      --danger: #bb2344;
+      padding: 1rem;
+    }
+    .meters .meter { --meter-track: #efedf4; }
+  </style>
+</head>
+<body>
+  <div class="stack meters">
+    <meter class="meter" id="danger" aria-label="Low" min="0" max="100" low="33" high="66" optimum="80" value="25"></meter>
+    <meter class="meter" id="warning" aria-label="Medium" min="0" max="100" low="33" high="66" optimum="80" value="50"></meter>
+    <meter class="meter" id="success" aria-label="Optimum" min="0" max="100" low="33" high="66" optimum="80" value="85"></meter>
+  </div>
+</body>
+</html>

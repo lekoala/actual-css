@@ -80,6 +80,20 @@
   border-radius: var(--radius-full);
 }
 
+/* The background shorthand clears Gecko's native gradient. Keep state
+   specificity inside :where() so Highlight can still override the fill. */
+.meter:where(:-moz-meter-optimum)::-moz-meter-bar {
+  background: var(--success);
+}
+
+.meter:where(:-moz-meter-sub-optimum)::-moz-meter-bar {
+  background: var(--warning);
+}
+
+.meter:where(:-moz-meter-sub-sub-optimum)::-moz-meter-bar {
+  background: var(--danger);
+}
+
 @media (forced-colors: active) {
   .meter::-webkit-meter-optimum-value,
   .meter::-webkit-meter-suboptimum-value,
