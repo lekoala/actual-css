@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.20.0] - 2026-11-21
 ### Added
 - `.nav-list.rail`: table-of-contents list on one rail; the current link is a band and the focus outline lands on it.
 - Docs: Navbar · "Rail / table of contents" and a Scrollspy demo on a rail.
