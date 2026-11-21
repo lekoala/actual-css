@@ -62,6 +62,11 @@ field; when the server issues a new token per submission, re-render the form
 with the answer, or the next submission sends a spent token. A redirect, such as post/redirect/get, navigates the
 page; `fetch` has already followed it, so the destination loads twice.
 
+When the update removes the focused element, such as the submit button of a
+re-rendered form, focus moves to the answer's first `aria-invalid="true"`
+field, or else to an element marked `autofocus`, or else to the target if it
+has a `tabindex`. Focus outside the target is left alone.
+
 Every response reaches `actual:ajax-response` with
 `{ form, submitter, response }`, after the target update or before a redirect
 navigates; check `response.ok`. A network failure reaches `actual:ajax-error`
@@ -72,6 +77,67 @@ update replaced it; listen on the document. None of them can be canceled.
 ```js
 document.addEventListener("actual:ajax-response", ({ detail }) => {
   if (detail.response.ok) detail.form.reset();
+});
+```
+
+## Confirm, show errors, recover
+
+**Related terms:** inline loading, submit feedback, success message, server
+errors, retry.
+
+The target wraps the form, so the server answers every outcome it handles with
+HTML. A failure region sits outside the target and exists before it is filled,
+so assistive technology announces it.
+
+```html
+<div id="contact">
+  <form class="stack" id="contact-form" action="/contact" method="post"
+        data-enhance="validation ajax" data-ajax-target="#contact">
+    <label class="field">
+      <span class="field-label">Email</span>
+      <input class="input" type="email" name="email" required
+             aria-describedby="contact-email-error" />
+      <span class="field-error" id="contact-email-error"></span>
+    </label>
+    <div class="cluster form-actions">
+      <button class="btn primary" type="submit" aria-busy="false">
+        Send <span class="spinner" aria-hidden="true"></span>
+      </button>
+    </div>
+  </form>
+</div>
+<div id="contact-failure" role="alert"></div>
+```
+
+- **Sending:** the button shows its spinner and further clicks send nothing.
+  `aria-busy="false"` keeps the spinner hidden at rest.
+- **Sent:** answer `200` with the confirmation. Mark it `autofocus` with
+  `tabindex="-1"`, so focus lands on it and it is read:
+  `<div class="alert success" tabindex="-1" autofocus>Message sent.</div>`.
+- **Rejected:** answer `422` with the same form, the field marked
+  `aria-invalid="true"` and its `.field-error` filled. Focus lands on that
+  field, which reads its error. Keep the values the user typed.
+- **Failed:** a network error or another status leaves the form as it was.
+  The application fills the failure region:
+
+```js
+const failure = document.getElementById("contact-failure");
+const mine = (form) => form.id === "contact-form";
+const show = (text) => {
+  failure.innerHTML = text ? `<p class="alert danger">${text}</p>` : "";
+};
+
+document.addEventListener("actual:ajax-start", ({ detail }) => {
+  if (mine(detail.form)) show("");
+});
+document.addEventListener("actual:ajax-response", ({ detail }) => {
+  const { response } = detail;
+  if (mine(detail.form) && !response.ok && response.status !== 422) {
+    show("The message could not be sent. Try again.");
+  }
+});
+document.addEventListener("actual:ajax-error", ({ detail }) => {
+  if (mine(detail.form)) show("No connection. Your message is kept; try again.");
 });
 ```
 

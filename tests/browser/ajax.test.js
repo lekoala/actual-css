@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import {
   browserAvailable,
+  clickSelector,
   fixtureUrl,
   waitForBrowser,
   withBrowserPage,
@@ -190,6 +191,32 @@ it("a target that contains the form replaces it and still reports", async () => 
     await waitForBrowser(view, `document.getElementById("done") !== null`);
     expect(await view.evaluate("events")).toEqual(["start:", "response:200"]);
     expect(await view.evaluate(`document.getElementById("swap")`)).toBeNull();
+  });
+}, 60_000);
+
+// Real clicks: the assertions are about where keyboard focus ends up once the
+// focused submit button is replaced with the rest of the target.
+it("focus lost with the replaced content lands on the answer's invalid field or autofocus", async () => {
+  await withAjax(async (view) => {
+    const active = `document.activeElement?.id ?? ""`;
+    await clickSelector(view, "#swap-save");
+    expect(await view.evaluate(active)).toBe("swap-save");
+    await view.evaluate(`reply(
+      '<form id="swap" action="save" method="post" data-enhance="ajax" data-ajax-target="#card">' +
+      '<input id="name"><input id="email" aria-invalid="true"><button id="swap-save">Save</button></form>',
+      { status: 422 },
+    )`);
+    await waitForBrowser(view, `document.activeElement?.id === "email"`);
+
+    await clickSelector(view, "#swap-save");
+    await view.evaluate(`reply('<p>Saved.</p><a id="again" href="#" autofocus>Send another</a>')`);
+    await waitForBrowser(view, `document.activeElement?.id === "again"`);
+
+    // Focus outside the target stays where it is.
+    await clickSelector(view, "#post-save");
+    await view.evaluate(`reply('<p id="note" autofocus tabindex="-1">Saved</p>')`);
+    await idle(view, "post");
+    expect(await view.evaluate(active)).toBe("post-save");
   });
 }, 60_000);
 

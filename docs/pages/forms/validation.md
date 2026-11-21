@@ -263,7 +263,7 @@ FormValidator.registerRule("iso-date", (value) => {
 
 ### Server and AJAX validation
 
-The enhancer never makes network calls. After a valid client submit, your own `form[data-ajax]` flow (see the JavaScript docs) performs the request and maps server errors back onto fields through the public API:
+The enhancer never makes network calls. A server that answers with HTML can re-render the form with its errors through [Ajax submission](ajax.md#confirm-show-errors-recover). A server that answers with data maps its errors back onto fields through the public API:
 
 ```js
 import { FormValidator } from "actual-css/js/validation";

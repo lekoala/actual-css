@@ -11,8 +11,8 @@ by promoting it to the top layer with `popover="manual"`.
 - Generated text is a snapshot at show time: changing `data-tooltip` never rewrites a tooltip that is already shown, and an always-visible generated tooltip keeps its initial text. For content that must update dynamically, use an explicit tooltip. See the [tooltips bench](../examples/overview.md) (`demo/templates/tooltips.html`) for all six cases side by side.
 - Generated text is always plain text (`textContent` only), so a shorthand value is safe for untrusted strings once they are in the DOM. An explicit tooltip is author-owned DOM: its sanitization belongs to whoever produces it. Escape the attribute server-side — a DOM already compromised at render cannot be repaired at read time. There is no `data-tooltip-html`, by design.
 - Keep essential instructions and control names available without opening a
-  tooltip. Use a [flyout panel](flyout.md#panel-with-actions) for contextual
-  help with links or buttons.
+  tooltip. Use a [flyout](flyout.md#contextual-help) for contextual help with
+  links or buttons.
 - Show on hover and keyboard focus. Hide on Escape, blur, pointer leave, or a pointer press on the trigger.
 - A trigger scrolled out of view takes its tooltip down and brings it back when it returns; only a dismissal ends the tooltip.
 - Escape dismisses the tooltip without moving the pointer or focus (WCAG 2.1 SC 1.4.13).

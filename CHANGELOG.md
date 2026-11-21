@@ -13,6 +13,8 @@
 - Design note: `composition-weight.md` records the weight audit and the reductions declined.
 - `minimal` demo theme: one ink, hairlines, square corners, no elevation, built from tokens and inherited hooks.
 - `--reveal-delay`: pause before a `.reveal` entrance or a `.reveal-group`'s first child; the stagger counts from it.
+- Docs: Ajax · "Confirm, show errors, recover" composes the busy button, a confirmation, server errors and a failure message.
+- Docs: Flyout · "Contextual help": a help button beside a label opens a panel with an explanation and a link.
 
 ### Changed
 - Docs: "Coding agents and DESIGN.md" gains "Components are tools, not design decisions".
@@ -34,6 +36,8 @@
 - An unchecked `.switch` knob takes `--text` in a dark scheme instead of sinking into the track (1.47:1 → 4.5:1 on the default palette).
 - The selected `.segment` rises above the `.segmented` track in a dark scheme instead of reading as a recess.
 - `in-view`: focus finishes a Reveal entrance still running or delayed after its release, not only a pending one.
+- `ajax`: focus lost with a replaced target lands on the answer's first `aria-invalid="true"` field or `autofocus` element instead of the body.
+- Docs: Validation · "Server and AJAX validation" pointed to a `form[data-ajax]` flow that does not exist.
 - Docs: Reveal · a reveal that holds controls takes `data-enhance="in-view"`; `.reveal` alone does not guard focus.
 
 ## [0.19.5] - 2026-11-20

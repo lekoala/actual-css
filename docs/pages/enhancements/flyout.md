@@ -519,6 +519,52 @@ form.addEventListener("submit", async (event) => {
 });
 ```
 
+## Contextual help
+
+**Related terms:** toggletip, help icon, info popover, more information.
+
+Help that needs a link, or more than a short phrase, goes in a flyout opened
+by a small button beside the label, not in a [tooltip](tooltip.md). The panel
+is a plain `<div>`: Enter, Space or Arrow Down open it and focus its link,
+and Escape closes it and returns focus to the button.
+
+```html demo
+<div class="field">
+  <div class="cluster" style="--gap: var(--space-10)">
+    <label class="field-label" for="billing-id">Billing ID</label>
+    <div class="flyout-trigger">
+      <button class="btn ghost sm icon-only"
+              type="button"
+              data-enhance="flyout"
+              aria-expanded="false"
+              aria-controls="billing-id-help"
+              aria-label="About the billing ID">
+        <i class="ti ti-help-circle" aria-hidden="true"></i>
+      </button>
+      <div class="flyout"
+           id="billing-id-help"
+           data-flyout-auto-close="outside"
+           data-flyout-placement="top-start"
+           style="--flyout-pad: var(--space-30); --flyout-max-inline-size: 16rem"
+           hidden>
+        <div class="stack" style="--gap: var(--space-20)">
+          <p>The reference printed at the top of each invoice, such as <code>INV2041</code>.</p>
+          <a href="#">Where to find it</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <input class="input" id="billing-id" name="billing-id" />
+</div>
+```
+
+- Name the button after its topic, such as "About the billing ID", not "Help".
+- Keep instructions everyone needs in a visible `.field-help`; the panel holds
+  the optional explanation.
+- `top-start` keeps the panel off the field, which focus reaches next. The
+  panel stays open until Escape, the button or a click outside closes it.
+- The `.stack` drops the paragraph margins inside the panel.
+
 ## Context menu
 
 Context menus use the same `.menu > li > .menu-item` presentation primitive as

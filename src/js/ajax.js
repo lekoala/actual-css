@@ -12,7 +12,8 @@
  * followed by navigation like a native submission.
  *
  * Display, kept apart: with data-ajax-target, an HTML response (2xx or 422)
- * replaces the target's content. Everything else only reaches the events.
+ * replaces the target's content, and focus lost with the old content lands in
+ * the new one. Everything else only reaches the events.
  * The module never decides that a response means "saved".
  */
 
@@ -69,6 +70,18 @@ function targetElement(root, selector) {
   }
 }
 
+// The update removed the focused element (a re-rendered form, a confirmation
+// in its place): without a new place, focus falls back to the body and a
+// keyboard user starts over from the top. The answer says where to land: the
+// first invalid field, or an element the server marked with autofocus, which
+// the browser ignores in inserted HTML. A target with a tabindex catches the
+// rest; otherwise focus stays where the browser left it.
+function refocus(target) {
+  const next = target.querySelector('[aria-invalid="true"], [autofocus]');
+  if (next) next.focus();
+  else if (target.hasAttribute("tabindex")) target.focus();
+}
+
 function display(form, root, response) {
   const selector = form.dataset.ajaxTarget;
   if (!selector || !(response.ok || response.status === 422)) return null;
@@ -81,7 +94,9 @@ function display(form, root, response) {
     .clone()
     .text()
     .then((html) => {
+      const focused = target.contains(root.activeElement);
       target.innerHTML = html;
+      if (focused) refocus(target);
     });
 }
 
