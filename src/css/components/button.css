@@ -93,8 +93,13 @@
   box-shadow: var(--btn-shadow, 0 0 #0000);
   font: inherit;
   font-size: var(--btn-font-size);
-  font-weight: var(--font-weight-medium);
-  line-height: 1;
+  /* why: regular, not medium. The fill, edge and intent carry the hierarchy;
+     a medium label read dense beside the medium field labels, worst with
+     system-ui on Windows, where 500 renders close to semibold. */
+  font-weight: var(--font-weight-normal);
+  /* why: 1.25, not 1: a wrapped label's lines touched at 1. A single line
+     keeps its height, since padding-block is derived from 1lh above. */
+  line-height: 1.25;
   text-decoration: none;
   cursor: pointer;
   transition:

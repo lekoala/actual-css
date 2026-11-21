@@ -33,6 +33,10 @@
 - The selected `.segment` has no edge by default; `--segmented-selected-border` inherits from a theme root.
 - `edge` demo theme redrawn after IBM Carbon: square, flat layers, filled fields with a 3:1 bottom line; its lower-edge buttons are gone.
 - Docs: component, enhancement and form pages lead with their first demo; `check:docs` fails a section placed before it.
+- `--soft-bg-mix` defaults to 92% (was 88%): soft alerts, badges, buttons and `.soft` surfaces take a lighter fill.
+- The default palette's `--*-soft-fg` hooks keep the raw intent, rebated toward `--text` only as far as 4.5:1 on the hovered fill needs (0–12%, was 10–25%): soft ink reads livelier.
+- `.btn` labels are set in `--font-weight-normal` (was medium); fill, edge and intent carry the hierarchy.
+- `.btn` takes `line-height: 1.25` (was 1): a wrapped label no longer cramps its lines; a single-line button keeps its height.
 
 ### Fixed
 - An unchecked `.switch` knob takes `--surface-opaque` in a dark scheme: it no longer sinks into the track (1.47:1 → 3.6:1 on the default palette) and stays dark like the checked knob.

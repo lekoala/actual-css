@@ -218,7 +218,7 @@ Themes tune both globally instead of rewriting component selectors:
 
 ```css
 :root {
-  --soft-bg-mix: 88%;     /* share of surface; the tint's opacity is 100% minus it */
+  --soft-bg-mix: 92%;     /* share of surface; the tint's opacity is 100% minus it */
   --soft-hover-alpha: 6%; /* extra intent share on hover */
   --soft-fg-mix: 100%;
 }

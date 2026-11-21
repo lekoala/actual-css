@@ -159,10 +159,12 @@
   }
 }
 
-/* Soft foreground hooks — the soft ink is the intent rebated toward the local
-   text so it keeps 4.5:1 against the soft hover fill (the resting fill carries
-   the extra margin; variants.css soft recipe). Deliberately scoped to the
-   default theme: a custom property bakes its var() references where it is
+/* Soft foreground hooks — the soft ink is the raw intent, rebated toward the
+   local text only by what keeps 4.5:1 against the hovered fill on
+   --surface-subtle, the tightest pair (the resting fill carries the extra
+   margin; variants.css soft recipe). A wider mix greys the ink and the softs
+   read dull, so each role is tuned to its own threshold. Deliberately scoped
+   to the default theme: a custom property bakes its var() references where it is
    declared, so these resolve against root/light/dark tokens on every boundary.
    Presets and custom islands keep their --soft-fg-mix / raw-intent ink unless
    they declare hooks themselves.
@@ -178,11 +180,11 @@
 :where(:root),
 [data-theme="light"],
 [data-theme="dark"] {
-  --secondary-soft-fg: color-mix(in oklab, var(--text) 10%, var(--secondary) 90%);
-  --success-soft-fg: color-mix(in oklab, var(--text) 15%, var(--success) 85%);
-  --warning-soft-fg: color-mix(in oklab, var(--text) 25%, var(--warning) 75%);
-  --danger-soft-fg: color-mix(in oklab, var(--text) 15%, var(--danger) 85%);
-  --neutral-soft-fg: color-mix(in oklab, var(--text) 20%, var(--neutral) 80%);
+  --secondary-soft-fg: var(--secondary);
+  --success-soft-fg: color-mix(in oklab, var(--text) 4%, var(--success));
+  --warning-soft-fg: color-mix(in oklab, var(--text) 12%, var(--warning));
+  --danger-soft-fg: color-mix(in oklab, var(--text) 3%, var(--danger));
+  --neutral-soft-fg: color-mix(in oklab, var(--text) 8%, var(--neutral));
 }
 
 :where([data-theme]:not([data-theme="light"]):not([data-theme="dark"])) {

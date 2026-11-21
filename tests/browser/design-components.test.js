@@ -79,7 +79,7 @@ it("Button colors bind to theme tokens or recipes; lengths are measured px", asy
   expect(solid.box.stroke).toBeNull();
   expect(solid.box).toMatchObject({ radius: 8, height: 38 });
   expect(solid.texts[0].color.token).toBe("primary-fg");
-  expect(solid.texts[0].fontWeight).toBe(500);
+  expect(solid.texts[0].fontWeight).toBe(400);
 
   // No theme token paints a soft fill: it becomes a recipe.
   expect(pick("danger", "soft").box.fill.token).toBe("soft-danger-bg");
