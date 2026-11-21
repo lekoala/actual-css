@@ -1,6 +1,9 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Changed
+- Docs: "Coding agents and DESIGN.md" gains "Components are tools, not design decisions".
+- Starter skill: start from content and purpose before components; no invented content or purposeless decoration.
 
 ## [0.19.5] - 2026-11-20
 ### Fixed

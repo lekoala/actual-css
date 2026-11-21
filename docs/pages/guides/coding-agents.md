@@ -121,6 +121,24 @@ Status labels                → .badge.soft + intent
 Dense data views             → .compact on the region
 ```
 
+## Components are tools, not design decisions
+
+Start from the product's content, audience and purpose; choose components and
+blocks only once that structure is known. A section exists because it carries
+information, a demonstration or an action, not because a layout has a slot for
+it.
+
+- Treat block markup as editable semantic HTML: remove, merge, reorder or
+  reshape sections freely.
+- Do not invent content to fill a layout, or add decoration without a purpose:
+  a status dot marks a live state, an arrow a direction, an illustration
+  explains something.
+- Express product identity in the theme and in application CSS. Writing it is
+  using Actual, not working around it.
+
+A polished interface is not necessarily a finished design. Before polishing,
+strip the ornaments mentally and ask what the page actually says.
+
 ## With a design skill
 
 A design skill and the Actual skill do not overlap. The design skill owns the

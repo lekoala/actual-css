@@ -44,6 +44,12 @@ If `DESIGN.md` (and `PRODUCT.md`) exists at the project root, read it after `PRO
 - `DESIGN.md` records the approved direction; the theme stylesheet defines the values actually shipped. When they disagree, neither wins by default: report the drift and ask whether the design changed on purpose or the code drifted, then update the stale document or fix the theme. Never silently copy a value either way.
 - A product-specific requirement no token, hook, or component expresses is focused application CSS, derived from theme tokens. Report a missing hook only when the need is generic and recurring. Never override a component's internal state or behavior.
 
+Components are implementation tools, not design decisions. Start from the content and purpose, then choose the components that give it form:
+
+- Do not invent content to fill a layout, or add decoration without a function (a status dot that marks no live state, an arrow on every link).
+- Treat block markup as editable semantic HTML: remove, merge, reorder or reshape sections.
+- A polished composition is not a finished design. A section that carries no information, demonstration or action is removed, not decorated.
+
 When a design skill (Impeccable or similar) is active, it owns direction, critique, and `DESIGN.md`; this skill still owns vocabulary and the completion check. Fix its findings through the decision order, confirm computed sizes and colors on the rendered page rather than from a source scan, and never copy its preview snippets (`.impeccable/design.json`) into application code.
 
 ## Decision order
@@ -244,3 +250,4 @@ Before considering an Actual CSS UI change complete:
 - JavaScript behavior and presentation stay decoupled.
 - Focus and relevant disabled/current/selected/expanded states remain accessible.
 - The implementation matches the Actual CSS version actually used by the project.
+- Every section and graphic element carries content or a function; none exists only to fill a layout.
