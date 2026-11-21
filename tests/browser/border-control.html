@@ -33,13 +33,34 @@
     <input class="radio" type="radio" name="plan">
     <span>Plan</span>
   </label>
-  <button class="btn outline" data-control type="button">Outline</button>
-
-  <!-- The neutral outline's edge is a local customization point. -->
-  <button class="btn outline" id="custom-outline" type="button" style="--border-control: rebeccapurple">
-    Custom edge
-  </button>
+  <!-- A labelled outline action is identified by its text: it keeps the
+       surface --border alone, and takes the field edge as a field segment. -->
+  <button class="btn outline" data-separator type="button">Outline</button>
+  <div class="join">
+    <input class="input" aria-label="Search">
+    <button class="btn outline" id="joined-outline" type="button">Go</button>
+  </div>
+  <div class="join" id="button-join">
+    <button class="btn outline" type="button">A</button>
+    <button class="btn outline" type="button">B</button>
+  </div>
+  <button class="btn outline primary" id="intent-outline" type="button">Intent</button>
   <span id="ref-text" style="color: var(--text)"></span>
+  <span id="ref-primary" style="color: var(--primary)"></span>
+
+  <!-- A theme moves the resting field edge with --control-default-border and
+       can keep 3:1 on the lower edge only. Choices keep --border-control;
+       readonly and disabled drop the inherited lower edge; validation wins. -->
+  <div id="recipe" style="--control-default-border: rgb(0 128 0); --control-border-block-end-color: rgb(0 0 255)">
+    <input class="input" data-recipe="input" aria-label="Recipe input">
+    <textarea class="textarea" data-recipe="textarea" aria-label="Recipe textarea"></textarea>
+    <select class="select" data-recipe="select" aria-label="Recipe select"><option>One</option></select>
+    <div class="join"><span class="join-addon" data-recipe="addon">@</span><input class="input" aria-label="Recipe joined"><button class="btn outline" data-recipe="join-button" type="button">Go</button></div>
+    <input class="check" type="checkbox" data-recipe="check" aria-label="Recipe check">
+    <input class="input" data-recipe="readonly" readonly value="Read only" aria-label="Recipe readonly">
+    <input class="input" data-recipe="disabled" disabled aria-label="Recipe disabled">
+    <label class="field danger"><input class="input" data-recipe="invalid" aria-label="Recipe invalid"></label>
+  </div>
 
   <!-- A switch keeps the control edge at rest only: checked and disabled
        tracks are a uniform fill, and validation still wins over the edge. -->

@@ -561,11 +561,9 @@ test("transparent treatments follow currentColor ink, including hover", () => {
 
   expect(variants).toMatch(/\.outline \{[\s\S]*--ui-fg: var\(--intent, currentColor\);/);
   expect(variants).toMatch(/\.outline \{[\s\S]*--ui-border: var\(--intent, currentColor\);/);
-  // A neutral button outline is the exception: its border is the control edge,
-  // so it matches a field instead of inheriting the label's full ink.
-  expect(button).toMatch(
-    /\.btn\.outline \{[\s\S]*--ui-border: var\(--intent, var\(--border-control\)\);/,
-  );
+  // A neutral button outline is the exception: its label identifies it, so its
+  // border is the surface --border, not the label's full ink.
+  expect(button).toMatch(/\.btn\.outline \{[\s\S]*--ui-border: var\(--intent, var\(--border\)\);/);
   expect(button).toMatch(/\.btn\.ghost \{[\s\S]*--ui-fg: var\(--intent, currentColor\);/);
   expect(button).toMatch(/\.btn\.link \{[\s\S]*--ui-fg: var\(--intent, currentColor\);/);
   expect(button).toContain("color-mix(in oklch, currentColor 10%, transparent)");
@@ -1114,7 +1112,7 @@ test("size and density use separate shared contracts", () => {
     /:where\([\s\S]*\.btn,[\s\S]*\)\.lg\s*\{[^}]*--control-font-size:\s*var\(--font-size-lg\)/,
   );
   expect(badgeCss).toMatch(/\.badge\.sm\s*\{[^}]*--badge-font-size:\s*var\(--font-size-xs\)/s);
-  expect(badgeCss).toMatch(/\.badge\.lg\s*\{[^}]*--badge-font-size:\s*var\(--font-size-md\)/s);
+  expect(badgeCss).toMatch(/\.badge\.lg\s*\{[^}]*--badge-font-size:\s*var\(--font-size-sm\)/s);
 
   // Density never becomes a second size ladder: the badge's optical height is
   // intrinsic and must not depend on a density token.

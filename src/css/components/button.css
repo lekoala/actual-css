@@ -122,11 +122,12 @@
   --ui-border: transparent;
 }
 
-/* A neutral outline is a quiet action, so its edge is the control edge that
-   identifies a field, not the full text ink. An explicit intent still wins
-   through --intent, and --border-control stays the theme's override point. */
+/* A neutral outline is a quiet action: its label identifies it, so its edge
+   is the surface border, not the 3:1 control edge a field needs (WCAG 1.4.11
+   asks for no boundary when visible text identifies the control). An explicit
+   intent still wins through --intent. */
 .btn.outline {
-  --ui-border: var(--intent, var(--border-control));
+  --ui-border: var(--intent, var(--border));
 }
 
 /* A surface button is neutral chrome, so it hovers at the .outline rate: an

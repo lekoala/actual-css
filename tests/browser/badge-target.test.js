@@ -92,9 +92,13 @@ it("badge size scales type and icons while density geometry stays inert", async 
         };
       })()`);
 
+      // The type scale stops at xs, so .sm differs from the default by its
+      // height and padding only.
       expect(result.sm.font).toBe(13);
-      expect(result.def.font).toBe(14);
-      expect(result.lg.font).toBe(16);
+      expect(result.def.font).toBe(13);
+      expect(result.lg.font).toBe(14);
+      expect(result.sm.height).toBeLessThan(result.def.height);
+      expect(result.def.height).toBeLessThan(result.lg.height);
       expect(result.sm.icon).toBe(result.sm.font);
       expect(result.def.icon).toBe(result.def.font);
       expect(result.lg.icon).toBe(result.lg.font);

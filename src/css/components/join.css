@@ -40,7 +40,7 @@
 }
 
 .join-addon {
-  --control-border: var(--border-control);
+  --control-border: var(--control-default-border, var(--border-control));
   --control-bg: var(--surface-subtle);
   --control-fg: var(--text-muted);
 
@@ -151,6 +151,16 @@
 
 /* Text controls paint their own inset focus outline (control.css), so a
    .join never moves the ring to the group: button-only groups and wrapped
-   inputs alike keep per-control focus, with no :has() group treatment.
-   A neutral outline action draws the same --border-control edge as the field
-   by its own base rule, so the group needs no special case. */
+   inputs alike keep per-control focus, with no :has() group treatment. */
+
+/* Beside a field, a neutral outline action is a segment of that field and
+   takes its edge; alone or among buttons it keeps its quieter --border edge.
+   Without :has() the rule drops and the button keeps --border: a lighter
+   segment, still bounded. */
+.join:has(> :is(.input, .textarea, .select), > * > :is(.input, .textarea, .select)) > .btn.outline {
+  --ui-border: var(--intent, var(--control-default-border, var(--border-control)));
+  --btn-border-block-end-color: var(
+    --intent,
+    var(--control-border-block-end-color, var(--btn-border))
+  );
+}

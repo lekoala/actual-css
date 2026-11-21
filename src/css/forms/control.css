@@ -17,10 +17,18 @@
  * --btn-border-block-end-* (button.css), for themes that give text controls an
  * underline-style lower edge instead of a uniform border.
  *
+ * --control-default-border is the inherited resting edge, the twin of
+ * --control-default-bg: a theme sets both on its root, where --control-border
+ * itself is owned by the state rules below. Paired with the lower-edge hook it
+ * moves the 3:1 identification to the bottom alone (quiet sides, or none).
+ * readonly and disabled reset the lower edge, so an inherited accent or 3:1
+ * underline never marks a field the user cannot edit.
+ *
  * Public hooks:
  * --control-border
  * --control-bg
  * --control-default-bg
+ * --control-default-border
  * --control-fg
  * --control-cursor
  * --control-shadow
@@ -32,7 +40,7 @@
 .input,
 .textarea,
 .select {
-  --control-border: var(--border-control);
+  --control-border: var(--control-default-border, var(--border-control));
   --control-bg: var(--control-default-bg, var(--surface));
   --control-fg: var(--text);
   --control-cursor: auto;
@@ -103,6 +111,7 @@
 .textarea[readonly] {
   --control-bg: var(--surface-subtle);
   --control-border: var(--border);
+  --control-border-block-end-color: initial;
 }
 
 .input:disabled,
@@ -111,6 +120,7 @@
   --control-bg: var(--surface-subtle);
   --control-fg: var(--state-disabled);
   --control-border: var(--border);
+  --control-border-block-end-color: initial;
   --control-cursor: not-allowed;
 }
 

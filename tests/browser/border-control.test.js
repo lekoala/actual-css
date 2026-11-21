@@ -40,9 +40,12 @@ it("controls take --border-control and separators keep --border", async () => {
         "color-swatch rgb(255, 0, 0)",
         "join-addon rgb(255, 0, 0)",
         "choice-card rgb(255, 0, 0)",
-        "btn rgb(255, 0, 0)",
       ]);
-      expect(edges.separators).toEqual(["card rgb(200, 200, 200)", "divider rgb(200, 200, 200)"]);
+      expect(edges.separators).toEqual([
+        "btn rgb(200, 200, 200)",
+        "card rgb(200, 200, 200)",
+        "divider rgb(200, 200, 200)",
+      ]);
     },
     { artifactName: "border-control" },
   );
@@ -74,24 +77,72 @@ it("a switch drops the control edge when checked or disabled", async () => {
   );
 });
 
-// A neutral outline joins the control role: a local --border-control moves its
-// edge and leaves the label on --text.
-it("a neutral outline takes --border-control without recoloring its text", async () => {
+// A labelled neutral outline needs no 3:1 boundary (its text identifies it):
+// alone or among buttons it keeps --border; beside a field it is a segment of
+// that field and takes its edge. An intent outline keeps its intent.
+it("a neutral outline takes the field edge only beside a field", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       const state = await view.evaluate(`(() => {
-        const button = getComputedStyle(document.querySelector("#custom-outline"));
+        const edge = (el) => getComputedStyle(el).borderBlockStartColor;
         return {
-          border: button.borderBlockStartColor,
-          color: button.color,
+          joined: edge(document.querySelector("#joined-outline")),
+          joinedText: getComputedStyle(document.querySelector("#joined-outline")).color,
+          buttons: [...document.querySelectorAll("#button-join .btn")].map(edge),
+          intent: edge(document.querySelector("#intent-outline")),
           text: getComputedStyle(document.querySelector("#ref-text")).color,
+          primary: getComputedStyle(document.querySelector("#ref-primary")).color,
         };
       })()`);
-      expect(state.border).toBe("rgb(102, 51, 153)");
-      expect(state.color).toBe(state.text);
+      expect(state.joined).toBe("rgb(255, 0, 0)");
+      expect(state.joinedText).toBe(state.text);
+      expect(state.buttons).toEqual(["rgb(200, 200, 200)", "rgb(200, 200, 200)"]);
+      expect(state.intent).toBe(state.primary);
     },
-    { artifactName: "border-control-custom" },
+    { artifactName: "border-control-outline" },
+  );
+});
+
+// --control-default-border is the inherited resting edge of text controls,
+// like --control-default-bg: with the lower-edge hook a theme keeps 3:1 at the
+// bottom only. An inherited lower edge must not mark a field the user cannot
+// edit, and validation still owns every side.
+it("--control-default-border moves field sides and states drop the lower edge", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const state = await view.evaluate(`(() => {
+        const read = (name) => {
+          const s = getComputedStyle(document.querySelector('[data-recipe="' + name + '"]'));
+          return s.borderInlineStartColor + " / " + s.borderBlockEndColor;
+        };
+        return {
+          input: read("input"),
+          textarea: read("textarea"),
+          select: read("select"),
+          addon: read("addon"),
+          joinButton: read("join-button"),
+          check: read("check"),
+          readonly: read("readonly"),
+          disabled: read("disabled"),
+          invalid: read("invalid"),
+          danger: getComputedStyle(document.querySelector("[data-switch-danger]")).color,
+        };
+      })()`);
+      const recipe = "rgb(0, 128, 0) / rgb(0, 0, 255)";
+      expect(state.input).toBe(recipe);
+      expect(state.textarea).toBe(recipe);
+      expect(state.select).toBe(recipe);
+      expect(state.addon).toBe(recipe);
+      expect(state.joinButton).toBe(recipe);
+      // Choices are identified by their edge alone: the field recipe skips them.
+      expect(state.check).toBe("rgb(255, 0, 0) / rgb(255, 0, 0)");
+      expect(state.readonly).toBe("rgb(200, 200, 200) / rgb(200, 200, 200)");
+      expect(state.disabled).toBe("rgb(200, 200, 200) / rgb(200, 200, 200)");
+      expect(state.invalid).toBe(`${state.danger} / ${state.danger}`);
+    },
+    { artifactName: "border-control-recipe" },
   );
 });
 

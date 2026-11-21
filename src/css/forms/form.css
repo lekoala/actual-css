@@ -37,13 +37,17 @@
   border-radius: var(--radius);
 }
 
-.field-label,
-.field-group > legend {
+/* A label names one control at body size: medium separates it from the
+   value without outweighing the field. The legend titles a group, one level
+   up, and is set small inside the frame, so it keeps the heavier weight. */
+.field-label {
   color: var(--text);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
 }
 
 .field-group > legend {
+  color: var(--text);
+  font-weight: var(--font-weight-semibold);
   padding-block: 0;
   padding-inline: var(--fieldset-legend-padding-inline, var(--space-10));
   font-size: var(--font-size-xs);

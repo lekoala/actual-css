@@ -90,6 +90,33 @@ Keep the outline visible against the surrounding surface when changing colors.
 
 → [Button hooks](../components/button.md#css-hooks) · [Focus tokens](./tokens.md#color)
 
+### Lighter field borders / underline fields / bottom border only
+
+A field must stay identifiable at rest. Keep a 3:1 edge on the lower side and
+quiet the others by setting two inherited hooks on your theme root:
+
+```css
+:root {
+  /* Quiet sides, 3:1 lower edge. */
+  --control-default-border: var(--border);
+  --control-border-block-end-color: var(--border-control);
+}
+```
+
+For an underline-only field on a tinted fill, also set
+`--control-default-bg: var(--surface-subtle)` and
+`--control-default-border: transparent`. The tint is then the fill readonly and
+disabled fields use too, so those states differ only by their lost lower edge
+and dimmed text.
+
+The recipe covers `.input`, `.textarea`, `.select` and join addons; checkboxes,
+radios and switches keep `--border-control`, their only cue. Readonly and
+disabled fields drop the lower edge, and validation still colours every side.
+Avoid lowering `--border-control-mix` instead: the default palette sits at
+3.2:1, with no room under the threshold.
+
+→ [Forms hooks](../forms/overview.md#hooks)
+
 ### Keep bare native controls on-theme / accent-color
 
 Bare checkboxes, radios, ranges, and `<progress>` follow the theme through
@@ -154,8 +181,8 @@ application CSS and keep forms and intent ink out of it:
 ```
 
 Transparent inks (`.btn.outline`, `.ghost`, `.link`) and headings follow that
-ink; a neutral `.btn.outline` draws its border with `--border-control`, so the
-edge stays visible without being derived from the band. Fields, their labels
+ink; a neutral `.btn.outline` draws its border with `--border`, so the edge
+is not derived from the band. Fields, their labels
 and help text, and intent colors keep the page palette, which nothing tunes for
 `--surface-solid`. Focus lines stay readable there: the theme contract keeps
 `--focus` at 3:1 on `--surface-solid`.

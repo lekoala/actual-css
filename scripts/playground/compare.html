@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Actual CSS — component bench</title>
+<!--
+  Component bench: the same eight cards rendered by Actual CSS (working tree)
+  and by other libraries, each in its own iframe so stylesheets never meet.
+  Open this file directly in a browser; the references load from CDNs.
+  ?libs=oat,daisyui,actual&theme=dark&view=full presets the toolbar;
+  &cards=members,invoices keeps only those cards; &css=<encoded CSS> sets the
+  overrides (handy for a capture of one variant).
+
+  - Proportions, not identity: the shared glue sets the font, the card
+    content's own layout and the titles, so what differs is the library.
+  - Each library is one kit (its classes for one shared component vocabulary).
+    Adding a library is one LIBS entry plus one kit.
+  - "Overrides" applies CSS to the working-tree column only: try a token or a
+    hook value live before editing src/.
+-->
+<style>
+  :root { color-scheme: light; --surface: #fff; --page: #f6f7f8; --ink: #24272e; --quiet: #646c78; --line: #e2e5e9; --accent: #3656a6; }
+  body[data-theme="dark"] { color-scheme: dark; --surface: #181a20; --page: #111319; --ink: #e7e9ef; --quiet: #9da5b3; --line: #343841; --accent: #acc4ff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--page); }
+  .shell { max-width: 1800px; margin: auto; padding: 24px clamp(12px, 3vw, 40px) 64px; }
+  h1 { font-size: 1.5rem; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .intro { color: var(--quiet); margin: 0; max-width: 60rem; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; margin: 16px 0; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+  .tool { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .tool > span { font-size: 12px; font-weight: 650; color: var(--quiet); }
+  .toggle { font: inherit; font-size: 12px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--page); color: var(--quiet); cursor: pointer; }
+  .toggle[aria-pressed="true"] { color: var(--ink); background: var(--surface); border-color: var(--quiet); }
+  .toggle:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  details.overrides { flex-basis: 100%; }
+  details.overrides summary { cursor: pointer; font-size: 12px; font-weight: 650; color: var(--quiet); }
+  .overrides-body { display: grid; gap: 6px; margin-top: 8px; }
+  .overrides textarea { font: 12px/1.5 ui-monospace, Consolas, monospace; min-height: 7rem; padding: 8px; color: var(--ink); background: var(--page); border: 1px solid var(--line); border-radius: 6px; }
+  .overrides select { font: inherit; font-size: 12px; justify-self: start; }
+  .grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(260px, 1fr)); gap: 12px; overflow-x: auto; }
+  .heads { position: sticky; top: 0; z-index: 1; background: var(--page); padding-block: 6px; }
+  .heads strong { font-size: 13px; }
+  .heads small { color: var(--quiet); margin-inline-start: 6px; }
+  .pair { margin-block-end: 20px; }
+  .pair h2 { font-size: 12px; margin: 0 0 6px; }
+  .pair h2 small { font-weight: 400; color: var(--quiet); margin-inline-start: 8px; }
+  .frame { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; min-width: 0; }
+  .frame iframe { display: block; width: 100%; height: 200px; border: 0; }
+  .metric { font-size: 11px; color: var(--quiet); padding: 4px 2px 0; }
+  .stack-full { display: grid; gap: 20px; }
+  .stack-full iframe { min-height: 900px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body data-theme="light">
+<main class="shell">
+  <h1>Component bench</h1>
+  <p class="intro">Same content, same composition, each library's own components. Actual CSS renders from <code>src/</code>, so a change shows on reload. Tab into a control to see its real <code>:focus-visible</code>.</p>
+
+  <div class="toolbar">
+    <div class="tool"><span>Libraries</span><span id="lib-toggles" class="tool"></span></div>
+    <div class="tool"><span>View</span>
+      <button class="toggle" type="button" data-view="pairs">Component by component</button>
+      <button class="toggle" type="button" data-view="full">Full composition</button>
+    </div>
+    <div class="tool"><span>Scheme</span>
+      <button class="toggle" type="button" data-theme-choice="light">Light</button>
+      <button class="toggle" type="button" data-theme-choice="dark">Dark</button>
+    </div>
+    <details class="overrides">
+      <summary>Overrides — CSS applied to Actual CSS (working tree) only</summary>
+      <div class="overrides-body">
+        <textarea id="overrides" spellcheck="false" placeholder=".badge { --badge-pad-x: calc(var(--badge-size) / 2); }"></textarea>
+        <select id="snippets" aria-label="Insert a snippet">
+          <option value="">Insert a snippet…</option>
+        </select>
+      </div>
+    </details>
+  </div>
+
+  <section id="pairs-view">
+    <div class="grid heads" id="heads"></div>
+    <div id="pairs"></div>
+  </section>
+  <section id="full-view" class="stack-full" hidden></section>
+</main>
+
+<script>
+(() => {
+  const ACTUAL_SRC = new URL("../../src/css/actual.full.css", location.href).href;
+
+  /* Shared vocabulary every kit implements. tone: success | warning |
+     danger | secondary. Kits use each library's documented markup; where a
+     library has no component (Bootstrap 5 avatar), the kit says so. The glue
+     must not restyle a library's own layout class (.choice): it once forced
+     flex centering over Actual's baseline alignment. */
+  const actualKit = {
+    theme: (t) => ({ "data-theme": t }),
+    cardGap: true,
+    card: (body) => `<article class="card">${body}</article>`,
+    button: (text, kind) => `<button type="button" class="btn ${kind === "primary" ? "primary" : "outline"}">${text}</button>`,
+    badge: (text, tone, outline) => `<span class="badge ${tone}${outline ? " outline" : ""}">${text}</span>`,
+    avatar: (initials, name) => `<div class="avatar" role="img" aria-label="${name}"><span aria-hidden="true">${initials}</span></div>`,
+    field: (f) => `<label class="field"><span class="field-label">${f.label}</span><input class="input" ${attrs(f)}></label>`,
+    checkbox: (label) => `<label class="terms choice"><input type="checkbox" class="check" checked><span>${label}</span></label>`,
+    switch: (input) => input("switch"),
+    tablist: (tabs) => `<div class="segmented" role="tablist" aria-label="Account details">${tabs.map((t) => tab(t, "segment")).join("")}</div>`,
+    selectedClass: "",
+    progress: (v, label) => `<progress class="progress" value="${v}" max="100" aria-label="${label}"></progress>`,
+    accordion: (items) => `<div class="accordion">${items.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("")}</div>`,
+  };
+
+  const oatKit = {
+    theme: (t) => ({ "data-theme": t }),
+    card: (body) => `<article class="card">${body}</article>`,
+    button: (text, kind) => `<button type="button"${kind === "primary" ? "" : ' class="outline"'}>${text}</button>`,
+    badge: (text, tone, outline) => `<span class="badge${outline ? " outline" : ""}" data-variant="${tone}">${text}</span>`,
+    avatar: (initials, name) => `<figure data-variant="avatar" role="img" aria-label="${name}">${initials}</figure>`,
+    field: (f) => `<label data-field>${f.label}<input ${attrs(f)}></label>`,
+    checkbox: (label) => `<label class="terms"><input type="checkbox" checked><span>${label}</span></label>`,
+    switch: (input) => input(""),
+    tablist: (tabs) => `<div role="tablist" aria-label="Account details">${tabs.map((t) => tab(t, "")).join("")}</div>`,
+    selectedClass: "",
+    progress: (v, label) => `<progress value="${v}" max="100" aria-label="${label}"></progress>`,
+    accordion: (items) => `<div>${items.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("")}</div>`,
+  };
+
+  const daisyKit = {
+    theme: (t) => ({ "data-theme": t }),
+    cardGap: true,
+    card: (body) => `<article class="card card-border bg-base-100"><div class="card-body">${body}</div></article>`,
+    button: (text, kind) => `<button type="button" class="btn ${kind === "primary" ? "btn-primary" : "btn-outline"}">${text}</button>`,
+    badge: (text, tone, outline) => `<span class="badge ${outline ? "badge-outline" : `badge-soft badge-${tone}`}">${text}</span>`,
+    avatar: (initials, name) => `<div class="avatar avatar-placeholder" role="img" aria-label="${name}"><div class="bg-neutral text-neutral-content" style="width:2.5rem;border-radius:50%"><span aria-hidden="true">${initials}</span></div></div>`,
+    field: (f) => `<label class="fieldset" style="padding:0"><span class="fieldset-legend">${f.label}</span><input class="input" style="width:100%" ${attrs(f)}></label>`,
+    checkbox: (label) => `<label class="terms"><input type="checkbox" class="checkbox" checked><span>${label}</span></label>`,
+    switch: (input) => input("toggle"),
+    tablist: (tabs) => `<div class="tabs tabs-box" role="tablist" aria-label="Account details">${tabs.map((t) => tab(t, "tab")).join("")}</div>`,
+    selectedClass: "tab-active",
+    progress: (v, label) => `<progress class="progress progress-primary" value="${v}" max="100" aria-label="${label}"></progress>`,
+    accordion: (items) => `<div class="join join-vertical bg-base-100" style="width:100%">${items.map(([q, a]) => `<details class="collapse collapse-arrow join-item"><summary class="collapse-title">${q}</summary><div class="collapse-content"><p>${a}</p></div></details>`).join("")}</div>`,
+  };
+
+  const bootstrapProgress = (v, label) => `<div class="progress" role="progressbar" aria-label="${label}" aria-valuenow="${v}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width:${v}%"></div></div>`;
+  const bootstrapField = (f) => `<div><label class="form-label" for="${f.id}">${f.label}</label><input class="form-control" id="${f.id}" ${attrs(f)}></div>`;
+  const bootstrapTabs = (tabs) => `<div class="nav nav-pills" role="tablist" aria-label="Account details">${tabs.map((t) => tab(t, "nav-link")).join("")}</div>`;
+
+  const bootstrap5Kit = {
+    theme: (t) => ({ "data-bs-theme": t }),
+    card: (body) => `<article class="card"><div class="card-body">${body}</div></article>`,
+    button: (text, kind) => `<button type="button" class="btn ${kind === "primary" ? "btn-primary" : "btn-outline-secondary"}">${text}</button>`,
+    badge: (text, tone, outline) => `<span class="badge ${outline ? "border border-secondary-subtle text-body-secondary" : `bg-${tone}-subtle text-${tone}-emphasis`}">${text}</span>`,
+    // No avatar component in Bootstrap 5: utilities only.
+    avatar: (initials, name) => `<span class="rounded-circle bg-secondary-subtle text-secondary-emphasis" role="img" aria-label="${name}" style="display:inline-flex;align-items:center;justify-content:center;width:2.5rem;height:2.5rem;font-size:.875rem;flex-shrink:0"><span aria-hidden="true">${initials}</span></span>`,
+    field: bootstrapField,
+    checkbox: (label) => `<label class="terms"><input type="checkbox" class="form-check-input" checked><span>${label}</span></label>`,
+    switch: (input) => `<span class="form-check form-switch" style="margin:0;padding-inline-start:2.5em">${input("form-check-input")}</span>`,
+    tablist: bootstrapTabs,
+    selectedClass: "active",
+    progress: bootstrapProgress,
+    accordion: (items) => `<div class="accordion">${items.map(([q, a]) => `<details class="accordion-item"><summary class="accordion-button collapsed">${q}</summary><div class="accordion-body">${a}</div></details>`).join("")}</div>`,
+  };
+
+  const bootstrap6Kit = {
+    theme: (t) => ({ "data-bs-theme": t }),
+    card: bootstrap5Kit.card,
+    button: (text, kind) => `<button type="button" class="btn ${kind === "primary" ? "btn-solid theme-primary" : "btn-outline theme-secondary"}">${text}</button>`,
+    badge: (text, tone, outline) => `<span class="badge ${outline ? "badge-outline theme-secondary" : `badge-subtle theme-${tone}`}">${text}</span>`,
+    avatar: (initials, name) => `<span class="avatar" role="img" aria-label="${name}" style="flex-shrink:0"><span aria-hidden="true">${initials}</span></span>`,
+    field: bootstrapField,
+    checkbox: (label) => `<label class="terms"><input type="checkbox" class="check" checked><span>${label}</span></label>`,
+    switch: (input) => `<span class="switch">${input("")}</span>`,
+    tablist: bootstrapTabs,
+    selectedClass: "active",
+    progress: bootstrapProgress,
+    accordion: (items) => `<div class="accordion">${items.map(([q, a]) => `<details class="accordion-item"><summary class="accordion-header">${q}<svg class="accordion-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 6l5 5 5-5"/></svg></summary><div class="accordion-body">${a}</div></details>`).join("")}</div>`,
+  };
+
+  /* Carbon draws its toggle from a <button> + label pair; the bench keeps a
+     real checkbox over the painted track so the switch row stays one label.
+     Carbon has no avatar and no yellow tag: warm-gray stands in for warning. */
+  const carbonTone = { success: "green", warning: "warm-gray", danger: "red", secondary: "gray" };
+  const carbonKit = {
+    theme: (t) => ({ class: t === "dark" ? "cds--g100" : "cds--white" }),
+    css: ".bench-toggle{position:relative;display:inline-flex}.bench-toggle input{position:absolute;inset:0;z-index:1;margin:0;opacity:0;cursor:pointer}.bench-toggle input:focus-visible+.cds--toggle__appearance{outline:2px solid var(--cds-focus,#0f62fe);outline-offset:2px}",
+    // A tile is layer 01; its controls sit on the next layer, as Carbon's <Layer> does.
+    card: (body) => `<article class="cds--tile"><div class="cds--layer-two">${body}</div></article>`,
+    button: (text, kind) => `<button type="button" class="cds--btn ${kind === "primary" ? "cds--btn--primary" : "cds--btn--tertiary"}">${text}</button>`,
+    badge: (text, tone, outline) => `<span class="cds--tag ${outline ? "cds--tag--outline" : `cds--tag--${carbonTone[tone]}`}"><span class="cds--tag__label">${text}</span></span>`,
+    avatar: (initials, name) => `<span role="img" aria-label="${name}" style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:50%;background:var(--cds-layer-accent-01,#e0e0e0);font-size:.875rem"><span aria-hidden="true">${initials}</span></span>`,
+    field: (f) => `<div class="cds--form-item cds--text-input-wrapper"><label class="cds--label${f.disabled ? " cds--label--disabled" : ""}" for="${f.id}">${f.label}</label><div class="cds--text-input__field-outer-wrapper"><div class="cds--text-input__field-wrapper"><input class="cds--text-input" id="${f.id}" ${attrs(f)}></div></div></div>`,
+    checkbox: (label, id) => `<div class="cds--checkbox-wrapper terms"><input type="checkbox" class="cds--checkbox" id="${id}" checked><label class="cds--checkbox-label" for="${id}"><span class="cds--checkbox-label-text">${label}</span></label></div>`,
+    switch: (input) => {
+      const html = input("");
+      return `<span class="bench-toggle">${html}<span class="cds--toggle__appearance" aria-hidden="true"><span class="cds--toggle__switch${html.includes(" checked") ? " cds--toggle__switch--checked" : ""}"></span></span></span>`;
+    },
+    tablist: (tabs) => `<div class="cds--content-switcher" role="tablist" aria-label="Account details">${tabs.map((t) => tab({ ...t, label: `<span class="cds--content-switcher__label">${t.label}</span>` }, "cds--content-switcher-btn")).join("")}</div>`,
+    selectedClass: "cds--content-switcher--selected",
+    progress: (v, label) => `<div class="cds--progress-bar"><div class="cds--progress-bar__track" role="progressbar" aria-label="${label}" aria-valuenow="${v}" aria-valuemin="0" aria-valuemax="100"><div class="cds--progress-bar__bar" style="transform:scaleX(${v / 100})"></div></div></div>`,
+    accordion: (items) => `<ul class="cds--accordion">${items.map(([q, a]) => `<li class="cds--accordion__item"><button type="button" class="cds--accordion__heading" aria-expanded="false"><svg class="cds--accordion__arrow" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M11 8l-5 5-.7-.7L9.6 8 5.3 3.7 6 3z"/></svg><div class="cds--accordion__title">${q}</div></button><div class="cds--accordion__wrapper"><div class="cds--accordion__content"><p>${a}</p></div></div></li>`).join("")}</ul>`,
+    wire(doc) {
+      for (const input of doc.querySelectorAll(".bench-toggle input")) {
+        input.addEventListener("change", () => input.nextElementSibling.firstElementChild.classList.toggle("cds--toggle__switch--checked", input.checked));
+      }
+      for (const heading of doc.querySelectorAll(".cds--accordion__heading")) {
+        heading.addEventListener("click", () => {
+          const open = heading.parentElement.classList.toggle("cds--accordion__item--active");
+          heading.setAttribute("aria-expanded", String(open));
+        });
+      }
+    },
+  };
+
+  /* GOV.UK Frontend has no card, switch, progress or dark scheme: the card is
+     a plain bordered box in its border colour, the switch a native checkbox,
+     the progress a native element, and the column stays light. */
+  const govukTone = { success: "green", warning: "yellow", danger: "red", secondary: "grey" };
+  const govukKit = {
+    theme: () => ({}),
+    schemes: ["light"],
+    bodyClass: "govuk-template__body govuk-frontend-supported",
+    css: ".bench-card{padding:20px;border:1px solid #b1b4b6;background:#fff}.govuk-button{margin-bottom:0}",
+    card: (body) => `<article class="bench-card">${body}</article>`,
+    button: (text, kind) => `<button type="button" class="govuk-button${kind === "primary" ? "" : " govuk-button--secondary"}" data-module="govuk-button">${text}</button>`,
+    badge: (text, tone, outline) => `<strong class="govuk-tag govuk-tag--${outline ? "grey" : govukTone[tone]}">${text}</strong>`,
+    avatar: (initials, name) => `<span role="img" aria-label="${name}" style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:50%;background:#f3f2f1;font-size:.875rem"><span aria-hidden="true">${initials}</span></span>`,
+    field: (f) => `<div class="govuk-form-group"><label class="govuk-label" for="${f.id}">${f.label}</label><input class="govuk-input" id="${f.id}" ${attrs(f)}></div>`,
+    checkbox: (label, id) => `<div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes"><div class="govuk-checkboxes__item"><input class="govuk-checkboxes__input" id="${id}" type="checkbox" checked><label class="govuk-label govuk-checkboxes__label" for="${id}">${label}</label></div></div>`,
+    switch: (input) => input(""),
+    tablist: (tabs) => `<div class="govuk-tabs" style="margin:0"><ul class="govuk-tabs__list" role="tablist" aria-label="Account details">${tabs.map((t) => `<li class="govuk-tabs__list-item${t.selected ? " govuk-tabs__list-item--selected" : ""}" role="presentation">${tab(t, "govuk-tabs__tab")}</li>`).join("")}</ul></div>`,
+    selectedClass: "",
+    selectedParentClass: "govuk-tabs__list-item--selected",
+    progress: (v, label) => `<progress value="${v}" max="100" aria-label="${label}"></progress>`,
+    accordion: (items) => `<div>${items.map(([q, a]) => `<details class="govuk-details"><summary class="govuk-details__summary"><span class="govuk-details__summary-text">${q}</span></summary><div class="govuk-details__text">${a}</div></details>`).join("")}</div>`,
+  };
+
+  /* UIkit has no switch and no dark scheme (.uk-light only inverts a section
+     on a dark background); its accordion opens through its JS, replaced here
+     by wire(). The quiet hairline reference among the light-edge systems. */
+  const uikitTone = { success: "uk-label-success", warning: "uk-label-warning", danger: "uk-label-danger", secondary: "" };
+  const uikitKit = {
+    theme: () => ({}),
+    schemes: ["light"],
+    card: (body) => `<article class="uk-card uk-card-default uk-card-body">${body}</article>`,
+    button: (text, kind) => `<button type="button" class="uk-button ${kind === "primary" ? "uk-button-primary" : "uk-button-default"}">${text}</button>`,
+    badge: (text, tone, outline) => `<span class="uk-label ${outline ? "" : uikitTone[tone]}">${text}</span>`,
+    avatar: (initials, name) => `<span role="img" aria-label="${name}" style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:50%;background:#f8f8f8;font-size:.875rem"><span aria-hidden="true">${initials}</span></span>`,
+    field: (f) => `<div><label class="uk-form-label" for="${f.id}">${f.label}</label><div class="uk-form-controls"><input class="uk-input" id="${f.id}" ${attrs(f)}></div></div>`,
+    checkbox: (label) => `<label class="terms"><input type="checkbox" class="uk-checkbox" checked><span>${label}</span></label>`,
+    switch: (input) => input("uk-checkbox"),
+    tablist: (tabs) => `<ul class="uk-subnav uk-subnav-pill" role="tablist" aria-label="Account details" style="margin:0">${tabs.map((t) => `<li class="${t.selected ? "uk-active" : ""}" role="presentation" style="padding:0">${tab(t, "")}</li>`).join("")}</ul>`,
+    selectedClass: "",
+    selectedParentClass: "uk-active",
+    progress: (v, label) => `<progress class="uk-progress" value="${v}" max="100" aria-label="${label}"></progress>`,
+    accordion: (items) => `<ul class="uk-accordion uk-accordion-default">${items.map(([q, a]) => `<li><button type="button" class="uk-accordion-title" aria-expanded="false">${q}</button><div class="uk-accordion-content" hidden><p>${a}</p></div></li>`).join("")}</ul>`,
+    // UIkit styles <a> in subnavs and accordion titles; a srcdoc frame would
+    // navigate on href="#", so the bench keeps buttons and mirrors those rules.
+    css: "button.uk-accordion-title,.uk-subnav>*>button{width:100%;border:0;background:none;font-family:inherit;text-align:start;cursor:pointer}button.uk-accordion-title{padding:0}.uk-subnav-pill>.uk-active>button{background-color:#1e87f0;color:#fff}",
+    wire(doc) {
+      for (const title of doc.querySelectorAll(".uk-accordion-title")) {
+        title.addEventListener("click", () => {
+          const open = title.parentElement.classList.toggle("uk-open");
+          title.setAttribute("aria-expanded", String(open));
+          title.nextElementSibling.hidden = !open;
+        });
+      }
+    },
+  };
+
+  /* Pin exact versions so a reference never moves under a comparison. Bump
+     actual-release after each release to compare against the last one. */
+  const LIBS = [
+    { id: "actual", name: "Actual CSS", version: "working tree", css: [ACTUAL_SRC], kit: actualKit, overrides: true },
+    { id: "actual-release", name: "Actual CSS", version: "0.19.5", css: ["https://cdn.jsdelivr.net/npm/actual-css@0.19.5/dist/actual.full.min.css"], kit: actualKit },
+    { id: "oat", name: "Oat", version: "0.8.0", css: ["https://unpkg.com/@knadh/oat@0.8.0/oat.min.css"], kit: oatKit },
+    { id: "daisyui", name: "daisyUI", version: "5.8.2", css: ["https://cdn.jsdelivr.net/npm/daisyui@5.8.2/daisyui.css", "https://cdn.jsdelivr.net/npm/daisyui@5.8.2/themes.css"], kit: daisyKit },
+    { id: "bootstrap5", name: "Bootstrap", version: "5.3.9", css: ["https://cdn.jsdelivr.net/npm/bootstrap@5.3.9/dist/css/bootstrap.min.css"], kit: bootstrap5Kit },
+    { id: "bootstrap6", name: "Bootstrap", version: "6.0.0-alpha.1", css: ["https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css"], kit: bootstrap6Kit },
+    { id: "uikit", name: "UIkit", version: "3.25.31", css: ["https://cdn.jsdelivr.net/npm/uikit@3.25.31/dist/css/uikit.min.css"], kit: uikitKit },
+    // Systems that keep a 3:1 control edge on purpose: a reference for the border question.
+    { id: "carbon", name: "Carbon", version: "1.120.0", css: ["https://cdn.jsdelivr.net/npm/@carbon/styles@1.120.0/css/styles.min.css"], kit: carbonKit },
+    { id: "govuk", name: "GOV.UK Frontend", version: "6.6.0", css: ["https://cdn.jsdelivr.net/npm/govuk-frontend@6.6.0/dist/govuk/govuk-frontend.min.css"], kit: govukKit },
+  ];
+
+  const SNIPPETS = {
+    "Thin focus (1px)": ":root { --focus-ring-width: 1px; --focus-outline-offset: 1px; }",
+    "Springy switch": ".switch::before { transition-duration: 350ms; transition-timing-function: cubic-bezier(.34, 1.56, .64, 1); }",
+    "Taller segmented": ".segmented { --control-size: 2.75rem; }",
+    "Segmented without inner border": ".segmented { --segmented-selected-border: transparent; }",
+    "Roomier badge": ".badge { --badge-font-size: var(--font-size-xs); --badge-pad-x: calc(var(--badge-size) / 2); }",
+    "Medium field labels": ".field-label { font-weight: var(--font-weight-medium); }",
+    "Card padding 24px": ".card { --card-pad: 1.5rem; }",
+    "Fields: quiet sides, 3:1 bottom edge": ":is(.input, .textarea, .select) { --control-border: var(--border); --control-border-block-end-color: var(--border-control); }",
+    "Fields: tinted fill, 3:1 bottom edge": ":is(.input, .textarea, .select) { --control-bg: var(--surface-subtle); --control-border: transparent; --control-border-block-end-color: var(--border-control); }",
+    "Focus: tinted fill": ":is(.input, .textarea, .select):focus-visible { --control-bg: color-mix(in oklab, var(--focus) 8%, var(--surface)); }",
+    "Outline button: quiet edge": ".btn.outline { --ui-border: var(--intent, var(--border)); }",
+  };
+
+  const store = {
+    get(key, fallback) { try { return JSON.parse(localStorage.getItem(`bench:${key}`)) ?? fallback; } catch { return fallback; } },
+    set(key, value) { try { localStorage.setItem(`bench:${key}`, JSON.stringify(value)); } catch {} },
+  };
+  const state = {
+    libs: store.get("libs", ["oat", "actual"]),
+    view: store.get("view", "pairs"),
+    theme: store.get("theme", "light"),
+    overrides: store.get("overrides", ""),
+  };
+  // ?libs=oat,actual&theme=dark&view=full wins over the stored choice.
+  const params = new URLSearchParams(location.search);
+  if (params.has("libs")) state.libs = params.get("libs").split(",");
+  if (params.has("theme")) state.theme = params.get("theme");
+  if (params.has("view")) state.view = params.get("view");
+  const onlyCards = params.get("cards")?.split(",");
+  if (params.has("css")) state.overrides = params.get("css");
+
+  let uid = 0;
+  const attrs = (f) => `type="${f.type || "text"}"${f.placeholder ? ` placeholder="${f.placeholder}"` : ""}${f.value ? ` value="${f.value}"` : ""}${f.disabled ? " disabled" : ""}`;
+  const tab = (t, cls) => `<button type="button" role="tab" class="${[cls, t.selected ? "%SEL%" : ""].filter(Boolean).join(" ")}" aria-selected="${t.selected}" id="tab-${t.id}" aria-controls="panel-${t.id}"${t.selected ? "" : ' tabindex="-1"'}>${t.label}</button>`;
+  const heading = (title, desc) => `<div class="demo-heading"><h2 class="demo-title">${title}</h2>${desc ? `<p class="demo-muted">${desc}</p>` : ""}</div>`;
+  const row = (cls, body) => `<div class="${cls}">${body}</div>`;
+
+  const CARDS = {
+    signup: { name: "Form · Sign up", hint: "Tab through to compare focus" },
+    fields: { name: "Fields at rest", hint: "Empty without placeholder: is it still a field?" },
+    notify: { name: "Switches · Notifications", hint: "Click to compare motion", metric: 'input[role="switch"]' },
+    members: { name: "Avatars, badges · Members" },
+    disk: { name: "Progress, badge · Storage" },
+    profile: { name: "Tabs · Segmented control", hint: "Compare group height and selection", metric: '[role="tablist"]' },
+    deploy: { name: "Actions · Deploy" },
+    faq: { name: "Accordion · FAQ" },
+    invoices: { name: "Badges · Invoices" },
+  };
+
+  function markup(card, k) {
+    const field = (label, placeholder, type, value, disabled) => k.field({ label, placeholder, type, value, disabled, id: `f${++uid}` });
+    const sw = (text, sub, checked) => `<label class="switch-row"><span class="switch-copy"><strong>${text}</strong><small>${sub}</small></span>${k.switch((cls) => `<input${cls ? ` class="${cls}"` : ""} type="checkbox" role="switch"${checked ? " checked" : ""} aria-label="${text}">`)}</label>`;
+    const member = (name, email, initials, role) => row("member-row", `${k.avatar(initials, name)}<div class="member-copy"><strong>${name}</strong><small>${email}</small></div>${k.badge(role, "secondary", role !== "Admin")}`);
+    const statement = (label, amount, status, tone) => row("statement-row", `<span>${label}</span>${k.badge(status, tone)}<span>${amount}</span>`);
+    switch (card) {
+      case "signup":
+        return k.card(heading("Sign up", "Feel free to start. Or stop.") + `<form class="demo-form" onsubmit="event.preventDefault()">${field("Full name", "Your name")}${field("Work email", "you@company.com", "email")}${field("Password", "••••••••", "password")}<p class="inline-hint">8 or more characters, with a number.</p>${k.checkbox("I accept the Terms", `c${++uid}`)}${k.button("Sign up", "primary")}</form>`);
+      case "fields":
+        return k.card(`<div class="demo-form">${field("Company", "")}${field("Website", "", "text", "example.com")}${field("Plan", "", "text", "Team", true)}</div>`);
+      case "notify":
+        return k.card(heading("Notify me", "You can change this later") + row("switches", sw("Someone replies", "To a thread you're in.") + sw("A deploy fails", "Sent right away, weekends included.", true) + sw("An invoice is ready", "On the 1st of every month.", true)));
+      case "members":
+        return k.card(`<div class="demo-heading heading-inline"><h2 class="demo-title">Members <small>3 of 5 users</small></h2>${k.button("Invite", "secondary")}</div>` + row("member-list", member("John Doe", "jdoe@example.com", "PR", "Admin") + member("Jane Doe", "jadoe@example.com", "TB", "Member") + member("Foo Bar", "foo@example.com", "FB", "Billing")));
+      case "disk":
+        return k.card(`<div class="demo-heading heading-inline"><h2 class="demo-title">Disk usage</h2>${k.badge("82%", "warning")}</div><p class="usage"><strong>8.2 GB</strong><span> of 10 GB</span></p>${k.progress(82, "Disk usage 82%")}` + row("usage-breakdown", "<div><span>Database backups</span><span>5.1 GB</span></div><div><span>Uploads</span><span>2.4 GB</span></div><div><span>Logs</span><span>0.7 GB</span></div>"));
+      case "profile":
+        return k.card(`<div class="tabs-demo">${k.tablist([{ id: "profile", label: "Profile", selected: true }, { id: "security", label: "Security", selected: false }]).replaceAll("%SEL%", k.selectedClass)}<div class="tab-content" id="panel-profile" role="tabpanel" aria-labelledby="tab-profile">${field("Username", "", "text", "foobar")}${k.button("Save changes", "primary")}</div><div class="tab-content" id="panel-security" role="tabpanel" aria-labelledby="tab-security" hidden>${field("New password", "••••••••", "password")}${k.button("Update password", "primary")}</div></div>`);
+      case "deploy":
+        return k.card(heading("app", "Last deployed 2 days ago. <code>main</code> has 3 new commits.") + row("button-row", k.button("Deploy now", "primary") + k.button("Dry run", "secondary")));
+      case "faq":
+        return k.accordion([["Do I need npm?", "No. You can use the library through a CDN link."], ["What if JavaScript is off?", "Native HTML controls and disclosures still work without JavaScript."]]);
+      case "invoices":
+        return k.card(heading("Invoices") + row("statement-list", statement("Bandwidth", "$1,200.00", "Paid", "success") + statement("CPU", "$340.00", "Due Oct 24", "warning") + statement("Memory", "$89.50", "Card declined", "danger")));
+    }
+  }
+
+  /* Glue: the card content's own layout, identical for every library. The
+     block margins stand in for a card gap; a library whose card already
+     spaces its children (cardGap) drops them, so spacing is not counted
+     twice. */
+  const GLUE = `
+    *{box-sizing:border-box}html{scrollbar-width:none}
+    body{margin:0;padding:10px;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5;background:transparent}
+    .card{min-width:0}
+    .demo-heading{display:grid;gap:5px}.demo-title{font-size:1.38rem;line-height:1.2;font-weight:600;letter-spacing:-.026em;margin:0}
+    .demo-muted{font-size:.94rem;opacity:.74;margin:0}.demo-title small{font-size:.65em;letter-spacing:0;font-weight:400;opacity:.65}
+    .heading-inline{display:flex;align-items:center;justify-content:space-between;gap:12px}.heading-inline .demo-title{margin-right:auto}
+    .demo-form{display:grid;gap:15px;margin-top:9px}.demo-form>*{margin:0}.demo-form>button{width:100%}
+    .inline-hint{margin:-10px 0 0!important;font-size:.75rem;opacity:.68}
+    .terms{font-size:.86rem}.terms:not(.choice){display:flex;align-items:center;gap:9px}.terms:not(.choice) input{margin:0}
+    .switches{margin-top:14px}.switch-row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid color-mix(in srgb,currentColor 11%,transparent);margin:0;cursor:pointer}
+    .switch-row:last-child{border-bottom:none;padding-bottom:0}.switch-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
+    .switch-copy strong{font-size:.9rem;font-weight:560}.switch-copy small{font-size:.81rem;opacity:.65;line-height:1.45}.switch-row>:last-child{flex:0 0 auto}
+    .member-list{margin-top:8px}.member-row{display:flex;align-items:center;gap:12px;padding:15px 0;border-bottom:1px solid color-mix(in srgb,currentColor 11%,transparent)}
+    .member-row:last-child{border:0;padding-bottom:0}.member-copy{min-width:0;flex:1;display:grid;gap:2px}
+    .member-copy strong{font-size:.89rem;line-height:1.25}.member-copy small{font-size:.79rem;opacity:.65;overflow-wrap:anywhere}.member-row .badge{flex-shrink:0}
+    .usage{font-size:1rem;margin:13px 0 9px}.usage span{opacity:.66}
+    .usage-breakdown{margin-top:8px}.usage-breakdown>div{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-top:1px solid color-mix(in srgb,currentColor 11%,transparent);font-size:.86rem}.usage-breakdown span:last-child{opacity:.64}
+    .tabs-demo [role=tablist]{display:grid;grid-template-columns:1fr 1fr;width:100%}.tabs-demo [role=tablist]>button{width:100%}
+    .tab-content{display:grid;gap:15px;margin-top:21px}.tab-content[hidden]{display:none}.tab-content>*{margin:0}.tab-content button{justify-self:start}
+    .button-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+    .statement-list{margin-top:9px}.statement-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:8px;padding:13px 0;border-bottom:1px solid color-mix(in srgb,currentColor 11%,transparent);font-size:.86rem}
+    .statement-row:last-child{border:0}.statement-row>span:last-child{text-align:right;white-space:nowrap}
+    .demo-feedback{font-size:.78rem;opacity:.65;margin-top:6px}
+    html[data-card-gap] :is(.card,.card-body)>*{margin-block:0}
+    .full-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:23px;align-items:start}.full-col{min-width:0;display:grid;gap:23px}
+    @media(max-width:600px){body{padding:7px}.demo-title{font-size:1.2rem}.full-grid{grid-template-columns:1fr}}`;
+
+  function buildDoc(lib, card) {
+    uid = 0;
+    const k = lib.kit;
+    const body = card === "full"
+      ? `<div class="full-grid"><div class="full-col">${markup("signup", k)}${markup("disk", k)}</div><div class="full-col">${markup("notify", k)}${markup("profile", k)}${markup("faq", k)}</div><div class="full-col">${markup("members", k)}${markup("deploy", k)}${markup("invoices", k)}</div></div>`
+      : markup(card, k);
+    // A library without the requested scheme renders its own, on its own page colour.
+    const scheme = (k.schemes ?? ["light", "dark"]).includes(state.theme) ? state.theme : k.schemes[0];
+    const page = scheme === state.theme ? "" : `html{background:${scheme === "light" ? "#fff" : "#000"}}`;
+    const html = Object.entries({ ...k.theme(scheme), ...(k.cardGap ? { "data-card-gap": "" } : {}) }).map(([a, v]) => ` ${a}="${v}"`).join("");
+    const links = lib.css.map((href) => `<link rel="stylesheet" href="${href}">`).join("");
+    return `<!doctype html><html lang="en"${html} style="color-scheme:${scheme}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">${links}<style>${GLUE}${k.css ?? ""}${page}</style><style id="bench-overrides">${lib.overrides ? state.overrides : ""}</style></head><body${k.bodyClass ? ` class="${k.bodyClass}"` : ""}>${body}</body></html>`;
+  }
+
+  function fit(frame) {
+    const doc = frame.contentDocument;
+    if (!doc?.documentElement) return;
+    frame.style.height = `${Math.ceil(doc.documentElement.scrollHeight)}px`;
+    const selector = CARDS[frame.dataset.card]?.metric;
+    const out = frame.parentElement.querySelector(".metric");
+    const el = selector && doc.querySelector(selector);
+    if (out && el) {
+      const r = el.getBoundingClientRect();
+      const motion = el.matches('[role="switch"]') ? ` · ${getComputedStyle(el, "::before").transitionDuration}` : "";
+      out.textContent = `${Math.round(r.width)} × ${Math.round(r.height)} px${motion}`;
+    }
+  }
+
+  // Same tab model in every frame, whatever the library's own JS would do.
+  function wire(frame, lib) {
+    const doc = frame.contentDocument;
+    new ResizeObserver(() => fit(frame)).observe(doc.documentElement);
+    doc.fonts?.ready?.then(() => fit(frame));
+    lib.kit.wire?.(doc);
+    const { selectedClass: selected, selectedParentClass: parentSelected } = lib.kit;
+    for (const list of doc.querySelectorAll('[role="tablist"]')) {
+      const tabs = [...list.querySelectorAll('[role="tab"]')];
+      const activate = (current, focus) => {
+        for (const t of tabs) {
+          const on = t === current;
+          t.setAttribute("aria-selected", String(on));
+          t.tabIndex = on ? 0 : -1;
+          if (selected) t.classList.toggle(selected, on);
+          if (parentSelected) t.parentElement.classList.toggle(parentSelected, on);
+          const panel = doc.getElementById(t.getAttribute("aria-controls"));
+          if (panel) panel.hidden = !on;
+        }
+        if (focus) current.focus();
+      };
+      tabs.forEach((t, i) => {
+        t.addEventListener("click", () => activate(t));
+        t.addEventListener("keydown", (e) => {
+          const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+          if (step === undefined && e.key !== "Home" && e.key !== "End") return;
+          e.preventDefault();
+          const next = e.key === "Home" ? 0 : e.key === "End" ? tabs.length - 1 : (i + step + tabs.length) % tabs.length;
+          activate(tabs[next], true);
+        });
+      });
+    }
+    fit(frame);
+  }
+
+  function frameFor(lib, card) {
+    const shell = document.createElement("div");
+    shell.className = "frame";
+    const frame = document.createElement("iframe");
+    frame.title = `${CARDS[card]?.name ?? "Full composition"} — ${lib.name} ${lib.version}`;
+    frame.dataset.card = card;
+    frame.dataset.lib = lib.id;
+    frame.addEventListener("load", () => wire(frame, lib));
+    frame.srcdoc = buildDoc(lib, card);
+    shell.append(frame);
+    if (CARDS[card]?.metric) shell.insertAdjacentHTML("beforeend", '<div class="metric"></div>');
+    return shell;
+  }
+
+  const selectedLibs = () => LIBS.filter((l) => state.libs.includes(l.id));
+
+  function render() {
+    const libs = selectedLibs();
+    document.body.dataset.theme = state.theme;
+    document.querySelectorAll("[data-view]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.view === state.view)));
+    document.querySelectorAll("[data-theme-choice]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.themeChoice === state.theme)));
+    document.querySelectorAll("[data-lib-toggle]").forEach((b) => b.setAttribute("aria-pressed", String(state.libs.includes(b.dataset.libToggle))));
+    document.getElementById("pairs-view").hidden = state.view !== "pairs";
+    document.getElementById("full-view").hidden = state.view !== "full";
+
+    const heads = document.getElementById("heads");
+    heads.style.setProperty("--cols", libs.length);
+    heads.innerHTML = libs.map((l) => `<div><strong>${l.name}</strong><small>${l.version}</small></div>`).join("");
+
+    const pairs = document.getElementById("pairs");
+    const full = document.getElementById("full-view");
+    pairs.replaceChildren();
+    full.replaceChildren();
+    if (state.view === "pairs") {
+      for (const [id, card] of Object.entries(CARDS)) {
+        if (onlyCards && !onlyCards.includes(id)) continue;
+        const section = document.createElement("section");
+        section.className = "pair";
+        section.innerHTML = `<h2>${card.name}${card.hint ? `<small>${card.hint}</small>` : ""}</h2>`;
+        const grid = document.createElement("div");
+        grid.className = "grid";
+        grid.style.setProperty("--cols", libs.length);
+        grid.append(...libs.map((l) => frameFor(l, id)));
+        section.append(grid);
+        pairs.append(section);
+      }
+    } else {
+      for (const l of libs) {
+        const block = document.createElement("div");
+        block.innerHTML = `<h2 class="pair"><strong>${l.name}</strong> <small>${l.version}</small></h2>`;
+        block.append(frameFor(l, "full"));
+        full.append(block);
+      }
+    }
+  }
+
+  function save() {
+    for (const key of Object.keys(state)) store.set(key, state[key]);
+  }
+
+  document.getElementById("lib-toggles").innerHTML = LIBS.map((l) => `<button class="toggle" type="button" data-lib-toggle="${l.id}">${l.name} ${l.version}</button>`).join("");
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("button");
+    if (!b) return;
+    if (b.dataset.libToggle) {
+      const id = b.dataset.libToggle;
+      state.libs = state.libs.includes(id) ? state.libs.filter((x) => x !== id) : LIBS.map((l) => l.id).filter((x) => x === id || state.libs.includes(x));
+    } else if (b.dataset.view) state.view = b.dataset.view;
+    else if (b.dataset.themeChoice) state.theme = b.dataset.themeChoice;
+    else return;
+    save();
+    render();
+  });
+
+  // Overrides restyle the live frames in place: no reload, focus and tab state survive.
+  const overrides = document.getElementById("overrides");
+  overrides.value = state.overrides;
+  const applyOverrides = () => {
+    state.overrides = overrides.value;
+    save();
+    for (const frame of document.querySelectorAll("iframe")) {
+      if (!LIBS.find((l) => l.id === frame.dataset.lib)?.overrides) continue;
+      const style = frame.contentDocument?.getElementById("bench-overrides");
+      if (style) style.textContent = state.overrides;
+    }
+  };
+  overrides.addEventListener("input", applyOverrides);
+  const snippets = document.getElementById("snippets");
+  snippets.insertAdjacentHTML("beforeend", Object.keys(SNIPPETS).map((name) => `<option>${name}</option>`).join(""));
+  snippets.addEventListener("change", () => {
+    if (!snippets.value) return;
+    overrides.value = `${overrides.value.trimEnd()}${overrides.value.trim() ? "\n" : ""}${SNIPPETS[snippets.value]}\n`;
+    snippets.value = "";
+    applyOverrides();
+  });
+
+  window.addEventListener("resize", () => document.querySelectorAll("iframe").forEach(fit));
+  render();
+})();
+</script>
+</body>
+</html>

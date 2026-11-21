@@ -77,9 +77,9 @@ Actual CSS or import `actual.layer.css`.
 
 Transparent treatments (`.outline`, `.ghost`, `.link`) take their text from the
 surrounding foreground by default, including on a band your application paints.
-A neutral outline draws its border with `--border-control`, the theme's control
-edge, so it matches an adjacent field rather than the band ink; set
-`--ui-border` when the border must follow the band. A local intent class still
+A neutral outline draws its border with `--border`: its label identifies it, so
+it needs no 3:1 control edge. Beside a field in a `.join`, it takes the field's
+edge instead. Set `--ui-border` when the border must follow the band. A local intent class still
 wins: `.danger.outline` uses the danger color in any context, and nothing tunes
 that color for a surface you paint yourself. For intent ink on a dark band, use
 a `data-theme` island, whose palette is tuned for its surface. Filled buttons

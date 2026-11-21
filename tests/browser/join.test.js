@@ -20,7 +20,7 @@ const TIMEOUT = 60_000;
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
-it("a neutral outline matches the field border; intents keep theirs", async () => {
+it("a neutral outline matches the field border beside a field; intents keep theirs", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
@@ -31,6 +31,7 @@ it("a neutral outline matches the field border; intents keep theirs", async () =
           default: border("#join-default"),
           plainInput: border("#plain-input"),
           plain: border("#plain-outline"),
+          surfaceBorder: border("#ref-border"),
           danger: border("#join-danger"),
           neutral: border("#join-neutral"),
           controlInput: border("#join-control-input"),
@@ -39,7 +40,8 @@ it("a neutral outline matches the field border; intents keep theirs", async () =
       })()`);
 
       expect(result.default).toBe(result.input);
-      expect(result.plain).toBe(result.plainInput);
+      expect(result.plain).toBe(result.surfaceBorder);
+      expect(result.plain).not.toBe(result.plainInput);
       expect(result.controlInput).toBe("rgb(255, 0, 0)");
       expect(result.controlDefault).toBe(result.controlInput);
       expect(result.danger).not.toBe(result.input);

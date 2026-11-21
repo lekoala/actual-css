@@ -62,6 +62,13 @@ and can be bypassed with Git's `--no-verify` option.
 
 ## Visual checks
 
+`playground/compare.html` is the component bench: the same cards in Actual
+CSS (rendered from `src/`) beside Oat, daisyUI, Bootstrap 5 and 6, UIkit,
+Carbon, GOV.UK Frontend, or the last Actual release, with an overrides box to try a token or hook value live. Open
+it in a browser; `?libs=oat,actual&theme=dark` presets it, which also lets
+`shot:page --width 1600` capture a configuration. A library is one `LIBS`
+entry plus a kit of its markup.
+
 `shot:page` renders a page in headless Chrome and saves a full-page PNG —
 the quickest way to verify a layout or component change actually looks right,
 especially for generated pages that compose primitives (a markup mistake there

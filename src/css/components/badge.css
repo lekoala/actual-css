@@ -40,10 +40,11 @@
 
 .badge {
   --badge-size: 1.5rem;
-  /* A third of the height keeps the pill proportional across local sizes
-     without coupling it to the label typography. */
-  --badge-pad-x: calc(var(--badge-size) / 3);
-  --badge-font-size: var(--font-size-sm);
+  /* Half the height keeps the pill proportional across local sizes without
+     coupling it to the label typography. A label one step under the body
+     text, with this much air, reads as a tag rather than as text on a fill. */
+  --badge-pad-x: calc(var(--badge-size) / 2);
+  --badge-font-size: var(--font-size-xs);
   --badge-icon-size: 1em;
   --badge-dot-size: 0.5rem;
   /* A leading .avatar and a trailing .close are slots: a disc inside the pill
@@ -99,7 +100,7 @@
 
 .badge.lg {
   --badge-size: 1.875rem;
-  --badge-font-size: var(--font-size-md);
+  --badge-font-size: var(--font-size-sm);
   --badge-dot-size: 0.625rem;
 }
 

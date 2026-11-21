@@ -177,6 +177,12 @@ background shared by `.input`, `.textarea`, `.select` and external widget bridge
 Use `--control-bg` for a local field override; state rules still own readonly,
 disabled and validation fills.
 
+Set `--control-default-border` the same way for an inherited resting field
+edge, and `--control-border-block-end-color` / `-width` for a different lower
+edge. Together they keep the 3:1 cue on the lower edge alone; readonly and
+disabled fields drop that lower edge. Recipes: Foundations · Theming (lighter
+field borders).
+
 Set `--control-hover-border` to tune the hover border of `.input` and `.textarea`.
 Set `--control-hover-bg` to keep a `.select` background steady on hover, or give
 it a stronger fill.

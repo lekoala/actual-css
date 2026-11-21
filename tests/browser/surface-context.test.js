@@ -47,7 +47,7 @@ it("contextual-surface contract over one browser pass", async () => {
           refNeutral: bg("#ref-neutral"),
           refPrimary: bg("#ref-primary"),
           refText: color("#ref-text"),
-          refBorderControl: color("#ref-border-control"),
+          refBorder: color("#ref-border"),
           refTextMuted: color("#ref-text-muted"),
           refNeutralFg: color("#ref-neutral-fg"),
           refPrimaryFg: color("#ref-primary-fg"),
@@ -96,10 +96,10 @@ it("contextual-surface contract over one browser pass", async () => {
       const initial = await snapshot();
 
       // Transparent treatments inherit ordinary foreground context. A neutral
-      // outline keeps the theme's control edge, and an explicit intent remains
+      // outline keeps the theme's surface border, and an explicit intent remains
       // stronger than that contextual color.
       expect(initial.normalOutlineColor).toBe(initial.refText);
-      expect(initial.normalOutlineBorder).toBe(initial.refBorderControl);
+      expect(initial.normalOutlineBorder).toBe(initial.refBorder);
       expect(initial.normalOutlineBorder).not.toBe(initial.refText);
       expect(initial.wrapperBg).toBe(initial.refSolid);
       expect(initial.wrapperColor).toBe(initial.refSurface);
@@ -107,7 +107,7 @@ it("contextual-surface contract over one browser pass", async () => {
       expect(initial.wrapperLinkColor).toBe(initial.refSurface);
       expect(initial.contextOutlineBg).toBe("rgba(0, 0, 0, 0)");
       expect(initial.contextOutlineColor).toBe(initial.refSurface);
-      expect(initial.contextOutlineBorder).toBe(initial.refBorderControl);
+      expect(initial.contextOutlineBorder).toBe(initial.refBorder);
       expect(initial.contextGhostColor).toBe(initial.refSurface);
       expect(initial.contextLinkButtonColor).toBe(initial.refSurface);
       expect(initial.contextPrimaryOutlineColor).toBe(initial.refPrimary);
@@ -125,7 +125,7 @@ it("contextual-surface contract over one browser pass", async () => {
       expect(initial.nestedCardColor).toBe(initial.refText);
       expect(initial.nestedHeadingColor).toBe(initial.refText);
       expect(initial.nestedOutlineColor).toBe(initial.refText);
-      expect(initial.nestedOutlineBorder).toBe(initial.refBorderControl);
+      expect(initial.nestedOutlineBorder).toBe(initial.refBorder);
       expect(initial.nestedBusyOverlay).toBe(initial.refRaisedOverlay);
       expect(initial.nestedAccordionBg).toBe(initial.refRaised);
       expect(initial.nestedAccordionSummary).toBe(initial.refText);
