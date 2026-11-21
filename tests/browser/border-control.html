@@ -74,10 +74,12 @@
   <span data-switch-danger style="color: var(--danger)"></span>
 
   <!-- In a dark scheme the --border-control track sits above the surface: the
-       resting knob must take the full ink, not --surface-raised. -->
+       resting knob is the opaque surface it is calibrated against, dark like
+       the checked knob, not --surface-raised. -->
   <div data-theme="dark">
     <input class="switch" type="checkbox" role="switch" data-dark-switch aria-label="Dark switch">
-    <span data-dark-ink style="color: var(--text)"></span>
+    <input class="switch" type="checkbox" role="switch" data-dark-checked checked aria-label="Dark checked switch">
+    <span data-dark-surface style="color: var(--surface-opaque)"></span>
   </div>
 
   <div class="card" data-separator>Card</div>

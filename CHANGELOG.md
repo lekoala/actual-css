@@ -35,7 +35,7 @@
 - Docs: component, enhancement and form pages lead with their first demo; `check:docs` fails a section placed before it.
 
 ### Fixed
-- An unchecked `.switch` knob takes `--text` in a dark scheme instead of sinking into the track (1.47:1 → 4.5:1 on the default palette).
+- An unchecked `.switch` knob takes `--surface-opaque` in a dark scheme: it no longer sinks into the track (1.47:1 → 3.6:1 on the default palette) and stays dark like the checked knob.
 - The selected `.segment` rises above the `.segmented` track in a dark scheme instead of reading as a recess.
 - An avatar status dot (`.avatar > .badge:empty`) keeps its ink edge in print, like every other `.badge`, instead of vanishing without background graphics.
 - `in-view`: focus finishes a Reveal entrance still running or delayed after its release, not only a pending one.

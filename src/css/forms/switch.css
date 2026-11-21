@@ -81,15 +81,18 @@
   cursor: pointer;
 }
 
-/* In a dark scheme the --border-control track sits above the surface, so a
-   --surface-raised knob would sink into it as a dark hole. The resting knob
-   takes the full ink there (4.5:1 against the track on the default palette,
-   where --text-muted gave 2.1:1); a light scheme keeps the white knob, 3:1
-   against the track. light-dark() follows the switch's own color-scheme, so a
-   theme island resolves its branch. Without it the knob stays --surface-raised. */
+/* The knob keeps one color through the toggle: light in a light scheme (white
+   on the dark checked track), dark in a dark one, where the checked track turns
+   light and its --intent-fg knob dark. A light resting knob there flipped color
+   on every toggle. The dark resting knob is --surface-opaque, not
+   --surface-raised: --border-control is calibrated to 3:1 against that opaque
+   surface, so the knob holds the same 3:1 against the track in any theme that
+   keeps the contract (3.6:1 on the default palette; --surface-raised gave
+   1.47:1). light-dark() follows the switch's own color-scheme, so a theme
+   island resolves its branch. Without it the knob stays --surface-raised. */
 @supports (color: light-dark(red, blue)) {
   .switch {
-    --switch-knob: light-dark(var(--surface-raised), var(--text));
+    --switch-knob: light-dark(var(--surface-raised), var(--surface-opaque));
   }
 }
 

@@ -164,13 +164,19 @@ it("a resting switch is a filled pill, not a ring", async () => {
   });
 });
 
-it("a resting switch knob takes the full ink in a dark scheme", async () => {
+// The knob keeps one tone through the toggle: a light resting knob beside the
+// dark checked one flipped color on every click in a dark scheme.
+it("a dark scheme switch knob is the opaque surface, dark in both states", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
-    const [knob, ink] = await view.evaluate(`[
+    const [off, on, surface] = await view.evaluate(`[
       getComputedStyle(document.querySelector("[data-dark-switch]"), "::before").backgroundColor,
-      getComputedStyle(document.querySelector("[data-dark-ink]")).color,
+      getComputedStyle(document.querySelector("[data-dark-checked]"), "::before").backgroundColor,
+      getComputedStyle(document.querySelector("[data-dark-surface]")).color,
     ]`);
-    expect(knob).toBe(ink);
+    expect(off).toBe(surface);
+    const lightness = (rgb) => Math.max(...rgb.match(/\d+/g).slice(0, 3).map(Number));
+    expect(lightness(off)).toBeLessThan(80);
+    expect(lightness(on)).toBeLessThan(80);
   });
 });
 

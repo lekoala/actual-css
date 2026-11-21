@@ -144,7 +144,8 @@ same optical line. Change the type or the control size and they stay level:
   as one shape; a disabled track takes the quiet `--border` of a disabled
   check. Validation takes precedence.
 - `--switch-knob` — knob fill. At rest it is `--surface-raised` in a light
-  scheme and `--text` in a dark one, so it contrasts with the track.
+  scheme and `--surface-opaque` in a dark one, so it contrasts with the track
+  and keeps the tone of the checked knob.
 
 - `--choice-control-size` — shared size for inline choices; the switch track is
   this plus `0.125em`, so scaling it scales the checkbox and the switch together.
