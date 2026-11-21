@@ -40,7 +40,8 @@ it("keeps size local and density typographically inert", async () => {
     })()`);
 
     expect(result.plain.font).toBe(result.bodyFont);
-    expect([result.sm.font, result.def.font, result.lg.font]).toEqual([14, 16, 18]);
+    // A button label sits one type step below the field text (14/16/18).
+    expect([result.sm.font, result.def.font, result.lg.font]).toEqual([13, 14, 16]);
     expect(result.sm.height).toBeLessThan(result.def.height);
     expect(result.def.height).toBeLessThan(result.lg.height);
 

@@ -81,6 +81,29 @@ one at the trailing edge:
 </form>
 ```
 
+## Full-width submit
+
+A button and a field share `--control-pad-x`, so a button at its own width
+under a field already sets its label on the field's text line. A button
+stretched to the column keeps that line only with its label at the start; an
+icon after it goes to the far end. Centered stays the default everywhere else.
+
+```html demo
+<form class="stack" novalidate>
+  <label class="field">
+    <span class="field-label">Hostname</span>
+    <input class="input" type="text" value="baremetal.example.com" />
+  </label>
+
+  <button type="submit"
+          class="btn primary"
+          style="inline-size: 100%; justify-content: space-between; text-align: start">
+    Create resource
+    <i class="ti ti-plus" aria-hidden="true"></i>
+  </button>
+</form>
+```
+
 > The sticky variant adds `--form-actions-sticky-block-offset`,
 > `--form-actions-sticky-padding`, and `--form-actions-sticky-inline-offset` —
 > see Sticky Actions.

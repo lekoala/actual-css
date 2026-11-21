@@ -138,6 +138,19 @@
   --alert-border-inline-start-color: var(--intent, var(--text));
 }
 
+/* Button labels at the field text size, regular: with regular captions for
+   labels, the core medium step-down label would be the heaviest text in a
+   form. Declared on the element, not the root: the root value would be
+   replaced at every .sm/.lg boundary, and var(--control-font-size) must
+   resolve where the size class applies. (design note: button-labels.md) */
+[data-theme="minimal"] :is(.btn, .pagination) {
+  --btn-font-size: var(--control-font-size);
+}
+
+[data-theme="minimal"] .btn {
+  font-weight: var(--font-weight-normal);
+}
+
 @supports (color: light-dark(red, blue)) {
   [data-theme="minimal"] {
     color-scheme: light dark;

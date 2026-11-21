@@ -11,11 +11,16 @@ Actions and navigation with shared intents, variants, sizes, and loading, presse
 
 ## Usage
 
-- Give the main action in each group the strongest treatment. Use quieter
-  treatments for alternatives, and reserve the `danger` intent for
-  destructive actions.
-- Label buttons with the action and its object when needed, such as
-  “Save changes” or “Delete project.”
+- Give one action per decision context the strongest treatment; two primary
+  buttons in the same group compete. Use quieter treatments for alternatives,
+  and reserve the `danger` intent for destructive actions.
+- Name the action, with its object when it clarifies: “Save changes”,
+  “Delete project”. Common actions such as “Close”, “Cancel” or “Done” stand
+  alone. A label should still make sense read out of context.
+- Keep a group to two or three actions; move the rest into an
+  [action list](../enhancements/flyout.md#action-list).
+- Let a long or translated label wrap to a second line rather than truncating
+  it.
 
 ## Class reference
 
@@ -139,7 +144,9 @@ container. For a plain text link, use a bare `<a>` with no class.
 
 ```html demo
 <div class="cluster">
-  <button class="btn" type="button"><i class="ti ti-star" aria-hidden="true"></i> With an icon</button>
+  <button class="btn primary" type="button">Create resource <i class="ti ti-plus" aria-hidden="true"></i></button>
+  <button class="btn outline" type="button">Download report <i class="ti ti-download" aria-hidden="true"></i></button>
+  <button class="btn ghost" type="button"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back</button>
   <button class="btn icon-only" type="button" aria-label="Add">
     <i class="ti ti-plus" aria-hidden="true"></i>
   </button>
@@ -149,8 +156,16 @@ container. For a plain text link, use a bare `<a>` with no class.
 </div>
 ```
 
+Put the icon after the label by default: the action reads first. A direction
+that points backward, such as “Back”, keeps its arrow before the label. In a
+group, give every button an icon or none, and draw them in one icon style.
+For a button as wide as its form column, see
+[a full-width submit](../forms/form-actions.md#full-width-submit).
+
 Use `.btn.icon-only` for a square icon button sized to the control height.
-Always name it with an `aria-label` since there is no visible text.
+Always name it with an `aria-label` since there is no visible text; a
+[tooltip](../enhancements/tooltip.md) shows that name to sighted users. Prefer
+a visible label when the icon is not familiar or the action is destructive.
 
 ### Button groups
 
@@ -173,6 +188,18 @@ Use the same variant across a group. Change a button's variant to mark a
 meaningful state, such as a solid pressed [toggle](#toggle) among outlines.
 For one choice among a few on a shared track, use a
 [segmented control](segmented.md).
+
+Two buttons that settle one decision can share their width: a `.switcher`
+gives them equal columns and stacks them when the row runs out of room. Keep
+intrinsic widths everywhere else, such as a toolbar or a row with a ghost
+“Skip”.
+
+```html demo
+<div class="switcher" style="--switcher-threshold: 20rem">
+  <button class="btn outline" type="button">Keep location</button>
+  <button class="btn danger" type="button">Delete location</button>
+</div>
+```
 
 ## Sizes
 
@@ -321,6 +348,10 @@ on its components. Tap both rows on a phone to compare:
 
 ## CSS hooks
 
+- `--btn-font-size` — label size, one type step below the field text and
+  selected by `.sm`/`.lg`. It inherits, so a container can set it for every
+  button inside. `.btn.link` takes the surrounding text size and `.icon-only`
+  the field text size instead.
 - `--btn-radius` — corner radius.
 - `--btn-gap` — space between an icon and the label text (default `0.375em`).
 - `--btn-shadow` — resting elevation (unset by default). It inherits, so a

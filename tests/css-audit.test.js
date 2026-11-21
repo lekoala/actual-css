@@ -1146,7 +1146,6 @@ test("sized control wrappers consume their local typography", () => {
     ["src/css/forms/form.css", ".field"],
     ["src/css/forms/input-icon.css", ".input-icon"],
     ["src/css/forms/otp.css", ".otp"],
-    ["src/css/components/pagination.css", ".pagination"],
   ];
 
   for (const [path, selector] of participants) {
@@ -1154,6 +1153,11 @@ test("sized control wrappers consume their local typography", () => {
       new RegExp(`\\${selector}\\s*\\{[^}]*font-size:\\s*var\\(--control-font-size\\)`, "s"),
     );
   }
+
+  // Pagination holds .btn page numbers: its ellipsis takes their label size.
+  expect(readCss("src/css/components/pagination.css")).toMatch(
+    /\.pagination\s*\{[^}]*font-size:\s*var\(--btn-font-size\)/s,
+  );
 });
 
 test("every inline choice derives its first-line offset from its own height", () => {

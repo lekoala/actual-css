@@ -48,7 +48,6 @@
 }
 
 .btn {
-  --btn-font-size: var(--control-font-size);
   --btn-min-size: var(--control-size);
   --btn-pad-x: var(--control-pad-x, 1em);
   --btn-bg: var(--ui-bg, var(--btn-default-bg, var(--intent, var(--neutral))));
@@ -92,11 +91,13 @@
      use 0 0 #0000 to remove elevation, since none invalidates that list. */
   box-shadow: var(--btn-shadow, 0 0 #0000);
   font: inherit;
-  font-size: var(--btn-font-size);
-  /* why: regular, not medium. The fill, edge and intent carry the hierarchy;
-     a medium label read dense beside the medium field labels, worst with
-     system-ui on Windows, where 500 renders close to semibold. */
-  font-weight: var(--font-weight-normal);
+  /* why: inherited, not declared here: tokens.css and the .sm/.lg boundaries
+     select it, so an author can also set it on a container. */
+  font-size: var(--btn-font-size, var(--control-font-size));
+  /* why: medium at one step below the field text. Medium at the field text
+     size read dense, worst with system-ui on Windows (500 renders close to
+     semibold); regular read lighter than the medium field labels. */
+  font-weight: var(--font-weight-medium);
   /* why: 1.25, not 1: a wrapped label's lines touched at 1. A single line
      keeps its height, since padding-block is derived from 1lh above. */
   line-height: 1.25;
@@ -117,6 +118,9 @@
   inline-size: var(--btn-min-size);
   block-size: var(--btn-min-size);
   padding: 0;
+  /* why: an icon font glyph is 1em; it keeps the field text size, not the
+     smaller label step, so the icon fills the square as before. */
+  font-size: var(--control-font-size);
 }
 
 /* .solid/.soft/.outline are shared via variants.css. The baseline --btn-*
@@ -223,6 +227,9 @@
   min-block-size: auto;
   padding-inline: 0;
   inline-size: fit-content;
+  /* why: a link reads as text, so it takes the size of the sentence around it
+     rather than the button label step. */
+  font-size: inherit;
   max-inline-size: 100%;
   /* No border at all: a link reads through its underline, and the inherited
      .btn border made transparent would turn into a visible box in forced

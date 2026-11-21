@@ -85,6 +85,7 @@ export const FOUNDATIONS = {
     "font-size-md",
     "font-size-lg",
     "control-font-size",
+    "btn-font-size",
   ],
   size: ["control-size-sm", "control-size-md", "control-size-lg", "control-size", "bar-height"],
   offset: ["focus-outline-offset"],

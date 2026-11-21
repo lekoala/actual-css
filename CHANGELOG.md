@@ -12,10 +12,15 @@
 - Dev: `bun run report:composition` prints what a composed page pays in CSS and JS, optionally beside another library (`--ref`).
 - Docs: Dialog · "Without JavaScript" lists what the native path covers and gives up.
 - Design note: `composition-weight.md` records the weight audit and the reductions declined.
+- Design note: `button-labels.md` records the button label settings compared and why 13/14/16px medium won.
+- `corporate` and `minimal` demo themes keep button labels at the field text size, in medium and regular.
 - `minimal` demo theme: one ink, hairlines, square corners, no elevation, built from tokens and inherited hooks.
 - `--reveal-delay`: pause before a `.reveal` entrance or a `.reveal-group`'s first child; the stagger counts from it.
 - Docs: Ajax · "Confirm, show errors, recover" composes the busy button, a confirmation, server errors and a failure message.
 - Docs: Flyout · "Contextual help": a help button beside a label opens a panel with an explanation and a link.
+- Docs: Button · usage for action labels, groups of two or three, icons after the label, and an equal-width decision pair on `.switcher`.
+- Docs: Form actions · "Full-width submit" keeps a stretched button's label on the field text line.
+- Dev: the component bench adds icons and long labels, a field beside an outline button, and an Actual-only size card.
 
 ### Changed
 - Docs: "Coding agents and DESIGN.md" gains "Components are tools, not design decisions".
@@ -35,8 +40,12 @@
 - Docs: component, enhancement and form pages lead with their first demo; `check:docs` fails a section placed before it.
 - `--soft-bg-mix` defaults to 92% (was 88%): soft alerts, badges, buttons and `.soft` surfaces take a lighter fill.
 - The default palette's `--*-soft-fg` hooks keep the raw intent, rebated toward `--text` only as far as 4.5:1 on the hovered fill needs (0–12%, was 10–25%): soft ink reads livelier.
-- `.btn` labels are set in `--font-weight-normal` (was medium); fill, edge and intent carry the hierarchy.
+- `.btn` labels drop one type step below the field text (`--btn-font-size`: 14px; 13px in `.sm`, 16px in `.lg`), still medium.
+- `--btn-font-size` is inherited and selected by `.sm`/`.lg`, so a button in `.join.sm` or `.field.sm` follows that size.
+- `.btn.link` takes the surrounding text size; `.btn.icon-only` keeps its glyph at `--control-font-size`.
+- `.pagination` sets its truncation ellipsis at `--btn-font-size`, the page numbers' size.
 - `.btn` takes `line-height: 1.25` (was 1): a wrapped label no longer cramps its lines; a single-line button keeps its height.
+- Docs: Dialog · the alert dialog's buttons name both outcomes, "Keep project" and "Delete project".
 
 ### Fixed
 - An unchecked `.switch` knob takes `--surface-opaque` in a dark scheme: it no longer sinks into the track (1.47:1 → 3.6:1 on the default palette) and stays dark like the checked knob.

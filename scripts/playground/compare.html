@@ -115,6 +115,11 @@
   const actualKit = {
     theme: (t) => ({ "data-theme": t }),
     cardGap: true,
+    // The size scale card: .sm/.lg on joined fields, buttons and segmented controls.
+    sizes: (size, n) => {
+      const s = size === "md" ? "" : ` ${size}`;
+      return `<div class="size-demo"><p class="size-caption">${size}</p><div class="field${s}"><label class="field-label" for="coupon-${n}">Coupon</label><div class="join${s}"><input class="input" id="coupon-${n}" value="SPRING25"><button class="btn outline" type="button">Apply</button></div></div><div class="cluster"><button class="btn primary${s}" type="button">Save</button><button class="btn outline${s}" type="button">Cancel</button><fieldset class="segmented${s}"><legend class="sr-only">Range</legend><label class="segment"><input type="radio" name="range-${n}">Day</label><label class="segment"><input type="radio" name="range-${n}" checked>Week</label><label class="segment"><input type="radio" name="range-${n}">Month</label></fieldset></div></div>`;
+    },
     card: (body) => `<article class="card">${body}</article>`,
     button: (text, kind, disabled) => `<button type="button" class="btn ${{ primary: "primary", ghost: "ghost", danger: "danger" }[kind] ?? "outline"}"${disabledAttr(disabled)}>${text}</button>`,
     badge: (text, tone, outline) => `<span class="badge ${tone}${outline ? " outline" : ""}">${text}</span>`,
@@ -353,8 +358,8 @@
     "Fields: tinted fill, 3:1 bottom edge": ":root { --control-default-bg: var(--surface-subtle); --control-default-border: transparent; --control-hover-border: transparent; --control-border-block-end-color: var(--border-control); }",
     "Focus: tinted fill": ":is(.input, .textarea, .select):focus-visible { --control-bg: color-mix(in oklab, var(--focus) 8%, var(--surface)); }",
     "Outline button: quiet edge": ".btn.outline { --ui-border: var(--intent, var(--border)); }",
-    "Buttons: regular weight (400)": ".btn { font-weight: var(--font-weight-normal); }",
-    "Buttons: line-height 1.25": ".btn { line-height: 1.25; }",
+    // The 0.19.5 column shows the field-text size at medium; this is the same size at regular.
+    "Buttons: field text size, regular": ":root { --btn-font-size: var(--control-font-size); } .btn { font-weight: var(--font-weight-normal); }",
     // Raw intent as soft ink (no --text mixed in) on a lighter fill: 4.8–5.5:1 on the default palette.
     "Soft tones: brighter ink, lighter fill": ":root { --success-soft-fg: var(--success); --warning-soft-fg: var(--warning); --danger-soft-fg: var(--danger); --soft-bg-mix: 92%; }",
   };
@@ -411,7 +416,15 @@
     states: { name: "Fields · Help, error, select", hint: "Is the error tied to its field?", doc: "forms/validation.html" },
     alerts: { name: "Alerts · Four tones", doc: "components/alert.html" },
     actions: { name: "Buttons · Hierarchy", hint: "Does one action lead?", doc: "components/button.html" },
+    edges: { name: "Edges · Field beside an outline button", hint: "Can you tell the field from the button by its edge alone?", doc: "components/button.html" },
+    sizes: { name: "Sizes · sm, md, lg", hint: "Actual only: a joined field, buttons and a segmented control per size, then a link button in prose", doc: "foundations/tokens.html" },
+    labels: { name: "Buttons · Icons, long labels", hint: "Icon after the label, label and icon spread, a label that wraps", metric: ".narrow button", doc: "components/button.html" },
   };
+  /* Inline icons, so every library renders the same glyph without an icon
+     font; the glue keeps them from shrinking and aligns them in libraries
+     whose buttons are inline-block. */
+  const icon = (d) => `<svg class="bench-icon" width="1em" height="1em" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
+  const ICONS = { plus: icon("M8 3v10M3 8h10"), download: icon("M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"), arrow: icon("M3 8h10M9 4l4 4-4 4") };
   const escapeHtml = (text) => text.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 
   function markup(card, k) {
@@ -444,6 +457,19 @@
         return row("alerts", k.alert("info", "New version.", "Reload to update.") + k.alert("success", "", "Your changes have been saved.") + k.alert("warning", "", "Your trial ends in 3 days.") + k.alert("danger", "Payment failed.", "Update your card to keep access."));
       case "actions":
         return k.card(heading("Project settings") + row("button-row", k.button("Save", "primary") + k.button("Cancel", "secondary") + k.button("Skip", "ghost") + k.button("Delete", "danger") + k.button("Publish", "primary", true)));
+      case "edges":
+        return k.card(heading("Redeem") + row("inline-form", field("Coupon", "", "text", "SPRING25") + k.button("Apply", "secondary")) + row("inline-form", field("Gift card", "XXXX-XXXX") + k.button("Check", "secondary")) + row("button-row", k.button("Save", "primary") + k.button("Cancel", "secondary")));
+      case "sizes":
+        if (!k.sizes) return '<p class="bench-na">Actual CSS only.</p>';
+        return k.card(["sm", "md", "lg"].map((size) => k.sizes(size, ++uid)).join("") + `<p class="size-prose">Body text with a <button class="btn link" type="button">link button</button> inside the sentence.</p>`);
+      case "labels":
+        return k.card(
+          heading("Resources") +
+            // Icon after the label in every kind, Carbon's convention; a ghost keeps it close to the label.
+            row("button-row", k.button(`Create resource ${ICONS.plus}`, "primary") + k.button(`Download report ${ICONS.download}`, "secondary") + k.button(`Create instance ${ICONS.plus}`, "ghost")) +
+            row("wide", k.button(`<span>Continue to payment</span>${ICONS.arrow}`, "primary")) +
+            row("narrow", k.button("Send the invitation to every member of this workspace", "secondary")),
+        );
     }
   }
 
@@ -476,6 +502,12 @@
     .statement-row:last-child{border:0}.statement-row>span:last-child{text-align:right;white-space:nowrap}
     .demo-feedback{font-size:.78rem;opacity:.65;margin-top:6px}
     .alerts{display:grid;gap:12px}.alerts>*{margin:0}
+    .bench-icon{flex-shrink:0;vertical-align:-.125em}
+    .wide,.narrow{margin-top:12px}.wide>button{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:start}
+    .narrow>button{max-width:14rem}
+    .size-demo{display:grid;gap:10px}.size-demo+.size-demo,.size-prose{margin-top:20px!important}.size-caption{margin:0;font-size:.75rem;font-weight:600;opacity:.6}
+    .bench-na{margin:0;font-size:.86rem;opacity:.6}
+    .inline-form{display:flex;align-items:flex-end;gap:8px;margin-top:12px}.inline-form>:first-child{flex:1;min-width:0;margin:0}.inline-form>button{flex:none;width:auto;margin:0}
     html[data-card-gap] :is(.card,.card-body)>*{margin-block:0}
     .full-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:23px;align-items:start}.full-col{min-width:0;display:grid;gap:23px}
     @media(max-width:600px){body{padding:7px}.demo-title{font-size:1.2rem}.full-grid{grid-template-columns:1fr}}`;

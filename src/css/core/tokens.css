@@ -151,6 +151,12 @@
   --control-step-md: 1;
   --control-step-lg: 0;
   --control-font-size: var(--font-size-md);
+  /* A button label sits one step of the type scale below the field text
+     (13/14/16px against 14/16/18px). Selected wherever --control-font-size
+     is, so a button inside .join.sm or .field.sm follows the size it sits in;
+     density (.compact/.spacious) leaves it alone like the field text. Not a
+     ratio: 0.875 put a .sm label at 12.25px. */
+  --btn-font-size: var(--font-size-sm);
   --choice-control-size: 1.125em;
   --disabled-opacity: 0.65;
 }

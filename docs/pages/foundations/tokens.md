@@ -339,8 +339,9 @@ Components can use local font variables for their own mapping, but should inheri
 ### Controls
 
 Controls share geometry so buttons, inputs, selects, and compact app UI align.
-Local `.sm`/`.lg` sizes map `--control-size`, `--control-font-size`, and
-`--control-pad-x`.
+Local `.sm`/`.lg` sizes map `--control-size`, `--control-font-size`,
+`--btn-font-size`, and `--control-pad-x`. A button label sits one step of the
+type scale below the field text.
 
 ```css
 :root {
@@ -353,6 +354,7 @@ Local `.sm`/`.lg` sizes map `--control-size`, `--control-font-size`, and
   --control-pad-x-lg: var(--font-size-lg); /* .lg, .spacious */
   --control-pad-x: var(--control-pad-x-md);
   --control-font-size: var(--font-size-md);
+  --btn-font-size: var(--font-size-sm); /* .sm → xs, .lg → md */
   --disabled-opacity: 0.65;
 }
 ```

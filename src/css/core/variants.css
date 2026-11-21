@@ -126,6 +126,7 @@
 ).sm {
   --control-size: var(--control-size-sm);
   --control-font-size: var(--font-size-sm);
+  --btn-font-size: var(--font-size-xs);
   --control-pad-x: var(--control-pad-x-sm);
   --control-step-sm: 1;
   --control-step-md: 0;
@@ -155,6 +156,7 @@
 ).lg {
   --control-size: var(--control-size-lg);
   --control-font-size: var(--font-size-lg);
+  --btn-font-size: var(--font-size-md);
   --control-pad-x: var(--control-pad-x-lg);
   --control-step-sm: 0;
   --control-step-md: 0;

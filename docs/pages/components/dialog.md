@@ -147,6 +147,8 @@ has no close icon and no light dismiss; the footer actions are the way out.
 `closedby="none"` keeps Escape and backdrop clicks from closing it, so a
 critical confirmation cannot be dismissed accidentally. With the optional
 runtime, backdrop clicks give a small static feedback instead of closing.
+Name both outcomes on the buttons, “Keep project” and “Delete project”, so
+each one reads without the question above it.
 
 ```html demo
 <button class="btn"
@@ -170,11 +172,11 @@ runtime, backdrop clicks give a small static feedback instead of closing.
     </div>
 
     <footer class="cluster justify-content-end">
-      <button class="btn outline" value="cancel">Cancel</button>
+      <button class="btn outline" value="cancel">Keep project</button>
 
       <button class="btn danger"
               value="delete">
-        Delete
+        Delete project
       </button>
     </footer>
   </form>
