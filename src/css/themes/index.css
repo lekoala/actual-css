@@ -18,7 +18,9 @@
  *   petrol     — desaturated petrol-blue primary + apricot secondary
  *   sunset     — paired recolor + selection and shadow-color theming
  *   lavender   — paired recolor + soft-variant tuning, tinted shadows
- *   mono       — grayscale palette, colored status intents only
+ *   mono       — palette only: a neutral ink over the default grammar, colored
+ *                status intents kept; the control for color dependence
+ *                (selection, hierarchy, states read without an accent)
  *   admin-neutral — light-only business interface: grey page, white cards, neutral actions, flat semantic tints
  *   square     — paired recolor + full radius scale forced to 0
  *   brutalist  — light-only stress test: off-white canvas, black ink,
@@ -37,6 +39,9 @@
  *                and pill buttons, a stress test of the field focus contract
  *   glass      — dark-only translucent surfaces over a theme-painted backdrop,
  *                a stress test of the opaque surface roles
+ *   minimal    — flat and editorial: square, no elevation, underline fields
+ *                aligned on their labels, intent as an alert's edge; how far
+ *                the tokens and inherited hooks change the grammar
  *
  * Single-block themes (indigo, dim, brutalist, neo-brutalist, cyberpunk,
  * neon, glass, admin-neutral) pin one color-scheme and cannot adapt to prefers-color-scheme;
@@ -61,3 +66,4 @@
 @import "./gradient.css";
 @import "./material.css";
 @import "./glass.css";
+@import "./minimal.css";

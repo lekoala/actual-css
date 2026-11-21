@@ -1,3 +1,9 @@
+/* Mono - paired light/dark theme that changes the palette and nothing else: a
+ * neutral ink, the default geometry, elevation and component grammar, colored
+ * status intents. It is the control for color dependence: whatever reads
+ * worse here leans on the accent (selection, hierarchy, hover and focus).
+ * Keep it palette-only; a grammar change belongs in another theme, or the
+ * comparison stops isolating color. */
 [data-theme="mono"] {
   /* Base palette is the light half; the dark pairing is only announced where
      light-dark() exists, in the @supports block below. */

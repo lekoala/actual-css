@@ -1,0 +1,151 @@
+/* Minimal - paired light/dark theme that moves attention from frames to type:
+ * one ink, white surfaces, hairline borders, no elevation. A stress test of
+ * the theme contract rather than of the palette: everything below is a token
+ * or an inherited hook, and the few component rules each record why a token
+ * could not do it.
+ *
+ * - Flat: --shadow is a real zero shadow, never none (it sits in box-shadow
+ *   lists, where none voids the declaration).
+ * - Fields: a 3:1 line and nothing else, no fill, no frame (the documented
+ *   underline recipe, without its tint).
+ * - Selection: the ink itself (--primary), so checks, switches and the current
+ *   step read as black; focus keeps a blue line that holds 3:1 everywhere. */
+[data-theme="minimal"] {
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
+
+  --primary: hsl(0 0% 9%);
+  --primary-fg: white;
+  --secondary: hsl(0 0% 40%);
+  --secondary-fg: white;
+  --success: hsl(152 62% 28%);
+  --success-fg: white;
+  --warning: hsl(34 90% 33%);
+  --warning-fg: white;
+  --danger: hsl(0 70% 45%);
+  --danger-fg: white;
+  --neutral: hsl(0 0% 40%);
+  --neutral-fg: white;
+
+  --surface: hsl(0 0% 100%);
+  --surface-raised: hsl(0 0% 100%);
+  --surface-subtle: hsl(0 0% 96.5%);
+  --surface-solid: hsl(0 0% 9%);
+
+  --text: hsl(0 0% 9%);
+  --text-muted: hsl(0 0% 40%);
+  --text-subtle: hsl(0 0% 50%);
+
+  --border: hsl(0 0% 90%);
+  /* Mid-tone blue, one value for both schemes: the focus line holds 3:1 on
+     --surface and --surface-solid alike. */
+  --focus: hsl(217 91% 55%);
+  --soft-fg-mix: 70%;
+  --hover-overlay: hsl(0 0% 9% / 0.04);
+  --shadow-color: hsl(0 0% 9%);
+  --shadow: 0 0 0 transparent;
+
+  /* Square: the field is one straight line, which a corner radius would curl
+     at its ends. Pills (badges, avatars, switches) keep --radius-full. */
+  --radius: 0;
+  --radius-sm: 0;
+  --radius-lg: 0;
+
+  /* Paler soft tints: badges and alerts whisper their intent. */
+  --soft-bg-mix: 93%;
+
+  /* The line is the field's only boundary, so it keeps the 3:1 edge; hover
+     must not draw the sides back. Forced colors redraw every side. */
+  --control-default-bg: transparent;
+  --control-default-border: transparent;
+  --control-hover-border: transparent;
+  --control-border-block-end-color: var(--border-control);
+  --segmented-selected-border: var(--border);
+  --alert-border-inline-start-width: 3px;
+}
+
+/* Large headings tighten: at display sizes the default tracking reads loose,
+   and type is what carries this theme's hierarchy. No token exists for it;
+   tracking is a typeface decision, so it stays a theme rule. */
+[data-theme="minimal"] :where(h1, h2) {
+  letter-spacing: -0.02em;
+}
+
+/* With no box to sit in, the value starts where its label starts. Zero
+   specificity past the theme scope, so a component that reserves its own
+   inline space (an .input-icon icon, the select chevron) still wins; a joined
+   field and a floating label keep the core inset they are laid out around. */
+[data-theme="minimal"] :where(.input, .textarea, .select):not(:where(.join, .floating-field) > *) {
+  padding-inline-start: 0;
+}
+
+/* The line is the whole field, invalid included. Core paints every side in
+   --form-invalid-border, read before --control-border, so the hooks cannot
+   clear them: the sides and top are cleared as declarations (as material
+   does). Forced colors still repaint them in a system color. */
+[data-theme="minimal"] :where(.input, .textarea, .select) {
+  border-block-start-color: transparent;
+  border-inline-color: transparent;
+}
+
+/* Focus follows the field's shape: the line turns --focus and thickens to
+   the ring width, instead of the core inset frame, which would sit on the
+   first glyph of an unpadded value. The transparent outline keeps an
+   indicator under forced colors, which drop shadows; an invalid field keeps
+   its color through --form-invalid-border. Same recipe as the material theme. */
+[data-theme="minimal"] :is(.input, .textarea, .select):is(:focus-visible, :open):not(:disabled) {
+  --control-border-block-end-color: var(--form-invalid-border, var(--focus));
+
+  outline: var(--focus-ring-width) solid transparent;
+  outline-offset: 0;
+  box-shadow: inset 0 calc(var(--border-width) - var(--focus-ring-width)) 0
+    var(--form-invalid-border, var(--focus));
+}
+
+/* Fields the user cannot edit keep the line shape, quieter: core gives them a
+   tinted box with a --border frame, which would be the only boxed fields on
+   the page. The text color still tells disabled from read-only. */
+[data-theme="minimal"] :is(.input, .textarea, .select):disabled,
+[data-theme="minimal"] :is(.input, .textarea)[readonly] {
+  --control-bg: transparent;
+  --control-border: transparent;
+  --control-border-block-end-color: var(--border);
+}
+
+/* The alert's leading edge carries its intent. Declared on the alert, not the
+   root: var(--intent) must resolve where the local intent class applies. */
+[data-theme="minimal"] .alert {
+  --alert-border-inline-start-color: var(--intent, var(--text));
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="minimal"] {
+    color-scheme: light dark;
+    --primary: light-dark(hsl(0 0% 9%), hsl(0 0% 96%));
+    --primary-fg: light-dark(white, hsl(0 0% 9%));
+    --secondary: light-dark(hsl(0 0% 40%), hsl(0 0% 70%));
+    --secondary-fg: light-dark(white, hsl(0 0% 9%));
+    --success: light-dark(hsl(152 62% 28%), hsl(152 50% 60%));
+    --success-fg: light-dark(white, hsl(152 40% 8%));
+    --warning: light-dark(hsl(34 90% 33%), hsl(40 85% 62%));
+    --warning-fg: light-dark(white, hsl(36 40% 9%));
+    --danger: light-dark(hsl(0 70% 45%), hsl(0 85% 72%));
+    --danger-fg: light-dark(white, hsl(0 50% 10%));
+    --neutral: light-dark(hsl(0 0% 40%), hsl(0 0% 70%));
+    --neutral-fg: light-dark(white, hsl(0 0% 9%));
+
+    --surface: light-dark(hsl(0 0% 100%), hsl(0 0% 7%));
+    --surface-raised: light-dark(hsl(0 0% 100%), hsl(0 0% 9%));
+    --surface-subtle: light-dark(hsl(0 0% 96.5%), hsl(0 0% 13%));
+    --surface-solid: light-dark(hsl(0 0% 9%), hsl(0 0% 96%));
+
+    --text: light-dark(hsl(0 0% 9%), hsl(0 0% 96%));
+    --text-muted: light-dark(hsl(0 0% 40%), hsl(0 0% 66%));
+    --text-subtle: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+
+    --border: light-dark(hsl(0 0% 90%), hsl(0 0% 18%));
+    --hover-overlay: light-dark(hsl(0 0% 9% / 0.04), hsl(0 0% 100% / 0.06));
+    --shadow-color: light-dark(hsl(0 0% 9%), hsl(0 0% 0%));
+  }
+}

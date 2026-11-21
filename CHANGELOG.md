@@ -11,6 +11,7 @@
 - Dev: `bun run report:composition` prints what a composed page pays in CSS and JS, optionally beside another library (`--ref`).
 - Docs: Dialog · "Without JavaScript" lists what the native path covers and gives up.
 - Design note: `composition-weight.md` records the weight audit and the reductions declined.
+- `minimal` demo theme: one ink, hairlines, square corners, no elevation, built from tokens and inherited hooks.
 
 ### Changed
 - Docs: "Coding agents and DESIGN.md" gains "Components are tools, not design decisions".

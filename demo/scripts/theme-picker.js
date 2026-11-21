@@ -37,6 +37,7 @@
     "gradient",
     "material",
     "glass",
+    "minimal",
   ];
 
   const KEY = document.currentScript?.dataset.storage;
