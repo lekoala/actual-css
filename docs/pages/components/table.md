@@ -2,24 +2,6 @@
 
 > Data table with caption and scope attributes, and an accessible scroll region for wide content.
 
-- Use native `<table class="table">` inside a `.table-wrap` for surface, border, radius, and overflow.
-- Use `<caption>`, `scope="col"`, and `scope="row"` for accessibility.
-- Use `.text-end` for numeric columns and `.text-nowrap` for non-wrapping cells.
-- For wide tables, make the wrapper an accessible scroll region with `role="region"`, `aria-labelledby`, and `tabindex="0"`.
-- Tables stay content-first and neutral by default.
-- `.table` is a static, content-first table. It provides no sorting, filtering, search, selection, pagination, or row actions. For an interactive data grid ("datatable"), use a dedicated component — see the [data grid template](../../demo/templates/data-grid.html), which themes `data-grid-component` with Actual CSS tokens.
-- `.table` does not consume shared variants or intent colors (`--ui-bg` / `--intent`): a `.soft` + intent combo on a `<tr>` has no effect. To tint rows or headers, style them with a class of your own.
-
-## Class reference
-
-| Class            | Kind      | Description                                                  |
-| ---------------- | --------- | ------------------------------------------------------------ |
-| `.table-wrap`    | Component | Scroll container and outer chrome (surface, border, radius). |
-| `.table`         | Component | The table itself; row and cell rules.                        |
-| `.table.compact` | Density   | Tighter cell padding; font size and icons unchanged.         |
-
-## Basic usage
-
 ```html demo
 <div class="table-wrap">
   <table class="table">
@@ -55,6 +37,29 @@
   </table>
 </div>
 ```
+
+## Usage
+
+- Use a table when readers need to compare the same fields across records.
+  Use a [list](list.md) when each record is read on its own, or a
+  [data list](data-list.md) for one record's label–value pairs.
+- For built-in sorting, filtering or row selection, see the themed
+  [data grid template](../../demo/templates/data-grid.html). For
+  server-rendered pages of results, pair the table with
+  [pagination](pagination.md).
+- Give the table a caption that identifies the dataset. Use `scope="col"`
+  on column headers and `scope="row"` on cells that identify their row.
+  Put units in column headers when they apply to every value in the column.
+- Use `.text-end` for numeric columns and `.text-nowrap` for values that
+  should stay together. Use an application class to tint a row or header.
+
+## Class reference
+
+| Class            | Kind      | Description                                                  |
+| ---------------- | --------- | ------------------------------------------------------------ |
+| `.table-wrap`    | Component | Scroll container and outer chrome (surface, border, radius). |
+| `.table`         | Component | The table itself; row and cell rules.                        |
+| `.table.compact` | Density   | Tighter cell padding; font size and icons unchanged.         |
 
 ## Accessible scroll region
 
@@ -203,16 +208,9 @@ positioning keep the core hover.
 
 ## When a table stops reading as a table
 
-Responsive strategy is horizontal overflow: the wrap scrolls, the table keeps
-its columns and its column scanability. No `data-label` restructuring, no
-second representation of the data.
-
-For datasets that no longer read well as a table on narrow screens, compose a
-different view instead of restructuring the table: a `.list` / `.media` row
-with badges and actions for a CRUD collection, [`.data-list`](data-list.md)
-for one object's properties, or a dedicated data grid for interactive tables
-(sorting, filtering, selection). Two views for two contexts is a feature, not
-a duplication.
+Keep the columns and let the wrapper scroll when readers still need to
+compare values on a narrow screen. When the main task is opening or acting
+on one record at a time, use a [list with row actions](list.md).
 
 ## CSS hooks
 

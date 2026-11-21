@@ -2,7 +2,7 @@
 
 > One compact choice among a few options, on a shared track with the selected segment raised.
 
-**Related terms:** segmented control, toggle group, pill tabs, view switcher, button group, option list, preset list, vertical radio group.
+**Related terms:** segmented control, toggle group, pill tabs, view switcher, content switcher, button group, option list, preset list, vertical radio group.
 
 `.segmented` is the track and each `.segment` a direct child. The look is
 shared; the semantics come from the markup, so pick the anatomy by what the
@@ -94,14 +94,15 @@ which both stacks it and gives the tabs runtime Up and Down.
 </fieldset>
 ```
 
-## When to use something else
+## Choosing a control
 
-- Several options on at once (bold, italic): `.join` of `.btn` with
-  `aria-pressed`, see [joined controls](../forms/joined-controls.md).
-- More options than fit on one row: [tabs](../enhancements/tabs.md), whose
-  strip scrolls.
-- Long or descriptive options: [choice cards](../forms/choice-cards.md) or
-  plain radios.
+- Use a segmented control for a compact choice such as list or grid view of
+  the same collection. Use [tabs](../enhancements/tabs.md) to give distinct
+  sections such as General, Security, and Billing a place of their own.
+- Use [joined controls](../forms/joined-controls.md) with `aria-pressed` when
+  several options, such as Bold and Italic, can be active together.
+- Use [choice cards](../forms/choice-cards.md) or plain radios for options
+  that need descriptions.
 
 ## Hooks
 

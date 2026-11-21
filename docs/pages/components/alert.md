@@ -2,25 +2,55 @@
 
 > Inline status messages for confirmations, warnings, and errors, with intents, icons, and action lists.
 
+```html demo
+<div class="stack">
+  <div class="alert surface">
+    <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
+    <div><strong>New message.</strong> 12 unread. <a href="#">Open inbox</a>.</div>
+  </div>
+
+  <div class="alert success">
+    <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
+    <div>Your changes have been saved. <a href="#">View activity</a>.</div>
+  </div>
+
+  <div class="alert warning">
+    <svg class="alert-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+    <div>Please review the <a href="#">failed checks</a> before continuing.</div>
+  </div>
+
+  <div class="alert">
+    <svg class="alert-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg>
+    <div>This is a default alert message.</div>
+  </div>
+
+  <div class="alert danger">
+    <strong>Couldn't save the draft.</strong>
+    <div>The connection dropped. Your changes are kept on this device.</div>
+  </div>
+
+  <div class="alert danger">
+    Your session expired. <a href="#">Sign in again</a>.
+  </div>
+</div>
+```
+
+## Usage
+
 **Related terms:** banner, callout, notice, inline notification, install prompt, trailing action.
 
-- Supports intent colors.
-- Supports longer text and lists.
-- Links inherit alert color by default.
-- Alerts are soft by default. Use `.surface` for neutral chrome with the intent only in the ink, `.solid` or `.outline` when the message needs stronger or quieter emphasis.
-- Use `<menu class="cluster">` for alert action lists.
-- Use `role="alert"` only when the alert is injected dynamically and should be announced.
-- Not a toast.
-- Could have simple or complex html content.
-- A title and a description are plain siblings: the alert owns the small space between its direct content blocks, so neither needs a wrapper. Nested content keeps its own rhythm — wrap several paragraphs in `.prose`, or a differently spaced group in `.stack`, when the message needs a rhythm of its own.
-- Alerts may include a decorative leading icon. Use `.alert-icon` on the icon element; the rest of the content flows into the remaining text column.
-- Use `.compact` or `.spacious` on the alert to step its block padding. The inline padding stays stable.
-- Use a [`.close`](close.md) button to make the alert dismissible. It is a direct trailing child in standard alerts and lives inside `.alert-title` in admonitions; the alert makes it compact.
-
-Because alerts are soft by default, adding `.soft` to an intent (`.alert.soft.primary`,
-`.alert.soft.danger`, …) is a no-op: it already resolves to a soft version of that
-intent. Reach for `.solid` (stronger) or `.outline` (quieter) when the emphasis
-itself needs to change, not `.soft`.
+- Place an alert near the content it concerns and keep it visible while the
+  information is relevant or the user can act on it.
+- Use a [status bar](../enhancements/status-bar.md) for brief confirmations
+  such as “Copied,” a [dialog](dialog.md) when a decision is required to
+  continue, and [field validation](../forms/validation.md) for errors the user
+  can fix in a specific field.
+- Reserve `role="alert"` for urgent, dynamically updated text. Use
+  `role="status"` for polite announcements. Notices that are present as part
+  of the page content can use ordinary markup.
+- Use `.surface` for neutral chrome with intent in the ink, or `.solid` and
+  `.outline` to change the emphasis. Use `.compact` or `.spacious` to adjust
+  block padding while keeping the inline padding.
 
 ## Class reference
 
@@ -54,49 +84,17 @@ itself needs to change, not `.soft`.
     └── content        any HTML
 ```
 
-## Basic usage
-
-`.surface` comes first on purpose: it keeps the theme's own chrome and puts the
-intent in the ink alone, which is what most informational messages want. Add an
-intent treatment when the color itself carries the meaning.
-
-```html demo
-<div class="stack">
-  <div class="alert surface">
-    <i class="ti ti-info-circle alert-icon" aria-hidden="true"></i>
-    <div><strong>New message.</strong> 12 unread. <a href="#">Open inbox</a>.</div>
-  </div>
-
-  <div class="alert success">
-    <i class="ti ti-circle-check alert-icon" aria-hidden="true"></i>
-    <div>Your changes have been saved. <a href="#">View activity</a>.</div>
-  </div>
-
-  <div class="alert warning" role="alert">
-    <svg class="alert-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
-    <div>Please review the <a href="#">failed checks</a> before continuing.</div>
-  </div>
-
-  <div class="alert">
-    <svg class="alert-icon" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/></svg>
-    <div>This is a default alert message.</div>
-  </div>
-
-  <div class="alert danger" role="alert">
-    <strong>Couldn't save the draft.</strong>
-    <div>The connection dropped. Your changes are kept on this device.</div>
-  </div>
-
-  <div class="alert danger" role="alert">
-    Your session expired. <a href="#">Sign in again</a>.
-  </div>
-</div>
-```
-
 ## Content and actions
 
+- Lead with the outcome or problem. Add a title when it helps scanning and use
+  the body for what happened or what the user can do next.
+- Name the next action directly, such as “Update billing.” Group multiple
+  actions in a `<menu class="cluster">`.
+- Place a title and description as siblings to use the alert's own spacing.
+  Use `.prose` for several paragraphs or `.stack` for a group with its own gap.
+
 ```html demo
-<div class="alert danger" role="alert">
+<div class="alert danger">
   <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
 
   <div class="stack">
@@ -154,15 +152,15 @@ the whole block.
 
 ```html demo
 <div class="stack">
-  <div class="alert surface" role="alert">
+  <div class="alert surface">
     I'm a surface alert — theme chrome, intent in the ink
   </div>
 
-  <div class="alert danger outline" role="alert">
+  <div class="alert danger outline">
     I'm an outline error <a href="#">with a link</a>
   </div>
 
-  <div class="alert danger solid" role="alert">
+  <div class="alert danger solid">
     I'm a solid error <a href="#">with a link</a>
   </div>
 </div>
@@ -170,7 +168,11 @@ the whole block.
 
 ## Dismiss
 
-Add a `.close` button to let a user remove an inline alert. Inside an alert it is compact and at reduced opacity, and it follows the alert's ink with any intent. Give the alert an `id` and point the button at it with `commandfor` and `command="--dismiss"`: the runtime hides the alert (`hidden`) and moves focus to the next control — no custom script. See [Dismiss command](../guides/progressive-enhancement.md#dismiss-command).
+Add a [`.close`](close.md) button to let a user remove an inline alert. Give
+the alert an `id` and point the button at it with `commandfor` and
+`command="--dismiss"`. The runtime sets `hidden` and moves focus to a nearby
+control when focus would otherwise be lost. See
+[Dismiss command](../guides/progressive-enhancement.md#dismiss-command).
 
 ```html demo
 <div class="alert warning" id="warning-alert">
@@ -221,7 +223,7 @@ the border.
     <p>A neutral panel with a thick accent flag on the leading edge.</p>
   </div>
 
-  <div class="alert warning callout" role="alert">
+  <div class="alert warning callout">
     <strong>Heads up</strong>
     <p>The intent tints the panel and the flag together.</p>
   </div>

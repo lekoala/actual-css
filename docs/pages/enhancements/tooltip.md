@@ -10,14 +10,16 @@ by promoting it to the top layer with `popover="manual"`.
 - Use `data-tooltip` on the trigger. With text (`data-tooltip="Help"`), the tooltip element is generated. Empty (`data-tooltip`) marks an explicit tooltip connected via `aria-describedby`.
 - Generated text is a snapshot at show time: changing `data-tooltip` never rewrites a tooltip that is already shown, and an always-visible generated tooltip keeps its initial text. For content that must update dynamically, use an explicit tooltip. See the [tooltips bench](../examples/overview.md) (`demo/templates/tooltips.html`) for all six cases side by side.
 - Generated text is always plain text (`textContent` only), so a shorthand value is safe for untrusted strings once they are in the DOM. An explicit tooltip is author-owned DOM: its sanitization belongs to whoever produces it. Escape the attribute server-side — a DOM already compromised at render cannot be repaired at read time. There is no `data-tooltip-html`, by design.
-- Tooltips are supplemental. Do not put required information or interactive controls inside them.
+- Keep essential instructions and control names available without opening a
+  tooltip. Use a [flyout panel](flyout.md#panel-with-actions) for contextual
+  help with links or buttons.
 - Show on hover and keyboard focus. Hide on Escape, blur, pointer leave, or a pointer press on the trigger.
 - A trigger scrolled out of view takes its tooltip down and brings it back when it returns; only a dismissal ends the tooltip.
 - Escape dismisses the tooltip without moving the pointer or focus (WCAG 2.1 SC 1.4.13).
 - After Escape or a pointer press dismisses a hover or focus tooltip, move the pointer away and back or return with keyboard focus to show it again.
 - Author an explicit tooltip with `hidden`. The runtime removes it when it takes the lifecycle over; until then it is what keeps the tooltip off screen.
 - JavaScript can generate tooltip elements from `data-tooltip`.
-- Add `data-tooltip-click` to toggle it on click instead of hover/focus.
+- Add `data-tooltip-click` to make a supplemental description open on click.
 - Add `data-tooltip-visible` to show it immediately and keep it visible while its trigger is in view.
 - Use `data-tooltip-placement` to set the preferred placement (default `top`).
 - The arrow inherits the tooltip background — custom gradients carry through automatically.

@@ -2,9 +2,13 @@
 
 > Loading indicator for actions or regions that may take noticeable time.
 
-- Most actions do not need a spinner. Use `disabled` alone for fast actions or to prevent duplicate submissions.
+- Use a spinner for a pending action with no measurable progress. Put it on the
+  [button](button.md#loading) for a local action, or overlay an existing region
+  that is being updated.
+- Use a [skeleton](skeleton.md) when the incoming content has a predictable
+  shape, or a [progress bar](progress.md) when the amount of work completed
+  can be measured.
 - Use `aria-busy="true"` with a loading label for actions that are visibly in progress.
-- Add `.spinner` only when the operation may take long enough that users need explicit loading feedback.
 - The spinner uses `currentColor`, so it adapts to its context.
 - Decorative spinners should be `aria-hidden="true"`.
 - Use `role="status"` with accessible text when the loading state needs to be announced.
@@ -80,7 +84,9 @@ surface; buttons keep their spinners inline instead (see Button).
 
 - Set `aria-busy="true"` on the container and add `<span class="spinner" aria-hidden="true"></span>` as its last direct child.
 - The overlay uses `--busy-overlay-bg`; a card derives it from its own surface.
-- Decorative spinners stay `aria-hidden="true"`; announce progress on the region with `role="status"` and a label when needed.
+- When an announcement is needed before the region finishes updating, put a
+  separate `role="status"` outside the busy region. Assistive technology can
+  defer announcements inside an `aria-busy="true"` subtree.
 
 ```html demo
 <article class="card" aria-busy="true" aria-label="Loading card content">

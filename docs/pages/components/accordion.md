@@ -2,12 +2,6 @@
 
 > Collapsible regions built on native details and summary, with optional exclusive groups via the name attribute.
 
-- Use native `<details>` and `<summary>` for collapsible content.
-- Use the `name` attribute for exclusive accordions.
-- Supports any valid body element (`div`, `p`, `ul`, ...).
-- Three container treatments: the default common shell, `.flush` (bare separators, for embedding inside an existing surface), and `.separated` (independent items).
-- The end marker is a chevron that turns when open; its glyph, turn, color, and size are hooks.
-
 ```html demo
 <div class="accordion">
   <details open>
@@ -34,6 +28,17 @@
   </details>
 </div>
 ```
+
+## Usage
+
+- Use an accordion for independent sections that people can read on demand,
+  such as answers to common questions. Keep instructions that everyone needs
+  visible, and use [tabs](../enhancements/tabs.md) for switching between
+  distinct views in the same space.
+- Write each `<summary>` so its topic is clear while the panel is closed.
+  Keep links and buttons in the panel body.
+- The browser owns disclosure state through `open`. Use a shared `name` when
+  opening one item should close the others.
 
 ## Variants
 

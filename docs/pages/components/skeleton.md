@@ -2,7 +2,9 @@
 
 > Placeholder shapes for content that is loading.
 
-- Use `.skeleton` for loading placeholders.
+- Use `.skeleton` to reserve space for content with a predictable layout. Use
+  a [spinner](spinner.md) to signal a pending action with no content
+  placeholder.
 - Use `data-shape` for common placeholder forms: `text`, `title`, `avatar`, `box`.
 - Put `role="status"` and accessible text on the loading region, not on every placeholder.
 - Use layout utilities for placeholder arrangement.

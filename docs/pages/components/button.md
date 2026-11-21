@@ -2,6 +2,21 @@
 
 Actions and navigation with shared intents, variants, sizes, and loading, pressed, and disabled states.
 
+```html demo
+<div class="cluster">
+  <button class="btn primary" type="button">Save changes</button>
+  <button class="btn outline" type="button">Cancel</button>
+</div>
+```
+
+## Usage
+
+- Give the main action in each group the strongest treatment. Use quieter
+  treatments for alternatives, and reserve the `danger` intent for
+  destructive actions.
+- Label buttons with the action and its object when needed, such as
+  “Save changes” or “Delete project.”
+
 ## Class reference
 
 | Class         | Kind      | Description                                             |
@@ -209,8 +224,11 @@ prevent the click since `aria-disabled` does not stop navigation on its own.
 
 ### Loading
 
-Set `aria-busy="true"` on the button and add a `.spinner`. The spinner inherits
-the button size.
+Show loading on the button when that action is what the user is waiting for.
+Set `aria-busy="true"` and add a `.spinner` beside a label that names the
+operation. Use the form's [request state](../forms/ajax.md#request-state) for
+an Ajax submit, or manage the busy state and repeat activation in application
+code.
 
 ```html demo
 <div class="cluster">

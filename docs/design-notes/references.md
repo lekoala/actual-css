@@ -23,6 +23,14 @@ Prior Actual CSS libraries:
 
 ## Research links
 
+### Carbon Design System
+
+- Action hierarchy and labels. [Button](https://www.carbondesignsystem.com/building-blocks/core/components/button/guidelines)
+- Disclosure and contextual help. [Accordion](https://www.carbondesignsystem.com/building-blocks/core/components/accordion/guidelines), [Tooltip](https://www.carbondesignsystem.com/building-blocks/core/components/tooltip/guidelines)
+- Feedback placement and request states. [Notification](https://www.carbondesignsystem.com/building-blocks/core/components/notification/guidelines), [Inline loading](https://www.carbondesignsystem.com/building-blocks/core/components/inline-loading/guidelines)
+- View switching, deep navigation and immediate settings. [Content switcher](https://www.carbondesignsystem.com/building-blocks/core/components/content-switcher/guidelines), [Breadcrumb](https://www.carbondesignsystem.com/building-blocks/core/components/breadcrumb/guidelines), [Toggle](https://www.carbondesignsystem.com/building-blocks/core/components/toggle/guidelines)
+- Tabular comparison and interactive grids. [Data table](https://www.carbondesignsystem.com/building-blocks/core/components/data-table/guidelines)
+
 ### Forms
 
 - https://oat.ink/components/#form

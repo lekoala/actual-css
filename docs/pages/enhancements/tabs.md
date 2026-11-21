@@ -14,7 +14,8 @@
 
 ## Usage
 
-- Use real tab semantics when panels switch in place.
+- Use tabs for distinct sections that switch in place. For a compact choice
+  among views of the same content, see [segmented control](../components/segmented.md).
 - Use normal links and `aria-current="page"` for page navigation that only looks like tabs.
 - On that link variant, `aria-current="page"` gets the same color and
   underline treatment as `aria-selected="true"` on a widget tab; `primary`
@@ -23,7 +24,10 @@
 - Tab selection never changes text metrics: the active tab keeps the shared
   weight and is marked by color and the indicator line.
 - JavaScript owns roving `tabindex`, `aria-selected`, `hidden`, and keyboard behavior.
-- Left/Right select tabs and wrap at the ends. Home/End jump to first/last. Down moves focus into the selected panel.
+- In a horizontal tablist, Left/Right select tabs and Down moves focus into
+  the selected panel. For a vertical strip, set `aria-orientation="vertical"`
+  on the tablist. Up/Down then select tabs. Both orientations wrap at the
+  ends and support Home/End.
 - A tab list needs both `.tabs` and `role="tablist"`; `.tab` styles each trigger.
   A tab belongs to its closest `role="tablist"`. `data-enhance="tabs"` on an
   element without that role wires nothing and warns in the console.

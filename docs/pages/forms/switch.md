@@ -11,6 +11,11 @@
 
 ## Usage
 
+- Use a switch for an on/off setting that takes effect when toggled. Use a
+  [checkbox](overview.md#example-form) for a choice the user confirms by
+  submitting a form.
+- Keep the label the same in both states. Name the setting, such as
+  “Notifications,” so the checked state can convey whether it is on.
 - Apply `class="switch"` to a native checkbox and `role="switch"` for on/off semantics.
 - Give it an accessible name through a label or `aria-label`.
 - Use `checked` for the initial state and `.checked` to change it in JavaScript.

@@ -2,14 +2,6 @@
 
 > Trail of links showing the current page's location in a hierarchy.
 
-- Use a semantic `<nav>` landmark.
-- Put `.breadcrumb` on the ordered list.
-- Use `aria-current="page"` for the current page, on its link or on its `<li>`,
-  and keep it last.
-- Separators are generated with CSS (`> li + li::before`).
-- Put each ancestor label in an `<a>` or a `<span>`: that box carries the
-  ellipsis. The current page may be bare text in an `<li aria-current="page">`.
-
 ```html demo
 <nav aria-label="Breadcrumb">
   <ol class="breadcrumb">
@@ -20,6 +12,16 @@
   </ol>
 </nav>
 ```
+
+## Usage
+
+- Show where the current page sits in the site hierarchy so people can go
+  back to a parent section. Use [steps](steps.md) for a process with stages.
+- Give the `<nav>` an accessible name and put `.breadcrumb` on the ordered
+  list. Mark the current page last with `aria-current="page"` on its link or
+  its `<li>`.
+- Put each ancestor label in an `<a>` or a `<span>` so it can truncate. The
+  current page may be bare text in an `<li aria-current="page">`.
 
 ## Narrow space
 
