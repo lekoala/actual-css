@@ -93,3 +93,17 @@ it("cyberdeck switch labels fit inside the track", async () => {
     }
   });
 });
+
+// Fields carry a resting transparent outline so focus can fade out. The OTP
+// input is a .input the core keeps outline-free: given the resting outline,
+// its style flipped to solid on blur while the colour faded from currentColor,
+// flashing a ring around every cell.
+it("cyberdeck leaves the OTP input without a resting outline", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const outlines = await view.evaluate(`(() => ({
+      field: getComputedStyle(document.getElementById("field")).outlineStyle,
+      otp: getComputedStyle(document.getElementById("otp")).outlineStyle,
+    }))()`);
+    expect(outlines).toEqual({ field: "solid", otp: "none" });
+  });
+});

@@ -21,6 +21,8 @@
 - `cyberdeck` demo theme: `.pagination` is one ruled strip; the current page is a chrome pane with a lit underline.
 - `cyberdeck` demo theme: `--table-header-fg` puts column labels in chrome on `.table` and on bridged data grids; `.btn.sm` carries no tab.
 - Demo: `cyberdeck.html` composes a detached alert from `.modal`, a `.card` panel and an outside action row.
+- `cyberdeck` demo theme: every `thead th`, its sort button included, and every `dt` take the uppercase chrome label voice.
+- Demo: `cyberdeck.html` adds a hover card (an explicit `.tooltip` with a dossier body) and a `data-grid-component` contracts board.
 - Docs: JavaScript runtime · "Without a build" registers a custom `data-enhance` module through a manifest with the plain bundle.
 - Design note: `theme-vs-brand.md` records what belongs to the framework, the theme, the brand and the project.
 - Dev: `browserSuite()` returns a `tabUntil` that presses real Tab keys in Firefox and WebKit too (Option+Tab for WebKit on macOS).

@@ -174,7 +174,8 @@
     var(--surface);
 }
 
-/* The deck's voice: names and actions are uppercase and tracked. */
+/* The deck's voice: names and actions are uppercase and tracked. Terms
+   (dt) are names too: a data list reads as labelled readouts. */
 [data-theme="cyberdeck"]
 :is(
   .field-label,
@@ -184,13 +185,14 @@
   .tab,
   .segment,
   .overline,
-  .table thead th
+  thead th,
+  dt
 ) {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-[data-theme="cyberdeck"] :is(.field-label, .field-group > legend, .overline) {
+[data-theme="cyberdeck"] :is(.field-label, .field-group > legend, .overline, dt) {
   color: var(--deck-chrome);
   font-weight: var(--font-weight-semibold);
 }
@@ -320,9 +322,12 @@
 
 /* The focus line can only fade if an outline already exists, so a resting
    field carries a transparent one in the same place. Not in forced colors,
-   which would paint that transparent outline as a permanent ring. */
+   which would paint that transparent outline as a permanent ring. Not the
+   OTP input either: the core keeps it outline-free, so on blur its outline
+   went from none to solid at once and faded from currentColor, flashing a
+   ring around the whole group. */
 @media (forced-colors: none) {
-  [data-theme="cyberdeck"] :is(.input, .textarea, .select):not(:focus-visible) {
+  [data-theme="cyberdeck"] :is(.input, .textarea, .select):not(:focus-visible, .otp > input) {
     outline: var(--focus-ring-width) solid transparent;
     outline-offset: calc(var(--focus-ring-width) * -1);
   }
@@ -631,9 +636,17 @@
   border-color: var(--border-control);
 }
 
-/* Table headers are small chrome labels (the ink is --table-header-fg). */
-[data-theme="cyberdeck"] .table thead th {
+/* Column headers are small chrome labels (the ink is --table-header-fg). Any
+   thead, not only .table: a third-party grid speaks the same voice. */
+[data-theme="cyberdeck"] thead th {
   font-size: var(--font-size-sm);
+}
+
+/* A sortable header is a button inside the th, and the UA stylesheet resets
+   text-transform and letter-spacing on buttons. */
+[data-theme="cyberdeck"] thead th button {
+  letter-spacing: inherit;
+  text-transform: inherit;
 }
 
 /* Pagination: one framed strip with its cells ruled off, cut on the bottom

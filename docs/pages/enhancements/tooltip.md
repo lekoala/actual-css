@@ -90,7 +90,9 @@ floating content contains controls.
 The `data-tooltip="…"` shorthand is intentionally plain text. For trusted HTML,
 use an explicit tooltip referenced by `aria-describedby`. Keep its content
 non-interactive and concise; long content wraps up to the tooltip's
-viewport-aware maximum width.
+viewport-aware maximum width. A hover card (preview card, profile peek) is the
+same explicit tooltip with a richer body; once it holds links or buttons, it is
+a flyout.
 
 ```html demo
 <button class="btn" type="button"

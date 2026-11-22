@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.6.2/dist/date-picker.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/themes/actual.css">
   <script src="../scripts/theme-picker.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.6.2/dist/date-picker.min.js"></script>
   <style>
@@ -242,6 +244,55 @@
     .otp > input:focus ~ span[data-deck-cell="active"] {
       --otp-cell-bg: color-mix(in oklab, var(--primary) 12%, var(--surface));
     }
+
+    /* A hover card: an explicit tooltip with a dossier body. The tooltip type
+       scale is set for one-line labels, so the card restores body text and a
+       frame-sized cut. */
+    .deck-dossier {
+      inline-size: 20rem;
+      gap: var(--space-30);
+      padding: var(--space-40);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-sm);
+      letter-spacing: normal;
+      line-height: var(--line-height);
+    }
+
+    .deck-dossier-id {
+      gap: var(--space-10);
+    }
+
+    .deck-dossier-id > strong {
+      font-size: var(--font-size-lg);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .deck-dossier dl {
+      --grid-columns: 1fr 1fr;
+      margin: 0;
+      padding-block-start: var(--space-30);
+      border-block-start: var(--border-width) solid var(--border);
+    }
+
+    .deck-dossier dd {
+      margin: 0;
+      color: var(--primary);
+      font-family: var(--font-mono);
+    }
+
+    /* A scanned ID photo: the initials over the scan lines of a print. */
+    .deck-mugshot {
+      --avatar-size: 3.5rem;
+      --avatar-font-size: var(--font-size-lg);
+      --avatar-bg: repeating-linear-gradient(
+        color-mix(in oklab, var(--primary) 22%, transparent) 0 1px,
+        transparent 0 3px
+      ) color-mix(in oklab, var(--primary) 10%, var(--surface));
+
+      border: var(--border-width) solid color-mix(in oklab, var(--primary) 60%, transparent);
+      color: var(--primary);
+    }
   </style>
 </head>
 <body>
@@ -364,7 +415,7 @@
         <ol class="timeline timeline-dates-start">
           <li>
             <time class="deck-time" datetime="2026-11-22T21:10">21:10</time>
-            <strong>Mara Voss</strong>
+            <strong><a href="#log-title" data-tooltip aria-describedby="dossier-voss" data-tooltip-placement="bottom-start">Mara Voss</a></strong>
             <p>Ridge antenna realigned. Expect a clean carrier after the hour.</p>
           </li>
           <li class="primary">
@@ -378,6 +429,22 @@
             <p>Storm cell tracking east, 40 km out.</p>
           </li>
         </ol>
+        <!-- A hover card is an explicit tooltip with a richer body: still
+             supplemental and non-interactive (a flyout carries controls). -->
+        <div class="tooltip deck-dossier stack" role="tooltip" id="dossier-voss" hidden>
+          <div class="media">
+            <span class="avatar deck-mugshot" aria-hidden="true">MV</span>
+            <div class="stack deck-dossier-id">
+              <strong>Mara Voss</strong>
+              <span class="overline">Field rigger</span>
+            </div>
+          </div>
+          <dl class="grid">
+            <div><dt>Station</dt><dd>Ridge</dd></div>
+            <div><dt>Shifts logged</dt><dd>214</dd></div>
+          </dl>
+          <span class="deck-micro">Dossier // Crew 7741-C</span>
+        </div>
       </section>
       <section class="tab-panel" role="tabpanel" id="ch-field" aria-labelledby="ch-field-tab" tabindex="-1" hidden>
         <p class="muted">No field traffic since 19:40.</p>
@@ -604,6 +671,16 @@
       </nav>
     </section>
 
+    <section class="stack" aria-labelledby="contracts-title">
+      <div class="cluster" style="--hr-space: 0">
+        <h2 class="text-title" id="contracts-title">Contracts</h2>
+        <hr class="grow" aria-hidden="true">
+        <span class="deck-micro" aria-hidden="true">06</span>
+      </div>
+      <p class="muted">The same theme on an external component: <code>data-grid-component</code> reads the tokens through its Actual adapter.</p>
+      <div id="contracts-grid"></div>
+    </section>
+
     <footer class="cluster" style="--cluster-justify: space-between">
       <span class="deck-micro" aria-hidden="true">▥▥▥ ── 0024 // B7</span>
       <span class="deck-micro">Secure channel</span>
@@ -647,5 +724,62 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script src="../scripts/deck-count.js"></script>
+  <script type="module">
+    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.js";
+
+    // Row actions are ghost: the same class lands on the "…" toggle and on the
+    // entries of its menu, where a framed button per entry reads as a stack.
+    DataGrid.setDefaultControlClasses({ button: "btn surface sm", action: "btn ghost sm", input: "input sm" });
+
+    const notify = (message, intent) =>
+      document.dispatchEvent(new CustomEvent("actual:status", { detail: { message, intent } }));
+
+    const status = { Open: "success", Claimed: "primary", Tracked: "warning" };
+    const credits = new Intl.NumberFormat("en-US");
+
+    const grid = new DataGrid({
+      rowKey: "id",
+      rowLabel: "task",
+      dataSource: new ArrayDataSource([
+        { id: 1, task: "Mast guy-wire retension", node: "Summit mast", status: "Open", payout: 12600 },
+        { id: 2, task: "Battery bank audit", node: "Glacier hut", status: "Claimed", payout: 6400 },
+        { id: 3, task: "Mirror lens sweep", node: "Valley mirror", status: "Open", payout: 4200 },
+        { id: 4, task: "Cold store relay swap", node: "Glacier hut", status: "Tracked", payout: 2850 },
+        { id: 5, task: "Night crew escort", node: "Summit mast", status: "Open", payout: 1950 },
+        { id: 6, task: "Cable jacket return", node: "Valley mirror", status: "Claimed", payout: 800 },
+      ]),
+      columns: [
+        { field: "task", title: "Task" },
+        { field: "node", title: "Node" },
+        {
+          field: "status",
+          title: "Status",
+          renderCell: ({ value }) => ({ html: `<span class="badge ${status[value]} soft">${value}</span>` }),
+        },
+        {
+          field: "payout",
+          title: "Payout",
+          class: "text-end",
+          renderCell: ({ value }) => ({ html: `<span class="deck-count">¤ ${credits.format(value)}</span>` }),
+        },
+      ],
+      sortable: true,
+      selectable: true,
+      collapseActions: true,
+      showPageSize: false,
+      actions: [
+        { name: "track", label: "Track" },
+        { name: "brief", label: "Open brief" },
+        { name: "drop", label: "Drop contract", intent: "danger", class: "danger", confirm: "Drop this contract?" },
+      ],
+    });
+    document.getElementById("contracts-grid").appendChild(grid);
+
+    grid.addEventListener("action", (ev) => {
+      const { name, row, rowKey } = ev.detail;
+      if (name === "drop") grid.removeRow(rowKey);
+      notify(`${row.task}: ${name === "drop" ? "dropped" : name === "track" ? "tracked" : "brief opened"} — demo only.`);
+    });
+  </script>
 </body>
 </html>
