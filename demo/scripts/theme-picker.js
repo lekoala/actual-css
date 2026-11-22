@@ -34,6 +34,7 @@
     "edge",
     "cyberpunk",
     "neon",
+    "cyberdeck",
     "gradient",
     "material",
     "glass",

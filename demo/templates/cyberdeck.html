@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en" data-theme="cyberdeck">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cyberdeck - Actual CSS</title>
+  <meta name="description" content="A relay station console on the cyberdeck theme: bevelled frames, segmented gauges and diamond markers on unchanged Actual markup.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.6.2/dist/date-picker.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.6.2/dist/date-picker.min.js"></script>
+  <style>
+    /* Date picker bridge: the --dp-* hooks mapped to tokens, as on any page
+       (docs: Date picker · theme bridge). The deck's look rides on top. */
+    date-picker,
+    date-calendar {
+      --dp-bg: var(--surface-raised);
+      --dp-fg: var(--text);
+      --dp-muted: var(--text-muted);
+      --dp-border: var(--border);
+      --dp-hover: var(--surface-subtle);
+      --dp-accent: var(--primary);
+      --dp-accent-fg: var(--primary-fg);
+      --dp-radius: var(--radius);
+      --dp-focus: var(--focus);
+      --dp-focus-width: var(--focus-ring-width);
+      --dp-picker-button-size: calc(var(--control-pad-x) * 2 + 1em + var(--border-width) * 2);
+    }
+
+    .dp-picker-panel[popover] {
+      border-width: var(--border-width);
+      box-shadow: var(--shadow-popout);
+    }
+
+    /* The fonts belong to the page, not to the theme. */
+    @font-face {
+      font-family: "Chakra Petch";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 400;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource/chakra-petch@5.3.0/files/chakra-petch-latin-400-normal.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Chakra Petch";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 500;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource/chakra-petch@5.3.0/files/chakra-petch-latin-500-normal.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Chakra Petch";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 600;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource/chakra-petch@5.3.0/files/chakra-petch-latin-600-normal.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "Chakra Petch";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 700;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource/chakra-petch@5.3.0/files/chakra-petch-latin-700-normal.woff2") format("woff2");
+    }
+    @font-face {
+      font-family: "JetBrains Mono Variable";
+      font-style: normal;
+      font-display: swap;
+      font-weight: 100 800;
+      src: url("https://cdn.jsdelivr.net/npm/@fontsource-variable/jetbrains-mono@5.3.0/files/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations");
+    }
+
+    :root {
+      --font-sans: "Chakra Petch", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+    }
+
+    .deck-page {
+      --center-size: 72rem;
+      --gap: var(--space-60);
+
+      padding-block: var(--space-50) 6rem;
+    }
+
+    /* Node cards are links: the whole card is the target, not its text. */
+    .deck-node {
+      --gap: var(--space-20);
+
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .deck-brand {
+      color: var(--secondary);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+    }
+
+    /* Micro-print: serials, coordinates and registration marks. Decoration
+       the station prints on its own panels, so it is page markup, hidden
+       from assistive technology, never carrying information. */
+    .deck-micro {
+      color: var(--text-subtle);
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* A readout: label, value, unit. The value is the signal. */
+    .deck-readout {
+      --gap: var(--space-10);
+    }
+
+    .deck-readout > :first-child {
+      color: var(--text-muted);
+      font-size: var(--font-size-sm);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .deck-value {
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      line-height: 1;
+      text-shadow: 0 0 1rem color-mix(in oklab, var(--primary) 40%, transparent);
+    }
+
+    .deck-time {
+      color: var(--secondary);
+      font-family: var(--font-mono);
+    }
+
+    /* Length readouts written by ../scripts/deck-count.js. */
+    .deck-count {
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-size: var(--font-size-sm);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* With the readout script, only the cell taking the next character keeps
+       the focus edge, tinted. Scoped to an .otp the script has marked: without
+       it every cell keeps the core focus edge, never none. */
+    .otp:has(> [data-deck-cell]) > input:focus:not([aria-invalid="true"]) ~ span:not([data-deck-cell="active"]) {
+      --otp-cell-border: var(--border-control);
+      --otp-cell-border-width: var(--border-width);
+    }
+
+    .otp > input:focus ~ span[data-deck-cell="active"] {
+      --otp-cell-bg: color-mix(in oklab, var(--primary) 12%, var(--surface));
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack deck-page">
+    <nav class="cluster" style="--cluster-justify: space-between" aria-label="Main">
+      <a class="deck-brand" href="#top">Halcyon // Relay 07</a>
+      <div class="cluster">
+        <span class="badge success surface"><span class="dot" aria-hidden="true"></span> Online</span>
+        <theme-picker themes="cyberdeck neon"><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+      </div>
+    </nav>
+
+    <header class="card stack" id="top">
+      <div class="cluster" style="--cluster-justify: space-between">
+        <span class="overline">Module 07 / System status</span>
+        <span class="deck-micro" aria-hidden="true">N 47.21 // E 008.04</span>
+      </div>
+      <h1 class="text-display">Relay control</h1>
+      <p class="text-lead muted">Field console for the Halcyon ridge relay. Tune the uplink, watch the cells, acknowledge the night crew.</p>
+      <hr>
+      <div class="grid" style="--grid-min: 11rem">
+        <div class="card stack deck-readout">
+          <span>Signal</span>
+          <span class="deck-value">98.7</span>
+          <span class="muted">MHz</span>
+        </div>
+        <div class="card stack deck-readout">
+          <span>Energy</span>
+          <span class="deck-value">84</span>
+          <span class="muted">% reserve</span>
+        </div>
+        <div class="card stack deck-readout">
+          <span>Link</span>
+          <span class="deck-value">03</span>
+          <span class="muted">nodes</span>
+        </div>
+      </div>
+      <footer>
+        <span class="deck-micro" aria-hidden="true">Sys // rev 0.21 // 0024-B7</span>
+        <div class="cluster">
+          <button class="btn" type="button">Diagnostics</button>
+          <button class="btn primary" type="button" commandfor="uplink-dialog" command="show-modal" aria-haspopup="dialog" aria-controls="uplink-dialog">Initialize uplink</button>
+        </div>
+      </footer>
+    </header>
+
+    <section class="stack" aria-labelledby="actions-title">
+      <h2 class="text-title" id="actions-title">Actions</h2>
+      <div class="cluster">
+        <button class="btn" type="button">Acknowledge</button>
+        <button class="btn primary" type="button">Transmit</button>
+        <button class="btn outline" type="button">Reroute</button>
+        <button class="btn ghost" type="button">Details</button>
+        <button class="btn danger" type="button">Purge cache</button>
+        <button class="btn" type="button" disabled>Issue pass</button>
+      </div>
+      <div class="cluster">
+        <span class="badge">Idle</span>
+        <span class="badge primary">Locked</span>
+        <span class="badge secondary">Scanning</span>
+        <span class="badge success">Synced</span>
+        <span class="badge warning">Drift</span>
+        <span class="badge danger solid">3</span>
+        <span class="badge surface warning"><span class="dot" aria-hidden="true"></span> Storm cell 40 km</span>
+      </div>
+    </section>
+
+    <section class="stack" aria-labelledby="cells-title">
+      <h2 class="text-title" id="cells-title">Cells</h2>
+      <div class="grid" style="--grid-min: 18rem">
+        <div class="stack" style="--gap: var(--space-20)">
+          <div class="cluster" style="--cluster-justify: space-between"><span class="field-label">Pack weight</span><span class="deck-time">5 / 10 kg</span></div>
+          <progress class="progress" value="50" max="100" aria-label="Pack weight">50%</progress>
+        </div>
+        <div class="stack" style="--gap: var(--space-20)">
+          <div class="cluster" style="--cluster-justify: space-between"><span class="field-label">Battery</span><span class="deck-time">84%</span></div>
+          <meter class="meter" value="0.84" low="0.25" high="0.6" optimum="1" aria-label="Battery">84%</meter>
+        </div>
+        <div class="stack" style="--gap: var(--space-20)">
+          <div class="cluster" style="--cluster-justify: space-between"><span class="field-label">Coolant</span><span class="deck-time">18%</span></div>
+          <progress class="progress danger" value="18" max="100" aria-label="Coolant">18%</progress>
+        </div>
+      </div>
+      <div class="grid" style="--grid-min: 20rem">
+        <div class="alert warning" role="status">
+          <i class="ti ti-alert-triangle alert-icon" aria-hidden="true"></i>
+          <strong>Drift on node 02</strong>
+          <p>Clock skew of 41 ms. Resync before the next window.</p>
+        </div>
+        <div class="alert danger" role="alert">
+          <i class="ti ti-temperature alert-icon" aria-hidden="true"></i>
+          <strong>Coolant low</strong>
+          <p>Below 20%. The relay throttles at 10%.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack" aria-labelledby="log-title">
+      <h2 class="text-title" id="log-title">Comms</h2>
+      <div class="tabs" role="tablist" aria-label="Channels" data-enhance="tabs">
+        <button class="tab" type="button" role="tab" id="ch-studio-tab" aria-selected="true" aria-controls="ch-studio">Studio</button>
+        <button class="tab" type="button" role="tab" id="ch-field-tab" aria-selected="false" aria-controls="ch-field" tabindex="-1">Field</button>
+        <button class="tab" type="button" role="tab" id="ch-dispatch-tab" aria-selected="false" aria-controls="ch-dispatch" tabindex="-1">Dispatch</button>
+      </div>
+      <section class="tab-panel" role="tabpanel" id="ch-studio" aria-labelledby="ch-studio-tab" tabindex="-1">
+        <ol class="timeline timeline-dates-end">
+          <li>
+            <time class="deck-time" datetime="2026-11-22T21:10">21:10</time>
+            <strong>Mara Voss</strong>
+            <p>Ridge antenna realigned. Expect a clean carrier after the hour.</p>
+          </li>
+          <li class="primary">
+            <time class="deck-time" datetime="2026-11-22T21:12">21:12</time>
+            <strong>Ilya Brandt</strong>
+            <p>Carrier confirmed. Moving the archive burst to the late slot.</p>
+          </li>
+          <li class="warning">
+            <time class="deck-time" datetime="2026-11-22T21:31">21:31</time>
+            <strong>Watch</strong>
+            <p>Storm cell tracking east, 40 km out.</p>
+          </li>
+        </ol>
+      </section>
+      <section class="tab-panel" role="tabpanel" id="ch-field" aria-labelledby="ch-field-tab" tabindex="-1" hidden>
+        <p class="muted">No field traffic since 19:40.</p>
+      </section>
+      <section class="tab-panel" role="tabpanel" id="ch-dispatch" aria-labelledby="ch-dispatch-tab" tabindex="-1" hidden>
+        <p class="muted">Dispatch is on the hour.</p>
+      </section>
+      <div>
+        <button class="btn" type="button"><i class="ti ti-check" aria-hidden="true"></i> Acknowledge thread</button>
+      </div>
+    </section>
+
+    <section class="stack" aria-labelledby="config-title">
+      <h2 class="text-title" id="config-title">Uplink configuration</h2>
+      <form class="stack" action="#" onsubmit="return false">
+        <fieldset class="field-group stack">
+          <legend>Station</legend>
+          <div class="grid" style="--grid-min: 15rem">
+            <label class="field">
+              <span class="field-label">Callsign <span class="required-mark" aria-hidden="true">*</span></span>
+              <input class="input" name="callsign" value="HALCYON-07" placeholder=" " required>
+            </label>
+            <label class="field">
+              <span class="field-label">Operator</span>
+              <input class="input" name="operator" placeholder="Name on the roster">
+            </label>
+            <label class="field">
+              <span class="field-label">Frequency</span>
+              <input class="input" name="freq" value="98.7" inputmode="decimal" placeholder=" " aria-invalid="true" aria-describedby="freq-error">
+              <span class="field-error" id="freq-error">Outside the licensed band (87.5 to 98.0).</span>
+            </label>
+            <label class="field">
+              <span class="field-label">Region</span>
+              <select class="select" name="region">
+                <option>Alpine north</option>
+                <option selected>Ridge relay</option>
+                <option>Lowland grid</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field-label">Archive key</span>
+              <input class="input" name="key" value="read-only" disabled>
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field-group stack">
+          <legend>Signal</legend>
+          <div class="stack" style="--gap: var(--space-20)">
+            <span class="field-label" id="stock-label">Film stock</span>
+            <fieldset class="segmented" aria-labelledby="stock-label" style="inline-size: 100%">
+              <label class="segment"><input type="radio" name="stock" value="dusk" checked>Dusk</label>
+              <label class="segment"><input type="radio" name="stock" value="chrome">Chrome</label>
+              <label class="segment"><input type="radio" name="stock" value="mono">Mono</label>
+            </fieldset>
+          </div>
+          <label class="choice cluster" style="--cluster-justify: space-between">
+            <span class="field-label">Composition grid</span>
+            <input class="switch" type="checkbox" role="switch" name="grid">
+          </label>
+          <label class="choice cluster" style="--cluster-justify: space-between">
+            <span class="field-label">Auto-resync</span>
+            <input class="switch" type="checkbox" role="switch" name="resync" checked>
+          </label>
+          <label class="field">
+            <span class="field-label">Gain</span>
+            <input class="range" type="range" name="gain" min="0" max="100" value="62" data-enhance="range">
+          </label>
+          <div class="cluster">
+            <label class="choice"><input class="check" type="checkbox" name="log" checked> Log bursts</label>
+            <label class="choice"><input class="check" type="checkbox" name="mirror"> Mirror to node 03</label>
+            <label class="choice"><input class="radio" type="radio" name="mode" value="am"> AM</label>
+            <label class="choice"><input class="radio" type="radio" name="mode" value="fm" checked> FM</label>
+          </div>
+        </fieldset>
+
+        <fieldset class="field-group stack">
+          <legend>Window</legend>
+          <div class="grid" style="--grid-min: 18rem; align-items: start">
+            <date-calendar value="2026-11-25" min="2026-11-02" fixed-weeks aria-label="Transmission window"></date-calendar>
+            <div class="stack">
+              <label class="field">
+                <span class="field-label">Next burst</span>
+                <date-picker value="2026-11-25" min="2026-11-02" open-on-focus="false">
+                  <input class="input" name="burst" placeholder=" ">
+                </date-picker>
+              </label>
+              <div class="cluster">
+                <button class="btn" type="button" aria-pressed="true">Night slot</button>
+                <button class="btn" type="button" aria-pressed="false">Repeat</button>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="grid" style="--grid-min: 18rem">
+          <label class="field">
+            <span class="cluster" style="--cluster-justify: space-between">
+              <span class="field-label">Pass code</span>
+              <span class="deck-count" data-deck-count="code" aria-hidden="true"></span>
+            </span>
+            <span class="otp">
+              <input class="input" id="code" type="text" autocomplete="one-time-code" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="12" aria-describedby="code-help">
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+            </span>
+            <span class="field-help" id="code-help">The night crew's sample code is 0427.</span>
+          </label>
+          <fieldset class="field-group flush">
+            <legend class="field-label">Shift rating</legend>
+            <div class="rating">
+              <input type="radio" name="shift" value="1" aria-label="1 of 5">
+              <input type="radio" name="shift" value="2" aria-label="2 of 5">
+              <input type="radio" name="shift" value="3" aria-label="3 of 5" checked>
+              <input type="radio" name="shift" value="4" aria-label="4 of 5">
+              <input type="radio" name="shift" value="5" aria-label="5 of 5">
+            </div>
+          </fieldset>
+        </div>
+
+        <label class="field">
+          <span class="cluster" style="--cluster-justify: space-between">
+            <span class="field-label">Notes</span>
+            <span class="deck-count" data-deck-count="notes" aria-hidden="true"></span>
+          </span>
+          <textarea class="textarea" id="notes" name="notes" maxlength="180" placeholder="What should the next shift know?"></textarea>
+        </label>
+
+        <div class="cluster">
+          <button class="btn primary" type="submit">Record configuration</button>
+          <button class="btn outline" type="reset">Reset</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="stack" aria-labelledby="nodes-title">
+      <h2 class="text-title" id="nodes-title">Nodes</h2>
+      <div class="grid" style="--grid-min: 14rem">
+        <a class="card stack deck-node" href="#nodes-title">
+          <span class="overline">Node 01</span>
+          <strong>Summit mast</strong>
+          <span class="muted">2,410 m · line of sight</span>
+        </a>
+        <a class="card stack deck-node" href="#nodes-title">
+          <span class="overline">Node 02</span>
+          <strong>Glacier hut</strong>
+          <span class="muted">Clock drift 41 ms</span>
+        </a>
+        <a class="card stack deck-node" href="#nodes-title">
+          <span class="overline">Node 03</span>
+          <strong>Valley mirror</strong>
+          <span class="muted">Standby</span>
+        </a>
+      </div>
+      <div class="table-wrap" role="region" aria-labelledby="bursts-caption" tabindex="0">
+        <table class="table" style="--table-min: 32rem">
+          <caption id="bursts-caption">Last bursts</caption>
+          <thead>
+            <tr>
+              <th scope="col">Burst</th>
+              <th scope="col">Node</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="text-end">Bytes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>#0424</td><td>Summit mast</td><td><span class="badge success">Delivered</span></td><td class="text-end">18,204</td></tr>
+            <tr><td>#0423</td><td>Glacier hut</td><td><span class="badge warning">Retried</span></td><td class="text-end">9,880</td></tr>
+            <tr><td>#0422</td><td>Valley mirror</td><td><span class="badge">Queued</span></td><td class="text-end">2,048</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="cluster" style="--cluster-justify: space-between">
+      <span class="deck-micro" aria-hidden="true">▥▥▥ ── 0024 // B7</span>
+      <span class="deck-micro">Secure channel</span>
+    </footer>
+  </main>
+
+  <dialog class="modal" id="uplink-dialog" closedby="any" aria-labelledby="uplink-title">
+    <form method="dialog">
+      <header>
+        <h2 class="text-title" id="uplink-title">Initialize uplink</h2>
+        <p class="muted">The relay drops current traffic for about four seconds.</p>
+      </header>
+      <label class="choice"><input class="check" type="checkbox" name="notify" checked> Warn the night crew first</label>
+      <footer class="cluster justify-content-end">
+        <button class="btn outline" value="cancel">Cancel</button>
+        <button class="btn primary" value="go">Initialize</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="status-bar" data-status role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script src="../scripts/deck-count.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" data-theme="cyberdeck">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cyberdeck geometry</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <link rel="stylesheet" href="../../src/css/themes/cyberdeck.css">
+  <style>
+    :root { --duration: 0s; }
+    body { padding: 1rem; }
+    .long { --deck-switch-on: "ENABLED"; --deck-switch-off: "DISABLED"; --switch-width: 6.5em; }
+  </style>
+</head>
+<body class="stack">
+  <button id="btn" class="btn" type="button">Deploy</button>
+  <input id="field" class="input" placeholder="Callsign">
+  <input id="radio" class="radio" type="radio" aria-label="Quiet">
+  <label class="choice-card"><input id="card-choice" type="radio" name="c" checked> Regular</label>
+  <input id="switch" class="switch" type="checkbox" role="switch" aria-label="Grid" checked>
+  <input id="switch-off" class="switch" type="checkbox" role="switch" aria-label="Overlay">
+  <input id="switch-long" class="switch long" type="checkbox" role="switch" aria-label="Uplink">
+</body>
+</html>

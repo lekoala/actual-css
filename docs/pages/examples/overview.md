@@ -38,6 +38,7 @@ Whole pages, composed the way a real product would.
 - [iOS-style settings](../../demo/templates/settings-ios.html) - iOS-like controls and grouped settings from unchanged framework markup, a local theme, and its findings listed rule by rule
 - [Card compositions](../../demo/templates/card-compositions.html) - editorial, team, sign-in and horizontal cards composed from existing primitives
 - [Neo-brutalist](../../demo/templates/neo-brutalist.html) - a risograph print studio on the `neo-brutalist` theme (order alerts, plus-marker FAQ, ruled testimonial grid, docked cookie banner) with the page loading its own fonts
+- [Cyberdeck](../../demo/templates/cyberdeck.html) - a relay station console on the `cyberdeck` theme (bevelled frames, segmented gauges, diamond markers, printed switch states, link-card reticle) with page-level micro-print
 - [Register form](../../demo/templates/register-form.html) - registration page with choice cards, masks, the password toggle, `tel-prefix` validation, an OTP verification dialog, and status feedback
 
 ### Layout references

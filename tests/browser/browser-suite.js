@@ -3,6 +3,7 @@ import {
   browserAvailable,
   clickSelector,
   setViewport,
+  tabUntil,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
 
@@ -12,7 +13,7 @@ export async function browserSuite() {
   const baseTest = engine || (await browserAvailable()) ? test : test.skip;
   const it = (name, run) => baseTest(name, run, 60_000);
 
-  if (!engine) return { it, clickSelector, setViewport, withBrowserPage };
+  if (!engine) return { it, clickSelector, setViewport, tabUntil, withBrowserPage };
 
   let browser;
   beforeAll(async () => {
@@ -24,6 +25,14 @@ export async function browserSuite() {
   return {
     it,
     clickSelector: (page, selector) => page.locator(selector).click(),
+    // Real Tab presses, like the CDP helper: focus assertions need dispatched input.
+    async tabUntil(page, expression, { max = 12 } = {}) {
+      for (let i = 0; i < max; i++) {
+        if (await page.evaluate(`!!(${expression})`)) return true;
+        await page.keyboard.press("Tab");
+      }
+      return await page.evaluate(`!!(${expression})`);
+    },
     setViewport: (page, { width, height = 900 }) => page.setViewportSize({ width, height }),
     async withBrowserPage(url, run, { width = 1100, height = 900 } = {}) {
       const page = await browser.newPage({ viewport: { width, height } });

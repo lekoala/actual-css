@@ -43,8 +43,12 @@
  *                aligned on their labels, intent as an alert's edge; how far
  *                the tokens and inherited hooks change the grammar
  *
+ *   cyberdeck  — dark-only tactical HUD: bevels through corner-shape over the
+ *                radius tokens, a dot-grid backdrop, segmented gauges, two
+ *                hue knobs a project re-brands with; tokens plus component rules
+ *
  * Single-block themes (indigo, dim, brutalist, neo-brutalist, cyberpunk,
- * neon, glass, admin-neutral) pin one color-scheme and cannot adapt to prefers-color-scheme;
+ * neon, cyberdeck, glass, admin-neutral) pin one color-scheme and cannot adapt to prefers-color-scheme;
  * the paired ones follow the OS. */
 @import "./indigo.css";
 @import "./dim.css";
@@ -63,6 +67,7 @@
 @import "./edge.css";
 @import "./cyberpunk.css";
 @import "./neon.css";
+@import "./cyberdeck.css";
 @import "./gradient.css";
 @import "./material.css";
 @import "./glass.css";

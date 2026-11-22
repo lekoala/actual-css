@@ -1,6 +1,19 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Added
+- `cyberdeck` demo theme: dark tactical HUD, bevels through `corner-shape` over the radius tokens, square where unsupported.
+- `cyberdeck` demo theme: `--deck-hue` and `--deck-signal-hue` re-brand the chrome and the signal from the theme root.
+- `cyberdeck` demo theme: folder tab on framed buttons, corner tick on `.btn[aria-pressed]`, hatched disabled actions and fields.
+- `cyberdeck` demo theme: `@lekoala/date-picker` days are bevelled cells, today framed, unavailable days hatched.
+- Demo: `cyberdeck.html` relay console exercises the theme on unchanged markup, an inline calendar included.
+- `cyberdeck` demo theme: graduated `.range` with a block thumb; `.otp` digits in the signal; gauges end on a whole cell.
+- Demo: `demo/scripts/deck-count.js` prints `02/04`-style length readouts and lights the next `.otp` cell.
+- Design note: `theme-vs-brand.md` records what belongs to the framework, the theme, the brand and the project.
+- Dev: `browserSuite()` returns a `tabUntil` that presses real Tab keys in Firefox and WebKit too.
+
+### Changed
+- Demo: Neon Ramen runs on `data-theme="cyberdeck"`; `.cut`, `.cyber-btn`, `.fieldset-cyber` and the site palette block are gone.
 
 ## [0.20.1] - 2026-11-21
 ### Fixed

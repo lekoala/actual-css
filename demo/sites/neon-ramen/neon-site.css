@@ -1,41 +1,26 @@
 /*
  * Neon Ramen — shared site stylesheet.
  *
- * Layer 1: theme tokens (one island, dark-only brand).
- * Layer 2: application CSS composed on top of Actual primitives
- *          (stack / cluster / grid / frame / card / navbar / btn / badge /
- *          field / choice-card / tabs / drawer / aura).
+ * The look is the cyberdeck theme (data-theme="cyberdeck"): palette, bevels,
+ * backdrop, label voice, gauges and rating. This file holds what is Neon
+ * Ramen's alone:
  *
- * Cyberpunk accents are deliberately small utilities — .cut, .neon-chip,
- * .signal, .ticker — so pages stay declarative.
+ * 1. The brand: the deck's two hues turned to night-market pink and cyan.
+ * 2. Application CSS composed on Actual primitives (stack / cluster / grid /
+ *    frame / card / navbar / btn / badge / field / choice-card / drawer /
+ *    aura): page layout, product cards, the cart readout.
+ * 3. Editorial signals: glow type, ticker, chips, signal captions.
  */
 
-/* ---------------------------------------------------------------- tokens */
-:root,
-[data-theme="dark"] {
-  color-scheme: dark;
-  --primary: hsl(326 100% 63%);
-  --primary-fg: hsl(250 35% 8%);
-  --secondary: hsl(187 100% 52%);
-  --secondary-fg: hsl(250 35% 8%);
-  --success: hsl(155 82% 52%);
-  --success-fg: hsl(250 35% 8%);
-  --warning: hsl(43 100% 58%);
-  --warning-fg: hsl(250 35% 8%);
-  --danger: hsl(6 100% 65%);
-  --danger-fg: hsl(250 35% 8%);
-  --neutral: hsl(250 10% 52%);
-  --neutral-fg: hsl(0 0% 100%);
-  --surface: hsl(245 30% 6%);
-  --surface-raised: hsl(245 25% 9%);
-  --surface-subtle: hsl(245 20% 13%);
-  --surface-solid: hsl(0 0% 96%);
-  --text: hsl(0 0% 96%);
-  --text-muted: hsl(250 9% 72%);
-  --text-subtle: hsl(250 7% 55%);
-  --border: hsl(250 18% 24%);
-  --focus: var(--secondary);
-  --shadow-color: hsl(326 100% 50%);
+/* ----------------------------------------------------------------- brand */
+/* Set on the theme root, where the deck resolves its palette. Pink is the
+   signal (--primary: calls to action, selection), cyan the chrome. */
+[data-theme="cyberdeck"] {
+  --deck-hue: 200;
+  --deck-signal-hue: 345;
+  /* The deck's signal is calibrated for a light cyan; at the same lightness
+     a pink reads pastel. The brand pink is hotter, so it is set outright. */
+  --primary: oklch(68% 0.26 352);
 
   /* Derived brand tokens — decorative colors follow the theme tokens instead
      of repeating literal palette values at various alphas. */
@@ -48,9 +33,6 @@
   --brand-glass: color-mix(in oklch, var(--surface) 80%, transparent);
   --brand-shadow: color-mix(in oklch, var(--surface) 55%, transparent);
 
-  --radius: 0.45rem;
-  --radius-sm: 0.25rem;
-  --radius-lg: 0.8rem;
   --gap: 1rem;
   --center-size: 74rem;
   --center-pad: clamp(1rem, 4vw, 2rem);
@@ -59,23 +41,9 @@
 /* ------------------------------------------------------------------ base */
 html { scroll-behavior: smooth; }
 
-body {
-  background:
-    radial-gradient(circle at 12% 12%, var(--brand-glow-faint), transparent 28rem),
-    radial-gradient(circle at 90% 32%, var(--brand-line-faint), transparent 26rem),
-    var(--surface);
-  color: var(--text);
-  font-family: var(--font-sans);
-}
-
 a { color: inherit; }
 figure { margin: 0; }
 img { filter: saturate(1.06) contrast(1.03); }
-
-::selection {
-  background: var(--primary);
-  color: var(--primary-fg);
-}
 
 /* ----------------------------------------------------------------- shell */
 .site-header {
@@ -195,25 +163,7 @@ img { filter: saturate(1.06) contrast(1.03); }
 
 .mono { font-family: var(--font-mono); }
 
-/* ------------------------------------------------------- cyber utilities */
-/* Chamfered corner — clip one corner off buttons and flat panels.
-   Clipping removes outer shadows and also clips the focus-visible outline, so
-   only use on shadowless elements and avoid on controls that need a visible
-   keyboard ring. */
-.cut {
-  --cut: 0.65rem;
-  clip-path: polygon(
-    var(--cut) 0,
-    100% 0,
-    100% calc(100% - var(--cut)),
-    calc(100% - var(--cut)) 100%,
-    0 100%,
-    0 var(--cut)
-  );
-}
-
-
-
+/* ---------------------------------------------------- editorial accents */
 /* Floating status chips over hero media. Not .chip: that is the framework's
    .choice-card modifier, and a demo should not reuse a framework name. */
 .neon-chip {
@@ -324,14 +274,6 @@ img { filter: saturate(1.06) contrast(1.03); }
 
 .hero-pickup { max-inline-size: 26rem; }
 
-.hero-pickup .field-label {
-  color: var(--text-subtle);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
 .hero-visual,
 .cart-visual,
 .item-visual {
@@ -382,16 +324,6 @@ img { filter: saturate(1.06) contrast(1.03); }
   font-size: 0.76rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-}
-
-/* ---------------------------------------------------------------- rating */
-/* Stars as neon tubes: the value lit in the brand pink, the rest an unlit
-   outline of the same hue. Set on .rating itself — the component declares its
-   defaults there, so a value on :root would not reach it. */
-.rating {
-  --rating-color: var(--intent, var(--primary));
-  --rating-empty: color-mix(in oklab, var(--rating-color) 45%, var(--surface));
-  --rating-star-empty: var(--rating-star-outline);
 }
 
 /* ------------------------------------------------------- live cart status */
@@ -738,17 +670,6 @@ img { filter: saturate(1.06) contrast(1.03); }
 .step h3 { font-size: 1.15rem; text-transform: uppercase; }
 
 /* ------------------------------------------------------------------ forms */
-.fieldset-cyber {
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.fieldset-cyber legend {
-  padding: 0;
-  margin-block-end: 0.75rem;
-}
-
 .choice-grid {
   --grid-min: 9rem;
   --gap: 0.6rem;
@@ -841,63 +762,9 @@ img { filter: saturate(1.06) contrast(1.03); }
 .footer-bottom b { color: var(--success); font-weight: 700; }
 
 
-/* ----------------------------------------------------------- cut controls */
-/* Key CTAs keep a chamfered cyberpunk silhouette. Focus is restored with a
-   drop-shadow ring rather than relying on the clipped default outline. */
-.cyber-btn {
-  --cut: 0.72rem;
-  border-radius: 0;
-  clip-path: polygon(
-    var(--cut) 0,
-    100% 0,
-    100% calc(100% - var(--cut)),
-    calc(100% - var(--cut)) 100%,
-    0 100%,
-    0 var(--cut)
-  );
-}
-
-.cyber-btn:focus-visible {
-  outline: 0;
-  filter: drop-shadow(0 0 0.1rem var(--focus)) drop-shadow(0 0 0.35rem var(--focus));
-}
-
-.site-header .navbar,
-.card,
-.frame,
-.cart-status {
-  position: relative;
-}
-
-.site-header .navbar::before,
-.frame::before,
-.card::before,
-.cart-status::before {
-  content: "";
-  position: absolute;
-  inset: 0.55rem auto auto 0.55rem;
-  inline-size: 1rem;
-  block-size: 1rem;
-  border-inline-start: 1px solid var(--brand-line-strong);
-  border-block-start: 1px solid var(--brand-line-strong);
-  pointer-events: none;
-  opacity: 0.85;
-}
-
-.site-header .navbar::after,
-.frame::after,
-.card::after,
-.cart-status::after {
-  content: "";
-  position: absolute;
-  inset: auto 0.55rem 0.55rem auto;
-  inline-size: 1rem;
-  block-size: 1rem;
-  border-inline-end: 1px solid var(--brand-line-strong);
-  border-block-end: 1px solid var(--brand-line-strong);
-  pointer-events: none;
-  opacity: 0.85;
-}
+/* ---------------------------------------------------------------- layout */
+/* Holds the absolute .signal caption. */
+.frame { position: relative; }
 
 .hero-copy .lede,
 .location-copy .lede {

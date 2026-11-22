@@ -1,0 +1,619 @@
+/* Cyberdeck — dark-only tactical HUD: chamfered frames, a dot-grid backdrop,
+ * uppercase tracked labels, segmented gauges and diamond markers. Tokens plus
+ * component rules, like neo-brutalist; the font is the page's.
+ *
+ * Two hues drive the palette. --deck-hue is the chrome: frames, labels and
+ * everyday actions. --deck-signal-hue is the signal: --primary, so selection,
+ * checked controls, focus and live values. A project re-brands the deck by
+ * setting both on the theme root, after this file; they resolve there, so a
+ * nested element that sets them changes nothing.
+ *
+ * Geometry is corner-shape over the radius tokens: every rounded corner
+ * becomes a bevel, cut on the top-left and bottom-right only. Borders,
+ * shadows and the focus outline follow the cut, so the core focus contract
+ * holds unchanged. Without corner-shape the radii stay 0 and the deck is
+ * square: a visual degradation, never a functional one.
+ *
+ * A demo theme targets current engines: oklch(), :has() and color-mix() are
+ * used freely. This skin is invasive: descendant rules cross nested
+ * data-theme boundaries. Apply it to a whole page. */
+[data-theme="cyberdeck"] {
+  color-scheme: dark;
+
+  --deck-hue: 22;
+  --deck-signal-hue: 195;
+  --deck-chrome: oklch(73% 0.16 var(--deck-hue));
+  /* Frames, labels and quiet lines: the chrome sunk toward the surface. */
+  --deck-line: color-mix(in oklab, var(--deck-chrome) 45%, var(--surface));
+  --deck-glow: color-mix(in oklab, var(--primary) 45%, transparent);
+
+  --primary: oklch(86% 0.14 var(--deck-signal-hue));
+  --primary-fg: oklch(18% 0.04 var(--deck-signal-hue));
+  --secondary: var(--deck-chrome);
+  --secondary-fg: oklch(16% 0.04 var(--deck-hue));
+  --success: oklch(84% 0.19 150);
+  --success-fg: oklch(18% 0.05 150);
+  --warning: oklch(87% 0.16 90);
+  --warning-fg: oklch(20% 0.05 90);
+  /* Pink, not red: the chrome is already a red, and an invalid field must
+     not read as one more frame. */
+  --danger: oklch(75% 0.2 350);
+  --danger-fg: oklch(16% 0.05 350);
+  --neutral: oklch(78% 0.02 265);
+  --neutral-fg: oklch(18% 0.02 265);
+
+  --surface: oklch(15% 0.018 265);
+  --surface-raised: oklch(18.5% 0.022 265);
+  --surface-subtle: oklch(23% 0.026 265);
+  --surface-solid: oklch(92% 0.04 var(--deck-signal-hue));
+
+  --text: oklch(94% 0.01 265);
+  --text-muted: oklch(78% 0.025 265);
+  --text-subtle: oklch(66% 0.03 265);
+
+  --border: var(--deck-line);
+  /* Controls keep a 3:1 edge: the chrome itself, a step down. */
+  --border-control: color-mix(in oklab, var(--deck-chrome) 80%, var(--surface));
+  /* Mid-tone: 3:1 on the dark surfaces and on the light --surface-solid. */
+  --focus: oklch(58% 0.12 var(--deck-signal-hue));
+  --hover-overlay: oklch(100% 0 0 / 0.06);
+  --soft-bg-mix: 82%;
+  --soft-border-mix: 50%;
+  /* Soft ink a step toward the text: the raw chrome and danger fell to
+     4.4:1 on a hovered tint over --surface-subtle. */
+  --soft-fg-mix: 85%;
+
+  /* No cast shadows on a HUD: surfaces are framed, and what floats glows. */
+  --shadow-color: transparent;
+  --shadow-popout:
+    0 0 0 var(--border-width) var(--deck-line),
+    0 0 1.5rem color-mix(in oklab, var(--primary) 18%, transparent);
+
+  --radius-sm: 0;
+  --radius: 0;
+  --radius-lg: 0;
+
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --selection-bg: var(--primary);
+  --selection-fg: var(--primary-fg);
+
+  /* The switch prints its state in the free half of the track. Strings, read
+     on the switch, so a page translates them there:
+     .switch:lang(fr) { --deck-switch-on: "OUI"; --deck-switch-off: "NON"; }
+     The track does not grow with the text: a longer word needs a wider
+     --switch-width. */
+  --deck-switch-on: "ON";
+  --deck-switch-off: "OFF";
+
+  scrollbar-color: var(--deck-line) transparent;
+}
+
+/* The radii only exist where they turn into bevels: a rounded corner is not
+   part of the deck. Guarded because the fallback must hold: radius 0. */
+@supports (corner-shape: bevel) {
+  [data-theme="cyberdeck"] {
+    --radius-sm: 0.25rem;
+    --radius: 0.5rem;
+    --radius-lg: 0.75rem;
+  }
+}
+
+/* Every rounded corner is cut, pseudo-elements included (knobs, marks and
+   markers are drawn there): a pill becomes a hexagon, a circle a diamond. */
+[data-theme="cyberdeck"],
+[data-theme="cyberdeck"] *,
+[data-theme="cyberdeck"] ::before,
+[data-theme="cyberdeck"] ::after {
+  corner-shape: bevel;
+}
+
+/* Frames carry the signature: cut on the top-left and bottom-right only.
+   Named, never universal. Trap: a full radius on two opposite corners makes
+   the cuts meet across the box, and a circle (the choice card's check badge)
+   collapsed into a diagonal sliver. */
+[data-theme="cyberdeck"]
+:is(
+  .card,
+  .alert,
+  .segmented,
+  .segment,
+  .choice-card:not(.chip),
+  .field-group,
+  .table-wrap,
+  .tab-panel,
+  .modal,
+  .drawer,
+  .flyout,
+  .navbar,
+  .list.grouped,
+  .accordion,
+  .switch
+),
+[data-theme="cyberdeck"] .switch::before {
+  corner-shape: bevel square;
+}
+
+/* Fields and buttons are cut on the bottom-right only: the top-left of a
+   button carries its tab instead. */
+[data-theme="cyberdeck"] :is(.input, .textarea, .select, .otp > span, .btn) {
+  corner-shape: square square bevel;
+}
+
+/* The backdrop is a plotting sheet: neutral one-pixel dots every 24px, a
+   registration cross on every eighth dot, and a faint signal glow from the
+   top. One SVG tile, sized in px so the dots stay on whole pixels; its white
+   is translucent, so it reads on any surface and hue. body paints --surface
+   over <html>, so the theme root and the body both carry it. */
+[data-theme="cyberdeck"],
+[data-theme="cyberdeck"] > body {
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192'%3E%3Cdefs%3E%3Cpattern id='d' width='24' height='24' patternUnits='userSpaceOnUse'%3E%3Crect width='1' height='1' fill='%23fff' fill-opacity='.09'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='192' height='192' fill='url(%23d)'/%3E%3Cpath d='M96.5 92v9M92 96.5h9' stroke='%23fff' stroke-opacity='.12'/%3E%3C/svg%3E")
+    0 0 / 192px 192px,
+    radial-gradient(
+      ellipse 90% 40rem at 50% 0,
+      color-mix(in oklab, var(--primary) 6%, transparent),
+      transparent
+    ),
+    var(--surface);
+}
+
+/* The deck's voice: names and actions are uppercase and tracked. */
+[data-theme="cyberdeck"]
+:is(
+  .field-label,
+  .field-group > legend,
+  .btn,
+  .badge:not(:empty),
+  .tab,
+  .segment,
+  .overline,
+  .table thead th
+) {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+[data-theme="cyberdeck"] :is(.field-label, .field-group > legend, .overline) {
+  color: var(--deck-chrome);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* A rule is a graduated scale: a minor tick every half rem, a major one
+   every 2.5rem, on a baseline. */
+[data-theme="cyberdeck"] hr {
+  block-size: 0.5rem;
+  border: 0;
+  background:
+    linear-gradient(var(--deck-line) 0 0) bottom / 100% var(--border-width) no-repeat,
+    repeating-linear-gradient(90deg, var(--deck-line) 0 1px, transparent 0 2.5rem) bottom / 100%
+    0.5rem no-repeat,
+    repeating-linear-gradient(90deg, var(--deck-line) 0 1px, transparent 0 0.5rem) bottom / 100%
+    0.25rem no-repeat;
+}
+
+/* Buttons. The default action is chrome: a tinted pane under a chrome frame,
+   not a grey slab. An intent class still fills it: declared on .btn, so
+   var(--intent) resolves after the local intent class. */
+[data-theme="cyberdeck"] .btn {
+  --btn-default-bg: var(--intent, color-mix(in oklab, var(--deck-chrome) 16%, var(--surface)));
+  --btn-default-fg: var(--intent-fg, var(--deck-chrome));
+  --btn-default-border: var(--intent, var(--deck-chrome));
+  --btn-hover-overlay: color-mix(in oklab, var(--deck-chrome) 14%, transparent);
+
+  font-weight: var(--font-weight-semibold);
+}
+
+/* What you can press glows on hover, in its own ink. */
+@media (hover: hover) {
+  [data-theme="cyberdeck"]
+    .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link)):hover {
+    --btn-shadow: 0 0 1rem color-mix(in oklab, currentColor 30%, transparent);
+  }
+}
+
+/* A framed button carries a tab on its top edge, like a folder: a strip of
+   its own border colour, sloped at the inline end. Text buttons have no
+   frame to grow it from. */
+[data-theme="cyberdeck"] .btn:not(.ghost, .link)::before {
+  content: "";
+  position: absolute;
+  inset-block-start: calc(-1 * var(--border-width) - 3px);
+  inset-inline-start: calc(-1 * var(--border-width));
+  inline-size: min(40%, 2rem);
+  block-size: 3px;
+  border-start-end-radius: 3px;
+  background: var(--btn-border-color, var(--btn-border));
+  pointer-events: none;
+}
+
+/* A toggle button shows its state in a corner tick: hollow off, lit on. */
+[data-theme="cyberdeck"] .btn[aria-pressed]::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 3px;
+  inset-inline-end: 3px;
+  inline-size: 5px;
+  block-size: 5px;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  pointer-events: none;
+}
+
+[data-theme="cyberdeck"] .btn[aria-pressed="true"]::after {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+/* Disabled actions and fields are struck through with a hatch, not only
+   dimmed. Not .select: its chevron is a background image. */
+[data-theme="cyberdeck"]
+:is(.btn:is(:disabled, [aria-disabled="true"]), .input:disabled, .textarea:disabled) {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, currentColor 22%, transparent) 0 1px,
+    transparent 0 0.4rem
+  );
+}
+
+/* Fields. A rail on the inline-start edge carries the field's state: quiet
+   at rest, the signal once filled, danger when invalid. Filled reads
+   :placeholder-shown, so it needs a placeholder (a space will do); a field
+   without one keeps the quiet rail. */
+:where([data-theme="cyberdeck"]) :is(.input, .textarea, .select) {
+  --deck-rail: var(--form-invalid-border, var(--deck-line));
+  --control-default-bg: oklch(12% 0.018 265);
+  --control-shadow: inset 3px 0 0 var(--deck-rail);
+}
+
+[data-theme="cyberdeck"] :is(.input, .textarea)[placeholder]:not(:placeholder-shown) {
+  --deck-rail: var(--form-invalid-border, var(--primary));
+}
+
+[data-theme="cyberdeck"] :is(.input, .textarea, .select):dir(rtl) {
+  --control-shadow: inset -3px 0 0 var(--deck-rail);
+}
+
+/* Choices. The radio is a diamond (above); the checked fill is the signal. */
+[data-theme="cyberdeck"] .check:checked,
+[data-theme="cyberdeck"] .radio:checked {
+  box-shadow: 0 0 0.5rem var(--deck-glow);
+}
+
+/* Switch: a framed track, a block knob, and the state printed in the free
+   half. Off is hollow chrome; on, the track tints and the knob lights. */
+:where([data-theme="cyberdeck"]) .switch {
+  --switch-block-size: 1.75em;
+  --switch-width: 4em;
+  --switch-knob-margin: 3px;
+  --switch-knob-inline-size: calc(var(--switch-knob-size) * 1.35);
+  --switch-bg: transparent;
+  --switch-border: var(--border-control);
+  --switch-knob: transparent;
+}
+
+[data-theme="cyberdeck"] .switch,
+[data-theme="cyberdeck"] .switch::before {
+  border-radius: var(--radius-sm);
+}
+
+[data-theme="cyberdeck"] .switch::before {
+  box-shadow: inset 0 0 0 var(--border-width) var(--switch-border);
+}
+
+[data-theme="cyberdeck"] .switch::after {
+  content: var(--deck-switch-off) / "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0.55em;
+  display: grid;
+  place-items: center;
+  color: var(--deck-chrome);
+  font-size: 0.55em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+[data-theme="cyberdeck"] .switch:checked {
+  --switch-bg: color-mix(in oklab, var(--primary) 22%, var(--surface));
+  --switch-border: var(--primary);
+  --switch-knob: var(--primary);
+
+  box-shadow: 0 0 0.6rem var(--deck-glow);
+}
+
+[data-theme="cyberdeck"] .switch:checked::after {
+  content: var(--deck-switch-on) / "";
+  inset-inline: 0.55em auto;
+  color: var(--primary);
+}
+
+[data-theme="cyberdeck"] .switch:disabled::after {
+  color: var(--state-disabled);
+}
+
+/* Segmented: a framed rail; the chosen segment is a chrome pane with a lit
+   signal tick under its label. */
+:where([data-theme="cyberdeck"]) .segmented {
+  --segmented-bg: transparent;
+  --segmented-fg: var(--deck-chrome);
+  --segmented-selected-bg: color-mix(in oklab, var(--deck-chrome) 30%, var(--surface));
+}
+
+[data-theme="cyberdeck"] .segmented {
+  border-color: var(--deck-line);
+}
+
+[data-theme="cyberdeck"] .segment:is([aria-selected="true"], [aria-current="page"])::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 3px;
+  inset-inline: calc(50% - 0.6em);
+  block-size: 2px;
+  background: var(--primary);
+  box-shadow: 0 0 0.4rem var(--deck-glow);
+}
+
+[data-theme="cyberdeck"] .segment:has(> input:checked)::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 3px;
+  inset-inline: calc(50% - 0.6em);
+  block-size: 2px;
+  background: var(--primary);
+  box-shadow: 0 0 0.4rem var(--deck-glow);
+}
+
+/* Tabs: chrome labels, the selected one lit with a glowing underline. */
+[data-theme="cyberdeck"] .tab {
+  color: var(--deck-chrome);
+  font-weight: var(--font-weight-semibold);
+}
+
+[data-theme="cyberdeck"] .tab:is([aria-selected="true"], [aria-current="page"])::after {
+  box-shadow: 0 0 0.6rem var(--deck-glow);
+}
+
+/* Range: a hairline track under a graduated scale, and a light block thumb
+   cut on the bottom-right. The graduation is decoration on the input's own
+   background: a tick every tenth of the travel, a longer one at both ends and
+   the middle. Each layer is one tick per tile, starting half a thumb in and
+   repeating every tenth (or half) of the travel, so the ticks land where the
+   thumb's centre does, the last one included.
+   The universal cut does not reach vendor pseudo-elements, so they are named
+   here, one rule each: an unknown pseudo drops a whole selector list. The
+   thumb's box-shadow is left alone: it carries the core focus ring. */
+:where([data-theme="cyberdeck"]) .range {
+  --range-thumb-size: 1.375rem;
+  --range-track-height: 2px;
+  --range-thumb-bg: var(--text);
+  --range-track-bg: var(--deck-line);
+  --deck-thumb-width: 0.625rem;
+  --deck-travel: calc(100% - var(--deck-thumb-width));
+}
+
+[data-theme="cyberdeck"] .range {
+  background:
+    linear-gradient(to right, var(--deck-line) 1px, transparent 1px)
+    calc(var(--deck-thumb-width) / 2) 0.125rem / calc(var(--deck-travel) / 2) 0.5rem repeat-x,
+    linear-gradient(to right, var(--deck-line) 1px, transparent 1px)
+    calc(var(--deck-thumb-width) / 2) 0.375rem / calc(var(--deck-travel) / 10) 0.25rem repeat-x;
+}
+
+[data-theme="cyberdeck"] .range::-webkit-slider-runnable-track {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .range::-moz-range-track {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .range::-webkit-slider-thumb {
+  inline-size: var(--deck-thumb-width);
+  border-radius: 0 0 var(--radius-sm);
+  corner-shape: square square bevel;
+}
+
+[data-theme="cyberdeck"] .range::-moz-range-thumb {
+  inline-size: var(--deck-thumb-width);
+  border-radius: 0;
+}
+
+/* Gauges are segmented: the bar is cut into cells by a mask, so track and
+   value share the cells. The value stays the browser's own fill. One cell
+   and its gap per tile, repeated with `round`: the tiles stretch to a whole
+   number, so no cell is cut at the end of the bar. */
+[data-theme="cyberdeck"] :is(.progress, .meter) {
+  --bar-height: 0.875rem;
+  --progress-track: color-mix(in oklab, var(--intent, var(--primary)) 16%, var(--surface));
+  --meter-track: color-mix(in oklab, var(--intent, var(--primary)) 16%, var(--surface));
+
+  border-radius: 0;
+  mask:
+    linear-gradient(90deg, #000 calc(100% - 3px), transparent 0) 0 0 / 1.25rem 100% round no-repeat;
+}
+
+/* The core draws the bar and its value as pills on vendor pseudo-elements,
+   which the universal cut does not reach: a round cap poked out of its cell.
+   One rule per pseudo, since an unknown one drops a whole selector list. */
+[data-theme="cyberdeck"] .progress::-webkit-progress-bar {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .progress::-webkit-progress-value {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .progress::-moz-progress-bar {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .meter::-webkit-meter-bar {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .meter::-webkit-meter-optimum-value {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .meter::-webkit-meter-suboptimum-value {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .meter::-webkit-meter-even-less-good-value {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .meter::-moz-meter-bar {
+  border-radius: 0;
+}
+
+/* Rating: diamonds, lit and unlit. */
+[data-theme="cyberdeck"] .rating {
+  --rating-color: var(--intent, var(--primary));
+  --rating-empty: var(--deck-line);
+  --rating-star: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 1.5 18.5 10 10 18.5 1.5 10Z'/%3E%3C/svg%3E");
+  --rating-star-empty: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M10 2.9 17.1 10 10 17.1 2.9 10Z' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+/* Timeline markers are hollow diamonds; the intent still colors them. */
+[data-theme="cyberdeck"] .timeline > li::before {
+  border: var(--border-width) solid var(--intent, var(--deck-chrome));
+  background: var(--surface);
+}
+
+/* Badges are tags, cut like everything else, not pills. */
+[data-theme="cyberdeck"] .badge {
+  --badge-radius: var(--radius-sm);
+}
+
+[data-theme="cyberdeck"] .avatar {
+  --avatar-radius: var(--radius-lg);
+}
+
+/* Groups: a technical frame with a chrome slice on the inline-start edge,
+   brighter while a control inside has focus. */
+[data-theme="cyberdeck"] .field-group:not(.flush) {
+  border-color: var(--deck-line);
+  border-inline-start: 4px solid var(--deck-chrome);
+  transition: border-color var(--duration);
+}
+
+[data-theme="cyberdeck"] .field-group:not(.flush):focus-within {
+  border-color: var(--border-control);
+  border-inline-start-color: var(--primary);
+}
+
+/* Table headers are chrome labels over a lit rule. */
+[data-theme="cyberdeck"] .table thead th {
+  color: var(--deck-chrome);
+  font-size: var(--font-size-sm);
+}
+
+/* Reticle: a link card is a target, so hovering or focusing it brackets it
+   with four signal corners that close in. Drawn by masking a full frame down
+   to its corners; square, since a reticle is not a frame. */
+[data-theme="cyberdeck"] a.card {
+  position: relative;
+}
+
+[data-theme="cyberdeck"] a.card::after {
+  --deck-reticle: 0.75rem;
+
+  content: "";
+  position: absolute;
+  inset: -0.625rem;
+  border: 2px solid var(--primary);
+  border-radius: 0;
+  corner-shape: square;
+  pointer-events: none;
+  opacity: 0;
+  mask:
+    conic-gradient(at var(--deck-reticle) var(--deck-reticle), transparent 75%, #000 0) 0 0 /
+    calc(100% - var(--deck-reticle)) calc(100% - var(--deck-reticle));
+  transition:
+    inset var(--duration-slow),
+    opacity var(--duration-slow);
+}
+
+[data-theme="cyberdeck"] a.card:is(:hover, :focus-visible)::after {
+  inset: -0.3125rem;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="cyberdeck"] a.card::after {
+    inset: -0.3125rem;
+  }
+}
+
+@media (forced-colors: active) {
+  [data-theme="cyberdeck"] a.card::after {
+    border-color: Highlight;
+  }
+}
+
+/* OTP: digits in the signal, empty cells framed in chrome. The group is not
+   cut: it clips its cells, and a bevel would take the first cell's corner. The
+   overlaid input is a .input, so the field rail is turned off on it. Which
+   cell is next is not knowable from CSS (the value is not reflected), so the
+   core focus edge stays on every cell. */
+[data-theme="cyberdeck"] .otp {
+  border-radius: 0;
+}
+
+[data-theme="cyberdeck"] .otp > input {
+  --control-shadow: none;
+
+  color: var(--primary);
+}
+
+/* The cells are the control's edge, so they keep the 3:1 chrome. */
+[data-theme="cyberdeck"] .otp > input:not(:focus, :disabled, [aria-invalid="true"]) ~ span {
+  --otp-cell-border: var(--border-control);
+}
+
+/* @lekoala/date-picker: its calendar renders in the light DOM and states its
+   days in data attributes, so the deck reaches it like a component. The page
+   still maps the --dp-* hooks to tokens (docs: Date picker · theme bridge).
+   Days are cells cut on the bottom-right; today is framed with a lit corner;
+   unavailable days are hatched instead of faded. */
+[data-theme="cyberdeck"] :is(date-picker, date-calendar) {
+  --dp-day-radius: var(--radius-sm);
+}
+
+[data-theme="cyberdeck"] :is(.dp-day, .dp-nav) {
+  corner-shape: square square bevel;
+}
+
+[data-theme="cyberdeck"] .dp-calendar-heading,
+[data-theme="cyberdeck"] .dp-week-heading {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+[data-theme="cyberdeck"] .dp-calendar-heading {
+  color: var(--deck-chrome);
+}
+
+[data-theme="cyberdeck"] .dp-day[data-today="true"]:not([data-selected="true"]) {
+  border-color: var(--deck-chrome);
+  background-image: linear-gradient(
+    to bottom left,
+    var(--deck-chrome) 0 0.3rem,
+    transparent 0.3rem
+  );
+}
+
+[data-theme="cyberdeck"] .dp-day[data-selected="true"] {
+  box-shadow: 0 0 0.6rem var(--deck-glow);
+}
+
+[data-theme="cyberdeck"] .dp-day[data-disabled="true"] {
+  opacity: 1;
+  color: var(--text-subtle);
+  text-decoration: line-through;
+  background-image: repeating-linear-gradient(-45deg, var(--deck-line) 0 1px, transparent 0 0.4rem);
+}

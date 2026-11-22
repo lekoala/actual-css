@@ -10,6 +10,7 @@ if (engines.some((engine) => !supportedEngines.includes(engine))) {
 // Keep this subset independent of built assets and Chrome DevTools Protocol.
 const files = [
   "./tests/browser/control-geometry.test.js",
+  "./tests/browser/cyberdeck.test.js",
   "./tests/browser/dirty.test.js",
   "./tests/browser/grid.test.js",
   "./tests/browser/meter.test.js",
