@@ -865,7 +865,8 @@
     "docs": "https://lekoala.github.io/actual-css/site/components/timeline.html",
     "classes": [
       "timeline",
-      "timeline-dates-end"
+      "timeline-dates-end",
+      "timeline-dates-start"
     ],
     "publicHooks": [
       "--timeline-dot-size",
@@ -895,6 +896,10 @@
         "::before"
       ],
       ".timeline-dates-end time": [
+        "::before"
+      ],
+      ".timeline-dates-start li": [
+        "::after",
         "::before"
       ]
     }

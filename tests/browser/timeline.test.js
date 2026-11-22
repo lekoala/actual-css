@@ -329,6 +329,70 @@ it("a local glyph correction leaves the disc, text and rail in place", async () 
   });
 });
 
+// Datelines of very different lengths share one column, so every rail and
+// every event start lines up. The marker is placed in the rail track, whose
+// area is its containing block: its resolved left is measured from that
+// track, read off the subgrid's resolved columns, not from the <li>.
+it("dates at the start share one column and keep every rail aligned", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const result = await view.evaluate(`(() => {
+        ${MEASURE}
+        // A subgrid reports "subgrid", not sizes: the tracks are the list's.
+        const read = (id) => [...document.querySelectorAll("#" + id + " > li")].map((li) => {
+          const list = getComputedStyle(li.parentElement);
+          const [dateline, rail] = list.gridTemplateColumns.split(" ").map(px);
+          const gap = px(list.columnGap);
+          const box = li.getBoundingClientRect();
+          const rtl = list.direction === "rtl";
+          const railLeft = rtl ? box.right - dateline - gap - rail : box.left + dateline + gap;
+          const marker = getComputedStyle(li, "::before");
+          const time = li.querySelector("time").getBoundingClientRect();
+          const event = li.querySelector(":scope > time ~ *").getBoundingClientRect();
+          const slot = li.querySelector(":scope > [aria-hidden]");
+          // Read the inset the rule sets (inline-start): in RTL that is right,
+          // and the resolved left of an auto offset is not measured from the
+          // track in every engine.
+          const markerX = rtl
+            ? railLeft + rail - px(marker.right) - px(marker.width) / 2
+            : railLeft + px(marker.left) + px(marker.width) / 2;
+          return {
+            railCenter: railLeft + rail / 2,
+            marker: marker.content === "none" ? null : markerX,
+            slot: slot ? center(slot.getBoundingClientRect()).x : null,
+            time: { left: time.left, right: time.right },
+            event: { left: event.left, right: event.right },
+            railLeft,
+            rail,
+          };
+        });
+        return { ltr: read("dates-start"), rtl: read("dates-start-rtl") };
+      })()`);
+
+      const near = (a, b) => Math.abs(a - b) <= 0.5;
+      for (const items of [result.ltr, result.rtl]) {
+        for (const item of items) {
+          const mark = item.marker ?? item.slot;
+          expect(near(mark, item.railCenter)).toBe(true);
+          expect(near(item.railCenter, items[0].railCenter)).toBe(true);
+        }
+      }
+      for (const item of result.ltr) {
+        expect(item.time.right).toBeLessThanOrEqual(item.railLeft + 0.5);
+        expect(near(item.time.right, result.ltr[0].time.right)).toBe(true);
+        expect(item.event.left).toBeGreaterThanOrEqual(item.railLeft + item.rail - 0.5);
+        expect(near(item.event.left, result.ltr[0].event.left)).toBe(true);
+      }
+      for (const item of result.rtl) {
+        expect(item.time.left).toBeGreaterThanOrEqual(item.railLeft + item.rail - 0.5);
+        expect(item.event.right).toBeLessThanOrEqual(item.railLeft + 0.5);
+      }
+    },
+    { artifactName: "timeline-dates-start" },
+  );
+});
+
 it("the rail follows the writing direction, and a stretched list keeps its gap", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),

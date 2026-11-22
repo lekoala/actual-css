@@ -170,6 +170,38 @@ from assistive technology.
 </section>
 ```
 
+## Dates at the start
+
+`.timeline-dates-start` sets every `<time>` in a column before the rail, as a
+log or an audit trail reads: the eye runs down the times, then across to the
+events. The column is as wide as the longest dateline, so every rail lines up
+whatever the dates say, and the list keeps that alignment in a wide column.
+
+Write the `<time>` first, after an optional icon or avatar, and make every
+other piece of the event an element: bare text beside the time would become
+its own grid item. Wrap a sentence that mixes text and links in one `<span>`
+or `<p>`. Without subgrid support the dateline stays above the title.
+
+```html demo
+<ol class="timeline timeline-dates-start">
+  <li>
+    <time datetime="2026-11-22T21:04">21:04</time>
+    <strong>Mara Voss</strong>
+    <p class="muted">Posted the job: a ledger out of the archive annex.</p>
+  </li>
+  <li class="primary">
+    <time datetime="2026-11-22T21:32">21:32</time>
+    <strong>Ghostwrite</strong>
+    <p class="muted">Rewrote the badge log for the service lift.</p>
+  </li>
+  <li class="warning">
+    <time datetime="2026-11-21">Yesterday</time>
+    <strong>Relay</strong>
+    <p class="muted">Trace detected on node 3F. <a href="#">Link rerouted</a>.</p>
+  </li>
+</ol>
+```
+
 ## Activity feed
 
 Avatars as markers, the actor and verb as one sentence, and richer content

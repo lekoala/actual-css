@@ -20,7 +20,9 @@ export async function browserSuite() {
     const { [engine]: browserType } = await import("playwright");
     browser = await browserType.launch();
   }, 60_000);
-  afterAll(() => browser?.close());
+  // Same budget as the launch: under load Firefox can take over the default
+  // 5s to close, which failed the file as an "(unnamed)" hook timeout.
+  afterAll(() => browser?.close(), 60_000);
 
   return {
     it,

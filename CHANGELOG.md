@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Added
+- `.timeline-dates-start`: datelines in a shared column before the rail; every rail lines up whatever the dates say.
+- Docs: Timeline · "Dates at the start".
 - `cyberdeck` demo theme: dark tactical HUD, bevels through `corner-shape` over the radius tokens, square where unsupported.
 - `cyberdeck` demo theme: `--deck-hue` and `--deck-signal-hue` re-brand the chrome and the signal from the theme root.
 - `cyberdeck` demo theme: folder tab on framed buttons, corner tick on `.btn[aria-pressed]`, hatched disabled actions and fields.

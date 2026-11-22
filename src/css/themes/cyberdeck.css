@@ -2,6 +2,10 @@
  * uppercase tracked labels, segmented gauges and diamond markers. Tokens plus
  * component rules, like neo-brutalist; the font is the page's.
  *
+ * Inspired by CyberSpec (https://www.cyberspec.dev/), whose visual grammar —
+ * bevelled frames, folder tabs, micro-print, hatched disabled states — this
+ * theme reinterprets on Actual's own components. No CyberSpec code is used.
+ *
  * Two hues drive the palette. --deck-hue is the chrome: frames, labels and
  * everyday actions. --deck-signal-hue is the signal: --primary, so selection,
  * checked controls, focus and live values. A project re-brands the deck by
@@ -9,7 +13,8 @@
  * nested element that sets them changes nothing.
  *
  * Geometry is corner-shape over the radius tokens: every rounded corner
- * becomes a bevel, cut on the top-left and bottom-right only. Borders,
+ * becomes a bevel, and frames are cut on the top-left and bottom-right only.
+ * Borders,
  * shadows and the focus outline follow the cut, so the core focus contract
  * holds unchanged. Without corner-shape the radii stay 0 and the deck is
  * square: a visual degradation, never a functional one.
@@ -63,11 +68,11 @@
      4.4:1 on a hovered tint over --surface-subtle. */
   --soft-fg-mix: 85%;
 
-  /* No cast shadows on a HUD: surfaces are framed, and what floats glows. */
+  /* No cast shadows on a HUD: surfaces are framed. What floats (pickers,
+     flyouts, menus) adds a dark drop under its frame to clear the page; never
+     a glow, which is for what emits light (see the glow policy). */
   --shadow-color: transparent;
-  --shadow-popout:
-    0 0 0 var(--border-width) var(--deck-line),
-    0 0 1.5rem color-mix(in oklab, var(--primary) 18%, transparent);
+  --shadow-popout: 0 0 0 var(--border-width) var(--deck-line), 0 0.75rem 2rem oklch(0% 0 0 / 0.55);
 
   --radius-sm: 0;
   --radius: 0;
@@ -81,6 +86,10 @@
 
   /* Square bars: a round value cap pokes out of a gauge cell. */
   --bar-radius: 0;
+
+  /* A denser scrim (blurred below): a detached dialog puts hollow buttons
+     straight on it, and the page under them must not compete. */
+  --backdrop-opacity: 0.7;
 
   /* Column labels in chrome, on .table and on any grid bridged to it. */
   --table-header-fg: var(--deck-chrome);
@@ -534,6 +543,48 @@
 
 [data-theme="cyberdeck"] .tooltip::before {
   background: var(--primary);
+}
+
+/* The base-select picker is a frame like any other, cut on the top-left and
+   bottom-right; the universal cut does not reach ::picker(select), and an
+   unknown pseudo drops its rule, so it stands alone. */
+[data-theme="cyberdeck"] .select::picker(select) {
+  corner-shape: bevel square;
+}
+
+/* The active option is a chrome pane with a signal rail, like the chosen
+   segment, not the core's solid accent bar. Still the option's focus
+   indicator: the rail holds 3:1 on the panel. Same selector as the core so
+   it outranks it; harmless where the picker is not enhanced. */
+[data-theme="cyberdeck"]
+  .select:not([multiple], .native, [size]:not([size="1"]))
+  option:not(:disabled):focus-visible {
+  background-color: color-mix(in oklab, var(--deck-chrome) 26%, var(--surface-raised));
+  color: var(--text);
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+
+[data-theme="cyberdeck"]
+  .select:not([multiple], .native, [size]:not([size="1"]))
+  option:not(:disabled):focus-visible:dir(rtl) {
+  box-shadow: inset -3px 0 0 var(--primary);
+}
+
+/* Modal scrims blur the page as well as dim it. dialog only: a ::backdrop
+   rule for every top-layer element would blur the page under each tooltip,
+   flyout and picker. Reduced transparency trades the blur for density. */
+[data-theme="cyberdeck"] dialog::backdrop {
+  backdrop-filter: blur(10px);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  [data-theme="cyberdeck"] {
+    --backdrop-opacity: 0.88;
+  }
+
+  [data-theme="cyberdeck"] dialog::backdrop {
+    backdrop-filter: none;
+  }
 }
 
 /* Cards read as instrument panels: a direct header and footer are ruled off

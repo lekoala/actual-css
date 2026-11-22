@@ -17,7 +17,8 @@
  * block flow, so a sentence mixing text and links is never split into items.
  *
  * .timeline-dates-end moves every dateline to the inline end of the event's
- * first line, beside the title instead of above it.
+ * first line, beside the title instead of above it. .timeline-dates-start sets
+ * them in a shared column before the rail.
  *
  * Progress through a process is .steps, not a timeline.
  *
@@ -172,6 +173,54 @@
 .timeline-dates-end > li > time::before {
   content: "";
   font-size: calc(var(--timeline-line-box) / var(--line-height));
+}
+
+/* Dates at the start: the datelines form a column before the rail, as in a
+   log. The list owns three tracks (dateline, rail, event) and every event
+   takes them as a subgrid, so the column is as wide as its longest dateline
+   and every rail lines up. The marker, the segment and a slot stay absolutely
+   positioned: placed in the rail track, that track becomes their containing
+   block, and the offsets above hold unchanged.
+
+   Contract: after the <time>, every piece of the event is an element. A
+   grid makes each run of bare text an item of its own, which could land in
+   the dateline track.
+
+   Guarded: without subgrid these rules would leave each event a lone grid
+   that scatters its children; the fallback is the default dateline above
+   the title. */
+@supports (grid-template-columns: subgrid) {
+  .timeline-dates-start {
+    grid-template-columns: max-content var(--timeline-rail-size) minmax(0, 1fr);
+    column-gap: var(--timeline-inline-gap);
+  }
+
+  .timeline-dates-start > li {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    /* The smaller dateline shares the title's baseline on the first row. */
+    align-items: first baseline;
+    padding-inline-start: 0;
+  }
+
+  .timeline-dates-start > li > * {
+    grid-column: 3;
+  }
+
+  /* Row 1, so the dateline sits beside the title rather than above it, and
+     end-aligned, so ragged datelines hug the rail. */
+  .timeline-dates-start > li > time {
+    grid-row: 1;
+    grid-column: 1;
+    text-align: end;
+  }
+
+  .timeline-dates-start > li::before,
+  .timeline-dates-start > li::after,
+  .timeline-dates-start > li > :is(.avatar, [aria-hidden="true"]):first-child {
+    grid-column: 2;
+  }
 }
 
 .timeline > li::before {

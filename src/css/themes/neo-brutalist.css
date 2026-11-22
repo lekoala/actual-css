@@ -3,6 +3,8 @@
  * object. Buttons lift on hover and press flat. Tokens plus component rules;
  * the font is the page's, not the theme's (docs: Theming · fonts).
  *
+ * Inspired by StreamUI (https://streamui.org/).
+ *
  * Shadows follow two rules: an object that stands on the page casts one, and
  * so does anything you can operate, until it is disabled and lies flat. A
  * surface nested in another does not (shadow on shadow reads as noise).

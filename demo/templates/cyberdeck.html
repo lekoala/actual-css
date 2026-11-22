@@ -166,7 +166,9 @@
       text-shadow: 0 0 1rem color-mix(in oklab, var(--primary) 40%, transparent);
     }
 
-    .deck-time {
+    /* The timeline dateline rule outranks a bare class, hence the second form. */
+    .deck-time,
+    .timeline > li > .deck-time {
       color: var(--secondary);
       font-family: var(--font-mono);
     }
@@ -359,7 +361,7 @@
         <button class="tab" type="button" role="tab" id="ch-dispatch-tab" aria-selected="false" aria-controls="ch-dispatch" tabindex="-1">Dispatch</button>
       </div>
       <section class="tab-panel" role="tabpanel" id="ch-studio" aria-labelledby="ch-studio-tab" tabindex="-1">
-        <ol class="timeline timeline-dates-end">
+        <ol class="timeline timeline-dates-start">
           <li>
             <time class="deck-time" datetime="2026-11-22T21:10">21:10</time>
             <strong>Mara Voss</strong>
