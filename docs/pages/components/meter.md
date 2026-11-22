@@ -73,6 +73,7 @@ marker to that background rather than to the neutral intent.
 - `--meter-track` — track color; raise it when the meter sits on a
   `--surface-subtle` card, where the default track would disappear.
 - `--bar-height` — bar thickness, shared with `.progress`.
+- `--bar-radius` — corner of the track and the value, shared with `.progress`; `0` squares the bar.
 - `--meter-value` — relative weight of a direct child in a segmented meter.
 
 `.sm` / `.lg` are intentionally not supported: a bar keeps its inline size and only changes

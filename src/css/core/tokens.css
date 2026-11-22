@@ -106,6 +106,10 @@
      the same geometry. Public: set it on the element or on an application
      class rather than reaching for a size variant. */
   --bar-height: 0.65rem;
+  /* Their corner, track and value alike. The value is drawn on vendor
+     pseudo-elements a theme cannot reach in one rule, so this is the way to
+     square a bar. */
+  --bar-radius: var(--radius-full);
 
   /* Controls — inputs and buttons share --control-size so heights always match.
      .compact/.spacious (variants.css) switch geometry (--control-size,

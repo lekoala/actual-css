@@ -14,6 +14,7 @@
  * --meter-track
  * --meter-value
  * --bar-height
+ * --bar-radius
  */
 
 .meter {
@@ -26,7 +27,7 @@
   block-size: var(--bar-height);
   overflow: hidden;
   border: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--bar-radius);
   background: var(--meter-track);
 }
 
@@ -53,31 +54,31 @@
   -webkit-appearance: none;
   block-size: var(--bar-height);
   border: 0;
-  border-radius: var(--radius-full);
+  border-radius: var(--bar-radius);
   background: var(--meter-track);
 }
 
 .meter::-webkit-meter-optimum-value {
   block-size: var(--bar-height);
-  border-radius: var(--radius-full);
+  border-radius: var(--bar-radius);
   background: var(--success);
 }
 
 .meter::-webkit-meter-suboptimum-value {
   block-size: var(--bar-height);
-  border-radius: var(--radius-full);
+  border-radius: var(--bar-radius);
   background: var(--warning);
 }
 
 .meter::-webkit-meter-even-less-good-value {
   block-size: var(--bar-height);
-  border-radius: var(--radius-full);
+  border-radius: var(--bar-radius);
   background: var(--danger);
 }
 
 .meter::-moz-meter-bar {
   block-size: var(--bar-height);
-  border-radius: var(--radius-full);
+  border-radius: var(--bar-radius);
 }
 
 /* The background shorthand clears Gecko's native gradient. Keep state

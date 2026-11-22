@@ -44,6 +44,15 @@ this project's content is the project's.
   radius tokens, not `clip-path`, so borders, shadows and the focus outline
   follow the cut and the core focus contract holds. Without `corner-shape` the
   radii stay 0: a square deck, tested in Firefox.
+- **Vendor pseudo-elements get hooks, not theme rules.** The universal cut
+  cannot reach a range thumb or a progress value, so each theme restated
+  vendor selectors, and one of those restatements erased the thumb's focus
+  ring. `--bar-radius`, `--range-thumb-radius` and `--range-thumb-inline-size`
+  replaced them; only `corner-shape` on the WebKit thumb is left.
+- **A third-party component is the page's integration.** The deck's look on
+  `@lekoala/date-picker` lives in the demo page next to its `--dp-*` bridge: a
+  theme names only Actual's vocabulary (`reserved-classes.json` would claim
+  anything else).
 
 ## Measured
 

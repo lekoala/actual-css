@@ -530,7 +530,8 @@
     "publicHooks": [
       "--meter-track",
       "--meter-value",
-      "--bar-height"
+      "--bar-height",
+      "--bar-radius"
     ]
   },
   {
@@ -624,7 +625,8 @@
     "publicHooks": [
       "--progress-track",
       "--progress-value",
-      "--bar-height"
+      "--bar-height",
+      "--bar-radius"
     ],
     "states": [
       "indeterminate"

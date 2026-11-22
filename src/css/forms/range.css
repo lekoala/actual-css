@@ -9,7 +9,9 @@
  * are not reliably applied across browsers.
  *
  * Public hooks:
- * --range-thumb-size
+ * --range-thumb-size (the thumb's block size, and the control's)
+ * --range-thumb-inline-size
+ * --range-thumb-radius
  * --range-track-height
  * --range-thumb-bg
  * --range-track-bg
@@ -27,6 +29,10 @@
 
 .range {
   --range-thumb-size: 1.125rem;
+  /* The thumb's shape, on vendor pseudo-elements a theme cannot reach in one
+     rule. The focus ring is a box-shadow, so it follows both. */
+  --range-thumb-inline-size: var(--range-thumb-size);
+  --range-thumb-radius: var(--radius-full);
   --range-track-height: 0.625rem;
   --range-thumb-bg: var(--intent, var(--primary));
   --range-track-bg: var(--border);
@@ -84,9 +90,9 @@
 .range::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  inline-size: var(--range-thumb-size);
+  inline-size: var(--range-thumb-inline-size);
   block-size: var(--range-thumb-size);
-  border-radius: var(--radius-full);
+  border-radius: var(--range-thumb-radius);
   border: 0;
   background: var(--range-thumb-bg);
   margin-block-start: calc((var(--range-track-height) - var(--range-thumb-size)) / 2);
@@ -99,9 +105,9 @@
 }
 
 .range::-moz-range-thumb {
-  inline-size: var(--range-thumb-size);
+  inline-size: var(--range-thumb-inline-size);
   block-size: var(--range-thumb-size);
-  border-radius: var(--radius-full);
+  border-radius: var(--range-thumb-radius);
   border: 0;
   background: var(--range-thumb-bg);
   cursor: inherit;

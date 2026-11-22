@@ -15,8 +15,10 @@
  * can light one cell instead of all of them. The value is not reflected in
  * the DOM, so CSS alone cannot find that cell.
  *
- * Its own attribute, not data-enhance: the plain-script runtime does not
- * expose registerEnhancement(), and this page should not pretend otherwise.
+ * Its own attribute, not a data-enhance token: a demo readout owns a
+ * self-describing attribute and stays a classic script. A page that wants
+ * the runtime's lifecycle declares a module in an enhancement manifest
+ * instead (docs: JavaScript runtime · Enhancement manifests · Without a build).
  */
 (() => {
   const update = (field, readout) => {

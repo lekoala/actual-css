@@ -590,6 +590,28 @@ connect function receives the element plus `{ config, signal, emit }`; `emit`
 dispatches `actual:<name>:<type>` events. Connect must be synchronous and may
 return a cleanup function or nothing; the loader owns the AbortController.
 
+#### Without a build
+
+The plain `<script src="actual.full.js">` bundle exposes no global, so a page
+without a bundler cannot call `registerEnhancement()`. It does not need to: the
+bundle watches manifests, so a page declares its own module and the runtime
+imports and registers it, on the same lifecycle as the built-in behaviors.
+
+```html
+<script type="application/json" data-enhance-modules>
+  { "autosubmit": "/js/autosubmit.js" }
+</script>
+<script src="/dist/actual.full.js" defer></script>
+
+<form data-enhance="autosubmit">…</form>
+```
+
+`/js/autosubmit.js` is an ES module with the default export shown above; no
+import of Actual is needed. Serve the page over HTTP: browsers refuse module
+imports from a page opened as `file://`, and the behavior silently never
+connects. A behavior that owns its own attribute instead of a
+`data-enhance` token can stay a classic script.
+
 `loadScript(url)` and `loadStyle(url)` are public helpers for non-ESM assets.
 Names are reserved once per manifest set — redeclaring a name from a different
 URL throws, and duplicate declarations share one import promise. The

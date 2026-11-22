@@ -77,7 +77,7 @@ export const FOUNDATIONS = {
     "control-pad-x-lg",
     "control-pad-x",
   ],
-  radius: ["radius-sm", "radius", "radius-lg", "radius-full"],
+  radius: ["radius-sm", "radius", "radius-lg", "radius-full", "bar-radius"],
   "border-width": ["border-width", "focus-ring-width"],
   "font-size": [
     "font-size-xs",

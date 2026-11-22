@@ -34,6 +34,45 @@
       box-shadow: var(--shadow-popout);
     }
 
+    /* The deck's look on the picker. A third-party component is the page's
+       integration, next to its bridge, never the theme's: a theme names only
+       Actual's vocabulary. The calendar renders in the light DOM and states
+       its days in data attributes. Days are cells cut on the bottom-right;
+       today is framed with a lit corner; unavailable days are hatched. */
+    date-picker,
+    date-calendar {
+      --dp-day-radius: var(--radius-sm);
+    }
+
+    :is(.dp-day, .dp-nav) {
+      corner-shape: square square bevel;
+    }
+
+    :is(.dp-calendar-heading, .dp-week-heading) {
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .dp-calendar-heading {
+      color: var(--secondary);
+    }
+
+    .dp-day[data-today="true"]:not([data-selected="true"]) {
+      border-color: var(--secondary);
+      background-image: linear-gradient(to bottom left, var(--secondary) 0 0.3rem, transparent 0.3rem);
+    }
+
+    .dp-day[data-selected="true"] {
+      box-shadow: 0 0 0.6rem color-mix(in oklab, var(--primary) 45%, transparent);
+    }
+
+    .dp-day[data-disabled="true"] {
+      opacity: 1;
+      color: var(--text-subtle);
+      text-decoration: line-through;
+      background-image: repeating-linear-gradient(-45deg, var(--border) 0 1px, transparent 0 0.4rem);
+    }
+
     /* The fonts belong to the page, not to the theme. */
     @font-face {
       font-family: "Chakra Petch";
@@ -167,12 +206,12 @@
       </div>
     </nav>
 
-    <header class="card stack" id="top">
-      <div class="cluster" style="--cluster-justify: space-between">
+    <section class="card stack" id="top" aria-labelledby="top-title">
+      <header>
         <span class="overline">Module 07 / System status</span>
         <span class="deck-micro" aria-hidden="true">N 47.21 // E 008.04</span>
-      </div>
-      <h1 class="text-display">Relay control</h1>
+      </header>
+      <h1 class="text-display" id="top-title">Relay control</h1>
       <p class="text-lead muted">Field console for the Halcyon ridge relay. Tune the uplink, watch the cells, acknowledge the night crew.</p>
       <hr>
       <div class="grid" style="--grid-min: 11rem">
@@ -199,10 +238,14 @@
           <button class="btn primary" type="button" commandfor="uplink-dialog" command="show-modal" aria-haspopup="dialog" aria-controls="uplink-dialog">Initialize uplink</button>
         </div>
       </footer>
-    </header>
+    </section>
 
     <section class="stack" aria-labelledby="actions-title">
-      <h2 class="text-title" id="actions-title">Actions</h2>
+      <div class="cluster" style="--hr-space: 0">
+        <h2 class="text-title" id="actions-title">Actions</h2>
+        <hr class="grow" aria-hidden="true">
+        <span class="deck-micro" aria-hidden="true">01</span>
+      </div>
       <div class="cluster">
         <button class="btn" type="button">Acknowledge</button>
         <button class="btn primary" type="button">Transmit</button>
@@ -223,7 +266,11 @@
     </section>
 
     <section class="stack" aria-labelledby="cells-title">
-      <h2 class="text-title" id="cells-title">Cells</h2>
+      <div class="cluster" style="--hr-space: 0">
+        <h2 class="text-title" id="cells-title">Cells</h2>
+        <hr class="grow" aria-hidden="true">
+        <span class="deck-micro" aria-hidden="true">02</span>
+      </div>
       <div class="grid" style="--grid-min: 18rem">
         <div class="stack" style="--gap: var(--space-20)">
           <div class="cluster" style="--cluster-justify: space-between"><span class="field-label">Pack weight</span><span class="deck-time">5 / 10 kg</span></div>
@@ -253,7 +300,11 @@
     </section>
 
     <section class="stack" aria-labelledby="log-title">
-      <h2 class="text-title" id="log-title">Comms</h2>
+      <div class="cluster" style="--hr-space: 0">
+        <h2 class="text-title" id="log-title">Comms</h2>
+        <hr class="grow" aria-hidden="true">
+        <span class="deck-micro" aria-hidden="true">03</span>
+      </div>
       <div class="tabs" role="tablist" aria-label="Channels" data-enhance="tabs">
         <button class="tab" type="button" role="tab" id="ch-studio-tab" aria-selected="true" aria-controls="ch-studio">Studio</button>
         <button class="tab" type="button" role="tab" id="ch-field-tab" aria-selected="false" aria-controls="ch-field" tabindex="-1">Field</button>
@@ -290,7 +341,11 @@
     </section>
 
     <section class="stack" aria-labelledby="config-title">
-      <h2 class="text-title" id="config-title">Uplink configuration</h2>
+      <div class="cluster" style="--hr-space: 0">
+        <h2 class="text-title" id="config-title">Uplink configuration</h2>
+        <hr class="grow" aria-hidden="true">
+        <span class="deck-micro" aria-hidden="true">04</span>
+      </div>
       <form class="stack" action="#" onsubmit="return false">
         <fieldset class="field-group stack">
           <legend>Station</legend>
@@ -415,22 +470,47 @@
     </section>
 
     <section class="stack" aria-labelledby="nodes-title">
-      <h2 class="text-title" id="nodes-title">Nodes</h2>
+      <div class="cluster" style="--hr-space: 0">
+        <h2 class="text-title" id="nodes-title">Nodes</h2>
+        <hr class="grow" aria-hidden="true">
+        <span class="deck-micro" aria-hidden="true">05</span>
+      </div>
       <div class="grid" style="--grid-min: 14rem">
         <a class="card stack deck-node" href="#nodes-title">
-          <span class="overline">Node 01</span>
+          <header>
+            <span class="overline">Node 01</span>
+            <span class="deck-micro" aria-hidden="true">SYS 041</span>
+          </header>
           <strong>Summit mast</strong>
           <span class="muted">2,410 m · line of sight</span>
+          <footer>
+            <span class="deck-micro">Signal synchronized</span>
+            <span class="badge success">Active</span>
+          </footer>
         </a>
         <a class="card stack deck-node" href="#nodes-title">
-          <span class="overline">Node 02</span>
+          <header>
+            <span class="overline">Node 02</span>
+            <span class="deck-micro" aria-hidden="true">SYS 042</span>
+          </header>
           <strong>Glacier hut</strong>
           <span class="muted">Clock drift 41 ms</span>
+          <footer>
+            <span class="deck-micro">Resync pending</span>
+            <span class="badge warning">Drift</span>
+          </footer>
         </a>
         <a class="card stack deck-node" href="#nodes-title">
-          <span class="overline">Node 03</span>
+          <header>
+            <span class="overline">Node 03</span>
+            <span class="deck-micro" aria-hidden="true">SYS 043</span>
+          </header>
           <strong>Valley mirror</strong>
-          <span class="muted">Standby</span>
+          <span class="muted">Mirrors node 01</span>
+          <footer>
+            <span class="deck-micro">Idle</span>
+            <span class="badge">Standby</span>
+          </footer>
         </a>
       </div>
       <div class="table-wrap" role="region" aria-labelledby="bursts-caption" tabindex="0">

@@ -51,6 +51,7 @@
   --radius: 0;
   --radius-sm: 0;
   --radius-lg: 0;
+  --bar-radius: 0;
   --border-width: 2px;
   --neo-offset: 3px;
   --neo-lift: 2px;
@@ -377,6 +378,7 @@
    since one unknown selector drops a whole list. */
 :where([data-theme="neo-brutalist"]) .range {
   --range-thumb-size: 1.5rem;
+  --range-thumb-radius: 0;
   --range-track-height: 1rem;
   --range-thumb-bg: var(--surface-raised);
   --range-track-bg: var(--surface-subtle);
@@ -395,14 +397,12 @@
 [data-theme="neo-brutalist"] .range::-webkit-slider-thumb {
   box-sizing: border-box;
   border: var(--border-width) solid var(--border);
-  border-radius: 0;
   box-shadow: 2px 2px 0 var(--border);
 }
 
 [data-theme="neo-brutalist"] .range::-moz-range-thumb {
   box-sizing: border-box;
   border: var(--border-width) solid var(--border);
-  border-radius: 0;
   box-shadow: 2px 2px 0 var(--border);
 }
 
@@ -433,21 +433,14 @@
   --bar-height: 1.25rem;
 
   border: var(--border-width) solid var(--border);
-  border-radius: 0;
   box-shadow: var(--neo-offset) var(--neo-offset) 0 var(--border);
 }
 
-[data-theme="neo-brutalist"] .progress::-webkit-progress-bar {
-  border-radius: 0;
-}
-
 [data-theme="neo-brutalist"] .progress::-webkit-progress-value {
-  border-radius: 0;
   box-shadow: var(--border-width) 0 0 var(--border);
 }
 
 [data-theme="neo-brutalist"] .progress::-moz-progress-bar {
-  border-radius: 0;
   box-shadow: var(--border-width) 0 0 var(--border);
 }
 
