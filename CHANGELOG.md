@@ -4,31 +4,17 @@
 ### Added
 - `.timeline-dates-start`: datelines in a shared column before the rail; every rail lines up whatever the dates say.
 - Docs: Timeline · "Dates at the start".
-- `cyberdeck` demo theme: dark tactical HUD, bevels through `corner-shape` over the radius tokens, square where unsupported.
-- `cyberdeck` demo theme: `--deck-hue` and `--deck-signal-hue` re-brand the chrome and the signal from the theme root.
-- `cyberdeck` demo theme: folder tab on framed buttons, corner tick on `.btn[aria-pressed]`, hatched disabled actions and fields.
-- Demo: `cyberdeck.html` skins `@lekoala/date-picker` in page CSS: bevelled day cells, today framed, unavailable days hatched.
 - `--bar-radius`: corner of `.progress` and `.meter`, track and value; `0` squares a bar without vendor selectors.
 - `--range-thumb-radius` and `--range-thumb-inline-size`: shape a `.range` thumb without vendor selectors; the focus ring follows.
-- Demo: `cyberdeck.html` relay console exercises the theme on unchanged markup, an inline calendar included.
-- `cyberdeck` demo theme: graduated `.range` with a block thumb; `.otp` digits in the signal; gauges end on a whole cell.
+- `cyberdeck` demo theme: dark tactical HUD with bevelled frames and hatched disabled states; `--deck-hue` and `--deck-signal-hue` re-brand it.
+- Demo: `cyberdeck.html` relay console runs the theme on unchanged markup and skins `@lekoala/date-picker` in page CSS.
 - Demo: `demo/scripts/deck-count.js` prints `02/04`-style length readouts and lights the next `.otp` cell.
-- `cyberdeck` demo theme: a `.card`'s direct `header` and `footer` are ruled off from its body.
-- `cyberdeck` demo theme: disabled `.check`, `.radio`, `.switch` and `.segment` are hatched; a disabled row dims its label.
-- `cyberdeck` demo theme: `.tooltip` is a readout tag with a signal edge; the segmented tick sits clear of its label.
-- `cyberdeck` demo theme: hover and keyboard focus run a framed button's tab along its top edge; no glow behind controls.
-- `cyberdeck` demo theme: fields brighten their chrome frame on hover and fade their focus line in.
-- `cyberdeck` demo theme: `.pagination` is one ruled strip; the current page is a chrome pane with a lit underline.
-- `cyberdeck` demo theme: `--table-header-fg` puts column labels in chrome on `.table` and on bridged data grids; `.btn.sm` carries no tab.
-- Demo: `cyberdeck.html` composes a detached alert from `.modal`, a `.card` panel and an outside action row.
-- `cyberdeck` demo theme: every `thead th`, its sort button included, and every `dt` take the uppercase chrome label voice.
-- Demo: `cyberdeck.html` adds a hover card (an explicit `.tooltip` with a dossier body) and a `data-grid-component` contracts board.
 - Docs: JavaScript runtime · "Without a build" registers a custom `data-enhance` module through a manifest with the plain bundle.
 - Design note: `theme-vs-brand.md` records what belongs to the framework, the theme, the brand and the project.
 - Dev: `browserSuite()` returns a `tabUntil` that presses real Tab keys in Firefox and WebKit too (Option+Tab for WebKit on macOS).
 
 ### Changed
-- `neo-brutalist` and `cyberdeck` demo themes square their bars and thumbs through the new hooks; their vendor radius rules are gone.
+- `neo-brutalist` demo theme squares its bars and thumbs through the new hooks; its vendor radius rules are gone.
 - Demo: Neon Ramen runs on `data-theme="cyberdeck"`; `.cut`, `.cyber-btn`, `.fieldset-cyber` and the site palette block are gone.
 
 ## [0.20.1] - 2026-11-21

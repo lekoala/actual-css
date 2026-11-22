@@ -144,6 +144,7 @@
   .navbar,
   .list.grouped,
   .accordion,
+  .accordion.separated > details,
   .switch
 ),
 [data-theme="cyberdeck"] .switch::before {
@@ -512,6 +513,68 @@
     linear-gradient(90deg, #000 calc(100% - 3px), transparent 0) 0 0 / 1.25rem 100% round no-repeat;
 }
 
+/* Spinner: a dial of eight ticks; the lit one steps round with a fading
+   trail, like a sequencer, not a spinning ring. A conic ramp from the
+   track to the value, masked to a ring cut into sectors. Steps of one
+   sector keep the ticks still: only the light moves. Square box: the
+   universal bevel turned the full radius into a diamond that clipped the
+   dial's diagonals. */
+[data-theme="cyberdeck"] .spinner {
+  border: 0;
+  border-radius: 0;
+  background: conic-gradient(var(--spinner-track), var(--spinner-value));
+  mask:
+    radial-gradient(closest-side, transparent 52%, #000 54% 96%, transparent),
+    repeating-conic-gradient(#000 0 30deg, transparent 0 45deg);
+  mask-composite: intersect;
+  animation-timing-function: steps(8);
+}
+
+/* The busy overlay restates the spin in an animation list (busy.css),
+   which resets the timing above: fade first, then the stepped spin. */
+[data-theme="cyberdeck"] [aria-busy="true"]:not(.btn) > .spinner:last-child {
+  animation-timing-function: ease, steps(8);
+}
+
+/* Skeletons are pending readouts: a faint hatch under a signal scan, cut
+   like what they stand for — bars like fields, a box like a frame, an
+   avatar like an avatar. The core animation moves every layer, but the
+   hatch is box-sized, so it stays put. */
+[data-theme="cyberdeck"] .skeleton {
+  --skeleton-radius: var(--radius-sm);
+  --skeleton-track: color-mix(in oklab, currentColor 7%, transparent);
+  --skeleton-highlight: color-mix(in oklab, var(--primary) 22%, transparent);
+
+  corner-shape: square square bevel;
+}
+
+/* Not in forced colors: the core's plain GrayText fill stands there. */
+@media (forced-colors: none) {
+  [data-theme="cyberdeck"] .skeleton {
+    background:
+      linear-gradient(90deg, transparent 44%, var(--skeleton-highlight), transparent 56%) 0 0 / 200%
+      100%,
+      repeating-linear-gradient(
+        -45deg,
+        color-mix(in oklab, currentColor 5%, transparent) 0 1px,
+        transparent 0 0.3rem
+      ),
+      var(--skeleton-track);
+  }
+}
+
+[data-theme="cyberdeck"] .skeleton[data-shape="box"] {
+  --skeleton-radius: var(--radius);
+
+  corner-shape: bevel square;
+}
+
+[data-theme="cyberdeck"] .skeleton[data-shape="avatar"] {
+  --skeleton-radius: var(--radius-lg);
+
+  corner-shape: bevel;
+}
+
 /* Rating: diamonds, lit and unlit. */
 [data-theme="cyberdeck"] .rating {
   --rating-color: var(--intent, var(--primary));
@@ -611,6 +674,46 @@
 
 [data-theme="cyberdeck"] .avatar {
   --avatar-radius: var(--radius-lg);
+}
+
+/* A person chip's avatar is a cut square, like the tag around it: at slot
+   size --radius-lg reaches half the side and the avatar became a diamond too
+   narrow for two initials. The tag's tracking would widen them further. */
+[data-theme="cyberdeck"] .badge > .avatar {
+  --avatar-radius: var(--radius-sm);
+
+  letter-spacing: 0;
+}
+
+/* Accordion: numbered rows. Each summary prints its index as a readout, lit
+   in the signal while the row is open, and the marker is a square plus that
+   flips to a minus. The index is decoration: empty alternative text. */
+[data-theme="cyberdeck"] .accordion {
+  --accordion-marker-color: var(--deck-chrome);
+  --accordion-marker-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M12 6v12M6 12h12'/%3E%3C/svg%3E");
+
+  counter-reset: deck-row;
+}
+
+[data-theme="cyberdeck"] .accordion > details {
+  counter-increment: deck-row;
+}
+
+[data-theme="cyberdeck"] .accordion > details[open] {
+  --accordion-marker-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='square'%3E%3Cpath d='M6 12h12'/%3E%3C/svg%3E");
+}
+
+[data-theme="cyberdeck"] .accordion > details > summary::before {
+  content: counter(deck-row, decimal-leading-zero) / "";
+  color: var(--text-subtle);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  transition: color var(--duration);
+}
+
+[data-theme="cyberdeck"] .accordion > details[open] > summary::before {
+  color: var(--primary);
 }
 
 /* Groups: a technical frame with a chrome slice on the inline-start edge,
