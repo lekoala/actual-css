@@ -368,6 +368,14 @@
   line-height: 1;
 }
 
+/* Hover lights the frame and barely tints the track. The core hover mixes
+   the text into --border-control, which over this transparent track turned
+   into a solid chrome slab. */
+[data-theme="cyberdeck"] .switch:not(:checked):hover:not(:disabled) {
+  --switch-bg: color-mix(in oklab, var(--deck-chrome) 12%, transparent);
+  --switch-border: var(--deck-chrome);
+}
+
 [data-theme="cyberdeck"] .switch:checked {
   --switch-bg: color-mix(in oklab, var(--primary) 22%, var(--surface));
   --switch-border: var(--primary);

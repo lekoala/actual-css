@@ -21,7 +21,7 @@
 - Demo: `cyberdeck.html` composes a detached alert from `.modal`, a `.card` panel and an outside action row.
 - Docs: JavaScript runtime · "Without a build" registers a custom `data-enhance` module through a manifest with the plain bundle.
 - Design note: `theme-vs-brand.md` records what belongs to the framework, the theme, the brand and the project.
-- Dev: `browserSuite()` returns a `tabUntil` that presses real Tab keys in Firefox and WebKit too.
+- Dev: `browserSuite()` returns a `tabUntil` that presses real Tab keys in Firefox and WebKit too (Option+Tab for WebKit on macOS).
 
 ### Changed
 - `neo-brutalist` and `cyberdeck` demo themes square their bars and thumbs through the new hooks; their vendor radius rules are gone.

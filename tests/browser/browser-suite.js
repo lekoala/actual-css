@@ -26,10 +26,14 @@ export async function browserSuite() {
     it,
     clickSelector: (page, selector) => page.locator(selector).click(),
     // Real Tab presses, like the CDP helper: focus assertions need dispatched input.
+    // Trap: WebKit on macOS follows the system setting, where Tab only reaches
+    // text fields and lists; buttons and links need Option+Tab. CI runs WebKit
+    // on macOS, so a test that tabbed to a button passed on Windows and failed there.
     async tabUntil(page, expression, { max = 12 } = {}) {
+      const key = engine === "webkit" && process.platform === "darwin" ? "Alt+Tab" : "Tab";
       for (let i = 0; i < max; i++) {
         if (await page.evaluate(`!!(${expression})`)) return true;
-        await page.keyboard.press("Tab");
+        await page.keyboard.press(key);
       }
       return await page.evaluate(`!!(${expression})`);
     },
