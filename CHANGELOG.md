@@ -12,6 +12,13 @@
 - `cyberdeck` demo theme: graduated `.range` with a block thumb; `.otp` digits in the signal; gauges end on a whole cell.
 - Demo: `demo/scripts/deck-count.js` prints `02/04`-style length readouts and lights the next `.otp` cell.
 - `cyberdeck` demo theme: a `.card`'s direct `header` and `footer` are ruled off from its body.
+- `cyberdeck` demo theme: disabled `.check`, `.radio`, `.switch` and `.segment` are hatched; a disabled row dims its label.
+- `cyberdeck` demo theme: `.tooltip` is a readout tag with a signal edge; the segmented tick sits clear of its label.
+- `cyberdeck` demo theme: hover and keyboard focus run a framed button's tab along its top edge; no glow behind controls.
+- `cyberdeck` demo theme: fields brighten their chrome frame on hover and fade their focus line in.
+- `cyberdeck` demo theme: `.pagination` is one ruled strip; the current page is a chrome pane with a lit underline.
+- `cyberdeck` demo theme: `--table-header-fg` puts column labels in chrome on `.table` and on bridged data grids; `.btn.sm` carries no tab.
+- Demo: `cyberdeck.html` composes a detached alert from `.modal`, a `.card` panel and an outside action row.
 - Docs: JavaScript runtime · "Without a build" registers a custom `data-enhance` module through a manifest with the plain bundle.
 - Design note: `theme-vs-brand.md` records what belongs to the framework, the theme, the brand and the project.
 - Dev: `browserSuite()` returns a `tabUntil` that presses real Tab keys in Firefox and WebKit too.

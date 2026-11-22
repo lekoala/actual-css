@@ -82,6 +82,9 @@
   /* Square bars: a round value cap pokes out of a gauge cell. */
   --bar-radius: 0;
 
+  /* Column labels in chrome, on .table and on any grid bridged to it. */
+  --table-header-fg: var(--deck-chrome);
+
   /* The switch prints its state in the free half of the track. Strings, read
      on the switch, so a page translates them there:
      .switch:lang(fr) { --deck-switch-on: "OUI"; --deck-switch-off: "NON"; }
@@ -208,18 +211,11 @@
   font-weight: var(--font-weight-semibold);
 }
 
-/* What you can press glows on hover, in its own ink. */
-@media (hover: hover) {
-  [data-theme="cyberdeck"]
-    .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link)):hover {
-    --btn-shadow: 0 0 1rem color-mix(in oklab, currentColor 30%, transparent);
-  }
-}
-
 /* A framed button carries a tab on its top edge, like a folder: a strip of
    its own border colour, sloped at the inline end. Text buttons have no
-   frame to grow it from. */
-[data-theme="cyberdeck"] .btn:not(.ghost, .link)::before {
+   frame to grow it from, and small ones stay plain: repeated on every row
+   of a data grid, the tabs read as noise. */
+[data-theme="cyberdeck"] .btn:not(.ghost, .link, .sm)::before {
   content: "";
   position: absolute;
   inset-block-start: calc(-1 * var(--border-width) - 3px);
@@ -229,6 +225,22 @@
   border-start-end-radius: 3px;
   background: var(--btn-border-color, var(--btn-border));
   pointer-events: none;
+  transition: inline-size var(--duration-slow) ease-out;
+}
+
+/* Hover and keyboard focus charge the tab: it runs the whole top edge, like
+   a gauge filling, instead of a glow behind the button. The reduced-motion
+   reset makes it a plain state change. */
+@media (hover: hover) {
+  [data-theme="cyberdeck"]
+    .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link)):hover::before {
+    inline-size: calc(100% + 2 * var(--border-width));
+  }
+}
+
+[data-theme="cyberdeck"]
+  .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link)):focus-visible::before {
+  inline-size: calc(100% + 2 * var(--border-width));
 }
 
 /* A toggle button shows its state in a corner tick: hollow off, lit on. */
@@ -249,14 +261,32 @@
   background: var(--primary);
 }
 
-/* Disabled actions and fields are struck through with a hatch, not only
-   dimmed. Not .select: its chevron is a background image. */
+/* Whatever is disabled is struck through with a hatch in its own ink, not
+   only dimmed: actions, fields, choices and segments. Not .select: its
+   chevron is a background image. The :has() forms are a rule of their own,
+   so an engine without :has() keeps this one. */
 [data-theme="cyberdeck"]
-:is(.btn:is(:disabled, [aria-disabled="true"]), .input:disabled, .textarea:disabled) {
+:is(
+  .btn:is(:disabled, [aria-disabled="true"]),
+  .input:disabled,
+  .textarea:disabled,
+  .check:disabled,
+  .radio:disabled,
+  .switch:disabled,
+  .segment:is(:disabled, [aria-disabled="true"])
+) {
   background-image: repeating-linear-gradient(
     -45deg,
-    color-mix(in oklab, currentColor 22%, transparent) 0 1px,
-    transparent 0 0.4rem
+    color-mix(in oklab, currentColor 30%, transparent) 0 1px,
+    transparent 0 0.3rem
+  );
+}
+
+[data-theme="cyberdeck"] .segment:has(> input:disabled) {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    color-mix(in oklab, currentColor 30%, transparent) 0 1px,
+    transparent 0 0.3rem
   );
 }
 
@@ -268,6 +298,25 @@
   --deck-rail: var(--form-invalid-border, var(--deck-line));
   --control-default-bg: oklch(12% 0.018 265);
   --control-shadow: inset 3px 0 0 var(--deck-rail);
+  /* Hover brightens the chrome frame instead of greying it. */
+  --control-hover-border: var(--deck-chrome);
+}
+
+/* Fields light up rather than snap: the frame, the rail and the focus line
+   ease in on one slower beat. The core's list plus outline-color. */
+[data-theme="cyberdeck"] :is(.input, .textarea, .select) {
+  transition-duration: var(--duration-slow);
+  transition-property: border-color, box-shadow, background-color, color, outline-color;
+}
+
+/* The focus line can only fade if an outline already exists, so a resting
+   field carries a transparent one in the same place. Not in forced colors,
+   which would paint that transparent outline as a permanent ring. */
+@media (forced-colors: none) {
+  [data-theme="cyberdeck"] :is(.input, .textarea, .select):not(:focus-visible) {
+    outline: var(--focus-ring-width) solid transparent;
+    outline-offset: calc(var(--focus-ring-width) * -1);
+  }
 }
 
 [data-theme="cyberdeck"] :is(.input, .textarea)[placeholder]:not(:placeholder-shown) {
@@ -278,11 +327,11 @@
   --control-shadow: inset -3px 0 0 var(--deck-rail);
 }
 
-/* Choices. The radio is a diamond (above); the checked fill is the signal. */
-[data-theme="cyberdeck"] .check:checked,
-[data-theme="cyberdeck"] .radio:checked {
-  box-shadow: 0 0 0.5rem var(--deck-glow);
-}
+/* Glow policy: only what emits light glows (a segment tick, a tab
+   underline, a readout value). Controls never do: a checked box or a lit
+   switch says its state by fill and frame, and a halo behind a control read
+   as generic neon. The radio is a diamond (above); its checked fill is the
+   signal. */
 
 /* Switch: a framed track, a block knob, and the state printed in the free
    half. Off is hollow chrome; on, the track tints and the knob lights. */
@@ -323,8 +372,6 @@
   --switch-bg: color-mix(in oklab, var(--primary) 22%, var(--surface));
   --switch-border: var(--primary);
   --switch-knob: var(--primary);
-
-  box-shadow: 0 0 0.6rem var(--deck-glow);
 }
 
 [data-theme="cyberdeck"] .switch:checked::after {
@@ -333,7 +380,19 @@
   color: var(--primary);
 }
 
+/* Disabled: the knob stays a hollow outline over the hatched track, as off
+   does, instead of the core's filled grey block. */
+[data-theme="cyberdeck"] .switch:disabled {
+  --switch-knob: transparent;
+}
+
 [data-theme="cyberdeck"] .switch:disabled::after {
+  color: var(--state-disabled);
+}
+
+/* A disabled choice row dims as a whole: the deck's chrome label would
+   otherwise outrank the core's row ink. */
+[data-theme="cyberdeck"] .choice:has(> :disabled) .field-label {
   color: var(--state-disabled);
 }
 
@@ -349,10 +408,17 @@
   border-color: var(--deck-line);
 }
 
+/* The label sits high in the segment to leave the tick some air: the core's
+   two equal block paddings become one, at the bottom. Same total, so the
+   segment keeps the --control-size height. */
+[data-theme="cyberdeck"] .segment {
+  padding-block: 0 clamp(0px, var(--segment-min-size) - 1lh, var(--space-10));
+}
+
 [data-theme="cyberdeck"] .segment:is([aria-selected="true"], [aria-current="page"])::after {
   content: "";
   position: absolute;
-  inset-block-end: 3px;
+  inset-block-end: 2px;
   inset-inline: calc(50% - 0.6em);
   block-size: 2px;
   background: var(--primary);
@@ -362,7 +428,7 @@
 [data-theme="cyberdeck"] .segment:has(> input:checked)::after {
   content: "";
   position: absolute;
-  inset-block-end: 3px;
+  inset-block-end: 2px;
   inset-inline: calc(50% - 0.6em);
   block-size: 2px;
   background: var(--primary);
@@ -438,6 +504,30 @@
   background: var(--surface);
 }
 
+/* Tooltips are readout tags: a dark plate cut on the top-right, framed in
+   chrome, a signal line under it. The arrow takes the signal too, so it
+   reads as the line pointing at its trigger. The case is left alone: a tip
+   can hold a sentence. */
+:where([data-theme="cyberdeck"]) .tooltip {
+  --tooltip-bg: var(--surface-raised);
+  --tooltip-fg: var(--text);
+}
+
+/* Trap: corner-shape with unequal borders. Chrome painted a stray strip of
+   the bottom border's colour along the top edge of the bevelled tooltip (and
+   the fieldset slice below bled into its cut corner). Keep the border
+   uniform and draw the accent edge as an inset shadow, which follows the cut. */
+[data-theme="cyberdeck"] .tooltip {
+  border-color: var(--deck-line);
+  box-shadow: inset 0 -2px 0 var(--primary);
+  corner-shape: square bevel square square;
+  letter-spacing: 0.04em;
+}
+
+[data-theme="cyberdeck"] .tooltip::before {
+  background: var(--primary);
+}
+
 /* Cards read as instrument panels: a direct header and footer are ruled off
    from the body. Only the card slots, so a card without them is unchanged. */
 :where([data-theme="cyberdeck"]) .card > header {
@@ -460,22 +550,72 @@
 }
 
 /* Groups: a technical frame with a chrome slice on the inline-start edge,
-   brighter while a control inside has focus. */
+   brighter while a control inside has focus. The slice is an inset shadow,
+   not a wider border (see the corner-shape trap at .tooltip). */
 [data-theme="cyberdeck"] .field-group:not(.flush) {
+  --deck-slice: var(--deck-chrome);
+
   border-color: var(--deck-line);
-  border-inline-start: 4px solid var(--deck-chrome);
-  transition: border-color var(--duration);
+  box-shadow: inset 4px 0 0 var(--deck-slice);
+  transition:
+    border-color var(--duration),
+    box-shadow var(--duration);
+}
+
+[data-theme="cyberdeck"] .field-group:not(.flush):dir(rtl) {
+  box-shadow: inset -4px 0 0 var(--deck-slice);
 }
 
 [data-theme="cyberdeck"] .field-group:not(.flush):focus-within {
+  --deck-slice: var(--primary);
+
   border-color: var(--border-control);
-  border-inline-start-color: var(--primary);
 }
 
-/* Table headers are chrome labels over a lit rule. */
+/* Table headers are small chrome labels (the ink is --table-header-fg). */
 [data-theme="cyberdeck"] .table thead th {
-  color: var(--deck-chrome);
   font-size: var(--font-size-sm);
+}
+
+/* Pagination: one framed strip with its cells ruled off, cut on the bottom
+   corners. The current page is a chrome pane with a lit underline, like the
+   chosen segment, not the core's solid fill. */
+/* Items stretch to the strip's height, so every rule spans it: the
+   ellipsis cell is shorter than a button and left a short rule. */
+[data-theme="cyberdeck"] .pagination {
+  align-items: stretch;
+  gap: 0;
+  inline-size: fit-content;
+  border: var(--border-width) solid var(--deck-line);
+  border-radius: var(--radius-sm);
+  corner-shape: square square bevel bevel;
+}
+
+[data-theme="cyberdeck"] .pagination > li {
+  display: flex;
+}
+
+[data-theme="cyberdeck"] .pagination > li + li {
+  border-inline-start: var(--border-width) solid var(--deck-line);
+}
+
+[data-theme="cyberdeck"] .pagination .btn {
+  --btn-radius: 0;
+}
+
+[data-theme="cyberdeck"] .pagination .btn[aria-current="page"] {
+  --btn-bg: color-mix(in oklab, var(--deck-chrome) 30%, var(--surface));
+  --btn-fg: var(--text);
+  --btn-border: transparent;
+}
+
+[data-theme="cyberdeck"] .pagination .btn[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  block-size: 2px;
+  background: var(--primary);
+  box-shadow: 0 0 0.4rem var(--deck-glow);
 }
 
 /* Reticle: a link card is a target, so hovering or focusing it brackets it

@@ -28,8 +28,12 @@ it("cyberdeck keeps focus and switch state readable in forced colors", async () 
           knobBorder: parseFloat(s("switch-off", "::before").borderTopWidth),
           label: s("switch", "::after").color,
           labelContent: s("switch", "::after").content,
+          // The resting transparent outline that lets field focus fade in
+          // would be painted as a permanent ring here.
+          restingFieldOutline: s("field").outlineStyle,
         };
       })()`);
+      expect(forced.restingFieldOutline).toBe("none");
       expect(forced.outline).toBe("solid");
       expect(forced.outlineWidth).toBeGreaterThan(0);
       expect(forced.knobBorder).toBeGreaterThan(0);

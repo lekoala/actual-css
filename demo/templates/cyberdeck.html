@@ -62,10 +62,6 @@
       background-image: linear-gradient(to bottom left, var(--secondary) 0 0.3rem, transparent 0.3rem);
     }
 
-    .dp-day[data-selected="true"] {
-      box-shadow: 0 0 0.6rem color-mix(in oklab, var(--primary) 45%, transparent);
-    }
-
     .dp-day[data-disabled="true"] {
       opacity: 1;
       color: var(--text-subtle);
@@ -175,6 +171,56 @@
       font-family: var(--font-mono);
     }
 
+    /* Detached alert. The dialog stays the modal (focus, backdrop, top
+       layer) but paints nothing: the code line, the panel and the actions
+       stand on the backdrop. The small pad keeps the button tabs and focus
+       outlines inside the wrapper's clip. */
+    .deck-alert {
+      --modal-pad: var(--space-20);
+
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .deck-alert-code {
+      color: var(--danger);
+    }
+
+    /* The panel is a card framed in the alert's intent; the hazard slab is
+       its first media column, stretched to the panel's height. */
+    .deck-alert-panel {
+      --card-pad: 0;
+
+      border-color: var(--danger);
+      background: color-mix(in oklab, var(--danger) 6%, var(--surface-raised));
+      overflow: hidden;
+    }
+
+    .deck-alert-panel > header {
+      padding: var(--space-50) var(--space-50) var(--space-50) 0;
+      border: 0;
+    }
+
+    .deck-alert-panel h2 {
+      color: var(--danger);
+      font-size: var(--font-size-lg);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* Solid on top behind the glyph, hazard stripes below. */
+    .deck-hazard {
+      align-self: stretch;
+      inline-size: 3rem;
+      padding-block-start: var(--space-40);
+      text-align: center;
+      font-size: 1.25rem;
+      color: var(--danger-fg);
+      background:
+        linear-gradient(var(--danger) 0 0) top / 100% 45% no-repeat,
+        repeating-linear-gradient(-45deg, var(--danger) 0 0.45rem, var(--surface) 0 0.9rem);
+    }
+
     /* Length readouts written by ../scripts/deck-count.js. */
     .deck-count {
       color: var(--primary);
@@ -251,8 +297,10 @@
         <button class="btn primary" type="button">Transmit</button>
         <button class="btn outline" type="button">Reroute</button>
         <button class="btn ghost" type="button">Details</button>
-        <button class="btn danger" type="button">Purge cache</button>
+        <button class="btn danger" type="button" commandfor="purge-dialog" command="show-modal" aria-haspopup="dialog" aria-controls="purge-dialog">Purge cache</button>
         <button class="btn" type="button" disabled>Issue pass</button>
+        <button class="btn outline icon-only" type="button" aria-label="Lock on" data-tooltip="Lock on"><i class="ti ti-focus-2" aria-hidden="true"></i></button>
+        <button class="btn outline icon-only" type="button" aria-label="Sweep" data-tooltip="Sweep the band"><i class="ti ti-radar" aria-hidden="true"></i></button>
       </div>
       <div class="cluster">
         <span class="badge">Idle</span>
@@ -386,6 +434,7 @@
               <label class="segment"><input type="radio" name="stock" value="dusk" checked>Dusk</label>
               <label class="segment"><input type="radio" name="stock" value="chrome">Chrome</label>
               <label class="segment"><input type="radio" name="stock" value="mono">Mono</label>
+              <label class="segment"><input type="radio" name="stock" value="infrared" disabled>Infrared</label>
             </fieldset>
           </div>
           <label class="choice cluster" style="--cluster-justify: space-between">
@@ -396,6 +445,10 @@
             <span class="field-label">Auto-resync</span>
             <input class="switch" type="checkbox" role="switch" name="resync" checked>
           </label>
+          <label class="choice cluster" style="--cluster-justify: space-between">
+            <span class="field-label">Uplink boost</span>
+            <input class="switch" type="checkbox" role="switch" name="boost" disabled>
+          </label>
           <label class="field">
             <span class="field-label">Gain</span>
             <input class="range" type="range" name="gain" min="0" max="100" value="62" data-enhance="range">
@@ -405,6 +458,8 @@
             <label class="choice"><input class="check" type="checkbox" name="mirror"> Mirror to node 03</label>
             <label class="choice"><input class="radio" type="radio" name="mode" value="am"> AM</label>
             <label class="choice"><input class="radio" type="radio" name="mode" value="fm" checked> FM</label>
+            <label class="choice"><input class="check" type="checkbox" name="encrypt" disabled> Encrypt (licence pending)</label>
+            <label class="choice"><input class="radio" type="radio" name="mode" value="ssb" disabled> SSB</label>
           </div>
         </fieldset>
 
@@ -531,6 +586,20 @@
           </tbody>
         </table>
       </div>
+      <nav class="cluster" aria-label="Bursts pages">
+        <ol class="pagination">
+          <li><a href="#bursts-caption" class="btn ghost icon-only" rel="prev" aria-label="Previous page"><i class="ti ti-chevron-left" aria-hidden="true"></i></a></li>
+          <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 1">1</a></li>
+          <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 2">2</a></li>
+          <li><a href="#bursts-caption" class="btn ghost" aria-current="page" aria-label="Page 3">3</a></li>
+          <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 4">4</a></li>
+          <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 5">5</a></li>
+          <li><span class="muted" aria-hidden="true">…</span></li>
+          <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 12">12</a></li>
+          <li><a href="#bursts-caption" class="btn ghost icon-only" rel="next" aria-label="Next page"><i class="ti ti-chevron-right" aria-hidden="true"></i></a></li>
+        </ol>
+        <span class="deck-count" aria-hidden="true">Page 03 / 12</span>
+      </nav>
     </section>
 
     <footer class="cluster" style="--cluster-justify: space-between">
@@ -549,6 +618,25 @@
       <footer class="cluster justify-content-end">
         <button class="btn outline" value="cancel">Cancel</button>
         <button class="btn primary" value="go">Initialize</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- A detached alert: the dialog is only a placement, and its parts stand
+       on the backdrop. The decision pair sits under the panel, outside it. -->
+  <dialog class="modal deck-alert" id="purge-dialog" closedby="none" aria-labelledby="purge-title" aria-describedby="purge-desc" style="--modal-size: 34rem">
+    <form method="dialog" class="stack">
+      <span class="deck-micro deck-alert-code" aria-hidden="true">Alert 0x3F // answer required</span>
+      <div class="card media deck-alert-panel">
+        <span class="deck-hazard" aria-hidden="true"><i class="ti ti-alert-triangle"></i></span>
+        <header class="stack">
+          <h2 id="purge-title">Purge the relay cache?</h2>
+          <p id="purge-desc">Every queued burst and its retry history are dropped on all three nodes. A purged burst cannot be resent.</p>
+        </header>
+      </div>
+      <footer class="cluster justify-content-end">
+        <button class="btn success outline" value="keep">Keep</button>
+        <button class="btn danger" value="purge">Purge</button>
       </footer>
     </form>
   </dialog>
