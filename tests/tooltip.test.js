@@ -725,6 +725,75 @@ test("tooltip stays open while the pointer moves from trigger to tip", async () 
   expect(visible(tip)).toBe(false);
 });
 
+function touch(type, el) {
+  el.dispatchEvent(new window.PointerEvent(type, { bubbles: true, pointerType: "touch" }));
+}
+
+/** A tap as a touch screen sends it: contact, release, then the pointer leaves. */
+function tap(el) {
+  touch("pointerover", el);
+  touch("pointerdown", el);
+  touch("pointerup", el);
+  el.dispatchEvent(new window.PointerEvent("pointerleave", { pointerType: "touch" }));
+}
+
+test("data-tooltip-no-tap keeps a tap from opening the tooltip", async () => {
+  await loadTooltip('<button data-tooltip="Copy" data-tooltip-no-tap>Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  tap(trigger);
+  await waitForShow();
+  expect(visible(document.querySelector('[role="tooltip"]'))).toBe(false);
+});
+
+test("a tap shows the tooltip and pins the tooltip until a second tap", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  tap(trigger);
+  const tip = document.querySelector('[role="tooltip"]');
+  expect(visible(tip)).toBe(true);
+  await waitForHide();
+  expect(visible(tip)).toBe(true);
+
+  tap(trigger);
+  await waitForShow();
+  expect(visible(tip)).toBe(false);
+});
+
+test("a tap elsewhere dismisses a tapped tooltip, a tap inside it does not", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button><p>Elsewhere</p>');
+  const trigger = document.querySelector("button");
+  const elsewhere = document.querySelector("p");
+
+  tap(trigger);
+  const tip = document.querySelector('[role="tooltip"]');
+  tap(tip);
+  expect(visible(tip)).toBe(true);
+
+  tap(elsewhere);
+  expect(visible(tip)).toBe(false);
+
+  // A hybrid device can close a pinned tip with the mouse as well.
+  tap(trigger);
+  expect(visible(tip)).toBe(true);
+  elsewhere.dispatchEvent(
+    new window.PointerEvent("pointerup", { bubbles: true, pointerType: "mouse" }),
+  );
+  expect(visible(tip)).toBe(false);
+});
+
+test("a touch scroll or drag starting on a tap trigger shows nothing", async () => {
+  await loadTooltip('<button data-tooltip="Help">Trigger</button>');
+  const trigger = document.querySelector("button");
+
+  touch("pointerover", trigger);
+  touch("pointerdown", trigger);
+  touch("pointercancel", trigger);
+  await waitForShow();
+  expect(visible(document.querySelector('[role="tooltip"]'))).toBe(false);
+});
+
 test("Escape key hides the tooltip", async () => {
   await loadTooltip('<button data-tooltip="Help">Trigger</button>');
   const trigger = document.querySelector("button");

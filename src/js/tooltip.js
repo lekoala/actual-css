@@ -5,6 +5,7 @@
  * Explicit:   <button data-tooltip aria-describedby="tooltip-id">
  *             <div role="tooltip" id="tooltip-id" hidden>Help <strong>text</strong></div>
  * Options:    data-tooltip-click toggles on click instead of hover/focus.
+ *             data-tooltip-no-tap keeps a touch tap from opening it.
  *             data-tooltip-visible keeps the tooltip visible.
  *
  * Discovery:  [data-tooltip] only. An empty data-tooltip marks an explicit
@@ -33,6 +34,11 @@
  *             visible. Focus counts only when it matches :focus-visible, so
  *             a pointer press, or focus handed back by a closing dialog after
  *             a pointer close, shows nothing.
+ * Touch:      a tap shows the tip at once and pins it, so no tooltip is
+ *             silently out of reach of a finger; the tap still activates the
+ *             trigger. A second tap, a tap elsewhere, Escape, or a dialog or
+ *             popover opening hides it. A scroll or drag ends in
+ *             pointercancel, not pointerup, so it is never a tap.
  * Hide:       focus leaving the trigger (focusout), pointer leave, pressing
  *             the trigger, or Escape.
  *
@@ -76,12 +82,15 @@ const HIDE_DELAY_MS = 100;
  * @property {boolean} hovered Pointer is over the active trigger.
  * @property {boolean} focused The active trigger has keyboard focus.
  * @property {boolean} overTip Pointer is over the tooltip.
+ * @property {boolean} tapped A touch tap pinned the tip open.
  */
 
 let uid = 0;
 const triggerStates = new WeakMap(); // trigger -> { tip, cleanup }
 /** @type {WeakMap<Element, TooltipState>} */
 const tipStates = new WeakMap(); // tip -> { refs, activeRef, controller, stopTracking, generated, visible, timer }
+/** @type {Element | null} The tip a tap pinned open; a tap elsewhere dismisses it. */
+let tappedTip = null;
 
 /*
  * Transport, the same shape surface.js uses and for the same reason: the
@@ -155,6 +164,12 @@ function hasOption(trigger, name) {
 
 function isClickTrigger(trigger) {
   return hasOption(trigger, "data-tooltip-click");
+}
+
+// Taps open tooltips by default: the opt-out is explicit, so a tooltip never
+// fails silently under a finger.
+function isNoTapTrigger(trigger) {
+  return hasOption(trigger, "data-tooltip-no-tap");
 }
 
 function isAlwaysVisible(trigger) {
@@ -290,7 +305,9 @@ function hideTip(tip, force = false) {
   if (state) {
     state.wanted = false;
     state.visible = false;
+    state.tapped = false;
   }
+  if (tappedTip === tip) tappedTip = null;
   hideTransport(tip);
   state?.unregisterEscape?.();
   if (state) {
@@ -311,11 +328,11 @@ function scheduleHide(tip) {
   const state = tipStates.get(tip);
   if (!state) return;
   if (isClickTrigger(state.activeRef) || isAlwaysVisible(state.activeRef)) return;
-  if (state.hovered || state.focused || state.overTip) return;
+  if (state.hovered || state.focused || state.overTip || state.tapped) return;
   if (state.hideTimer) clearTimeout(state.hideTimer);
   state.hideTimer = setTimeout(() => {
     state.hideTimer = null;
-    if (!state.hovered && !state.focused && !state.overTip) hideTip(tip);
+    if (!state.hovered && !state.focused && !state.overTip && !state.tapped) hideTip(tip);
   }, HIDE_DELAY_MS);
 }
 
@@ -344,6 +361,7 @@ function wireTip(tip, options = {}) {
     hovered: false,
     focused: false,
     overTip: false,
+    tapped: false,
   };
 
   tip.addEventListener(
@@ -511,6 +529,8 @@ function show(tip, ref, immediate = false) {
 const SEL = "[data-tooltip]";
 /** @type {WeakRef<Element> | null} */
 let pressedTrigger = null;
+// The current press hid its trigger's tip: its release must not reopen it.
+let pressDismissed = false;
 
 function handleTriggerIntent(e) {
   const trigger = e.target.closest?.(SEL);
@@ -542,6 +562,7 @@ function handleTriggerIntent(e) {
 function handleTriggerPress(e) {
   const trigger = e.target.closest?.(SEL);
   pressedTrigger = trigger ? new WeakRef(trigger) : null;
+  pressDismissed = false;
   if (!trigger || isClickTrigger(trigger) || isAlwaysVisible(trigger)) return;
 
   const tip = triggerStates.get(trigger)?.tip;
@@ -554,6 +575,34 @@ function handleTriggerPress(e) {
   state.focused = false;
   state.overTip = false;
   hideTip(tip, true);
+  pressDismissed = true;
+}
+
+/*
+ * Touch has no hover, and a tap focuses without :focus-visible, so a finger
+ * reaches a tooltip only through this. Touch pointers are
+ * implicitly captured, so the release targets the element the press landed on.
+ * The outside dismissal runs for any pointer, so a hybrid device can close a
+ * pinned tip with the mouse too; it never stops the event.
+ */
+function handleTap(e) {
+  const target = /** @type {Element} */ (e.target);
+  if (tappedTip && !tappedTip.contains(target)) {
+    const ref = tipStates.get(tappedTip)?.activeRef;
+    if (!ref?.contains(target)) hideTip(tappedTip, true);
+  }
+
+  if (e.pointerType !== "touch") return;
+  const trigger = target.closest?.(SEL);
+  if (!trigger || pressDismissed || pressedTrigger?.deref() !== trigger) return;
+  if (isNoTapTrigger(trigger) || isClickTrigger(trigger) || isAlwaysVisible(trigger)) return;
+
+  const tip = ensureTip(trigger);
+  if (!tip) return;
+  const state = tipStates.get(tip);
+  state.tapped = true;
+  tappedTip = tip;
+  show(tip, trigger, true);
 }
 
 function handleTriggerClick(e) {
@@ -574,6 +623,19 @@ if (typeof document !== "undefined") {
   document.addEventListener("focusin", handleTriggerIntent);
   // A drag handler can stop the press before it bubbles to the document.
   document.addEventListener("pointerdown", handleTriggerPress, { capture: true });
+  document.addEventListener("pointerup", handleTap, { capture: true });
+  // A tap that opens a dialog or a popover moved on from its trigger: the
+  // pinned label would linger under the new layer. toggle does not bubble.
+  document.addEventListener(
+    "toggle",
+    (e) => {
+      const opened = /** @type {ToggleEvent} */ (e).newState === "open";
+      if (opened && tappedTip && !e.target.matches?.('[role="tooltip"]')) {
+        hideTip(tappedTip, true);
+      }
+    },
+    { capture: true },
+  );
   document.addEventListener(
     "keydown",
     () => {

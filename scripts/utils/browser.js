@@ -388,6 +388,21 @@ export async function clickSelector(view, selector) {
   return point;
 }
 
+/*
+ * Real dispatched tap: touch events, from which Chrome derives the pointer
+ * (pointerType "touch") and compatibility mouse events a phone would send.
+ */
+export async function tapSelector(view, selector) {
+  const point = await view.evaluate(`(() => {
+    const rect = document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();
+    return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+  })()`);
+  await view.cdp("Emulation.setTouchEmulationEnabled", { enabled: true });
+  await view.cdp("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [point] });
+  await view.cdp("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  return point;
+}
+
 /* `rawKeyDown` + `keyUp` is the CDP pair the tmp/0.11 Tab walkers converge on.
    Enter also needs its `char` event: Chrome activates a button or a link on
    the keypress, so without it Enter reached keydown handlers but never

@@ -14,6 +14,8 @@ by promoting it to the top layer with `popover="manual"`.
   tooltip. Use a [flyout](flyout.md#contextual-help) for contextual help with
   links or buttons.
 - Show on hover and keyboard focus. Hide on Escape, blur, pointer leave, or a pointer press on the trigger.
+- On touch, a tap opens the tooltip and still activates the trigger. A second tap, a tap elsewhere, Escape, or a dialog or popover opening closes it.
+- Add `data-tooltip-no-tap` when the tooltip only repeats the trigger's accessible name, such as an icon button's `aria-label`: the tap then just runs the action.
 - A trigger scrolled out of view takes its tooltip down and brings it back when it returns; only a dismissal ends the tooltip.
 - Escape dismisses the tooltip without moving the pointer or focus (WCAG 2.1 SC 1.4.13).
 - After Escape or a pointer press dismisses a hover or focus tooltip, move the pointer away and back or return with keyboard focus to show it again.

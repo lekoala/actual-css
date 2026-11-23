@@ -11,6 +11,8 @@
 - Demo: `demo/scripts/deck-count.js` prints `02/04`-style length readouts and lights the next `.otp` cell.
 - Docs: JavaScript runtime · "Without a build" registers a custom `data-enhance` module through a manifest with the plain bundle.
 - Design note: `theme-vs-brand.md` records what belongs to the framework, the theme, the brand and the project.
+- `data-tooltip-no-tap`: a touch tap no longer opens that trigger's tooltip.
+- Dev: `tapSelector()` in `scripts/utils/browser.js` and `browserSuite()` dispatches a real touch tap (`withBrowserPage(…, { touch: true })` under Playwright).
 - Dev: `browserSuite()` returns a `tabUntil` that presses real Tab keys in Firefox and WebKit too (Option+Tab for WebKit on macOS).
 
 ### Changed
@@ -19,6 +21,7 @@
 
 ## [0.20.1] - 2026-11-21
 ### Fixed
+- A touch tap opens a `data-tooltip` tooltip again, pinned until a second tap, a tap elsewhere, Escape, or a dialog or popover opening.
 - `.timeline`: dates, titles and details keep their line spacing in Firefox.
 - `.meter`: native gauges use flat theme colors for all three zones in Firefox.
 

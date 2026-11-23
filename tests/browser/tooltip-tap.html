@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tooltip tap fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <!-- A label on an action that opts out of taps, and a rich tooltip whose
+       trigger only reveals it. -->
+  <div class="stack" style="padding: 2rem">
+    <p>
+      <button class="btn" type="button" id="copy" data-tooltip="Copy" data-tooltip-no-tap>Copy</button>
+    </p>
+    <p>
+      Filed by
+      <button class="btn link" type="button" id="dossier" data-tooltip
+              aria-describedby="dossier-tip">Mara Voss</button>
+    </p>
+    <div class="tooltip" role="tooltip" id="dossier-tip" hidden>
+      <strong>Mara Voss</strong>
+      <p>Relay operator, sector 7.</p>
+    </div>
+    <p id="outside">Somewhere else on the page.</p>
+  </div>
+</body>
+</html>

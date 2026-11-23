@@ -4,6 +4,7 @@ import {
   clickSelector,
   setViewport,
   tabUntil,
+  tapSelector,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
 
@@ -13,7 +14,7 @@ export async function browserSuite() {
   const baseTest = engine || (await browserAvailable()) ? test : test.skip;
   const it = (name, run) => baseTest(name, run, 60_000);
 
-  if (!engine) return { it, clickSelector, setViewport, tabUntil, withBrowserPage };
+  if (!engine) return { it, clickSelector, setViewport, tabUntil, tapSelector, withBrowserPage };
 
   let browser;
   beforeAll(async () => {
@@ -27,6 +28,8 @@ export async function browserSuite() {
   return {
     it,
     clickSelector: (page, selector) => page.locator(selector).click(),
+    // Needs a page opened with { touch: true }: Playwright taps only where hasTouch is set.
+    tapSelector: (page, selector) => page.locator(selector).tap(),
     // Real Tab presses, like the CDP helper: focus assertions need dispatched input.
     // Trap: WebKit on macOS follows the system setting, where Tab only reaches
     // text fields and lists; buttons and links need Option+Tab. CI runs WebKit
@@ -40,8 +43,8 @@ export async function browserSuite() {
       return await page.evaluate(`!!(${expression})`);
     },
     setViewport: (page, { width, height = 900 }) => page.setViewportSize({ width, height }),
-    async withBrowserPage(url, run, { width = 1100, height = 900 } = {}) {
-      const page = await browser.newPage({ viewport: { width, height } });
+    async withBrowserPage(url, run, { width = 1100, height = 900, touch = false } = {}) {
+      const page = await browser.newPage({ viewport: { width, height }, hasTouch: touch });
       try {
         await page.goto(url);
         return await run(page);

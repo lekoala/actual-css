@@ -14,9 +14,11 @@ import { expect, test } from "bun:test";
 import {
   browserAvailable,
   clickSelector,
+  finishAnimations,
   fixtureUrl,
   pressKey,
   tabUntil,
+  tapSelector,
   waitForBrowser,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
@@ -155,21 +157,22 @@ it("a press dismisses the tooltip through pointer capture, and fresh hover or Ta
   });
 });
 
-it("a tap does not open a hover tooltip through compatibility mouse events", async () => {
+// A tap pins a tooltip open, but a tap that opens a dialog has moved on: the
+// label must not linger under the drawer, nor come back when it closes.
+it("a tap that opens a drawer leaves its invoker's tooltip closed", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
     await view.evaluate(runtime);
-    await view.evaluate(`(() => {
-      const trigger = document.getElementById("trigger");
-      trigger.removeAttribute("command");
-      trigger.addEventListener("click", () => { trigger.dataset.tapped = "true"; });
-    })()`);
-    await view.cdp("Emulation.setTouchEmulationEnabled", { enabled: true });
+    await tapSelector(view, "#trigger");
+    await waitForBrowser(view, `document.getElementById("panel").open`);
+    await waitForBrowser(view, `!(${tipOpen})`);
 
-    const at = await centre(view, "trigger");
-    await view.cdp("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [at] });
-    await view.cdp("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
-    await waitForBrowser(view, `document.querySelector("#trigger[data-tapped]") !== null`);
-    expect(await view.evaluate(`document.querySelector('[role="tooltip"]') === null`)).toBe(true);
+    // The drawer slides in: tap its close button where it lands.
+    await finishAnimations(view, "#panel");
+    await tapSelector(view, "#close");
+    await waitForBrowser(view, `!document.getElementById("panel").open`);
+    // Elapsed time is the contract: past the 150ms show delay, nothing reopened.
+    await view.evaluate("new Promise((r) => setTimeout(r, 300))");
+    expect(await view.evaluate(tipOpen)).toBe(false);
   });
 });
 
