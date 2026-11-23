@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.20.2] - 2026-11-23
 ### Added
 - `.timeline-dates-start`: datelines in a shared column before the rail; every rail lines up whatever the dates say.
 - Docs: Timeline · "Dates at the start".
