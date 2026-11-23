@@ -231,6 +231,20 @@
       font-family: var(--font-mono);
       font-size: var(--font-size-sm);
       font-variant-numeric: tabular-nums;
+      /* why: a readout ("¤ 12,600") reads as one value; the grid's detail
+         rows otherwise broke it after the sign. */
+      white-space: nowrap;
+    }
+
+    /* A static stand-in for the shorter range a server renders on a phone:
+       the full strip wraps below this width, and the readout beside it
+       already gives the total. The `li` matches the theme's
+       `[data-theme] .pagination > li { display: flex }`, which this sheet
+       follows. */
+    @media (width < 36rem) {
+      .pagination > li.deck-page-far {
+        display: none;
+      }
     }
 
     /* With the readout script, only the cell taking the next character keeps
@@ -658,13 +672,13 @@
       <nav class="cluster" aria-label="Bursts pages">
         <ol class="pagination">
           <li><a href="#bursts-caption" class="btn ghost icon-only" rel="prev" aria-label="Previous page"><i class="ti ti-chevron-left" aria-hidden="true"></i></a></li>
-          <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 1">1</a></li>
+          <li class="deck-page-far"><a href="#bursts-caption" class="btn ghost" aria-label="Page 1">1</a></li>
           <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 2">2</a></li>
           <li><a href="#bursts-caption" class="btn ghost" aria-current="page" aria-label="Page 3">3</a></li>
           <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 4">4</a></li>
-          <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 5">5</a></li>
-          <li><span class="muted" aria-hidden="true">…</span></li>
-          <li><a href="#bursts-caption" class="btn ghost" aria-label="Page 12">12</a></li>
+          <li class="deck-page-far"><a href="#bursts-caption" class="btn ghost" aria-label="Page 5">5</a></li>
+          <li class="deck-page-far"><span class="muted" aria-hidden="true">…</span></li>
+          <li class="deck-page-far"><a href="#bursts-caption" class="btn ghost" aria-label="Page 12">12</a></li>
           <li><a href="#bursts-caption" class="btn ghost icon-only" rel="next" aria-label="Next page"><i class="ti ti-chevron-right" aria-hidden="true"></i></a></li>
         </ol>
         <span class="deck-count" aria-hidden="true">Page 03 / 12</span>
@@ -748,18 +762,28 @@
         { id: 5, task: "Night crew escort", node: "Summit mast", status: "Open", payout: 1950 },
         { id: 6, task: "Cable jacket return", node: "Valley mirror", status: "Claimed", payout: 800 },
       ]),
+      // On a narrow grid, columns drop by priority (highest number first) into
+      // detail rows that start open; the task name never drops, and a badge
+      // moves to the details rather than being clipped.
+      responsive: true,
+      responsiveStartOpen: true,
+      responsiveToggle: false,
       columns: [
-        { field: "task", title: "Task" },
-        { field: "node", title: "Node" },
+        { field: "task", title: "Task", minWidth: 160, responsive: 0 },
+        { field: "node", title: "Node", minWidth: 120, responsive: 3 },
         {
           field: "status",
           title: "Status",
+          minWidth: 110,
+          responsive: 1,
           renderCell: ({ value }) => ({ html: `<span class="badge ${status[value]} soft">${value}</span>` }),
         },
         {
           field: "payout",
           title: "Payout",
           class: "text-end",
+          minWidth: 110,
+          responsive: 2,
           renderCell: ({ value }) => ({ html: `<span class="deck-count">¤ ${credits.format(value)}</span>` }),
         },
       ],
