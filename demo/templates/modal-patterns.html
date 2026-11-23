@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Modal patterns - Actual CSS</title>
-  <meta name="description" content="A torture test of modal layouts: decision, destructive, hero, illustration, release, dense form, option picker and profile, each composed from the modal plus the smallest application CSS it needs.">
+  <meta name="description" content="A torture test of modal layouts: decision, destructive, detached actions, hero, illustration, release, dense form, option picker and profile, each composed from the modal plus the smallest application CSS it needs.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
@@ -64,6 +64,28 @@
     .modal-centered .dialog-icon {
       --dialog-icon-size: 4rem;
       --dialog-icon-glyph-size: 2rem;
+    }
+
+    /* The card owns the visible surface, including its edge in forced colors.
+       The form inset leaves room for focus rings inside the scroll clip. */
+    .modal-detached {
+      --modal-pad: var(--space-20);
+
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    /* The exposed action row needs the scrim to soften the page's text and controls. */
+    .modal-detached::backdrop {
+      backdrop-filter: blur(1rem);
+    }
+
+    @media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+      .modal-detached::backdrop {
+        background: var(--surface-opaque);
+        backdrop-filter: none;
+      }
     }
 
     /* Hero: the promo paint is a mesh that fades into the surface rather than a
@@ -190,7 +212,7 @@
       <p class="overline">Modal patterns</p>
       <h1>Modal layouts, composed</h1>
       <p class="lead">
-        Eight real application modals, each built from the same <code>.modal</code>
+        Nine real application modals, each built from the same <code>.modal</code>
         surface and the layout primitives. The point is to see where the
         framework ends and where a project's own CSS begins: every rule under
         <em>application CSS</em> in this page is the smallest addition a dialog
@@ -201,9 +223,8 @@
       </div>
       <p class="muted">
         Open each pattern, then resize the window, switch theme, and toggle
-        forced colors. The centered, hero, illustration, release and profile
-        dialogs are the ones that carry application CSS; the confirmation,
-        filters and picker dialogs are pure framework composition.
+        forced colors. The confirmation, filters and picker dialogs are pure
+        framework composition. The other examples add local styles.
       </p>
     </header>
 
@@ -221,6 +242,12 @@
           <h3>Destructive confirm</h3>
           <p class="muted">Leading status icon, an item preview, and a full-width action band. Pure composition: <code>media</code>, <code>bleed</code>, utilities.</p>
           <button class="btn danger" type="button" commandfor="p-destructive" command="show-modal" aria-haspopup="dialog" aria-controls="p-destructive">Open</button>
+        </article>
+
+        <article class="card pattern-card">
+          <h3>Detached actions</h3>
+          <p class="muted">A confirmation card with an action row below it, directly on the backdrop.</p>
+          <button class="btn" type="button" commandfor="p-detached" command="show-modal" aria-haspopup="dialog" aria-controls="p-detached">Open</button>
         </article>
       </div>
     </section>
@@ -318,6 +345,23 @@
       <footer class="bleed background-subtle cluster justify-content-space-between">
         <button class="btn outline" value="cancel">Cancel</button>
         <button class="btn danger" value="delete">Delete campaign</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="modal modal-detached" id="p-detached" aria-labelledby="p-detached-title" aria-describedby="p-detached-description">
+    <form method="dialog">
+      <div class="card media">
+        <span class="dialog-icon danger soft" aria-hidden="true"><i class="ti ti-alert-triangle"></i></span>
+        <div class="stack tight">
+          <h2 id="p-detached-title">Discard unsaved changes?</h2>
+          <p class="muted" id="p-detached-description">Your edits since the last save will be lost.</p>
+        </div>
+      </div>
+
+      <footer class="cluster justify-content-end">
+        <button class="btn surface" value="keep" autofocus>Keep editing</button>
+        <button class="btn danger" value="discard">Discard</button>
       </footer>
     </form>
   </dialog>
