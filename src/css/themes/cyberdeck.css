@@ -31,6 +31,8 @@
   /* Frames, labels and quiet lines: the chrome sunk toward the surface. */
   --deck-line: color-mix(in oklab, var(--deck-chrome) 45%, var(--surface));
   --deck-glow: color-mix(in oklab, var(--primary) 45%, transparent);
+  /* The chosen item's chrome pane: a segment, the current page, a choice. */
+  --deck-pane: color-mix(in oklab, var(--deck-chrome) 30%, var(--surface));
 
   --primary: oklch(86% 0.14 var(--deck-signal-hue));
   --primary-fg: oklch(18% 0.04 var(--deck-signal-hue));
@@ -154,7 +156,8 @@
 /* Fields and buttons are cut on the bottom-right only: the top-left of a
    button carries its tab instead. A .btn.circle keeps the diamond above: the
    one cut on a full radius slices it into a triangle. */
-[data-theme="cyberdeck"] :is(.input, .textarea, .select, .otp > span, .btn:not(.circle)) {
+[data-theme="cyberdeck"]
+:is(.input, .textarea, .select, .otp > span, .btn:not(.circle), .choice-card.chip) {
   corner-shape: square square bevel;
 }
 
@@ -183,6 +186,7 @@
   .field-label,
   .field-group > legend,
   .btn,
+  .choice-card.chip,
   .badge:not(:empty),
   .tab,
   .segment,
@@ -259,8 +263,10 @@
   inline-size: calc(100% + 2 * var(--border-width));
 }
 
-/* A toggle button shows its state in a corner tick: hollow off, lit on. */
-[data-theme="cyberdeck"] .btn[aria-pressed]::after {
+/* A toggle button shows its state in a corner tick: hollow off, lit on. A
+   choice card or chip is a toggle too: the tick replaces its indicator and
+   check (undone with the choices below), so the label never moves. */
+[data-theme="cyberdeck"] :is(.btn[aria-pressed], .choice-card)::after {
   content: "";
   position: absolute;
   inset-block-start: 3px;
@@ -272,9 +278,17 @@
   pointer-events: none;
 }
 
-[data-theme="cyberdeck"] .btn[aria-pressed="true"]::after {
+[data-theme="cyberdeck"] :is(.btn[aria-pressed="true"], .choice-card:has(:checked))::after {
   border-color: var(--primary);
   background: var(--primary);
+}
+
+/* Forced colors repaint the lit fill as Canvas, and a lit tick read as a
+   hollow one; a system color survives. */
+@media (forced-colors: active) {
+  [data-theme="cyberdeck"] :is(.btn[aria-pressed="true"], .choice-card:has(:checked))::after {
+    background: CanvasText;
+  }
 }
 
 /* Whatever is disabled is struck through with a hatch in its own ink, not
@@ -298,7 +312,7 @@
   );
 }
 
-[data-theme="cyberdeck"] .segment:has(> input:disabled) {
+[data-theme="cyberdeck"] :is(.segment, .choice-card):has(> input:disabled) {
   background-image: repeating-linear-gradient(
     -45deg,
     color-mix(in oklab, currentColor 30%, transparent) 0 1px,
@@ -428,7 +442,7 @@
 :where([data-theme="cyberdeck"]) .segmented {
   --segmented-bg: transparent;
   --segmented-fg: var(--deck-chrome);
-  --segmented-selected-bg: color-mix(in oklab, var(--deck-chrome) 30%, var(--surface));
+  --segmented-selected-bg: var(--deck-pane);
 }
 
 [data-theme="cyberdeck"] .segmented {
@@ -460,6 +474,53 @@
   block-size: 2px;
   background: var(--primary);
   box-shadow: 0 0 0.4rem var(--deck-glow);
+}
+
+/* Choice cards and chips: the chosen one is a chrome pane under the signal
+   frame, like a segment, its state in the corner tick above. The card's
+   leading indicator column closes; a chip is a chrome toggle cut like a
+   button. Radio and checkbox share the tick: the group says which it is. */
+:where([data-theme="cyberdeck"]) .choice-card {
+  --choice-card-check-size: 0;
+  --choice-card-gap: 0;
+}
+
+:where([data-theme="cyberdeck"]) .choice-card.chip {
+  --choice-card-radius: var(--radius-sm);
+}
+
+[data-theme="cyberdeck"] .choice-card:has(:checked) {
+  --choice-card-bg: var(--deck-pane);
+}
+
+@media (hover: hover) {
+  [data-theme="cyberdeck"] .choice-card:hover:not(:has(:disabled, :checked)) {
+    --choice-card-border: var(--deck-chrome);
+  }
+}
+
+[data-theme="cyberdeck"] .choice-card.chip {
+  color: var(--deck-chrome);
+  font-weight: var(--font-weight-semibold);
+}
+
+[data-theme="cyberdeck"] .choice-card.chip:has(:checked) {
+  color: var(--text);
+}
+
+[data-theme="cyberdeck"] .choice-card::before {
+  content: none;
+}
+
+/* why: an absolute grid child is placed in its grid area, not the padding
+   box; the core's 1 / 1 held the tick inside the padding. */
+[data-theme="cyberdeck"] .choice-card::after {
+  grid-area: auto;
+  margin: 0;
+  background: transparent;
+  -webkit-mask: none;
+  mask: none;
+  transform: none;
 }
 
 /* Tabs: chrome labels, the selected one lit with a glowing underline. */
@@ -783,7 +844,7 @@
 }
 
 [data-theme="cyberdeck"] .pagination .btn[aria-current="page"] {
-  --btn-bg: color-mix(in oklab, var(--deck-chrome) 30%, var(--surface));
+  --btn-bg: var(--deck-pane);
   --btn-fg: var(--text);
   --btn-border: transparent;
 }

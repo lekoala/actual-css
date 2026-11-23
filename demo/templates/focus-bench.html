@@ -7,8 +7,8 @@
   <meta name="description" content="Inspect keyboard focus on links, cards, buttons, validation states and a live data grid across surfaces and theme islands.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/themes/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.3/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.3/themes/actual.css">
   <script src="../scripts/theme-picker.js"></script>
   <style>
     .fb-page {
@@ -299,8 +299,14 @@
     }
 
     try {
-      const { DataGrid } = await import("https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.js");
-      DataGrid.setDefaultControlClasses({ button: "btn surface sm", action: "btn surface sm", input: "input sm" });
+      const { DataGrid } = await import("https://cdn.jsdelivr.net/npm/data-grid-component@3.10.3/dist/data-grid.min.js");
+      DataGrid.setDefaultControlClasses({
+        button: "btn surface sm",
+        action: "btn surface sm",
+        input: "input sm",
+        check: "check",
+        radio: "radio",
+      });
       document.getElementById("grid-status").textContent = "Live grid loaded. Preview excludes the grid; Tab to inspect its actual focus.";
     } catch {
       document.getElementById("grid-status").textContent = "Grid CDN unavailable. The table below is a static fallback; grid focus has not been tested.";

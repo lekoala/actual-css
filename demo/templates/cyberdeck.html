@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.46.0/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.6.3/dist/date-picker.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/themes/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.3/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.3/themes/actual.css">
   <script src="../scripts/theme-picker.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/@lekoala/date-picker@0.6.3/dist/date-picker.min.js"></script>
   <style>
@@ -510,6 +510,36 @@
         </fieldset>
 
         <fieldset class="field-group stack">
+          <legend>Routing</legend>
+          <div class="grid" style="--grid-min: 12rem">
+            <label class="choice-card">
+              <input type="radio" name="relay" value="summit" checked>
+              <strong>Summit mast</strong>
+              <span class="muted">Line of sight</span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="relay" value="glacier">
+              <strong>Glacier hut</strong>
+              <span class="muted">Clock drift 41 ms</span>
+            </label>
+            <label class="choice-card">
+              <input type="radio" name="relay" value="valley" disabled>
+              <strong>Valley mirror</strong>
+              <span class="muted">Offline</span>
+            </label>
+          </div>
+          <div class="stack" style="--gap: var(--space-20)">
+            <span class="field-label" id="layers-label">Scan layers</span>
+            <div class="cluster" role="group" aria-labelledby="layers-label">
+              <label class="choice-card chip"><input type="checkbox" name="layers" value="thermal" checked> Thermal</label>
+              <label class="choice-card chip"><input type="checkbox" name="layers" value="network"> Network</label>
+              <label class="choice-card chip"><input type="checkbox" name="layers" value="structure" checked> Structure</label>
+              <label class="choice-card chip"><input type="checkbox" name="layers" value="biosign" disabled> Biosign</label>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="field-group stack">
           <legend>Signal</legend>
           <div class="stack" style="--gap: var(--space-20)">
             <span class="field-label" id="stock-label">Film stock</span>
@@ -739,11 +769,17 @@
   <script src="../../dist/actual.full.js"></script>
   <script src="../scripts/deck-count.js"></script>
   <script type="module">
-    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.js";
+    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.10.3/dist/data-grid.min.js";
 
     // Row actions are ghost: the same class lands on the "…" toggle and on the
     // entries of its menu, where a framed button per entry reads as a stack.
-    DataGrid.setDefaultControlClasses({ button: "btn surface sm", action: "btn ghost sm", input: "input sm" });
+    DataGrid.setDefaultControlClasses({
+      button: "btn surface sm",
+      action: "btn ghost sm",
+      input: "input sm",
+      check: "check",
+      radio: "radio",
+    });
 
     const notify = (message, intent) =>
       document.dispatchEvent(new CustomEvent("actual:status", { detail: { message, intent } }));

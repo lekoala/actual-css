@@ -4,6 +4,14 @@
 ### Changed
 - Demos: `@lekoala/date-picker` 0.6.3 in `date-fields`, `contrast-contexts`, `neo-brutalist` and `cyberdeck`; `@lekoala/combobox` 0.8.2 in `combobox`, `contrast-contexts` and `neo-brutalist`.
 - Docs: Combobox bridge maps `--cb-focus-width` to `--focus-ring-width`, so chips and remove buttons keep the field's focus width.
+- `cyberdeck`: `.choice-card` and `.chip` show their state in the pressed-button corner tick instead of the leading indicator and check.
+- `cyberdeck`: `.choice-card.chip` is a cut chrome toggle, like a button.
+- `cyberdeck`: a checked `.choice-card` takes the chrome pane of a selected segment; disabled choice cards are hatched.
+- `cyberdeck` demo: Routing fieldset shows choice cards and chips.
+- Demos: `data-grid-component` 3.10.3 in `cyberdeck`, `data-grid` and `focus-bench`; grid checkboxes and radios take `.check` / `.radio` through the `check` and `radio` control roles.
+
+### Fixed
+- `cyberdeck`: the lit corner tick of `.btn[aria-pressed="true"]` and checked chips stays visible in forced colors.
 
 ## [0.20.2] - 2026-11-23
 ### Added

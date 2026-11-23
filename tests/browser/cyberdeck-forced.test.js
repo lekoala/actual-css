@@ -31,6 +31,14 @@ it("cyberdeck keeps focus and switch state readable in forced colors", async () 
           // The resting transparent outline that lets field focus fade in
           // would be painted as a permanent ring here.
           restingFieldOutline: s("field").outlineStyle,
+          // A chip's corner tick is its only state sign once the pane tint
+          // is dropped. The mode repaints a lit --primary fill as Canvas, the
+          // chip's own ground: lit must differ from it, off must stay hollow.
+          chipOn: s("chip-on", "::after").backgroundColor,
+          chipGround: s("chip-on").backgroundColor,
+          chipOff: s("chip-off", "::after").backgroundColor,
+          card: getComputedStyle(document.getElementById("card-choice").closest(".choice-card"), "::after")
+            .backgroundColor,
         };
       })()`);
       expect(forced.restingFieldOutline).toBe("none");
@@ -39,6 +47,10 @@ it("cyberdeck keeps focus and switch state readable in forced colors", async () 
       expect(forced.knobBorder).toBeGreaterThan(0);
       expect(forced.label).not.toMatch(/rgba\(.*, 0\)$|transparent/);
       expect(forced.labelContent).toContain("ON");
+      expect(forced.chipOn).not.toMatch(/rgba\(.*, 0\)$|transparent/);
+      expect(forced.chipOn).not.toBe(forced.chipGround);
+      expect(forced.card).toBe(forced.chipOn);
+      expect(forced.chipOff).toMatch(/rgba\(.*, 0\)$|transparent/);
     },
     {
       artifactName: "cyberdeck-forced",

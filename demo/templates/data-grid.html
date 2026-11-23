@@ -8,8 +8,8 @@
   <meta name="description" content="data-grid-component loaded from CDN, themed with Actual CSS tokens. Declarative table and JavaScript API examples.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/themes/actual.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.3/dist/data-grid.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/data-grid-component@3.10.3/themes/actual.css">
   <script src="../scripts/theme-picker.js"></script>
   <style>
     .page {
@@ -363,7 +363,7 @@
     </section>
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
-      <span>Loaded from jsDelivr: <code>data-grid-component@3.10.0</code>, with
+      <span>Loaded from jsDelivr: <code>data-grid-component@3.10.3</code>, with
         <code>themes/actual.css</code> and Actual control classes.</span>
     </footer>
   </main>
@@ -373,12 +373,14 @@
 
   <script src="../../dist/actual.full.js"></script>
   <script type="module">
-    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.10.0/dist/data-grid.min.js";
+    import { DataGrid, ArrayDataSource } from "https://cdn.jsdelivr.net/npm/data-grid-component@3.10.3/dist/data-grid.min.js";
 
     DataGrid.setDefaultControlClasses({
       button: "btn surface sm",
       action: "btn surface sm",
       input: "input sm",
+      check: "check",
+      radio: "radio",
     });
 
     const notify = (message, intent) =>
