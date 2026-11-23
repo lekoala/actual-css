@@ -67,6 +67,7 @@
 
 .rating > input[type="radio"] {
   appearance: none;
+  -webkit-appearance: none;
   flex: 0 0 auto;
   inline-size: calc(var(--rating-size) + var(--rating-gap));
   /* Taller than the star: the hit area grows, the drawing does not. */
@@ -212,6 +213,7 @@
 @media (forced-colors: active) {
   .rating > input[type="radio"] {
     appearance: auto;
+    -webkit-appearance: auto;
     inline-size: auto;
     block-size: auto;
     background: Canvas;

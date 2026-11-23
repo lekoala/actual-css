@@ -363,6 +363,22 @@ export function mixedVendorSelectorLists(css) {
 }
 
 /*
+ * Unprefixed appearance is Safari 15.4: below it a rating radio kept its native
+ * blue ring under the star mask. The prefix is the only fix, so neither a
+ * comment nor @supports excuses a declaration block that lacks it. Only none
+ * and auto have a prefixed twin; base-select exists unprefixed only.
+ */
+export function unprefixedAppearance(css) {
+  const masked = css.replace(/\/\*[\s\S]*?\*\//g, (comment) => " ".repeat(comment.length));
+  const found = [];
+  for (const m of masked.matchAll(/(?<![-\w])appearance\s*:\s*(?:none|auto)\b/gi)) {
+    const block = masked.slice(masked.lastIndexOf("{", m.index) + 1, masked.indexOf("}", m.index));
+    if (!/-webkit-appearance\s*:/i.test(block)) found.push({ line: lineNo(css, m.index) });
+  }
+  return found;
+}
+
+/*
  * Classify every above-floor capability in one stylesheet. Exported so the
  * guard's own rules can be tested on a CSS string instead of on the tree.
  * `name` only feeds the entry labels and the PROGRESSIVE ledger lookup.
@@ -404,6 +420,7 @@ function main() {
   const optional = [];
   const vendorViolations = [];
   const breakingViolations = [];
+  const appearanceViolations = [];
 
   for (const file of files) {
     const css = readFileSync(file, "utf8");
@@ -416,6 +433,12 @@ function main() {
       ...mixedBreakingSelectorLists(css).map(
         ({ line, selector }) =>
           `${rel(file)}:${line}  above-floor pseudo shares a rule with baseline selectors: ${selector}`,
+      ),
+    );
+
+    appearanceViolations.push(
+      ...unprefixedAppearance(css).map(
+        ({ line }) => `${rel(file)}:${line}  appearance without -webkit-appearance`,
       ),
     );
 
@@ -438,11 +461,19 @@ function main() {
     `Selector lists mixing above-floor and baseline pseudos: ${breakingViolations.length}`,
   );
   for (const line of breakingViolations) console.log(`  ✗ ${line}`);
+  console.log(`Unprefixed appearance: ${appearanceViolations.length}`);
+  for (const line of appearanceViolations) console.log(`  ✗ ${line}`);
 
-  if (violations.length > 0 || vendorViolations.length > 0 || breakingViolations.length > 0) {
+  if (
+    violations.length > 0 ||
+    vendorViolations.length > 0 ||
+    breakingViolations.length > 0 ||
+    appearanceViolations.length > 0
+  ) {
     console.error("\ncheck:compat failed — structural capabilities need a guarded fallback, and");
     console.error("selector lists must not mix browser-specific pseudo-elements or let an");
     console.error("above-floor pseudo-class share a rule with baseline selectors.");
+    console.error("appearance needs its -webkit-appearance twin in the same rule.");
     process.exit(1);
   }
   console.log("\ncheck:compat passed.");

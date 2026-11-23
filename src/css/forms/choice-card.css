@@ -218,7 +218,8 @@
   border: 0;
   border-radius: inherit;
   background: var(--text-subtle);
-  transform: none;
+  /* No transform here: the card's scale(0) keeps the dot hidden beside a
+     visible native input until the :has() block above reveals it. */
   clip-path: circle(0.1875em at var(--choice-chip-dot));
   z-index: -1;
   transition: clip-path var(--duration);

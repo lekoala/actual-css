@@ -21,13 +21,18 @@
 - `neo-brutalist` demo theme squares its bars and thumbs through the new hooks; its vendor radius rules are gone.
 - Demo: Neon Ramen runs on `data-theme="cyberdeck"`; `.cut`, `.cyber-btn`, `.fieldset-cyber` and the site palette block are gone.
 
+### Fixed
+- A touch tap opens a `data-tooltip` tooltip again, pinned until a second tap, a tap elsewhere, Escape, or a dialog or popover opening.
+- `.otp`: ligatures and contextual alternates are off, so a code font cannot join `+++` across cells in Safari.
+- Dialogs opened by a tap or a click no longer ring their first control in Safari; keyboard openings keep the ring.
+- `cyberdeck`: a `.btn.circle` is a diamond with no tab, so a `.fab` keeps its plus and close glyphs.
+- `.flyout[popover]` resets the UA popover height, so Safari 18 no longer spreads menu rows across the panel.
+- `.rating`, `button.avatar` and the high-contrast `.select` pair `appearance` with `-webkit-appearance`: Safari before 15.4 drew native radios and buttons.
+- `.choice-card.chip`: without `:has()`, the dot stays hidden beside the visible native input.
+- Dev: `check:compat` fails an `appearance: none | auto` without its `-webkit-appearance` twin in the same rule.
+
 ## [0.20.1] - 2026-11-21
 ### Fixed
-- `.flyout[popover]` resets the UA popover height, so Safari 18 no longer spreads menu rows across the panel.
-- `cyberdeck`: a `.btn.circle` is a diamond with no tab, so a `.fab` keeps its plus and close glyphs.
-- Dialogs opened by a tap or a click no longer ring their first control in Safari; keyboard openings keep the ring.
-- `.otp`: ligatures and contextual alternates are off, so a code font cannot join `+++` across cells in Safari.
-- A touch tap opens a `data-tooltip` tooltip again, pinned until a second tap, a tap elsewhere, Escape, or a dialog or popover opening.
 - `.timeline`: dates, titles and details keep their line spacing in Firefox.
 - `.meter`: native gauges use flat theme colors for all three zones in Firefox.
 

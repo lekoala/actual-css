@@ -52,6 +52,7 @@
 @media (forced-colors: active), (prefers-contrast: more) {
   .select:not(:is([multiple], [size]:not([size="1"]))) {
     appearance: auto;
+    -webkit-appearance: auto;
     background-image: none;
     padding-inline-end: var(--control-pad-x);
   }

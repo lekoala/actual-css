@@ -3,6 +3,7 @@ import {
   auditCss,
   mixedBreakingSelectorLists,
   mixedVendorSelectorLists,
+  unprefixedAppearance,
 } from "../scripts/check-compat.js";
 
 test.each([
@@ -180,4 +181,11 @@ test("popover selectors are no longer audited", () => {
   expect(violations).toEqual([]);
   expect(progressive).toEqual([]);
   expect(optional).toEqual([]);
+});
+
+test("appearance none/auto needs its -webkit- twin in the same rule", () => {
+  expect(unprefixedAppearance(".r > input { appearance: none; }")).toEqual([{ line: 1 }]);
+  expect(unprefixedAppearance(".r { appearance: none; -webkit-appearance: none; }")).toEqual([]);
+  expect(unprefixedAppearance(".s { appearance: base-select; }")).toEqual([]);
+  expect(unprefixedAppearance("/* appearance: none */ .x { color: red; }")).toEqual([]);
 });

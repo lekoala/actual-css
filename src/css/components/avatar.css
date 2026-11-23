@@ -104,6 +104,7 @@
 
 button.avatar {
   appearance: none;
+  -webkit-appearance: none;
   cursor: pointer;
 }
 
