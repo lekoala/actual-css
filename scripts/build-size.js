@@ -36,7 +36,7 @@ const DIST = join(ROOT, "dist");
 const BUDGETS = {
   coreCssBrotli: 3000, // src/css/actual.css, minified in memory (current 2912; mark pair, closed-dialog reset)
   fullCssBrotli: 22900, // actual.full.min.css (current 22604; segmented controls, nav rail, switches)
-  fullJsBrotli: 21600, // actual.full.js (current 21466; focus return from flyouts, surface)
+  fullJsBrotli: 21800, // actual.full.js (current 21612; tooltip tap on touch)
 };
 
 async function collectCSS(root, base = "") {
