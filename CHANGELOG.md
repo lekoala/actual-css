@@ -3,6 +3,7 @@
 ## [Unreleased]
 ### Added
 - `--field-label-scale`: `.field-label` and `.field-group.flush` legend size as a fraction of `--control-font-size`; `1` restores labels at the field text size.
+- `actual-css/forms.json`: the `components.json` index for `src/css/forms` (classes, hooks, states, imports, docs URL), verified by `check:catalog`.
 
 ### Changed
 - Demos: `@lekoala/date-picker` 0.6.3 in `date-fields`, `contrast-contexts`, `neo-brutalist` and `cyberdeck`; `@lekoala/combobox` 0.8.2 in `combobox`, `contrast-contexts` and `neo-brutalist`.

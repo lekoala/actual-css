@@ -78,6 +78,26 @@ test("every component links to its published docs page", () => {
   expect(docsOf("join")).toBe(`${homepage}forms/joined-controls.html`);
 });
 
+test("forms.json matches the derivation and indexes every forms file", async () => {
+  const forms = await buildCatalog(ROOT, "forms");
+  expect(forms).toEqual(JSON.parse(readFileSync(join(ROOT, "forms.json"), "utf8")));
+  for (const entry of forms) {
+    expect(entry.source).toBe(`src/css/forms/${entry.name}.css`);
+    expect(entry.cssImport).toBe(`actual-css/css/forms/${entry.name}`);
+  }
+  const byName = (name) => forms.find((entry) => entry.name === name);
+  // Bundles only @import: not entries.
+  expect(byName("index")).toBeUndefined();
+  expect(byName("base")).toBeUndefined();
+  expect(byName("form").publicHooks).toContain("--field-label-scale");
+  // Cascade ownership: validation.css restyles .input and .field, it does not
+  // provide them; a class named after a file stays that file's (.select).
+  expect(byName("validation").classes).toEqual(["needs-validation", "was-validated"]);
+  expect(byName("control").classes).toEqual(["input", "textarea"]);
+  expect(byName("select").classes).toEqual(["select"]);
+  expect(byName("otp").classes).toEqual(["otp"]);
+});
+
 test("tokens.json matches the derivation and lists only public globals", async () => {
   const tokens = await buildTokens(ROOT);
   expect(tokens).toEqual(JSON.parse(readFileSync(join(ROOT, "tokens.json"), "utf8")));

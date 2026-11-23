@@ -54,7 +54,7 @@ test("package ships built assets, not theme demo sources", () => {
   expect(files).not.toContain("src/css/optional");
   expect(pkg.exports["./reserved-classes.json"]).toBe("./reserved-classes.json");
   expect(existsSync(join(ROOT, pkg.exports["./reserved-classes.json"]))).toBe(true);
-  for (const manifest of ["components.json", "tokens.json"]) {
+  for (const manifest of ["components.json", "forms.json", "tokens.json"]) {
     expect(files).toContain(manifest);
     expect(pkg.exports[`./${manifest}`]).toBe(`./${manifest}`);
     expect(existsSync(join(ROOT, manifest))).toBe(true);
@@ -255,6 +255,7 @@ packTest("packed tarball ships public exports with usable JS declarations", asyn
       "package/src/tooling/color.js", // contrast math, shared with the reports
       "package/reserved-classes.json", // actual-css/reserved-classes.json
       "package/components.json", // actual-css/components.json
+      "package/forms.json", // actual-css/forms.json
       "package/tokens.json", // actual-css/tokens.json
     ];
     for (const entry of critical) {

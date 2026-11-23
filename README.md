@@ -12,8 +12,8 @@ Documentation: <https://lekoala.github.io/actual-css/site/>
 Actual CSS claims a documented set of global class names; the package publishes
 it as [`actual-css/reserved-classes.json`](reserved-classes.json). Tools can
 also read [`actual-css/components.json`](components.json) (components, imports,
-hooks, docs URLs) and [`actual-css/tokens.json`](tokens.json) (public global
-tokens).
+hooks, docs URLs), [`actual-css/forms.json`](forms.json) (the same for forms)
+and [`actual-css/tokens.json`](tokens.json) (public global tokens).
 
 For existing projects: use cascade layers, import order, or your own build-time
 prefix transform.

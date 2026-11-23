@@ -15,7 +15,7 @@ The target is not zero application CSS. The target is:
 
 Actual CSS may evolve between releases. Resolve uncertain API from the version used by the current project, in this order:
 
-1. `actual-css/components.json` — component index: classes, public hooks, states, CSS/JS imports, enhancement tokens, docs URL.
+1. `actual-css/components.json` and `actual-css/forms.json` — component and form indexes: classes, public hooks, states, CSS/JS imports, enhancement tokens, docs URL.
 2. `actual-css/reserved-classes.json` — framework-owned class namespace.
 3. `actual-css/tokens.json` — public global tokens; a `var(--…)` outside a component should be one of them.
 4. `actual-css/package.json#exports` — canonical package entrypoints.

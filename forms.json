@@ -1,0 +1,324 @@
+[
+  {
+    "name": "choice",
+    "source": "src/css/forms/choice.css",
+    "cssImport": "actual-css/css/forms/choice",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/overview.html",
+    "classes": [
+      "check",
+      "choice",
+      "radio"
+    ],
+    "publicHooks": [
+      "--choice-control-nudge",
+      "--choice-border",
+      "--choice-bg",
+      "--choice-mark",
+      "--choice-control-size"
+    ],
+    "states": [
+      "checked",
+      "disabled",
+      "indeterminate"
+    ],
+    "pseudoElements": {
+      ".check": [
+        "::before"
+      ],
+      ".radio": [
+        "::before"
+      ]
+    }
+  },
+  {
+    "name": "choice-card",
+    "source": "src/css/forms/choice-card.css",
+    "cssImport": "actual-css/css/forms/choice-card",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/choice-cards.html",
+    "classes": [
+      "chip",
+      "choice-card"
+    ],
+    "publicHooks": [
+      "--choice-card-pad",
+      "--choice-card-gap",
+      "--choice-card-radius",
+      "--choice-card-border",
+      "--choice-card-bg",
+      "--choice-card-check-size",
+      "--choice-chip-dot"
+    ],
+    "states": [
+      "checked",
+      "disabled"
+    ],
+    "pseudoElements": {
+      ".choice-card": [
+        "::after",
+        "::before"
+      ]
+    }
+  },
+  {
+    "name": "color-swatch",
+    "source": "src/css/forms/color-swatch.css",
+    "cssImport": "actual-css/css/forms/color-swatch",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/color-swatches.html",
+    "classes": [
+      "color-swatch"
+    ],
+    "publicHooks": [
+      "--color-swatch-value",
+      "--color-swatch-size",
+      "--color-swatch-radius"
+    ],
+    "states": [
+      "checked",
+      "disabled"
+    ],
+    "pseudoElements": {
+      ".color-swatch": [
+        "::after",
+        "::before"
+      ]
+    }
+  },
+  {
+    "name": "control",
+    "source": "src/css/forms/control.css",
+    "cssImport": "actual-css/css/forms/control",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/overview.html",
+    "classes": [
+      "input",
+      "textarea"
+    ],
+    "publicHooks": [
+      "--control-border",
+      "--control-bg",
+      "--control-default-bg",
+      "--control-default-border",
+      "--control-fg",
+      "--control-cursor",
+      "--control-shadow",
+      "--control-border-block-end-color",
+      "--control-border-block-end-width",
+      "--control-hover-border",
+      "--control-hover-bg"
+    ],
+    "states": [
+      "disabled"
+    ]
+  },
+  {
+    "name": "custom-select",
+    "source": "src/css/forms/custom-select.css",
+    "cssImport": "actual-css/css/forms/custom-select",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/overview.html",
+    "internalHooks": [
+      "--control-bg"
+    ],
+    "states": [
+      "disabled",
+      "open"
+    ]
+  },
+  {
+    "name": "floating-field",
+    "source": "src/css/forms/floating-field.css",
+    "cssImport": "actual-css/css/forms/floating-field",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/floating-field.html",
+    "classes": [
+      "floating-field"
+    ],
+    "publicHooks": [
+      "--floating-label-top",
+      "--floating-label-opacity",
+      "--floating-pad-block-start"
+    ]
+  },
+  {
+    "name": "form",
+    "source": "src/css/forms/form.css",
+    "cssImport": "actual-css/css/forms/form",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/overview.html",
+    "classes": [
+      "field",
+      "field-error",
+      "field-group",
+      "field-help",
+      "field-label",
+      "flush",
+      "required-mark"
+    ],
+    "publicHooks": [
+      "--field-label-scale",
+      "--fieldset-legend-padding-inline"
+    ]
+  },
+  {
+    "name": "form-actions",
+    "source": "src/css/forms/form-actions.css",
+    "cssImport": "actual-css/css/forms/form-actions",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/form-actions.html",
+    "classes": [
+      "form-actions",
+      "sticky"
+    ],
+    "publicHooks": [
+      "--form-actions-align",
+      "--form-actions-justify"
+    ],
+    "internalHooks": [
+      "--form-actions-sticky-block-offset",
+      "--form-actions-sticky-inline-offset",
+      "--form-actions-sticky-padding"
+    ]
+  },
+  {
+    "name": "input-icon",
+    "source": "src/css/forms/input-icon.css",
+    "cssImport": "actual-css/css/forms/input-icon",
+    "docs": "https://lekoala.github.io/actual-css/site/patterns/icon-input.html",
+    "classes": [
+      "input-icon"
+    ],
+    "publicHooks": [
+      "--input-icon-size"
+    ]
+  },
+  {
+    "name": "native",
+    "source": "src/css/forms/native.css",
+    "cssImport": "actual-css/css/forms/native",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/controls.html",
+    "classes": [
+      "color",
+      "file"
+    ],
+    "publicHooks": [
+      "--color-size"
+    ],
+    "states": [
+      "disabled"
+    ]
+  },
+  {
+    "name": "otp",
+    "source": "src/css/forms/otp.css",
+    "cssImport": "actual-css/css/forms/otp",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/otp.html",
+    "classes": [
+      "otp"
+    ],
+    "publicHooks": [
+      "--otp-cell-size",
+      "--otp-gap",
+      "--otp-font-size"
+    ],
+    "internalHooks": [
+      "--otp-cell-border",
+      "--otp-cell-border-width",
+      "--otp-cell-bg",
+      "--otp-caret-space"
+    ],
+    "states": [
+      "aria-invalid",
+      "disabled"
+    ]
+  },
+  {
+    "name": "range",
+    "source": "src/css/forms/range.css",
+    "cssImport": "actual-css/css/forms/range",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/range.html",
+    "classes": [
+      "range"
+    ],
+    "publicHooks": [
+      "--range-thumb-size",
+      "--range-thumb-inline-size",
+      "--range-thumb-radius",
+      "--range-track-height",
+      "--range-thumb-bg",
+      "--range-track-bg",
+      "--range-fill-bg",
+      "--range-progress"
+    ],
+    "states": [
+      "disabled"
+    ],
+    "jsImport": "actual-css/js/range",
+    "enhancements": [
+      "range"
+    ]
+  },
+  {
+    "name": "select",
+    "source": "src/css/forms/select.css",
+    "cssImport": "actual-css/css/forms/select",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/overview.html",
+    "classes": [
+      "select"
+    ],
+    "publicHooks": [
+      "--select-icon-size"
+    ]
+  },
+  {
+    "name": "switch",
+    "source": "src/css/forms/switch.css",
+    "cssImport": "actual-css/css/forms/switch",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/switch.html",
+    "classes": [
+      "switch"
+    ],
+    "publicHooks": [
+      "--switch-bg",
+      "--switch-border",
+      "--switch-knob",
+      "--switch-width",
+      "--switch-block-size",
+      "--switch-knob-margin",
+      "--switch-knob-size",
+      "--switch-knob-inline-size",
+      "--switch-travel",
+      "--choice-control-size",
+      "--control-size"
+    ],
+    "states": [
+      "checked",
+      "disabled"
+    ],
+    "pseudoElements": {
+      ".switch": [
+        "::before"
+      ]
+    }
+  },
+  {
+    "name": "validation",
+    "source": "src/css/forms/validation.css",
+    "cssImport": "actual-css/css/forms/validation",
+    "docs": "https://lekoala.github.io/actual-css/site/forms/validation.html",
+    "classes": [
+      "needs-validation",
+      "was-validated"
+    ],
+    "publicHooks": [
+      "--form-invalid-border"
+    ],
+    "internalHooks": [
+      "--choice-bg",
+      "--switch-bg"
+    ],
+    "states": [
+      "aria-invalid",
+      "checked",
+      "indeterminate"
+    ],
+    "jsImport": "actual-css/js/validation",
+    "enhancements": [
+      "validation"
+    ]
+  }
+]

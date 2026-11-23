@@ -5,13 +5,14 @@
 Use the installed version rather than guessing from names:
 
 - `components.json` — component classes, hooks, states, CSS/JS imports, enhancement tokens, docs URL.
+- `forms.json` — the same for form files (`form` → `.field`, `.field-label`…).
 - `reserved-classes.json` — whether Actual CSS owns a class name.
 - `tokens.json` — public global tokens (`--space-40`, `--shadow`, `--primary`…).
 - `package.json#exports` — supported package entrypoints.
 - CSS/JS source — exact behavior and defaults.
 - docs / `llms.txt` — intended usage and framework map.
 
-`components.json` is an index, not a replacement for component documentation or source.
+`components.json` and `forms.json` are indexes, not a replacement for component documentation or source.
 
 ## Class grammar
 

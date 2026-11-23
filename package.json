@@ -79,6 +79,7 @@
     "./js/surface": { "types": "./dist/types/surface.d.ts", "default": "./src/js/surface.js" },
     "./reserved-classes.json": "./reserved-classes.json",
     "./components.json": "./components.json",
+    "./forms.json": "./forms.json",
     "./tokens.json": "./tokens.json",
     "./package.json": "./package.json"
   },
@@ -104,6 +105,7 @@
     "src/tooling",
     "reserved-classes.json",
     "components.json",
+    "forms.json",
     "tokens.json",
     "docs/pages",
     "docs/brand",

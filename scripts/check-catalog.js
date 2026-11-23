@@ -1,31 +1,30 @@
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildCatalog, buildTokens } from "./build-catalog.js";
+import { buildCatalog, buildTokens, CATALOG_FAMILIES } from "./build-catalog.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const JSON_FILE = join(ROOT, "components.json");
-const TOKENS_FILE = join(ROOT, "tokens.json");
 
-const committed = JSON.parse(await readFile(JSON_FILE, "utf8"));
-const generated = await buildCatalog(ROOT);
-const committedTokens = JSON.parse(await readFile(TOKENS_FILE, "utf8"));
-const generatedTokens = await buildTokens(ROOT);
+const derived = {};
+for (const family of CATALOG_FAMILIES) derived[`${family}.json`] = await buildCatalog(ROOT, family);
+derived["tokens.json"] = await buildTokens(ROOT);
 
-const drifted = [
-  JSON.stringify(committed) !== JSON.stringify(generated) && JSON_FILE,
-  JSON.stringify(committedTokens) !== JSON.stringify(generatedTokens) && TOKENS_FILE,
-].filter(Boolean);
+const drifted = [];
+for (const [file, generated] of Object.entries(derived)) {
+  const committed = JSON.parse(await readFile(join(ROOT, file), "utf8"));
+  if (JSON.stringify(committed) !== JSON.stringify(generated)) drifted.push(file);
+}
 
 if (drifted.length) {
   console.error("Component catalog check failed.");
   console.error(
-    `Run "bun run generate:catalog" to refresh ${drifted.join(" and ")} from src/css, src/js, and the package exports.`,
+    `Run "bun run generate:catalog" to refresh ${drifted.join(", ")} from src/css, src/js, and the package exports.`,
   );
   process.exit(1);
 }
 
+const counts = CATALOG_FAMILIES.map((family) => `${derived[`${family}.json`].length} ${family}`);
 console.log(
-  `Component catalog check passed (${generated.length} components, ${generatedTokens.global.length} global tokens).`,
+  `Component catalog check passed (${counts.join(", ")}, ${derived["tokens.json"].global.length} global tokens).`,
 );

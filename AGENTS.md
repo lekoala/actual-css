@@ -28,7 +28,7 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   a demo or docs page linking a file outside it 404s on the site, which
   `check:templates` and `build:pages` catch. Extend the manifest, never
   commit a build output to make a link resolve.
-- `components.json` is a derived artifact, not a second source of truth. After touching CSS header comments, selectors, `src/js` enhancements, or `package.json#exports`, run `bun run generate:catalog` and let the diff speak; `check:catalog` (in build:all) verifies the committed file matches the derivation.
+- `components.json`, `forms.json` and `tokens.json` are derived artifacts, not a second source of truth. After touching CSS header comments, selectors, `src/js` enhancements, or `package.json#exports`, run `bun run generate:catalog` and let the diff speak; `check:catalog` (in build:all) verifies the committed files match the derivation.
 - Use `Bun.WebView` through `scripts/utils/browser.js` for Chromium tests,
   screenshots and probes. Install the Playwright browsers with
   `bun run playwright install firefox webkit`, then run

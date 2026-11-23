@@ -1,6 +1,8 @@
 /*
  * Customizable select — appearance: base-select picker enhancement.
  *
+ * Docs: docs/pages/forms/overview.md
+ *
  * Progressive enhancement on top of the native .select baseline in select.css.
  * Wrapped in @supports and gated on fine pointer devices so it never blocks a
  * layout. Add .native to a specific select to opt out.

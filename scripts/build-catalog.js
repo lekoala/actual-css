@@ -9,7 +9,8 @@
  *
  * Derivation rules
  *
- *   name            file basename under src/css/components (index.css skipped).
+ *   name            file basename under src/css/components. Bundle files that
+ *                   only @import (index.css, forms/base.css) are skipped.
  *   source          repository path of the component CSS file.
  *   cssImport       `actual-css/css/components/<name>`, from the
  *                   `./css/components/*` export — the modular import path.
@@ -47,6 +48,12 @@
  *                   component file must carry one that resolves to an existing
  *                   page: a consumer linking to the docs cannot guess that tab
  *                   lives under enhancements/ or join under forms/.
+ *
+ * forms.json — the same rows, derived the same way from src/css/forms. A
+ * family gets its own file instead of joining components.json: a forms file
+ * holds several classes (form.css: .field, .field-label, .field-group…), so
+ * `name` is a file, not a component, and mixing them would give the field
+ * two meanings. A future family (layout, effects) follows the same shape.
  *
  * tokens.json — the public global tokens, written by the same command:
  *
@@ -102,8 +109,39 @@ import { parseHookSections } from "./utils/parse-hook-sections.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const OUT_FILE = join(ROOT, "components.json");
 const TOKENS_FILE = join(ROOT, "tokens.json");
+
+/* The published CSS families with an index of their own, each written to
+   <family>.json, and how a class shared between two files finds its owner.
+   Always: a class named after a file is that file's (bleed styles .card,
+   card owns it; control.css styles .select, select owns it). "cascade" adds:
+   a forms file holds several classes, so the first file in import order that
+   styles a class owns it and later ones only restyle it (validation.css
+   paints .input invalid). Cascade order cannot serve components: unrelated
+   components share runtime markers (.is-open, .scrollable), and each must
+   keep listing them. */
+const FAMILIES = { components: "name", forms: "cascade" };
+export const CATALOG_FAMILIES = Object.keys(FAMILIES);
+
+/* A bundle file (index.css, forms/base.css) only imports its family: it
+   styles nothing and is not an entry. */
+const isBundle = (css) =>
+  stripComments(css)
+    .replace(/@import[^;]*;/g, "")
+    .trim() === "";
+
+/* The family's files in cascade order, flattened from index.css through any
+   nested bundle (forms/base.css). */
+async function importOrder(dir, file = "index.css", order = []) {
+  const css = stripComments(await readFile(join(dir, file), "utf8"));
+  for (const match of css.matchAll(/@import\s+["']\.\/([^"']+)["']/g)) {
+    const child = match[1];
+    const source = await readFile(join(dir, child), "utf8");
+    if (isBundle(source)) await importOrder(dir, child, order);
+    else if (!order.includes(child)) order.push(child);
+  }
+  return order;
+}
 
 /* The universal modifier catalogue — the classes a component composes without
    owning them. */
@@ -193,35 +231,53 @@ async function jsModules(root) {
   return modules;
 }
 
-export async function buildCatalog(root) {
+export async function buildCatalog(root, family = "components") {
   const reserved = new Set(loadReservedClasses(join(root, "reserved-classes.json")));
   const shared = await sharedVocabulary(root);
   const modules = await jsModules(root);
   const base = await docsBase(root);
-  const componentsDir = join(root, "src", "css", "components");
-  const files = (await readdir(componentsDir)).filter(
-    (file) => file.endsWith(".css") && file !== "index.css",
-  );
-  const componentNames = new Set(files.map((file) => file.slice(0, -4)));
+  const familyDir = join(root, "src", "css", family);
+  const sources = new Map();
+  for (const file of await readdir(familyDir)) {
+    if (!file.endsWith(".css")) continue;
+    const css = await readFile(join(familyDir, file), "utf8");
+    if (!isBundle(css)) sources.set(file, css);
+  }
+  const files = [...sources.keys()];
+
+  const styled = new Map();
+  for (const [file, css] of sources) {
+    const classes = new Set();
+    for (const prelude of selectorPreludes(stripComments(css))) {
+      for (const cls of preludeClasses(prelude)) {
+        if (reserved.has(cls) && !shared.has(cls)) classes.add(cls);
+      }
+    }
+    styled.set(file, classes);
+  }
+
+  const owner = new Map(files.map((file) => [file.slice(0, -4), file]));
+  if (FAMILIES[family] === "cascade") {
+    for (const file of await importOrder(familyDir)) {
+      for (const cls of styled.get(file) ?? []) if (!owner.has(cls)) owner.set(cls, file);
+    }
+  }
 
   const catalog = await Promise.all(
     files.map(async (file) => {
       const name = file.slice(0, -4);
-      const css = await readFile(join(componentsDir, file), "utf8");
+      const css = sources.get(file);
 
       const classes = new Set();
-      for (const prelude of selectorPreludes(stripComments(css))) {
-        for (const cls of preludeClasses(prelude)) {
-          const foreign = cls !== name && componentNames.has(cls);
-          if (reserved.has(cls) && !shared.has(cls) && !foreign) classes.add(cls);
-        }
+      for (const cls of styled.get(file)) {
+        if ((owner.get(cls) ?? file) === file) classes.add(cls);
       }
 
       const hooks = parseHookSections(css);
       const entry = {
         name,
-        source: `src/css/components/${file}`,
-        cssImport: `actual-css/css/components/${name}`,
+        source: `src/css/${family}/${file}`,
+        cssImport: `actual-css/css/${family}/${name}`,
         docs: docsUrl(root, base, file, css),
       };
       if (classes.size) entry.classes = [...classes].sort();
@@ -315,9 +371,12 @@ async function cssFilesOutsideCore(root) {
 }
 
 async function main() {
-  const catalog = await buildCatalog(ROOT);
-  await writeFile(OUT_FILE, `${JSON.stringify(catalog, null, 2)}\n`);
-  console.log(`Wrote ${catalog.length} components to ${OUT_FILE}`);
+  for (const family of CATALOG_FAMILIES) {
+    const catalog = await buildCatalog(ROOT, family);
+    const file = join(ROOT, `${family}.json`);
+    await writeFile(file, `${JSON.stringify(catalog, null, 2)}\n`);
+    console.log(`Wrote ${catalog.length} ${family} entries to ${file}`);
+  }
   const tokens = await buildTokens(ROOT);
   await writeFile(TOKENS_FILE, `${JSON.stringify(tokens, null, 2)}\n`);
   console.log(`Wrote ${tokens.global.length} global tokens to ${TOKENS_FILE}`);

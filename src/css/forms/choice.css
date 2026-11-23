@@ -1,6 +1,8 @@
 /*
  * Checkbox and radio controls.
  *
+ * Docs: docs/pages/forms/overview.md
+ *
  * Native inputs keep their behavior while sharing custom geometry, checked,
  * focus, and disabled states across semantic forms and classed aliases. This
  * file also owns the .choice label layout (input + label text) so the whole
