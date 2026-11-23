@@ -7,6 +7,7 @@
 - `--bar-radius`: corner of `.progress` and `.meter`, track and value; `0` squares a bar without vendor selectors.
 - `--range-thumb-radius` and `--range-thumb-inline-size`: shape a `.range` thumb without vendor selectors; the focus ring follows.
 - `cyberdeck` demo theme: dark tactical HUD with bevelled frames and hatched disabled states; `--deck-hue` and `--deck-signal-hue` re-brand it.
+- Demo: `kitchen-sink.html` prints the user agent, touch support and key CSS feature probes for device bug reports.
 - Demo: `cyberdeck.html` relay console runs the theme on unchanged markup and skins `@lekoala/date-picker` in page CSS.
 - Demo: `demo/scripts/deck-count.js` prints `02/04`-style length readouts and lights the next `.otp` cell.
 - Docs: JavaScript runtime · "Without a build" registers a custom `data-enhance` module through a manifest with the plain bundle.
@@ -21,6 +22,7 @@
 
 ## [0.20.1] - 2026-11-21
 ### Fixed
+- `.flyout[popover]` resets the UA popover height, so Safari 18 no longer spreads menu rows across the panel.
 - `cyberdeck`: a `.btn.circle` is a diamond with no tab, so a `.fab` keeps its plus and close glyphs.
 - Dialogs opened by a tap or a click no longer ring their first control in Safari; keyboard openings keep the ring.
 - `.otp`: ligatures and contextual alternates are off, so a code font cannot join `+++` across cells in Safari.

@@ -123,6 +123,9 @@
     <span>Width <span id="width-lab-value">100%</span> (demo only)</span>
   </label>
   </div>
+  <!-- Which engine rendered this page, for remote and device bug reports.
+       iPad Safari sends a Mac user agent, so features are probed too. -->
+  <p class="muted"><small id="sink-env">Browser: unknown</small></p>
 
   <!-- 1. Buttons -->
   <section>
@@ -1135,6 +1138,22 @@
         ? `Custom ${event.target.value}`
         : event.target.getAttribute("aria-label");
     });
+  </script>
+  <script>
+    {
+      const probes = {
+        "corner-shape": "corner-shape: bevel",
+        "anchor positioning": "anchor-name: --a",
+        "field-sizing": "field-sizing: content",
+        popover: "selector(:popover-open)",
+      };
+      const supported = Object.entries(probes)
+        .map(([name, test]) => `${name} ${CSS.supports(test) ? "yes" : "no"}`)
+        .join(" · ");
+      const touch = navigator.maxTouchPoints > 0 ? `touch (${navigator.maxTouchPoints})` : "no touch";
+      document.getElementById("sink-env").textContent =
+        `${navigator.userAgent} — ${touch} · ${supported}`;
+    }
   </script>
   <script>
     const fonts = {

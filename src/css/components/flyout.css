@@ -97,6 +97,9 @@
 .flyout[popover] {
   position: fixed;
   inset: auto;
+  /* why: the UA's height: fit-content made Safari 18 size this grid to its
+     max-block-size and spread the spare room between menu rows. */
+  block-size: auto;
 }
 
 /* A presentation class may own its *visible* display type, but must not
