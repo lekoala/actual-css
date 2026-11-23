@@ -72,7 +72,7 @@ contrast contracts apply to the combobox for free:
 .actual-combobox {
   --cb-bg: var(--control-default-bg, var(--surface));
   --cb-color: var(--text);
-  --cb-border-color: var(--form-invalid-border, var(--border));
+  --cb-border-color: var(--form-invalid-border, var(--control-default-border, var(--border-control)));
   --cb-border-radius: var(--radius);
   --cb-focus-color: var(--focus);
   --cb-muted-color: var(--text-muted);
@@ -121,7 +121,9 @@ turn danger together.
 
 ### Limits
 
-The bridge shares the inherited resting field fill through `--control-default-bg`.
+The bridge shares the inherited resting field fill and edge through
+`--control-default-bg` and `--control-default-border`, falling back to
+`--surface` and `--border-control` like `.input`.
 It follows tokens, not native-control selectors: local `--control-bg` overrides
 and theme-specific invalid or disabled fills need matching widget state rules.
 

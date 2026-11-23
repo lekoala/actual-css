@@ -7,6 +7,7 @@
 - `--bar-radius`: corner of `.progress` and `.meter`, track and value; `0` squares a bar without vendor selectors.
 - `--range-thumb-radius` and `--range-thumb-inline-size`: shape a `.range` thumb without vendor selectors; the focus ring follows.
 - `cyberdeck` demo theme: dark tactical HUD with bevelled frames and hatched disabled states; `--deck-hue` and `--deck-signal-hue` re-brand it.
+- Docs: Combobox bridge takes `--control-default-border` / `--border-control` for its edge, like `.input`.
 - Demo: `kitchen-sink.html` prints the user agent, touch support and key CSS feature probes for device bug reports.
 - Demo: `cyberdeck.html` relay console runs the theme on unchanged markup and skins `@lekoala/date-picker` in page CSS.
 - Demo: `demo/scripts/deck-count.js` prints `02/04`-style length readouts and lights the next `.otp` cell.
