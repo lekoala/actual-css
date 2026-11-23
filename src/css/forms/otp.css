@@ -71,6 +71,11 @@
   font-family: var(--font-mono);
   font-size: var(--otp-font-size);
   font-variant-numeric: tabular-nums;
+  /* why: one glyph per cell. A code font (JetBrains Mono, Fira Code) joins
+     `+++` or `->` through ligatures and contextual alternates; Chromium drops
+     them under letter-spacing, Safari keeps them and the glyphs leave their
+     cells. */
+  font-variant-ligatures: none;
   line-height: var(--otp-cell-size);
   letter-spacing: calc(var(--otp-cell-size) + var(--otp-gap) - 1ch);
   text-align: start;

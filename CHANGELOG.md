@@ -21,6 +21,7 @@
 
 ## [0.20.1] - 2026-11-21
 ### Fixed
+- `.otp`: ligatures and contextual alternates are off, so a code font cannot join `+++` across cells in Safari.
 - A touch tap opens a `data-tooltip` tooltip again, pinned until a second tap, a tap elsewhere, Escape, or a dialog or popover opening.
 - `.timeline`: dates, titles and details keep their line spacing in Firefox.
 - `.meter`: native gauges use flat theme colors for all three zones in Firefox.
