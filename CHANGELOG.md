@@ -1,6 +1,9 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Changed
+- Demos: `@lekoala/date-picker` 0.6.3 in `date-fields`, `contrast-contexts`, `neo-brutalist` and `cyberdeck`; `@lekoala/combobox` 0.8.2 in `combobox`, `contrast-contexts` and `neo-brutalist`.
+- Docs: Combobox bridge maps `--cb-focus-width` to `--focus-ring-width`, so chips and remove buttons keep the field's focus width.
 
 ## [0.20.2] - 2026-11-23
 ### Added

@@ -8,9 +8,9 @@
   <meta name="description" content="@lekoala/combobox loaded from CDN and themed with Actual CSS tokens: searchable selects, removable chips, autocomplete, states and the theme presets follow the framework.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.8.0/dist/combobox.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.8.2/dist/combobox.css">
   <script src="../scripts/theme-picker.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.8.0/dist/combobox.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@lekoala/combobox@0.8.2/dist/combobox.js"></script>
   <script>
     customElements.get("combo-box").setDefaultChipClass("badge primary");
   </script>
@@ -57,6 +57,7 @@
       --cb-border-color: var(--form-invalid-border, var(--control-default-border, var(--border-control)));
       --cb-border-radius: var(--radius);
       --cb-focus-color: var(--focus);
+      --cb-focus-width: var(--focus-ring-width);
       --cb-muted-color: var(--text-muted);
       --cb-error-color: var(--danger);
       --cb-control-height: var(--control-size);
@@ -64,8 +65,8 @@
     }
 
     /* 2. Focus — the .input inset outline while the search input is focused,
-          replacing the library's accent border and outer halo. A chip or its
-          × keeps the library's own inner ring (--cb-focus-color). */
+          replacing the library's accent border. Chips and their × keep the
+          library's own inner ring, at the mapped --cb-focus-width. */
     .actual-combobox :is(.cb-text-control:focus-visible, .cb-control:has(.cb-input:focus-visible)) {
       border-color: var(--form-invalid-border, var(--cb-border-color));
       outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
@@ -400,6 +401,7 @@
   --cb-border-color: var(--form-invalid-border, var(--control-default-border, var(--border-control)));
   --cb-border-radius: var(--radius);
   --cb-focus-color: var(--focus);
+  --cb-focus-width: var(--focus-ring-width);
   --cb-muted-color: var(--text-muted);
   --cb-error-color: var(--danger);
   --cb-control-height: var(--control-size);
@@ -451,8 +453,8 @@
 
     <footer class="cluster items-baseline justify-content-space-between page-note">
       <span>
-        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.8.0/dist/combobox.css</code> and
-        <code>@lekoala/combobox@0.8.0/dist/combobox.js</code>.
+        Loaded from jsDelivr, pinned: <code>@lekoala/combobox@0.8.2/dist/combobox.css</code> and
+        <code>@lekoala/combobox@0.8.2/dist/combobox.js</code>.
       </span>
       <span>Combobox enhances native <code>&lt;input&gt;</code>/<code>&lt;select&gt;</code> — the source owns the form value.</span>
     </footer>

@@ -75,6 +75,7 @@ contrast contracts apply to the combobox for free:
   --cb-border-color: var(--form-invalid-border, var(--control-default-border, var(--border-control)));
   --cb-border-radius: var(--radius);
   --cb-focus-color: var(--focus);
+  --cb-focus-width: var(--focus-ring-width);
   --cb-muted-color: var(--text-muted);
   --cb-error-color: var(--danger);
   --cb-control-height: var(--control-size);
@@ -110,14 +111,15 @@ contrast contracts apply to the combobox for free:
 The control reads the field geometry a theme gives `.input`: `--border-width`
 and the `--control-shadow` elevation, which focus keeps. Hover follows `.input`
 too (`--control-hover-border`), since the control is typed into, in place of
-the library's own border mix. While the search input
-is focused, the control takes the same inset outline as `.input` in place of
-the library's accent border and outer halo; a focused chip
-or remove × keeps the library's own inner ring. Being inset, the outline needs
-no adaptation inside `.join`: `combo-box` owns the radius at zero specificity,
-so the join gives it the group corners and the visible control inherits them. The invalid rule sets `--form-invalid-border`,
-the hook `.field.danger` and `aria-invalid` already use, so border and outline
-turn danger together.
+the library's own border mix. While the search input is focused, the control
+takes the same inset outline as `.input` in place of the library's accent
+border; `--cb-focus-width` mirrors `--focus-ring-width`, so a focused chip or
+remove × keeps the library's own inner ring at the field's width. Being inset,
+the outline needs no adaptation inside `.join`: `combo-box` owns the radius at
+zero specificity, so the join gives it the group corners and the visible
+control inherits them. The invalid rule sets `--form-invalid-border`, the hook
+`.field.danger` and `aria-invalid` already use, so border and outline turn
+danger together.
 
 ### Limits
 
