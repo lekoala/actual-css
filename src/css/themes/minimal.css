@@ -77,7 +77,8 @@
 [data-theme="minimal"] .field-label {
   color: var(--text-muted);
   /* 13px at the default size, following .sm/.lg like the core, with a 12px
-     floor: a .sm caption at 11.4px stopped being readable. */
+     floor: a .sm caption at 11.4px stopped being readable. The floor needs
+     its own formula, so --field-label-scale does not reach this theme. */
   font-size: max(0.75rem, calc(var(--control-font-size) * 0.8125));
   font-weight: var(--font-weight-normal);
   line-height: var(--line-height-tight);

@@ -43,3 +43,10 @@ The mixed shape `<label for="x">…<input id="x"></label>` is allowed by the spe
 
 `.field-label` works on a `<span>`, on a detached `<label for>`, or on a
 `<legend>`. `.required-mark` goes inside a label.
+
+### Hooks
+
+- `--field-label-scale`: label size as a fraction of `--control-font-size`,
+  so it follows `.sm`/`.lg`. `1` sets labels at the field text size. Applies
+  to `.field-label` and the `.field-group.flush` legend; set it on `:root`, a
+  form, or a single field.

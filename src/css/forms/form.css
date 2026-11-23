@@ -14,6 +14,7 @@
  * .field-group.flush, .required-mark.
  *
  * Public hooks:
+ * --field-label-scale
  * --fieldset-legend-padding-inline
  */
 .field {
@@ -41,12 +42,14 @@
    own size the hierarchy rested on weight alone, and a stack of medium
    labels read louder than the fields. Medium and the full ink keep it a
    clear read. A fraction of --control-font-size, not a fixed step, so it
-   follows .sm/.lg on the .field whatever element holds the label. The legend
-   titles a group, one level up, and is set small inside the frame, so it
-   keeps the heavier weight. */
+   follows .sm/.lg on the .field whatever element holds the label.
+   --field-label-scale is the author hook for that fraction (1 sets labels at
+   the field text size); its fallback stays here, not on :root, so the hook
+   can be set on any container. The legend titles a group, one level up, and
+   is set small inside the frame, so it keeps the heavier weight. */
 .field-label {
   color: var(--text);
-  font-size: calc(var(--control-font-size) * 0.875);
+  font-size: calc(var(--control-font-size) * var(--field-label-scale, 0.875));
   font-weight: var(--font-weight-medium);
 }
 
@@ -72,7 +75,7 @@
 .field-group.flush > legend {
   margin-block-end: var(--space-10);
   padding-inline: 0;
-  font-size: calc(var(--control-font-size) * 0.875);
+  font-size: calc(var(--control-font-size) * var(--field-label-scale, 0.875));
 }
 
 .field-help {
