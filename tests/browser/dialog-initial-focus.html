@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dialog initial focus fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <!-- showModal() focuses Cancel. Its ring must follow how the dialog was
+       opened, not the engine's default for script focus. -->
+  <p style="padding: 2rem">
+    <button class="btn primary" type="button" id="open" commandfor="modal" command="show-modal">Open modal</button>
+  </p>
+  <dialog class="modal" id="modal">
+    <form method="dialog" class="stack">
+      <p>Modal content goes here.</p>
+      <footer class="cluster">
+        <button class="btn" type="submit" value="cancel" id="cancel">Cancel</button>
+        <button class="btn primary" type="submit" value="confirm">Confirm</button>
+      </footer>
+    </form>
+  </dialog>
+</body>
+</html>

@@ -2,6 +2,7 @@ import { afterAll, beforeAll, test } from "bun:test";
 import {
   browserAvailable,
   clickSelector,
+  pressKey,
   setViewport,
   tabUntil,
   tapSelector,
@@ -14,7 +15,8 @@ export async function browserSuite() {
   const baseTest = engine || (await browserAvailable()) ? test : test.skip;
   const it = (name, run) => baseTest(name, run, 60_000);
 
-  if (!engine) return { it, clickSelector, setViewport, tabUntil, tapSelector, withBrowserPage };
+  if (!engine)
+    return { it, clickSelector, pressKey, setViewport, tabUntil, tapSelector, withBrowserPage };
 
   let browser;
   beforeAll(async () => {
@@ -28,6 +30,7 @@ export async function browserSuite() {
   return {
     it,
     clickSelector: (page, selector) => page.locator(selector).click(),
+    pressKey: (page, key) => page.keyboard.press(key),
     // Needs a page opened with { touch: true }: Playwright taps only where hasTouch is set.
     tapSelector: (page, selector) => page.locator(selector).tap(),
     // Real Tab presses, like the CDP helper: focus assertions need dispatched input.

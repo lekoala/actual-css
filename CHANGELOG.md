@@ -21,6 +21,7 @@
 
 ## [0.20.1] - 2026-11-21
 ### Fixed
+- Dialogs opened by a tap or a click no longer ring their first control in Safari; keyboard openings keep the ring.
 - `.otp`: ligatures and contextual alternates are off, so a code font cannot join `+++` across cells in Safari.
 - A touch tap opens a `data-tooltip` tooltip again, pinned until a second tap, a tap elsewhere, Escape, or a dialog or popover opening.
 - `.timeline`: dates, titles and details keep their line spacing in Firefox.

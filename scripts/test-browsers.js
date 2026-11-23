@@ -11,6 +11,7 @@ if (engines.some((engine) => !supportedEngines.includes(engine))) {
 const files = [
   "./tests/browser/control-geometry.test.js",
   "./tests/browser/cyberdeck.test.js",
+  "./tests/browser/dialog-initial-focus.test.js",
   "./tests/browser/dirty.test.js",
   "./tests/browser/grid.test.js",
   "./tests/browser/meter.test.js",

@@ -359,6 +359,7 @@ function showDialog(dialog, focusReturn, forcedModal) {
   const viewport = dialog.ownerDocument.defaultView;
   const scrollX = viewport?.scrollX ?? 0;
   const scrollY = viewport?.scrollY ?? 0;
+  const indicated = dialog.ownerDocument.activeElement?.matches(":focus-visible") === true;
 
   if (modal) {
     dialog.showModal();
@@ -367,12 +368,30 @@ function showDialog(dialog, focusReturn, forcedModal) {
     dialog.show();
     state.modalOpen = false;
   }
+  if (!indicated) quietInitialFocus(dialog);
 
   if (scrollX !== 0 || scrollY > 0) {
     viewport?.scrollTo(scrollX, scrollY);
   }
 
   syncModalOpenClass(dialog.ownerDocument);
+}
+
+/*
+ * WebKit shows the focus ring on the control showModal() focuses even when a
+ * tap or a click opened the dialog, so a Cancel button looked pressed on an
+ * iPad. Chromium and Firefox follow the opening's modality: the ring shows
+ * only when the element focused before it showed one. Refocusing with
+ * focusVisible: false brings WebKit in line; it needs the blur, since focusing
+ * the active element again is a no-op. Text fields keep their ring in every
+ * engine, whatever the modality.
+ */
+function quietInitialFocus(dialog) {
+  const focused = dialog.ownerDocument.activeElement;
+  if (!focused || !dialog.contains(focused) || !focused.matches(":focus-visible")) return;
+  if (focused.matches("input, textarea, select, [contenteditable]")) return;
+  focused.blur();
+  focused.focus({ focusVisible: false, preventScroll: true });
 }
 
 function handleDialogPointerDown(event) {
