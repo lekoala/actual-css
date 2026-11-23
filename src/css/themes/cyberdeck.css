@@ -152,8 +152,9 @@
 }
 
 /* Fields and buttons are cut on the bottom-right only: the top-left of a
-   button carries its tab instead. */
-[data-theme="cyberdeck"] :is(.input, .textarea, .select, .otp > span, .btn) {
+   button carries its tab instead. A .btn.circle keeps the diamond above: the
+   one cut on a full radius slices it into a triangle. */
+[data-theme="cyberdeck"] :is(.input, .textarea, .select, .otp > span, .btn:not(.circle)) {
   corner-shape: square square bevel;
 }
 
@@ -226,8 +227,9 @@
 /* A framed button carries a tab on its top edge, like a folder: a strip of
    its own border colour, sloped at the inline end. Text buttons have no
    frame to grow it from, and small ones stay plain: repeated on every row
-   of a data grid, the tabs read as noise. */
-[data-theme="cyberdeck"] .btn:not(.ghost, .link, .sm)::before {
+   of a data grid, the tabs read as noise. A diamond has no top edge, and a
+   .fab summary draws its plus and close glyphs in ::before and ::after. */
+[data-theme="cyberdeck"] .btn:not(.ghost, .link, .sm, .circle)::before {
   content: "";
   position: absolute;
   inset-block-start: calc(-1 * var(--border-width) - 3px);
@@ -245,13 +247,15 @@
    reset makes it a plain state change. */
 @media (hover: hover) {
   [data-theme="cyberdeck"]
-    .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link)):hover::before {
+    .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link, .sm, .circle)):hover::before {
     inline-size: calc(100% + 2 * var(--border-width));
   }
 }
 
 [data-theme="cyberdeck"]
-  .btn:not(:where(:disabled, [aria-disabled="true"], .ghost, .link)):focus-visible::before {
+  .btn:not(
+    :where(:disabled, [aria-disabled="true"], .ghost, .link, .sm, .circle)
+  ):focus-visible::before {
   inline-size: calc(100% + 2 * var(--border-width));
 }
 

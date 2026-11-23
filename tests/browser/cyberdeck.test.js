@@ -21,6 +21,8 @@ it("cyberdeck bevels with corner-shape and stays square without it", async () =>
         supported: CSS.supports("corner-shape", "bevel"),
         btnRadius: style("btn").borderBottomRightRadius,
         btn: corners(style("btn")),
+        circle: corners(style("circle")),
+        circleTab: style("circle", "::before").content,
         frame: corners(getComputedStyle(card)),
         radio: corners(style("radio")),
         badge: corners(getComputedStyle(card, "::before")),
@@ -38,6 +40,10 @@ it("cyberdeck bevels with corner-shape and stays square without it", async () =>
       expect(geometry.frame).toBe([bevel, square, bevel, square].join(" "));
       expect(geometry.radio).toBe([bevel, bevel, bevel, bevel].join(" "));
       expect(geometry.badge).toBe([bevel, bevel, bevel, bevel].join(" "));
+      // A circle is a diamond with no tab: a .fab summary draws its glyphs in
+      // ::before, and one cut on a full radius made it a triangle.
+      expect(geometry.circle).toBe([bevel, bevel, bevel, bevel].join(" "));
+      expect(geometry.circleTab).toBe("none");
     } else {
       expect(geometry.btnRadius).toBe("0px");
       expect(geometry.radio).not.toContain("superellipse");
