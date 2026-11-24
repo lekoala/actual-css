@@ -36,6 +36,7 @@ Whole pages, composed the way a real product would.
 - [Modal patterns](../../demo/templates/modal-patterns.html) - nine application modals, including a confirmation with detached actions
 - [Workspace settings](../../demo/templates/settings-pricing.html) - plans with visible native choices, preferences and segmented tabs
 - [iOS-style settings](../../demo/templates/settings-ios.html) - iOS-like controls and grouped settings from unchanged framework markup, a local theme, and its findings listed rule by rule
+- [Surface form](../../demo/templates/surface-form.html) - workshop booking with flat, outlined and inset-shadow fields on a blue surface, with visible keyboard focus and validation
 - [Card compositions](../../demo/templates/card-compositions.html) - editorial, team, sign-in and horizontal cards composed from existing primitives
 - [Neo-brutalist](../../demo/templates/neo-brutalist.html) - a risograph print studio on the `neo-brutalist` theme (order alerts, plus-marker FAQ, ruled testimonial grid, docked cookie banner) with the page loading its own fonts
 - [Cyberdeck](../../demo/templates/cyberdeck.html) - a relay station console on the `cyberdeck` theme (bevelled frames, segmented gauges, diamond markers, printed switch states, link-card reticle) with page-level micro-print

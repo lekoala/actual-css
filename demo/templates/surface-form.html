@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en" data-theme="studio-demo">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Surface form - Actual CSS</title>
+  <meta name="description" content="Compare flat, outlined and inset-shadow form fields on a pale blue surface, with keyboard focus and inline validation in every treatment.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <style>
+    [data-theme="studio-demo"] {
+      color-scheme: light;
+      --surface: #f1f6f8;
+      --surface-raised: #fff;
+      --surface-subtle: #e3f3f6;
+      --text: #0f3341;
+      --text-muted: #536973;
+      --primary: var(--text);
+      --primary-fg: #fff;
+      --link: #1a6f80;
+      --focus: var(--link);
+      --danger: #a12640;
+      --border: #dce7eb;
+      --border-control: #708690;
+      --studio-invalid-fill: #fce7e8;
+      --radius: 1.25rem;
+      --radius-lg: 1.5rem;
+    }
+
+    .studio-width {
+      --center-size: 62rem;
+      --center-pad: clamp(var(--space-40), 4vw, var(--space-60));
+    }
+
+    .studio-bar {
+      background: var(--surface-raised);
+      border-block-end: var(--border-width) solid var(--border);
+    }
+
+    .studio-bar .cluster {
+      --cluster-justify: space-between;
+      padding-block: var(--space-30);
+    }
+
+    .studio-page {
+      --gap: var(--space-60);
+      padding-block: clamp(var(--space-50), 5vw, calc(2 * var(--space-60)));
+    }
+
+    .studio-intro {
+      --gap: var(--space-20);
+    }
+
+    .studio-intro h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .studio-layout {
+      display: grid;
+      gap: var(--space-50);
+      align-items: start;
+    }
+
+    @media (width >= 48rem) {
+      .studio-layout {
+        grid-template-columns: minmax(17rem, 2fr) minmax(0, 3fr);
+        grid-template-rows: auto 1fr;
+        column-gap: clamp(var(--space-60), 5vw, calc(1.5 * var(--space-60)));
+      }
+
+      .studio-form {
+        grid-column: 2;
+        grid-row: 1 / span 2;
+      }
+    }
+
+    .studio-panel {
+      --gap: var(--space-40);
+      --card-pad: clamp(var(--space-40), 2.5vw, var(--space-50));
+    }
+
+    .studio-appearance .segmented {
+      --control-size: 3.25rem;
+      inline-size: 100%;
+    }
+
+    .studio-appearance .segment {
+      padding-inline: var(--space-10);
+    }
+
+    .studio-panel h2 {
+      font-size: var(--font-size-md);
+    }
+
+    .studio-ratios {
+      --gap: var(--space-10);
+      margin: 0;
+      padding-block: var(--space-30);
+      border-block: var(--border-width) solid var(--border);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .studio-ratios .cluster {
+      --cluster-justify: space-between;
+      --gap: var(--space-10);
+    }
+
+    .studio-ratios dd {
+      margin: 0;
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .studio-form {
+      --gap: var(--space-40);
+      --control-default-bg: var(--surface-raised);
+      --control-hover-bg: var(--surface-raised);
+      --control-size: 3.5rem;
+    }
+
+    .studio-names {
+      --switcher-threshold: 22rem;
+    }
+
+    .studio-form .btn {
+      --btn-radius: var(--radius-full);
+    }
+
+    /* Keep the same border box across treatments so focus lands on the same edge. */
+    :where(.studio-page:has(:is(#surface-mode, #shadow-mode):checked)) .studio-form {
+      --control-default-border: transparent;
+      --control-hover-border: transparent;
+      --studio-invalid-border: transparent;
+    }
+
+    :where(.studio-page:has(#shadow-mode:checked)) .studio-form {
+      --control-shadow: inset 0 2px 6px rgb(15 51 65 / 18%);
+    }
+
+    /* Match the specificity of the framework's post-submit validation rule. */
+    .studio-form.needs-validation :is(.input, .select, .textarea):is([aria-invalid="true"], :user-invalid) {
+      --control-bg: var(--studio-invalid-fill);
+      --form-invalid-border: var(--studio-invalid-border, var(--danger));
+    }
+
+    .studio-form .field-error {
+      margin: 0;
+    }
+
+    /* Keep the inset focus ring teal while the fill and message signal the error. */
+    .studio-form :is(.input, .select, .textarea):focus-visible {
+      outline-color: var(--focus);
+    }
+
+    @media (prefers-contrast: more), (forced-colors: active) {
+      .studio-form {
+        --control-default-border: var(--border-control);
+        --control-hover-border: var(--text);
+        --control-shadow: none;
+        --studio-invalid-border: initial;
+      }
+    }
+
+    @media (forced-colors: active) {
+      /* The forced palette flattens the pink fill and red edge. */
+      .studio-form .field-error {
+        font-weight: var(--font-weight-bold);
+      }
+    }
+
+    .studio-status:empty {
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <header class="studio-bar">
+    <div class="center cluster studio-width">
+      <strong>Open Studio</strong>
+      <a href="border-contrast.html">Border contrast lab</a>
+    </div>
+  </header>
+
+  <main class="center stack studio-width studio-page">
+    <header class="stack studio-intro">
+      <h1>Join a printmaking workshop</h1>
+      <p class="muted">Try a community studio booking form with three field treatments on the same blue surface.</p>
+    </header>
+
+    <div class="studio-layout">
+      <aside class="card stack studio-panel" aria-labelledby="appearance-title">
+        <fieldset class="field-group flush studio-appearance">
+          <legend id="appearance-title">Field appearance</legend>
+          <div class="segmented">
+            <label class="segment"><input id="surface-mode" type="radio" name="appearance" checked>Surface</label>
+            <label class="segment"><input type="radio" name="appearance">Outline</label>
+            <label class="segment"><input id="shadow-mode" type="radio" name="appearance">Shadow</label>
+          </div>
+        </fieldset>
+        <p>Press Tab to see focus. Submit the empty form to see errors and focus the first invalid field.</p>
+      </aside>
+
+      <!-- Demo fields are unnamed so a native submit never serializes their values. -->
+      <form class="stack needs-validation studio-form" id="booking" action="#booking" data-enhance="validation" aria-labelledby="booking-title">
+        <h2 id="booking-title">Your booking</h2>
+        <div class="switcher studio-names">
+          <div class="field">
+            <label for="first-name">First name</label>
+            <input class="input" id="first-name" type="text" autocomplete="given-name" aria-errormessage="first-name-error" required>
+            <p class="field-error" id="first-name-error">Enter your first name.</p>
+          </div>
+          <div class="field">
+            <label for="last-name">Last name</label>
+            <input class="input" id="last-name" type="text" autocomplete="family-name" aria-errormessage="last-name-error" required>
+            <p class="field-error" id="last-name-error">Enter your last name.</p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input class="input" id="email" type="email" autocomplete="email" placeholder="you@example.com" aria-errormessage="email-error" required>
+          <p class="field-error" id="email-error">Enter a valid email address.</p>
+        </div>
+        <div class="field">
+          <label for="session">Session</label>
+          <select class="select" id="session" aria-errormessage="session-error" required>
+            <option value="">Choose a session</option>
+            <option>Saturday morning · 10 am</option>
+            <option>Sunday afternoon · 2 pm</option>
+          </select>
+          <p class="field-error" id="session-error">Choose a workshop session.</p>
+        </div>
+        <div class="field">
+          <label for="notes">Notes <span class="muted">(optional)</span></label>
+          <textarea class="textarea" id="notes" rows="2"></textarea>
+        </div>
+        <div class="cluster form-actions">
+          <button class="btn primary" type="submit">Reserve a spot</button>
+          <p class="studio-status" id="booking-status" role="status"></p>
+        </div>
+      </form>
+
+      <aside class="card stack studio-panel" aria-labelledby="contrast-title">
+        <h2 id="contrast-title">Light palette contrast</h2>
+        <dl class="stack studio-ratios">
+          <div class="cluster"><dt>White fill against blue</dt><dd>1.09:1</dd></div>
+          <div class="cluster"><dt>Outline against blue</dt><dd>3.50:1</dd></div>
+          <div class="cluster"><dt>Outline against white</dt><dd>3.82:1</dd></div>
+        </dl>
+        <p class="muted">The white fill alone falls below the 3:1 threshold for a cue needed to identify a field. Increased contrast and forced colors restore a full outline. <a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html">WCAG non-text contrast</a></p>
+      </aside>
+    </div>
+  </main>
+
+  <script src="../../dist/actual.full.js"></script>
+  <script>
+    const booking = document.querySelector("#booking");
+    const bookingStatus = document.querySelector("#booking-status");
+
+    booking.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (booking.checkValidity()) bookingStatus.textContent = "Demo booking complete.";
+    });
+
+    booking.addEventListener("input", () => {
+      bookingStatus.textContent = "";
+    });
+  </script>
+</body>
+</html>
