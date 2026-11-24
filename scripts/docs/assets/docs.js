@@ -175,7 +175,7 @@
     await indexLoading;
   }
 
-  // Ranking mirrors scoreEntry() in scripts/docs/search.js (kept self-contained:
+  // Ranking mirrors scripts/docs/search.js (kept self-contained:
   // this file ships without a bundler). Parity is enforced by
   // tests/browser/docs-search.test.js.
   function tokenize(value) {
@@ -289,7 +289,7 @@
     if (searchEmpty) {
       searchEmpty.textContent =
         q && results.length === 0
-          ? `No results for “${q}”. Try a class, a hook or a component name.`
+          ? `No results for “${q}”. Try a class, hook, component or demo name.`
           : "";
     }
     searchInput?.setAttribute("aria-expanded", String(optionCount() > 0));
@@ -297,14 +297,17 @@
 
   function runSearch(query) {
     const q = query.trim();
-    results = q
+    const ranked = q
       ? index
           .map((entry) => ({ entry, score: score(entry, q) }))
           .filter((item) => item.score > 0)
           .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
-          .slice(0, 8)
           .map((item) => item.entry)
       : [];
+    results = [
+      ...ranked.filter((entry) => !entry.demo).slice(0, 8),
+      ...ranked.filter((entry) => entry.demo).slice(0, 3),
+    ];
     renderResults(q);
   }
 

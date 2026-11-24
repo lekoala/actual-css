@@ -228,6 +228,33 @@ it("search arrows keep input focus and Enter follows the selected result", async
   });
 }, 60_000);
 
+it("offers demos after docs and opens a demo from a nested docs page", async () => {
+  await withSearch(
+    async (view) => {
+      const links =
+        await view.evaluate(`[...document.querySelectorAll("[data-docs-search-results] a")]
+        .map((link) => ({ href: link.href, label: link.textContent }))`);
+      const demos = links.filter(({ label }) => label.endsWith(" — Demo"));
+      expect(demos).toEqual([
+        { href: fixtureUrl("demo/templates/surface-form.html"), label: "Surface form — Demo" },
+        {
+          href: fixtureUrl("demo/templates/adaptive-surface.html"),
+          label: "Adaptive filter surface — Demo",
+        },
+      ]);
+      expect(links.length).toBeGreaterThan(demos.length);
+      expect(links.slice(-demos.length)).toEqual(demos);
+
+      await key(view, "End", 35);
+      await key(view, "Enter", 13);
+      const href = demos.at(-1).href;
+      await waitForBrowser(view, `location.href === ${JSON.stringify(href)}`);
+    },
+    "surface",
+    fixtureUrl("site/examples/overview.html"),
+  );
+}, 60_000);
+
 // Trap: the link carried the matched section's #id while Enter navigated to
 // the bare page URL, so click and keyboard opened different places.
 it("Enter opens the same #section the result link points to", async () => {
@@ -321,6 +348,7 @@ it("ranks the same ordered URLs as searchEntries() for index-derived queries", a
     if (index.some((entry) => entry.aliases?.includes("custom select"))) {
       queries.push("custom select");
     }
+    queries.push("surface");
     expect(queries.length).toBeGreaterThan(0);
 
     for (const query of queries) {

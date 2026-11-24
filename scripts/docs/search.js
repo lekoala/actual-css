@@ -1,9 +1,11 @@
 /*
- * Search index generation and ranking. One entry per page, plain-text body
- * for scoring. scoreEntry() is the source of truth for ranking — the docs
- * runtime in scripts/docs/assets/docs.js mirrors it (no bundler there);
- * tests/browser/docs-search.test.js enforces the parity.
+ * Search index generation and ranking. Documentation pages include their
+ * body text; demos are discoverable by name. The docs runtime mirrors this
+ * ranking without a bundler; tests/browser/docs-search.test.js checks parity.
  */
+import { readFileSync } from "node:fs";
+import { basename, join, sep } from "node:path";
+import { decodeEntities } from "./markdown.js";
 
 function stripHtml(html) {
   return html
@@ -31,6 +33,25 @@ export function buildSearchIndex(navigation, rendered) {
       anchors: result.toc.map((heading) => heading.id),
       aliases: result.aliases ?? [],
       text: stripHtml(result.html),
+    };
+  });
+}
+
+export function buildDemoSearchIndex(root) {
+  const demos = new Bun.Glob("demo/{templates,sites}/**/*.html");
+  return [...demos.scanSync(root)].sort().map((file) => {
+    const html = readFileSync(join(root, file), "utf8");
+    const slug = basename(file, ".html");
+    const title = decodeEntities(html.match(/<title>([^<]*)<\/title>/i)?.[1] ?? "")
+      .trim()
+      .replace(/^Actual CSS\s+[-—]\s+|\s+[-—]\s+Actual CSS$/g, "");
+    const path = file.replaceAll(sep, "/").split("/").map(encodeURIComponent).join("/");
+    return {
+      title: title || slug.replaceAll("-", " "),
+      aliases: [slug],
+      group: "Demo",
+      url: `../${path}`,
+      demo: true,
     };
   });
 }
@@ -120,14 +141,17 @@ export function scoreEntry(entry, query) {
   return score;
 }
 
-/* Top-8 matches, deterministic on ties so nav order cannot hide the best page. */
+/* Keep the top eight docs even when a query also matches demos. */
 export function searchEntries(index, query) {
   const q = query.trim();
   if (!q) return [];
-  return index
+  const ranked = index
     .map((entry) => ({ entry, score: scoreEntry(entry, q) }))
     .filter((item) => item.score > 0)
     .sort((a, b) => b.score - a.score || a.entry.title.localeCompare(b.entry.title))
-    .slice(0, 8)
     .map((item) => item.entry);
+  return [
+    ...ranked.filter((entry) => !entry.demo).slice(0, 8),
+    ...ranked.filter((entry) => entry.demo).slice(0, 3),
+  ];
 }

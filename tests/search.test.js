@@ -104,3 +104,20 @@ describe("scoreEntry", () => {
     );
   });
 });
+
+describe("searchEntries", () => {
+  it("appends up to three demos after the top eight docs", () => {
+    const docs = Array.from({ length: 9 }, (_, i) => ({
+      title: `Page ${i}`,
+      text: "Shared",
+    }));
+    const demos = ["Shared", "Shared B", "Shared C", "Shared D"].map((title) => ({
+      title,
+      demo: true,
+    }));
+    expect(searchEntries([...demos, ...docs], "shared")).toEqual([
+      ...docs.slice(0, 8),
+      ...demos.slice(0, 3),
+    ]);
+  });
+});

@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- Docs search links directly to matching demos by title or filename after the documentation results.
 - `--field-label-scale`: `.field-label` and `.field-group.flush` legend size as a fraction of `--control-font-size`; `1` restores labels at the field text size.
 - `actual-css/forms.json`: the `components.json` index for `src/css/forms` (classes, hooks, states, imports, docs URL), verified by `check:catalog`.
 
