@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en" data-theme="ocean">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tasks - Actual CSS</title>
+  <meta name="description" content="An inset task workspace with a divided master-detail surface and persistent mobile navigation.">
+  <link rel="stylesheet" href="../../dist/actual.full.css">
+  <link rel="stylesheet" href="../assets/actual-themes.min.css">
+  <script src="../scripts/theme-picker.js"></script>
+  <style>
+    .task-app {
+      --panel-padding: clamp(var(--space-30), 2vw, var(--space-50));
+      display: grid;
+      grid-template: auto minmax(0, 1fr) / 11rem minmax(0, 1fr);
+      block-size: 100vh;
+      block-size: 100dvh;
+      background: var(--surface-subtle);
+    }
+
+    .task-topbar {
+      grid-column: 1 / -1;
+      --cluster-justify: space-between;
+      padding: var(--space-20) var(--panel-padding);
+    }
+
+    .task-nav {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-10);
+      padding: var(--space-30);
+      overflow: auto;
+    }
+
+    .task-nav .nav-link[aria-current] {
+      --nav-current-bg: var(--surface-raised);
+    }
+
+    .task-nav svg,
+    .task-back svg {
+      flex: none;
+      inline-size: 1.25rem;
+      block-size: 1.25rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .task-workspace {
+      display: grid;
+      grid-template-columns: 10rem minmax(0, 1fr);
+      min-block-size: 0;
+      margin: 0 var(--space-30) var(--space-30) 0;
+      border: var(--border-width) solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--surface-raised);
+    }
+
+    .task-projects {
+      padding: var(--space-30);
+      border-inline-end: var(--border-width) solid var(--border);
+      overflow: auto;
+    }
+
+    .task-panes {
+      --gap: 0;
+      --sidebar-layout-size: clamp(19rem, 42%, 38rem);
+      --sidebar-content-min: 25rem;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      min-inline-size: 0;
+      min-block-size: 0;
+    }
+
+    .task-panel {
+      min-block-size: 0;
+      overflow: auto;
+      padding: var(--panel-padding);
+    }
+
+    .task-detail {
+      border-inline-start: var(--border-width) solid var(--border);
+    }
+
+    .task-master {
+      gap: var(--space-40);
+      padding-inline: 0;
+    }
+
+    .task-master > :is(hgroup, #task-empty),
+    .task-group h2 {
+      padding-inline: var(--panel-padding);
+    }
+
+    .task-group {
+      gap: var(--space-10);
+    }
+
+    .task-group h2 {
+      margin-block: 0;
+      font-size: var(--font-size-sm);
+    }
+
+    .task-rows {
+      --list-item-pad-block: var(--space-20);
+      --list-item-pad-inline: var(--panel-padding);
+      /* Keep the focus ring visible where a row meets the scrollport edge. */
+      --focus-outline-offset: calc(-1 * var(--focus-ring-width));
+    }
+
+    /* The selection fills the row, so its accent meets both dividers. */
+    .task-rows .list-item[aria-current="true"]::before {
+      inset-block: 0;
+    }
+
+    .task-editor {
+      --measure: 60ch;
+      gap: var(--space-40);
+    }
+
+    .task-properties {
+      --grid-min: 10rem;
+      --gap: var(--space-30);
+      padding: var(--space-30);
+      border-radius: var(--radius);
+      background: var(--surface-subtle);
+    }
+
+    .task-checks {
+      gap: var(--space-20);
+    }
+
+    .task-back {
+      display: none;
+    }
+
+    /* Keep one list and one editor in the DOM. A narrow view gives each the
+       entire pane, with the app navigation still in reach. */
+    @media (max-width: 68rem) {
+      .task-panes {
+        display: grid;
+      }
+
+      .task-detail {
+        border-inline-start: 0;
+        padding-block-start: 0;
+        padding-inline: 0;
+      }
+
+      .task-editor {
+        margin-block-start: var(--space-40);
+        margin-inline: var(--panel-padding);
+      }
+
+      .task-app:not([data-detail]) .task-detail,
+      .task-app[data-detail] .task-master {
+        display: none;
+      }
+
+      .task-back {
+        --focus-outline-offset: calc(-1 * var(--focus-ring-width));
+        display: flex;
+        justify-content: flex-start;
+        inline-size: 100%;
+        min-block-size: var(--control-size-lg);
+        padding-inline: var(--panel-padding);
+        border: 0;
+        border-block-end: var(--border-width) solid var(--border);
+        border-radius: 0;
+      }
+    }
+
+    @media (max-width: 44rem) {
+      .task-app {
+        grid-template: auto minmax(0, 1fr) auto / minmax(0, 1fr);
+      }
+
+      .task-workspace {
+        grid-template: auto minmax(0, 1fr) / minmax(0, 1fr);
+        margin: 0;
+        border-inline: 0;
+        border-radius: 0;
+      }
+
+      .task-projects {
+        padding: var(--space-10) var(--panel-padding);
+        border-inline-end: 0;
+        border-block-end: var(--border-width) solid var(--border);
+      }
+
+      .task-projects .nav-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-10);
+      }
+
+      .task-projects li {
+        flex: 1;
+      }
+
+      .task-projects .nav-link {
+        justify-content: center;
+      }
+
+      .task-app[data-detail] .task-projects {
+        display: none;
+      }
+
+      .task-app[data-detail] .task-panes {
+        grid-row: 2;
+      }
+
+      .task-nav {
+        grid-row: 3;
+        flex-direction: row;
+        padding: var(--space-10) max(var(--space-10), env(safe-area-inset-right))
+          max(var(--space-10), env(safe-area-inset-bottom)) max(var(--space-10), env(safe-area-inset-left));
+      }
+
+      .task-nav .nav-link {
+        flex: 1;
+        flex-direction: column;
+        justify-content: center;
+        gap: var(--space-10);
+        min-block-size: var(--control-size-lg);
+        padding-block: var(--space-10);
+        font-size: var(--font-size-sm);
+      }
+
+      .task-nav svg {
+        inline-size: 1.5rem;
+        block-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="task-app">
+    <header class="cluster task-topbar">
+      <span class="navbar-brand"><span class="avatar primary sm" aria-hidden="true">F</span> Fieldwork</span>
+      <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
+    </header>
+
+    <nav class="scroller task-nav" aria-label="Task views">
+      <button class="nav-link" type="button" data-view="all" aria-current="page">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m3 6 1.5 1.5L7 5m-4 7 1.5 1.5L7 11m-4 7 1.5 1.5L7 17M11 6h10m-10 6h10m-10 6h10"/>
+        </svg>
+        <span>All tasks</span>
+      </button>
+      <button class="nav-link" type="button" data-view="today">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="3" y="5" width="18" height="16" rx="2"/>
+          <path d="M7 3v4m10-4v4M3 10h18m-10 5h2v2h-2z"/>
+        </svg>
+        <span>Today</span>
+      </button>
+      <button class="nav-link" type="button" data-view="done">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="m8 12 2.5 2.5 5-5"/>
+        </svg>
+        <span>Completed</span>
+      </button>
+    </nav>
+
+    <main class="task-workspace" aria-label="Task workspace">
+      <nav class="scroller task-projects" aria-label="Project lists">
+        <ul class="nav-list">
+          <li><button class="nav-link" type="button" data-project="all" aria-current="true">All lists</button></li>
+          <li><button class="nav-link" type="button" data-project="Studio">Studio</button></li>
+          <li><button class="nav-link" type="button" data-project="Operations">Operations</button></li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-layout reverse task-panes">
+        <section class="scroller stack task-panel task-master" aria-labelledby="task-heading">
+          <hgroup>
+            <h1 id="task-heading" tabindex="-1">All tasks</h1>
+            <p id="task-summary" class="muted" aria-live="polite"></p>
+          </hgroup>
+          <section class="stack task-group" data-group="today" aria-labelledby="today-heading">
+            <h2 id="today-heading">Today</h2>
+            <ul class="list task-rows"></ul>
+          </section>
+          <section class="stack task-group" data-group="planned" aria-labelledby="planned-heading">
+            <h2 id="planned-heading">Upcoming</h2>
+            <ul class="list task-rows"></ul>
+          </section>
+          <section class="stack task-group" data-group="done" aria-labelledby="done-heading">
+            <h2 id="done-heading">Completed</h2>
+            <ul class="list task-rows"></ul>
+          </section>
+          <p id="task-empty" class="muted" hidden>No tasks in this view.</p>
+        </section>
+
+        <article class="scroller task-panel task-detail" id="task-detail" aria-labelledby="task-title">
+          <button class="btn ghost sm task-back" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="m11 5-7 7 7 7M4 12h16"/>
+            </svg>
+            Back to tasks
+          </button>
+          <div class="measure stack task-editor">
+            <hgroup>
+              <p class="overline" id="task-project"></p>
+              <h2 id="task-title" tabindex="-1"></h2>
+            </hgroup>
+            <div class="grid task-properties">
+              <label class="field">
+                <span class="field-label">Status</span>
+                <select class="select" id="task-status">
+                  <option value="today">Today</option>
+                  <option value="planned">Upcoming</option>
+                  <option value="done">Completed</option>
+                </select>
+              </label>
+              <label class="field">
+                <span class="field-label">List</span>
+                <select class="select" id="task-list">
+                  <option>Studio</option>
+                  <option>Operations</option>
+                </select>
+              </label>
+            </div>
+            <fieldset class="field-group flush" id="task-checklist">
+              <legend>Checklist <span class="muted" id="task-progress"></span></legend>
+              <div class="stack task-checks" id="task-checks"></div>
+            </fieldset>
+            <label class="field">
+              <span class="field-label">Notes</span>
+              <textarea class="textarea" id="task-notes" rows="4"></textarea>
+            </label>
+          </div>
+        </article>
+      </div>
+    </main>
+  </div>
+
+  <template id="task-row">
+    <li><a class="list-item" href="#task-detail">
+      <span class="list-item-content">
+        <span class="list-item-title"></span>
+        <span class="list-item-text"></span>
+      </span>
+      <span class="list-item-trailing badge soft" hidden>Priority</span>
+    </a></li>
+  </template>
+
+  <script type="module">
+    const tasks = [
+      {
+        title: "Review the exhibition floor plan",
+        project: "Studio",
+        status: "today",
+        priority: true,
+        notes: "Check the route from the entrance to the workshop table. Leave room by the east wall for visitors to pause without blocking the aisle.",
+        checks: [
+          { label: "Compare with the venue measurements", done: true },
+          { label: "Mark the accessible route", done: false },
+          { label: "Share the revised plan with the team", done: false },
+        ],
+      },
+      { title: "Confirm the print delivery window", project: "Operations", status: "today" },
+      { title: "Proof the gallery labels and check the credits against the loan list", project: "Studio", status: "today" },
+      { title: "Set up the volunteer briefing", project: "Operations", status: "planned" },
+      { title: "Export the entrance signage", project: "Studio", status: "planned" },
+      { title: "Send the updated venue access details", project: "Operations", status: "done" },
+    ];
+
+    const app = document.querySelector(".task-app");
+    const groups = [...app.querySelectorAll("[data-group]")];
+    const filters = [...app.querySelectorAll("[data-view], [data-project]")];
+    const rowTemplate = document.getElementById("task-row");
+    const heading = document.getElementById("task-heading");
+    const detail = document.getElementById("task-detail");
+    const title = document.getElementById("task-title");
+    const status = document.getElementById("task-status");
+    const list = document.getElementById("task-list");
+    const notes = document.getElementById("task-notes");
+    const checklist = document.getElementById("task-checklist");
+    const checks = document.getElementById("task-checks");
+    const narrow = matchMedia("(max-width: 68rem)");
+    let view = "all";
+    let project = "all";
+    let selected = tasks[0];
+
+    const visibleTasks = () => tasks.filter((task) =>
+      (view === "all" || view === task.status) && (project === "all" || project === task.project));
+
+    function renderList() {
+      const visible = visibleTasks();
+      const done = visible.filter((task) => task.status === "done").length;
+      document.getElementById("task-summary").textContent = `${visible.length - done} open · ${done} completed`;
+      document.getElementById("task-empty").hidden = visible.length > 0;
+
+      for (const group of groups) {
+        const rows = visible.filter((task) => task.status === group.dataset.group);
+        group.hidden = rows.length === 0;
+        group.querySelector(".list").replaceChildren(...rows.map((task) => {
+          const row = rowTemplate.content.firstElementChild.cloneNode(true);
+          const link = row.querySelector("a");
+          if (task === selected) link.setAttribute("aria-current", "true");
+          row.querySelector(".list-item-title").textContent = task.title;
+          row.querySelector(".list-item-text").textContent = task.project;
+          row.querySelector(".badge").hidden = !task.priority;
+          link.addEventListener("click", (event) => {
+            event.preventDefault();
+            app.querySelector("a[aria-current]")?.removeAttribute("aria-current");
+            link.setAttribute("aria-current", "true");
+            selected = task;
+            app.setAttribute("data-detail", "");
+            renderDetail();
+            detail.scrollTop = 0;
+            if (narrow.matches) title.focus({ preventScroll: true });
+          });
+          return row;
+        }));
+      }
+    }
+
+    function renderDetail() {
+      detail.hidden = !selected;
+      if (!selected) return;
+      title.textContent = selected.title;
+      document.getElementById("task-project").textContent = selected.project;
+      status.value = selected.status;
+      list.value = selected.project;
+      notes.value = selected.notes ?? "";
+      const items = selected.checks ?? [];
+      checklist.hidden = items.length === 0;
+
+      function updateProgress() {
+        document.getElementById("task-progress").textContent = `${items.filter((item) => item.done).length}/${items.length}`;
+      }
+
+      checks.replaceChildren(...items.map((item) => {
+        const label = document.createElement("label");
+        label.className = "choice";
+        const input = document.createElement("input");
+        input.className = "check";
+        input.type = "checkbox";
+        input.checked = item.done;
+        input.addEventListener("change", () => {
+          item.done = input.checked;
+          updateProgress();
+        });
+        label.append(input, item.label);
+        return label;
+      }));
+      updateProgress();
+    }
+
+    for (const filter of filters) {
+      filter.addEventListener("click", () => {
+        const key = filter.hasAttribute("data-view") ? "view" : "project";
+        app.querySelector(`[data-${key}][aria-current]`).removeAttribute("aria-current");
+        filter.setAttribute("aria-current", key === "view" ? "page" : "true");
+        view = filter.dataset.view ?? view;
+        project = filter.dataset.project ?? project;
+        const visible = visibleTasks();
+        if (!visible.includes(selected)) selected = visible[0];
+        app.removeAttribute("data-detail");
+        if (key === "view") heading.textContent = filter.lastElementChild.textContent;
+        renderList();
+        renderDetail();
+      });
+    }
+
+    app.querySelector(".task-back").addEventListener("click", () => {
+      app.removeAttribute("data-detail");
+      (app.querySelector("a[aria-current]") ?? heading).focus();
+    });
+
+    status.addEventListener("change", () => {
+      selected.status = status.value;
+      renderList();
+    });
+    list.addEventListener("change", () => {
+      selected.project = list.value;
+      document.getElementById("task-project").textContent = selected.project;
+      renderList();
+    });
+    notes.addEventListener("input", () => { selected.notes = notes.value; });
+
+    renderList();
+    renderDetail();
+  </script>
+</body>
+
+</html>

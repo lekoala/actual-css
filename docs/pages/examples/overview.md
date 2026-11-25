@@ -29,6 +29,7 @@ Whole pages, composed the way a real product would.
 - [Order management](../../demo/templates/order-management.html) - one state at three levels (a badge in a selectable list, a message in context, a notification with its own action) composed on the `admin-neutral` business-interface theme
 - [App](../../demo/templates/app.html) - application shell with sidebar
 - [Workspaces](../../demo/templates/workspaces.html) - sectioned sidebar, master/detail list with native current state, and workspace cards
+- [Tasks](../../demo/templates/tasks.html) - inset workspace with one divided surface, a `.measure` editor, and a single-pane task flow on mobile. Edits apply immediately and reset on reload.
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type
 - [Blog](../../demo/templates/blog.html) - article page with prose
 - [Changelog](../../demo/templates/changelog.html) - release notes on a `.timeline`: version and date beside the rail on wide containers, and a light on the rail that runs from the first release to the last as the page scrolls
