@@ -65,9 +65,9 @@
     <button class="segment" type="button" role="tab" aria-selected="false" tabindex="-1">Notifications</button>
   </div>
 
-  <!-- No edge by default; a theme sets it once on its root and it inherits. -->
-  <div style="--segmented-selected-border: rgb(255 0 0)">
-    <div class="segmented" role="tablist" aria-label="Edged">
+  <!-- Theme-level foreground and edge mixed with a track-level fill. -->
+  <div style="--segmented-selected-border: rgb(255 0 0); --segmented-selected-fg: white">
+    <div class="segmented" id="custom-track" role="tablist" aria-label="Custom selection" style="--segmented-selected-bg: #173c4a">
       <button class="segment" type="button" role="tab" aria-selected="true" id="edged-selected">On</button>
       <button class="segment" type="button" role="tab" aria-selected="false" tabindex="-1">Off</button>
     </div>

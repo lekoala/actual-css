@@ -229,10 +229,34 @@ it("keyboard focus draws an inset ring and arrows move the selection", async () 
   );
 });
 
+it("the selected foreground inherits and follows selection and focus", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    await view.evaluate('document.body.style.setProperty("--segmented-selected-fg", "rgb(1 2 3)")');
+    expect(await tabUntil(view, `document.activeElement?.id === "week-input"`)).toBe(true);
+    const selected = await view.evaluate(paint("week"));
+    const idle = await view.evaluate(paint("day"));
+    expect(selected.color).toBe("rgb(1, 2, 3)");
+    expect(selected.outlineColor).toBe(selected.color);
+    expect(idle.color).not.toBe(selected.color);
+    expect((await view.evaluate(paint("t1"))).color).toBe(selected.color);
+    expect(
+      await view.evaluate('getComputedStyle(document.querySelector("#nav [aria-current]")).color'),
+    ).toBe(selected.color);
+    expect((await view.evaluate(paint("edged-selected"))).color).toBe("rgb(255, 255, 255)");
+    await pressKey(view, "ArrowRight", ARROW_RIGHT);
+    await waitForBrowser(view, `document.querySelector("#quarter input").checked`);
+    expect((await view.evaluate(paint("quarter"))).outlineColor).toBe(selected.color);
+    expect((await view.evaluate(paint("week"))).color).toBe(idle.color);
+  });
+});
+
 it("forced colors mark selection with a fill and keep focus visible on it", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
+      await view.evaluate(
+        'document.body.style.setProperty("--segmented-selected-fg", "rgb(1 2 3)")',
+      );
       expect(await tabUntil(view, `document.activeElement?.id === "week-input"`)).toBe(true);
       const selected = await view.evaluate(paint("week"));
       const idle = await view.evaluate(paint("day"));
@@ -241,6 +265,7 @@ it("forced colors mark selection with a fill and keep focus visible on it", asyn
       // highlight's text color, so it never matches the fill it sits on.
       expect(selected.outlineStyle).toBe("solid");
       expect(selected.outlineColor).toBe(selected.color);
+      expect(selected.color).not.toBe("rgb(1, 2, 3)");
       expect(selected.outlineColor).not.toBe(selected.bg);
       // The UA's Canvas backplate behind the label is invisible to computed
       // style, yet it hid the text on the highlight: only opting out stops it.

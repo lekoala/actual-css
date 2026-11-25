@@ -67,6 +67,24 @@
   text-overflow: ellipsis;
 }
 
+.menu-item-text:where(:has(> .menu-item-desc)),
+.menu-item-desc {
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.menu-item-desc {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.875em;
+}
+
+/* Keep the leading icon aligned with the label when the description wraps. */
+.menu-item:where(:has(> .menu-item-text > .menu-item-desc)) {
+  align-items: flex-start;
+  padding-block: var(--space-10);
+}
+
 .menu-item-end {
   display: inline-flex;
   align-items: center;

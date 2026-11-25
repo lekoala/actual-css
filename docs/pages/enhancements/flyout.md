@@ -218,7 +218,8 @@ relies on both.
 | `.menu`           | Component   | Action-list primitive.                         |
 | `.menu-item`      | Component   | One action row; joins roving focus.            |
 | `.menu-item-icon` | Slot        | Fixed leading column for an icon.              |
-| `.menu-item-text` | Slot        | Flexible label column; truncates.              |
+| `.menu-item-text` | Slot        | Flexible label column for plain or rich text.  |
+| `.menu-item-desc` | Slot        | Wrapping secondary line inside the label.      |
 | `.menu-item-end`  | Slot        | Trailing shortcut, badge or status.            |
 | `.menu-label`     | Variant     | Muted, non-interactive group heading.          |
 | `.menu-separator` | Variant     | Divider row between groups.                    |
@@ -307,13 +308,17 @@ records which patterns Biome rejects, and which of its findings were right.
 Wrap rich item content in the three optional slots when a menu needs aligned
 icons or trailing metadata. Keep decorative icons hidden from assistive
 technology. Plain text directly inside `.menu-item` remains valid for simple
-actions.
+actions. Put a description inside `.menu-item-text` with `.menu-item-desc`. The
+label and description can wrap together, with the icon aligned to the start
+of the row.
 
 ```html
 <li>
   <button class="menu-item" type="button" role="menuitem">
     <span class="menu-item-icon" aria-hidden="true">…</span>
-    <span class="menu-item-text">Duplicate</span>
+    <span class="menu-item-text">
+      Duplicate <span class="menu-item-desc">Create a copy in this workspace</span>
+    </span>
     <span class="menu-item-end"><kbd>⌘D</kbd></span>
   </button>
 </li>

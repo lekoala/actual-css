@@ -41,6 +41,35 @@ const withFixture = (run) =>
   );
 
 it(
+  "a menu description wraps while the icon stays at the start of the label",
+  async () => {
+    await withFixture(async (view) => {
+      const layout = await view.evaluate(`(() => {
+        const text = document.querySelector("#rich-item .menu-item-text");
+        const description = text.querySelector(".menu-item-desc");
+        const label = document.createRange();
+        label.selectNode(text.firstChild);
+        const copy = document.createRange();
+        copy.selectNodeContents(description);
+        const icon = document.querySelector("#rich-item .menu-item-icon");
+        return {
+          labelBottom: label.getBoundingClientRect().bottom,
+          copyTop: description.getBoundingClientRect().top,
+          iconOffset: icon.getBoundingClientRect().top - text.getBoundingClientRect().top,
+          copyLines: copy.getClientRects().length,
+          plainWrap: getComputedStyle(document.querySelector("#plain-item .menu-item-text")).whiteSpace,
+        };
+      })()`);
+      expect(layout.copyTop).toBeGreaterThanOrEqual(layout.labelBottom);
+      expect(layout.copyLines).toBeGreaterThan(1);
+      expect(layout.iconOffset).toBeCloseTo(0);
+      expect(layout.plainWrap).toBe("nowrap");
+    });
+  },
+  TIMEOUT,
+);
+
+it(
   "help panel: Tab and Shift+Tab close it at their destination; its trigger keeps it open",
   async () => {
     await withFixture(async (view) => {

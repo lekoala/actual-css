@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 ### Added
+- `--segmented-selected-fg` sets the text and inset focus ring color for a custom selected fill.
+- `.menu-item-desc` adds a wrapping secondary line to `.menu-item-text` and keeps the icon aligned to the label.
 - Docs search links directly to matching demos by title or filename after the documentation results.
 - `--field-label-scale`: `.field-label` and `.field-group.flush` legend size as a fraction of `--control-font-size`; `1` restores labels at the field text size.
 - `actual-css/forms.json`: the `components.json` index for `src/css/forms` (classes, hooks, states, imports, docs URL), verified by `check:catalog`.

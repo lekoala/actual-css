@@ -110,12 +110,13 @@ which both stacks it and gives the tabs runtime Up and Down.
 - `--segmented-pad` — inset between the track and its segments, also the gap
   between segments; the segment radius is the track radius minus it.
 - `--segmented-radius` — track corner radius.
-- `--segmented-fg` — label ink of the unselected segments; the selected one
-  takes `--text`.
+- `--segmented-fg` — label ink of the unselected segments.
 - `--segmented-selected-bg` — fill of the selected segment: `--surface-raised`
   in a light scheme, lifted above the track in a dark one. Its shadow follows
   `--shadow`; a flat theme sets `--shadow-color: transparent`, not
   `--shadow: none`, which would also drop the edge below.
+- `--segmented-selected-fg` — label and inset focus ring color for a custom
+  selected fill. Set it on the track or inherit it from a theme.
 - `--segmented-selected-border` — hairline around the selected segment, none
   by default. Set it once on a theme root, for example a flat light theme,
   where fill and ink alone barely set the selected segment apart from the

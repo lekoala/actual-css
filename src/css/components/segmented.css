@@ -28,11 +28,13 @@
  * --segmented-radius
  * --segmented-fg
  * --segmented-selected-bg
+ * --segmented-selected-fg
  * --segmented-selected-border (fallback-only: no edge by default; a theme sets
  *   it once on its root, e.g. a flat theme whose selected pill has no shadow)
  *
  * Internal:
  * --segment-min-size
+ * --segment-focus
  */
 .segmented {
   --segmented-bg: var(--surface-subtle);
@@ -158,28 +160,32 @@
    list item. A theme that sets --shadow: none drops the whole declaration,
    ring included; flatten shadows with --shadow-color: transparent instead. */
 .segment:is([aria-selected="true"], [aria-current="page"], [aria-current="true"]) {
+  --segment-focus: var(--segmented-selected-fg, var(--focus));
+
   background: var(--segmented-selected-bg);
-  color: var(--text);
+  color: var(--segmented-selected-fg, var(--text));
   box-shadow:
     0 0 0 var(--border-width) var(--segmented-selected-border, transparent),
     var(--shadow);
 }
 
 .segment:has(> input:checked) {
+  --segment-focus: var(--segmented-selected-fg, var(--focus));
+
   background: var(--segmented-selected-bg);
-  color: var(--text);
+  color: var(--segmented-selected-fg, var(--text));
   box-shadow:
     0 0 0 var(--border-width) var(--segmented-selected-border, transparent),
     var(--shadow);
 }
 
 .segment:focus-visible {
-  outline: var(--focus-ring-width) solid var(--focus);
+  outline: var(--focus-ring-width) solid var(--segment-focus, var(--focus));
   outline-offset: calc(var(--focus-ring-width) * -1);
 }
 
 .segment:has(> input:focus-visible) {
-  outline: var(--focus-ring-width) solid var(--focus);
+  outline: var(--focus-ring-width) solid var(--segment-focus, var(--focus));
   outline-offset: calc(var(--focus-ring-width) * -1);
 }
 
@@ -201,7 +207,7 @@
    is dropped here and the focus line takes the highlight's text color. */
 @media (forced-colors: active) {
   .segment:is([aria-selected="true"], [aria-current="page"], [aria-current="true"]) {
-    --focus: HighlightText;
+    --segment-focus: HighlightText;
 
     forced-color-adjust: none;
     background: Highlight;
@@ -210,7 +216,7 @@
   }
 
   .segment:has(> input:checked) {
-    --focus: HighlightText;
+    --segment-focus: HighlightText;
 
     forced-color-adjust: none;
     background: Highlight;

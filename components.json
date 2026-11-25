@@ -694,10 +694,12 @@
       "--segmented-radius",
       "--segmented-fg",
       "--segmented-selected-bg",
+      "--segmented-selected-fg",
       "--segmented-selected-border"
     ],
     "internalHooks": [
-      "--segment-min-size"
+      "--segment-min-size",
+      "--segment-focus"
     ],
     "states": [
       "aria-current",
