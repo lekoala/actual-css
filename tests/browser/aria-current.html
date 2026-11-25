@@ -34,5 +34,23 @@
     <a class="list-item" href="#e" data-reference>None</a>
   </div>
 
+  <section aria-label="Current row indicator" style="padding: 1rem">
+    <div class="list" style="--list-item-pad-block: 1rem; --list-item-pad-inline: 1rem">
+      <a class="list-item" id="padded-current" href="#a" aria-current="true">Default indicator inset</a>
+      <a class="list-item" id="flush-current" href="#b" aria-current="page" style="--list-current-inset-block: 0">
+        <span class="list-item-content">
+          <span class="list-item-title">Review the plans</span>
+          <span class="list-item-text">Include the changes agreed with the venue team.</span>
+        </span>
+      </a>
+    </div>
+
+    <ul class="list grouped" id="rounded-current" dir="rtl" style="--list-radius: 1.5rem; --list-current-inset-block: 0; margin-block-start: 1rem">
+      <li><a class="list-item" id="first-current" href="#a" aria-current="page" lang="ar">المهام الجديدة</a></li>
+      <li><a class="list-item" href="#b" lang="ar">مهام قيد التنفيذ</a></li>
+      <li><a class="list-item" id="last-current" href="#c" aria-current="page" lang="ar">المهام المكتملة</a></li>
+    </ul>
+  </section>
+
 </body>
 </html>

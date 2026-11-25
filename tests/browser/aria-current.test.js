@@ -6,7 +6,12 @@
  * binding — renders like an absent attribute.
  */
 import { expect, test } from "bun:test";
-import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
+import {
+  browserAvailable,
+  fixtureUrl,
+  tabUntil,
+  withBrowserPage,
+} from "../../scripts/utils/browser.js";
 
 const FIXTURE = "tests/browser/aria-current.html";
 const TIMEOUT = 60_000;
@@ -47,4 +52,67 @@ it("only the supported values paint the current state", async () => {
     },
     { width: 800, height: 600, artifactName: "aria-current" },
   );
+});
+
+it("the current row indicator can span the row independently of padding", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const rows = await view.evaluate(`(() => {
+      const read = (id) => {
+        const row = document.getElementById(id);
+        const { paddingBlockStart } = getComputedStyle(row);
+        const indicator = getComputedStyle(row, "::before");
+        return {
+          padding: paddingBlockStart,
+          start: indicator.insetBlockStart,
+          end: indicator.insetBlockEnd,
+          height: row.getBoundingClientRect().height,
+        };
+      };
+      return { padded: read("padded-current"), flush: read("flush-current") };
+    })()`);
+
+    expect(parseFloat(rows.padded.padding)).toBeGreaterThan(0);
+    expect(rows.padded.start).toBe(rows.padded.padding);
+    expect(rows.padded.end).toBe(rows.padded.padding);
+    expect(rows.flush.padding).toBe(rows.padded.padding);
+    expect(rows.flush.start).toBe("0px");
+    expect(rows.flush.end).toBe("0px");
+    expect(rows.flush.height).toBeGreaterThan(rows.padded.height);
+
+    expect(await tabUntil(view, "document.activeElement.id === 'flush-current'", { max: 20 })).toBe(
+      true,
+    );
+    expect(
+      await view.evaluate(`(() => {
+      const focused = document.activeElement;
+      return focused.matches(":focus-visible") && getComputedStyle(focused).outlineStyle === "solid"
+        && getComputedStyle(focused, "::before").borderInlineStartStyle === "solid";
+    })()`),
+    ).toBe(true);
+  });
+});
+
+it("the full-height RTL indicator follows the grouped list's end corners", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const marks = await view.evaluate(`['first-current', 'last-current'].map((id, index) => {
+      const row = document.getElementById(id);
+      const indicator = getComputedStyle(row, "::before");
+      const corner = index === 0 ? "borderTopRightRadius" : "borderBottomRightRadius";
+      return {
+        corner: indicator[corner],
+        rowCorner: getComputedStyle(row)[corner],
+        clip: indicator.clipPath,
+        leadingBorder: indicator.borderRightStyle,
+        trailingBorder: indicator.borderLeftStyle,
+      };
+    })`);
+
+    for (const mark of marks) {
+      expect(parseFloat(mark.rowCorner)).toBeGreaterThan(0);
+      expect(mark.corner).toBe(mark.rowCorner);
+      expect(mark.clip).toBe("inset(0px)");
+      expect(mark.leadingBorder).toBe("solid");
+      expect(mark.trailingBorder).toBe("none");
+    }
+  });
 });

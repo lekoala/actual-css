@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- `--list-current-inset-block` adjusts the current row's indicator independently of `.list` row padding.
 - `--segmented-selected-fg` sets the text and inset focus ring color for a custom selected fill.
 - `.menu-item-desc` adds a wrapping secondary line to `.menu-item-text` and keeps the icon aligned to the label.
 - Docs search links directly to matching demos by title or filename after the documentation results.
@@ -18,6 +19,7 @@
 - Demos: `data-grid-component` 3.10.3 in `cyberdeck`, `data-grid` and `focus-bench`; grid checkboxes and radios take `.check` / `.radio` through the `check` and `radio` control roles.
 
 ### Fixed
+- `.list.grouped` rounds the first and last row links inside `<li>` to match the shell.
 - `cyberdeck`: the lit corner tick of `.btn[aria-pressed="true"]` and checked chips stays visible in forced colors.
 
 ## [0.20.2] - 2026-11-23

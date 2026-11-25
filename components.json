@@ -477,6 +477,7 @@
       "--list-item-pad-block",
       "--list-item-pad-inline",
       "--list-item-gap",
+      "--list-current-inset-block",
       "--list-divider",
       "--list-radius"
     ],
@@ -484,6 +485,9 @@
       "aria-current"
     ],
     "pseudoElements": {
+      ".list": [
+        "::before"
+      ],
       ".list-item": [
         "::before"
       ]
@@ -497,6 +501,7 @@
     "classes": [
       "menu",
       "menu-item",
+      "menu-item-desc",
       "menu-item-end",
       "menu-item-icon",
       "menu-item-text",

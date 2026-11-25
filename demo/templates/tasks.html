@@ -107,13 +107,9 @@
     .task-rows {
       --list-item-pad-block: var(--space-20);
       --list-item-pad-inline: var(--panel-padding);
+      --list-current-inset-block: 0;
       /* Keep the focus ring visible where a row meets the scrollport edge. */
       --focus-outline-offset: calc(-1 * var(--focus-ring-width));
-    }
-
-    /* The selection fills the row, so its accent meets both dividers. */
-    .task-rows .list-item[aria-current="true"]::before {
-      inset-block: 0;
     }
 
     .task-editor {

@@ -189,6 +189,9 @@ sets that gutter already.
 - `--list-item-pad-block` and `--list-item-pad-inline` control row padding.
   `.grouped` raises the inline padding to a standalone surface's gutter; set
   the hook on the list to choose another.
+- `--list-current-inset-block` controls the inset at both ends of the current
+  row's indicator. It follows `--list-item-pad-block` by default. Set it to
+  `0` for a full-height indicator that follows the corners of a grouped row.
 - `--list-item-gap` controls spacing between the regions a row actually has.
 - `--list-divider` controls the inter-row dividers, and the leading divider on
   a bare list. `.grouped` replaces that leading divider with its shell border.
