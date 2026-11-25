@@ -71,6 +71,10 @@
       "--app-nav-current-bg",
       "--app-nav-current-fg"
     ],
+    "internalHooks": [
+      "--app-nav-fill",
+      "--app-nav-ink"
+    ],
     "states": [
       "aria-current",
       "aria-hidden",

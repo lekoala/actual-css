@@ -14,8 +14,12 @@
  * --app-nav-size
  * --app-nav-gap
  * --app-nav-icon-size
- * --app-nav-current-bg (fallback-only: current tile fill)
- * --app-nav-current-fg (fallback-only: current tile ink)
+ * --app-nav-current-bg (fallback-only: current fill, icon pill or side row)
+ * --app-nav-current-fg (fallback-only: ink on that fill)
+ *
+ * Internal:
+ * --app-nav-fill (state fill, read by the icon pill or the whole tile)
+ * --app-nav-ink (state ink on that fill)
  */
 :where(.app-nav) {
   --intent: initial;
@@ -84,17 +88,35 @@
   opacity: var(--disabled-opacity);
 }
 
+/* The fill hugs what it marks. Under a caption, a tile is mostly empty space,
+   so its state paints a pill around the icon, not the tile: a full-tile fill
+   read as a segmented control. States only set --app-nav-fill and
+   --app-nav-ink; the presentation decides what reads them (the labelled side
+   navigation paints the whole row, app-layout.css). Every icon carries the
+   pill's geometry, so becoming current never moves it. */
 .app-nav > :is(a, button) > :where(svg, img, [aria-hidden="true"]) {
+  box-sizing: content-box;
   inline-size: var(--app-nav-icon-size);
   block-size: var(--app-nav-icon-size);
+  padding: var(--space-10) var(--space-40);
+  border-radius: var(--radius-full);
+  background: var(--app-nav-fill, transparent);
+  color: var(--app-nav-ink, currentColor);
   font-size: var(--app-nav-icon-size);
   line-height: 1;
+}
+
+/* A tile without an icon has nothing else to carry its state. Without :has()
+   it shows the label color alone, and forced colors keep their frame. */
+.app-nav > :is(a, button):not(:has(> :where(svg, img, [aria-hidden="true"]))) {
+  background: var(--app-nav-fill, transparent);
 }
 
 /* :where() keeps hover below the current tile, as when tiles were links only:
    :is(button:enabled) would raise hover over a[aria-current] and repaint it. */
 .app-nav > :where(a, button:enabled):hover {
-  background: var(--surface-subtle);
+  --app-nav-fill: var(--surface-subtle);
+
   color: var(--text);
 }
 
@@ -102,27 +124,35 @@
    reads on any --ui-* bar; the baseline keeps a legible light chip. */
 @supports (color: color-mix(in oklch, red, white)) {
   .app-nav > :where(a, button:enabled):hover {
-    background: color-mix(in oklch, currentColor 10%, transparent);
+    --app-nav-fill: color-mix(in oklch, currentColor 10%, transparent);
+
     color: var(--ui-fg, var(--text));
   }
 }
 
-/* Current tile is already a full selected surface. Selection never changes
-   text metrics: the shared medium weight is kept. The forced-colors cue is a
-   transparent border on a ::before overlay, not on the tile: an element border
-   shrinks the content box, and the side layout starts its content at the inline
-   edge, so the icon and label shifted by --border-width when a tile became
-   current. The overlay costs no layout, yet forced colors still turn its
-   transparent border into a system-color frame once --state-selected flattens
-   to the bar's own Canvas. No forced-colors repaint: a Highlight fill put
-   HighlightText on Chromium's Canvas backplate, which hid the label. The
+/* Selection never changes text metrics: the shared medium weight is kept. The
+   label sits on the bar, not on the fill, so it takes the bar's full ink; the
+   selected ink goes to what the fill paints. The forced-colors cue is a
+   transparent border on a ::before overlay of the tile, not on the tile: an
+   element border shrinks the content box, and the side layout starts its
+   content at the inline edge, so the icon and label shifted by --border-width
+   when a tile became current. The overlay costs no layout, yet forced colors
+   still turn its transparent border into a system-color frame once the fill
+   flattens to the bar's own Canvas. No forced-colors repaint: a Highlight fill
+   put HighlightText on Chromium's Canvas backplate, which hid the label. The
    positioning context is on every link so it does not move when one becomes
    current or an application places its own decoration. A pale
-   --app-nav-current-bg is the only cue on the rail, where no label shows:
-   its contrast against the nav surface is the theme's to keep. */
+   --app-nav-current-bg must still stand out from the nav surface: its
+   contrast is the theme's to keep. */
 .app-nav > a[aria-current="page"] {
-  background: var(--app-nav-current-bg, var(--state-selected));
-  color: var(--app-nav-current-fg, var(--state-selected-fg));
+  --app-nav-fill: var(--app-nav-current-bg, var(--state-selected));
+  --app-nav-ink: var(--app-nav-current-fg, var(--state-selected-fg));
+
+  color: var(--ui-fg, var(--text));
+}
+
+.app-nav > a[aria-current="page"]:not(:has(> :where(svg, img, [aria-hidden="true"]))) {
+  color: var(--app-nav-ink);
 }
 
 .app-nav > a[aria-current="page"]::before {

@@ -78,14 +78,20 @@ then spans the navigation; see
 
 At most one of each per `.app-nav`. The bottom bar hides both: it has room for
 destinations only, so give their content a second home on a phone — identity in
-the topbar, the primary action in a [FAB](fab.md), the account in the drawer.
+the topbar, the primary action in a [FAB](fab.md), the account behind a button
+tile that opens a bottom-sheet [drawer](drawer.md) with the same items. The
+[Tasks template](../../demo/templates/tasks.html) shows that account tile; it
+hides the tile from the side breakpoint, where the footer takes over. Use an
+SVG or icon-font glyph in the tile: the icon slot sizes its font to
+`--app-nav-icon-size`, which an avatar's initials do not survive.
 
 ## Rail
 
-Set `data-nav="rail"` on `.app-layout` to show the side navigation as an icon
-rail. Tiles keep their icon; everything else in a tile, a counter included, is
-visually hidden and stays the tile's accessible name. The bottom bar ignores
-the attribute.
+Set `data-nav="rail"` on `.app-layout` to show the side navigation as a narrow
+rail. Each tile keeps its label as a small caption under the icon, as in the
+bottom bar, so the rail needs no tooltip. Two-word labels wrap onto a second
+line; keep labels to one or two short words. The bottom bar ignores the
+attribute.
 
 The application owns the preference: the toggle, its label, and persisting the
 choice. What the header and footer show on the rail, such as a compact brand
@@ -96,6 +102,8 @@ mark, is application CSS keyed to the same attribute. See
 
 - `--app-nav-size` controls the minimum bottom-bar size.
 - `--app-nav-gap` controls spacing between destinations.
-- `--app-nav-current-bg` and `--app-nav-current-fg` repaint the current tile,
-  for example a soft tint instead of the selected fill. On the rail the fill is
-  the only current cue, so keep it distinct from the navigation surface.
+- `--app-nav-current-bg` and `--app-nav-current-fg` repaint the current state,
+  for example a soft tint instead of the selected fill. The bottom bar and the
+  rail paint a pill around the icon and keep the label in the bar's ink;
+  labelled side navigation fills the whole row. The fill is the only current
+  cue, so keep it distinct from the navigation surface.

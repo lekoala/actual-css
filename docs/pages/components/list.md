@@ -183,6 +183,16 @@ non-zero `--list-item-pad-inline`: without that gutter, the current indicator
 touches the leading region and the trailing touches the row edge. `.grouped`
 sets that gutter already.
 
+### Completion beside a navigable row
+
+A task row both opens its record and completes it: two controls that must not
+nest. Keep the link as the row and overlay a `label` holding the checkbox on
+the link's leading gutter, positioned against the `li`. The link keeps the
+whole row's hover, current, focus and forced-colors states, so the selection
+and the completion stay independent. The
+[Tasks template](../../demo/templates/tasks.html) has the recipe (checkbox,
+done task, todo item, check off).
+
 ## Hooks
 
 - `--list-item-min-size` controls the row's minimum touch height.

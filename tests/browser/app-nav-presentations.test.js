@@ -47,6 +47,7 @@ const READ = `(() => {
     currentLabel: box("current-label"),
     link: box("link"),
     linkIcon: box("link-icon"),
+    linkLabel: box("link-label"),
     count: box("count"),
     more: box("more"),
     disabled: box("disabled"),
@@ -177,18 +178,24 @@ it("a short viewport scrolls the side navigation instead of overlapping it", asy
   );
 });
 
-it("the rail keeps icons centred and labels as accessible names only", async () => {
+// A visible caption names the tile for everyone and needs no tooltip; an
+// icon-only rail left that as an open question.
+it("the rail captions each centred icon", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
       await setRail(view);
       const g = await view.evaluate(READ);
+      const navSize = await view.evaluate(
+        'getComputedStyle(document.getElementById("nav")).fontSize',
+      );
+      const centre = (b) => b.x + b.w / 2;
       expect(g.nav.w).toBe(g.rail);
-      expect(Math.abs(g.linkIcon.x + g.linkIcon.w / 2 - (g.link.x + g.link.w / 2))).toBeLessThan(1);
-      // Visually hidden, not removed: a hidden or display: none label would
-      // drop out of the accessibility tree and leave the tile nameless.
-      expect(g.currentLabel.w).toBeLessThanOrEqual(1);
-      expect(g.currentLabel.display).not.toBe("none");
+      expect(Math.abs(centre(g.linkIcon) - centre(g.link))).toBeLessThan(1);
+      expect(Math.abs(centre(g.linkLabel) - centre(g.link))).toBeLessThan(1);
+      expect(g.linkLabel.w).toBeGreaterThan(1);
+      expect(g.linkLabel.y).toBeGreaterThanOrEqual(g.linkIcon.bottom);
+      expect(Number.parseFloat(g.linkLabel.size)).toBeLessThan(Number.parseFloat(navSize));
       // The name the accessibility tree computes, the counter included.
       await view.cdp("DOM.enable");
       await view.cdp("Accessibility.enable");
@@ -208,6 +215,58 @@ it("the rail keeps icons centred and labels as accessible names only", async () 
     },
     { ...WIDE, artifactName: "app-nav-presentations-rail" },
   );
+});
+
+// Under a caption a tile is mostly empty space: its state paints a pill around
+// the icon, and the label keeps the bar's ink, since --state-selected-fg is
+// made for the fill and would vanish on the bar. A labelled row is its own
+// target and fills whole.
+it("the bar and rail fill the icon pill, the labelled side nav the row", async () => {
+  const PAINT = `(() => {
+    const cs = (s) => getComputedStyle(document.querySelector(s));
+    return {
+      tile: cs("#current").backgroundColor,
+      pill: cs("#current > [aria-hidden]").backgroundColor,
+      label: cs("#current-label").color,
+      nav: cs("#nav").color,
+      hoverTile: cs("#more").backgroundColor,
+      hoverPill: cs("#more > [aria-hidden]").backgroundColor,
+    };
+  })()`;
+  const SET = `(() => {
+    const nav = document.getElementById("nav");
+    nav.style.setProperty("--app-nav-current-bg", "rgb(1, 2, 3)");
+    nav.style.setProperty("--app-nav-current-fg", "rgb(4, 5, 6)");
+  })()`;
+  const CLEAR = "rgba(0, 0, 0, 0)";
+  for (const [label, size, rail] of [
+    ["bar", NARROW, false],
+    ["rail", WIDE, true],
+    ["side", WIDE, false],
+  ]) {
+    await withBrowserPage(
+      fixtureUrl(FIXTURE),
+      async (view) => {
+        await view.evaluate(SET);
+        if (rail) await setRail(view);
+        await forceStates(view, { "#more": ["hover"] });
+        const p = await view.evaluate(PAINT);
+        if (label === "side") {
+          expect(p.tile, label).toBe("rgb(1, 2, 3)");
+          expect(p.pill, label).toBe(CLEAR);
+          expect(p.label, label).toBe("rgb(4, 5, 6)");
+          expect(p.hoverTile, label).not.toBe(CLEAR);
+        } else {
+          expect(p.tile, label).toBe(CLEAR);
+          expect(p.pill, label).toBe("rgb(1, 2, 3)");
+          expect(p.label, label).not.toBe("rgb(4, 5, 6)");
+          expect(p.hoverTile, label).toBe(CLEAR);
+          expect(p.hoverPill, label).not.toBe(CLEAR);
+        }
+      },
+      { ...size, artifactName: `app-nav-presentations-fill-${label}` },
+    );
+  }
 });
 
 it("current tint hooks repaint the current tile and hover never overrides it", async () => {

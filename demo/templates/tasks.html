@@ -154,7 +154,9 @@
         display: block;
       }
 
-      .task-app[data-shell="global"] .task-topbar select {
+      /* The side navigation's footer holds the account from here on. Outranks
+         the tile's own display (.app-nav > :is(a, button)). */
+      .app-nav > .task-account-tile {
         display: none;
       }
     }
@@ -186,6 +188,7 @@
       overflow: auto;
     }
 
+
     .task-panes {
       --gap: 0;
       --sidebar-layout-size: clamp(19rem, 42%, 38rem);
@@ -211,8 +214,7 @@
       padding-inline: 0;
     }
 
-    .task-master > :is(hgroup, #task-empty),
-    .task-group h2 {
+    .task-master > :is(hgroup, #task-empty) {
       padding-inline: var(--panel-padding);
     }
 
@@ -220,21 +222,103 @@
       margin-inline: var(--panel-padding);
     }
 
-    .task-group {
-      gap: var(--space-10);
-    }
-
     .task-group h2 {
       margin-block: 0;
       font-size: var(--font-size-sm);
+    }
+
+    /* A quiet count on the heading's line, not a pill weighing on the rows. */
+    .task-count {
+      margin-inline-start: var(--space-10);
+      color: var(--text-muted);
+      font-weight: var(--font-weight-normal);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* A leading chevron in place of the browser's triangle: the accordion's
+       glyph, without its panel chrome (muted text, list gutter) around rows. */
+    .task-group > summary {
+      display: flex;
+      align-items: center;
+      gap: var(--space-10);
+      margin-block-end: var(--space-30);
+      padding-inline: var(--panel-padding);
+      color: var(--text-muted);
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .task-group > summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .task-group > summary::before {
+      content: "";
+      flex: none;
+      inline-size: 1rem;
+      block-size: 1rem;
+      background-color: currentColor;
+      -webkit-mask: var(--icon-chevron) center / contain no-repeat;
+      mask: var(--icon-chevron) center / contain no-repeat;
+      transform: rotate(-90deg);
+      transition: transform var(--duration);
+    }
+
+    .task-group[open] > summary::before {
+      transform: none;
+    }
+
+    .task-group > summary:hover {
+      color: var(--text);
+    }
+
+    .task-group > summary h2 {
+      color: var(--text);
+    }
+
+    @media (forced-colors: active) {
+      .task-group > summary::before {
+        background-color: CanvasText;
+      }
     }
 
     .task-rows {
       --list-item-pad-block: var(--space-20);
       --list-item-pad-inline: var(--panel-padding);
       --list-current-inset-block: 0;
+      --task-check-column: 1.75rem;
       /* Keep the focus ring visible where a row meets the scrollport edge. */
       --focus-outline-offset: calc(-1 * var(--focus-ring-width));
+    }
+
+    /* Completion and selection are independent controls that must never nest.
+       The checkbox overlays the link's leading gutter instead of sharing a
+       grid with it, so the link keeps the whole row's hover, current, focus
+       and forced-colors states. The label is the full-height hit target. */
+    .task-row {
+      position: relative;
+    }
+
+    /* Outranks the list's own row padding (.list > li > .list-item). */
+    .task-rows > .task-row > .list-item {
+      padding-inline-start: calc(var(--list-item-pad-inline) + var(--task-check-column));
+    }
+
+    .task-check {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      inline-size: calc(var(--list-item-pad-inline) + var(--task-check-column));
+      padding-inline-start: var(--list-item-pad-inline);
+      cursor: pointer;
+    }
+
+    .task-row[data-done] .list-item-title {
+      color: var(--text-muted);
+      text-decoration: line-through;
     }
 
     .task-editor {
@@ -349,7 +433,6 @@
     <header class="topbar cluster task-topbar">
       <span class="navbar-brand"><span class="avatar primary sm" aria-hidden="true">F</span> Fieldwork</span>
       <input class="input task-search" type="search" id="task-search" aria-label="Search tasks" placeholder="Search tasks…">
-      <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
     </header>
 
     <main class="app-main task-workspace" aria-label="Task workspace">
@@ -371,18 +454,20 @@
             <input class="input" name="title" aria-label="New task" placeholder="Add a task…" autocomplete="off" required>
             <button class="btn outline" type="submit">Add</button>
           </form>
-          <section class="stack task-group" data-group="today" aria-labelledby="today-heading">
-            <h2 id="today-heading">Today</h2>
-            <ul class="list task-rows"></ul>
-          </section>
-          <section class="stack task-group" data-group="planned" aria-labelledby="planned-heading">
-            <h2 id="planned-heading">Upcoming</h2>
-            <ul class="list task-rows"></ul>
-          </section>
-          <section class="stack task-group" data-group="done" aria-labelledby="done-heading">
-            <h2 id="done-heading">Completed</h2>
-            <ul class="list task-rows"></ul>
-          </section>
+          <!-- Every group folds with a native disclosure, no script; completed
+               work starts folded away. -->
+          <details class="task-group" data-group="today" open>
+            <summary><h2 id="today-heading">Today <span class="task-count" data-count></span></h2></summary>
+            <ul class="list task-rows" aria-labelledby="today-heading"></ul>
+          </details>
+          <details class="task-group" data-group="planned" open>
+            <summary><h2 id="planned-heading">Upcoming <span class="task-count" data-count></span></h2></summary>
+            <ul class="list task-rows" aria-labelledby="planned-heading"></ul>
+          </details>
+          <details class="task-group" data-group="done">
+            <summary><h2 id="done-heading">Completed <span class="task-count" data-count></span></h2></summary>
+            <ul class="list task-rows" aria-labelledby="done-heading"></ul>
+          </details>
           <p id="task-empty" class="muted" hidden>No tasks in this view.</p>
         </section>
 
@@ -506,17 +591,64 @@
           <span class="task-nav-text">Collapse menu</span>
         </button>
       </footer>
+      <!-- The bottom bar hides the footer: on a phone the account opens from
+           its own tile, in a bottom sheet rendered from the same items. -->
+      <button class="task-account-tile" type="button" command="show-modal" commandfor="task-account-sheet"
+        aria-haspopup="dialog" aria-controls="task-account-sheet">
+        <svg class="task-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21a8 8 0 0 1 16 0"/>
+        </svg>
+        <span>Account</span>
+      </button>
     </nav>
   </div>
 
-  <template id="task-row">
-    <li><a class="list-item" href="#task-detail">
-      <span class="list-item-content">
-        <span class="list-item-title"></span>
-        <span class="list-item-text"></span>
+  <dialog class="drawer" id="task-account-sheet" data-side="bottom" aria-labelledby="task-account-sheet-title"
+    closedby="any" data-dialog-dismissible>
+    <header>
+      <span class="cluster">
+        <span class="avatar primary sm" aria-hidden="true">AL</span>
+        <strong id="task-account-sheet-title">Alex Lambert</strong>
       </span>
-      <span class="list-item-trailing badge soft" hidden>Priority</span>
-    </a></li>
+      <form method="dialog">
+        <button class="close" type="submit" aria-label="Close account"></button>
+      </form>
+    </header>
+    <menu class="menu" aria-label="Account">
+      <li>
+        <a class="menu-item" href="#profile">
+          <span class="menu-item-text">Profile<span class="menu-item-desc">Name, photo and email</span></span>
+        </a>
+      </li>
+      <li>
+        <a class="menu-item" href="#preferences">
+          <span class="menu-item-text">Preferences<span class="menu-item-desc">Reminders and week start</span></span>
+        </a>
+      </li>
+      <li class="menu-separator" aria-hidden="true"></li>
+      <li>
+        <label class="task-setting">
+          <span class="field-label">Theme</span>
+          <theme-picker><select class="select"></select></theme-picker>
+        </label>
+      </li>
+      <li class="menu-separator" aria-hidden="true"></li>
+      <li><button class="menu-item" type="button">Sign out</button></li>
+    </menu>
+  </dialog>
+
+  <template id="task-row">
+    <li class="task-row">
+      <label class="task-check"><input class="check" type="checkbox"></label>
+      <a class="list-item" href="#task-detail">
+        <span class="list-item-content">
+          <span class="list-item-title"></span>
+          <span class="list-item-text"></span>
+        </span>
+        <span class="list-item-trailing badge soft" hidden>Priority</span>
+      </a>
+    </li>
   </template>
 
   <script src="../../dist/actual.full.js"></script>
@@ -584,6 +716,7 @@
     let project = "all";
     let query = "";
     let selected = tasks[0];
+    const rowChecks = new Map();
 
     const visibleTasks = () => tasks.filter((task) =>
       (view === "all" || view === task.status) && (project === "all" || project === task.project) &&
@@ -594,13 +727,37 @@
       const done = visible.filter((task) => task.status === "done").length;
       document.getElementById("task-summary").textContent = `${visible.length - done} open · ${done} completed`;
       document.getElementById("task-empty").hidden = visible.length > 0;
+      rowChecks.clear();
 
       for (const group of groups) {
         const rows = visible.filter((task) => task.status === group.dataset.group);
         group.hidden = rows.length === 0;
+        group.querySelector("[data-count]").textContent = rows.length;
         group.querySelector(".list").replaceChildren(...rows.map((task) => {
           const row = rowTemplate.content.firstElementChild.cloneNode(true);
           const link = row.querySelector("a");
+          const check = row.querySelector("input");
+          row.toggleAttribute("data-done", task.status === "done");
+          check.checked = task.status === "done";
+          check.setAttribute("aria-label", `Complete: ${task.title}`);
+          // Completing never touches the selection: the current task stays
+          // current, wherever its group moves it.
+          check.addEventListener("change", () => {
+            if (check.checked) {
+              task.reopenAs = task.status;
+              task.status = "done";
+            } else {
+              task.status = task.reopenAs ?? "today";
+            }
+            renderList();
+            if (task === selected) status.value = task.status;
+            // The row was rebuilt in its new group: keep focus on its box, or on
+            // the folded group's summary when Completed is closed.
+            const box = rowChecks.get(task);
+            const fold = box?.closest("details:not([open])");
+            (fold ? fold.querySelector("summary") : box)?.focus();
+          });
+          rowChecks.set(task, check);
           if (task === selected) link.setAttribute("aria-current", "true");
           row.querySelector(".list-item-title").textContent = task.title;
           row.querySelector(".list-item-text").textContent = task.due ? `${task.project} · ${task.due}` : task.project;

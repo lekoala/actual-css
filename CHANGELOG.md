@@ -2,13 +2,14 @@
 
 ## [Unreleased]
 ### Added
-- `.app-layout[data-nav="rail"]`: the side `.app-nav` as an icon rail, sized by `--app-nav-rail-size`; labels stay accessible names.
+- `.app-layout[data-nav="rail"]`: the side `.app-nav` as a narrow rail, each label a caption under its icon, sized by `--app-nav-rail-size`.
 - `.app-nav > button` tiles, for a "More" drawer trigger or a disabled destination.
 - `.app-nav > header` and `.app-nav > footer`: brand, primary action and account in side navigation, hidden in the bottom bar.
-- `--app-nav-current-bg` and `--app-nav-current-fg` repaint the current `.app-nav` tile.
+- `--app-nav-current-bg` and `--app-nav-current-fg` repaint the current `.app-nav` state.
 - `.app-layout`: without an `.app-nav > header`, the topbar spans the side navigation as a global bar.
 - `--app-layout-bar-size`: one top band for the topbar and the side `.app-nav > header` brand row.
 - Design note: `app-navigation-presentations.md`.
+- Docs: List · "Completion beside a navigable row".
 - `--list-current-inset-block` adjusts the current row's indicator independently of `.list` row padding.
 - `--segmented-selected-fg` sets the text and inset focus ring color for a custom selected fill.
 - `.menu-item-desc` adds a wrapping secondary line to `.menu-item-text` and keeps the icon aligned to the label.
@@ -17,6 +18,9 @@
 - `actual-css/forms.json`: the `components.json` index for `src/css/forms` (classes, hooks, states, imports, docs URL), verified by `check:catalog`.
 
 ### Changed
+- `.app-nav`: the bottom bar and the rail mark the current and hovered tile with a pill around the icon; the label keeps the bar's ink.
+- `tasks` demo: an Account tile opens a bottom sheet on phones; the theme moves out of the topbar.
+- `tasks` demo: a completion checkbox on each row, independent of the current task, and group counts with a folding Completed group.
 - Demos: `@lekoala/date-picker` 0.6.3 in `date-fields`, `contrast-contexts`, `neo-brutalist` and `cyberdeck`; `@lekoala/combobox` 0.8.2 in `combobox`, `contrast-contexts` and `neo-brutalist`.
 - Docs: Combobox bridge maps `--cb-focus-width` to `--focus-ring-width`, so chips and remove buttons keep the field's focus width.
 - `cyberdeck`: `.choice-card` and `.chip` show their state in the pressed-button corner tick instead of the leading indicator and check.

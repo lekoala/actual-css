@@ -62,9 +62,9 @@ navigations theme alike. Not coupled to the focus color: the `.segmented`
 exception exists because its ring is inset on the selected fill, and an
 `.app-nav` ring is not.
 
-A pale tint must still identify the current tile on the rail, where the label
-weight is gone. The fill is then the only cue, so its contrast against the nav
-surface is the theme's responsibility; the docs say so beside the hooks.
+A pale tint must still identify the current tile, and the shared medium weight
+never marks it. The fill is the cue, so its contrast against the nav surface is
+the theme's responsibility; the docs say so beside the hooks.
 
 ### 2. Buttons as tiles
 
@@ -104,9 +104,17 @@ An application that wants the rail on tablets sets the attribute from
 In the side presentation only:
 
 - the side track shrinks to `--app-nav-rail-size`;
-- tiles keep their icon; the label is visually hidden with the `.sr-only`
-  technique, so the accessible name survives. The prototype used
-  `font-size: 0`, which keeps the name but leaves no handle for anything else.
+- each tile keeps its label as an xs caption under the icon: the bottom bar's
+  tile turned upright, as in Material's navigation rail. A visible caption
+  names the tile for everyone, so the rail needs no tooltip.
+
+The first version hid the label with the `.sr-only` technique, after the
+prototype's `font-size: 0`. Both keep the accessible name, but a sighted user
+lost it, and restoring it meant a tooltip that duplicated the name while the
+sidebar showed it. The caption removes that question. Measured at the xs size
+(13px), single words reach 76px ("Notifications"); the 5.5rem track, with the
+nav's inline padding narrowed to `--space-10` and none on the tile, leaves
+80px. Two words wrap onto a second line.
 
 ### Implementation notes
 
@@ -136,12 +144,24 @@ In the side presentation only:
   nav `header`, and the topbar spans. No attribute, since moving the brand is
   already the decision. `:not(:has())` sets areas only: at its weight a full
   `grid-template` would override the rail's columns.
+- The fill hugs what it marks. A full-tile fill under a caption read as a
+  segmented control: the bottom bar and the rail now paint a pill around the
+  icon, as Material 3 does, and the label keeps the bar's ink, since
+  `--state-selected-fg` is made for the fill and vanished on the bar. A
+  labelled side row is its own target and fills whole. States set
+  `--app-nav-fill` and `--app-nav-ink`; each presentation picks what reads
+  them, so no state rule is written twice. A tile without an icon fills whole
+  through `:has()`; without it, the label color and the forced-colors frame
+  remain. Inside a work surface, a band from edge to edge was tried for the
+  secondary list column and dropped: next to the canvas pill it read as a
+  third treatment rather than a shared one.
+- On a phone the account sits behind an "Account" button tile opening a
+  bottom sheet with the same items: the first use of button tiles, and the
+  duplication this note accepts. The demo hides the tile from `48rem` in the
+  same media block that hides its topbar, so the literal is still copied once.
 - Hover is in `:where(a, button:enabled)`. `:is()` takes its strongest
   argument, so `button:enabled` raised hover over `a[aria-current]` and
   repainted the current tile.
-- In the rail, every tile child except the icon slot is hidden, a counter
-  included: the count stays in the accessible name, and the visible dot is
-  the open notification question below.
 - In the `tasks` demo, an `aria-label` swap ("Collapse" / "Expand
   navigation") replaced `aria-pressed` on the toggle: a pressed `.btn` paints a
   selected fill that competes with the current destination. Aligning the
@@ -179,21 +199,12 @@ naming the current section. Visually it should look current. Actual has no
 visual-only state attribute today (`data-current` would be the first), so the
 marker is decided at implementation, against the existing conventions.
 
-### Tooltips on the rail
-
-The rail needs a hover and focus label; the expanded sidebar does not. The
-tooltip enhancement has no notion of presentation, so `data-tooltip` on every
-tile would duplicate the visible label when expanded, and its
-`aria-describedby` would make a screen reader announce the name twice. Check
-whether the enhancement can stay wired and stay silent while the label is
-visible, rather than adding and removing attributes on every switch.
-
 ### Notifications on the rail
 
-A counter beside the label becomes a dot on the icon, and the count must
-survive for assistive technology when the label is visually hidden. Start
-from a `.badge` in the tile and `.indicator` around the icon before anything
-new.
+A counter beside the side label now sits in the rail's caption too, which a
+narrow tile may not hold. A dot on the icon is the usual rail form. Start from
+a `.badge` in the label and `.indicator` around the icon before anything new;
+the count stays in the accessible name either way.
 
 ## Rejected
 

@@ -83,7 +83,7 @@ and `.app-main` carries the raised one.
 
 ## Rail
 
-`data-nav="rail"` is a desktop preference for an icon rail instead of labelled
+`data-nav="rail"` is a desktop preference for a captioned rail instead of labelled
 side navigation. Below the side breakpoint both produce the same bottom bar.
 
 ```html

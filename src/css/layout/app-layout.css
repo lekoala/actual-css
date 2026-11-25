@@ -7,7 +7,7 @@
  *
  * Docs: docs/pages/layout/app-layout.md
  *
- * data-nav="rail" is the application's desktop preference for an icon rail.
+ * data-nav="rail" is the application's desktop preference for a captioned rail.
  * It only changes the side presentation; the bottom bar ignores it. Setting,
  * toggling and persisting it belong to the application.
  *
@@ -18,7 +18,7 @@
  */
 .app-layout {
   --app-nav-side-size: 12rem;
-  --app-nav-rail-size: 4.5rem;
+  --app-nav-rail-size: 5.5rem;
   --app-layout-bar-size: calc(var(--control-size) + var(--space-30) * 2);
 
   display: grid;
@@ -141,28 +141,47 @@
     text-align: start;
   }
 
+  /* A labelled row is the target itself: the state fills the whole row and
+     the icon drops its pill (app-nav.css), back to a plain glyph. */
+  .app-layout:not([data-nav="rail"]) > .app-nav > :is(a, button) {
+    background: var(--app-nav-fill, transparent);
+  }
+
+  .app-layout:not([data-nav="rail"]) > .app-nav > a[aria-current="page"] {
+    color: var(--app-nav-ink);
+  }
+
+  .app-layout:not([data-nav="rail"])
+    > .app-nav
+    > :is(a, button)
+    > :where(svg, img, [aria-hidden="true"]) {
+    padding: 0;
+    background: none;
+    color: inherit;
+  }
+
   .app-layout[data-nav="rail"] {
     grid-template-columns: var(--app-nav-rail-size) minmax(0, 1fr);
   }
 
+  /* The rail keeps a caption under each icon, the bottom bar's tile turned
+     upright: a visible label needs no tooltip and names the tile for everyone.
+     The track fits single-word xs captions ("Notifications" measured 76px),
+     with the nav's inline padding narrowed so the tile keeps that width; two
+     words wrap onto a second line. */
+  .app-layout[data-nav="rail"] > .app-nav {
+    padding-inline: var(--space-10);
+  }
+
   .app-layout[data-nav="rail"] > .app-nav > :is(a, button) {
+    grid-template-rows: auto auto;
     grid-template-columns: auto;
     place-content: center;
     justify-items: center;
-    padding-inline: 0;
-  }
-
-  /* The .sr-only technique: the label leaves the layout but stays the tile's
-     accessible name. font-size: 0 would keep the name too, yet collapse
-     every descendant, a counter included. */
-  .app-layout[data-nav="rail"] > .app-nav > :is(a, button) > :not(svg, img, [aria-hidden="true"]) {
-    position: absolute;
-    inline-size: 1px;
-    block-size: 1px;
-    margin: -1px;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
+    gap: var(--space-10);
+    padding: var(--space-10) 0;
+    font-size: var(--font-size-xs);
+    text-align: center;
   }
 
   /* In the side layout the FAB owns the viewport's bottom safe-area inset. */

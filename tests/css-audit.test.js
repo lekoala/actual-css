@@ -1478,8 +1478,13 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   expect(tintedHover).toBeGreaterThan(-1);
   expect(tintedHover).toBeLessThan(navCss.indexOf('.app-nav > a[aria-current="page"] {'));
   expect(navCss).not.toMatch(/:is\([^)]*\):hover/);
+  // States set the fill and ink; the presentation picks what paints them
+  // (the icon pill here, the whole row in app-layout's labelled side nav).
   expect(navCss).toMatch(
-    /\.app-nav > a\[aria-current="page"\] \{[^}]*background: var\(--app-nav-current-bg, var\(--state-selected\)\);[^}]*color: var\(--app-nav-current-fg, var\(--state-selected-fg\)\);/,
+    /\.app-nav > a\[aria-current="page"\] \{[^}]*--app-nav-fill: var\(--app-nav-current-bg, var\(--state-selected\)\);[^}]*--app-nav-ink: var\(--app-nav-current-fg, var\(--state-selected-fg\)\);/,
+  );
+  expect(layoutCss).toMatch(
+    /\.app-layout:not\(\[data-nav="rail"\]\) > \.app-nav > :is\(a, button\) \{[^}]*background: var\(--app-nav-fill, transparent\);/,
   );
   expect(navCss).toContain("min-block-size: var(--control-size-lg);");
   expect(navCss).toMatch(
