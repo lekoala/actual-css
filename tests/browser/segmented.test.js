@@ -17,6 +17,7 @@ import {
   waitForBrowser,
   withBrowserPage,
 } from "../../scripts/utils/browser.js";
+import { contrast, RASTERIZE } from "../../src/tooling/color.js";
 
 const FIXTURE = "tests/browser/segmented.html";
 const TIMEOUT = 60_000;
@@ -247,6 +248,21 @@ it("the selected foreground inherits and follows selection and focus", async () 
     await waitForBrowser(view, `document.querySelector("#quarter input").checked`);
     expect((await view.evaluate(paint("quarter"))).outlineColor).toBe(selected.color);
     expect((await view.evaluate(paint("week"))).color).toBe(idle.color);
+  });
+});
+
+it("a custom selected fill keeps its label and inset ring readable", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    // The fixture's dark fill with a theme-level white foreground: the inset
+    // ring sits on the fill, where --focus has no contrast guarantee.
+    expect(await tabUntil(view, `document.activeElement?.id === "edged-selected"`)).toBe(true);
+    const { bg, color, outline } = await view.evaluate(`(() => {
+      const rgba = ${RASTERIZE};
+      const cs = getComputedStyle(document.getElementById("edged-selected"));
+      return { bg: rgba(cs.backgroundColor), color: rgba(cs.color), outline: rgba(cs.outlineColor) };
+    })()`);
+    expect(contrast(color, bg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrast(outline, bg)).toBeGreaterThanOrEqual(3);
   });
 });
 

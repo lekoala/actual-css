@@ -116,7 +116,8 @@ which both stacks it and gives the tabs runtime Up and Down.
   `--shadow`; a flat theme sets `--shadow-color: transparent`, not
   `--shadow: none`, which would also drop the edge below.
 - `--segmented-selected-fg` — label and inset focus ring color for a custom
-  selected fill. Set it on the track or inherit it from a theme.
+  selected fill. Set it on the track or inherit it from a theme. Pair it with
+  the fill: 4.5:1 for the label, which also gives the ring its 3:1.
 - `--segmented-selected-border` — hairline around the selected segment, none
   by default. Set it once on a theme root, for example a flat light theme,
   where fill and ink alone barely set the selected segment apart from the

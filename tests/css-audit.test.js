@@ -2017,13 +2017,21 @@ test("action focus is a solid --focus line with the shared offset", () => {
   expect(source).not.toMatch(/--focus-ring(?!-width)/);
   expect(source).not.toContain("--btn-focus");
 
+  // Both ring colors, or a segment's ring escapes the offset check below.
   const actionRules = [...source.matchAll(/([^{}]+)\{([^{}]*)\}/g)].filter(([, , body]) =>
-    /outline:\s*var\(--focus-ring-width\) solid var\(--focus\);/.test(body),
+    /outline:\s*var\(--focus-ring-width\) solid var\((--focus|--segment-focus, var\(--focus\))\);/.test(
+      body,
+    ),
   );
   expect(actionRules.length).toBeGreaterThan(0);
+  const segmentRules = actionRules.filter(([, , body]) => body.includes("--segment-focus"));
+  expect(segmentRules.length).toBeGreaterThan(0);
 
   for (const [, rawSelector, body] of actionRules) {
     const selector = rawSelector.trim();
+    if (body.includes("--segment-focus")) {
+      expect(selector, "--segment-focus is the segment's ring only").toMatch(/^\.segment:/);
+    }
     if (selector === ".tab:focus-visible") {
       // A tab's ring is inset so it remains attached to the tab strip.
       expect(body, selector).toMatch(/outline-offset:\s*-2px;/);
@@ -2055,6 +2063,12 @@ test("every framework outline is one of the two focus contracts", () => {
     "2px solid transparent",
     "2px solid Canvas",
   ]);
+  // File-scoped exceptions, never a precedent for --card-focus and the like.
+  // A segment's ring is inset on its own fill, not on --surface where --focus
+  // holds 3:1, so a custom selected fill lends it its foreground (internal).
+  const SCOPED = {
+    "segmented.css": ["var(--focus-ring-width) solid var(--segment-focus, var(--focus))"],
+  };
   const found = [];
   const walk = (dir) => {
     for (const entry of readdirSync(dir)) {
@@ -2078,7 +2092,9 @@ test("every framework outline is one of the two focus contracts", () => {
   for (const { file, prop, value } of found) {
     expect(prop, `${file}: ${prop}: ${value}`).toBe("outline");
     expect(
-      [...ALLOWED].some((allowed) => allowed.replace(/\s+/g, "") === value.replace(/\s+/g, "")),
+      [...ALLOWED, ...(SCOPED[file] ?? [])].some(
+        (allowed) => allowed.replace(/\s+/g, "") === value.replace(/\s+/g, ""),
+      ),
       `${file}: outline: ${value}`,
     ).toBe(true);
   }
