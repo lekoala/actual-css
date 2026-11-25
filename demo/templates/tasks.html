@@ -189,6 +189,10 @@
       padding-inline: var(--panel-padding);
     }
 
+    .task-add {
+      margin-inline: var(--panel-padding);
+    }
+
     .task-group {
       gap: var(--space-10);
     }
@@ -207,8 +211,18 @@
     }
 
     .task-editor {
-      --measure: 60ch;
+      --measure: 68ch;
       gap: var(--space-40);
+    }
+
+    .task-editor-head {
+      --cluster-justify: space-between;
+      flex-wrap: nowrap;
+      align-items: flex-start;
+    }
+
+    .task-editor-head hgroup {
+      min-inline-size: 0;
     }
 
     .task-properties {
@@ -246,7 +260,8 @@
       }
 
       .task-app:not([data-detail]) .task-detail,
-      .task-app[data-detail] .task-master {
+      .task-app[data-detail] .task-master,
+      .task-close {
         display: none;
       }
 
@@ -324,6 +339,10 @@
             <h1 id="task-heading" tabindex="-1">All tasks</h1>
             <p id="task-summary" class="muted" aria-live="polite"></p>
           </hgroup>
+          <form class="join task-add" id="task-add">
+            <input class="input" name="title" aria-label="New task" placeholder="Add a task…" autocomplete="off" required>
+            <button class="btn outline" type="submit">Add</button>
+          </form>
           <section class="stack task-group" data-group="today" aria-labelledby="today-heading">
             <h2 id="today-heading">Today</h2>
             <ul class="list task-rows"></ul>
@@ -347,10 +366,14 @@
             Back to tasks
           </button>
           <div class="measure stack task-editor">
-            <hgroup>
-              <p class="overline" id="task-project"></p>
-              <h2 id="task-title" tabindex="-1"></h2>
-            </hgroup>
+            <div class="cluster task-editor-head">
+              <hgroup>
+                <p class="overline" id="task-project"></p>
+                <h2 id="task-title" tabindex="-1"></h2>
+              </hgroup>
+              <!-- Closing hands the whole workspace back to the list. -->
+              <button class="close task-close" type="button" aria-label="Close task"></button>
+            </div>
             <div class="grid task-properties">
               <label class="field">
                 <span class="field-label">Status</span>
@@ -475,10 +498,36 @@
         ],
       },
       { title: "Confirm the print delivery window", project: "Operations", status: "today" },
-      { title: "Proof the gallery labels and check the credits against the loan list", project: "Studio", status: "today" },
-      { title: "Set up the volunteer briefing", project: "Operations", status: "planned" },
-      { title: "Export the entrance signage", project: "Studio", status: "planned" },
+      {
+        title: "Proof the gallery labels and check every credit line against the loan agreements before the printer's cut-off",
+        project: "Studio",
+        status: "today",
+      },
+      { title: "Call the venue about loading dock hours", project: "Operations", status: "today", priority: true },
+      { title: "Reply to the lighting technician", project: "Studio", status: "today" },
+      {
+        title: "Set up the volunteer briefing",
+        project: "Operations",
+        status: "planned",
+        due: "Nov 27",
+        checks: [
+          { label: "Book the meeting room", done: true },
+          { label: "Print the floor maps", done: false },
+        ],
+      },
+      { title: "Export the entrance signage", project: "Studio", status: "planned", due: "Nov 28" },
+      {
+        title: "Book the accessibility walkthrough with the venue's access officer and both wheelchair-user advisors",
+        project: "Operations",
+        status: "planned",
+        due: "Dec 1",
+        priority: true,
+      },
+      { title: "Draft the press preview invitation", project: "Studio", status: "planned", due: "Dec 2" },
+      { title: "Order replacement spotlights", project: "Operations", status: "planned", due: "Dec 3" },
       { title: "Send the updated venue access details", project: "Operations", status: "done" },
+      { title: "Collect the artist biographies", project: "Studio", status: "done" },
+      { title: "Sign the insurance certificate", project: "Operations", status: "done" },
     ];
 
     const app = document.querySelector(".task-app");
@@ -515,7 +564,7 @@
           const link = row.querySelector("a");
           if (task === selected) link.setAttribute("aria-current", "true");
           row.querySelector(".list-item-title").textContent = task.title;
-          row.querySelector(".list-item-text").textContent = task.project;
+          row.querySelector(".list-item-text").textContent = task.due ? `${task.project} · ${task.due}` : task.project;
           row.querySelector(".badge").hidden = !task.priority;
           link.addEventListener("click", (event) => {
             event.preventDefault();
@@ -573,7 +622,8 @@
         view = filter.dataset.view ?? view;
         project = filter.dataset.project ?? project;
         const visible = visibleTasks();
-        if (!visible.includes(selected)) selected = visible[0];
+        // A closed detail stays closed; an open one follows the filter.
+        if (selected && !visible.includes(selected)) selected = visible[0] ?? null;
         app.removeAttribute("data-detail");
         if (key === "view") heading.textContent = filter.lastElementChild.textContent;
         renderList();
@@ -584,6 +634,31 @@
     app.querySelector(".task-back").addEventListener("click", () => {
       app.removeAttribute("data-detail");
       (app.querySelector(".task-rows a[aria-current]") ?? heading).focus();
+    });
+
+    // Closing ends the selection, so the list takes the whole workspace.
+    app.querySelector(".task-close").addEventListener("click", () => {
+      const row = app.querySelector(".task-rows a[aria-current]");
+      row?.removeAttribute("aria-current");
+      selected = null;
+      app.removeAttribute("data-detail");
+      renderDetail();
+      (row ?? heading).focus();
+    });
+
+    // Quick add files the task where the current view and list can show it.
+    document.getElementById("task-add").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const input = event.currentTarget.elements.title;
+      const text = input.value.trim();
+      if (!text) return;
+      tasks.unshift({
+        title: text,
+        project: project === "all" ? "Studio" : project,
+        status: view === "all" ? "today" : view,
+      });
+      input.value = "";
+      renderList();
     });
 
     status.addEventListener("change", () => {
