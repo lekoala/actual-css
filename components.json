@@ -67,11 +67,14 @@
     "publicHooks": [
       "--app-nav-size",
       "--app-nav-gap",
-      "--app-nav-icon-size"
+      "--app-nav-icon-size",
+      "--app-nav-current-bg",
+      "--app-nav-current-fg"
     ],
     "states": [
       "aria-current",
-      "aria-hidden"
+      "aria-hidden",
+      "disabled"
     ],
     "pseudoElements": {
       ".app-nav a": [
@@ -401,7 +404,7 @@
       "--surface-anchor-width"
     ],
     "states": [
-      "aria-haspopup",
+      "aria-controls",
       "hidden",
       "popover-open"
     ],

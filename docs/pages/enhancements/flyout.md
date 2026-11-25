@@ -192,6 +192,10 @@ script, closes it and stays where it landed; Escape is the key that returns
 focus to the trigger. `false` keeps the flyout open there too, so a persistent
 panel must not cover the controls around it.
 
+A click on a text field, a select or a textarea, or on its label, never closes
+the flyout either: it starts an edit, so an action menu can hold a field, such
+as a theme select in an account menu. A checkbox or radio click is a pick.
+
 Arrow keys and Space in a radio group never close the flyout: they move
 through the options, and a pointer pick closes it. Opening from the keyboard
 focuses a group at its checked radio. The [palette picker](../forms/color-swatches.md#palette-in-a-flyout)

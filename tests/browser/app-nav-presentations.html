@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>App nav presentations fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+</head>
+<body>
+  <div class="app-layout" id="layout">
+    <header class="topbar"><button class="btn" type="button" id="topbar-control">Top</button></header>
+    <main class="app-main">Main</main>
+    <nav class="app-nav" id="nav" aria-label="Primary">
+      <header id="nav-header">
+        <strong id="brand">Brand</strong>
+        <button class="btn primary" type="button" id="action">New</button>
+      </header>
+      <a href="#today" id="current" aria-current="page">
+        <span aria-hidden="true">☀</span>
+        <span id="current-label">Today</span>
+      </a>
+      <a href="#tasks" id="link">
+        <span aria-hidden="true" id="link-icon">✓</span>
+        <span id="link-label">Tasks <span class="badge" id="count">4</span></span>
+      </a>
+      <button type="button" id="more">
+        <span aria-hidden="true">≡</span>
+        <span>More</span>
+      </button>
+      <button type="button" id="disabled" disabled>
+        <span aria-hidden="true">✉</span>
+        <span>Messages</span>
+      </button>
+      <footer id="nav-footer">
+        <button class="btn ghost" type="button">Account</button>
+      </footer>
+    </nav>
+  </div>
+</body>
+</html>

@@ -399,6 +399,16 @@ function isKeyboardRadioMove(e) {
   return e.detail === 0 && e.target?.matches?.('input[type="radio"]') === true;
 }
 
+/* A click on a field, or on its label, starts an edit, not a pick: closing on
+   it shut an account menu on the click that opened its theme select. A
+   checkbox or radio is still a pick (a palette closes on its color). */
+const FIELD =
+  'select,textarea,input:not([type="button"],[type="submit"],[type="reset"],[type="image"],[type="checkbox"],[type="radio"])';
+
+function isFieldEdit(node) {
+  return node instanceof Element && (node.matches(FIELD) || !!node.control?.matches(FIELD));
+}
+
 function onDocumentClick(e) {
   const path = e.composedPath();
   const radioMove = isKeyboardRadioMove(e);
@@ -411,16 +421,12 @@ function onDocumentClick(e) {
     const menuIndex = path.indexOf(menu);
     const isInside = menuIndex >= 0;
     if (isInside && radioMove) continue;
-    const hasCloseTrigger =
-      isInside &&
-      path
-        .slice(0, menuIndex)
-        .some((node) => node instanceof Element && node.hasAttribute("data-flyout-close"));
-
-    if (hasCloseTrigger) {
+    const inner = isInside ? path.slice(0, menuIndex) : [];
+    if (inner.some((node) => node instanceof Element && node.hasAttribute("data-flyout-close"))) {
       closeSurface(menu);
       continue;
     }
+    if (inner.some(isFieldEdit)) continue;
 
     const closesInside = state.autoClose === "true" || state.autoClose === "inside";
     const closesOutside = state.autoClose === "true" || state.autoClose === "outside";

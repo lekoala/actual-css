@@ -44,6 +44,13 @@ assigns those children to named grid areas and changes `.app-nav` from a bottom
 bar to labelled side navigation. Missing, renamed, or wrapped regions mean a
 different layout contract should be used.
 
+The topbar earns its band with global actions, such as search or creation.
+Without any, hide it from the side breakpoint (`@media (min-width: 48rem)`):
+its row collapses, the side navigation's `header` carries the brand, and a
+phone keeps the topbar, where that header is hidden. Size
+`--app-layout-bar-size` to the main region's first row so the brand stays on
+its line; the [Tasks template](../../demo/templates/tasks.html) does this.
+
 A direct-child `.fab` overlays the end of the main grid area. It therefore
 clears both bottom and side navigation without copying the navigation size or
 bottom safe-area inset. When navigation moves aside, the layout applies the
@@ -56,9 +63,29 @@ the same layout contract. The topbar preserves its normal spacing below the
 top safe-area inset. The recipe provides no routing or page lifecycle.
 
 The [Tasks template](../../demo/templates/tasks.html) composes it with a
-master-detail workspace inset on the canvas: the topbar and `.app-nav` drop
-their own surface, and `.app-main` carries the raised one.
+master-detail workspace inset on the canvas: `.app-nav` drops its own surface,
+and `.app-main` carries the raised one.
 
-### Hooks
+## Rail
+
+`data-nav="rail"` is a desktop preference for an icon rail instead of labelled
+side navigation. Below the side breakpoint both produce the same bottom bar.
+
+```html
+<div class="app-layout" data-nav="rail">
+```
+
+The layout only draws the rail. Toggling the attribute, labelling the toggle
+and remembering the choice belong to the application; to use the rail on
+tablets only, set the attribute from `matchMedia`. See
+[App navigation](../components/app-navigation.md#rail) for what each tile shows.
+
+## Hooks
 
 - `--app-nav-side-size` controls the side navigation track.
+- `--app-nav-rail-size` controls the rail track.
+- `--app-layout-bar-size` is the top band shared by the topbar and the first
+  row of a side `.app-nav > header`, so the brand sits on the topbar's line and
+  the first destination starts level with the main region. Raise it when the
+  topbar holds taller content, or size it to the main region's first row when
+  the topbar is hidden on desktop.

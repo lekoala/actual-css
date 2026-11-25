@@ -55,6 +55,8 @@ Contract:
 
 Rejected: a bottom navigation (that is `.app-layout`), a collapsible icon rail
 (an application state), and a breakpoint hook (impossible in a media query).
+`.app-nav` does have a rail, because its tiles have a fixed anatomy: see
+[app-navigation-presentations.md](app-navigation-presentations.md).
 
 Compact UI vocabulary remains semantic rather than shape-driven:
 

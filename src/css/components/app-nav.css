@@ -5,10 +5,17 @@
  *
  * Docs: docs/pages/components/app-navigation.md
  *
+ * Tiles are direct-child links and buttons (a "More" button opening a drawer,
+ * a disabled destination). A direct-child header and footer, at most one each,
+ * belong to the side presentation only (app-layout.css); the bottom bar has
+ * room for destinations alone.
+ *
  * Public hooks:
  * --app-nav-size
  * --app-nav-gap
  * --app-nav-icon-size
+ * --app-nav-current-bg (fallback-only: current tile fill)
+ * --app-nav-current-fg (fallback-only: current tile ink)
  */
 :where(.app-nav) {
   --intent: initial;
@@ -39,7 +46,11 @@
   color: var(--ui-fg, var(--text-muted));
 }
 
-.app-nav > a {
+.app-nav > :is(header, footer) {
+  display: none;
+}
+
+.app-nav > :is(a, button) {
   position: relative;
   display: grid;
   grid-template-rows: auto auto;
@@ -61,14 +72,28 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.app-nav > a > :where(svg, img, [aria-hidden="true"]) {
+.app-nav > button {
+  border: 0;
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.app-nav > button:disabled {
+  cursor: not-allowed;
+  opacity: var(--disabled-opacity);
+}
+
+.app-nav > :is(a, button) > :where(svg, img, [aria-hidden="true"]) {
   inline-size: var(--app-nav-icon-size);
   block-size: var(--app-nav-icon-size);
   font-size: var(--app-nav-icon-size);
   line-height: 1;
 }
 
-.app-nav > a:hover {
+/* :where() keeps hover below the current tile, as when tiles were links only:
+   :is(button:enabled) would raise hover over a[aria-current] and repaint it. */
+.app-nav > :where(a, button:enabled):hover {
   background: var(--surface-subtle);
   color: var(--text);
 }
@@ -76,7 +101,7 @@
 /* Same contextual hover as .nav-link (navbar.css): a tint of the tile's ink
    reads on any --ui-* bar; the baseline keeps a legible light chip. */
 @supports (color: color-mix(in oklch, red, white)) {
-  .app-nav > a:hover {
+  .app-nav > :where(a, button:enabled):hover {
     background: color-mix(in oklch, currentColor 10%, transparent);
     color: var(--ui-fg, var(--text));
   }
@@ -92,10 +117,12 @@
    to the bar's own Canvas. No forced-colors repaint: a Highlight fill put
    HighlightText on Chromium's Canvas backplate, which hid the label. The
    positioning context is on every link so it does not move when one becomes
-   current or an application places its own decoration. */
+   current or an application places its own decoration. A pale
+   --app-nav-current-bg is the only cue on the rail, where no label shows:
+   its contrast against the nav surface is the theme's to keep. */
 .app-nav > a[aria-current="page"] {
-  background: var(--state-selected);
-  color: var(--state-selected-fg);
+  background: var(--app-nav-current-bg, var(--state-selected));
+  color: var(--app-nav-current-fg, var(--state-selected-fg));
 }
 
 .app-nav > a[aria-current="page"]::before {

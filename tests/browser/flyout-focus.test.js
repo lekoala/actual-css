@@ -7,6 +7,7 @@
 import { expect, test } from "bun:test";
 import {
   browserAvailable,
+  clickSelector,
   elementRect,
   fixtureUrl,
   pressKey,
@@ -176,6 +177,33 @@ it(
       await pressKey(view, "Tab");
       await waitForBrowser(view, focusIs("shared-after"));
       expect(await state(view, "shared")).toEqual({ open: false, focus: "shared-after" });
+    });
+  },
+  TIMEOUT,
+);
+
+// A flyout mixing actions and fields: the default auto-close shut the panel on
+// the click that opened the select. A click on a field or its label is an
+// edit; an action is still a pick. The stretched trigger has no aria-haspopup
+// (the panel is no role="menu") and must still span its row.
+it(
+  "a field click inside a default flyout edits; an action still closes it",
+  async () => {
+    await withFixture(async (view) => {
+      const widths = await view.evaluate(`[
+        document.getElementById("account-trigger").getBoundingClientRect().width,
+        document.getElementById("account-wrap").getBoundingClientRect().width,
+      ]`);
+      expect(widths[0]).toBe(widths[1]);
+
+      await clickSelector(view, "#account-trigger");
+      await waitForBrowser(view, open("account-panel"));
+      for (const field of ["#theme-label", "#name-label", "#name-input", "#theme-select"]) {
+        await clickSelector(view, field);
+        expect(await view.evaluate(open("account-panel")), field).toBe(true);
+      }
+      await clickSelector(view, "#sign-out");
+      await waitForBrowser(view, `!${open("account-panel")}`);
     });
   },
   TIMEOUT,

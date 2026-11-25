@@ -109,6 +109,11 @@
       select.addEventListener("change", () => {
         apply(select.value);
         store(select.value);
+        // A page can show a picker per layout (topbar on a phone, account
+        // menu on desktop): the hidden one must not show a stale theme.
+        for (const other of document.querySelectorAll("theme-picker select")) {
+          if (other !== select) other.value = select.value;
+        }
         this.dispatchEvent(new CustomEvent("theme-change", { bubbles: true, detail: select.value }));
       });
     }

@@ -1468,19 +1468,22 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   expect(navCss).toContain('.app-nav > a[aria-current="page"]');
   expect(navCss).toContain("env(safe-area-inset-bottom)");
   // Only the hover is contextual (a tint of the tile's ink, never the bar's
-  // own --ui-hover-bg); the current tile keeps the full --state-selected /
-  // --state-selected-fg contract. The tinted hover must precede the current
-  // rule: at equal specificity, a later hover would repaint the current tile.
+  // own --ui-hover-bg); the current tile keeps the --state-selected /
+  // --state-selected-fg contract behind fallback-only hooks. The tinted hover
+  // must precede the current rule and stay below it in :where(): a later or
+  // stronger hover would repaint the current tile (asserted rendered in
+  // tests/browser/app-nav-presentations.test.js).
   expect(navCss).not.toContain("--ui-hover-bg");
   const tintedHover = navCss.indexOf("color-mix(in oklch, currentColor 10%, transparent)");
   expect(tintedHover).toBeGreaterThan(-1);
   expect(tintedHover).toBeLessThan(navCss.indexOf('.app-nav > a[aria-current="page"] {'));
+  expect(navCss).not.toMatch(/:is\([^)]*\):hover/);
   expect(navCss).toMatch(
-    /\.app-nav > a\[aria-current="page"\] \{[^}]*background: var\(--state-selected\);[^}]*color: var\(--state-selected-fg\);/,
+    /\.app-nav > a\[aria-current="page"\] \{[^}]*background: var\(--app-nav-current-bg, var\(--state-selected\)\);[^}]*color: var\(--app-nav-current-fg, var\(--state-selected-fg\)\);/,
   );
   expect(navCss).toContain("min-block-size: var(--control-size-lg);");
   expect(navCss).toMatch(
-    /> a > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: var\(--app-nav-icon-size\);[\s\S]*line-height: 1;/,
+    /> :is\(a, button\) > :where\(svg, img, \[aria-hidden="true"\]\)\s*\{[\s\S]*font-size: var\(--app-nav-icon-size\);[\s\S]*line-height: 1;/,
   );
   // The current tile is a full selected surface at the shared weight —
   // selection never changes text metrics. The positioning context sits on
@@ -1491,7 +1494,7 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   // content-box shift from an element border. The rendered frame is asserted
   // in tests/browser/app-nav.test.js.
   expect(navCss).not.toMatch(/> a\[aria-current="page"\]\s*\{[^}]*font-weight:/);
-  expect(navCss).toMatch(/\.app-nav > a \{[^}]*position: relative;/);
+  expect(navCss).toMatch(/\.app-nav > :is\(a, button\) \{[^}]*position: relative;/);
   expect(navCss).toMatch(
     /\.app-nav > a\[aria-current="page"\]::before \{[^}]*border: var\(--border-width\) solid transparent;/,
   );
@@ -1503,7 +1506,7 @@ test("app navigation stays semantic and app-layout owns its adaptive geometry", 
   expect(layoutCss).toContain('"topbar" auto');
   expect(layoutCss).toContain('"nav topbar" auto');
   expect(layoutCss).toContain(".app-layout > .app-nav");
-  expect(layoutCss).toContain(".app-layout > .app-nav > a");
+  expect(layoutCss).toContain(".app-layout > .app-nav > :is(a, button)");
   expect(layoutCss).toContain(".app-layout > .app-main");
   expect(layoutCss).toContain("block-size: var(--viewport-block);");
   expect(layoutCss).toContain(

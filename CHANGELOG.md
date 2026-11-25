@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 ### Added
+- `.app-layout[data-nav="rail"]`: the side `.app-nav` as an icon rail, sized by `--app-nav-rail-size`; labels stay accessible names.
+- `.app-nav > button` tiles, for a "More" drawer trigger or a disabled destination.
+- `.app-nav > header` and `.app-nav > footer`: brand, primary action and account in side navigation, hidden in the bottom bar.
+- `--app-nav-current-bg` and `--app-nav-current-fg` repaint the current `.app-nav` tile.
+- `--app-layout-bar-size`: one top band for the topbar and the side `.app-nav > header` brand row.
+- Design note: `app-navigation-presentations.md`.
 - `--list-current-inset-block` adjusts the current row's indicator independently of `.list` row padding.
 - `--segmented-selected-fg` sets the text and inset focus ring color for a custom selected fill.
 - `.menu-item-desc` adds a wrapping secondary line to `.menu-item-text` and keeps the icon aligned to the label.
@@ -19,8 +25,12 @@
 - Demos: `data-grid-component` 3.10.3 in `cyberdeck`, `data-grid` and `focus-bench`; grid checkboxes and radios take `.check` / `.radio` through the `check` and `radio` control roles.
 
 ### Fixed
+- Flyout: a click on a text field, select, textarea or its label no longer closes the default `data-flyout-auto-close="true"` panel.
+- `.flyout-trigger.stretch` spans any trigger (`[aria-controls]`), not only `aria-haspopup="menu"` ones.
 - `.app-layout`: side `.app-nav` labels inherit the body size instead of the bottom bar's `--font-size-xs` caption.
-- `tasks` demo: built on `.app-layout` and `.app-nav` instead of a hand-rolled shell.
+- `tasks` demo: built on `.app-layout` and `.app-nav` instead of a hand-rolled shell, with a brand header, an account flyout holding the theme, a remembered rail toggle, and no desktop topbar.
+- Demos: `<theme-picker>` instances on one page stay in sync.
+- `.app-layout`: side `.app-nav` scrolls on a short viewport instead of clipping its last destinations.
 - `.list.grouped` rounds the first and last row links inside `<li>` to match the shell.
 - `cyberdeck`: the lit corner tick of `.btn[aria-pressed="true"]` and checked chips stays visible in forced colors.
 

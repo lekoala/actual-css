@@ -88,6 +88,24 @@
     <input id="ctx-after" aria-label="After context">
   </section>
 
+  <!-- 7. An account menu holding a field, on the default auto-close: no
+       role="menu", so no aria-haspopup; a field click edits, an action picks. -->
+  <section style="inline-size: 14rem">
+    <div class="flyout-trigger stretch" id="account-wrap">
+      <button id="account-trigger" class="btn" type="button" data-enhance="flyout"
+              aria-controls="account-panel">Alex</button>
+      <menu id="account-panel" class="flyout menu" hidden>
+        <li>
+          <label id="theme-label">Theme
+            <select id="theme-select"><option>Light</option><option>Dark</option></select>
+          </label>
+        </li>
+        <li><label id="name-label">Name <input id="name-input"></label></li>
+        <li><button id="sign-out" class="menu-item" type="button">Sign out</button></li>
+      </menu>
+    </div>
+  </section>
+
   <menu class="menu" id="rich-menu" aria-label="Attachment options" style="inline-size: 18ch">
     <li>
       <button class="menu-item" type="button" id="rich-item">

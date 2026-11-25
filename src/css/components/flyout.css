@@ -35,13 +35,16 @@
    last row of a full-width sidebar nav list. Stretches both the
    positioning wrapper and its trigger control. Named for the effect
    (stretch to fill), not the display value, to avoid reading like a
-   generic display-block utility. */
+   generic display-block utility. The trigger is matched by aria-controls,
+   the runtime's own wiring: aria-haspopup="menu" follows role="menu" only, so
+   a trigger for a panel holding a field (an account menu with a theme select)
+   carries none and stayed content-sized. */
 .flyout-trigger.stretch {
   display: block;
   inline-size: 100%;
 }
 
-.flyout-trigger.stretch > [aria-haspopup="menu"] {
+.flyout-trigger.stretch > [aria-controls] {
   inline-size: 100%;
 }
 
