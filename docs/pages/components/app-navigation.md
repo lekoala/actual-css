@@ -72,6 +72,10 @@ destinations outgrow the viewport. An account menu there is a
 </nav>
 ```
 
+Both are optional. Without a `header`, the brand belongs in the topbar, which
+then spans the navigation; see
+[App layout](../layout/app-layout.md#where-the-brand-lives).
+
 At most one of each per `.app-nav`. The bottom bar hides both: it has room for
 destinations only, so give their content a second home on a phone — identity in
 the topbar, the primary action in a [FAB](fab.md), the account in the drawer.

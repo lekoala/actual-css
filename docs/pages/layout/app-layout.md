@@ -44,6 +44,21 @@ assigns those children to named grid areas and changes `.app-nav` from a bottom
 bar to labelled side navigation. Missing, renamed, or wrapped regions mean a
 different layout contract should be used.
 
+## Where the brand lives
+
+From the side breakpoint, the brand's place decides who owns the top-left
+corner:
+
+- brand in the topbar, no `header` in `.app-nav`: the topbar is a global bar
+  over the navigation, for identity, global search, the account and other
+  application-wide context. Collapsing the rail leaves the brand untouched.
+- brand in a side `.app-nav > header`: the navigation runs the full height,
+  the compact shape of a small standalone app.
+
+No attribute chooses between them; adding or removing the `header` does. The
+[Tasks template](../../demo/templates/tasks.html) switches between both from
+its account menu.
+
 The topbar earns its band with global actions, such as search or creation.
 Without any, hide it from the side breakpoint (`@media (min-width: 48rem)`):
 its row collapses, the side navigation's `header` carries the brand, and a

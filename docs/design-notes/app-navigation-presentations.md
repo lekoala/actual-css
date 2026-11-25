@@ -128,6 +128,14 @@ In the side presentation only:
   as a workspace toolbar. Hiding works with no framework change, since the
   empty row collapses; no `.no-topbar` variant. The cost is one copy of the
   `48rem` literal, the same friction as distributing destinations.
+- A global topbar over the navigation (identity, search, active practice,
+  account) suits a product with application-wide functions; the brand in the
+  nav header suits a small standalone app. Building the global bar in
+  application CSS meant restating the layout's area names, the rail columns
+  and the `48rem` literal, so the layout owns it. The structure chooses: no
+  nav `header`, and the topbar spans. No attribute, since moving the brand is
+  already the decision. `:not(:has())` sets areas only: at its weight a full
+  `grid-template` would override the rail's columns.
 - Hover is in `:where(a, button:enabled)`. `:is()` takes its strongest
   argument, so `button:enabled` raised hover over `a[aria-current]` and
   repainted the current tile.

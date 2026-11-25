@@ -134,6 +134,34 @@ it("a hidden topbar collapses its row without moving the side navigation", async
   );
 });
 
+// The brand's place decides the corner: without a nav header the topbar is a
+// global bar over the navigation, in the sidebar and on the rail alike.
+it("without a nav header the topbar spans the navigation", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      const before = await view.evaluate(READ);
+      expect(before.nav.y).toBe(0);
+
+      await view.evaluate('document.getElementById("nav-header").remove()');
+      for (const rail of [false, true]) {
+        if (rail) await setRail(view);
+        const g = await view.evaluate(`(() => {
+          const r = (s) => document.querySelector(s).getBoundingClientRect().toJSON();
+          return { topbar: r(".topbar"), nav: r(".app-nav"), main: r(".app-main") };
+        })()`);
+        expect(g.topbar.x).toBe(g.nav.x);
+        expect(g.topbar.right).toBe(g.main.right);
+        expect(g.nav.y).toBe(g.topbar.bottom);
+        expect(g.main.y).toBe(g.topbar.bottom);
+        expect(g.main.x).toBe(g.nav.right);
+        if (rail) expect(g.nav.width).toBe(before.rail);
+      }
+    },
+    { ...WIDE, artifactName: "app-nav-presentations-global-topbar" },
+  );
+});
+
 it("a short viewport scrolls the side navigation instead of overlapping it", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),

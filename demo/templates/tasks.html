@@ -102,25 +102,31 @@
       justify-content: center;
     }
 
-    /* The theme is a user preference, so it lives in the account menu. */
-    .task-theme {
+    /* Theme and shell are user preferences, so they live in the account menu. */
+    .task-setting {
       display: grid;
       gap: var(--space-10);
       padding: var(--space-20) var(--space-30);
     }
 
+    /* Global search only earns its place in the global topbar. */
+    .task-search {
+      display: none;
+      flex: 0 1 22rem;
+    }
+
     @media (min-width: 48rem) {
-      /* No global action justifies a desktop topbar: the side navigation's
-         header carries the brand and the account menu the theme. A phone hides
-         that header and footer, so it keeps the topbar for both. */
-      .task-app > .topbar {
+      /* Brand in the navigation: no global action justifies a desktop topbar.
+         The nav header carries the brand and the account menu the theme. A
+         phone hides that header and footer, so it keeps the topbar for both. */
+      .task-app:not([data-shell="global"]) > .topbar {
         display: none;
       }
 
       /* With no topbar to share it, the band is the workspace's first row:
          card margin, border and list padding above and below a list row, so
          the brand centres on "All lists". */
-      .task-app {
+      .task-app:not([data-shell="global"]) {
         --app-layout-bar-size: calc((var(--space-30) * 2 + var(--border-width)) * 2 + var(--control-size-sm));
       }
 
@@ -129,6 +135,27 @@
         border: var(--border-width) solid var(--border);
         border-radius: var(--radius-lg);
         background: var(--surface-raised);
+      }
+
+      /* Global topbar: the layout spans it over the navigation once the nav
+         header is gone; it holds identity and search, the account menu the
+         theme. */
+      .task-app[data-shell="global"] .task-workspace {
+        margin-block-start: 0;
+      }
+
+      /* The brand lines up with the tile icons below it (nav padding + tile
+         padding), the search with the work surface's end edge. */
+      .task-app[data-shell="global"] > .topbar {
+        padding-inline: calc(var(--space-20) + var(--space-30)) var(--space-30);
+      }
+
+      .task-app[data-shell="global"] .task-search {
+        display: block;
+      }
+
+      .task-app[data-shell="global"] .task-topbar select {
+        display: none;
       }
     }
 
@@ -321,6 +348,7 @@
   <div class="app-layout task-app">
     <header class="topbar cluster task-topbar">
       <span class="navbar-brand"><span class="avatar primary sm" aria-hidden="true">F</span> Fieldwork</span>
+      <input class="input task-search" type="search" id="task-search" aria-label="Search tasks" placeholder="Search tasks…">
       <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
     </header>
 
@@ -452,9 +480,18 @@
             </li>
             <li class="menu-separator" aria-hidden="true"></li>
             <li>
-              <label class="task-theme">
+              <label class="task-setting">
                 <span class="field-label">Theme</span>
                 <theme-picker><select class="select sm"></select></theme-picker>
+              </label>
+            </li>
+            <li>
+              <label class="task-setting">
+                <span class="field-label">Brand</span>
+                <select class="select sm" id="task-shell">
+                  <option value="nav">In the navigation</option>
+                  <option value="global">In a global topbar</option>
+                </select>
               </label>
             </li>
             <li class="menu-separator" aria-hidden="true"></li>
@@ -545,10 +582,12 @@
     const narrow = matchMedia("(max-width: 68rem)");
     let view = "all";
     let project = "all";
+    let query = "";
     let selected = tasks[0];
 
     const visibleTasks = () => tasks.filter((task) =>
-      (view === "all" || view === task.status) && (project === "all" || project === task.project));
+      (view === "all" || view === task.status) && (project === "all" || project === task.project) &&
+      (!query || task.title.toLowerCase().includes(query)));
 
     function renderList() {
       const visible = visibleTasks();
@@ -684,6 +723,35 @@
     }
     railToggle.addEventListener("click", () => setRail(!app.hasAttribute("data-nav")));
     try { setRail(localStorage.getItem("tasks-rail") === "1"); } catch {}
+
+    // Where the brand lives decides the shell: without the nav header,
+    // .app-layout spans the topbar over the navigation. The app only moves it.
+    const nav = app.querySelector(".app-nav");
+    const navHeader = nav.querySelector(":scope > header");
+    const shell = document.getElementById("task-shell");
+    const search = document.getElementById("task-search");
+    function setShell(global) {
+      if (global) {
+        app.dataset.shell = "global";
+        navHeader.remove();
+      } else {
+        delete app.dataset.shell;
+        nav.prepend(navHeader);
+        // The search leaves with the global topbar; so does its filter.
+        search.value = "";
+        query = "";
+        renderList();
+      }
+      shell.value = global ? "global" : "nav";
+      try { localStorage.setItem("tasks-shell", global ? "global" : ""); } catch {}
+    }
+    shell.addEventListener("change", () => setShell(shell.value === "global"));
+    try { if (localStorage.getItem("tasks-shell") === "global") setShell(true); } catch {}
+
+    search.addEventListener("input", () => {
+      query = search.value.trim().toLowerCase();
+      renderList();
+    });
 
     renderList();
     renderDetail();

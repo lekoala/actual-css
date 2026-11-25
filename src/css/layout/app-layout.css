@@ -69,6 +69,17 @@
   /* A column, not grid rows: the footer takes the free space above it with an
      auto margin. Scrolls on its own when the destinations outgrow a short
      viewport, so the footer follows the last link instead of covering it. */
+  /* Where the brand lives decides who owns the top-left corner. A nav header
+     claims it, and the nav runs the full height; without one the brand is in
+     the topbar, which then spans the navigation as a global bar. Areas only:
+     columns stay with the rules above and the rail's, which this selector
+     would outweigh. Without :has() the nav keeps the full height. */
+  .app-layout:not(:has(> .app-nav > header)) {
+    grid-template-areas:
+      "topbar topbar"
+      "nav main";
+  }
+
   .app-layout > .app-nav {
     position: sticky;
     inset-block: 0;
