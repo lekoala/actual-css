@@ -8,6 +8,9 @@ Use `.app-layout` only when all three direct regions are intentional:
 - `.app-main` is the page's independent scroll container;
 - `.app-nav` changes from bottom navigation to labelled side navigation.
 
+**Related terms:** app shell, workspace, inset shell, tab bar, bottom
+navigation, side navigation, navigation rail, master-detail app.
+
 This is not a generic wrapper for a website, dashboard, or anything described
 as an "app." It fixes the shell to the dynamic viewport and hides overflow on
 that shell. A public, marketing, editorial, or normally scrolling page should
@@ -51,6 +54,10 @@ The recipe uses the dynamic viewport token and gives scrolling to `.app-main`,
 which avoids fixed-position offsets and keeps mobile keyboard resizing within
 the same layout contract. The topbar preserves its normal spacing below the
 top safe-area inset. The recipe provides no routing or page lifecycle.
+
+The [Tasks template](../../demo/templates/tasks.html) composes it with a
+master-detail workspace inset on the canvas: the topbar and `.app-nav` drop
+their own surface, and `.app-main` carries the raised one.
 
 ### Hooks
 

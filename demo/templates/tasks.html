@@ -10,38 +10,35 @@
   <link rel="stylesheet" href="../assets/actual-themes.min.css">
   <script src="../scripts/theme-picker.js"></script>
   <style>
+    /* Inset shell: chrome sits on the canvas, the work surface is raised. */
     .task-app {
       --panel-padding: clamp(var(--space-30), 2vw, var(--space-50));
-      display: grid;
-      grid-template: auto minmax(0, 1fr) / 11rem minmax(0, 1fr);
-      block-size: 100vh;
-      block-size: 100dvh;
       background: var(--surface-subtle);
     }
 
-    .task-topbar {
-      grid-column: 1 / -1;
+    .task-app > .topbar {
       --cluster-justify: space-between;
-      padding: var(--space-20) var(--panel-padding);
+      border: 0;
+      background: none;
+      backdrop-filter: none;
     }
 
-    .task-nav {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-10);
-      padding: var(--space-30);
-      overflow: auto;
+    .task-app > .app-nav {
+      --ui-bg: transparent;
+      --ui-border: transparent;
     }
 
-    .task-nav .nav-link[aria-current] {
-      --nav-current-bg: var(--surface-raised);
+    @media (min-width: 48rem) {
+      .task-workspace {
+        margin: 0 var(--space-30) var(--space-30) 0;
+        border: var(--border-width) solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--surface-raised);
+      }
     }
 
-    .task-nav svg,
-    .task-back svg {
+    svg.task-icon {
       flex: none;
-      inline-size: 1.25rem;
-      block-size: 1.25rem;
       fill: none;
       stroke: currentColor;
       stroke-width: 1.75;
@@ -49,14 +46,16 @@
       stroke-linejoin: round;
     }
 
+    .task-back svg {
+      inline-size: 1.25rem;
+      block-size: 1.25rem;
+    }
+
+    /* .app-main scrolls; the panes inside it scroll instead. */
     .task-workspace {
       display: grid;
       grid-template-columns: 10rem minmax(0, 1fr);
-      min-block-size: 0;
-      margin: 0 var(--space-30) var(--space-30) 0;
-      border: var(--border-width) solid var(--border);
-      border-radius: var(--radius-lg);
-      background: var(--surface-raised);
+      overflow: hidden;
     }
 
     .task-projects {
@@ -169,16 +168,12 @@
       }
     }
 
-    @media (max-width: 44rem) {
-      .task-app {
-        grid-template: auto minmax(0, 1fr) auto / minmax(0, 1fr);
-      }
-
+    /* .app-layout's bottom-navigation range. */
+    @media (width < 48rem) {
       .task-workspace {
         grid-template: auto minmax(0, 1fr) / minmax(0, 1fr);
-        margin: 0;
-        border-inline: 0;
-        border-radius: 0;
+        border-block: var(--border-width) solid var(--border);
+        background: var(--surface-raised);
       }
 
       .task-projects {
@@ -208,63 +203,18 @@
       .task-app[data-detail] .task-panes {
         grid-row: 2;
       }
-
-      .task-nav {
-        grid-row: 3;
-        flex-direction: row;
-        padding: var(--space-10) max(var(--space-10), env(safe-area-inset-right))
-          max(var(--space-10), env(safe-area-inset-bottom)) max(var(--space-10), env(safe-area-inset-left));
-      }
-
-      .task-nav .nav-link {
-        flex: 1;
-        flex-direction: column;
-        justify-content: center;
-        gap: var(--space-10);
-        min-block-size: var(--control-size-lg);
-        padding-block: var(--space-10);
-        font-size: var(--font-size-sm);
-      }
-
-      .task-nav svg {
-        inline-size: 1.5rem;
-        block-size: 1.5rem;
-      }
     }
   </style>
 </head>
 
 <body>
-  <div class="task-app">
-    <header class="cluster task-topbar">
+  <div class="app-layout task-app">
+    <header class="topbar cluster task-topbar">
       <span class="navbar-brand"><span class="avatar primary sm" aria-hidden="true">F</span> Fieldwork</span>
       <theme-picker><select class="select sm fit" aria-label="Switch theme"></select></theme-picker>
     </header>
 
-    <nav class="scroller task-nav" aria-label="Task views">
-      <button class="nav-link" type="button" data-view="all" aria-current="page">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <path d="m3 6 1.5 1.5L7 5m-4 7 1.5 1.5L7 11m-4 7 1.5 1.5L7 17M11 6h10m-10 6h10m-10 6h10"/>
-        </svg>
-        <span>All tasks</span>
-      </button>
-      <button class="nav-link" type="button" data-view="today">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <rect x="3" y="5" width="18" height="16" rx="2"/>
-          <path d="M7 3v4m10-4v4M3 10h18m-10 5h2v2h-2z"/>
-        </svg>
-        <span>Today</span>
-      </button>
-      <button class="nav-link" type="button" data-view="done">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="m8 12 2.5 2.5 5-5"/>
-        </svg>
-        <span>Completed</span>
-      </button>
-    </nav>
-
-    <main class="task-workspace" aria-label="Task workspace">
+    <main class="app-main task-workspace" aria-label="Task workspace">
       <nav class="scroller task-projects" aria-label="Project lists">
         <ul class="nav-list">
           <li><button class="nav-link" type="button" data-project="all" aria-current="true">All lists</button></li>
@@ -296,7 +246,7 @@
 
         <article class="scroller task-panel task-detail" id="task-detail" aria-labelledby="task-title">
           <button class="btn ghost sm task-back" type="button">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <svg class="task-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="m11 5-7 7 7 7M4 12h16"/>
             </svg>
             Back to tasks
@@ -335,6 +285,29 @@
         </article>
       </div>
     </main>
+
+    <nav class="app-nav" aria-label="Task views">
+      <a href="#all" data-view="all" aria-current="page">
+        <svg class="task-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="m3 6 1.5 1.5L7 5m-4 7 1.5 1.5L7 11m-4 7 1.5 1.5L7 17M11 6h10m-10 6h10m-10 6h10"/>
+        </svg>
+        <span>All tasks</span>
+      </a>
+      <a href="#today" data-view="today">
+        <svg class="task-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <rect x="3" y="5" width="18" height="16" rx="2"/>
+          <path d="M7 3v4m10-4v4M3 10h18m-10 5h2v2h-2z"/>
+        </svg>
+        <span>Today</span>
+      </a>
+      <a href="#done" data-view="done">
+        <svg class="task-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="m8 12 2.5 2.5 5-5"/>
+        </svg>
+        <span>Completed</span>
+      </a>
+    </nav>
   </div>
 
   <template id="task-row">
@@ -406,7 +379,7 @@
           row.querySelector(".badge").hidden = !task.priority;
           link.addEventListener("click", (event) => {
             event.preventDefault();
-            app.querySelector("a[aria-current]")?.removeAttribute("aria-current");
+            app.querySelector(".task-rows a[aria-current]")?.removeAttribute("aria-current");
             link.setAttribute("aria-current", "true");
             selected = task;
             app.setAttribute("data-detail", "");
@@ -452,7 +425,8 @@
     }
 
     for (const filter of filters) {
-      filter.addEventListener("click", () => {
+      filter.addEventListener("click", (event) => {
+        event.preventDefault();
         const key = filter.hasAttribute("data-view") ? "view" : "project";
         app.querySelector(`[data-${key}][aria-current]`).removeAttribute("aria-current");
         filter.setAttribute("aria-current", key === "view" ? "page" : "true");
@@ -469,7 +443,7 @@
 
     app.querySelector(".task-back").addEventListener("click", () => {
       app.removeAttribute("data-detail");
-      (app.querySelector("a[aria-current]") ?? heading).focus();
+      (app.querySelector(".task-rows a[aria-current]") ?? heading).focus();
     });
 
     status.addEventListener("change", () => {

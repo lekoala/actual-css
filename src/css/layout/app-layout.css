@@ -82,6 +82,9 @@
     justify-items: start;
     gap: var(--space-30);
     padding-inline: var(--space-30);
+    /* The xs caption suits a label under an icon in a cramped bar; beside the
+       icon it reads as a navigation link, at body size like .nav-link. */
+    font-size: inherit;
     text-align: start;
   }
 

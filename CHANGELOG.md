@@ -19,6 +19,8 @@
 - Demos: `data-grid-component` 3.10.3 in `cyberdeck`, `data-grid` and `focus-bench`; grid checkboxes and radios take `.check` / `.radio` through the `check` and `radio` control roles.
 
 ### Fixed
+- `.app-layout`: side `.app-nav` labels inherit the body size instead of the bottom bar's `--font-size-xs` caption.
+- `tasks` demo: built on `.app-layout` and `.app-nav` instead of a hand-rolled shell.
 - `.list.grouped` rounds the first and last row links inside `<li>` to match the shell.
 - `cyberdeck`: the lit corner tick of `.btn[aria-pressed="true"]` and checked chips stays visible in forced colors.
 

@@ -170,6 +170,12 @@ it("side navigation keeps the current tile's content aligned with its peers", as
       expect(boxes.current.w).toBe(boxes.other.w);
       expect(boxes.currentIcon.x).toBe(boxes.otherIcon.x);
       expect(boxes.currentLabel.x).toBe(boxes.otherLabel.x);
+      // A side label reads as a link, not as the bottom bar's xs caption.
+      const sizes = await view.evaluate(`[
+        getComputedStyle(document.getElementById("other-label")).fontSize,
+        getComputedStyle(document.querySelector(".app-nav")).fontSize,
+      ]`);
+      expect(sizes[0]).toBe(sizes[1]);
     },
     { width: 1100, height: 900, artifactName: "app-nav-side" },
   );
