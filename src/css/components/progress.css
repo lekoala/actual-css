@@ -35,12 +35,16 @@
   border: 0;
   border-radius: var(--bar-radius);
   background: var(--progress-track);
+  /* A rail, recessed with the fields when a theme sets --shadow-inset. */
+  box-shadow: var(--shadow-inset, none);
 }
 
+/* The bar box paints over the host's inset shadow, so it carries it too. */
 .progress::-webkit-progress-bar {
   block-size: var(--bar-height);
   border-radius: var(--bar-radius);
   background: var(--progress-track);
+  box-shadow: var(--shadow-inset, none);
 }
 
 .progress::-webkit-progress-value {

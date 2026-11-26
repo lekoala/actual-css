@@ -67,6 +67,7 @@
   --range-fill-from: to left;
 }
 
+/* A rail, recessed with the fields when a theme sets --shadow-inset. */
 .range::-webkit-slider-runnable-track {
   block-size: var(--range-track-height);
   border-radius: var(--radius-full);
@@ -75,6 +76,7 @@
     var(--range-fill-bg) var(--range-progress),
     var(--range-track-bg) var(--range-progress)
   );
+  box-shadow: var(--shadow-inset, none);
 }
 
 .range::-moz-range-track {
@@ -85,6 +87,7 @@
     var(--range-fill-bg) var(--range-progress),
     var(--range-track-bg) var(--range-progress)
   );
+  box-shadow: var(--shadow-inset, none);
 }
 
 .range::-webkit-slider-thumb {
@@ -99,8 +102,11 @@
   cursor: inherit;
   /* Permanent surface separator: the fill defaults to the thumb color, so
      without this the thumb would melt into the filled part of the track.
-     Focus-visible keeps this ring and adds the --focus ring outside it. */
-  box-shadow: 0 0 0 2px var(--surface-opaque);
+     Focus-visible keeps this ring and adds the --focus ring outside it. A
+     theme's --shadow-control comes last, under both rings. */
+  box-shadow:
+    0 0 0 2px var(--surface-opaque),
+    var(--shadow-control, 0 0 #0000);
   transition: box-shadow var(--duration);
 }
 
@@ -111,7 +117,9 @@
   border: 0;
   background: var(--range-thumb-bg);
   cursor: inherit;
-  box-shadow: 0 0 0 2px var(--surface-opaque);
+  box-shadow:
+    0 0 0 2px var(--surface-opaque),
+    var(--shadow-control, 0 0 #0000);
   transition: box-shadow var(--duration);
 }
 
@@ -130,13 +138,15 @@
 .range:focus-visible::-webkit-slider-thumb {
   box-shadow:
     0 0 0 2px var(--surface-opaque),
-    0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
+    0 0 0 calc(2px + var(--focus-ring-width)) var(--focus),
+    var(--shadow-control, 0 0 #0000);
 }
 
 .range:focus-visible::-moz-range-thumb {
   box-shadow:
     0 0 0 2px var(--surface-opaque),
-    0 0 0 calc(2px + var(--focus-ring-width)) var(--focus);
+    0 0 0 calc(2px + var(--focus-ring-width)) var(--focus),
+    var(--shadow-control, 0 0 #0000);
 }
 
 .range:disabled {
@@ -154,7 +164,9 @@
    and would win the variable, leaving a Canvas-remapped fill.
    The split lives in a background-image, which forced-color-adjust: auto
    drops — so the tracks opt out locally. The colors stay system keywords,
-   keeping native contrast adaptation; only the host keeps adjusting. */
+   keeping native contrast adaptation; only the host keeps adjusting. Opting
+   out also keeps a theme's --shadow-inset, which the forced palette would
+   drop everywhere else, hence the reset. */
 @media (forced-colors: active) {
   .range {
     --range-track-bg: CanvasText;
@@ -169,6 +181,7 @@
       Highlight var(--range-progress),
       CanvasText var(--range-progress)
     );
+    box-shadow: none;
   }
 
   .range::-moz-range-track {
@@ -178,6 +191,7 @@
       Highlight var(--range-progress),
       CanvasText var(--range-progress)
     );
+    box-shadow: none;
   }
   .range::-webkit-slider-thumb {
     background: ButtonFace;

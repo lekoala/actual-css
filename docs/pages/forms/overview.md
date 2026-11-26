@@ -188,7 +188,9 @@ Set `--control-hover-bg` to keep a `.select` background steady on hover, or give
 it a stronger fill.
 Set `--control-shadow` to give `.input`, `.textarea` and `.select` a resting
 elevation (unset by default). It inherits, so a theme can set it once on its
-root; keyboard focus and an open custom select keep it.
+root; keyboard focus and an open custom select keep it. Unset, it falls back
+to `--shadow-inset`, the recess fields share with the switch, range, progress
+and segmented rails ([Elevation](../foundations/tokens.md#elevation)).
 
 ## Notes
 

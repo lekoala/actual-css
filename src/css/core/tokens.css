@@ -61,6 +61,13 @@
   --radius-full: 9999px;
   --shadow: 0 1px 3px rgb(0 0 0 / 0.05), 0 4px 12px rgb(0 0 0 / 0.04);
   --shadow-popout: 0 0.25rem 0.75rem rgb(0 0 0 / 0.15);
+  /* Control-scale relief, unset so the default theme stays flat: a theme sets
+     them on its root. --shadow-control lifts the part that moves on a rail
+     (selected segment, switch knob, range thumb), where --shadow's blur reads
+     as a smudge; --shadow-inset recesses fields and rails. Both enter shadow
+     lists, so a theme flattens them with 0 0 #0000, never none. */
+  --shadow-control: initial;
+  --shadow-inset: initial;
 
   /* Motion — see reset.css for the prefers-reduced-motion hard reset.
      --duration scales component transitions (hover/focus); the dedicated

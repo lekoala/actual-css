@@ -369,3 +369,9 @@ on its components. Tap both rows on a phone to compare:
   Change it in `:hover`/`:active` rules for a lift and press.
   Supply shadow-list items; use `0 0 #0000` for no elevation. `none` cannot
   compose with the inset hover overlay and invalidates the whole shadow list.
+- `--btn-finish` — a `background-image` layered over the fill (unset by
+  default): a gloss, a dome, a texture. Use a translucent neutral such as
+  `linear-gradient(rgb(255 255 255 / 0.15), transparent)` so one value lights
+  every intent and the hover still darkens it; the intent color stays in the
+  color tokens. `.outline`, `.ghost`, `.link`, `.soft` and `.surface` clear
+  it. `actual-css contrast` measures the fill without it, so keep it a veil.

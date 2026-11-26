@@ -1,7 +1,8 @@
 <!doctype html>
 <!-- Hooks a theme sets to change component behaviour, not only color: a
-     resting button elevation the hover overlay composes with, and an
-     accordion marker glyph and turn. --duration: 0s reads end states. -->
+     resting button elevation the hover overlay composes with, control-scale
+     relief and a button finish, and an accordion marker glyph and turn.
+     --duration: 0s reads end states. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -15,6 +16,11 @@
       --btn-shadow: 4px 4px 0 rgb(0 0 0);
       --control-shadow: 3px 3px 0 rgb(0 0 0);
     }
+    .relief {
+      --shadow-control: rgb(0 0 0) 0px 1px 0px 0px;
+      --shadow-inset: rgb(0 0 0) 0px 2px 0px 0px inset;
+      --btn-finish: linear-gradient(rgb(255 0 0), rgb(0 0 255));
+    }
     .plus {
       --accordion-marker-icon: var(--icon-plus);
       --accordion-marker-open-rotate: 45deg;
@@ -26,6 +32,25 @@
     <button class="btn" type="button" id="btn-rest">Rest</button>
     <button class="btn" type="button" id="btn-hover">Hover</button>
     <input class="input" id="field" aria-label="Field">
+  </div>
+
+  <div class="relief stack">
+    <div class="cluster">
+      <button class="btn primary" type="button" id="finish-hover">Finish</button>
+      <button class="btn outline" type="button" id="finish-outline">Outline</button>
+      <input class="input" id="relief-field" aria-label="Relief field">
+      <input class="switch" type="checkbox" role="switch" id="relief-switch" aria-label="Relief switch">
+      <input class="range" type="range" id="relief-range" aria-label="Relief range">
+    </div>
+    <div class="segmented" id="relief-segmented">
+      <label class="segment"><input type="radio" name="relief" checked>One</label>
+      <label class="segment"><input type="radio" name="relief">Two</label>
+    </div>
+    <progress class="progress" id="relief-progress" value="50" max="100"></progress>
+  </div>
+  <div class="segmented" id="plain-segmented">
+    <label class="segment"><input type="radio" name="plain" checked>One</label>
+    <label class="segment"><input type="radio" name="plain">Two</label>
   </div>
 
   <div class="accordion" id="acc-default">

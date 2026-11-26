@@ -76,6 +76,8 @@
   border: var(--border-width) solid var(--form-invalid-border, var(--switch-border));
   border-radius: var(--radius-full);
   background: var(--switch-bg);
+  /* A rail, recessed with the fields when a theme sets --shadow-inset. */
+  box-shadow: var(--shadow-inset, none);
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
@@ -96,11 +98,11 @@
   }
 }
 
-/* No elevation on the knob: --shadow is a surface elevation (card, modal,
-   drawer, fab), and at this size its 12px blur reads as a smudge that spills
-   past the rail while carrying no state. The range thumb — the same kind of
-   small moving part — stays flat for the same reason. The concentric inset
-   against the track is what makes the knob legible. */
+/* Never --shadow on the knob: it is a surface elevation (card, modal, drawer,
+   fab), and at this size its 12px blur reads as a smudge that spills past the
+   rail while carrying no state. A theme lifts it with the control-scale
+   --shadow-control; unset, the knob stays flat and the concentric inset
+   against the track is what makes it legible. */
 .switch::before {
   content: "";
   /* Out of flow like the checkbox mark, so the track carries no in-flow item
@@ -116,6 +118,7 @@
   block-size: var(--switch-knob-size);
   border-radius: var(--radius-full);
   background: var(--switch-knob);
+  box-shadow: var(--shadow-control, none);
   transition:
     transform var(--duration),
     background-color var(--duration);

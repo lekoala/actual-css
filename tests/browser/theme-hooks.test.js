@@ -1,7 +1,8 @@
 /*
  * Hooks a theme sets to change component behaviour: --btn-shadow (a resting
- * elevation the solid hover overlay must compose with, not replace) and the
- * accordion marker glyph and open turn.
+ * elevation the solid hover overlay must compose with, not replace),
+ * --btn-finish, --shadow-control and --shadow-inset, and the accordion marker
+ * glyph and open turn.
  */
 import { expect, test } from "bun:test";
 import {
@@ -52,6 +53,59 @@ it("keeps --control-shadow on a keyboard-focused field", async () => {
 
     expect(field.outline).toBe("solid");
     expect(field.shadow).toBe("rgb(0, 0, 0) 3px 3px 0px 0px");
+  });
+});
+
+// Trap: the hover rule used the background shorthand, which resets the image
+// layer, so a finish set on .btn vanished under the pointer.
+it("keeps --btn-finish under the hover and off unfilled variants", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    await forceStates(view, { "#finish-hover": ["hover"] });
+    await waitForBrowser(
+      view,
+      `getComputedStyle(document.getElementById("finish-hover")).boxShadow.includes("inset")`,
+    );
+    const image = await view.evaluate(`(() => ({
+      hover: getComputedStyle(document.getElementById("finish-hover")).backgroundImage,
+      outline: getComputedStyle(document.getElementById("finish-outline")).backgroundImage,
+    }))()`);
+
+    expect(image.hover).toStartWith("linear-gradient(");
+    expect(image.outline).toBe("none");
+  });
+});
+
+it("recesses fields and rails with --shadow-inset, kept on keyboard focus", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    await tabUntil(view, `document.activeElement?.id === "relief-field"`);
+    await waitForBrowser(view, `document.getElementById("relief-field").matches(":focus-visible")`);
+    const shadows = await view.evaluate(`(() => Object.fromEntries(
+      ["relief-field", "relief-switch", "relief-segmented", "relief-progress"].map((id) => [
+        id,
+        getComputedStyle(document.getElementById(id)).boxShadow,
+      ]),
+    ))()`);
+
+    for (const shadow of Object.values(shadows)) {
+      expect(shadow).toBe("rgb(0, 0, 0) 0px 2px 0px 0px inset");
+    }
+  });
+});
+
+// Trap: the selected segment's ring and its shadow share one list, so the
+// control relief must be appended after the ring, never replace the list.
+it("lifts moving parts with --shadow-control and falls back to --shadow", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const shadows = await view.evaluate(`(() => ({
+      knob: getComputedStyle(document.getElementById("relief-switch"), "::before").boxShadow,
+      pill: getComputedStyle(document.querySelector("#relief-segmented .segment")).boxShadow,
+      plain: getComputedStyle(document.querySelector("#plain-segmented .segment")).boxShadow,
+    }))()`);
+
+    expect(shadows.knob).toBe("rgb(0, 0, 0) 0px 1px 0px 0px");
+    expect(shadows.pill).toEndWith(", rgb(0, 0, 0) 0px 1px 0px 0px");
+    // Unset, the pill keeps the surface --shadow (its 12px ambient blur).
+    expect(shadows.plain).toContain("12px");
   });
 });
 

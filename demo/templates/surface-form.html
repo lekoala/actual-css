@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Surface form - Actual CSS</title>
-  <meta name="description" content="Compare flat, outlined and inset-shadow form fields on a pale blue surface, with keyboard focus and inline validation in every treatment.">
+  <meta name="description" content="Compare flat, outlined, inset-shadow and lower-edge form fields on a pale blue surface, with keyboard focus and inline validation in every treatment.">
   <link rel="stylesheet" href="../../dist/actual.full.css">
   <style>
     [data-theme="studio-demo"] {
@@ -133,6 +133,17 @@
       --studio-invalid-border: transparent;
     }
 
+    /* The borderless look that passes: the 3:1 control edge moves to the
+       lower edge alone, thick enough to read as the field's underside. The
+       invalid border stays: it replaces that edge, so clearing it would
+       leave an invalid field with no cue at all. */
+    :where(.studio-page:has(#edge-mode:checked)) .studio-form {
+      --control-default-border: transparent;
+      --control-hover-border: transparent;
+      --control-border-block-end-color: var(--border-control);
+      --control-border-block-end-width: 2px;
+    }
+
     :where(.studio-page:has(#shadow-mode:checked)) .studio-form {
       --control-shadow: inset 0 2px 6px rgb(15 51 65 / 18%);
     }
@@ -184,7 +195,7 @@
   <main class="center stack studio-width studio-page">
     <header class="stack studio-intro">
       <h1>Join a printmaking workshop</h1>
-      <p class="muted">Try a community studio booking form with three field treatments on the same blue surface.</p>
+      <p class="muted">Try a community studio booking form with four field treatments on the same blue surface.</p>
     </header>
 
     <div class="studio-layout">
@@ -195,6 +206,7 @@
             <label class="segment"><input id="surface-mode" type="radio" name="appearance" checked>Surface</label>
             <label class="segment"><input type="radio" name="appearance">Outline</label>
             <label class="segment"><input id="shadow-mode" type="radio" name="appearance">Shadow</label>
+            <label class="segment"><input id="edge-mode" type="radio" name="appearance">Edge</label>
           </div>
         </fieldset>
         <p>Press Tab to see focus. Submit the empty form to see errors and focus the first invalid field.</p>
@@ -246,7 +258,7 @@
           <div class="cluster"><dt>Outline against blue</dt><dd>3.50:1</dd></div>
           <div class="cluster"><dt>Outline against white</dt><dd>3.82:1</dd></div>
         </dl>
-        <p class="muted">The white fill alone falls below the 3:1 threshold for a cue needed to identify a field. Increased contrast and forced colors restore a full outline. <a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html">WCAG non-text contrast</a></p>
+        <p class="muted">The white fill alone falls below the 3:1 threshold for a cue needed to identify a field. Edge keeps the fill and carries the outline color on the lower edge only. Increased contrast and forced colors restore a full outline. <a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html">WCAG non-text contrast</a></p>
       </aside>
     </div>
   </main>

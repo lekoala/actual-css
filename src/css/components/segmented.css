@@ -55,6 +55,8 @@
   border: var(--border-width) solid transparent;
   border-radius: var(--segmented-radius);
   background: var(--segmented-bg);
+  /* A rail, recessed with the fields when a theme sets --shadow-inset. */
+  box-shadow: var(--shadow-inset, none);
   font-size: var(--control-font-size);
   vertical-align: middle;
 }
@@ -155,10 +157,12 @@
    The selected pill is set apart by its fill, its shadow and the full --text
    ink against --text-muted; no edge by default. --segmented-selected-border
    is read, never declared here, so a theme (a flat one without --shadow) can
-   restore the edge once on its root.
-   Trap: the ring and --shadow share one box-shadow list, and `none` is not a
-   list item. A theme that sets --shadow: none drops the whole declaration,
-   ring included; flatten shadows with --shadow-color: transparent instead. */
+   restore the edge once on its root. The shadow is --shadow-control when a
+   theme sets it, the surface --shadow otherwise.
+   Trap: the ring and the shadow share one box-shadow list, and `none` is not
+   a list item. A theme that sets either shadow to none drops the whole
+   declaration, ring included; flatten with 0 0 #0000 or
+   --shadow-color: transparent instead. */
 .segment:is([aria-selected="true"], [aria-current="page"], [aria-current="true"]) {
   --segment-focus: var(--segmented-selected-fg, var(--focus));
 
@@ -166,7 +170,7 @@
   color: var(--segmented-selected-fg, var(--text));
   box-shadow:
     0 0 0 var(--border-width) var(--segmented-selected-border, transparent),
-    var(--shadow);
+    var(--shadow-control, var(--shadow));
 }
 
 .segment:has(> input:checked) {
@@ -176,7 +180,7 @@
   color: var(--segmented-selected-fg, var(--text));
   box-shadow:
     0 0 0 var(--border-width) var(--segmented-selected-border, transparent),
-    var(--shadow);
+    var(--shadow-control, var(--shadow));
 }
 
 .segment:focus-visible {

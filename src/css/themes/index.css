@@ -34,7 +34,7 @@
  *   neon       — dark-only + wide-gamut P3 upgrade via oklch(), glow
  *                shadows, soft-variant tuning
  *   gradient   — paired recolor + Bootstrap 4 style gradient on solid buttons
- *                via component-local button tokens
+ *                through the --btn-finish token
  *   material   — paired Material 3 baseline palette + filled underline fields
  *                and pill buttons, a stress test of the field focus contract
  *   glass      — dark-only translucent surfaces over a theme-painted backdrop,
@@ -42,6 +42,11 @@
  *   minimal    — flat and editorial: square, no elevation, underline fields
  *                aligned on their labels, intent as an alert's edge; how far
  *                the tokens and inherited hooks change the grammar
+ *   tactile    — paired: raised cards, recessed fields and rails, domed solid
+ *                buttons; a stress test of elevation and finish
+ *   plush      — paired: borderless cards, inset-shaded wells for fields and
+ *                rails, tonal quiet actions, squish and stretch press motion;
+ *                a stress test of fill-identified controls
  *
  *   cyberdeck  — dark-only tactical HUD: bevels through corner-shape over the
  *                radius tokens, a dot-grid backdrop, segmented gauges, two
@@ -72,3 +77,5 @@
 @import "./material.css";
 @import "./glass.css";
 @import "./minimal.css";
+@import "./tactile.css";
+@import "./plush.css";

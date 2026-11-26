@@ -113,8 +113,9 @@ which both stacks it and gives the tabs runtime Up and Down.
 - `--segmented-fg` — label ink of the unselected segments.
 - `--segmented-selected-bg` — fill of the selected segment: `--surface-raised`
   in a light scheme, lifted above the track in a dark one. Its shadow follows
-  `--shadow`; a flat theme sets `--shadow-color: transparent`, not
-  `--shadow: none`, which would also drop the edge below.
+  `--shadow-control`, or `--shadow` when that is unset; a flat theme sets
+  `--shadow-color: transparent`, not a shadow to `none`, which would also drop
+  the edge below. The track takes `--shadow-inset`.
 - `--segmented-selected-fg` — label and inset focus ring color for a custom
   selected fill. Set it on the track or inherit it from a theme. Pair it with
   the fill: 4.5:1 for the label, which also gives the ring its 3:1.

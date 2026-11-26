@@ -1972,7 +1972,7 @@ test("controls never zero the outline in their base style", () => {
     new RegExp(
       String.raw`\.select:focus-visible:not\(:disabled\)\s*\{[^}]*` +
         FIELD_INSET_OUTLINE.source +
-        String.raw`[^}]*box-shadow:\s*var\(--control-shadow, none\);`,
+        String.raw`[^}]*box-shadow:\s*var\(--control-shadow, var\(--shadow-inset, none\)\);`,
     ),
   );
   expect(css).not.toMatch(/outline\s*:\s*(none|0)\b/);

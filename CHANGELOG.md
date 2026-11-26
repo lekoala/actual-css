@@ -17,8 +17,18 @@
 - Docs search links directly to matching demos by title or filename after the documentation results.
 - `--field-label-scale`: `.field-label` and `.field-group.flush` legend size as a fraction of `--control-font-size`; `1` restores labels at the field text size.
 - `actual-css/forms.json`: the `components.json` index for `src/css/forms` (classes, hooks, states, imports, docs URL), verified by `check:catalog`.
+- `--shadow-control`: unset control-scale relief for the selected `.segment`, the `.switch` knob and the `.range` thumb.
+- `--shadow-inset`: unset recess for fields (through `--control-shadow`) and the switch, range, progress, meter and segmented rails.
+- `--btn-finish`: a `background-image` over a filled `.btn`, kept on hover and cleared on `.outline`, `.ghost`, `.link`, `.soft` and `.surface`.
+- `tactile` demo theme: raised cards, recessed fields and rails, domed buttons.
+- `plush` demo theme: borderless cards, inset-shaded fields and rails, squish and stretch press motion.
+- `surface-form` demo: an Edge treatment, a filled field with the 3:1 cue on its lower edge.
+- Design note: `elevation-and-finish.md`.
 
 ### Changed
+- `.btn` paints `--btn-bg` with `background-color`: a gradient in `--ui-bg` or `--btn-default-bg` no longer renders; use `--btn-finish`.
+- `gradient` demo theme: its button gradient moves to `--btn-finish`.
+- `actual-css contrast` measures solid button pairs under `--btn-finish` instead of reporting them n/a.
 - `nextItem()` from `actual-css/js/keys` stops at the edges by default, matching `itemForKey()`; pass `{ wrap: true }` to cycle.
 - Dialog toggles accept `false` in any letter case, matching tooltip toggles.
 - The `actual-css/js/enhancement-loader` entry point drops the `__setModuleImporter` and `__reset` test hooks.

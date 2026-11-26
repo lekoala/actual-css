@@ -123,7 +123,12 @@ export const NOT_EXPORTED = {
     "icon-close",
     "icon-plus",
   ],
-  "composite DTCG types the export does not build yet": ["shadow", "shadow-popout"],
+  "composite DTCG types the export does not build yet": [
+    "shadow",
+    "shadow-popout",
+    "shadow-control",
+    "shadow-inset",
+  ],
   "input of a derived value": [
     "backdrop-color",
     "backdrop-opacity",

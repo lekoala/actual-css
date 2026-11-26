@@ -29,6 +29,8 @@
   border: 0;
   border-radius: var(--bar-radius);
   background: var(--meter-track);
+  /* A rail, recessed with the fields when a theme sets --shadow-inset. */
+  box-shadow: var(--shadow-inset, none);
 }
 
 /* A non-native meter is a weighted flex container. The element type keeps the
@@ -56,6 +58,8 @@
   border: 0;
   border-radius: var(--bar-radius);
   background: var(--meter-track);
+  /* Paints over the host's inset shadow, so it carries it too. */
+  box-shadow: var(--shadow-inset, none);
 }
 
 .meter::-webkit-meter-optimum-value {

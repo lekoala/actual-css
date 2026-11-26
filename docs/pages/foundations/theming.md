@@ -305,7 +305,13 @@ reference material to copy into your own `[data-theme]` island — they are demo
 assets, not package entrypoints. Each sets the intent/surface/text tokens and
 lets the core derive everything else.
 
-- `gradient`: outer focus halos on fields.
+- `gradient`: outer focus halos on fields, and a button finish.
+- `tactile`: raised cards, recessed fields and rails, domed buttons, all from
+  the elevation and finish tokens.
+- `plush`: borderless cards, fields and rails pressed in by an inner shade,
+  tonal quiet actions, and press motion: squishing buttons, a stretching
+  switch knob. Its fields have no 3:1 cue at rest, a documented exception: the
+  outline returns under increased contrast and forced colors.
 - `neo-brutalist`: hard shadows, pastel fills, and plus-shaped accordion
   markers. Use it as a page skin: its rules cross nested theme boundaries.
 - `material`: filled underline fields, pill buttons, and a table hover that

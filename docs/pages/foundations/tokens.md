@@ -446,6 +446,19 @@ Use a tiny elevation surface. Components should not invent their own shadow scal
 
 With `color-mix()` support the shadows derive from `--shadow-color` (a theme token) and re-declare on every theme boundary so islands follow their own shadow color.
 
+Two control-scale roles are unset by default, so the default theme stays flat.
+A theme sets them on its root to add relief (raised, recessed, tactile, skeuomorphic):
+
+- `--shadow-control` lifts the part that moves on a rail: the selected segment,
+  the switch knob, the range thumb. `--shadow` is too wide at that size.
+  Buttons keep their own `--btn-shadow`, which every variant reads.
+- `--shadow-inset` recesses fields (through `--control-shadow`) and rails:
+  switch track, range track, progress, meter and segmented track.
+
+Both enter shadow lists beside rings and overlays: flatten them with
+`0 0 #0000`, never `none`. A recess does not identify a field; keep the
+`--border-control` edge. A finish on filled buttons is `--btn-finish`.
+
 ### Motion
 
 Motion durations keep transitions consistent and easy to disable.

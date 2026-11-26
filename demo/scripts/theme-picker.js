@@ -39,6 +39,8 @@
     "material",
     "glass",
     "minimal",
+    "tactile",
+    "plush",
   ];
 
   const KEY = document.currentScript?.dataset.storage;

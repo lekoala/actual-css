@@ -20,6 +20,7 @@
  * --btn-gap
  * --btn-hover-overlay
  * --btn-shadow
+ * --btn-finish
  * --btn-default-bg
  * --btn-default-fg
  * --btn-default-border
@@ -83,7 +84,15 @@
   );
   border-block-end-width: var(--btn-border-block-end-width, var(--border-width));
   border-radius: var(--btn-radius);
-  background: var(--btn-bg);
+  /* why: the fill is a color and the finish an image layered over it, so a
+     theme lights every intent the same way without restating its color, and
+     the hover (a background-color change under an inset overlay) keeps the
+     finish. --btn-bg must stay a color: an image there invalidates the
+     declaration. From the border box, so a repeated tile does not show its
+     bottom edge in the transparent border along the top. */
+  background-color: var(--btn-bg);
+  background-image: var(--btn-finish, none);
+  background-origin: border-box;
   color: var(--btn-fg);
   /* why: an unset hook rather than none, so a theme or container can give
      every button an elevation the hover overlay composes with instead of
@@ -163,6 +172,12 @@
   --btn-hover-overlay: transparent;
 }
 
+/* A finish lights a fill: the recipes without an opaque fill of their own
+   stay flat. A theme that wants a finish on one of them sets it there. */
+.btn:is(.outline, .ghost, .link, .soft, .surface) {
+  --btn-finish: initial;
+}
+
 /* Shared hover recipe — sets --ui-hover-bg consumed by the hover rule below.
    Declared outside :hover: the variables resolve only when the hover rule
    reads them, so the values are inert until interaction. */
@@ -203,7 +218,7 @@
 /* The .soft/.outline/.ghost hover recipe (--ui-hover-bg) is set locally above;
    the overlay darkening for solid is .btn-specific. */
 .btn:not(:where(:disabled, [aria-disabled="true"])):hover {
-  background: var(--ui-hover-bg, var(--btn-bg));
+  background-color: var(--ui-hover-bg, var(--btn-bg));
   /* Huge inset spread paints the overlay over any border-radius without a
      pseudo-element; a plain background would replace the fill instead of
      darkening it. Listed after --btn-shadow, which it must not drop. */
@@ -243,7 +258,7 @@
    after components and overrides border-radius at equal specificity. */
 
 .btn.link:not(:where(:disabled, [aria-disabled="true"])):hover {
-  background: transparent;
+  background-color: transparent;
   text-decoration-thickness: 0.12em;
 }
 

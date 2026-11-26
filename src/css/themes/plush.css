@@ -1,0 +1,185 @@
+/* Plush — paired light/dark consumer theme: soft filled shapes instead of
+ * outlines. Borderless cards float on a warm canvas, fields and rails are
+ * wells pressed in by an inner shade, quiet actions are tonal fills. A stress
+ * test of fill-identified controls, and a documented exception to the 3:1
+ * field cue (see the wells below),
+ * with motion recipes on the existing hooks: buttons squish when pressed, the
+ * switch knob stretches under the pointer, a focused field lifts out of its
+ * well. */
+[data-theme="plush"] {
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
+
+  --primary: #b8235a;
+  --primary-fg: #fff;
+  --secondary: #6b4f8a;
+  --secondary-fg: #fff;
+  --success: #23785a;
+  --success-fg: #fff;
+  --warning: #9a5b00;
+  --warning-fg: #fff;
+  --danger: #b4321f;
+  --danger-fg: #fff;
+  --neutral: #3d3640;
+  --neutral-fg: #fff;
+
+  /* Warm canvas, white cushions on it, a sunk fill for wells. */
+  --surface: #f5f1ec;
+  --surface-raised: #fff;
+  --surface-subtle: #efe9e3;
+  --surface-solid: #2e2830;
+
+  --text: #231d24;
+  --text-muted: #5b5160;
+  --text-subtle: #6e6473;
+
+  --border: #e4ddd6;
+  /* One mid-tone for both schemes: the primary has no 3:1 pair with the
+     inverse surface; this holds it on the canvas, the well and
+     --surface-solid. */
+  --focus: #d94882;
+  --soft-fg-mix: 70%;
+  --hover-overlay: rgb(35 29 36 / 0.05);
+  --shadow-color: hsl(330 30% 22%);
+
+  --radius-sm: 0.625rem;
+  --radius: 0.875rem;
+  --radius-lg: 1.5rem;
+
+  --control-default-bg: var(--surface-subtle);
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="plush"] {
+    color-scheme: light dark;
+    --primary: light-dark(#b8235a, #ff8db5);
+    --primary-fg: light-dark(#fff, #3d0a1f);
+    --secondary: light-dark(#6b4f8a, #c9b2e6);
+    --secondary-fg: light-dark(#fff, #24173a);
+    --success: light-dark(#23785a, #78d6ae);
+    --success-fg: light-dark(#fff, #07261b);
+    --warning: light-dark(#9a5b00, #f2b866);
+    --warning-fg: light-dark(#fff, #2d1900);
+    --danger: light-dark(#b4321f, #ff9d8c);
+    --danger-fg: light-dark(#fff, #3d0c05);
+    --neutral: light-dark(#3d3640, #d6cdd8);
+    --neutral-fg: light-dark(#fff, #231d24);
+
+    --surface: light-dark(#f5f1ec, #18141a);
+    --surface-raised: light-dark(#fff, #241f27);
+    --surface-subtle: light-dark(#efe9e3, #2e2831);
+    --surface-solid: light-dark(#2e2830, #f5f1ec);
+
+    --text: light-dark(#231d24, #f3edf2);
+    --text-muted: light-dark(#5b5160, #b9adbc);
+    --text-subtle: light-dark(#6e6473, #9d91a0);
+
+    --border: light-dark(#e4ddd6, #3a333d);
+    --hover-overlay: light-dark(rgb(35 29 36 / 0.05), rgb(255 255 255 / 0.06));
+    --shadow-color: light-dark(hsl(330 30% 22%), #000);
+  }
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  [data-theme="plush"] {
+    /* Wide, low, tinted: cushions rest on the canvas rather than hover. */
+    --shadow:
+      0 1px 2px color-mix(in oklch, var(--shadow-color) 5%, transparent),
+      0 10px 30px color-mix(in oklch, var(--shadow-color) 8%, transparent);
+    --shadow-popout:
+      0 2px 6px color-mix(in oklch, var(--shadow-color) 8%, transparent),
+      0 16px 40px color-mix(in oklch, var(--shadow-color) 16%, transparent);
+    --shadow-control:
+      0 1px 2px color-mix(in oklch, var(--shadow-color) 12%, transparent),
+      0 3px 8px color-mix(in oklch, var(--shadow-color) 10%, transparent);
+    --control-hover-bg: color-mix(in oklab, var(--surface-subtle) 94%, var(--text));
+
+    /* Cushion wells: fields and rails are pressed into the surface by a soft
+       inner shade, with no outline. Known exception: neither the fill nor the
+       shade reaches the 3:1 a field's identifying cue needs, so
+       `actual-css contrast` reports the field edge, and the outline returns
+       under increased contrast (below) and forced colors, which paint the
+       transparent border. Inside this @supports so a browser without the
+       shade keeps the outline. */
+    --shadow-inset: inset 0 2px 5px color-mix(in oklch, var(--shadow-color) 14%, transparent);
+    --control-default-border: transparent;
+    --control-hover-border: transparent;
+  }
+
+  /* A focused field lifts out of its well: the raised fill and the control
+     relief, under the core focus outline. */
+  [data-theme="plush"] :is(.input, .textarea, .select):focus-visible:not(:disabled) {
+    --control-bg: var(--surface-raised);
+
+    box-shadow: var(--shadow-control);
+  }
+
+  /* Hover deepens the well instead of drawing an edge, as the select does
+     through --control-hover-bg. */
+  [data-theme="plush"] :is(.input, .textarea):hover:not(:disabled, :focus-visible, [readonly]) {
+    --control-bg: var(--control-hover-bg);
+  }
+
+  /* Quiet actions are tonal fills: the label identifies them, an outline
+     would bring back the edges the theme removes. An explicit intent keeps
+     the core outline. */
+  [data-theme="plush"]
+  .btn:is(.outline, .surface):not(:where(.primary, .secondary, .success, .warning, .danger)) {
+    --ui-bg: var(--surface-subtle);
+    --ui-hover-bg: color-mix(in oklab, var(--surface-subtle) 92%, var(--text));
+    --ui-border: transparent;
+  }
+}
+
+/* A dark well needs a denser shade, and the lit lower lip of a hollow, to
+   read as sunk rather than flat. Both features are required: light-dark()
+   inside color-mix() would otherwise drop the shade where only one exists. */
+@supports (color: light-dark(red, blue)) and (color: color-mix(in oklch, red, white)) {
+  [data-theme="plush"] {
+    --shadow-inset:
+      inset 0 2px 5px
+      light-dark(color-mix(in oklch, var(--shadow-color) 14%, transparent), rgb(0 0 0 / 0.55)),
+      inset 0 -1px 0 light-dark(transparent, rgb(255 255 255 / 0.06));
+  }
+}
+
+@media (prefers-contrast: more) {
+  [data-theme="plush"] {
+    --control-default-border: var(--border-control);
+    --control-hover-border: var(--text-subtle);
+  }
+}
+
+/* Cards float on their shadow; the canvas and the cushion differ by fill. */
+[data-theme="plush"] .card {
+  border-color: transparent;
+  box-shadow: var(--shadow);
+}
+
+/* Common buttons are pills. */
+[data-theme="plush"] .btn {
+  --btn-radius: var(--radius-full);
+}
+
+[data-theme="plush"] .segmented {
+  --segmented-radius: var(--radius-full);
+}
+
+/* Pressed actions squish instead of sinking. */
+[data-theme="plush"] .btn:not(:where(:disabled, [aria-disabled="true"])):active {
+  transform: scale(0.96);
+}
+
+/* The knob stretches toward its travel while held; the travel follows the
+   knob width (switch.css), so the knob still ends flush with the track. */
+[data-theme="plush"] .switch::before {
+  transition:
+    transform var(--duration),
+    inline-size var(--duration),
+    background-color var(--duration);
+}
+
+[data-theme="plush"] .switch:active:not(:disabled) {
+  --switch-knob-inline-size: calc(var(--switch-knob-size) * 1.3);
+}

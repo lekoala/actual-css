@@ -1,0 +1,137 @@
+/* Tactile — paired light/dark theme where depth carries the role of each part:
+ * cards rise off a grey canvas, fields and rails are recessed into it, solid
+ * actions are domed by a neutral finish over their intent color. A stress test
+ * of the elevation and finish tokens (--shadow-control, --shadow-inset,
+ * --btn-finish): tokens carry the palette and the relief, small recipes carry
+ * raised cards and the quiet buttons turned into raised keys. */
+[data-theme="tactile"] {
+  /* Base palette is the light half; the dark pairing is only announced where
+     light-dark() exists, in the @supports block below. */
+  color-scheme: light;
+
+  --primary: #5a4fc8;
+  --primary-fg: #fff;
+  --secondary: #5c6178;
+  --secondary-fg: #fff;
+  --success: #2f7a4f;
+  --success-fg: #fff;
+  --warning: #a35c00;
+  --warning-fg: #fff;
+  --danger: #b53a32;
+  --danger-fg: #fff;
+  --neutral: #3a3d4c;
+  --neutral-fg: #fff;
+
+  /* Canvas, raised card, recessed well: the well sits between the two so a
+     field reads sunk into the card and still apart from the page. */
+  --surface: #e6e7ec;
+  --surface-raised: #fafafc;
+  --surface-subtle: #ecedf2;
+  --surface-solid: #262833;
+
+  --text: #1b1c24;
+  --text-muted: #525568;
+  --text-subtle: #696c80;
+
+  --border: #d2d4dd;
+  /* One mid-tone for both schemes: the primary has no 3:1 pair with the
+     inverse surface; this holds it on the canvas and on --surface-solid. */
+  --focus: #776bd8;
+  /* The grey canvas pulls soft ink under 4.5:1 at the default full intent. */
+  --soft-fg-mix: 65%;
+  --hover-overlay: rgb(27 28 36 / 0.05);
+  --shadow-color: hsl(235 25% 18%);
+
+  --radius-sm: 0.375rem;
+  --radius: 0.625rem;
+  --radius-lg: 1rem;
+}
+
+@supports (color: light-dark(red, blue)) {
+  [data-theme="tactile"] {
+    color-scheme: light dark;
+    --primary: light-dark(#5a4fc8, #a89ff5);
+    --primary-fg: light-dark(#fff, #1c1640);
+    --secondary: light-dark(#5c6178, #b4b8cc);
+    --secondary-fg: light-dark(#fff, #1b1c24);
+    --success: light-dark(#2f7a4f, #7fcf9c);
+    --success-fg: light-dark(#fff, #0b2416);
+    --warning: light-dark(#a35c00, #f0b45a);
+    --warning-fg: light-dark(#fff, #2b1800);
+    --danger: light-dark(#b53a32, #f29b93);
+    --danger-fg: light-dark(#fff, #3a0c08);
+    --neutral: light-dark(#3a3d4c, #c9ccd9);
+    --neutral-fg: light-dark(#fff, #1b1c24);
+
+    --surface: light-dark(#e6e7ec, #16171d);
+    --surface-raised: light-dark(#fafafc, #22242c);
+    --surface-subtle: light-dark(#ecedf2, #1b1c23);
+    --surface-solid: light-dark(#262833, #e6e7ec);
+
+    --text: light-dark(#1b1c24, #ecedf3);
+    --text-muted: light-dark(#525568, #a9acbd);
+    --text-subtle: light-dark(#696c80, #8d90a3);
+
+    --border: light-dark(#d2d4dd, #33353f);
+    --hover-overlay: light-dark(rgb(27 28 36 / 0.05), rgb(255 255 255 / 0.06));
+    --shadow-color: light-dark(hsl(235 25% 18%), #000);
+    /* Top-edge light: a lit lip on a raised face, a shade on a recessed one.
+       Weaker in the dark half, where a bright rim reads as a stroke. */
+    --tactile-light: light-dark(rgb(255 255 255 / 0.75), rgb(255 255 255 / 0.06));
+  }
+}
+
+@supports (color: color-mix(in oklch, red, white)) {
+  [data-theme="tactile"] {
+    /* Surface elevation: a lit top edge plus a tight contact shadow and a
+       soft ambient one. */
+    --shadow:
+      inset 0 1px 0 var(--tactile-light, rgb(255 255 255 / 0.75)),
+      0 1px 2px color-mix(in oklch, var(--shadow-color) 10%, transparent),
+      0 4px 14px color-mix(in oklch, var(--shadow-color) 9%, transparent);
+    --shadow-popout:
+      0 1px 2px color-mix(in oklch, var(--shadow-color) 12%, transparent),
+      0 8px 24px color-mix(in oklch, var(--shadow-color) 18%, transparent);
+
+    /* Control-scale relief: knobs, thumbs and the selected segment rise;
+       fields and rails sink. The field border stays the 3:1 --border-control
+       edge — the shade alone does not identify a field. */
+    --shadow-control:
+      0 1px 1px color-mix(in oklch, var(--shadow-color) 18%, transparent),
+      0 1px 3px color-mix(in oklch, var(--shadow-color) 12%, transparent);
+    --shadow-inset: inset 0 1px 2px color-mix(in oklch, var(--shadow-color) 14%, transparent);
+    --control-default-bg: var(--surface-subtle);
+    --control-hover-bg: color-mix(in oklab, var(--surface-subtle) 92%, var(--text));
+
+    /* Domed fills: one neutral light over every intent color. */
+    --btn-finish: linear-gradient(rgb(255 255 255 / 0.14), rgb(0 0 0 / 0.08));
+  }
+
+  /* Every card is a raised face; the theme has no flat card. */
+  [data-theme="tactile"] .card {
+    box-shadow: var(--shadow);
+  }
+
+  /* Solid actions rise like the other moving parts, with a lit top lip. */
+  [data-theme="tactile"] .btn:not(:where(.soft, .outline, .ghost, .link, .surface)) {
+    --btn-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2), var(--shadow-control);
+  }
+
+  /* Quiet actions become raised neutral keys rather than an outline on the
+     page: the label identifies them, the relief says they press. */
+  [data-theme="tactile"]
+  .btn:is(.outline, .surface):not(:where(.primary, .secondary, .success, .warning, .danger)) {
+    --ui-bg: var(--surface-raised);
+    --ui-hover-bg: color-mix(in oklab, var(--surface-raised) 94%, var(--text));
+    --ui-border: var(--border);
+    --btn-shadow:
+      inset 0 1px 0 var(--tactile-light, rgb(255 255 255 / 0.75)), var(--shadow-control);
+    --btn-finish: linear-gradient(transparent 40%, rgb(0 0 0 / 0.03));
+  }
+
+  /* Pressed: the relief turns inward. Through the hook, so the core hover
+     overlay still composes after it. */
+  [data-theme="tactile"] .btn:not(:where(.ghost, .link, :disabled, [aria-disabled="true"])):active {
+    --btn-shadow: inset 0 1px 3px color-mix(in oklch, var(--shadow-color) 28%, transparent);
+  }
+}

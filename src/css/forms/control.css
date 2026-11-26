@@ -60,10 +60,11 @@
   background: var(--control-bg);
   color: var(--control-fg);
   /* why: an unset hook, so a theme can give every field a resting elevation
-     that focus keeps (see the focus rule). The fallback is none, the same as
-     the focus rule's: a transparent 0 0 shadow here made focus transition
-     between two values and expose a phantom shadow mid-way. */
-  box-shadow: var(--control-shadow, none);
+     that focus keeps (see the focus rule); --shadow-inset recesses fields and
+     rails alike. The fallback is none, the same as the focus rule's: a
+     transparent 0 0 shadow here made focus transition between two values and
+     expose a phantom shadow mid-way. */
+  box-shadow: var(--control-shadow, var(--shadow-inset, none));
   font-size: var(--control-font-size);
   cursor: var(--control-cursor);
   /* No outline: none here — the core :focus fallback must survive for browsers
@@ -104,7 +105,7 @@
 .select:focus-visible:not(:disabled) {
   outline: var(--focus-ring-width) solid var(--form-invalid-border, var(--focus));
   outline-offset: calc(var(--focus-ring-width) * -1);
-  box-shadow: var(--control-shadow, none);
+  box-shadow: var(--control-shadow, var(--shadow-inset, none));
 }
 
 .input[readonly],

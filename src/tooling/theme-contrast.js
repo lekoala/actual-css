@@ -9,8 +9,8 @@
  *     field, checkbox and radio, the track edge or knob of an unchecked switch
  *   - soft ink against the resting and the hovered soft fill (4.5:1), on each
  *     surface a soft element sits on
- *   - the solid pairs, -fg on the intent fill (4.5:1); a fill painted by a
- *     background-image reads n/a
+ *   - the solid pairs, -fg on the intent fill (4.5:1), under the --btn-finish
+ *     veil; a fill a theme paints with its own background-image reads n/a
  *   - selected ink on those surfaces: the current nav link at rest and on
  *     hover, the selected tab and the current step number (4.5:1), and the
  *     current step's ring (3:1)
@@ -61,7 +61,7 @@ function islandMarkup(id, scheme) {
   ).join("");
   return `<div${style} id="${id}">
     ${softPairs}
-    ${INTENTS.map((i) => `<button class="btn solid ${i}" data-solid="${i}" type="button">t</button>`).join("")}
+    ${INTENTS.map((i) => `<button class="btn solid ${i}" data-solid="${i}" type="button" style="--btn-finish: initial">t</button>`).join("")}
     <span data-pair="focus-surface" style="color: var(--focus); background: var(--surface)"></span>
     <span data-pair="focus-solid" style="color: var(--focus); background: var(--surface-solid)"></span>
     <span data-pair="inverse" style="color: var(--surface-solid-fg); background: var(--surface-solid)"></span>
@@ -154,8 +154,9 @@ export async function measureContrast({ css, themes, label = "default" }) {
         const fg = el.dataset.pair === "invalid-field" ? cs(el).borderBlockEndColor : cs(el).color;
         pairs[el.dataset.pair] = { fg: rgba(fg), bg: rgba(cs(el).backgroundColor) };
       }
-      // A solid fill painted by a background-image (a gradient theme) has no
-      // single color to measure: it is reported, not sampled.
+      // The --btn-finish veil is cleared on these buttons (islandMarkup), so
+      // the pair is the intent fill. A fill a theme still paints with its own
+      // background-image has no single color: it is reported, not sampled.
       const solid = {};
       for (const el of island.querySelectorAll("[data-solid]")) {
         solid[el.dataset.solid] =
