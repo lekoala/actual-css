@@ -2,6 +2,11 @@
  * Shared CSS bundling helpers: inline @import chains, strip comments, minify.
  * Used by build-dist.js (package artifacts), build-themes.js (demo asset),
  * and the public CLI.
+ *
+ * This is intentionally a pass-through flattener: no CSS parser or printer, so
+ * modern syntax and authored fallback ladders survive verbatim. The evaluated
+ * alternative (Bun's CSS bundler, `target: "bun"` only) still rewrites values;
+ * see docs/design-notes/css-bundling.md before replacing this path.
  */
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";

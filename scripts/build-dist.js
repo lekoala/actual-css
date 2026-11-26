@@ -6,6 +6,9 @@
  * artifact would reopen the alias `./core` was removed to avoid. Its size
  * budget is measured in memory by build-size.js. Demo-only assets (the theme
  * palettes bundle) are built separately by build-themes.js into demo/assets/.
+ * CSS stays on the pass-through flattener in src/tooling/css-bundle.js; the
+ * evaluated Bun alternative and its open conditions are in
+ * docs/design-notes/css-bundling.md.
  *
  *   bun run build:dist
  */
