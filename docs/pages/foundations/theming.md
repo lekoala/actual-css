@@ -93,11 +93,12 @@ Keep the outline visible against the surrounding surface when changing colors.
 ### Field borders: quiet or strong / field contrast / WCAG 1.4.11
 
 Fields rest on the quiet `--border` edge, like a neutral outline button. On a
-fill equal to the surface that edge sits under 3:1: the field reads by its
-label and place, a known WCAG 1.4.11 trade-off that `actual-css contrast`
-reports as a warning. Increased contrast (`prefers-contrast: more`) gives every
-field the 3:1 `--border-control` edge back, and forced colors draw it in a
-system color.
+fill equal to the surface that edge sits under 3:1, so the default does not
+meet WCAG 1.4.11 (non-text contrast, AA): the field reads by its label and
+place, which an audit does not count. `actual-css contrast` reports it as a
+warning. Increased contrast (`prefers-contrast: more`) gives every field the
+3:1 `--border-control` edge back, and forced colors draw it in a system color.
+For a formal AA audit (EN 301 549, RGAA), use the strong recipe.
 
 ```css
 /* Actual default: quiet fields. */
@@ -111,9 +112,11 @@ system color.
 }
 ```
 
-A field fill distinct from its surface also identifies it, as on a raised
-panel (below). Checkboxes, radios and switches keep `--border-control`, their
-only cue.
+The criterion asks for 3:1, not a width: a 1px edge passes. The checker reads
+the stronger of a field's lower edge and its fill against the surface, so a
+fill that reaches 3:1 identifies the field without an edge. A faint tint, as on
+a raised panel (below), reads well on a good screen but does not count.
+Checkboxes, radios and switches keep `--border-control`, their only cue.
 
 ### Underline fields / bottom border only
 

@@ -390,8 +390,9 @@ export function formatContrast(rows) {
   lines.push(
     "",
     "Control cue at rest (edge, a field's fill, or a switch's knob, vs --surface), needs 3:1.",
-    "A field under 3:1 is a warning: set --control-default-border: var(--border-control)",
-    "for strong identification, or give fields a fill or an edge that reaches 3:1.",
+    "A field under 3:1 is a warning: it reads by its label and place, which a WCAG 2 AA",
+    "audit does not count. Set --control-default-border: var(--border-control) for strong",
+    "identification, or give fields a fill or an edge that reaches 3:1.",
     "",
   );
   lines.push(`${"theme".padEnd(width)}  scheme  control      ratio`);
