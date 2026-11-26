@@ -30,6 +30,7 @@ Whole pages, composed the way a real product would.
 - [App](../../demo/templates/app.html) - application shell with sidebar
 - [Workspaces](../../demo/templates/workspaces.html) - sectioned sidebar, master/detail list with native current state, and workspace cards
 - [Tasks](../../demo/templates/tasks.html) - inset workspace with one divided surface, a `.measure` editor, and a single-pane task flow on mobile. Edits apply immediately and reset on reload.
+- [TodoMVC](../../demo/templates/todomvc.html) - a buildless task list with hash routing, local persistence, and presentation derived from HTML state. See the [implementation notes](#todomvc).
 - [Marketing](../../demo/templates/marketing.html) - landing page with typography and fluid type
 - [Blog](../../demo/templates/blog.html) - article page with prose
 - [Changelog](../../demo/templates/changelog.html) - release notes on a `.timeline`: version and date beside the rail on wide containers, and a light on the rail that runs from the first release to the last as the page scrolls
@@ -80,6 +81,31 @@ and extension points.
 - [Date fields](../../demo/templates/date-fields.html) - a native date input, a masked text field and an external date picker on Actual tokens, side by side
 - [File upload](../../demo/templates/file-upload.html) - the native file input, Dropzone rendering its file rows as Actual components, and FilePond on Actual tokens
 - [Diagrams](../../demo/templates/diagrams.html) - Mermaid timelines, Gantt charts and flowcharts drawn by Pele through a small web component, on Actual tokens
+
+## TodoMVC
+
+[Open the demo](../../demo/templates/todomvc.html) ·
+[View source](https://github.com/lekoala/actual-css/blob/master/demo/templates/todomvc.html) ·
+[Read the functional spec](https://github.com/tastejs/todomvc/blob/master/app-spec.md)
+
+Serve the checkout with `bun scripts/serve.js` and open
+`/demo/templates/todomvc.html` on localhost. The page loads Actual's CSS
+modules directly from `src/css` and runs its own inline JavaScript. Tasks start
+empty and are saved to the browser's local storage.
+
+- CSS reads checkbox state to style completed titles and show Clear completed.
+  It reads list contents to show the controls and queries the card's width to
+  lay out the toolbar. Actual's theme follows the system scheme.
+- JavaScript owns the task records, hash filtering, active count, and focus.
+  Filtered rows retain their task checkboxes and use `hidden`. This lets Clear
+  completed reflect the entire list while the active filter is in use.
+- The demo uses Actual's own markup and styles. It adds a visible-on-focus Edit
+  button alongside double-click editing, so keyboard and touch users can edit
+  tasks. Delete and Edit stay visible on touch screens.
+
+The [browser acceptance tests](https://github.com/lekoala/actual-css/blob/master/tests/browser/todomvc.test.js)
+exercise the behaviors from the spec. Run them with
+`bun test tests/browser/todomvc.test.js`.
 
 ## Sites
 

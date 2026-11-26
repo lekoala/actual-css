@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TodoMVC · Actual CSS</title>
+  <meta name="description" content="TodoMVC with Actual CSS, native HTML state and vanilla JavaScript.">
+  <link rel="stylesheet" href="../../src/css/actual.css">
+  <link rel="stylesheet" href="../../src/css/layout/center.css">
+  <link rel="stylesheet" href="../../src/css/layout/stack.css">
+  <link rel="stylesheet" href="../../src/css/layout/cluster.css">
+  <link rel="stylesheet" href="../../src/css/layout/container-query.css">
+  <link rel="stylesheet" href="../../src/css/forms/control.css">
+  <link rel="stylesheet" href="../../src/css/forms/choice.css">
+  <link rel="stylesheet" href="../../src/css/components/button.css">
+  <link rel="stylesheet" href="../../src/css/components/close.css">
+  <link rel="stylesheet" href="../../src/css/components/card.css">
+  <link rel="stylesheet" href="../../src/css/components/list.css">
+  <link rel="stylesheet" href="../../src/css/utilities/base.css">
+  <style>
+    body {
+      background: var(--surface-subtle);
+    }
+
+    .todo-page {
+      --center-size: 36rem;
+      padding-block: clamp(var(--space-50), 9vh, 6rem);
+    }
+
+    .todo-heading {
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      letter-spacing: -0.07em;
+      line-height: 1;
+    }
+
+    .todo-heading span {
+      color: var(--primary);
+    }
+
+    .todo-card {
+      --card-pad: clamp(var(--space-30), 4vw, var(--space-60));
+    }
+
+    @container actual-container (width >= 28rem) {
+      .todo-toolbar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(max-content, 1fr);
+        align-items: center;
+      }
+
+      .todo-clear {
+        justify-self: end;
+      }
+    }
+
+    .todo-toolbar {
+      font-size: var(--font-size-sm);
+    }
+
+    .todo-view.list-item {
+      flex-wrap: nowrap;
+    }
+
+    .todo-title {
+      flex: 1;
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .todo:has(.check:checked) .todo-title {
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .todo-editor {
+      padding-block: var(--space-30);
+    }
+
+    .todo-editor:not([hidden]) + .todo-view {
+      display: none;
+    }
+
+    .todo-app:not(:has(.todo)) .todo-controls,
+    .todo-list:not(:has(.todo:not([hidden]))) {
+      display: none;
+    }
+
+    /* Keep the action's space when the first or last task changes state. */
+    .todo-app:not(:has(.todo .check:checked)) .todo-clear {
+      visibility: hidden;
+    }
+
+    .todo-filters a {
+      padding: var(--space-10) var(--space-20);
+      border: var(--border-width) solid transparent;
+      border-radius: var(--radius);
+      text-decoration: none;
+    }
+
+    .todo-filters a[aria-current="page"] {
+      border-color: var(--border-control);
+      font-weight: var(--font-weight-semibold);
+    }
+
+    .todo-clear .btn {
+      white-space: nowrap;
+    }
+
+    @media (hover: hover) and (not (any-pointer: coarse)) {
+      /* Opacity keeps the actions in the tab order so focus can reveal them. */
+      .todo:not(:hover, :focus-within) .todo-actions {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="center stack todo-page">
+    <hgroup>
+      <h1 class="todo-heading">todos<span aria-hidden="true">.</span></h1>
+      <p class="muted">TodoMVC with Actual CSS and vanilla JavaScript</p>
+    </hgroup>
+
+    <section class="card stack container-query todo-card todo-app" aria-label="Todo list">
+      <form id="todo-add">
+        <label class="sr-only" for="todo-new">New todo</label>
+        <input class="input" id="todo-new" placeholder="What needs to be done?" autocomplete="off" autofocus>
+      </form>
+
+      <div class="stack todo-controls">
+        <label class="cluster">
+          <input class="check" type="checkbox" id="todo-all"> Mark all as complete
+        </label>
+        <ul class="list todo-list" id="todo-list" role="list"></ul>
+      </div>
+
+      <div class="stack todo-toolbar todo-controls">
+        <span id="todo-count" role="status"><strong>0</strong><span> items left</span></span>
+        <nav class="cluster todo-filters" aria-label="Filter todos">
+          <a href="#/" aria-current="page">All</a>
+          <a href="#/active">Active</a>
+          <a href="#/completed">Completed</a>
+        </nav>
+        <div class="todo-clear"><button class="btn ghost sm" type="button" id="todo-clear">Clear completed</button></div>
+      </div>
+      <p id="todo-storage" role="status" hidden></p>
+    </section>
+
+    <footer class="cluster muted">
+      <a href="../../site/examples/overview.html#todomvc">Implementation notes</a>
+      <a href="https://github.com/lekoala/actual-css/blob/master/demo/templates/todomvc.html">View source</a>
+    </footer>
+  </main>
+
+  <template id="todo-row">
+    <li class="todo">
+      <form class="todo-editor" hidden>
+        <input class="input" aria-label="Edit todo title" autocomplete="off">
+      </form>
+      <div class="list-item todo-view">
+        <input class="check" type="checkbox">
+        <span class="todo-title"></span>
+        <div class="cluster todo-actions">
+          <button class="btn ghost sm todo-edit" type="button">Edit</button>
+          <button class="close" type="button"></button>
+        </div>
+      </div>
+    </li>
+  </template>
+
+  <script>
+    const storageKey = "todos-actual-css";
+    const addForm = document.querySelector("#todo-add");
+    const newTodo = document.querySelector("#todo-new");
+    const toggleAll = document.querySelector("#todo-all");
+    const list = document.querySelector("#todo-list");
+    const count = document.querySelector("#todo-count");
+    const filters = [...document.querySelectorAll(".todo-filters a")];
+    const clear = document.querySelector("#todo-clear");
+    const rowTemplate = document.querySelector("#todo-row");
+    const storageNotice = document.querySelector("#todo-storage");
+    const rows = new Map();
+
+    function storageUnavailable() {
+      storageNotice.hidden = false;
+      storageNotice.textContent = "Changes may not be available after you reload.";
+    }
+
+    function loadTodos() {
+      try {
+        const tasks = JSON.parse(localStorage.getItem(storageKey));
+        if (!Array.isArray(tasks)) return [];
+        return tasks.filter((task) =>
+          typeof task?.id === "string" && typeof task.title === "string" && typeof task.completed === "boolean");
+      } catch {
+        storageUnavailable();
+        return [];
+      }
+    }
+
+    function render() {
+      const current = filters.find((link) => link.hash === location.hash) ?? filters[0];
+      let active = 0;
+
+      for (const [task, { row, check }] of rows) {
+        check.checked = task.completed;
+        row.hidden = (current.hash === "#/active" && task.completed) ||
+          (current.hash === "#/completed" && !task.completed);
+        if (!task.completed) active += 1;
+      }
+
+      toggleAll.checked = rows.size > 0 && active === 0;
+      toggleAll.indeterminate = active > 0 && active < rows.size;
+      if (count.firstElementChild.textContent !== String(active)) {
+        count.firstElementChild.textContent = active;
+        count.lastElementChild.textContent = active === 1 ? " item left" : " items left";
+      }
+      for (const link of filters) {
+        if (link === current) link.setAttribute("aria-current", "page");
+        else link.removeAttribute("aria-current");
+      }
+    }
+
+    function save() {
+      render();
+      try {
+        localStorage.setItem(storageKey, JSON.stringify([...rows.keys()]));
+      } catch {
+        storageUnavailable();
+      }
+    }
+
+    function remove(task) {
+      rows.get(task).row.remove();
+      rows.delete(task);
+    }
+
+    function focusRemaining() {
+      (list.querySelector(".todo:not([hidden]) .check") ?? newTodo).focus();
+    }
+
+    function addRow(task) {
+      const row = rowTemplate.content.firstElementChild.cloneNode(true);
+      const check = row.querySelector(".check");
+      const title = row.querySelector(".todo-title");
+      const edit = row.querySelector(".todo-edit");
+      const destroy = row.querySelector(".close");
+      const editor = row.querySelector(".todo-editor");
+      const input = editor.firstElementChild;
+
+      function renderTitle() {
+        title.textContent = task.title;
+        check.setAttribute("aria-label", `Complete: ${task.title}`);
+        edit.setAttribute("aria-label", `Edit: ${task.title}`);
+        destroy.setAttribute("aria-label", `Delete: ${task.title}`);
+      }
+
+      function openEditor() {
+        input.value = task.title;
+        editor.hidden = false;
+        input.focus();
+        input.select();
+      }
+
+      function finishEditor(commit, restoreFocus) {
+        if (editor.hidden) return;
+        editor.hidden = true;
+        if (commit) {
+          const value = input.value.trim();
+          if (!value) {
+            remove(task);
+            save();
+            if (restoreFocus) focusRemaining();
+            return;
+          }
+          task.title = value;
+          renderTitle();
+          save();
+        }
+        if (restoreFocus) edit.focus();
+      }
+
+      renderTitle();
+      check.addEventListener("change", () => {
+        task.completed = check.checked;
+        save();
+        if (row.hidden) focusRemaining();
+      });
+      edit.addEventListener("click", openEditor);
+      title.addEventListener("dblclick", openEditor);
+      editor.addEventListener("submit", (event) => {
+        event.preventDefault();
+        finishEditor(true, true);
+      });
+      input.addEventListener("blur", () => finishEditor(true, false));
+      input.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || event.isComposing) return;
+        event.preventDefault();
+        finishEditor(false, true);
+      });
+      destroy.addEventListener("click", () => {
+        remove(task);
+        save();
+        focusRemaining();
+      });
+
+      rows.set(task, { row, check });
+      list.append(row);
+    }
+
+    addForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const title = newTodo.value.trim();
+      if (!title) return;
+      addRow({ id: crypto.randomUUID(), title, completed: false });
+      newTodo.value = "";
+      save();
+    });
+
+    toggleAll.addEventListener("change", () => {
+      for (const task of rows.keys()) task.completed = toggleAll.checked;
+      save();
+    });
+
+    clear.addEventListener("click", () => {
+      for (const task of rows.keys()) {
+        if (task.completed) remove(task);
+      }
+      save();
+      newTodo.focus();
+    });
+
+    window.addEventListener("hashchange", () => {
+      const focused = document.activeElement;
+      if (focused.closest(".todo-editor")) focused.blur();
+      render();
+      if (focused.closest(".todo")?.hidden) focusRemaining();
+    });
+
+    for (const task of loadTodos()) addRow(task);
+    render();
+  </script>
+</body>
+</html>

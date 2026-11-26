@@ -17,6 +17,7 @@ const files = [
   "./tests/browser/meter.test.js",
   "./tests/browser/surface-lifecycle.test.js",
   "./tests/browser/timeline.test.js",
+  "./tests/browser/todomvc.test.js",
   "./tests/browser/tooltip-tap.test.js",
 ];
 
