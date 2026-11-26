@@ -65,6 +65,8 @@
 - `.table`: the first and last columns and the caption pad at least the new `--table-radius` of `.table-wrap`, so text clears a large corner.
 - Docs home: the invoice specimen keeps its column widths across its two pages.
 - `cyberdeck`: the lit corner tick of `.btn[aria-pressed="true"]` and checked chips stays visible in forced colors.
+- `.choice-card` and `.chip` draw the `.check` mark (2px stroke) instead of a scaled `--icon-check` that thinned to 1px.
+- `.check`, `.choice-card` and `.chip`: the check mark keeps its shape in RTL instead of turning into a `>`.
 
 ## [0.20.2] - 2026-11-23
 ### Added

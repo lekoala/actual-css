@@ -183,11 +183,13 @@
   transition: transform var(--duration);
 }
 
+/* why: physical sides. The mark is a glyph, not a layout edge: logical ones
+   swap in RTL and the quarter turn draws a ">" instead of a check. */
 .check::before {
   inline-size: 0.58em;
   block-size: 0.34em;
-  border-inline-start: 2px solid currentColor;
-  border-block-end: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
   transform: translateY(-0.06em) rotate(-45deg) scale(0);
 }
 
@@ -213,10 +215,10 @@
 }
 
 .check:indeterminate::before {
-  border-inline-start: 0;
+  border-left: 0;
   inline-size: 0.6em;
   block-size: 0;
-  border-block-end: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
   transform: scale(1);
 }
 
