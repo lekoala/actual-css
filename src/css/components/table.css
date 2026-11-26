@@ -14,7 +14,8 @@
  *
  * Public hooks:
  * --table-min
- * --table-cell-pad
+ * --table-cell-pad (a single length: the edge columns compare it to the radius)
+ * --table-radius (on .table-wrap; the edge columns pad at least this much)
  *
  * Theme hooks (unset by default, read with a fallback, so a theme sets them
  * once on its root and third-party grid bridges can read the same choice):
@@ -34,8 +35,10 @@
   max-inline-size: 100%;
   min-inline-size: 0;
   overflow-x: auto;
+  --table-radius: var(--radius-lg);
+
   border: var(--border-width) solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--table-radius);
   background: var(--surface-raised);
 }
 
@@ -62,6 +65,22 @@
   border-block-end: var(--border-width) solid var(--border);
   text-align: var(--text-align, start);
   vertical-align: baseline;
+}
+
+/* The edge columns clear the wrap's corner: with an inline padding under the
+   radius, the first letter of a header or caption sits inside the curve. The
+   whole column takes it so the body stays aligned with its header. A row under
+   a rowspan cell starts in the second column and takes it too. */
+.table caption {
+  padding-inline: max(var(--table-cell-pad), var(--table-radius, 0px));
+}
+
+.table :is(th, td):first-child {
+  padding-inline-start: max(var(--table-cell-pad), var(--table-radius, 0px));
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: max(var(--table-cell-pad), var(--table-radius, 0px));
 }
 
 .table th {

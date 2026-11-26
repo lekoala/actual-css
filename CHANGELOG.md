@@ -29,6 +29,8 @@
 - `.btn` paints `--btn-bg` with `background-color`: a gradient in `--ui-bg` or `--btn-default-bg` no longer renders; use `--btn-finish`.
 - `gradient` demo theme: its button gradient moves to `--btn-finish`.
 - `actual-css contrast` measures solid button pairs under `--btn-finish` instead of reporting them n/a.
+- `.input` and `.textarea` take `--control-hover-bg` on hover when a theme sets it, like `.select`; the `material` theme's text fields gain its hover fill.
+- `actual-css contrast` measures the invalid focus line on the focused field: its outline, or its block-end border when a theme clears the outline.
 - `nextItem()` from `actual-css/js/keys` stops at the edges by default, matching `itemForKey()`; pass `{ wrap: true }` to cycle.
 - Dialog toggles accept `false` in any letter case, matching tooltip toggles.
 - The `actual-css/js/enhancement-loader` entry point drops the `__setModuleImporter` and `__reset` test hooks.
@@ -52,6 +54,8 @@
 - Demos: `<theme-picker>` instances on one page stay in sync.
 - `.app-layout`: side `.app-nav` scrolls on a short viewport instead of clipping its last destinations.
 - `.list.grouped` rounds the first and last row links inside `<li>` to match the shell.
+- `.table`: the first and last columns and the caption pad at least the new `--table-radius` of `.table-wrap`, so text clears a large corner.
+- Docs home: the invoice specimen keeps its column widths across its two pages.
 - `cyberdeck`: the lit corner tick of `.btn[aria-pressed="true"]` and checked chips stays visible in forced colors.
 
 ## [0.20.2] - 2026-11-23

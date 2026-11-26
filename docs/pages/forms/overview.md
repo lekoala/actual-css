@@ -185,7 +185,8 @@ field borders).
 
 Set `--control-hover-border` to tune the hover border of `.input` and `.textarea`.
 Set `--control-hover-bg` to keep a `.select` background steady on hover, or give
-it a stronger fill.
+it a stronger fill. Once set, `.input` and `.textarea` take it too: the hover
+cue of a field whose hover border is cleared.
 Set `--control-shadow` to give `.input`, `.textarea` and `.select` a resting
 elevation (unset by default). It inherits, so a theme can set it once on its
 root; keyboard focus and an open custom select keep it. Unset, it falls back

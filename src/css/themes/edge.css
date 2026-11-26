@@ -73,11 +73,6 @@
   font-weight: var(--font-weight-normal);
 }
 
-/* Text fields take the select's hover fill. */
-[data-theme="edge"] :is(.input, .textarea):hover:not(:disabled) {
-  --control-bg: var(--control-hover-bg);
-}
-
 /* Fields the user cannot edit keep the theme's frameless shape: core falls
    back to a --border box there. Read-only drops the fill for a quiet line. */
 [data-theme="edge"] :is(.input, .textarea, .select):disabled {

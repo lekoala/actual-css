@@ -214,7 +214,10 @@ on one record at a time, use a [list with row actions](list.md).
 
 ## CSS hooks
 
-- `--table-cell-pad` — cell padding; `.compact` re-declares it tighter.
+- `--table-cell-pad` — cell padding, a single length; `.compact` re-declares
+  it tighter.
+- `--table-radius` — the corner radius of `.table-wrap`. The first and last
+  columns and the caption pad at least this much, so text clears the curve.
 - `--table-min` — minimum table width before `.table-wrap` scrolls horizontally.
 - `--table-header-bg`, `--table-header-fg` — header band fill and ink. Set
   them on a theme root rather than on `.table`: a data grid bridge reads the

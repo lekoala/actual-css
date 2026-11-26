@@ -869,6 +869,7 @@
     "publicHooks": [
       "--table-min",
       "--table-cell-pad",
+      "--table-radius",
       "--table-header-bg",
       "--table-header-fg"
     ]

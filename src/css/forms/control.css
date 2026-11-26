@@ -35,7 +35,7 @@
  * --control-border-block-end-color
  * --control-border-block-end-width
  * --control-hover-border (input and textarea)
- * --control-hover-bg (select)
+ * --control-hover-bg (select; input and textarea when set)
  */
 .input,
 .textarea,
@@ -91,6 +91,15 @@
 
 .select:hover:not(:disabled) {
   --control-bg: var(--control-hover-bg, var(--surface-subtle));
+}
+
+/* Text fields take the select's hover fill once a theme sets one, and keep
+   their rest fill otherwise: a theme that clears the hover border (underline,
+   borderless wells) would leave them without hover feedback. A readonly
+   field keeps its own fill. */
+.input:hover:not(:disabled, [readonly]),
+.textarea:hover:not(:disabled, [readonly]) {
+  --control-bg: var(--control-hover-bg, var(--control-default-bg, var(--surface)));
 }
 
 /* Field focus is an inset outline: offset = -width keeps every pixel inside

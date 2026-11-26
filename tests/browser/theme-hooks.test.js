@@ -4,27 +4,19 @@
  * --btn-finish, --shadow-control and --shadow-inset, and the accordion marker
  * glyph and open turn.
  */
-import { expect, test } from "bun:test";
-import {
-  browserAvailable,
-  fixtureUrl,
-  forceStates,
-  tabUntil,
-  waitForBrowser,
-  withBrowserPage,
-} from "../../scripts/utils/browser.js";
+import { expect } from "bun:test";
+import { fixtureUrl, waitForBrowser } from "../../scripts/utils/browser.js";
+import { browserSuite } from "./browser-suite.js";
 
 const FIXTURE = "tests/browser/theme-hooks.html";
-const TIMEOUT = 60_000;
 
-const baseTest = (await browserAvailable()) ? test : test.skip;
-const it = (name, run) => baseTest(name, run, TIMEOUT);
+const { it, hoverSelector, tabUntil, withBrowserPage } = await browserSuite();
 
 // Trap: the hover overlay is itself a box-shadow (inset 999px), so a theme
 // elevation set on .btn vanished on hover until both shared one list.
 it("keeps --btn-shadow under the solid hover overlay", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
-    await forceStates(view, { "#btn-hover": ["hover"] });
+    await hoverSelector(view, "#btn-hover");
     await waitForBrowser(
       view,
       `getComputedStyle(document.getElementById("btn-hover")).boxShadow.includes("inset")`,
@@ -60,7 +52,7 @@ it("keeps --control-shadow on a keyboard-focused field", async () => {
 // layer, so a finish set on .btn vanished under the pointer.
 it("keeps --btn-finish under the hover and off unfilled variants", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
-    await forceStates(view, { "#finish-hover": ["hover"] });
+    await hoverSelector(view, "#finish-hover");
     await waitForBrowser(
       view,
       `getComputedStyle(document.getElementById("finish-hover")).boxShadow.includes("inset")`,

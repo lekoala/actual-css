@@ -148,10 +148,18 @@ export async function measureContrast({ css, themes, label = "default" }) {
       const cs = (el, pseudo = null) => getComputedStyle(el, pseudo);
       const pairs = {};
       for (const el of island.querySelectorAll("[data-pair]")) {
-        // The invalid field's block-end border carries --form-invalid-border,
-        // the hook its focus outline reads, even on an underline-only theme
-        // (material) whose other sides are clear.
-        const fg = el.dataset.pair === "invalid-field" ? cs(el).borderBlockEndColor : cs(el).color;
+        // The invalid field is measured focused (a focused text field always
+        // matches :focus-visible): its line is the outline in
+        // --form-invalid-border, against the focused fill. A theme that clears
+        // the outline for an inset line (material, minimal) keeps the hook on
+        // the block-end border; a theme that drops the invalid frame (plush)
+        // keeps it on the outline.
+        let fg = cs(el).color;
+        if (el.dataset.pair === "invalid-field") {
+          el.focus();
+          const outline = cs(el).outlineStyle === "none" ? null : rgba(cs(el).outlineColor);
+          fg = outline && outline[3] > 0 ? cs(el).outlineColor : cs(el).borderBlockEndColor;
+        }
         pairs[el.dataset.pair] = { fg: rgba(fg), bg: rgba(cs(el).backgroundColor) };
       }
       // The --btn-finish veil is cleared on these buttons (islandMarkup), so

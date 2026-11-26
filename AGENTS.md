@@ -99,6 +99,10 @@ Add relevant guards for future-us when needed based on traps and discoveries.
   shell, labels each file, and takes an offset and a limit, so it replaces the
   usual reasons to reach for a loop or for `head` / `tail` / `wc`. Assume no
   utility exists beyond the one you are calling.
+- Run the CLI from source: `bun src/cli/actual-css.js contrast --theme FILE`.
+  `bunx actual-css` resolves the package published on npm, not the working
+  tree, so a change to `src/tooling/` measured with it reports the last
+  release.
 - For the rare quick number-only check (a rect, a computed style, a class
   list) use `bun run probe <page> --script tmp/x.js` instead of improvising a
   headless-Chrome script — it runs the file as an async program in the page and

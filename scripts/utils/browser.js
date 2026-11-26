@@ -388,6 +388,17 @@ export async function clickSelector(view, selector) {
   return point;
 }
 
+/* Real pointer move onto the element's center, so :hover matches as it does
+   for a user; no press, so focus stays where it was. */
+export async function hoverSelector(view, selector) {
+  const point = await view.evaluate(`(() => {
+    const rect = document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();
+    return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+  })()`);
+  await view.cdp("Input.dispatchMouseEvent", { type: "mouseMoved", x: point.x, y: point.y });
+  return point;
+}
+
 /*
  * Real dispatched tap: touch events, from which Chrome derives the pointer
  * (pointerType "touch") and compatibility mouse events a phone would send.

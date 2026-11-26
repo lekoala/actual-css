@@ -107,7 +107,7 @@ For an underline-only field on a tinted fill, also set
 `--control-default-bg: var(--surface-subtle)`,
 `--control-default-border: transparent` and
 `--control-hover-border: transparent`; without the last one, hover draws a full
-frame around the field. Readonly and disabled fields keep their quiet
+frame around the field. Set `--control-hover-bg` for the hover cue instead. Readonly and disabled fields keep their quiet
 `--border` frame on that tint; a theme that wants them frameless too sets
 `--control-border: transparent` on those states. In forced colors every side
 is drawn again in a system color.
@@ -119,6 +119,44 @@ Avoid lowering `--border-control-mix` instead: the default palette sits at
 3.2:1, with no room under the threshold.
 
 → [Forms hooks](../forms/overview.md#hooks)
+
+### Fields inside a card or panel / filled fields on a raised surface
+
+The field hooks inherit, so a container retunes every field inside it. On a
+raised panel, a tinted fill sets the fields apart from the panel:
+
+```css
+.settings-panel {
+  --control-default-bg: var(--surface-subtle);
+
+  background: var(--surface-raised);
+}
+```
+
+Keep the `--border-control` edge: the fill step alone stays under 3:1. For a
+borderless filled field, move the edge to the lower side as in the underline
+recipe above.
+
+→ [Forms hooks](../forms/overview.md#hooks) · Examples · Surface form
+
+### Recessed, sunken or inset fields / relief / tactile
+
+`--shadow-inset` presses fields and the switch, range, progress, meter and
+segmented rails into the surface together. Pair it with a fill a step below
+the surface around the fields:
+
+```css
+:root {
+  --shadow-inset: inset 0 1px 2px color-mix(in oklch, var(--shadow-color) 14%, transparent);
+  --control-default-bg: var(--surface-subtle);
+}
+```
+
+The shade does not identify a field; keep its edge. `--shadow-control` raises
+the moving parts on those rails, and `--btn-finish` adds a sheen to filled
+buttons. The `tactile` theme combines the three.
+
+→ [Elevation tokens](./tokens.md#elevation)
 
 ### Keep bare native controls on-theme / accent-color
 

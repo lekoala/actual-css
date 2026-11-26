@@ -289,11 +289,15 @@ it("home preferences stay local while feedback and invoice pagination remain usa
       expect(feedbackLayout.spread).toBeLessThan(1);
       expect(feedbackLayout.fits).toBe(true);
 
+      // Pages collapse rather than leave the layout, so the columns hold.
+      const statusColumn = `document.querySelector("#showcase-invoices thead th:last-child").getBoundingClientRect().left`;
+      const page1Column = await view.evaluate(statusColumn);
       await clickPreview(view, '#showcase-invoices [aria-label="Page 2"]');
       await waitForBrowser(
         view,
-        'document.querySelectorAll("#showcase-invoices tbody")[0].hidden && !document.querySelectorAll("#showcase-invoices tbody")[1].hidden',
+        'document.querySelectorAll("#showcase-invoices tbody")[0].hasAttribute("data-collapsed") && !document.querySelectorAll("#showcase-invoices tbody")[1].hasAttribute("data-collapsed")',
       );
+      expect(await view.evaluate(statusColumn)).toBe(page1Column);
       expect(
         await view.evaluate(
           'document.querySelector("#showcase-invoices [aria-current]").textContent.trim()',
@@ -302,7 +306,7 @@ it("home preferences stay local while feedback and invoice pagination remain usa
       await clickPreview(view, '#showcase-invoices [aria-label="Page 1"]');
       await waitForBrowser(
         view,
-        '!document.querySelectorAll("#showcase-invoices tbody")[0].hidden && document.querySelectorAll("#showcase-invoices tbody")[1].hidden',
+        '!document.querySelectorAll("#showcase-invoices tbody")[0].hasAttribute("data-collapsed") && document.querySelectorAll("#showcase-invoices tbody")[1].hasAttribute("data-collapsed")',
       );
     },
     { sourceCss: true, artifactName: "docs-home-interactions" },

@@ -840,6 +840,18 @@
   gap: var(--space-50);
 }
 
+/* An off-screen page of rows collapses instead of leaving the layout (which
+   `hidden` would, with its important display), so every page sizes the columns
+   and paging does not shift them. Invoice numbers do not break at their
+   hyphen. */
+.docs-specimen-panel .table {
+  white-space: nowrap;
+}
+
+.docs-specimen-panel .table tbody[data-collapsed] {
+  visibility: collapse;
+}
+
 .docs-specimen-panel h3 {
   font-size: var(--font-size-md);
   letter-spacing: -0.02em;

@@ -5,7 +5,7 @@
  * field cue (see the wells below),
  * with motion recipes on the existing hooks: buttons squish when pressed, the
  * switch knob stretches under the pointer, a focused field lifts out of its
- * well. */
+ * well, a modal pops in on a spring. */
 [data-theme="plush"] {
   /* Base palette is the light half; the dark pairing is only announced where
      light-dark() exists, in the @supports block below. */
@@ -93,7 +93,13 @@
     --shadow-control:
       0 1px 2px color-mix(in oklch, var(--shadow-color) 12%, transparent),
       0 3px 8px color-mix(in oklch, var(--shadow-color) 10%, transparent);
-    --control-hover-bg: color-mix(in oklab, var(--surface-subtle) 94%, var(--text));
+    /* Hover rises halfway toward the focused fill, with a blush of the
+       primary: the well softens rather than darkens. */
+    --control-hover-bg: color-mix(
+      in oklab,
+      color-mix(in oklab, var(--surface-subtle), var(--surface-raised)) 97%,
+      var(--primary)
+    );
 
     /* Cushion wells: fields and rails are pressed into the surface by a soft
        inner shade, with no outline. Known exception: neither the fill nor the
@@ -115,10 +121,22 @@
     box-shadow: var(--shadow-control);
   }
 
-  /* Hover deepens the well instead of drawing an edge, as the select does
-     through --control-hover-bg. */
-  [data-theme="plush"] :is(.input, .textarea):hover:not(:disabled, :focus-visible, [readonly]) {
-    --control-bg: var(--control-hover-bg);
+  /* An invalid field keeps its well and fills with a danger tint instead of
+     the core's red frame: the validation rules set --form-invalid-border on
+     the field or its .field, and the mix is the plain fill when it is unset.
+     The message below the field carries the error in words; the frame
+     returns under increased contrast. */
+  @media not (prefers-contrast: more) {
+    [data-theme="plush"] :is(.input, .textarea, .select) {
+      --control-default-bg: color-mix(
+        in oklab,
+        var(--form-invalid-border, var(--surface-subtle)) 12%,
+        var(--surface-subtle)
+      );
+
+      border-color: var(--control-border);
+      border-block-end-color: var(--control-border-block-end-color, var(--control-border));
+    }
   }
 
   /* Quiet actions are tonal fills: the label identifies them, an outline
@@ -182,4 +200,38 @@
 
 [data-theme="plush"] .switch:active:not(:disabled) {
   --switch-knob-inline-size: calc(var(--switch-knob-size) * 1.3);
+}
+
+/* A modal pops in on a spring: it grows from slightly small, overshoots and
+   settles. The core lift stays a pure offset because scaling a wide panel
+   reads as sideways motion; here that bounce is the point. Opacity keeps a
+   plain curve, the spring would clamp it. Closing keeps the core exit. A
+   browser without linear() drops the lists and keeps the core entrance. */
+[data-theme="plush"] :where(dialog).modal[open] {
+  transition-duration: var(--duration), calc(var(--duration-slow) * 2.5);
+  transition-timing-function:
+    ease,
+    linear(
+      0,
+      0.034 2.1%,
+      0.281 6.7%,
+      0.723 12.9%,
+      0.938 16.7%,
+      1.077,
+      1.149 24.3%,
+      1.163,
+      1.154 29.9%,
+      1.051 39.6%,
+      0.991,
+      0.975 57.1%,
+      0.997 69.8%,
+      1.003 76.9%,
+      1
+    );
+}
+
+@starting-style {
+  [data-theme="plush"] :where(dialog).modal[open] {
+    transform: translateY(0.5rem) scale(0.9);
+  }
 }

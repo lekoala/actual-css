@@ -2,6 +2,7 @@ import { afterAll, beforeAll, test } from "bun:test";
 import {
   browserAvailable,
   clickSelector,
+  hoverSelector,
   pressKey,
   setViewport,
   tabUntil,
@@ -16,7 +17,17 @@ export async function browserSuite() {
   const it = (name, run) => baseTest(name, run, 60_000);
 
   if (!engine)
-    return { it, clickSelector, pressKey, setViewport, tabUntil, tapSelector, withBrowserPage };
+    return {
+      it,
+      engine,
+      clickSelector,
+      hoverSelector,
+      pressKey,
+      setViewport,
+      tabUntil,
+      tapSelector,
+      withBrowserPage,
+    };
 
   let browser;
   beforeAll(async () => {
@@ -29,7 +40,9 @@ export async function browserSuite() {
 
   return {
     it,
+    engine,
     clickSelector: (page, selector) => page.locator(selector).click(),
+    hoverSelector: (page, selector) => page.locator(selector).hover(),
     pressKey: (page, key) => page.keyboard.press(key),
     // Needs a page opened with { touch: true }: Playwright taps only where hasTouch is set.
     tapSelector: (page, selector) => page.locator(selector).tap(),

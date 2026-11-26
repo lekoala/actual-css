@@ -224,7 +224,7 @@
                       <tr><td>INV-1047</td><td>€640</td><td><span class="badge soft warning">Due</span></td></tr>
                       <tr><td>INV-1046</td><td>€2,310</td><td><span class="badge soft success">Paid</span></td></tr>
                     </tbody>
-                    <tbody hidden>
+                    <tbody data-collapsed>
                       <tr><td>INV-1045</td><td>€980</td><td><span class="badge soft danger">Overdue</span></td></tr>
                       <tr><td>INV-1044</td><td>€410</td><td><span class="badge soft success">Paid</span></td></tr>
                       <tr><td>INV-1043</td><td>€1,575</td><td><span class="badge soft success">Paid</span></td></tr>
@@ -652,7 +652,7 @@
           const current = other === button;
           if (current) other.setAttribute("aria-current", "page");
           else other.removeAttribute("aria-current");
-          pages[i].hidden = !current;
+          pages[i].toggleAttribute("data-collapsed", !current);
         }
       });
 

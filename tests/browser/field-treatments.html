@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Field treatments fixture</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    * { transition-duration: 0s !important; }
+
+    body { padding: 1rem; }
+
+    /* The four documented treatments, each from inherited hooks only. */
+    .edge {
+      --control-default-bg: var(--surface-subtle);
+      --control-default-border: transparent;
+      --control-hover-border: transparent;
+      --control-hover-bg: rgb(220 220 228);
+      --control-border-block-end-color: var(--border-control);
+      --control-border-block-end-width: 2px;
+    }
+
+    .filled {
+      --control-default-bg: var(--surface-subtle);
+    }
+
+    .recessed {
+      --control-default-bg: var(--surface-subtle);
+      --shadow-inset: inset 0 1px 2px rgb(0 0 0 / 0.2);
+    }
+
+    #away { block-size: 2rem; }
+  </style>
+</head>
+<body>
+  <div id="away"></div>
+  <div class="grid" style="--grid-min: 12rem">
+    <section class="stack outlined" data-treatment="outlined">
+      <input class="input" id="outlined-rest" aria-label="Rest">
+      <input class="input" id="outlined-invalid" aria-label="Invalid" aria-invalid="true">
+      <input class="input" id="outlined-readonly" aria-label="Readonly" value="Readonly" readonly>
+      <input class="input" id="outlined-disabled" aria-label="Disabled" disabled>
+    </section>
+    <section class="stack edge" data-treatment="edge">
+      <input class="input" id="edge-rest" aria-label="Rest">
+      <input class="input" id="edge-invalid" aria-label="Invalid" aria-invalid="true">
+      <input class="input" id="edge-readonly" aria-label="Readonly" value="Readonly" readonly>
+      <input class="input" id="edge-disabled" aria-label="Disabled" disabled>
+    </section>
+    <section class="stack filled" data-treatment="filled">
+      <input class="input" id="filled-rest" aria-label="Rest">
+      <input class="input" id="filled-invalid" aria-label="Invalid" aria-invalid="true">
+      <input class="input" id="filled-readonly" aria-label="Readonly" value="Readonly" readonly>
+      <input class="input" id="filled-disabled" aria-label="Disabled" disabled>
+    </section>
+    <section class="stack recessed" data-treatment="recessed">
+      <input class="input" id="recessed-rest" aria-label="Rest">
+      <input class="input" id="recessed-invalid" aria-label="Invalid" aria-invalid="true">
+      <input class="input" id="recessed-readonly" aria-label="Readonly" value="Readonly" readonly>
+      <input class="input" id="recessed-disabled" aria-label="Disabled" disabled>
+    </section>
+  </div>
+
+  <!-- Expected colors, resolved by the same engine as the fields. -->
+  <span data-ref="edge" style="color: var(--border-control)"></span>
+  <span data-ref="quiet" style="color: var(--border)"></span>
+  <span data-ref="focus" style="color: var(--focus)"></span>
+  <span data-ref="danger" style="color: var(--danger)"></span>
+  <span data-ref="disabled" style="color: var(--state-disabled)"></span>
+</body>
+</html>
