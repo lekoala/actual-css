@@ -1,5 +1,5 @@
 import { afterEach, expect, test } from "bun:test";
-import FormValidator from "../src/js/validation.js";
+import { FormValidator } from "../src/js/validation.js";
 import { cleanupDOM, setupDOM } from "./helpers/dom.js";
 
 let importId = 0;

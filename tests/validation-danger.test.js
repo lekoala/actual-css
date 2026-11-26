@@ -130,7 +130,7 @@ test("picking a radio clears the whole required group, not only the picked radio
 });
 
 test("setErrors resolves collection property names and radio groups by field name", async () => {
-  const { default: FormValidator } = await loadValidation(`
+  const { FormValidator } = await loadValidation(`
     <form data-enhance="validation">
       <input name="length" />
       <input type="radio" name="plan" value="monthly" />
