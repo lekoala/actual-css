@@ -238,7 +238,7 @@
   --control-step-md: 1;
   --control-step-lg: 0;
   --control-default-bg: var(--surface);
-  --control-default-border: initial;
+  --control-default-border: var(--border);
   --control-hover-border: initial;
   --control-hover-bg: initial;
   --control-border-block-end-color: initial;
@@ -247,8 +247,15 @@
   --shadow: 0 8px 24px rgb(0 0 0 / 0.14);
   --shadow-control: initial;
   --shadow-inset: initial;
-  --btn-finish: initial;
+  --finish: initial;
   --font-sans: "Inter Variable", system-ui, sans-serif;
+}
+
+/* The panel keeps the core field edge, which increased contrast makes strong. */
+@media (prefers-contrast: more) {
+  .docs-customizer {
+    --control-default-border: var(--border-control);
+  }
 }
 
 /* Desktop opens it without a modal (docs-customizer.js), outside the top
@@ -261,12 +268,14 @@
   font-size: var(--font-size-lg);
 }
 
-.docs-customizer-scheme {
-  --gap: var(--space-20);
-
+.docs-customizer fieldset {
   margin: 0;
   padding: 0;
   border: 0;
+}
+
+.docs-customizer-scheme {
+  --gap: var(--space-20);
 }
 
 .docs-customizer-hint,

@@ -109,6 +109,15 @@
   border-inline-color: transparent;
 }
 
+/* Hover inks the line: with no fill and no sides, the line is the only thing
+   that can answer. Same states as the core hover; declared before focus,
+   which wins at equal specificity. An invalid line keeps its color through
+   --form-invalid-border. */
+[data-theme="minimal"] :is(.input, .textarea):hover:not(:disabled, [readonly]),
+[data-theme="minimal"] .select:hover:not(:disabled) {
+  --control-border-block-end-color: var(--text);
+}
+
 /* Focus follows the field's shape: the line turns --focus and thickens to
    the ring width, instead of the core inset frame, which would sit on the
    first glyph of an unpadded value. The transparent outline keeps an

@@ -128,8 +128,10 @@ A theme with translucent surfaces overrides both with opaque values.
 
 `--border` separates surfaces: cards, tables, dividers, panels.
 `--border-control` is the resting edge that tells a control apart from the
-surface — fields, checkboxes and radios, the unchecked switch track, OTP cells, choice
-cards, join addons and the outline button beside them, the color and file inputs. It is
+surface — checkboxes and radios, the unchecked switch track, choice cards, the
+color and file inputs. Text fields, OTP cells and join addons rest on
+`--control-default-border`, the quiet `--border`, and take `--border-control`
+under increased contrast ([field borders](./theming.md#field-borders-quiet-or-strong-field-contrast-wcag-1411)). It is
 derived from `--text` and `--surface`; on the default palette it holds 3:1
 against `--surface` and 2.9–3.0 against `--surface-subtle`. `actual-css
 contrast` reports it for your theme. `--border-control-mix` sets the ink share;
@@ -457,7 +459,25 @@ A theme sets them on its root to add relief (raised, recessed, tactile, skeuomor
 
 Both enter shadow lists beside rings and overlays: flatten them with
 `0 0 #0000`, never `none`. A recess does not identify a field; keep the
-`--border-control` edge. A finish on filled buttons is `--btn-finish`.
+`--border-control` edge.
+
+### Finish
+
+`--finish` is a `background-image` layered over every solid fill (unset by
+default): a gloss, a dome, a texture (sheen, gradient buttons, glossy,
+satin). Solid buttons, checked checkboxes, radios and switches, the progress
+value and solid badges read it; outline, ghost, soft and unchecked parts stay
+flat.
+
+```css
+:root {
+  --finish: linear-gradient(rgb(255 255 255 / 0.15), transparent);
+}
+```
+
+Keep it a translucent neutral, so one value lights every intent and the intent
+color stays in the color tokens. `actual-css contrast` measures the fill
+without it, so keep it a veil.
 
 ### Motion
 

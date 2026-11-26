@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Field icons bench</title>
+  <link rel="stylesheet" href="../../src/css/actual.full.css">
+  <style>
+    /* Where the icons inside a field land against the text inset. A dashed
+       guide marks --control-pad-x from each edge: the text starts on the
+       first one, and an icon's ink should meet the guide on its side. */
+    * { transition-duration: 0s !important; }
+    body { padding: 1.5rem; }
+    .bench-intro { max-inline-size: 60ch; margin-block-end: 1.5rem; }
+    .bench-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+      gap: 1.5rem;
+    }
+    .bench-grid h2 { margin: 0; font-size: var(--font-size-sm); color: var(--text-muted); }
+    .bench-toolbar { margin-block-end: 1.5rem; }
+
+    .guide { position: relative; }
+    .guide::before,
+    .guide::after {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .guide::before {
+      inset-inline-start: var(--control-pad-x);
+      border-inline-start: 1px dashed rgb(255 0 128 / 0.5);
+    }
+    .guide::after {
+      inset-inline-end: var(--control-pad-x);
+      border-inline-end: 1px dashed rgb(255 0 128 / 0.5);
+    }
+    body:not(.show-guides) .guide::before,
+    body:not(.show-guides) .guide::after { display: none; }
+
+    .pill { --radius: 999px; }
+    .thick { --border-width: 2px; }
+
+    /* Variants to compare against the core. */
+    .box { --select-icon-inset: var(--control-pad-x); }
+    .half { --select-icon-inset: calc(var(--control-pad-x) * 0.5); }
+    .half .input-icon > .input ~ * { inset-inline-end: calc(var(--control-pad-x) * 0.5); }
+    .half .input-icon > :first-child:where(:not(.input)) { inset-inline-start: calc(var(--control-pad-x) * 0.5); }
+    .half :is([type="date"], [type="time"])::-webkit-calendar-picker-indicator {
+      margin-inline-end: calc(var(--control-pad-x) * -0.5);
+    }
+  </style>
+</head>
+<body class="show-guides">
+  <header class="bench-intro stack">
+    <h1>Field icons</h1>
+    <p class="muted">
+      Leading and trailing icons inside fields: the select chevron, native
+      date, time and search controls, and <code>.input-icon</code>. The dashed
+      guides sit at <code>--control-pad-x</code> from each edge. The native
+      search clear button shows on hover or focus.
+    </p>
+  </header>
+  <div class="bench-toolbar cluster">
+    <label class="choice"><input class="check" type="checkbox" id="guides" checked> Guides</label>
+    <label class="choice"><input class="check" type="checkbox" id="dark"> Dark</label>
+  </div>
+  <div class="bench-grid" id="grid"></div>
+
+  <template id="fields">
+    <div class="guide"><input class="input" value="Ada Morgan" aria-label="Text"></div>
+    <div class="guide"><select class="select" aria-label="Select"><option>View</option></select></div>
+    <div class="guide"><input class="input" type="date" value="2026-11-26" aria-label="Date"></div>
+    <div class="guide"><input class="input" type="time" value="09:30" aria-label="Time"></div>
+    <div class="guide"><input class="input" type="search" value="Native search" aria-label="Native search"></div>
+    <div class="guide input-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M21 21l-6-6"/></svg>
+      <input class="input" type="search" value="Leading icon" aria-label="Leading icon">
+    </div>
+    <div class="guide input-icon">
+      <input class="input" value="Trailing icon" aria-label="Trailing icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7"/><path d="M21 21l-6-6"/></svg>
+    </div>
+    <div class="guide input-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 7l9 6 9-6"/></svg>
+      <input class="input" value="Both sides" aria-label="Both sides">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>
+    </div>
+  </template>
+
+  <script>
+    const COLUMNS = [
+      ["", "Core"],
+      ["box", "Chevron box at the pad"],
+      ["half", "Everything at half a pad"],
+    ];
+    const SETS = [
+      ["", ""],
+      ["pill", "pill"],
+      ["pill thick", "pill, 2px"],
+      ["", "rtl", "rtl"],
+    ];
+    const grid = document.getElementById("grid");
+    const fields = document.getElementById("fields").innerHTML;
+    for (const [extra, note, dir] of SETS) {
+      for (const [variant, label] of COLUMNS) {
+        const column = document.createElement("section");
+        column.className = `stack ${variant} ${extra}`.trim();
+        if (dir) column.dir = dir;
+        column.innerHTML = `<h2>${label}${note ? ` · ${note}` : ""}</h2>${fields}`;
+        grid.append(column);
+      }
+    }
+    document.getElementById("guides").addEventListener("change", (event) => {
+      document.body.classList.toggle("show-guides", event.target.checked);
+    });
+    document.getElementById("dark").addEventListener("change", (event) => {
+      document.documentElement.dataset.theme = event.target.checked ? "dark" : "light";
+    });
+  </script>
+</body>
+</html>

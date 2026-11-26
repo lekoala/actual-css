@@ -20,7 +20,6 @@
  * --btn-gap
  * --btn-hover-overlay
  * --btn-shadow
- * --btn-finish
  * --btn-default-bg
  * --btn-default-fg
  * --btn-default-border
@@ -84,14 +83,15 @@
   );
   border-block-end-width: var(--btn-border-block-end-width, var(--border-width));
   border-radius: var(--btn-radius);
-  /* why: the fill is a color and the finish an image layered over it, so a
-     theme lights every intent the same way without restating its color, and
-     the hover (a background-color change under an inset overlay) keeps the
-     finish. --btn-bg must stay a color: an image there invalidates the
-     declaration. From the border box, so a repeated tile does not show its
-     bottom edge in the transparent border along the top. */
+  /* why: the fill is a color and the finish (--finish, the token every solid
+     fill reads) an image layered over it, so a theme lights every intent the
+     same way without restating its color, and the hover (a background-color
+     change under an inset overlay) keeps the finish. --btn-bg must stay a
+     color: an image there invalidates the declaration. From the border box,
+     so a repeated tile does not show its bottom edge in the transparent
+     border along the top. */
   background-color: var(--btn-bg);
-  background-image: var(--btn-finish, none);
+  background-image: var(--finish, none);
   background-origin: border-box;
   color: var(--btn-fg);
   /* why: an unset hook rather than none, so a theme or container can give
@@ -172,10 +172,12 @@
   --btn-hover-overlay: transparent;
 }
 
-/* A finish lights a fill: the recipes without an opaque fill of their own
-   stay flat. A theme that wants a finish on one of them sets it there. */
+/* A finish lights a solid fill: the recipes without one stay flat. A
+   declaration, not a reset of --finish, so the token does not stop at the
+   button for its content. A theme that wants a sheen on one of them paints
+   its own background-image there. */
 .btn:is(.outline, .ghost, .link, .soft, .surface) {
-  --btn-finish: initial;
+  background-image: none;
 }
 
 /* Shared hover recipe — sets --ui-hover-bg consumed by the hover rule below.

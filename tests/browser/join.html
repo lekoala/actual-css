@@ -28,14 +28,16 @@
   </div>
 
   <!-- Outside a field join, the label identifies the action: it keeps the
-       quieter surface border. -->
-  <input class="input" id="plain-input" aria-label="Plain field" value="x">
-  <button class="btn outline" id="plain-outline" type="button">Clear</button>
+       quieter surface border, even when the field edge is strong. -->
+  <div style="--control-default-border: rgb(0 128 0)">
+    <input class="input" id="plain-input" aria-label="Plain field" value="x">
+    <button class="btn outline" id="plain-outline" type="button">Clear</button>
+  </div>
   <span id="ref-border" style="border: 1px solid var(--border)"></span>
 
-  <!-- A control edge themed apart from --border: the action follows the
+  <!-- A field edge themed apart from --border: the action follows the
        field, not the structural border. -->
-  <div class="join" role="group" style="--border-control: rgb(255 0 0)">
+  <div class="join" role="group" style="--control-default-border: rgb(255 0 0)">
     <input class="input" id="join-control-input" value="x">
     <button class="btn outline" id="join-control-default" type="button">Clear</button>
   </div>

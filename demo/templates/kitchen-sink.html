@@ -602,10 +602,21 @@
       <button class="btn outline" commandfor="demoDrawer" command="show-modal"
         aria-haspopup="dialog" aria-controls="demoDrawer">Open drawer</button>
     </p>
-    <dialog class="modal" id="demoModal" style="max-inline-size:24rem">
+    <dialog class="modal" id="demoModal" style="max-inline-size:28rem" closedby="any"
+      aria-labelledby="demoModalTitle">
+      <header>
+        <h3 id="demoModalTitle">Rename project</h3>
+        <div class="cluster">
+          <button class="close" type="button" commandfor="demoModal" command="request-close"
+            aria-controls="demoModal" aria-label="Close dialog"></button>
+        </div>
+      </header>
       <form method="dialog" class="stack">
-        <header><h3>Modal title</h3></header>
-        <p>Modal content goes here.</p>
+        <p>The new name shows in the sidebar, in links and in notifications. Members keep their access.</p>
+        <label class="field">
+          <span class="field-label">Project name</span>
+          <input class="input" name="name" value="Website redesign">
+        </label>
         <footer class="cluster justify-content-end">
           <button class="btn" type="submit" value="cancel">Cancel</button>
           <button class="btn primary" type="submit" value="confirm">Confirm</button>

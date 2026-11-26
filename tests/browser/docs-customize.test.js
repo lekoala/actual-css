@@ -61,8 +61,8 @@ it("applies the saved config before the first paint and renders the copied CSS",
   await withBrowserPage(PAGE, async (view) => {
     const config = {
       version: 1,
-      theme: "plush",
-      scheme: "system",
+      theme: "default",
+      scheme: "dark",
       radius: "square",
       density: "compact",
       fields: "edge",
@@ -93,7 +93,7 @@ it("applies the saved config before the first paint and renders the copied CSS",
     // Parser-blocking in <head>: the config lands before the body renders.
     expect(state.blocking).toBe(true);
     expect(state.styleInHead).toBe(true);
-    expect(state.theme).toBe("plush");
+    expect(state.theme).toBe("dark");
     expect(state.rendered).toBe(state.expected);
     expect(state.radius).toBe("0");
     expect(state.controlSize).toBe("2rem");
@@ -106,20 +106,29 @@ it("applies the saved config before the first paint and renders the copied CSS",
   });
 });
 
-it("Default follows the theme and an explicit value survives a theme switch", async () => {
+it("a demo theme keeps its own choices and the axes come back with Default", async () => {
   await withBrowserPage(PAGE, async (view) => {
     await fresh(view);
     await openPanel(view);
-    await choose(view, "theme", "plush");
-    expect(await view.evaluate(rootToken("--radius-lg"))).toBe("1.5rem");
-
     await choose(view, "radius", "small");
-    await choose(view, "theme", "tactile");
     expect(await view.evaluate(rootToken("--radius-lg"))).toBe("0.375rem");
 
     await choose(view, "theme", "plush");
-    await choose(view, "radius", "default");
-    expect(await view.evaluate(rootToken("--radius-lg"))).toBe("1.5rem");
+    const demo = await view.evaluate(`({
+      radius: ${rootToken("--radius-lg")},
+      css: document.getElementById("docs-customizer-style").textContent,
+      locked: document.querySelector("[data-docs-customizer-axes]").disabled,
+      copy: document.querySelector('[data-docs-customizer-action="copy"]').disabled,
+    })`);
+    expect(demo).toEqual({ radius: "1.5rem", css: "", locked: true, copy: true });
+
+    await choose(view, "theme", "default");
+    const back = await view.evaluate(`({
+      radius: ${rootToken("--radius-lg")},
+      field: document.getElementById("docs-customizer-radius").value,
+      locked: document.querySelector("[data-docs-customizer-axes]").disabled,
+    })`);
+    expect(back).toEqual({ radius: "0.375rem", field: "small", locked: false });
   });
 });
 
@@ -159,12 +168,12 @@ it("a share link reproduces the config and leaves a clean address", async () => 
     await fresh(view);
     await view.evaluate(stubClipboard);
     await openPanel(view);
-    await choose(view, "theme", "tactile");
+    await choose(view, "scheme", "dark");
     await choose(view, "fields", "recessed");
     await clickSelector(view, '[data-docs-customizer-action="share"]');
     await waitForBrowser(view, "window.__copied.length === 1");
     const link = await view.evaluate("window.__copied[0]");
-    expect(link).toContain("customize=1%2Ctheme%3Atactile%2Cfields%3Arecessed");
+    expect(link).toContain("customize=1%2Cscheme%3Adark%2Cfields%3Arecessed");
 
     await view.evaluate("(() => { localStorage.clear(); return true; })()");
     await view.navigate(link);
@@ -173,7 +182,7 @@ it("a share link reproduces the config and leaves a clean address", async () => 
       search: location.search,
       saved: JSON.parse(localStorage.getItem("${KEY}")).fields,
     })`);
-    expect(state).toEqual({ theme: "tactile", search: "", saved: "recessed" });
+    expect(state).toEqual({ theme: "dark", search: "", saved: "recessed" });
   });
 });
 

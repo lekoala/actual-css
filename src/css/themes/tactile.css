@@ -2,7 +2,7 @@
  * cards rise off a grey canvas, fields and rails are recessed into it, solid
  * actions are domed by a neutral finish over their intent color. A stress test
  * of the elevation and finish tokens (--shadow-control, --shadow-inset,
- * --btn-finish): tokens carry the palette and the relief, small recipes carry
+ * --finish): tokens carry the palette and the relief, small recipes carry
  * raised cards and the quiet buttons turned into raised keys. */
 [data-theme="tactile"] {
   /* Base palette is the light half; the dark pairing is only announced where
@@ -101,10 +101,11 @@
       0 1px 3px color-mix(in oklch, var(--shadow-color) 12%, transparent);
     --shadow-inset: inset 0 1px 2px color-mix(in oklch, var(--shadow-color) 14%, transparent);
     --control-default-bg: var(--surface-subtle);
+    --control-default-border: var(--border-control);
     --control-hover-bg: color-mix(in oklab, var(--surface-subtle) 92%, var(--text));
 
-    /* Domed fills: one neutral light over every intent color. */
-    --btn-finish: linear-gradient(rgb(255 255 255 / 0.14), rgb(0 0 0 / 0.08));
+    /* Domed fills: one neutral light over every solid intent color. */
+    --finish: linear-gradient(rgb(255 255 255 / 0.14), rgb(0 0 0 / 0.08));
   }
 
   /* Every card is a raised face; the theme has no flat card. */
@@ -126,7 +127,8 @@
     --ui-border: var(--border);
     --btn-shadow:
       inset 0 1px 0 var(--tactile-light, rgb(255 255 255 / 0.75)), var(--shadow-control);
-    --btn-finish: linear-gradient(transparent 40%, rgb(0 0 0 / 0.03));
+
+    background-image: linear-gradient(transparent 40%, rgb(0 0 0 / 0.03));
   }
 
   /* Pressed: the relief turns inward. Through the hook, so the core hover

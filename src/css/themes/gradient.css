@@ -1,9 +1,9 @@
 /* Gradient — paired light/dark theme, palette inspired by Bootstrap 4's
- * defaults. Gives solid buttons the classic Bootstrap 4 gradient (a
+ * defaults. Gives solid fills the classic Bootstrap 4 gradient (a
  * 15%-white-lightened top fading to the flat intent color) through the
- * --btn-finish token alone. .soft/.outline/.ghost/.link/.surface stay flat,
- * matching Bootstrap 4's own gradient mixin, which only wraps its filled
- * button variant. */
+ * --finish token alone: solid buttons, checked boxes and switches, progress
+ * values, as Bootstrap 4's $enable-gradients does. .soft/.outline/.ghost/
+ * .link/.surface stay flat. */
 [data-theme="gradient"] {
   /* Base palette is the light half; the dark pairing is only announced where
      light-dark() exists, in the @supports block below. */
@@ -96,8 +96,8 @@
 
 /* Bootstrap 4 gradient recipe (linear-gradient(180deg, mix(white, $color,
    15%), $color)) as a neutral finish over the intent fill, so one value serves
-   every intent. The button core keeps it off the unfilled variants, and the
-   hover overlay darkens it as Bootstrap 4 does. */
+   every intent. The core keeps it off unfilled parts, and the button hover
+   overlay darkens it as Bootstrap 4 does. */
 [data-theme="gradient"] {
-  --btn-finish: linear-gradient(rgb(255 255 255 / 0.15), transparent);
+  --finish: linear-gradient(rgb(255 255 255 / 0.15), transparent);
 }

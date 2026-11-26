@@ -32,7 +32,8 @@ function usage() {
     "scheme it declares: soft ink on its resting and hovered fill, the resting edge",
     "of a field, checkbox and radio and the track or knob of an unchecked switch, the focus line on --surface",
     "and --surface-solid, the invalid-field focus line, and the inverse text. Exits 1",
-    "when a pair misses its threshold. Needs Bun (bunx --bun actual-css contrast ...).",
+    "when a pair misses its threshold; a field without a 3:1 edge or fill is a",
+    "warning. Needs Bun (bunx --bun actual-css contrast ...).",
   ].join("\n");
 }
 
@@ -152,8 +153,13 @@ async function design({ themeFile, name, out }) {
 async function contrast({ themeFile, name }) {
   requireBun("contrast");
   const { formatContrast, measureThemeFile } = await import("../tooling/theme-contrast.js");
-  const { text, misses } = formatContrast(await measureThemeFile({ themeFile, name }));
+  const { text, misses, warnings } = formatContrast(await measureThemeFile({ themeFile, name }));
   console.log(text);
+  if (warnings > 0) {
+    console.error(
+      `\n${warnings} field${warnings === 1 ? "" : "s"} without a 3:1 cue (warning, see above).`,
+    );
+  }
   if (misses > 0) {
     console.error(`\n${misses} pair${misses === 1 ? "" : "s"} under threshold.`);
     process.exitCode = 1;

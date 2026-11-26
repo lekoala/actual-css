@@ -261,7 +261,8 @@
       "select"
     ],
     "publicHooks": [
-      "--select-icon-size"
+      "--select-icon-size",
+      "--select-icon-inset"
     ]
   },
   {

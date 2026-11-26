@@ -10,7 +10,8 @@
  * Exception: --surface-opaque and --surface-solid-fg are public; a theme with
  * translucent surfaces overrides them with opaque values. --border-control is
  * public too: the resting edge of a neutral control, apart from structural
- * separators. --control-default-bg is the inherited resting field fill.
+ * separators. --control-default-bg and --control-default-border are the
+ * inherited resting field fill and edge.
  *
  * Internal:
  * --hgroup-gap
@@ -136,6 +137,12 @@
   /* Inherited resting field fill, shared with external control bridges.
      Component state rules still own readonly, disabled and invalid fills. */
   --control-default-bg: var(--surface);
+  /* Inherited resting field edge: the quiet --border, like a neutral outline
+     button. A known WCAG 1.4.11 trade-off: on a fill equal to the surface the
+     field reads by its label and place, not a 3:1 edge (actual-css contrast
+     warns). Increased contrast restores --border-control below; a product
+     that needs strong identification everywhere sets it on :root. */
+  --control-default-border: var(--border);
 }
 
 /* Custom properties accept unknown functions, so guard the pair to preserve
@@ -268,5 +275,8 @@
     --focus-ring-width: 3px;
     --text-muted: var(--text);
     --text-subtle: var(--text);
+    /* Fields are identified by a 3:1 edge again, quiet or borderless themes
+       included. */
+    --control-default-border: var(--border-control);
   }
 }

@@ -90,10 +90,34 @@ Keep the outline visible against the surrounding surface when changing colors.
 
 → [Button hooks](../components/button.md#css-hooks) · [Focus tokens](./tokens.md#color)
 
-### Lighter field borders / underline fields / bottom border only
+### Field borders: quiet or strong / field contrast / WCAG 1.4.11
 
-A field must stay identifiable at rest. Keep a 3:1 edge on the lower side and
-quiet the others by setting two inherited hooks on your theme root:
+Fields rest on the quiet `--border` edge, like a neutral outline button. On a
+fill equal to the surface that edge sits under 3:1: the field reads by its
+label and place, a known WCAG 1.4.11 trade-off that `actual-css contrast`
+reports as a warning. Increased contrast (`prefers-contrast: more`) gives every
+field the 3:1 `--border-control` edge back, and forced colors draw it in a
+system color.
+
+```css
+/* Actual default: quiet fields. */
+:root {
+  --control-default-border: var(--border);
+}
+
+/* Strong field identification: a 3:1 edge on every side. */
+:root {
+  --control-default-border: var(--border-control);
+}
+```
+
+A field fill distinct from its surface also identifies it, as on a raised
+panel (below). Checkboxes, radios and switches keep `--border-control`, their
+only cue.
+
+### Underline fields / bottom border only
+
+To keep the 3:1 cue on the lower side alone, set the lower-edge hook:
 
 ```css
 :root {
@@ -133,9 +157,9 @@ raised panel, a tinted fill sets the fields apart from the panel:
 }
 ```
 
-Keep the `--border-control` edge: the fill step alone stays under 3:1. For a
-borderless filled field, move the edge to the lower side as in the underline
-recipe above.
+The fill step sets the fields apart but stays under 3:1 on its own. For strict
+identification, use the strong edge above; for a borderless filled field, move
+the edge to the lower side as in the underline recipe.
 
 → [Forms hooks](../forms/overview.md#hooks) · Examples · Surface form
 
@@ -153,8 +177,8 @@ the surface around the fields:
 ```
 
 The shade does not identify a field; keep its edge. `--shadow-control` raises
-the moving parts on those rails, and `--btn-finish` adds a sheen to filled
-buttons. The `tactile` theme combines the three.
+the moving parts on those rails, and `--finish` adds a sheen to every solid
+fill. The `tactile` theme combines the three.
 
 → [Elevation tokens](./tokens.md#elevation)
 
@@ -341,9 +365,9 @@ application CSS:
 `src/css/themes/` holds example palettes (`ocean`, `spruce`, `neon`, `brutalist`, …) as
 reference material to copy into your own `[data-theme]` island — they are demo
 assets, not package entrypoints. Each sets the intent/surface/text tokens and
-lets the core derive everything else. Customize, in the docs header, applies a
-preset to these pages, adjusts its radius, density, fields, elevation, finish
-and font, and copies the resulting CSS.
+lets the core derive everything else. Customize, in the docs header, previews a
+preset on these pages, or adjusts the default theme's radius, borders, density, fields,
+elevation, finish and font and copies the resulting CSS.
 
 - `gradient`: outer focus halos on fields, and a button finish.
 - `tactile`: raised cards, recessed fields and rails, domed buttons, all from

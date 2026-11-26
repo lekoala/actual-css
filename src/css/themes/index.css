@@ -33,8 +33,8 @@
  *                intents, 2px borders, hard offset shadows
  *   neon       — dark-only + wide-gamut P3 upgrade via oklch(), glow
  *                shadows, soft-variant tuning
- *   gradient   — paired recolor + Bootstrap 4 style gradient on solid buttons
- *                through the --btn-finish token
+ *   gradient   — paired recolor + Bootstrap 4 style gradient on solid fills
+ *                through the --finish token
  *   material   — paired Material 3 baseline palette + filled underline fields
  *                and pill buttons, a stress test of the field focus contract
  *   glass      — dark-only translucent surfaces over a theme-painted backdrop,

@@ -47,16 +47,19 @@
   box-shadow: var(--shadow-inset, none);
 }
 
+/* The value is a solid fill: the theme finish is the layer over it. Two
+   layers of one shorthand, so --progress-value may stay a color or become a
+   gradient (only the last layer accepts a color). */
 .progress::-webkit-progress-value {
   block-size: var(--bar-height);
   border-radius: var(--bar-radius);
-  background: var(--progress-value);
+  background: var(--finish, none), var(--progress-value);
 }
 
 .progress::-moz-progress-bar {
   block-size: var(--bar-height);
   border-radius: var(--bar-radius);
-  background: var(--progress-value);
+  background: var(--finish, none), var(--progress-value);
 }
 
 /* Indeterminate progress */

@@ -10,7 +10,13 @@
 
     body { padding: 1rem; }
 
-    /* The four documented treatments, each from inherited hooks only. */
+    /* The core default (quiet) and the documented treatments, each from
+       inherited hooks only. The core restores the 3:1 edge under increased
+       contrast; the classes below come after it, so they restate it. */
+    .framed {
+      --control-default-border: var(--border-control);
+    }
+
     .edge {
       --control-default-bg: var(--surface-subtle);
       --control-default-border: transparent;
@@ -20,13 +26,25 @@
       --control-border-block-end-width: 2px;
     }
 
+    /* Borderless: the documented exception, the edge returns under
+       increased contrast. */
     .filled {
-      --control-default-bg: var(--surface-subtle);
+      --control-default-bg: rgb(228 228 234);
+      --control-default-border: transparent;
+      --control-hover-border: transparent;
+      --control-hover-bg: rgb(216 216 224);
     }
 
     .recessed {
       --control-default-bg: var(--surface-subtle);
       --shadow-inset: inset 0 1px 2px rgb(0 0 0 / 0.2);
+    }
+
+    @media (prefers-contrast: more) {
+      .filled {
+        --control-default-border: var(--border-control);
+        --control-hover-border: initial;
+      }
     }
 
     #away { block-size: 2rem; }
@@ -35,26 +53,37 @@
 <body>
   <div id="away"></div>
   <div class="grid" style="--grid-min: 12rem">
-    <section class="stack outlined" data-treatment="outlined">
-      <input class="input" id="outlined-rest" aria-label="Rest">
-      <input class="input" id="outlined-invalid" aria-label="Invalid" aria-invalid="true">
-      <input class="input" id="outlined-readonly" aria-label="Readonly" value="Readonly" readonly>
-      <input class="input" id="outlined-disabled" aria-label="Disabled" disabled>
+    <section class="stack" data-treatment="quiet">
+      <input class="input" id="quiet-rest" aria-label="Rest">
+      <select class="select" id="quiet-select" aria-label="Select"><option>One</option></select>
+      <input class="input" id="quiet-invalid" aria-label="Invalid" aria-invalid="true">
+      <input class="input" id="quiet-readonly" aria-label="Readonly" value="Readonly" readonly>
+      <input class="input" id="quiet-disabled" aria-label="Disabled" disabled>
+    </section>
+    <section class="stack framed" data-treatment="framed">
+      <input class="input" id="framed-rest" aria-label="Rest">
+      <select class="select" id="framed-select" aria-label="Select"><option>One</option></select>
+      <input class="input" id="framed-invalid" aria-label="Invalid" aria-invalid="true">
+      <input class="input" id="framed-readonly" aria-label="Readonly" value="Readonly" readonly>
+      <input class="input" id="framed-disabled" aria-label="Disabled" disabled>
     </section>
     <section class="stack edge" data-treatment="edge">
       <input class="input" id="edge-rest" aria-label="Rest">
+      <select class="select" id="edge-select" aria-label="Select"><option>One</option></select>
       <input class="input" id="edge-invalid" aria-label="Invalid" aria-invalid="true">
       <input class="input" id="edge-readonly" aria-label="Readonly" value="Readonly" readonly>
       <input class="input" id="edge-disabled" aria-label="Disabled" disabled>
     </section>
     <section class="stack filled" data-treatment="filled">
       <input class="input" id="filled-rest" aria-label="Rest">
+      <select class="select" id="filled-select" aria-label="Select"><option>One</option></select>
       <input class="input" id="filled-invalid" aria-label="Invalid" aria-invalid="true">
       <input class="input" id="filled-readonly" aria-label="Readonly" value="Readonly" readonly>
       <input class="input" id="filled-disabled" aria-label="Disabled" disabled>
     </section>
     <section class="stack recessed" data-treatment="recessed">
       <input class="input" id="recessed-rest" aria-label="Rest">
+      <select class="select" id="recessed-select" aria-label="Select"><option>One</option></select>
       <input class="input" id="recessed-invalid" aria-label="Invalid" aria-invalid="true">
       <input class="input" id="recessed-readonly" aria-label="Readonly" value="Readonly" readonly>
       <input class="input" id="recessed-disabled" aria-label="Disabled" disabled>

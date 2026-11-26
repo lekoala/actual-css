@@ -354,6 +354,8 @@
     // Stands in for `.card > footer` (the bench markup has no footer); :root
     // outranks the glue that zeroes child margins.
     "Card: half step before actions": ":root .card > .button-row:last-child { margin-block-start: calc(var(--card-gap) / 2); }",
+    // The core rests fields on the quiet --border edge; this is the strong identification recipe.
+    "Fields: strong edge (3:1)": ":root { --control-default-border: var(--border-control); }",
     "Fields: quiet sides, 3:1 bottom edge": ":root { --control-default-border: var(--border); --control-border-block-end-color: var(--border-control); }",
     "Fields: tinted fill, 3:1 bottom edge": ":root { --control-default-bg: var(--surface-subtle); --control-default-border: transparent; --control-hover-border: transparent; --control-border-block-end-color: var(--border-control); }",
     "Focus: tinted fill": ":is(.input, .textarea, .select):focus-visible { --control-bg: color-mix(in oklab, var(--focus) 8%, var(--surface)); }",

@@ -1,7 +1,7 @@
 /*
  * Hooks a theme sets to change component behaviour: --btn-shadow (a resting
  * elevation the solid hover overlay must compose with, not replace),
- * --btn-finish, --shadow-control and --shadow-inset, and the accordion marker
+ * --finish, --shadow-control and --shadow-inset, and the accordion marker
  * glyph and open turn.
  */
 import { expect } from "bun:test";
@@ -50,7 +50,7 @@ it("keeps --control-shadow on a keyboard-focused field", async () => {
 
 // Trap: the hover rule used the background shorthand, which resets the image
 // layer, so a finish set on .btn vanished under the pointer.
-it("keeps --btn-finish under the hover and off unfilled variants", async () => {
+it("keeps --finish under the hover and off unfilled variants", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
     await hoverSelector(view, "#finish-hover");
     await waitForBrowser(
@@ -64,6 +64,30 @@ it("keeps --btn-finish under the hover and off unfilled variants", async () => {
 
     expect(image.hover).toStartWith("linear-gradient(");
     expect(image.outline).toBe("none");
+  });
+});
+
+// One finish for every solid fill: a checked control or a solid pill beside
+// a solid button must not read matte.
+it("lights every solid fill with --finish and leaves the rest flat", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const image = await view.evaluate(`Object.fromEntries(
+      ["finish-switch", "finish-check", "finish-radio", "finish-badge", "relief-switch",
+       "finish-unchecked", "finish-soft-badge"].map((id) => [
+        id,
+        getComputedStyle(document.getElementById(id)).backgroundImage.startsWith("linear-gradient("),
+      ]),
+    )`);
+
+    expect(image).toEqual({
+      "finish-switch": true,
+      "finish-check": true,
+      "finish-radio": true,
+      "finish-badge": true,
+      "relief-switch": false,
+      "finish-unchecked": false,
+      "finish-soft-badge": false,
+    });
   });
 });
 

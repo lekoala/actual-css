@@ -19,18 +19,25 @@
 - `actual-css/forms.json`: the `components.json` index for `src/css/forms` (classes, hooks, states, imports, docs URL), verified by `check:catalog`.
 - `--shadow-control`: unset control-scale relief for the selected `.segment`, the `.switch` knob and the `.range` thumb.
 - `--shadow-inset`: unset recess for fields (through `--control-shadow`) and the switch, range, progress, meter and segmented rails.
-- `--btn-finish`: a `background-image` over a filled `.btn`, kept on hover and cleared on `.outline`, `.ghost`, `.link`, `.soft` and `.surface`.
+- `--finish`: an unset `background-image` over every solid fill: solid `.btn`, checked `.check`, `.radio` and `.switch`, `.progress` value and `.badge.solid`.
 - `tactile` demo theme: raised cards, recessed fields and rails, domed buttons.
 - `plush` demo theme: borderless cards, inset-shaded fields and rails, squish and stretch press motion.
 - `surface-form` demo: an Edge treatment, a filled field with the 3:1 cue on its lower edge.
 - Design note: `elevation-and-finish.md`.
-- Docs: a Customize panel replaces the header theme select: theme, scheme, radius, density, fields, elevation, finish and font, with Copy CSS, Share link and Reset.
+- Docs: a Customize panel replaces the header theme select: preview a demo theme and scheme, or tune the default theme's radius, borders, density, fields, elevation, finish and font, with Copy CSS, Share link and Reset.
 
 ### Changed
-- `.btn` paints `--btn-bg` with `background-color`: a gradient in `--ui-bg` or `--btn-default-bg` no longer renders; use `--btn-finish`.
-- `gradient` demo theme: its button gradient moves to `--btn-finish`.
-- `actual-css contrast` measures solid button pairs under `--btn-finish` instead of reporting them n/a.
-- `.input` and `.textarea` take `--control-hover-bg` on hover when a theme sets it, like `.select`; the `material` theme's text fields gain its hover fill.
+- `.btn` paints `--btn-bg` with `background-color`: a gradient in `--ui-bg` or `--btn-default-bg` no longer renders; use `--finish`.
+- `gradient` demo theme: its gradient moves to `--finish` and reaches checked controls, switches, progress and solid badges.
+- `actual-css contrast` measures solid button pairs under `--finish` instead of reporting them n/a.
+- `.input`, `.textarea` and `.select` share one hover: `--control-hover-border` and `--control-hover-bg` apply to all three, and `.select` no longer fills with `--surface-subtle` by default.
+- `minimal` theme: hovering a field inks its underline.
+- `.select` places its chevron's ink, not its box, at `--control-pad-x`, aligned with native date, time and `.input-icon` icons; `--select-icon-inset` sets the offset for a replacement `--icon-chevron`.
+- `.input`, `.textarea`, `.select`, `.join-addon` and `.otp` cells rest on a quiet `--border` edge: `--control-default-border` defaults to `--border` and to `--border-control` under `prefers-contrast: more`.
+- Strong field identification is `--control-default-border: var(--border-control)` on `:root` (Foundations · Theming, field borders).
+- `actual-css contrast` reads a field's fill as well as its lower edge, and reports a field without a 3:1 cue as a warning instead of a failure.
+- `tactile` demo theme keeps the 3:1 `--border-control` field edge.
+- Docs Customize: the Fields axis offers Framed (the 3:1 edge) beside the quiet default; Edge, Filled and Recessed restore the 3:1 edge under increased contrast.
 - `actual-css contrast` measures the invalid focus line on the focused field: its outline, or its block-end border when a theme clears the outline.
 - `nextItem()` from `actual-css/js/keys` stops at the edges by default, matching `itemForKey()`; pass `{ wrap: true }` to cycle.
 - Dialog toggles accept `false` in any letter case, matching tooltip toggles.

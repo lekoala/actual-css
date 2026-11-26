@@ -1,10 +1,12 @@
 /*
- * The four field treatments (outlined, edge, filled, recessed) are built from
- * inherited hooks alone, so a theme or the docs customizer can switch them
- * freely. Whatever the treatment, the states keep their invariants: a 3:1
- * lower edge at rest, a visible hover change, the focus outline over the
- * kept elevation, validation on every side, and quiet readonly and disabled
- * fields. Computed styles, not pixels.
+ * The core field (quiet) and the treatments (framed, edge, filled, recessed)
+ * are built from inherited hooks alone, so a theme or the docs customizer can
+ * switch them freely. Whatever the treatment, the states keep their
+ * invariants: a resting lower edge (3:1, or the known quiet and borderless
+ * exceptions, which regain it under increased contrast), one visible hover
+ * change shared by the input and the select, the focus outline over the kept
+ * elevation, validation on every side, and quiet readonly and disabled fields.
+ * Computed styles, not pixels.
  */
 import { expect, test } from "bun:test";
 import { fixtureUrl } from "../../scripts/utils/browser.js";
@@ -13,8 +15,13 @@ import { browserSuite } from "./browser-suite.js";
 const { it, engine, hoverSelector, tabUntil, withBrowserPage } = await browserSuite();
 
 const FIXTURE = fixtureUrl("tests/browser/field-treatments.html");
-const TREATMENTS = ["outlined", "edge", "filled", "recessed"];
+const TREATMENTS = ["quiet", "framed", "edge", "filled", "recessed"];
 const CLEAR = "rgba(0, 0, 0, 0)";
+// Known exceptions to the 3:1 cue, with their resting lower edge: a pale
+// edge, or the fill alone. All give the 3:1 edge back under increased
+// contrast (tested below).
+const EXCEPTIONS = { quiet: "quiet", recessed: "quiet", filled: "clear" };
+const BORDERLESS = new Set(["filled"]);
 
 const read = (id) => `(() => {
   const el = document.getElementById(${JSON.stringify(id)});
@@ -44,17 +51,24 @@ for (const name of TREATMENTS) {
       const ref = await view.evaluate(REFS);
       const rest = await view.evaluate(read(`${name}-rest`));
 
-      // Rest: the 3:1 control edge on the lower side at least.
-      expect(rest.end).toBe(ref.edge);
+      // Rest: the 3:1 control edge on the lower side at least, except for the
+      // known exceptions.
+      const expected = { quiet: ref.quiet, clear: CLEAR }[EXCEPTIONS[name]] ?? ref.edge;
+      expect(rest.end).toBe(expected);
       expect(rest.endWidth).toBeGreaterThanOrEqual(1);
       expect(rest.shadow.includes("inset")).toBe(name === "recessed");
 
-      // Hover: something visible changes, and the lower edge stays.
+      // Hover: something visible changes, and a lower edge stays.
       await hoverSelector(view, `#${name}-rest`);
       const hover = await view.evaluate(read(`${name}-rest`));
       expect(hover.hover).toBe(true);
       expect([hover.bg, hover.start, hover.end]).not.toEqual([rest.bg, rest.start, rest.end]);
-      expect(hover.end).not.toBe(CLEAR);
+      if (!BORDERLESS.has(name)) expect(hover.end).not.toBe(CLEAR);
+
+      // A select answers the same hover as the input beside it.
+      const pick = (s) => [s.bg, s.start, s.end];
+      await hoverSelector(view, `#${name}-select`);
+      expect(pick(await view.evaluate(read(`${name}-select`)))).toEqual(pick(hover));
       await hoverSelector(view, "#away");
 
       // Keyboard focus: the focus outline, over the field's own elevation.
@@ -83,6 +97,24 @@ for (const name of TREATMENTS) {
     });
   });
 }
+
+// The exceptions give the 3:1 edge back under increased contrast. Emulated
+// through CDP, so Chromium only.
+(engine ? test.skip : it)(
+  "quiet and borderless fields regain their edge under increased contrast",
+  async () => {
+    await withBrowserPage(
+      FIXTURE,
+      async (view) => {
+        const ref = await view.evaluate(REFS);
+        for (const name of Object.keys(EXCEPTIONS)) {
+          expect((await view.evaluate(read(`${name}-rest`))).end).toBe(ref.edge);
+        }
+      },
+      { mediaFeatures: [{ name: "prefers-contrast", value: "more" }] },
+    );
+  },
+);
 
 // Forced colors repaint every border in a system color, so a treatment that
 // clears the sides (edge) still frames its field. Emulated through CDP, so

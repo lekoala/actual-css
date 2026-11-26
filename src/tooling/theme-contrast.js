@@ -9,7 +9,7 @@
  *     field, checkbox and radio, the track edge or knob of an unchecked switch
  *   - soft ink against the resting and the hovered soft fill (4.5:1), on each
  *     surface a soft element sits on
- *   - the solid pairs, -fg on the intent fill (4.5:1), under the --btn-finish
+ *   - the solid pairs, -fg on the intent fill (4.5:1), under the --finish
  *     veil; a fill a theme paints with its own background-image reads n/a
  *   - selected ink on those surfaces: the current nav link at rest and on
  *     hover, the selected tab and the current step number (4.5:1), and the
@@ -61,7 +61,7 @@ function islandMarkup(id, scheme) {
   ).join("");
   return `<div${style} id="${id}">
     ${softPairs}
-    ${INTENTS.map((i) => `<button class="btn solid ${i}" data-solid="${i}" type="button" style="--btn-finish: initial">t</button>`).join("")}
+    ${INTENTS.map((i) => `<button class="btn solid ${i}" data-solid="${i}" type="button" style="--finish: initial">t</button>`).join("")}
     <span data-pair="focus-surface" style="color: var(--focus); background: var(--surface)"></span>
     <span data-pair="focus-solid" style="color: var(--focus); background: var(--surface-solid)"></span>
     <span data-pair="inverse" style="color: var(--surface-solid-fg); background: var(--surface-solid)"></span>
@@ -74,7 +74,10 @@ function islandMarkup(id, scheme) {
 
 /* Controls whose resting edge is all that identifies them (WCAG 1.4.11): the
    edge against the surface around them needs 3:1. The field is read on its
-   block-end side, the one an underline-only theme (material) keeps. An
+   block-end side, the one an underline-only theme (material) keeps, or on its
+   fill, whichever is stronger; under 3:1 it is a warning, not a miss: the
+   core's quiet field edge is a known trade-off (theme.css), and a field is
+   also identified by its label and place. An
    unchecked switch is read on its track edge or its knob, whichever is
    stronger: the core track is the --border-control edge, and a theme may move
    the cue to a dark knob on a quiet track (docs/pages/forms/switch.md). */
@@ -162,7 +165,7 @@ export async function measureContrast({ css, themes, label = "default" }) {
         }
         pairs[el.dataset.pair] = { fg: rgba(fg), bg: rgba(cs(el).backgroundColor) };
       }
-      // The --btn-finish veil is cleared on these buttons (islandMarkup), so
+      // The --finish veil is cleared on these buttons (islandMarkup), so
       // the pair is the intent fill. A fill a theme still paints with its own
       // background-image has no single color: it is reported, not sampled.
       const solid = {};
@@ -216,11 +219,11 @@ export async function measureContrast({ css, themes, label = "default" }) {
       const box = island.querySelector("[data-controls]");
       const controls = { backdrop: rgba(cs(box).backgroundColor), edges: {} };
       // The cues that can identify each control; the best one counts. A field
-      // shows its lower edge, a switch its track edge or its knob (the core
-      // pill, or a theme's dark knob on a quiet track), any other control its
-      // edge.
+      // shows its lower edge or its fill, a switch its track edge or its knob
+      // (the core pill, or a theme's dark knob on a quiet track), any other
+      // control its edge.
       const cues = {
-        field: (s) => [s.borderBlockEndColor],
+        field: (s) => [s.borderBlockEndColor, s.backgroundColor],
         switch: (s, el) => [cs(el, "::before").backgroundColor, s.borderTopColor],
       };
       for (const el of box.querySelectorAll("[data-control]")) {
@@ -306,9 +309,11 @@ export async function measureThemeFile({ themeFile, name }) {
   return measureContrast({ css, themes: [theme], label: themeFile ? ":root" : "default" });
 }
 
-/* Text tables for `rows`, and the number of pairs under their threshold. */
+/* Text tables for `rows`, the number of pairs under their threshold, and the
+   number of warnings: fields with no 3:1 cue, a trade-off the core makes. */
 export function formatContrast(rows) {
   let misses = 0;
+  let warnings = 0;
   const cell = (value, min) => {
     if (value === null) return { text: "n/a", miss: false };
     const miss = value < min;
@@ -382,10 +387,23 @@ export function formatContrast(rows) {
     );
   }
 
-  lines.push("", "Control cue at rest (edge, or a switch's knob, vs --surface), needs 3:1.", "");
+  lines.push(
+    "",
+    "Control cue at rest (edge, a field's fill, or a switch's knob, vs --surface), needs 3:1.",
+    "A field under 3:1 is a warning: set --control-default-border: var(--border-control)",
+    "for strong identification, or give fields a fill or an edge that reaches 3:1.",
+    "",
+  );
   lines.push(`${"theme".padEnd(width)}  scheme  control      ratio`);
   for (const row of rows) {
     for (const { kind, value } of row.controls ?? []) {
+      if (kind === "field" && value !== null && value < 3) {
+        warnings += 1;
+        lines.push(
+          `${head(row)}  ${kind.padEnd(9)} ${`${value.toFixed(2)}:1`.padStart(8)}  <-- warning: under 3`,
+        );
+        continue;
+      }
       const c = cell(value, 3);
       lines.push(`${head(row)}  ${kind.padEnd(9)} ${c.text.padStart(8)}${flag([c], 3)}`);
     }
@@ -406,5 +424,5 @@ export function formatContrast(rows) {
     4.5,
   );
 
-  return { text: lines.join("\n"), misses };
+  return { text: lines.join("\n"), misses, warnings };
 }

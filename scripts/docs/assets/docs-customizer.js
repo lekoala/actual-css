@@ -8,13 +8,13 @@
  * panel's options, so the axes are declared once.
  *
  * Invariants:
- * - "default" on an axis writes no override: the theme's own value wins, so a
- *   theme switch adopts the new theme's radius unless one was chosen.
+ * - The axes customize the Default theme only. A demo theme is a finished
+ *   identity whose component rules (a pill button, a beveled card) outrank
+ *   tokens; an adopter writes one theme, never stacks two. On a demo theme
+ *   the axes stay saved but write nothing, and come back with Default.
+ * - "default" on an axis writes no override: the core value wins.
  * - The page renders exactly the CSS that Copy CSS hands out (cssText): one
  *   generator, no second path for the export.
- * - Overrides only set tokens and inherited hooks. A theme's component rules
- *   (a pill button, a beveled card) still apply: the customizer shows where
- *   the theming contract ends, it does not patch around it.
  * - Nothing here ships in the Actual CSS bundle.
  */
 (() => {
@@ -41,15 +41,24 @@
 
   /* Every field option sets the whole hook set, so switching from Edge to
      Filled cannot leave Edge's lower edge behind. initial falls back to the
-     core value (the hooks are read with a fallback). */
+     core value (the hooks are read with a fallback); the resting edge is a
+     token theme.css sets, so it is restated: the quiet --border. */
   const FIELD_RESET = {
     "--control-default-bg": "initial",
-    "--control-default-border": "initial",
+    "--control-default-border": "var(--border)",
     "--control-hover-border": "initial",
     "--control-hover-bg": "initial",
     "--control-border-block-end-color": "initial",
     "--control-border-block-end-width": "initial",
     "--control-shadow": "initial",
+  };
+
+  /* What increased contrast gives back to a quiet, edged or borderless field:
+     the 3:1 edge on every side, as theme.css does for the core. Restated
+     because these rules come after the core's. */
+  const STRONG_EDGE = {
+    "--control-default-border": "var(--border-control)",
+    "--control-hover-border": "initial",
   };
 
   const AXES = {
@@ -73,6 +82,17 @@
           label: "Large",
           css: { "--radius-sm": "0.5rem", "--radius": "0.875rem", "--radius-lg": "1.5rem" },
         },
+      },
+    },
+    /* Thicker only. --border-width is every edge (an unchecked box, an
+       outline button, a card), so 0 would erase controls, not just frames:
+       the field edge is the Fields axis. And an explicit 1px would undo the
+       2px that increased contrast sets on :root. */
+    borders: {
+      label: "Borders",
+      scope: "theme",
+      options: {
+        thick: { label: "Thick (2px)", css: { "--border-width": "2px" } },
       },
     },
     density: {
@@ -121,7 +141,12 @@
       label: "Fields",
       scope: "theme",
       options: {
-        outlined: { label: "Outlined", css: { ...FIELD_RESET } },
+        /* Strong field identification: the 3:1 edge on every side. Default
+           is the core's quiet edge. */
+        framed: {
+          label: "Framed",
+          css: { ...FIELD_RESET, "--control-default-border": "var(--border-control)" },
+        },
         edge: {
           label: "Edge",
           css: {
@@ -133,14 +158,22 @@
             "--control-border-block-end-color": "var(--border-control)",
             "--control-border-block-end-width": "2px",
           },
+          contrast: STRONG_EDGE,
         },
+        /* Borderless: the fill alone marks the field, denser than
+           --surface-subtle so it holds on a card. A known exception to the 3:1
+           cue (elevation-and-finish.md): the edge returns under increased
+           contrast, and forced colors paint the transparent border. */
         filled: {
           label: "Filled",
           css: {
             ...FIELD_RESET,
-            "--control-default-bg": "var(--surface-subtle)",
-            "--control-hover-bg": hoverFill,
+            "--control-default-bg": "color-mix(in oklab, var(--surface-subtle) 94%, var(--text))",
+            "--control-default-border": "transparent",
+            "--control-hover-border": "transparent",
+            "--control-hover-bg": "color-mix(in oklab, var(--surface-subtle) 88%, var(--text))",
           },
+          contrast: STRONG_EDGE,
         },
         recessed: {
           label: "Recessed",
@@ -150,6 +183,7 @@
             "--control-hover-bg": hoverFill,
             "--control-shadow": inset(16),
           },
+          contrast: STRONG_EDGE,
         },
       },
     },
@@ -192,15 +226,15 @@
       label: "Finish",
       scope: "theme",
       options: {
-        matte: { label: "Matte", css: { "--btn-finish": "none" } },
+        matte: { label: "Matte", css: { "--finish": "none" } },
         satin: {
           label: "Satin",
-          css: { "--btn-finish": "linear-gradient(rgb(255 255 255 / 0.14), rgb(0 0 0 / 0.08))" },
+          css: { "--finish": "linear-gradient(rgb(255 255 255 / 0.14), rgb(0 0 0 / 0.08))" },
         },
         gloss: {
           label: "Gloss",
           css: {
-            "--btn-finish":
+            "--finish":
               "linear-gradient(rgb(255 255 255 / 0.32), rgb(255 255 255 / 0.08) 50%, rgb(0 0 0 / 0.04) 50%, rgb(0 0 0 / 0.12))",
           },
         },
@@ -243,12 +277,18 @@
   }
 
   const isDefault = (config, key) => config[key] === DEFAULTS[key];
+  const customizable = (config) => config.theme === DEFAULTS.theme;
+  /* The keys that change the rendering: a demo theme ignores the axes. */
+  const effective = (config) =>
+    Object.keys(DEFAULTS).filter(
+      (key) => key !== "version" && (customizable(config) || !Object.hasOwn(AXES, key)),
+    );
 
-  /* Share link value: the version, then the axes that differ from the
-     default ("1,theme:plush,radius:large"). Readable, and short. */
+  /* Share link value: the version, then the effective keys that differ from
+     the default ("1,radius:large,font:serif"). Readable, and short. */
   function encode(config) {
-    const parts = Object.keys(DEFAULTS)
-      .filter((key) => key !== "version" && !isDefault(config, key))
+    const parts = effective(config)
+      .filter((key) => !isDefault(config, key))
       .map((key) => `${key}:${config[key]}`);
     return [VERSION, ...parts].join(",");
   }
@@ -263,50 +303,58 @@
     return normalize(raw, themes);
   }
 
+  const block = (selector, lines, indent = "") =>
+    `${indent}${selector.replaceAll("\n", `\n${indent}`)} {\n${lines
+      .map((line) => `${indent}${line}`)
+      .join("\n")}\n${indent}}`;
+
+  /* An option's css applies everywhere; its contrast css is what changes
+     under prefers-contrast: more (an edge a quiet treatment gives back). */
   function overrides(config) {
-    const scopes = { theme: [], root: [] };
+    if (!customizable(config)) return "";
+    const rules = { theme: [], root: [] };
+    const more = { theme: [], root: [] };
     for (const [axis, { scope, options }] of Object.entries(AXES)) {
-      if (isDefault(config, axis)) continue;
-      scopes[scope].push(`  /* ${axis}: ${config[axis]} */`);
-      for (const [property, value] of Object.entries(options[config[axis]].css)) {
-        scopes[scope].push(`  ${property}: ${value};`);
+      // A missing or unknown value writes nothing, like "default": a config
+      // saved before an axis existed still renders.
+      const option = Object.hasOwn(options, config[axis]) ? options[config[axis]] : null;
+      if (!option) continue;
+      rules[scope].push(`  /* ${axis}: ${config[axis]} */`);
+      for (const [property, value] of Object.entries(option.css)) {
+        rules[scope].push(`  ${property}: ${value};`);
+      }
+      for (const [property, value] of Object.entries(option.contrast ?? {})) {
+        more[scope].push(`  ${property}: ${value};`);
       }
     }
-    return Object.entries(scopes)
-      .filter(([, lines]) => lines.length > 0)
-      .map(([scope, lines]) => `${SELECTORS[scope]} {\n${lines.join("\n")}\n}`)
-      .join("\n\n");
+    const emit = (scopes, indent) =>
+      Object.entries(scopes)
+        .filter(([, lines]) => lines.length > 0)
+        .map(([scope, lines]) => block(SELECTORS[scope], lines, indent));
+    const contrast = emit(more, "  ");
+    return [
+      ...emit(rules, ""),
+      ...(contrast.length
+        ? [`@media (prefers-contrast: more) {\n${contrast.join("\n\n")}\n}`]
+        : []),
+    ].join("\n\n");
   }
 
-  /* The markup the config stands for. color-scheme is pinned only on a theme
-     that pairs both schemes: on a single-scheme theme it would flip native
-     controls and nothing else. */
-  function markup(config, { paired = true } = {}) {
-    const named = config.theme !== "default";
-    const scheme = config.scheme !== "system" ? config.scheme : null;
-    const theme = named ? config.theme : scheme;
-    const attributes = [
-      theme ? ` data-theme="${theme}"` : "",
-      named && scheme && paired ? ` style="color-scheme: ${scheme}"` : "",
-    ].join("");
-    return `<html${attributes}>`;
-  }
-
-  /* The one CSS text: rendered into the page and copied as is. Empty when the
-     config changes nothing. */
-  function cssText(config, { paired = true } = {}) {
+  /* The one CSS text: rendered into the page and copied as is. Empty when
+     there is nothing to copy: no override, or a demo theme. The header names
+     the markup only when a scheme is pinned (Default pairs both). */
+  function cssText(config) {
     const rules = overrides(config);
-    const named = config.theme !== "default";
-    if (!rules && !named && config.scheme === "system") return "";
+    if (!rules) return "";
+    const scheme = config.scheme !== "system" ? config.scheme : null;
     const header = [
       `/* Actual CSS customizer, config v${VERSION}.`,
-      `   Markup: ${markup(config, { paired })}`,
-      named ? `   Theme: a demo preset; copy src/css/themes/${config.theme}.css first.` : "",
-      "   Load this after Actual CSS and the theme. */",
+      scheme ? `   Markup: <html data-theme="${scheme}">` : "",
+      "   Load this after Actual CSS. */",
     ]
       .filter(Boolean)
       .join("\n");
-    return rules ? `${header}\n\n${rules}\n` : `${header}\n`;
+    return `${header}\n\n${rules}\n`;
   }
 
   function pairsSchemes(root) {
@@ -335,9 +383,7 @@
       style.id = STYLE_ID;
       doc.head.append(style);
     }
-    const text = cssText(config, { paired });
-    // Markup alone needs no style element content.
-    style.textContent = overrides(config) ? text : "";
+    style.textContent = cssText(config);
     return paired;
   }
 
@@ -394,7 +440,7 @@
     storage.write(STORAGE_KEY, changed ? JSON.stringify(config) : null);
   }
 
-  const api = { VERSION, AXES, DEFAULTS, normalize, encode, decode, cssText, markup, apply };
+  const api = { VERSION, AXES, DEFAULTS, normalize, encode, decode, cssText, apply };
   globalThis.ActualDocsCustomizer = api;
 
   if (typeof document === "undefined") return;
@@ -416,6 +462,9 @@
     const status = panel.querySelector("[data-docs-customizer-status]");
     const hint = panel.querySelector("[data-docs-customizer-scheme-hint]");
     const schemes = [...form.querySelectorAll('[name="scheme"]')];
+    const axes = panel.querySelector("[data-docs-customizer-axes]");
+    const axesHint = panel.querySelector("[data-docs-customizer-axes-hint]");
+    const copyButton = panel.querySelector('[data-docs-customizer-action="copy"]');
 
     function render() {
       for (const [key, value] of Object.entries(config)) {
@@ -425,9 +474,19 @@
       const single = !paired;
       for (const radio of schemes) radio.disabled = single;
       if (hint) hint.hidden = !single;
+      // A disabled fieldset still exposes its selects' values: the saved
+      // axes survive a visit to a demo theme.
+      const locked = !customizable(config);
+      if (axes) axes.disabled = locked;
+      if (axesHint) axesHint.hidden = !locked;
+      const text = cssText(config);
+      if (copyButton) copyButton.disabled = !text;
       if (preview) {
         preview.textContent =
-          cssText(config, { paired }) || "/* No overrides: the theme as shipped. */";
+          text ||
+          (locked
+            ? "/* A demo theme: copy its file from src/css/themes/. */"
+            : "/* No overrides: Actual CSS as shipped. */");
       }
     }
 
@@ -469,7 +528,7 @@
     form.addEventListener("click", (event) => {
       const action = event.target.closest("[data-docs-customizer-action]")?.dataset
         .docsCustomizerAction;
-      if (action === "copy") copy(cssText(config, { paired }), "CSS copied.");
+      if (action === "copy") copy(cssText(config), "CSS copied.");
       if (action === "share") {
         const url = new URL(location.href);
         url.hash = "";
@@ -478,7 +537,7 @@
       }
       if (action === "reset") {
         update({ ...DEFAULTS });
-        announce("Reset to the theme as shipped.");
+        announce("Reset to Actual CSS as shipped.");
       }
     });
 

@@ -18,9 +18,12 @@
  * underline-style lower edge instead of a uniform border.
  *
  * --control-default-border is the inherited resting edge, the twin of
- * --control-default-bg: a theme sets both on its root, where --control-border
- * itself is owned by the state rules below. Paired with the lower-edge hook it
- * moves the 3:1 identification to the bottom alone (quiet sides, or none).
+ * --control-default-bg: theme.css sets both (the quiet --border, and
+ * --border-control under increased contrast), and a theme sets them on its
+ * root, where --control-border itself is owned by the state rules below.
+ * --border-control there is strong field identification; paired with the
+ * lower-edge hook it puts the 3:1 cue on the bottom alone. The fallback below
+ * is the strong edge, for a page that unsets the token.
  * readonly and disabled reset the lower edge, so an inherited accent or 3:1
  * underline never marks a field the user cannot edit.
  *
@@ -34,8 +37,8 @@
  * --control-shadow
  * --control-border-block-end-color
  * --control-border-block-end-width
- * --control-hover-border (input and textarea)
- * --control-hover-bg (select; input and textarea when set)
+ * --control-hover-border
+ * --control-hover-bg
  */
 .input,
 .textarea,
@@ -84,21 +87,15 @@
   resize: vertical;
 }
 
-.input:hover:not(:disabled),
-.textarea:hover:not(:disabled) {
-  --control-border: var(--control-hover-border, var(--text-subtle));
-}
-
-.select:hover:not(:disabled) {
-  --control-bg: var(--control-hover-bg, var(--surface-subtle));
-}
-
-/* Text fields take the select's hover fill once a theme sets one, and keep
-   their rest fill otherwise: a theme that clears the hover border (underline,
-   borderless wells) would leave them without hover feedback. A readonly
-   field keeps its own fill. */
+/* One hover for every field, so a select never answers differently from the
+   input beside it: the edge darkens, and the fill changes once a theme sets
+   --control-hover-bg (a theme that clears the hover edge, such as an
+   underline or a borderless well, needs one). A readonly field is not
+   editable, so it keeps its rest state. */
 .input:hover:not(:disabled, [readonly]),
-.textarea:hover:not(:disabled, [readonly]) {
+.textarea:hover:not(:disabled, [readonly]),
+.select:hover:not(:disabled) {
+  --control-border: var(--control-hover-border, var(--text-subtle));
   --control-bg: var(--control-hover-bg, var(--control-default-bg, var(--surface)));
 }
 

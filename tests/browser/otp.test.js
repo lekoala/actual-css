@@ -61,7 +61,7 @@ it("disabled OTP cells are visibly distinct from enabled", async () => {
         };
       })()`);
 
-      // Enabled baseline cells: page surface with the control edge.
+      // Enabled baseline cells: page surface with the field edge of .input.
       expect(snapshot.enabled.bg).toBe(snapshot.ref.surface);
       expect(snapshot.enabled.border).toBe(snapshot.ref.border);
       expect(snapshot.enabled.opacity).toBe("1");

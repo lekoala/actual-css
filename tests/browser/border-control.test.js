@@ -1,8 +1,10 @@
 /*
- * --border-control is the resting edge of neutral controls, apart from the
- * --border that separates surfaces: setting it alone moves every control and
- * no separator. An unchecked switch takes it too, as its whole track: the
- * filled pill is the edge that identifies it on the surface.
+ * --border-control is the resting edge of the controls an edge identifies
+ * (choices, swatches, choice cards), apart from the --border that separates
+ * surfaces: setting it alone moves every such control and no separator. An
+ * unchecked switch takes it too, as its whole track. Text fields read
+ * --control-default-border instead: the quiet --border by default, and
+ * --border-control under increased contrast.
  */
 import { expect, test } from "bun:test";
 import { browserAvailable, fixtureUrl, withBrowserPage } from "../../scripts/utils/browser.js";
@@ -13,31 +15,39 @@ const TIMEOUT = 60_000;
 const baseTest = (await browserAvailable()) ? test : test.skip;
 const it = (name, run) => baseTest(name, run, TIMEOUT);
 
-it("controls take --border-control and separators keep --border", async () => {
+const EDGES = `(() => {
+  // Block-start: the edge every control and the hr divider draw, read on the
+  // pseudo-element when the control draws it there.
+  const edge = (el) => {
+    const name = el.dataset.name ?? el.className.split(" ")[0];
+    return name + " " + getComputedStyle(el, el.dataset.pseudo ?? null).borderBlockStartColor;
+  };
+  return {
+    fields: [...document.querySelectorAll("[data-field]")].map(edge),
+    controls: [...document.querySelectorAll("[data-control]")].map(edge),
+    separators: [...document.querySelectorAll("[data-separator]")].map(edge),
+  };
+})()`;
+
+const FIELDS = (color) => [
+  `input ${color}`,
+  `textarea ${color}`,
+  `select ${color}`,
+  `join-addon ${color}`,
+  `otp-cell ${color}`,
+];
+
+it("choices take --border-control, fields and separators keep --border", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
-      const edges = await view.evaluate(`(() => {
-        // Block-start: the edge every control and the hr divider draw, read on
-        // the pseudo-element when the control draws it there.
-        const edge = (el) => {
-          const name = el.className.split(" ")[0];
-          return name + " " + getComputedStyle(el, el.dataset.pseudo ?? null).borderBlockStartColor;
-        };
-        return {
-          controls: [...document.querySelectorAll("[data-control]")].map(edge),
-          separators: [...document.querySelectorAll("[data-separator]")].map(edge),
-        };
-      })()`);
+      const edges = await view.evaluate(EDGES);
 
+      expect(edges.fields).toEqual(FIELDS("rgb(200, 200, 200)"));
       expect(edges.controls).toEqual([
-        "input rgb(255, 0, 0)",
-        "textarea rgb(255, 0, 0)",
-        "select rgb(255, 0, 0)",
         "check rgb(255, 0, 0)",
         "radio rgb(255, 0, 0)",
         "color-swatch rgb(255, 0, 0)",
-        "join-addon rgb(255, 0, 0)",
         "choice-card rgb(255, 0, 0)",
       ]);
       expect(edges.separators).toEqual([
@@ -47,6 +57,21 @@ it("controls take --border-control and separators keep --border", async () => {
       ]);
     },
     { artifactName: "border-control" },
+  );
+});
+
+// The quiet field edge is a known WCAG 1.4.11 trade-off: increased contrast
+// gives every field the 3:1 edge back.
+it("fields take --border-control under increased contrast", async () => {
+  await withBrowserPage(
+    fixtureUrl(FIXTURE),
+    async (view) => {
+      expect((await view.evaluate(EDGES)).fields).toEqual(FIELDS("rgb(255, 0, 0)"));
+    },
+    {
+      artifactName: "border-control-more",
+      mediaFeatures: [{ name: "prefers-contrast", value: "more" }],
+    },
   );
 });
 
@@ -84,7 +109,8 @@ it("a switch drops the control edge when checked or disabled", async () => {
 
 // A labelled neutral outline needs no 3:1 boundary (its text identifies it):
 // alone or among buttons it keeps --border; beside a field it is a segment of
-// that field and takes its edge. An intent outline keeps its intent.
+// that field and takes its edge (the fixture paints it apart from --border).
+// An intent outline keeps its intent.
 it("a neutral outline takes the field edge only beside a field", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
@@ -100,7 +126,7 @@ it("a neutral outline takes the field edge only beside a field", async () => {
           primary: getComputedStyle(document.querySelector("#ref-primary")).color,
         };
       })()`);
-      expect(state.joined).toBe("rgb(255, 0, 0)");
+      expect(state.joined).toBe("rgb(0, 160, 160)");
       expect(state.joinedText).toBe(state.text);
       expect(state.buttons).toEqual(["rgb(200, 200, 200)", "rgb(200, 200, 200)"]);
       expect(state.intent).toBe(state.primary);

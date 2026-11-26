@@ -12,17 +12,25 @@
  *
  * Public hooks:
  * --select-icon-size
+ * --select-icon-inset
  */
 /* --select-icon-size is typographic (em), so the reserved slot and the
    pictogram scale with the control's font size, not a fixed rem sliver. */
 .select:not(:is([multiple], [size]:not([size="1"]))) {
   --select-icon-size: 1em;
+  /* why: optical, not geometric. The chevron is drawn on the middle half of
+     its box (6..18 of 24), so a box at the pad left its ink a quarter icon
+     further in than the text on the other side and than the native date,
+     time and search icons, which fill their box. Shifting the box by that
+     margin puts the ink at the pad. A replacement --icon-chevron that fills
+     its box sets this to the pad. */
+  --select-icon-inset: calc(var(--control-pad-x) - var(--select-icon-size) * 0.25);
 
   appearance: none;
   -webkit-appearance: none;
   padding-inline-end: calc(var(--control-pad-x) * 2 + var(--select-icon-size));
   background-image: var(--icon-chevron);
-  background-position: center right var(--control-pad-x);
+  background-position: center right var(--select-icon-inset);
   background-size: var(--select-icon-size) auto;
   background-repeat: no-repeat;
 }
@@ -34,15 +42,15 @@
    directionality, so the explicit ltr rule neutralizes an outer RTL fallback
    for a nested direction change. */
 [dir="rtl"] .select:not(:is([multiple], [size]:not([size="1"]))) {
-  background-position: center left var(--control-pad-x);
+  background-position: center left var(--select-icon-inset);
 }
 
 .select:not(:is([multiple], [size]:not([size="1"]))):dir(ltr) {
-  background-position: center right var(--control-pad-x);
+  background-position: center right var(--select-icon-inset);
 }
 
 .select:not(:is([multiple], [size]:not([size="1"]))):dir(rtl) {
-  background-position: center left var(--control-pad-x);
+  background-position: center left var(--select-icon-inset);
 }
 
 /* Both forced-colors and prefers-contrast hand the arrow back to the

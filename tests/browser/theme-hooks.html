@@ -19,7 +19,7 @@
     .relief {
       --shadow-control: rgb(0 0 0) 0px 1px 0px 0px;
       --shadow-inset: rgb(0 0 0) 0px 2px 0px 0px inset;
-      --btn-finish: linear-gradient(rgb(255 0 0), rgb(0 0 255));
+      --finish: linear-gradient(rgb(255 0 0), rgb(0 0 255));
     }
     .plus {
       --accordion-marker-icon: var(--icon-plus);
@@ -40,6 +40,12 @@
       <button class="btn outline" type="button" id="finish-outline">Outline</button>
       <input class="input" id="relief-field" aria-label="Relief field">
       <input class="switch" type="checkbox" role="switch" id="relief-switch" aria-label="Relief switch">
+      <input class="switch" type="checkbox" role="switch" id="finish-switch" aria-label="Finish switch" checked>
+      <input class="check" type="checkbox" id="finish-check" aria-label="Finish check" checked>
+      <input class="check" type="checkbox" id="finish-unchecked" aria-label="Unchecked">
+      <input class="radio" type="radio" id="finish-radio" aria-label="Finish radio" checked>
+      <span class="badge solid" id="finish-badge">Solid</span>
+      <span class="badge" id="finish-soft-badge">Soft</span>
       <input class="range" type="range" id="relief-range" aria-label="Relief range">
     </div>
     <div class="segmented" id="relief-segmented">

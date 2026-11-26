@@ -23,17 +23,22 @@ gradient where a color belonged.
 - **Shadow hooks are list items.** They share a `box-shadow` with selection
   rings, focus rings and the button hover overlay. `none` invalidates that
   whole list, so a theme flattens a role with `0 0 #0000`.
-- **Finish is an image over a color.** `--btn-finish` is a `background-image`;
-  `--btn-bg` stays a color, so one translucent value lights every intent, the
+- **Finish is an image over a color.** `--finish` is a `background-image`;
+  the fill stays a color, so one translucent value lights every intent, the
   hover changes the color under it, and the contrast audit measures the
-  semantic pair under it. Variants without an opaque fill clear it.
-- **Relief does not identify a control.** A recessed field keeps its
-  `--border-control` edge; an inset shade or a fill step alone falls under
-  3:1 (`surface-form.html` measures that case). A borderless theme either
-  moves the edge (the lower edge alone, as `surface-form`'s Edge mode) or
-  states the exception: `plush` keeps its wells borderless, `actual-css
-  contrast` reports them, and the outline returns under increased contrast
-  and forced colors.
+  semantic pair under it. Parts without an opaque fill stay flat.
+- **One finish for every solid fill.** A glossy button beside a matte checked
+  box read as two themes, so buttons, checked choices, switch tracks, progress
+  values and solid badges read the same token. Each consumer gates it by a
+  declaration in its solid state, not by resetting the token, so it never
+  stops inheriting at a component boundary.
+- **Relief does not identify a control.** An inset shade or a fill step alone
+  falls under 3:1 (`surface-form.html` measures that case). The core's quiet
+  field edge is the same stated exception: `actual-css contrast` warns, and
+  increased contrast and forced colors restore the 3:1 edge. `tactile` keeps
+  the strong `--border-control` edge on its wells; `plush` keeps them
+  borderless under the exception; an Edge treatment moves the 3:1 cue to the
+  lower edge alone.
 - **Buttons keep `--btn-shadow`.** It applies to every variant, so a theme that
   raises its solid buttons scopes it to them; a ghost or a link never rises.
 
@@ -44,6 +49,7 @@ gradient where a color belonged.
   where that ordering does not hold.
 - `--card-shadow`: a `.card { box-shadow: var(--shadow) }` rule in the theme
   raised every card; no hook was needed.
-- A finish on cards, switches or bars: no theme has asked for one yet.
+- A finish on cards, range fills and meters: the range fill is already a
+  gradient split, and no theme has asked for the others.
 - Shadow tokens in the design-tool export: the DTCG shadow type is not built
   yet, as for `--shadow`.

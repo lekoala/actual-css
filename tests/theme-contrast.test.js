@@ -30,6 +30,19 @@ test("a control edge under 3:1 counts as a miss", () => {
   expect(formatContrast([edge(null)]).misses).toBe(0);
 });
 
+// The quiet field edge is a trade-off the core makes: a field without a 3:1
+// cue warns but does not fail the run.
+test("a field cue under 3:1 is a warning, not a miss", () => {
+  const field = (value) => ({
+    ...row({ rest: 5, hover: 5 }),
+    controls: [{ kind: "field", value }],
+  });
+  expect(formatContrast([field(1.3)])).toMatchObject({ misses: 0, warnings: 1 });
+  expect(formatContrast([field(1.3)]).text).toContain("<-- warning");
+  expect(formatContrast([field(3)])).toMatchObject({ misses: 0, warnings: 0 });
+  expect(formatContrast([field(null)])).toMatchObject({ misses: 0, warnings: 0 });
+});
+
 test("a translucent pair reads n/a and is not a miss", () => {
   const { text, misses } = formatContrast([row({ rest: null, hover: 5 })]);
   expect(misses).toBe(0);

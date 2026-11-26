@@ -153,7 +153,7 @@ const option = (value, label) => `<option value="${value}">${escapeHtml(label)}<
 
 function renderAxisField(name, axis) {
   const options = [
-    option("default", "Theme default"),
+    option("default", "Default"),
     ...Object.entries(axis.options).map(([value, entry]) => option(value, entry.label)),
   ];
   return `      <div class="field">
@@ -204,7 +204,11 @@ export function renderCustomizer(themes) {
         </div>
         <p class="muted docs-customizer-hint" data-docs-customizer-scheme-hint hidden>This theme has one scheme.</p>
       </fieldset>
+      <fieldset class="stack docs-customizer-axes" data-docs-customizer-axes>
+        <legend>Tokens</legend>
+        <p class="muted docs-customizer-hint" data-docs-customizer-axes-hint hidden>A demo theme keeps its own choices. Switch to Default to customize.</p>
 ${axes}
+      </fieldset>
       <details class="docs-customizer-css">
         <summary>Generated CSS</summary>
         <pre><code data-docs-customizer-css></code></pre>

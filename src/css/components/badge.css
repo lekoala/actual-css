@@ -156,6 +156,11 @@
   --ui-border: initial;
 }
 
+/* A solid pill takes the theme finish like a solid button. */
+.badge.solid {
+  background-image: var(--finish, none);
+}
+
 .badge:empty {
   --badge-size: var(--badge-dot-size);
   --badge-bg: var(--intent, var(--neutral));
@@ -223,8 +228,9 @@
   }
 }
 
+/* The color alone: the shorthand would drop a solid pill's finish. */
 :where(a.badge, button.badge):not(:where(:disabled, [aria-disabled="true"])):hover {
-  background: var(--ui-hover-bg, var(--badge-default-hover-bg));
+  background-color: var(--ui-hover-bg, var(--badge-default-hover-bg));
 }
 
 /* Solid and empty badges keep the overlay darkening on hover; soft badges do

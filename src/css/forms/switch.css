@@ -132,10 +132,13 @@
   }
 }
 
+/* The checked track is a solid fill: it takes the theme finish. */
 .switch:checked {
   --switch-bg: var(--intent, var(--state-selected));
   --switch-border: var(--switch-bg);
   --switch-knob: var(--intent-fg, var(--state-selected-fg));
+
+  background-image: var(--finish, none);
 }
 
 .switch:checked::before {
