@@ -37,22 +37,44 @@ For an icon on a tinted disc, compose an [icon slot](icon-slot.md).
 
 ## No results
 
-An empty search names the query and offers to clear it. Clearing removes the
-empty state and the button with it, so move focus back to the search field;
-otherwise it falls to the page.
+Filter the list with `hidden` and announce the result count in a persistent
+`role="status"` region. CSS shows the empty state when no list item is visible.
+Browsers without `:has()` still show the count, including zero. When clearing
+the search from the empty state, return focus to the field before the button
+disappears. Try searching for “zebra”.
 
 ```html demo
+<style>
+  #member-empty {
+    display: none;
+  }
+
+  #member-results:not(:has(> li:not([hidden]))) {
+    display: none;
+  }
+
+  #member-results:not(:has(> li:not([hidden]))) + #member-empty {
+    display: flex;
+  }
+</style>
+
 <div class="stack">
   <div class="field">
     <label class="field-label" for="member-search">Search members</label>
-    <input class="input" type="search" id="member-search" value="zebra">
+    <input class="input" type="search" id="member-search">
   </div>
 
-  <section class="stack items-center text-center"
-           id="no-results"
+  <p class="muted" id="member-count" role="status">3 members found.</p>
+  <ul class="list" id="member-results">
+    <li class="list-item">Alice Chen</li>
+    <li class="list-item">Bob Okafor</li>
+    <li class="list-item">Charlie Ruiz</li>
+  </ul>
+
+  <section class="stack items-center text-center" id="member-empty"
            aria-labelledby="no-results-title">
     <hgroup>
-      <h3 id="no-results-title">No members match “zebra”</h3>
+      <h3 id="no-results-title">No matching members</h3>
       <p class="muted">Check the spelling, or clear the search to see everyone.</p>
     </hgroup>
     <button class="btn outline" type="button" id="clear-member-search">
@@ -61,14 +83,30 @@ otherwise it falls to the page.
   </section>
 </div>
 
-<script>
+<script type="module">
   const search = document.getElementById("member-search");
-  const noResults = document.getElementById("no-results");
+  const members = document.getElementById("member-results").children;
+  const count = document.getElementById("member-count");
 
+  function filterMembers() {
+    const query = search.value.trim().toLowerCase();
+    let matches = 0;
+
+    for (const member of members) {
+      member.hidden = !member.textContent.toLowerCase().includes(query);
+      if (!member.hidden) matches += 1;
+    }
+
+    count.textContent = `${matches} ${matches === 1 ? "member" : "members"} found.`;
+  }
+
+  search.addEventListener("input", filterMembers);
   document.getElementById("clear-member-search").addEventListener("click", () => {
     search.value = "";
-    noResults.hidden = true;
     search.focus();
+    filterMembers();
   });
+
+  filterMembers();
 </script>
 ```

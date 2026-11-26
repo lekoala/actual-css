@@ -166,7 +166,7 @@ consider whether the real requirement is simply “create another column wheneve
 
 This removes viewport breakpoint choreography entirely.
 
-## Prefer intrinsic behavior over translating breakpoints
+## Context-aware components
 
 Tailwind allows almost every utility to be changed independently at a breakpoint:
 
@@ -186,7 +186,11 @@ If the requirement is:
 
 > Show these items horizontally when there is enough room, otherwise stack them.
 
-use a layout primitive such as `.switcher`.
+use a layout primitive such as [`.switcher`](../layout/switcher.md). For cards
+that reflow as space permits, use [`.grid`](../layout/grid.md). When a component
+needs a specific width threshold, query its container in application CSS.
+Actual's fixed-count grids and Steps can also read the shared
+[`actual-container` context](../layout/grid.md#balanced-subdivision).
 
 If the requirement truly is:
 
@@ -312,7 +316,7 @@ Otherwise write the declaration normally.
 
 This is one of the largest mechanical differences for Tailwind-heavy applications.
 
-## State variants move into component behavior or CSS
+## State-aware components
 
 Tailwind can keep highly specific state rules in markup:
 
@@ -342,9 +346,11 @@ For application-specific state styling, keep the semantic attribute and style it
 }
 ```
 
-The same applies to Tailwind's `group-*`, `peer-*`, arbitrary selector, and complex `data-*` variants.
-
-Do not invent an Actual variant grammar to replace them.
+Apply the same approach to `group-*`, `peer-*`, `has-*` and arbitrary selector
+variants. For example, the [Tasks workspace](../../demo/templates/tasks.html)
+uses `:has(.task-check .check:checked)` on a named row so every instance shares
+the completed style in one rule. See [the state principle](../foundations/philosophy.md#derive-presentation-from-the-state-your-html-already-exposes)
+for the selector and the division of responsibilities.
 
 ## Colors and dark mode
 

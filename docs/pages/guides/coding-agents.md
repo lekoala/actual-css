@@ -139,6 +139,17 @@ it.
 A polished interface is not necessarily a finished design. Before polishing,
 strip the ornaments mentally and ask what the page actually says.
 
+## Prefer derived presentation
+
+Before adding a JavaScript-managed class, data attribute or listener, check
+whether native HTML, ARIA or an existing application attribute already exposes
+the state. Use a local, readable CSS selector for the visual change. Reach for
+intrinsic layouts or container queries when the change depends on available
+space. Keep data updates, accessible state and focus management with the code
+that owns the interaction.
+
+See [Derive presentation from the state your HTML already exposes](../foundations/philosophy.md#derive-presentation-from-the-state-your-html-already-exposes).
+
 ## With a design skill
 
 A design skill and the Actual skill do not overlap. The design skill owns the

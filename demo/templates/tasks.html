@@ -316,7 +316,7 @@
       cursor: pointer;
     }
 
-    .task-row[data-done] .list-item-title {
+    .task-row:has(.task-check .check:checked) .list-item-title {
       color: var(--text-muted);
       text-decoration: line-through;
     }
@@ -737,7 +737,6 @@
           const row = rowTemplate.content.firstElementChild.cloneNode(true);
           const link = row.querySelector("a");
           const check = row.querySelector("input");
-          row.toggleAttribute("data-done", task.status === "done");
           check.checked = task.status === "done";
           check.setAttribute("aria-label", `Complete: ${task.title}`);
           // Completing never touches the selection: the current task stays

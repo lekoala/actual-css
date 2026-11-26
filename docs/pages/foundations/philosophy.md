@@ -58,6 +58,32 @@ type together is a component: give it a name in application CSS.
 `--card-pad`, `--cluster-justify`) are the API. Other custom properties are
 internal and may change.
 
+### Derive presentation from the state your HTML already exposes
+
+| Layer       | Responsibility              |
+| ----------- | --------------------------- |
+| Application | Owns the data               |
+| JavaScript  | Manages behavior            |
+| HTML        | Exposes state and structure |
+| CSS         | Derives presentation        |
+
+Before adding a class, data attribute or listener for a visual change, look
+for the state on the element or a related control. In the
+[Tasks workspace](../../demo/templates/tasks.html), JavaScript updates the
+task in the model, moves it between groups and sets the checkbox's `checked`
+property. The row gets its completed appearance from that checkbox.
+
+```css
+.task-row:has(.task-check .check:checked) .list-item-title {
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+```
+
+The same approach applies to a list's [empty state](../patterns/empty-state.md#no-results).
+For a change that depends on available space, let [intrinsic layouts or
+container queries](../layout/choosing.md) adapt the same markup in each context.
+
 ## Before adding CSS
 
 Go down the layers and stop at the first that answers the need:
