@@ -480,18 +480,28 @@ test("a shared explicit tooltip survives the removal of one of its triggers", as
   const b = document.getElementById("b");
   const tip = document.getElementById("tip1");
 
+  hover(b);
   hover(a);
   await waitForShow();
   expect(visible(tip)).toBe(true);
 
-  leave(a);
-  await waitForHide();
-  expect(visible(tip)).toBe(false);
-
-  // Removing one trigger must not tear down the tooltip for the other.
+  // Removing the active trigger can leave a pointerleave queued on the tip.
   a.remove();
   await nextMicrotask();
+  expect(visible(tip)).toBe(false);
   expect(tip.isConnected).toBe(true);
+
+  const errors = [];
+  window.addEventListener(
+    "error",
+    (event) => {
+      errors.push(event.message);
+      event.preventDefault();
+    },
+    { once: true },
+  );
+  leave(tip);
+  expect(errors).toEqual([]);
 
   hover(b);
   await waitForShow();

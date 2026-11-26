@@ -50,6 +50,33 @@ test("ends-with fails without a literal option", () => {
   expect(endsWith("report.pdf", null)).toBe(false);
 });
 
+test("date accepts either local order when no format is specified", () => {
+  const date = FormValidator.rules.date;
+  for (const value of ["31/12/1990", "12/31/1990", "1.2.1990", "1990-12-31"]) {
+    expect(date(value), value).toBe(true);
+  }
+});
+
+test("date with a format requires its order, separator and digit count", () => {
+  const date = FormValidator.rules.date;
+  for (const [format, value] of [
+    ["yyyy-mm-dd", "2024-02-29"],
+    ["dd/mm/yyyy", "29/02/2024"],
+    ["mm/dd/yyyy", "02/29/2024"],
+    ["dd.mm.yyyy", "29.02.2024"],
+    ["mm.dd.yyyy", "02.29.2024"],
+    ["dd-mm-yyyy", "29-02-2024"],
+    ["mm-dd-yyyy", "02-29-2024"],
+  ]) {
+    expect(date(value, null, format), format).toBe(true);
+  }
+  for (const value of ["02/29/2024", "29.02.2024", "29/2/2024", "29/02/2025", "2024-02-29"]) {
+    expect(date(value, null, "dd/mm/yyyy"), value).toBe(false);
+  }
+  expect(date("29/02/2024", null, "d/m/yyyy")).toBe(false);
+  expect(date("29/02/2024", null, "yyyy-mm-dd")).toBe(false);
+});
+
 test("tel-prefix accepts local input whatever its format", () => {
   const telPrefix = FormValidator.rules["tel-prefix"];
   for (const local of ["0470 12 34 56", "02/123.45.67", "0470-12-34-56", "12345"]) {
@@ -123,6 +150,26 @@ test("data-validation-rules resolves a hyphenated rule with literal tokens", asy
   expect(input.getAttribute("aria-invalid")).toBe("true");
 
   input.value = "INV-1";
+  form.requestSubmit();
+  expect(input.getAttribute("aria-invalid")).toBeNull();
+});
+
+test("data-validation-rules passes the date format to the validator", async () => {
+  setupDOM(`
+    <form data-enhance="validation">
+      <input name="birthdate" data-validation-rules="date dd/mm/yyyy">
+    </form>
+  `);
+  await import(`../src/js/validation.js?rules=${++importId}`);
+
+  const form = document.querySelector("form");
+  const input = form.querySelector("input");
+
+  input.value = "12/31/1990";
+  form.requestSubmit();
+  expect(input.getAttribute("aria-invalid")).toBe("true");
+
+  input.value = "31/12/1990";
   form.requestSubmit();
   expect(input.getAttribute("aria-invalid")).toBeNull();
 });

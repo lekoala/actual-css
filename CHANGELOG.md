@@ -2,6 +2,7 @@
 
 ## [Unreleased]
 ### Added
+- The `date` validation rule accepts an explicit format such as `date dd/mm/yyyy`.
 - `.app-layout[data-nav="rail"]`: the side `.app-nav` as a narrow rail, each label a caption under its icon, sized by `--app-nav-rail-size`.
 - `.app-nav > button` tiles, for a "More" drawer trigger or a disabled destination.
 - `.app-nav > header` and `.app-nav > footer`: brand, primary action and account in side navigation, hidden in the bottom bar.
@@ -31,6 +32,7 @@
 - Demos: `data-grid-component` 3.10.3 in `cyberdeck`, `data-grid` and `focus-bench`; grid checkboxes and radios take `.check` / `.radio` through the `check` and `radio` control roles.
 
 ### Fixed
+- A shared tooltip handles pointer exit after its active trigger is removed.
 - Flyout: a click on a text field, select, textarea or its label no longer closes the default `data-flyout-auto-close="true"` panel.
 - `.flyout-trigger.stretch` spans any trigger (`[aria-controls]`), not only `aria-haspopup="menu"` ones.
 - `.app-layout`: side `.app-nav` labels inherit the body size instead of the bottom bar's `--font-size-xs` caption.

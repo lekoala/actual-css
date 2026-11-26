@@ -37,20 +37,31 @@ function validDateParts(year, month, day) {
   return day <= days;
 }
 
-function isValidDate(value) {
+function isValidDate(value, format) {
   const v = value.trim();
   const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
   if (iso) {
-    return validDateParts(Number(iso[1]), Number(iso[2]), Number(iso[3]));
+    return (
+      (format === undefined || format === "yyyy-mm-dd") &&
+      validDateParts(Number(iso[1]), Number(iso[2]), Number(iso[3]))
+    );
   }
 
   const local = /^(\d{1,2})([/.-])(\d{1,2})\2(\d{4})$/.exec(v);
   if (!local) return false;
 
-  const first = Number(local[1]);
-  const second = Number(local[3]);
-  const year = Number(local[4]);
-  return validDateParts(year, second, first) || validDateParts(year, first, second);
+  const [, firstPart, separator, secondPart, yearPart] = local;
+  if (format !== undefined && (firstPart.length !== 2 || secondPart.length !== 2)) return false;
+
+  const dayFirst = format === undefined || format === `dd${separator}mm${separator}yyyy`;
+  const monthFirst = format === undefined || format === `mm${separator}dd${separator}yyyy`;
+  const first = Number(firstPart);
+  const second = Number(secondPart);
+  const year = Number(yearPart);
+  return (
+    (dayFirst && validDateParts(year, second, first)) ||
+    (monthFirst && validDateParts(year, first, second))
+  );
 }
 
 function warnUnknownRuleOnce(el, name) {
@@ -98,8 +109,13 @@ const rules = {
     const value = v.trim();
     return suffixes.length > 0 && suffixes.some((suffix) => value.endsWith(suffix));
   },
-  date(v) {
-    return isValidDate(v);
+  /**
+   * @param {string} v
+   * @param {Element | null} [_el]
+   * @param {string} [format]
+   */
+  date(v, _el, format) {
+    return isValidDate(v, format);
   },
   // Telephone origin policy, not telephone validation. A local number carries
   // nothing but its digits after the usual separators are ignored, so a value

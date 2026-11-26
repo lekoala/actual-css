@@ -135,7 +135,7 @@ function placementFor(ref) {
 
 function hasOption(trigger, name) {
   const value = trigger?.getAttribute(name);
-  return value !== null && value.toLowerCase() !== "false";
+  return typeof value === "string" && value.toLowerCase() !== "false";
 }
 
 function isClickTrigger(trigger) {

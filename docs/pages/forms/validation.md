@@ -168,7 +168,7 @@ Custom rules live in `data-validation-rules` as a comma-separated list; each rul
 - `alnum` — Value is empty or letters and digits only.
 - `starts-with <token>…` — Value must begin with one of the literal tokens (`starts-with INV- CR-`). The value is trimmed before comparison; the match is case-sensitive.
 - `ends-with <token>…` — Value must end with one of the literal tokens (`ends-with .pdf .csv`). Trimmed, case-sensitive.
-- `date` — Value is a valid date in `yyyy-mm-dd`, `dd/mm/yyyy`, `mm/dd/yyyy`, `dd.mm.yyyy`, `mm.dd.yyyy`, `dd-mm-yyyy`, or `mm-dd-yyyy` shape; rejects non-existent dates like `2026-02-29`. ISO remains the recommended wire format because servers can parse it without guessing.
+- `date [format]` — Validates a calendar date. Pass the format shown to the user, for example `date dd/mm/yyyy`, to enforce the order, separator and digit count. Supported formats are `yyyy-mm-dd`, `dd/mm/yyyy`, `mm/dd/yyyy`, `dd.mm.yyyy`, `mm.dd.yyyy`, `dd-mm-yyyy` and `mm-dd-yyyy`. With no format, the rule accepts any of these shapes, including one-digit days and months in year-last dates.
 - `tel-prefix <prefix>…` — A local number (its digits, with the usual separators `space ( ) . / -` ignored) passes; an explicit international number is normalized (`00` to `+`) and must match one of the literal prefixes (`tel-prefix +32`, `tel-prefix +32 +33 +352`). A value that is not dialing digits fails. With no prefix, only local input passes. The entered value is never modified.
 
 `starts-with` and `ends-with` options are literal tokens: no quoting, no escaping, and a token cannot contain whitespace. Without a token they fail rather than passing silently. `tel-prefix` without a prefix is instead a deliberate local-only policy.
@@ -214,7 +214,7 @@ The `date` rule pairs naturally with `data-mask` — the mask structures input, 
     <span class="field-label">Date (ISO)</span>
     <input class="input" name="date-iso"
            data-mask="9999-99-99"
-           data-validation-rules="date"
+           data-validation-rules="date yyyy-mm-dd"
            inputmode="numeric"
            autocomplete="off"
            placeholder="yyyy-mm-dd"
@@ -232,7 +232,7 @@ The `date` rule pairs naturally with `data-mask` — the mask structures input, 
     <span class="field-label">Date (European)</span>
     <input class="input" name="date-eu"
            data-mask="99/99/9999"
-           data-validation-rules="date"
+           data-validation-rules="date dd/mm/yyyy"
            inputmode="numeric"
            autocomplete="off"
            placeholder="dd/mm/yyyy"
