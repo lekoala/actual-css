@@ -516,12 +516,11 @@
    box; the core's 1 / 1 held the tick inside the padding. */
 [data-theme="cyberdeck"] .choice-card::after {
   grid-area: auto;
-  justify-self: auto;
   margin: 0;
   background: transparent;
+  -webkit-mask: none;
+  mask: none;
   transform: none;
-  translate: none;
-  rotate: none;
 }
 
 /* Tabs: chrome labels, the selected one lit with a glowing underline. */

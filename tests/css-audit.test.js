@@ -139,6 +139,7 @@ test("forced-colors mask fills survive application hook overrides", () => {
     "src/css/components/close.css",
     "src/css/components/fab.css",
     "src/css/components/menu.css",
+    "src/css/forms/choice.css",
   ]) {
     expect(readCss(path)).toContain("forced-color-adjust: none;");
   }

@@ -514,6 +514,10 @@ Icons used by CSS-only controls are public tokens because users may need to repl
 }
 ```
 
+`--icon-check` is the mark of every checked state: checkbox, choice card,
+chip, menu item and picker option. Replace it to restyle them all; its stroke
+scales with the size each component draws it at.
+
 A single icon token can serve both `background-image` (native select) and `mask-image` (accordion, custom select) — the embedded stroke color is the fallback for image use; mask consumers provide their own color via `background-color`. Only add an icon token when CSS needs the icon. Markup icons should stay in markup.
 
 ### Composition tokens

@@ -161,22 +161,12 @@
   border-radius: var(--radius-sm);
 }
 
-/* Check mark: the .check mark, two 2px borders turned a quarter, so a
-   checkbox, a card and a chip carry the same stroke at any indicator size (a
-   scaled 24px icon thinned it to 1px). rotate and translate leave transform to
-   the scale-in. Physical sides, as there: a logical pair swaps in RTL into a
-   ">". The box centres in the indicator cell, level with the first line. */
+/* Check mark: --icon-check, as on .check. 80% of the indicator is 1em at the
+   default size, the checkbox's mark, and grows with a larger indicator. */
 .choice-card::after {
-  justify-self: center;
-  margin-block-start: calc((1.5em - 0.34em) / 2);
-  margin-block-start: calc((1lh - 0.34em) / 2);
-  inline-size: 0.58em;
-  block-size: 0.34em;
-  border-left: 2px solid;
-  border-bottom: 2px solid;
-  color: var(--intent-fg, var(--state-selected-fg));
-  translate: 0 -0.06em;
-  rotate: -45deg;
+  background: var(--intent-fg, var(--state-selected-fg));
+  -webkit-mask: var(--icon-check) center / 80% no-repeat;
+  mask: var(--icon-check) center / 80% no-repeat;
   z-index: 2;
 }
 
@@ -249,10 +239,10 @@
   flex: none;
   align-self: center;
   margin-block: 0;
-  /* The mark is narrower than its slot: split the rest around it. */
-  margin-inline: calc((var(--choice-card-check-size) - 0.58em) / 2)
-    calc((var(--choice-card-check-size) - 0.58em) / 2 + 0.375em);
-  color: var(--state-selected-text, var(--intent, var(--state-selected)));
+  margin-inline: 0 0.375em;
+  background: var(--state-selected-text, var(--intent, var(--state-selected)));
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
 
 /* The native input is hidden and the checked marker is custom-drawn: without
@@ -269,7 +259,7 @@
   }
 
   .choice-card:has(:checked)::after {
-    border-color: HighlightText;
+    background: HighlightText;
   }
 
   /* A chip has no disc behind its check: the check carries the state alone,
@@ -283,6 +273,6 @@
   }
 
   .choice-card.chip:has(:checked)::after {
-    border-color: CanvasText;
+    background: CanvasText;
   }
 }

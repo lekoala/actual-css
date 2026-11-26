@@ -21,9 +21,7 @@ function state(view, id) {
     const input = label.querySelector("input");
     return {
       border: style.borderTopColor,
-      selected: label.matches(".chip")
-        ? getComputedStyle(label, "::after").borderBottomColor
-        : getComputedStyle(label, "::before").backgroundColor,
+      selected: getComputedStyle(label, label.matches(".chip") ? "::after" : "::before").backgroundColor,
       checked: input.checked,
       focused: input === document.activeElement,
       focusVisible: input.matches(":focus-visible"),

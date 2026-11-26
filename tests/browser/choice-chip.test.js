@@ -41,7 +41,7 @@ function chipState(view, id) {
       dotClip: dot.clipPath,
       dotBg: dot.backgroundColor,
       checkTransform: check.transform,
-      checkInk: check.borderBottomColor,
+      checkBg: check.backgroundColor,
       opacity: getComputedStyle(chip).opacity,
     };
   })()`);
@@ -146,7 +146,7 @@ it("forced colors keep checked distinct from the unchecked dot", async () => {
       expect(unchecked.dotContent).not.toBe("none");
       expect(unchecked.dotBg).not.toBe("rgba(0, 0, 0, 0)");
       expect(checked.dotContent).toBe("none");
-      expect(checked.checkInk).toBe(unchecked.dotBg);
+      expect(checked.checkBg).toBe(unchecked.dotBg);
       expect(checked.checkTransform).not.toBe(unchecked.checkTransform);
     },
     {

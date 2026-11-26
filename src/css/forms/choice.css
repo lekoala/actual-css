@@ -183,14 +183,15 @@
   transition: transform var(--duration);
 }
 
-/* why: physical sides. The mark is a glyph, not a layout edge: logical ones
-   swap in RTL and the quarter turn draws a ">" instead of a check. */
+/* The check is --icon-check, the mark every checked state shares (cards,
+   chips, menus, the picker), at 1em: a 24-unit icon with a 3-unit stroke
+   draws 2px at 16px. Replace the token to restyle every check at once. */
 .check::before {
-  inline-size: 0.58em;
-  block-size: 0.34em;
-  border-left: 2px solid currentColor;
-  border-bottom: 2px solid currentColor;
-  transform: translateY(-0.06em) rotate(-45deg) scale(0);
+  inline-size: 1em;
+  block-size: 1em;
+  background: currentColor;
+  -webkit-mask: var(--icon-check) center / contain no-repeat;
+  mask: var(--icon-check) center / contain no-repeat;
 }
 
 .radio::before {
@@ -210,18 +211,16 @@
   background-image: var(--finish, none);
 }
 
-.check:checked::before {
-  transform: translateY(-0.06em) rotate(-45deg) scale(1);
-}
-
+/* The dash stays drawn: the same layer without the mask, flattened to a bar
+   the check's stroke weight. */
 .check:indeterminate::before {
-  border-left: 0;
+  -webkit-mask: none;
+  mask: none;
   inline-size: 0.6em;
-  block-size: 0;
-  border-bottom: 2px solid currentColor;
-  transform: scale(1);
+  block-size: 2px;
 }
 
+.check:is(:checked, :indeterminate)::before,
 .radio:checked::before {
   transform: scale(1);
 }
@@ -248,7 +247,13 @@
   opacity: 1;
 }
 
-/* Forced colors intentionally stay under UA control: the visible check/dot
-   carries state while native remapping preserves platform contrast and focus.
-   If real HCM testing ever loses a mark, opt out on that pseudo only—never on
-   the interactive input host. */
+/* Forced colors stay under UA control on the input host, which keeps platform
+   contrast and focus. The marks are currentColor fills (the check a mask, the
+   dash and dot plain), which the system remaps to Canvas, erasing the state:
+   they opt out on the pseudo only, and inherit the host's forced ink. */
+@media (forced-colors: active) {
+  .check::before,
+  .radio::before {
+    forced-color-adjust: none;
+  }
+}
