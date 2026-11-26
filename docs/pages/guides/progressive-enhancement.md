@@ -188,6 +188,9 @@ exported by those entry points are the public API, including the helpers used
 to compose widgets. Import a component entry point directly to run its setup
 when it has no exports.
 
+Use `parseConfig` from `actual-css/js/parse-config` to read
+[declarative configuration](#declarative-configuration) in custom enhancements.
+
 ## Floating contract
 
 `floating` is a positioning-only primitive with zero CSS dependency: no
@@ -575,23 +578,27 @@ export async function prepare({ resolve, loadStyle }) {
   await loadStyle(resolve("./autosubmit.css"));
 }
 
-export default function autosubmit(form, { config, signal, emit }) {
-  const max = config.max ?? 3; // from data-enhance-config
+export default function autosubmit(form, { config, signal }) {
+  const delay = config.delay ?? 200;
+  let timer;
 
-  form.addEventListener("change", () => form.requestSubmit(), { signal });
+  form.addEventListener("change", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => form.requestSubmit(), delay);
+  }, { signal });
+  return () => clearTimeout(timer);
 }
 ```
 
 ```html
-<form data-enhance="autosubmit"
-      data-enhance-config='{ "max": 3 }'>
+<form data-enhance="autosubmit" data-enhance-config="delay:200">…</form>
 ```
 
-`data-enhance-config` is parsed with `parseConfig`: strict JSON first, with a
-tiny relaxed subset (unquoted keys, single-quoted strings) as a fallback. The
-connect function receives the element plus `{ config, signal, emit }`; `emit`
-dispatches `actual:<name>:<type>` events. Connect must be synchronous and may
-return a cleanup function or nothing; the loader owns the AbortController.
+The connect function receives the element plus `{ config, signal, emit }`.
+The loader reads `config` from [`data-enhance-config`](#declarative-configuration)
+and owns the AbortController. Call `emit` to dispatch
+`actual:<name>:<type>` events. Connect must be synchronous and may return
+a cleanup function.
 
 #### Without a build
 
@@ -606,7 +613,7 @@ imports and registers it, on the same lifecycle as the built-in behaviors.
 </script>
 <script src="/dist/actual.full.js" defer></script>
 
-<form data-enhance="autosubmit">…</form>
+<form data-enhance="autosubmit" data-enhance-config="delay:350">…</form>
 ```
 
 `/js/autosubmit.js` is an ES module with the default export shown above; no
@@ -617,8 +624,62 @@ connects. A behavior that owns its own attribute instead of a
 
 `loadScript(url)` and `loadStyle(url)` are public helpers for non-ESM assets.
 Names are reserved once per manifest set — redeclaring a name from a different
-URL throws, and duplicate declarations share one import promise. The
-`__`-prefixed exports are test hooks, not public API.
+URL throws, and duplicate declarations share one import promise.
+
+## Declarative configuration
+
+For hand-written HTML, use comma-separated `key:value` pairs. The outer
+braces are optional.
+
+```html
+<div data-config="delay:200,wrap:true"></div>
+```
+
+The manifest loader reads `data-enhance-config` automatically. In a custom
+enhancement, choose an attribute and import the `parseConfig` primitive from
+`actual-css/js/parse-config`. Here, `data-config` is an application attribute.
+
+```js
+import { parseConfig } from "actual-css/js/parse-config";
+
+const config = parseConfig(element.getAttribute("data-config"));
+// { delay: 200, wrap: true }
+```
+
+Strict JSON objects work in the same attribute, including output from
+`JSON.stringify()`. The parser tries strict JSON first and falls back to the
+compact syntax if JSON parsing fails.
+
+```html
+<div data-config='{"delay":200,"wrap":true}'></div>
+```
+
+### Supported syntax
+
+- Separate pairs with commas and keys from values with a colon. Whitespace
+  around tokens is allowed. Nested objects require braces and arrays require
+  brackets. Both may contain compact objects and quoted strings.
+- Unquoted keys match `[A-Za-z_$][A-Za-z0-9_$-]*`. Quote other keys with
+  single or double quotes.
+- Values are quoted strings, JSON numbers (including decimals and exponents),
+  `true`, `false`, `null`, objects, or arrays. Quote text values such as
+  `placement:'bottom'`.
+- Double-quoted strings use JSON escaping. In single-quoted strings, use
+  `\'` for an apostrophe, write double quotes literally, and use JSON escapes
+  such as `\n` and `\t` for control characters. In HTML, escape any quote
+  that matches the attribute delimiter as `&quot;` or `&#39;`.
+
+### Errors and defaults
+
+`parseConfig()` returns an empty object for missing, blank, or non-string
+input. The result of parsing a string must be an object. Valid JSON with
+an array, scalar, or `null` at the root throws `TypeError`. Malformed input
+throws `SyntaxError`, including trailing commas, bare text values, comments,
+and unfinished strings.
+
+Use the result to apply your enhancement's defaults and validate its option
+values. If parsing throws during enhancer setup, the runtime logs the error
+and skips setup for that element.
 
 ## Lifecycle rules
 
@@ -691,12 +752,14 @@ Actual's built-in filters.
 ```js
 import enhance from "actual-css/js/enhance";
 import { dispatchInput, onTextInput, selectionStart, setCaret } from "actual-css/js/input";
+import { parseConfig } from "actual-css/js/parse-config";
 
 const filters = {
-  currency(value) {
+  currency(value, precision) {
     const normalized = value.replace(/,/g, ".");
     const [whole, decimals = ""] = normalized.replace(/[^0-9.]/g, "").split(".");
-    return decimals ? `${whole}.${decimals.slice(0, 2)}` : whole;
+    const fraction = decimals.slice(0, precision);
+    return fraction ? `${whole}.${fraction}` : whole;
   },
   time(value) {
     const digits = value.replace(/\D/g, "").slice(0, 4);
@@ -706,8 +769,10 @@ const filters = {
 
 enhance({
   "input[data-app-filter]": (input) => {
-    const filter = filters[input.dataset.appFilter];
-    if (!filter) return;
+    const { kind, precision } = parseConfig(input.dataset.appFilter);
+    if (typeof kind !== "string" || !Object.hasOwn(filters, kind)) return;
+    const digits = Number.isInteger(precision) && precision >= 0 ? precision : 2;
+    const filter = (value) => filters[kind](value, digits);
 
     const controller = new AbortController();
     let filtering = false;
@@ -737,8 +802,8 @@ enhance({
 ```
 
 ```html
-<input class="input" inputmode="decimal" data-app-filter="currency" autocomplete="off" />
-<input class="input" inputmode="numeric" data-app-filter="time" autocomplete="off" />
+<input class="input" inputmode="decimal" data-app-filter="kind:'currency',precision:3" autocomplete="off" />
+<input class="input" inputmode="numeric" data-app-filter="kind:'time'" autocomplete="off" />
 ```
 
 ## Textarea autogrow
