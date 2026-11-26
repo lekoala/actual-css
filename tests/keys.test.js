@@ -3,13 +3,11 @@ import { firstItem, itemForKey, lastItem, nextItem, shouldIgnoreKey } from "../s
 
 const items = ["a", "b", "c"];
 
-test("low-level item helpers retain their existing behavior", () => {
+test("firstItem and lastItem return the edges of a nonempty list", () => {
   expect(firstItem([])).toBeNull();
   expect(lastItem([])).toBeNull();
   expect(firstItem(items)).toBe("a");
   expect(lastItem(items)).toBe("c");
-  expect(nextItem(items, "c", 1)).toBe("a");
-  expect(nextItem(items, "c", 1, { wrap: false })).toBeNull();
 });
 
 test("Home and End select edges on either axis", () => {
@@ -34,12 +32,16 @@ test("arrows outside the configured axis are ignored", () => {
 });
 
 test("navigation does not wrap by default", () => {
+  expect(nextItem(items, "a", -1)).toBeNull();
+  expect(nextItem(items, "c", 1)).toBeNull();
   expect(itemForKey(items, "a", "ArrowLeft")).toBeNull();
   expect(itemForKey(items, "c", "ArrowRight")).toBeNull();
 });
 
 test("navigation wraps when requested", () => {
   const opts = { wrap: true };
+  expect(nextItem(items, "a", -1, opts)).toBe("c");
+  expect(nextItem(items, "c", 1, opts)).toBe("a");
   expect(itemForKey(items, "a", "ArrowLeft", opts)).toBe("c");
   expect(itemForKey(items, "c", "ArrowRight", opts)).toBe("a");
 });

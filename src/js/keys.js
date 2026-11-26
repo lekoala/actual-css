@@ -30,14 +30,13 @@ export function lastItem(items) {
 export function nextItem(items, current, delta, opts = {}) {
   if (!items.length) return null;
 
-  const wrap = opts.wrap !== false;
   const idx = items.indexOf(current);
   if (idx === -1) {
     return delta > 0 ? firstItem(items) : lastItem(items);
   }
 
   const next = idx + delta;
-  if (!wrap) return items[next] || null;
+  if (opts.wrap !== true) return items[next] || null;
 
   const wrapped = ((next % items.length) + items.length) % items.length;
   return items[wrapped];
@@ -45,7 +44,6 @@ export function nextItem(items, current, delta, opts = {}) {
 
 export function itemForKey(items, current, key, opts = {}) {
   const orientation = opts.orientation || "horizontal";
-  const wrap = opts.wrap === true;
   const direction = opts.direction || "ltr";
 
   switch (key) {
@@ -55,16 +53,16 @@ export function itemForKey(items, current, key, opts = {}) {
       return lastItem(items);
     case "ArrowRight":
       if (orientation !== "horizontal") return null;
-      return nextItem(items, current, direction === "rtl" ? -1 : 1, { wrap });
+      return nextItem(items, current, direction === "rtl" ? -1 : 1, opts);
     case "ArrowLeft":
       if (orientation !== "horizontal") return null;
-      return nextItem(items, current, direction === "rtl" ? 1 : -1, { wrap });
+      return nextItem(items, current, direction === "rtl" ? 1 : -1, opts);
     case "ArrowDown":
       if (orientation !== "vertical") return null;
-      return nextItem(items, current, 1, { wrap });
+      return nextItem(items, current, 1, opts);
     case "ArrowUp":
       if (orientation !== "vertical") return null;
-      return nextItem(items, current, -1, { wrap });
+      return nextItem(items, current, -1, opts);
     default:
       return null;
   }

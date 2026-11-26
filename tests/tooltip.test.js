@@ -259,6 +259,13 @@ test("data-tooltip-click toggles on click and ignores hover", async () => {
   expect(visible(tip)).toBe(false);
 });
 
+test("data-tooltip-visible accepts false case-insensitively", async () => {
+  await loadTooltip(
+    '<button data-tooltip="Help text" data-tooltip-visible="FaLsE">Trigger</button>',
+  );
+  expect(document.querySelector('[role="tooltip"]')).toBeNull();
+});
+
 test("data-tooltip-visible eagerly creates and keeps a tooltip visible", async () => {
   await loadTooltip('<button data-tooltip="Persistent help" data-tooltip-visible>Trigger</button>');
   const trigger = document.querySelector("button");

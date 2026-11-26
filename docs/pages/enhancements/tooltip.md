@@ -23,6 +23,7 @@ by promoting it to the top layer with `popover="manual"`.
 - JavaScript can generate tooltip elements from `data-tooltip`.
 - Add `data-tooltip-click` to make a supplemental description open on click.
 - Add `data-tooltip-visible` to show it immediately and keep it visible while its trigger is in view.
+- Set `data-tooltip-click`, `data-tooltip-visible` or `data-tooltip-no-tap` to `false` to disable the option, in any letter case.
 - Use `data-tooltip-placement` to set the preferred placement (default `top`).
 - The arrow inherits the tooltip background — custom gradients carry through automatically.
 - Avoid relying on the native `title` attribute as the primary implementation.

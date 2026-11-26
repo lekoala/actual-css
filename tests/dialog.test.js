@@ -827,10 +827,10 @@ test("data-dialog-open opens the dialog modally at load", async () => {
   expect(document.documentElement.classList.contains("has-modal-open")).toBe(true);
 });
 
-test("data-dialog-open follows data-dialog-modal and ignores a false value", async () => {
+test("data-dialog-open and data-dialog-modal accept false case-insensitively", async () => {
   await loadDialog(`
-    <dialog id="inline" data-dialog-open data-dialog-modal="false"></dialog>
-    <dialog id="off" data-dialog-open="false"></dialog>
+    <dialog id="inline" data-dialog-open data-dialog-modal="FALSE"></dialog>
+    <dialog id="off" data-dialog-open="FaLsE"></dialog>
   `);
 
   expect(document.getElementById("inline").open).toBe(true);

@@ -56,6 +56,7 @@
  */
 
 import { autoUpdate, reposition } from "@lekoala/floating";
+import { readDataFlag } from "./data-flag.js";
 import enhance from "./enhance.js";
 import { registerEscapeDismissal } from "./escape.js";
 import { positionModeFor, readPlacement } from "./floating-space.js";
@@ -133,23 +134,18 @@ function placementFor(ref) {
   return readPlacement(ref, "data-tooltip-placement") ?? "top";
 }
 
-function hasOption(trigger, name) {
-  const value = trigger?.getAttribute(name);
-  return typeof value === "string" && value.toLowerCase() !== "false";
-}
-
 function isClickTrigger(trigger) {
-  return hasOption(trigger, "data-tooltip-click");
+  return readDataFlag(trigger, "data-tooltip-click");
 }
 
 // Taps open tooltips by default: the opt-out is explicit, so a tooltip never
 // fails silently under a finger.
 function isNoTapTrigger(trigger) {
-  return hasOption(trigger, "data-tooltip-no-tap");
+  return readDataFlag(trigger, "data-tooltip-no-tap");
 }
 
 function isAlwaysVisible(trigger) {
-  return hasOption(trigger, "data-tooltip-visible");
+  return readDataFlag(trigger, "data-tooltip-visible");
 }
 
 function describedByIds(trigger) {

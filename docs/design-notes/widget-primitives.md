@@ -27,7 +27,8 @@ Exports used by the compositions below:
 - `floating` — `autoUpdate`, `reposition`, `repositionAt`, plus
   `--available-height` and `data-placement`
 - `keys` — `itemForKey`, `firstItem`, `lastItem`, `nextItem`, with edge,
-  wrapping and RTL handling
+  wrapping and RTL handling. `nextItem` and `itemForKey` stop at the
+  edges by default. Pass `{ wrap: true }` to cycle through items.
 - `focus-group` — `connectFocusGroup`
 - `input` — `onTextInput`, `selectionStart`, `setCaret`, `dispatchInput`
 - `events` — `EVENTS`, `ACTUAL_EVENT_PREFIX`

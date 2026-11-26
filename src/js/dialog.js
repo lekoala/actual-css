@@ -30,6 +30,7 @@
  */
 
 import { registerCommands, targetFor } from "./command.js";
+import { readDataFlag } from "./data-flag.js";
 import enhance, { registerEnhancement } from "./enhance.js";
 import { EVENTS } from "./events.js";
 import { submissionSetting } from "./form-submission.js";
@@ -63,10 +64,6 @@ function allowsDialogEnhancement(dialog) {
     if (parent.localName.includes("-")) return false;
   }
   return true;
-}
-
-function boolData(el, name) {
-  return el.hasAttribute(name) && el.getAttribute(name) !== "false";
 }
 
 function setOwnedAttribute(state, el, name, value) {
@@ -136,7 +133,7 @@ function syncDialogSemantics(dialog, state, modal = isModal(dialog)) {
 }
 
 function isModal(dialog) {
-  return dialog.getAttribute("data-dialog-modal") !== "false";
+  return readDataFlag(dialog, "data-dialog-modal", true);
 }
 
 function resolveModalMode(dialog, forcedModal = null) {
@@ -190,11 +187,11 @@ function syncModalOpenClass(doc = document) {
 }
 
 function isDismissible(dialog) {
-  return boolData(dialog, "data-dialog-dismissible");
+  return readDataFlag(dialog, "data-dialog-dismissible");
 }
 
 function wantsViewTransition(dialog) {
-  return boolData(dialog, "data-dialog-view-transition");
+  return readDataFlag(dialog, "data-dialog-view-transition");
 }
 
 const VT_NAME = "actual-dialog";
@@ -577,7 +574,7 @@ function swallowNextClose(dialog) {
    without JavaScript, non-modally; the runtime upgrades it to its modal mode.
    A reinserted node does not reopen; a new node does. */
 function autoOpen(dialog) {
-  if (!boolData(dialog, "data-dialog-open") || autoOpened.has(dialog)) return;
+  if (!readDataFlag(dialog, "data-dialog-open") || autoOpened.has(dialog)) return;
   if (dialog.open) {
     // Already modal (a command came first), or meant to stay non-modal.
     if (isModalOpen(dialog) || !isModal(dialog)) {

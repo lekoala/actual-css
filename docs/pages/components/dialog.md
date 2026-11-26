@@ -534,6 +534,9 @@ Available options:
   `closedby="none"`. Use `closedby="none"` for critical dialogs that must be
   closed by an explicit action.
 
+Set a `data-dialog-*` toggle to `false` to disable it, in any letter case.
+An empty attribute enables the option.
+
 ### Open on load
 
 Add `data-dialog-open` to show a dialog without a trigger, for example a
