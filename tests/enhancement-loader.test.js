@@ -1,14 +1,31 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from "bun:test";
+import {
+  loadEnhancement,
+  loadEnhancements,
+  loadResponse,
+  loadScript,
+  loadStyle,
+  watchEnhancementManifests,
+} from "actual-css/js/enhancement-loader";
+import { loaderState } from "../src/js/enhancement-loader-state.js";
 import { cleanupDOM, setupDOM } from "./helpers/dom.js";
+
+const importModule = loaderState.importModule;
 
 afterEach(() => {
   cleanupDOM();
 });
 
-beforeEach(async () => {
-  const loader = await import("../src/js/enhancement-loader.js");
-  loader.__reset();
+beforeEach(() => {
+  loaderState.enhancements.clear();
+  loaderState.scriptLoads.clear();
+  loaderState.styleLoads.clear();
+  loaderState.importModule = importModule;
 });
+
+function setModuleImporter(importer) {
+  loaderState.importModule = importer;
+}
 
 function setupTestDOM(html = "") {
   setupDOM(html);
@@ -27,10 +44,7 @@ describe("enhancement-loader", () => {
       const connectFn = mock(() => () => {});
       const mockModule = { default: connectFn };
 
-      const { loadEnhancement, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => Promise.resolve(mockModule));
+      setModuleImporter(() => Promise.resolve(mockModule));
 
       const result = await loadEnhancement("my-widget", "https://example.test/widget.js");
 
@@ -42,10 +56,7 @@ describe("enhancement-loader", () => {
 
       const mockModule = { default: () => () => {} };
 
-      const { loadEnhancement, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => Promise.resolve(mockModule));
+      setModuleImporter(() => Promise.resolve(mockModule));
 
       await loadEnhancement("my-widget", "https://example.test/widget.js");
       const result = await loadEnhancement("my-widget", "https://example.test/widget.js");
@@ -58,10 +69,7 @@ describe("enhancement-loader", () => {
 
       const mockModule = { default: () => () => {} };
 
-      const { loadEnhancement, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => Promise.resolve(mockModule));
+      setModuleImporter(() => Promise.resolve(mockModule));
 
       await loadEnhancement("my-widget", "https://example.test/widget-a.js");
 
@@ -78,10 +86,7 @@ describe("enhancement-loader", () => {
     test("throws for missing default export", async () => {
       setupTestDOM("<div></div>");
 
-      const { loadEnhancement, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => Promise.resolve({}));
+      setModuleImporter(() => Promise.resolve({}));
 
       await expect(loadEnhancement("bad-widget", "https://example.test/bad.js")).rejects.toThrow(
         /default function/,
@@ -91,10 +96,7 @@ describe("enhancement-loader", () => {
     test("throws for invalid prepare export", async () => {
       setupTestDOM("<div></div>");
 
-      const { loadEnhancement, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => Promise.resolve({ default: () => {}, prepare: "not a function" }));
+      setModuleImporter(() => Promise.resolve({ default: () => {}, prepare: "not a function" }));
 
       await expect(loadEnhancement("bad-prepare", "https://example.test/bad.js")).rejects.toThrow(
         /invalid prepare/,
@@ -110,10 +112,7 @@ describe("enhancement-loader", () => {
         return Promise.resolve();
       });
 
-      const { loadEnhancement, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() =>
+      setModuleImporter(() =>
         Promise.resolve({
           default: () => () => {},
           prepare: prepareFn,
@@ -131,10 +130,7 @@ describe("enhancement-loader", () => {
 
       let shouldFail = true;
 
-      const { loadEnhancement, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => {
+      setModuleImporter(() => {
         if (shouldFail) {
           return Promise.reject(new Error("Network error"));
         }
@@ -155,10 +151,7 @@ describe("enhancement-loader", () => {
 
       let importedUrl = "";
 
-      const { loadEnhancement, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter((url) => {
+      setModuleImporter((url) => {
         importedUrl = url;
         return Promise.resolve({ default: () => () => {} });
       });
@@ -180,10 +173,7 @@ describe("enhancement-loader", () => {
 
       const connectFn = mock(() => () => {});
 
-      const { loadEnhancements, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => Promise.resolve({ default: connectFn }));
+      setModuleImporter(() => Promise.resolve({ default: connectFn }));
 
       const result = await loadEnhancements();
 
@@ -200,10 +190,7 @@ describe("enhancement-loader", () => {
 				</script>
 			`);
 
-      const { loadEnhancements, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => Promise.reject(new Error("404")));
+      setModuleImporter(() => Promise.reject(new Error("404")));
 
       const result = await loadEnhancements();
 
@@ -222,10 +209,7 @@ describe("enhancement-loader", () => {
 				</script>
 			`);
 
-      const { loadEnhancements, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => Promise.resolve({ default: () => () => {} }));
+      setModuleImporter(() => Promise.resolve({ default: () => () => {} }));
 
       await expect(loadEnhancements()).rejects.toThrow(/declared from both/);
     });
@@ -237,10 +221,7 @@ describe("enhancement-loader", () => {
 				</script>
 			`);
 
-      const { loadEnhancements, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter((url) => {
+      setModuleImporter((url) => {
         if (url.includes("good")) {
           return Promise.resolve({ default: () => () => {} });
         }
@@ -260,10 +241,7 @@ describe("enhancement-loader", () => {
       setupTestDOM('<div data-enhance="my-widget"></div>');
 
       const connectFn = mock(() => () => {});
-      const { watchEnhancementManifests, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => Promise.resolve({ default: connectFn }));
+      setModuleImporter(() => Promise.resolve({ default: connectFn }));
 
       const watcher = watchEnhancementManifests();
       document.body.insertAdjacentHTML(
@@ -284,10 +262,7 @@ describe("enhancement-loader", () => {
       console.error = () => {};
 
       try {
-        const { watchEnhancementManifests, __setModuleImporter } = await import(
-          "../src/js/enhancement-loader.js"
-        );
-        __setModuleImporter(() => Promise.reject(new Error("404")));
+        setModuleImporter(() => Promise.reject(new Error("404")));
 
         const watcher = watchEnhancementManifests();
         document.body.insertAdjacentHTML(
@@ -310,8 +285,7 @@ describe("enhancement-loader", () => {
 
       const connectFn = mock(() => () => {});
 
-      const { loadResponse, __setModuleImporter } = await import("../src/js/enhancement-loader.js");
-      __setModuleImporter(() => Promise.resolve({ default: connectFn }));
+      setModuleImporter(() => Promise.resolve({ default: connectFn }));
 
       const response = new Response("", {
         headers: {
@@ -328,8 +302,6 @@ describe("enhancement-loader", () => {
     test("returns empty result when no header", async () => {
       setupTestDOM("");
 
-      const { loadResponse } = await import("../src/js/enhancement-loader.js");
-
       const response = new Response("");
       const result = await loadResponse(response);
 
@@ -338,8 +310,6 @@ describe("enhancement-loader", () => {
 
     test("throws on invalid header JSON", async () => {
       setupTestDOM("");
-
-      const { loadResponse } = await import("../src/js/enhancement-loader.js");
 
       const response = new Response("", {
         headers: { "Enhance-Modules": "{invalid json" },
@@ -352,7 +322,6 @@ describe("enhancement-loader", () => {
   describe("loadScript / loadStyle helpers", () => {
     test("loadScript evicts a failed load and starts fresh on retry", async () => {
       setupTestDOM("");
-      const { loadScript } = await import("../src/js/enhancement-loader.js");
       const url = "https://example.test/vendor.js";
 
       const first = loadScript(url);
@@ -368,7 +337,6 @@ describe("enhancement-loader", () => {
 
     test("loadStyle evicts a failed load and starts fresh on retry", async () => {
       setupTestDOM("");
-      const { loadStyle } = await import("../src/js/enhancement-loader.js");
       const url = "https://example.test/theme.css";
 
       // happy-dom refuses external stylesheets by default and fires `error`
@@ -384,7 +352,6 @@ describe("enhancement-loader", () => {
 
     test("loadStyle keeps a successful load cached", async () => {
       setupTestDOM("");
-      const { loadStyle } = await import("../src/js/enhancement-loader.js");
       const url = "https://example.test/theme.css";
 
       // Turns happy-dom's refused stylesheet load into a `load` event.
@@ -401,8 +368,6 @@ describe("enhancement-loader", () => {
     test("loadScript deduplicates by URL", async () => {
       setupTestDOM("");
 
-      const { loadScript } = await import("../src/js/enhancement-loader.js");
-
       const rawPromise = loadScript("https://example.test/vendor.js");
       expect(rawPromise).toBe(loadScript("https://example.test/vendor.js"));
       rawPromise.catch(() => {});
@@ -411,8 +376,6 @@ describe("enhancement-loader", () => {
     test("loadScript normalizes relative URLs", async () => {
       setupTestDOM("");
 
-      const { loadScript } = await import("../src/js/enhancement-loader.js");
-
       const rawPromise = loadScript("/resources/app.js");
       expect(rawPromise).toBe(loadScript("https://example.test/resources/app.js"));
       rawPromise.catch(() => {});
@@ -420,8 +383,6 @@ describe("enhancement-loader", () => {
 
     test("loadScript different URLs produce different promises", async () => {
       setupTestDOM("");
-
-      const { loadScript } = await import("../src/js/enhancement-loader.js");
 
       const promise1 = loadScript("https://example.test/a.js");
       const promise2 = loadScript("https://example.test/b.js");
@@ -434,8 +395,6 @@ describe("enhancement-loader", () => {
     test("loadStyle deduplicates by URL", async () => {
       setupTestDOM("");
 
-      const { loadStyle } = await import("../src/js/enhancement-loader.js");
-
       const rawPromise = loadStyle("https://example.test/style.css");
       expect(rawPromise).toBe(loadStyle("https://example.test/style.css"));
       rawPromise.catch(() => {});
@@ -443,8 +402,6 @@ describe("enhancement-loader", () => {
 
     test("loadStyle normalizes relative URLs", async () => {
       setupTestDOM("");
-
-      const { loadStyle } = await import("../src/js/enhancement-loader.js");
 
       const rawPromise = loadStyle("/resources/app.css");
       expect(rawPromise).toBe(loadStyle("https://example.test/resources/app.css"));
@@ -458,10 +415,7 @@ describe("enhancement-loader", () => {
 
       let importCount = 0;
 
-      const { loadEnhancement, __setModuleImporter } = await import(
-        "../src/js/enhancement-loader.js"
-      );
-      __setModuleImporter(() => {
+      setModuleImporter(() => {
         importCount++;
         return new Promise((resolve) => setTimeout(() => resolve({ default: () => () => {} }), 10));
       });

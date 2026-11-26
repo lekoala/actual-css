@@ -183,7 +183,10 @@ published in `package.json#exports`:
 | `actual-css/js/menu`    | Menu keyboard/click wiring, item vocabulary                      |
 | `actual-css/js/surface` | Surface lifecycle (`openSurface`, `closeSurface`, …)             |
 
-The exports map is explicit — it *is* the statement of what is public.
+Import from the JavaScript subpaths in `package.json#exports`. The symbols
+exported by those entry points are the public API, including the helpers used
+to compose widgets. Import a component entry point directly to run its setup
+when it has no exports.
 
 ## Floating contract
 

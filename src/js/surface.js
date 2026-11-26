@@ -3,7 +3,7 @@ import enhance from "./enhance.js";
 import { registerEscapeDismissal } from "./escape.js";
 import { EVENTS } from "./events.js";
 import { positionModeFor } from "./floating-space.js";
-
+import { hidePopover, showPopover } from "./popover-transport.js";
 import { CLASSES } from "./selectors.js";
 import { surfaceFocusReturns } from "./surface-focus.js";
 
@@ -42,36 +42,6 @@ function reaperFor(menu) {
     reapers.set(root, reaper);
   }
   return reaper;
-}
-
-/*
- * Transport: the top layer, via popover="manual".
- *
- * The runtime owns the whole lifecycle, so "manual" is the only usable mode —
- * it supplies promotion to the top layer and nothing else, leaving the
- * dismissal policy, Escape ordering and focus restoration below untouched.
- *
- * The attribute is set by the runtime, not asked of the author: a surface is
- * still marked up exactly as before. showPopover/hidePopover throw on an
- * out-of-order call (already open, not connected), which is a state Actual's
- * own guards should already have excluded — the try/catch is there so a
- * surprising DOM does not take the lifecycle down with it.
- */
-function showTransport(menu) {
-  try {
-    menu.showPopover();
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function hideTransport(menu) {
-  try {
-    menu.hidePopover();
-  } catch {
-    /* Already closed or detached; nothing left to hide. */
-  }
 }
 
 /*
@@ -312,7 +282,7 @@ export function openSurface(menu, opts = {}) {
   // again, and that close must observe the open state to tear down.
   openSurfaces.add(menu);
   // Promote before measuring: a closed popover has no box to position.
-  if (!showTransport(menu)) {
+  if (!showPopover(menu)) {
     openSurfaces.delete(menu);
     surfaceFocusReturns.delete(menu);
     return false;
@@ -365,7 +335,7 @@ export function closeSurface(menu, opts = {}) {
   const shouldRestoreFocus = opts.restoreFocus ?? menu.contains(activeElement);
   const restoreFocusTo = surfaceFocusReturns.get(menu);
   menu.classList.remove(CLASSES.open);
-  hideTransport(menu);
+  hidePopover(menu);
   openSurfaces.delete(menu);
   syncExpanded(menu, false);
   state?.unregisterEscape?.();

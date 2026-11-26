@@ -59,6 +59,7 @@ import { autoUpdate, reposition } from "@lekoala/floating";
 import enhance from "./enhance.js";
 import { registerEscapeDismissal } from "./escape.js";
 import { positionModeFor, readPlacement } from "./floating-space.js";
+import { hidePopover, showPopover } from "./popover-transport.js";
 import { CLASSES } from "./selectors.js";
 
 const SHOW_DELAY_MS = 150;
@@ -91,31 +92,6 @@ const triggerStates = new WeakMap(); // trigger -> { tip, cleanup }
 const tipStates = new WeakMap(); // tip -> { refs, activeRef, controller, stopTracking, generated, visible, timer }
 /** @type {Element | null} The tip a tap pinned open; a tap elsewhere dismisses it. */
 let tappedTip = null;
-
-/*
- * Transport, the same shape surface.js uses and for the same reason: the
- * platform promotes the tip to the top layer and does nothing else, leaving
- * the hover/focus/click policy, the show delays and the Escape ordering here
- * untouched. showPopover/hidePopover throw on an out-of-order call, which the
- * state below should already have excluded — the try/catch is there so a
- * surprising DOM does not take the lifecycle down with it.
- */
-function showTransport(tip) {
-  try {
-    tip.showPopover();
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function hideTransport(tip) {
-  try {
-    tip.hidePopover();
-  } catch {
-    /* Already closed or detached; nothing left to hide. */
-  }
-}
 
 /*
  * [hidden] stops being the runtime's state here and goes back to what the
@@ -243,13 +219,13 @@ function updateTrackedTip(tip, state) {
   if (!ref || !state.wanted) return;
 
   if (!state.visible) {
-    if (!showTransport(tip)) return;
+    if (!showPopover(tip)) return;
     state.visible = true;
   }
 
   if (!repositionTip(ref, tip, state.space)) {
     state.visible = false;
-    hideTransport(tip);
+    hidePopover(tip);
   }
   syncEscapeDismissal(tip, state);
 }
@@ -308,7 +284,7 @@ function hideTip(tip, force = false) {
     state.tapped = false;
   }
   if (tappedTip === tip) tappedTip = null;
-  hideTransport(tip);
+  hidePopover(tip);
   state?.unregisterEscape?.();
   if (state) {
     state.unregisterEscape = null;

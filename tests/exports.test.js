@@ -1,15 +1,9 @@
 import { expect, test } from "bun:test";
 import { publicJsExports } from "./helpers/package-exports.js";
 
-// Inventory of the JS subpaths, not a stability promise. Keys mirror the JS
-// subpaths of package.json#exports and values list each module's exact
-// exports, so adding an export or a subpath without updating this table fails
-// the suite on purpose and the triage stays visible — but inclusion here does
-// NOT mean adopters may rely on the symbol. `[]` marks a self-registering
-// module with no exports. `__`-prefixed entries, ref-counting
-// (`retainSurface`, `prepareSurface`), menu lookup internals (`getMenuItems`,
-// `hasMenuItem(s)`, `onMenuKeydown`), `selectionStart`, and the `validation`
-// default are internals slated for triage before 1.0.
+// Review changes to this inventory as API changes. Keys mirror the JS subpaths
+// of package.json#exports and values list exactly the public symbols at each
+// subpath. An empty array marks an entry point imported for its side effects.
 const JS_EXPORT_INVENTORY = {
   "./js": [],
   "./js/full": ["applyEnhancement", "enhance", "registerEnhancement"],
@@ -54,8 +48,6 @@ const JS_EXPORT_INVENTORY = {
     "loadEnhancements",
     "watchEnhancementManifests",
     "loadResponse",
-    "__setModuleImporter",
-    "__reset",
   ],
   "./js/input": ["selectionStart", "setCaret", "dispatchInput", "onTextInput"],
   "./js/parse-config": ["default", "parseConfig"],

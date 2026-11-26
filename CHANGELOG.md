@@ -18,6 +18,7 @@
 - `actual-css/forms.json`: the `components.json` index for `src/css/forms` (classes, hooks, states, imports, docs URL), verified by `check:catalog`.
 
 ### Changed
+- The `actual-css/js/enhancement-loader` entry point drops the `__setModuleImporter` and `__reset` test hooks.
 - `.app-nav`: the bottom bar and the rail mark the current and hovered tile with a pill around the icon; the label keeps the bar's ink.
 - `tasks` demo: an Account tile opens a bottom sheet on phones; the theme moves out of the topbar.
 - `tasks` demo: a completion checkbox on each row, independent of the current task, and group counts with a folding Completed group.

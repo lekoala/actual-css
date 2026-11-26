@@ -20,16 +20,16 @@ The JS runtime doubles as a primitive kit for building custom widgets.
 | Declarative triggers               | `command`     | `actual-css/js/command`     |
 | State classes the runtime writes   | `selectors`   | `actual-css/js/selectors`   |
 
-The named exports each module carries:
+Exports used by the compositions below:
 
-- `enhance` — `enhance`, `registerEnhancement`, `applyEnhancement`
+- `enhance` — default `enhance`, named `registerEnhancement` and `applyEnhancement`
 - `escape` — `registerEscapeDismissal`
 - `floating` — `autoUpdate`, `reposition`, `repositionAt`, plus
   `--available-height` and `data-placement`
 - `keys` — `itemForKey`, `firstItem`, `lastItem`, `nextItem`, with edge,
   wrapping and RTL handling
 - `focus-group` — `connectFocusGroup`
-- `input` — `onTextInput`, `setCaret`, `dispatchInput`
+- `input` — `onTextInput`, `selectionStart`, `setCaret`, `dispatchInput`
 - `events` — `EVENTS`, `ACTUAL_EVENT_PREFIX`
 - `command` — `registerCommands`
 - `selectors` — `CLASSES`

@@ -16,22 +16,15 @@
  * One map keyed by name reserves the slot immediately, so concurrent calls
  * for the same name share one promise. The browser's native module cache
  * handles URL dedup. Script/style helpers fill the gap for non-ESM assets.
- *
- * Exports prefixed with `__` are test hooks and are not part of the
- * supported public API or SemVer contract.
  */
 
 import enhance, { registerEnhancement } from "./enhance.js";
+import { loaderState } from "./enhancement-loader-state.js";
 import { parseConfig } from "./parse-config.js";
 
 const MANIFEST_SELECTOR = 'script[type="application/json"][data-enhance-modules]';
 
-const enhancements = new Map();
-
-const scriptLoads = new Map();
-const styleLoads = new Map();
-
-let moduleImporter = (url) => import(url);
+const { enhancements, scriptLoads, styleLoads } = loaderState;
 
 function loadAsset(url, loads, kind) {
   const absoluteUrl = new URL(url, document.baseURI).href;
@@ -141,7 +134,8 @@ export function loadEnhancement(name, url) {
     return existing.promise.then(() => ({ name, status: "skipped" }));
   }
 
-  const promise = moduleImporter(absoluteUrl)
+  const promise = loaderState
+    .importModule(absoluteUrl)
     .then(async (mod) => {
       if (typeof mod.default !== "function") {
         throw new TypeError(`Enhancement "${name}" must export a default function.`);
@@ -284,15 +278,4 @@ export async function loadResponse(response) {
   }
 
   return loadManifest(Object.entries(manifest));
-}
-
-export function __setModuleImporter(fn) {
-  moduleImporter = fn;
-}
-
-export function __reset() {
-  enhancements.clear();
-  scriptLoads.clear();
-  styleLoads.clear();
-  moduleImporter = (url) => import(url);
 }
