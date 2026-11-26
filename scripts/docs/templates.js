@@ -6,6 +6,11 @@ import { readFileSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { DOCS_PROSE_END, DOCS_PROSE_START } from "./markdown.js";
+// A classic script for the page; imported here for its axes only. Without a
+// document it registers its API and returns before touching the page.
+import "./assets/docs-customizer.js";
+
+const customizer = () => globalThis.ActualDocsCustomizer;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO = "https://github.com/lekoala/actual-css";
@@ -125,36 +130,96 @@ export function renderToc(toc) {
     .join("\n");
 }
 
-const SCHEME_VALUES = ["system", "light", "dark"];
-
-export function renderThemeOptions(themes) {
-  const scheme = SCHEME_VALUES.map(
-    (name) =>
-      `            <option value="${name}">${escapeHtml(name.charAt(0).toUpperCase() + name.slice(1))}</option>`,
-  ).join("\n");
-  const named = themes
-    .map((theme) => `            <option value="${theme.name}">${escapeHtml(theme.label)}</option>`)
-    .join("\n");
-  return `${scheme}
-            <optgroup label="Themes">
-${named}
-            </optgroup>`;
+/*
+ * The customizer: a blocking script at the end of <head> that applies the
+ * saved config before the first paint, a header trigger, and the panel. The
+ * panel's options come from the runtime's own axes, so the build and the
+ * page read one declaration.
+ */
+export function renderCustomizerScript(themes, src) {
+  const names = themes.map((theme) => theme.name).join(" ");
+  return `<script src="${src}" data-themes="${escapeHtml(names)}"></script>`;
 }
 
-export function renderThemeInit(themes) {
-  const valid = JSON.stringify([...SCHEME_VALUES, ...themes.map((theme) => theme.name)]);
-  return `<script>
-  (function () {
-    var valid = ${valid};
-    var saved = null;
-    try { saved = localStorage.getItem("actual-docs-theme"); } catch (e) {}
-    if (saved === "system" || !valid.includes(saved)) {
-      try { localStorage.removeItem("actual-docs-theme"); } catch (e) {}
-    } else if (saved) {
-      document.documentElement.setAttribute("data-theme", saved);
-    }
-  })();
-</script>`;
+export function renderCustomizeTrigger() {
+  return `<button class="btn sm ghost docs-customize-trigger" type="button" data-docs-customize
+            aria-haspopup="dialog" aria-controls="docs-customizer" aria-label="Customize">
+            <i class="ti ti-adjustments-horizontal" aria-hidden="true"></i>
+            <span class="docs-customize-label">Customize</span>
+          </button>`;
+}
+
+const option = (value, label) => `<option value="${value}">${escapeHtml(label)}</option>`;
+
+function renderAxisField(name, axis) {
+  const options = [
+    option("default", "Theme default"),
+    ...Object.entries(axis.options).map(([value, entry]) => option(value, entry.label)),
+  ];
+  return `      <div class="field">
+        <label for="docs-customizer-${name}">${escapeHtml(axis.label)}</label>
+        <select class="select" id="docs-customizer-${name}" name="${name}">
+          ${options.join("\n          ")}
+        </select>
+      </div>`;
+}
+
+export function renderCustomizer(themes) {
+  const themeOptions = [
+    option("default", "Default"),
+    ...themes.map((theme) => option(theme.name, theme.label)),
+  ];
+  const schemes = [
+    ["system", "System"],
+    ["light", "Light"],
+    ["dark", "Dark"],
+  ]
+    .map(
+      ([value, label]) =>
+        `<label class="segment"><input type="radio" name="scheme" value="${value}">${label}</label>`,
+    )
+    .join("\n          ");
+  const axes = Object.entries(customizer().AXES)
+    .map(([name, axis]) => renderAxisField(name, axis))
+    .join("\n");
+
+  return `<dialog class="drawer docs-customizer" id="docs-customizer" data-side="end" closedby="any" aria-labelledby="docs-customizer-title">
+    <form data-docs-customizer-form>
+      <header>
+        <h2 class="docs-customizer-title" id="docs-customizer-title">Customize</h2>
+        <button class="close" type="button" commandfor="docs-customizer" command="request-close"
+          aria-controls="docs-customizer" aria-label="Close customizer"></button>
+      </header>
+      <div class="stack">
+      <div class="field">
+        <label for="docs-customizer-theme">Theme</label>
+        <select class="select" id="docs-customizer-theme" name="theme">
+          ${themeOptions.join("\n          ")}
+        </select>
+      </div>
+      <fieldset class="stack docs-customizer-scheme">
+        <legend>Color scheme</legend>
+        <div class="segmented">
+          ${schemes}
+        </div>
+        <p class="muted docs-customizer-hint" data-docs-customizer-scheme-hint hidden>This theme has one scheme.</p>
+      </fieldset>
+${axes}
+      <details class="docs-customizer-css">
+        <summary>Generated CSS</summary>
+        <pre><code data-docs-customizer-css></code></pre>
+      </details>
+      </div>
+      <footer class="stack">
+        <div class="cluster">
+          <button class="btn sm primary" type="button" data-docs-customizer-action="copy"><i class="ti ti-copy" aria-hidden="true"></i> Copy CSS</button>
+          <button class="btn sm outline" type="button" data-docs-customizer-action="share"><i class="ti ti-link" aria-hidden="true"></i> Share link</button>
+          <button class="btn sm ghost" type="button" data-docs-customizer-action="reset">Reset</button>
+        </div>
+        <p class="muted docs-customizer-status" role="status" data-docs-customizer-status></p>
+      </footer>
+    </form>
+  </dialog>`;
 }
 
 /*
@@ -267,6 +332,7 @@ export function renderHome({
   docsCss,
   actualJs,
   docsJs,
+  customizerJs,
   siteRoot,
 }) {
   return loadHomeTemplate()
@@ -276,8 +342,9 @@ export function renderHome({
     .replace(/\{\{actualJs\}\}/g, actualJs)
     .replace(/\{\{docsJs\}\}/g, docsJs)
     .replace(/\{\{siteRoot\}\}/g, siteRoot)
-    .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
-    .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
+    .replace(/\{\{customizerScript\}\}/g, renderCustomizerScript(themes, customizerJs))
+    .replace(/\{\{customizeTrigger\}\}/g, renderCustomizeTrigger())
+    .replace(/\{\{customizer\}\}/g, renderCustomizer(themes))
     .replace(/\{\{themeCount\}\}/g, String(themes.length))
     .replace(/\{\{homeStats\}\}/g, renderHomeStats())
     .replace(
@@ -331,6 +398,7 @@ export function renderPage({
   docsCss,
   actualJs,
   docsJs,
+  customizerJs,
   siteRoot,
   url,
   previous,
@@ -359,8 +427,9 @@ export function renderPage({
     .replace(/\{\{destinations\}\}/g, destinations)
     .replace(/\{\{drawerDestinations\}\}/g, drawerDestinations)
     .replace(/\{\{searchLinks\}\}/g, searchLinks)
-    .replace(/\{\{themeOptions\}\}/g, renderThemeOptions(themes))
-    .replace(/\{\{themeInit\}\}/g, renderThemeInit(themes))
+    .replace(/\{\{customizerScript\}\}/g, renderCustomizerScript(themes, customizerJs))
+    .replace(/\{\{customizeTrigger\}\}/g, renderCustomizeTrigger())
+    .replace(/\{\{customizer\}\}/g, renderCustomizer(themes))
     .replace(/\{\{content\}\}/g, wrapDocsContent(content))
     .replace(/\{\{toc\}\}/g, renderToc(toc))
     .replace(/\{\{prev\}\}/g, page.previous ? renderPageLink(url, page.previous, "previous") : "")

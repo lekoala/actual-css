@@ -54,11 +54,10 @@ it("docs shell never widens the document beyond the viewport", async () => {
 });
 
 /* The compact header is a single row at every width: brand + controls, with
- * the theme select dropped to the drawer below 32rem. A wrapping cluster would
- * silently reintroduce the stacked logo / theme / Search+Menu header, so guard
- * the height instead of the markup. One row is the tallest control (select,
- * --control-size 38px) plus the header's two --space-30 edges (24px); a wrapped
- * header roughly doubles that. */
+ * the Customize label dropped to its icon below 33rem. A wrapping cluster
+ * would silently reintroduce the stacked logo / controls header, so guard the
+ * height instead of the markup. One row is the tallest control (38px) plus the
+ * header's two --space-30 edges (24px); a wrapped header roughly doubles that. */
 const ONE_ROW_HEIGHT = 64;
 
 it("docs header stays a single row", async () => {
@@ -74,35 +73,30 @@ it("docs header stays a single row", async () => {
         });
         // Wait for the breakpoint decision rather than a fixed delay: reading
         // before the media query re-resolves was the CI flake (a stale row at
-        // the previous width). The height is final once the theme field's
+        // the previous width). The height is final once the Customize label's
         // visibility matches this width.
-        const themeVisible = width > 528;
+        const labelVisible = width > 528;
         await waitForBrowser(
           view,
           `(() => {
-            const field = document.querySelector(".docs-header-inner .docs-theme-field");
-            return (getComputedStyle(field).display !== "none") === ${themeVisible};
+            const label = document.querySelector(".docs-header-inner .docs-customize-label");
+            return (getComputedStyle(label).display !== "none") === ${labelVisible};
           })()`,
         );
 
         const height = await view.evaluate(`(() => {
           const header = document.querySelector(".docs-header-inner");
-          const theme = document.querySelector(".docs-header-inner .docs-theme-field");
-          return {
-            height: Math.round(header.getBoundingClientRect().height),
-            themeVisible: getComputedStyle(theme).display !== "none",
-          };
+          return Math.round(header.getBoundingClientRect().height);
         })()`);
 
-        expect(`${width}: ${height.height <= ONE_ROW_HEIGHT}`).toBe(`${width}: true`);
-        expect(`${width}: ${height.themeVisible}`).toBe(`${width}: ${width > 528}`);
+        expect(`${width}: ${height <= ONE_ROW_HEIGHT}`).toBe(`${width}: true`);
       }
     },
     { artifactName: "docs-header-row" },
   );
 });
 
-it("docs header search and theme select have no resting frame or fill", async () => {
+it("docs header search and customize triggers have no resting frame or fill", async () => {
   await withBrowserPage(
     fixtureUrl(FIXTURE),
     async (view) => {
@@ -112,11 +106,11 @@ it("docs header search and theme select have no resting frame or fill", async ()
           return { border: style.borderBlockStartColor, background: style.backgroundColor };
         };
         return {
-          select: chrome(".docs-theme-field .select"),
+          customize: chrome("[data-docs-customize]"),
           search: chrome("[data-docs-search]"),
         };
       })()`);
-      for (const control of [edges.search, edges.select]) {
+      for (const control of [edges.search, edges.customize]) {
         expect(control.border).toBe("rgba(0, 0, 0, 0)");
         expect(control.background).toBe("rgba(0, 0, 0, 0)");
       }

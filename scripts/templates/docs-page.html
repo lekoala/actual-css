@@ -18,7 +18,7 @@
   <script src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/autoloader/prism-autoloader.min.js"></script>
   <script src="{{actualJs}}" defer></script>
   <script src="{{docsJs}}" defer></script>
-  {{themeInit}}
+  {{customizerScript}}
 </head>
 
 <body>
@@ -46,12 +46,7 @@
         </nav>
 
         <div class="cluster">
-          <label class="docs-theme-field">
-            <span class="sr-only">Color scheme</span>
-            <select class="select" data-docs-theme>
-              {{themeOptions}}
-            </select>
-          </label>
+          {{customizeTrigger}}
           <button class="btn sm ghost docs-search-trigger" type="button" data-docs-search
             aria-haspopup="dialog" aria-controls="docs-search-dialog" aria-keyshortcuts="Control+K Meta+K /">
             <i class="ti ti-search" aria-hidden="true"></i>
@@ -120,12 +115,6 @@
     </header>
     <!-- One body child: the drawer scrolls its single middle track. -->
     <div class="stack">
-      <label class="docs-theme-field">
-        <span class="sr-only">Color scheme</span>
-        <select class="select" data-docs-theme>
-          {{themeOptions}}
-        </select>
-      </label>
       <nav class="stack" aria-label="Documentation">
         <ul class="grid docs-destination-grid">
 {{drawerDestinations}}
@@ -174,6 +163,8 @@
       </footer>
     </div>
   </dialog>
+
+  {{customizer}}
 </body>
 
 </html>

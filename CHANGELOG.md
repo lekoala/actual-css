@@ -24,6 +24,7 @@
 - `plush` demo theme: borderless cards, inset-shaded fields and rails, squish and stretch press motion.
 - `surface-form` demo: an Edge treatment, a filled field with the 3:1 cue on its lower edge.
 - Design note: `elevation-and-finish.md`.
+- Docs: a Customize panel replaces the header theme select: theme, scheme, radius, density, fields, elevation, finish and font, with Copy CSS, Share link and Reset.
 
 ### Changed
 - `.btn` paints `--btn-bg` with `background-color`: a gradient in `--ui-bg` or `--btn-default-bg` no longer renders; use `--btn-finish`.

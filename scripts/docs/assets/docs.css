@@ -87,21 +87,6 @@
   --btn-font-size: var(--font-size-lg);
 }
 
-.docs-theme-field .select {
-  min-inline-size: 8rem;
-}
-
-/* Navigation controls share the header surface, including on themes that
-   give form fields an elevation or a separate bottom edge. */
-.docs-header .docs-theme-field .select {
-  --control-border: transparent;
-  --control-border-block-end-color: transparent;
-  --control-default-bg: transparent;
-  --control-fg: var(--text-muted);
-  --control-font-size: var(--font-size-sm);
-  --control-shadow: none;
-}
-
 .docs-shell {
   --center-size: var(--docs-shell-size);
   /* .center's auto margins otherwise let fixed grid tracks shrink-wrap this
@@ -231,6 +216,73 @@
 
 .docs-drawer-header {
   margin-block-end: var(--space-30);
+}
+
+/* --- Customizer --- */
+
+/* The panel edits these tokens on the page; its own controls keep the
+   framework defaults, so no choice makes the panel itself harder to use. The
+   page overrides reach it only by inheritance, which these declarations stop.
+   Values mirror src/css/core/tokens.css and theme.css; colors still follow
+   the theme. */
+.docs-customizer {
+  --drawer-size: 21rem;
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-lg: 0.75rem;
+  --gap: 0.75rem;
+  --density-space: var(--space-40);
+  --control-size: var(--control-size-md);
+  --control-pad-x: var(--control-pad-x-md);
+  --control-step-sm: 0;
+  --control-step-md: 1;
+  --control-step-lg: 0;
+  --control-default-bg: var(--surface);
+  --control-default-border: initial;
+  --control-hover-border: initial;
+  --control-hover-bg: initial;
+  --control-border-block-end-color: initial;
+  --control-border-block-end-width: initial;
+  --control-shadow: initial;
+  --shadow: 0 8px 24px rgb(0 0 0 / 0.14);
+  --shadow-control: initial;
+  --shadow-inset: initial;
+  --btn-finish: initial;
+  --font-sans: "Inter Variable", system-ui, sans-serif;
+}
+
+/* Desktop opens it without a modal (docs-customizer.js), outside the top
+   layer: it must stay above the sticky sidebar and TOC. */
+.docs-customizer:not(:modal) {
+  z-index: calc(var(--z-sticky) + 1);
+}
+
+.docs-customizer-title {
+  font-size: var(--font-size-lg);
+}
+
+.docs-customizer-scheme {
+  --gap: var(--space-20);
+
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.docs-customizer-hint,
+.docs-customizer-status {
+  margin: 0;
+  font-size: var(--font-size-sm);
+}
+
+.docs-customizer-status:empty {
+  display: none;
+}
+
+.docs-customizer-css pre {
+  max-block-size: 16rem;
+  overflow: auto;
+  font-size: var(--font-size-xs);
 }
 
 /* --- Content --- */
@@ -1221,7 +1273,8 @@
     --btn-pad-x: var(--space-20);
   }
 
-  .docs-header-inner .docs-theme-field {
+  /* The trigger keeps its icon; its aria-label still names it. */
+  .docs-header-inner .docs-customize-label {
     display: none;
   }
 

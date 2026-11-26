@@ -1,48 +1,10 @@
 /*
  * Docs site runtime — progressive enhancement only. The documentation and its
- * examples are fully usable without this script; it adds search, theme
- * persistence, copy buttons, and effect replay controls.
+ * examples are fully usable without this script; it adds search, copy
+ * buttons, and effect replay controls. Theme and customization live in
+ * docs-customizer.js, which must run before the first paint.
  */
 (() => {
-  const THEME_KEY = "actual-docs-theme";
-
-  /* --- Theme persistence --- */
-
-  /* The theme select is duplicated: the header keeps it while there is room,
-     the drawer carries it below the compact-header breakpoint. Bind every
-     copy and mirror a change across the rest, or the hidden one drifts. */
-  const themeSelects = [...document.querySelectorAll("[data-docs-theme]")];
-
-  function applyTheme(theme) {
-    if (!theme || theme === "system") {
-      document.documentElement.removeAttribute("data-theme");
-    } else {
-      document.documentElement.setAttribute("data-theme", theme);
-    }
-  }
-
-  if (themeSelects.length > 0) {
-    const storedTheme = localStorage.getItem(THEME_KEY);
-    const current =
-      storedTheme && themeSelects[0].querySelector(`option[value="${storedTheme}"]`)
-        ? storedTheme
-        : "system";
-    for (const select of themeSelects) {
-      select.value = current;
-      select.addEventListener("change", () => {
-        const theme = select.value;
-        if (theme === "system") {
-          localStorage.removeItem(THEME_KEY);
-        } else {
-          localStorage.setItem(THEME_KEY, theme);
-        }
-        applyTheme(theme);
-        for (const other of themeSelects) other.value = theme;
-      });
-    }
-    applyTheme(current);
-  }
-
   /* --- Reveal active nav item --- */
 
   /* The sidebar is its own scroll container, so a deep link loads with the

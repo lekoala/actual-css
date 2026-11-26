@@ -129,6 +129,7 @@ function writePages(navigation, rendered, themes) {
       docsCss: repoAsset(from, join(CHROME, "docs.css")),
       actualJs: repoAsset(from, join(DIST, "actual.full.js")),
       docsJs: repoAsset(from, join(CHROME, "docs.js")),
+      customizerJs: repoAsset(from, join(CHROME, "docs-customizer.js")),
       siteRoot: siteRoot(from),
       url: page.url,
       previous: page.previous,
@@ -153,6 +154,7 @@ function writeHome(navigation, themes) {
       docsCss: repoAsset(from, join(CHROME, "docs.css")),
       actualJs: repoAsset(from, join(DIST, "actual.full.js")),
       docsJs: repoAsset(from, join(CHROME, "docs.js")),
+      customizerJs: repoAsset(from, join(CHROME, "docs-customizer.js")),
       siteRoot: siteRoot(from),
     }),
   );

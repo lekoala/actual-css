@@ -341,7 +341,9 @@ application CSS:
 `src/css/themes/` holds example palettes (`ocean`, `spruce`, `neon`, `brutalist`, …) as
 reference material to copy into your own `[data-theme]` island — they are demo
 assets, not package entrypoints. Each sets the intent/surface/text tokens and
-lets the core derive everything else.
+lets the core derive everything else. Customize, in the docs header, applies a
+preset to these pages, adjusts its radius, density, fields, elevation, finish
+and font, and copies the resulting CSS.
 
 - `gradient`: outer focus halos on fields, and a button finish.
 - `tactile`: raised cards, recessed fields and rails, domed buttons, all from
