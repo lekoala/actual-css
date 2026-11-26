@@ -68,6 +68,10 @@
      lists, so a theme flattens them with 0 0 #0000, never none. */
   --shadow-control: initial;
   --shadow-inset: initial;
+  /* Finish, unset so the default theme stays matte: a background-image every
+     solid fill (button, checked choice and switch, progress value, solid
+     badge) layers over its color. Keep it a translucent neutral veil. */
+  --finish: initial;
 
   /* Motion — see reset.css for the prefers-reduced-motion hard reset.
      --duration scales component transitions (hover/focus); the dedicated

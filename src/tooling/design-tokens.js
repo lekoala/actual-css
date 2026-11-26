@@ -129,6 +129,7 @@ export const NOT_EXPORTED = {
     "shadow-popout",
     "shadow-control",
     "shadow-inset",
+    "finish",
   ],
   "input of a derived value": [
     "backdrop-color",
