@@ -15,6 +15,7 @@ const files = [
   "./tests/browser/dirty.test.js",
   "./tests/browser/grid.test.js",
   "./tests/browser/meter.test.js",
+  "./tests/browser/surface-lifecycle.test.js",
   "./tests/browser/timeline.test.js",
   "./tests/browser/tooltip-tap.test.js",
 ];

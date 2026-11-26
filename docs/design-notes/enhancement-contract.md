@@ -164,10 +164,50 @@ working.
 `menuFor()` validates semantically (`menu, [role="menu"]`). A context menu may
 legitimately want the flyout *look* without the flyout *behavior*.
 
-**D9 — An orphaned surface is torn down by a reaper observing
-`data-actual-surface`.** `prepareSurface()` writes the marker; the reaper
-closes and forgets a surface once it leaves the document. A `fix:`, not part
-of the contract itself.
+**D9 — The surface reaper handles DOM removal.**
+`prepareSurface()` writes the internal `data-actual-surface` marker used for
+discovery. The reaper is a fallback for removal by code that cannot call
+`disconnectSurface()`.
+
+## Surface lifecycle
+
+The surface is the panel element. Its ID is an address that declarative
+triggers resolve as needed. Retention, opening and DOM connection each track
+a different part of its lifetime.
+
+- **Retention.** `retainSurface(panel)` gives a consumer a reference to that
+  element and returns its release function. Several consumers can retain the
+  same panel. Each release takes effect once. The final release disconnects
+  the runtime wiring. Retaining a panel leaves its current opening intact.
+- **Opening.** A connected panel can be opened directly or through a
+  trigger. Only an active opening owns an Escape entry, position tracking,
+  and scroll dismissal listeners. Closing ends that opening and keeps the
+  last focus return target available to a dialog command from the panel.
+  `disconnectSurface()` clears that target and removes the panel's runtime
+  wiring. Both operations leave the DOM node and outstanding retains intact.
+- **DOM connection.** Removing a panel ends its opening and tears down its
+  wiring once the runtime observes the removal. Outstanding retains still
+  refer to that same object. Cleanup also works if the trigger and panel
+  are removed in the same mutation batch, regardless of teardown order.
+
+### DOM mutations
+
+- **Removal followed by reinsertion.** If the panel is absent when the
+  mutation batch is processed, reinserting the same element leaves it closed.
+  A later activation can wire and open it again using the existing reference.
+- **Move within the document.** An element that stays in the document at the
+  end of the mutation batch keeps its identity and retains. If the move also
+  preserves the native popover, the opening can continue. If the platform
+  closes it during the move, Actual ends that opening and releases its
+  resources. The panel can be opened again on the next activation.
+- **Replacement at the same ID.** The old element ends its opening. On the
+  next activation, the trigger resolves the current element, releases its
+  reference to the old one and retains the replacement. The replacement
+  starts with its own wiring and opening state.
+
+Trigger teardown can explicitly close its panel before releasing it. For
+example, removing the source of an open context menu dismisses that opening
+even if another trigger retains the menu.
 
 ## Token vocabulary
 

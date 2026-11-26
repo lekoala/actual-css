@@ -106,6 +106,7 @@ function ensureSurfaceWired(menu) {
   ensureDocumentClick(menu);
   const state = {
     stopTracking: null,
+    stopWatchingMove: null,
     stopScrollIntent: null,
     unregisterEscape: null,
     trigger: null,
@@ -190,6 +191,21 @@ function startSurfaceResources(menu, state) {
     if (type === "scroll" && state.dismissOnScroll) return;
     if (!positionSurface(menu)) closeSurface(menu);
   });
+
+  if (menu.matches(":popover-open")) {
+    // Moving a popover can close it without a toggle event. The reaper
+    // handles detachment, while this check follows the active opening.
+    const observer = new MutationObserver((records) => {
+      const moved = records.some(({ removedNodes }) =>
+        Array.from(removedNodes).some((node) => node.contains(menu)),
+      );
+      if (moved && menu.isConnected && !menu.matches(":popover-open")) {
+        closeSurface(menu, { restoreFocus: false });
+      }
+    });
+    observer.observe(menu.ownerDocument, { childList: true, subtree: true });
+    state.stopWatchingMove = () => observer.disconnect();
+  }
 }
 
 export function isSurfaceOpen(menu) {
@@ -200,7 +216,7 @@ export function isSurfaceOpen(menu) {
 }
 
 export function prepareSurface(menu) {
-  if (!menu) return;
+  if (!menu || isSurfaceOpen(menu)) return;
   menu.style.position = "fixed";
   // A closed popover is hidden by the platform, so [hidden] is no longer the
   // closed state. Any left over from author markup would outrank it.
@@ -341,6 +357,8 @@ export function closeSurface(menu, opts = {}) {
   state?.unregisterEscape?.();
   state?.stopScrollIntent?.();
   state?.stopTracking?.();
+  state?.stopWatchingMove?.();
+  if (state) state.stopWatchingMove = null;
 
   if (shouldRestoreFocus && restoreFocusTo?.isConnected) {
     restoreFocusTo.focus({ preventScroll: true });

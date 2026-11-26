@@ -4,10 +4,7 @@ import { nextFrame } from "./helpers/layout.js";
 
 // The open set is the lifecycle state; .is-open is only its visual
 // projection, so a class morph must not orphan the Escape entry, tracking,
-// or open set. Deliberate tradeoff: the set can still diverge from what is
-// painted (external hidePopover(), popover attribute removed) — only
-// :popover-open cannot. A trigger click then closes an already-invisible
-// surface first; the next click reopens normally.
+// or open set. Actual owns the transport state for managed surfaces.
 const isOpen = (el) => el.classList.contains("is-open");
 
 setupDOM();
@@ -674,6 +671,25 @@ test("retaining a surface warns about nothing", () => {
   const panel = document.getElementById("menu");
 
   expect(captureWarnings(() => retainSurface(panel)())).toEqual([]);
+});
+
+test("the first retain preserves an active opening", () => {
+  setBody(`
+    <button id="trigger" aria-controls="panel"></button>
+    <div id="panel" class="flyout"></div>
+  `);
+  const trigger = document.getElementById("trigger");
+  const panel = document.getElementById("panel");
+  mockPlacement(trigger, panel);
+  expect(openSurface(panel, { trigger })).toBe(true);
+  expect(panel.style.position).toBe("absolute");
+
+  const release = retainSurface(panel);
+  expect(isSurfaceOpen(panel)).toBe(true);
+  expect(trigger.getAttribute("aria-expanded")).toBe("true");
+  expect(panel.style.position).toBe("absolute");
+  release();
+  expect(isSurfaceOpen(panel)).toBe(false);
 });
 
 /*
