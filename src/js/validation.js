@@ -457,5 +457,3 @@ export class FormValidator {
 // refreshes it like the other token behaviors. The token only means
 // something on a form.
 registerEnhancement("validation", (el) => (isFormElement(el) ? connectForm(el) : undefined));
-
-export default FormValidator;

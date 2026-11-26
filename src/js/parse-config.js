@@ -46,5 +46,3 @@ export function parseConfig(source) {
 
   return value;
 }
-
-export default parseConfig;
