@@ -7,6 +7,58 @@ sections in order when skipping a release.
 
 **Related terms:** migration, breaking changes, update, version.
 
+## 0.20 to 0.21
+
+### Field borders
+
+`.input`, `.textarea`, `.select`, `.join-addon` and `.otp` cells rest on the
+quiet `--border` edge, and on `--border-control` only under
+`prefers-contrast: more`. On a fill identical to the surface, the quiet edge
+does not meet the 3:1 of WCAG 1.4.11. To keep the strong edge everywhere:
+
+```css
+:root {
+  --control-default-border: var(--border-control);
+}
+```
+
+[Theming](../foundations/theming.md) lists the other field treatments that
+keep a 3:1 cue.
+
+### Button gradients
+
+`.btn` paints `--btn-bg` with `background-color`. A gradient in `--ui-bg`,
+`--btn-bg` or `--btn-default-bg` no longer renders: keep a color there and
+move the image to `--finish`.
+
+### Named JavaScript exports
+
+`actual-css/js/parse-config`, `actual-css/js/status` and
+`actual-css/js/validation` have no default export:
+
+```js
+import { parseConfig } from "actual-css/js/parse-config";
+import { status } from "actual-css/js/status";
+import { FormValidator } from "actual-css/js/validation";
+```
+
+`nextItem()` from `actual-css/js/keys` stops at the first and last item. Pass
+`{ wrap: true }` where focus should cycle.
+
+### App layout topbar
+
+On wide screens, an `.app-layout` without an `.app-nav > header` lets its
+`.topbar` span the side navigation. To keep the navigation at full height,
+move the brand into an `.app-nav > header`.
+
+### Select
+
+- A hovered `.select` no longer fills with `--surface-subtle`; set
+  `--control-hover-bg` to restore a hover fill on every field.
+- The chevron sits `--select-icon-inset` from the edge, so the default
+  glyph's ink lines up with `--control-pad-x`. Set the offset for a
+  replacement `--icon-chevron` whose ink fills more or less of its box.
+
 ## 0.16 to 0.17
 
 ### Current nav link

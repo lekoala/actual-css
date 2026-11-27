@@ -20,13 +20,22 @@
 - `--shadow-control`: unset control-scale relief for the selected `.segment`, the `.switch` knob and the `.range` thumb.
 - `--shadow-inset`: unset recess for fields (through `--control-shadow`) and the switch, range, progress, meter and segmented rails.
 - `--finish`: an unset `background-image` over every solid fill: solid `.btn`, checked `.check`, `.radio` and `.switch`, `.progress` value and `.badge.solid`.
-- `tactile` demo theme: raised cards, recessed fields and rails, domed buttons.
+- `tactile` demo theme: raised cards, recessed fields and rails, domed buttons, and the 3:1 `--border-control` field edge.
 - `plush` demo theme: borderless cards, inset-shaded fields and rails, squish and stretch press motion.
 - `surface-form` demo: an Edge treatment, a filled field with the 3:1 cue on its lower edge.
 - Design note: `elevation-and-finish.md`.
 - Docs: a Customize panel replaces the header theme select: preview a demo theme and scheme, or tune the default theme's radius, borders, density, fields, elevation, finish and font, with Copy CSS, Share link and Reset.
+- Docs Customize: the Fields axis offers Framed (the 3:1 edge) beside the quiet default; Edge, Filled and Recessed restore the 3:1 edge under increased contrast.
+- `--table-radius`: corner radius of `.table-wrap`; the edge columns and the caption clear the curve.
+- `tasks` demo: a task workspace on `.app-layout` and `.app-nav`, with completion checkboxes, folding groups, an account flyout and sheet, and a remembered rail toggle.
+- `todomvc` demo: buildless TodoMVC with hash routing, local persistence, and presentation derived from HTML state.
+- `modal-patterns` demo: a confirmation with detached actions.
+- Docs: JavaScript runtime · compact `key:value` configuration for `data-enhance-config` and `parseConfig`.
+- Docs: Empty state filters rows with `hidden` and derives the no-results panel from the list contents.
+- Design note: `css-bundling.md`.
 
 ### Changed
+- `actual-css/js/parse-config`, `actual-css/js/status` and `actual-css/js/validation` drop their default exports; import `parseConfig`, `status` and `FormValidator` by name.
 - `.btn` paints `--btn-bg` with `background-color`: a gradient in `--ui-bg` or `--btn-default-bg` no longer renders; use `--finish`.
 - `gradient` demo theme: its gradient moves to `--finish` and reaches checked controls, switches, progress and solid badges.
 - `actual-css contrast` measures solid button pairs under `--finish` instead of reporting them n/a.
@@ -34,17 +43,13 @@
 - `minimal` theme: hovering a field inks its underline.
 - `.select` places its chevron's ink, not its box, at `--control-pad-x`, aligned with native date, time and `.input-icon` icons; `--select-icon-inset` sets the offset for a replacement `--icon-chevron`.
 - `.input`, `.textarea`, `.select`, `.join-addon` and `.otp` cells rest on a quiet `--border` edge: `--control-default-border` defaults to `--border` and to `--border-control` under `prefers-contrast: more`.
-- Strong field identification is `--control-default-border: var(--border-control)` on `:root` (Foundations · Theming, field borders).
+- The quiet field edge does not meet WCAG 1.4.11 on a fill equal to the surface; `--control-default-border: var(--border-control)` on `:root` restores the 3:1 edge (Guides · Upgrading).
 - `actual-css contrast` reads a field's fill as well as its lower edge, and reports a field without a 3:1 cue as a warning instead of a failure.
-- `tactile` demo theme keeps the 3:1 `--border-control` field edge.
-- Docs Customize: the Fields axis offers Framed (the 3:1 edge) beside the quiet default; Edge, Filled and Recessed restore the 3:1 edge under increased contrast.
 - `actual-css contrast` measures the invalid focus line on the focused field: its outline, or its block-end border when a theme clears the outline.
 - `nextItem()` from `actual-css/js/keys` stops at the edges by default, matching `itemForKey()`; pass `{ wrap: true }` to cycle.
 - Dialog toggles accept `false` in any letter case, matching tooltip toggles.
 - The `actual-css/js/enhancement-loader` entry point drops the `__setModuleImporter` and `__reset` test hooks.
 - `.app-nav`: the bottom bar and the rail mark the current and hovered tile with a pill around the icon; the label keeps the bar's ink.
-- `tasks` demo: an Account tile opens a bottom sheet on phones; the theme moves out of the topbar.
-- `tasks` demo: a completion checkbox on each row, independent of the current task, and group counts with a folding Completed group.
 - Demos: `@lekoala/date-picker` 0.6.3 in `date-fields`, `contrast-contexts`, `neo-brutalist` and `cyberdeck`; `@lekoala/combobox` 0.8.2 in `combobox`, `contrast-contexts` and `neo-brutalist`.
 - Docs: Combobox bridge maps `--cb-focus-width` to `--focus-ring-width`, so chips and remove buttons keep the field's focus width.
 - `cyberdeck`: `.choice-card` and `.chip` show their state in the pressed-button corner tick instead of the leading indicator and check.
@@ -58,11 +63,11 @@
 - Flyout: a click on a text field, select, textarea or its label no longer closes the default `data-flyout-auto-close="true"` panel.
 - `.flyout-trigger.stretch` spans any trigger (`[aria-controls]`), not only `aria-haspopup="menu"` ones.
 - `.app-layout`: side `.app-nav` labels inherit the body size instead of the bottom bar's `--font-size-xs` caption.
-- `tasks` demo: built on `.app-layout` and `.app-nav` instead of a hand-rolled shell, with a brand header, an account flyout holding the theme, a remembered rail toggle, and a switch between the brand in the navigation and a global topbar with search.
 - Demos: `<theme-picker>` instances on one page stay in sync.
 - `.app-layout`: side `.app-nav` scrolls on a short viewport instead of clipping its last destinations.
 - `.list.grouped` rounds the first and last row links inside `<li>` to match the shell.
-- `.table`: the first and last columns and the caption pad at least the new `--table-radius` of `.table-wrap`, so text clears a large corner.
+- A flyout moved in the DOM while open closes its runtime state too, instead of staying open after the browser hid the popover.
+- `tokens.json` and the design-token exports include `--control-default-border`.
 - Docs home: the invoice specimen keeps its column widths across its two pages.
 - `cyberdeck`: the lit corner tick of `.btn[aria-pressed="true"]` and checked chips stays visible in forced colors.
 - `--icon-check` is the mark of every checked state: `.check` draws it too, so it matches `.choice-card`, `.chip`, menus and the picker.
