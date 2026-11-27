@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.21.0] - 2026-11-27
 ### Added
 - The `date` validation rule accepts an explicit format such as `date dd/mm/yyyy`.
 - `.app-layout[data-nav="rail"]`: the side `.app-nav` as a narrow rail, each label a caption under its icon, sized by `--app-nav-rail-size`.
