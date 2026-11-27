@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.22.0] - 2026-11-27
 ### Added
 - `--check-radius`: corner of every `.check` in a theme or region; `.radio` keeps its circle.
 - `--progress-border`: an optional `border` shorthand around the `.progress` track, inside `--bar-height`.
