@@ -498,10 +498,14 @@
   overflow: clip;
 }
 
-/* The stage: a faint tint toward --text, not --surface-subtle, which is an
-   expressive fill in several presets and the soft fill of many components —
-   a demo must stand out from its stage in every theme. Raised surfaces
-   (.card, .alert.surface) read as lifted off it. */
+/* The stage: --surface-raised in light, a faint tint toward --text in dark —
+   not --surface-subtle, which is an expressive fill in several presets and the
+   soft fill of many components. Fields fill with --surface and read as a well
+   only on something lighter: a light tint toward --text darkened the stage
+   onto the field fill and left the quiet edge alone, while the same tint in
+   dark moves away from it. Raised demos (.card) keep their edge and shadow on
+   a light stage. Without light-dark() the stage falls back to the example's
+   --surface-raised. */
 .docs-preview {
   /* A neutral environment: no query container. actual-container is a public
      contract an author declares, so a demo that inherited it here would render
@@ -510,12 +514,10 @@
      establishes it in its own markup. */
   padding: var(--space-60) var(--space-50);
   overflow-x: auto;
-}
-
-@supports (color: color-mix(in oklab, red, white)) {
-  .docs-preview {
-    background: color-mix(in oklab, var(--surface-raised), var(--text) 2.5%);
-  }
+  background: light-dark(
+    var(--surface-raised),
+    color-mix(in oklab, var(--surface-raised), var(--text) 2.5%)
+  );
 }
 
 /* A phone has no width to spare for a frame: the demo gets it back. */
