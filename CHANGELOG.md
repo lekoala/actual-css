@@ -9,7 +9,7 @@
 
 ### Changed
 - `--btn-radius`, `--card-radius`, `--badge-radius`, `--segmented-radius`, `--join-radius`, `--choice-card-radius` and `--range-thumb-radius` are fallback-only: set on a theme or region, they reach every instance inside.
-- Unset radius hooks and `--switch-border` no longer hold a value: read them with their default, e.g. `var(--card-radius, var(--radius-lg))`.
+- Unset radius hooks and `--switch-border` no longer hold a value: read them with their default, e.g. `var(--card-radius, var(--radius-lg))` (Guides · Upgrading).
 - `.btn.link` and `.choice-card.chip` keep their own default corner but follow a radius hook set by a region; `.join.circle` stays round.
 
 ### Fixed

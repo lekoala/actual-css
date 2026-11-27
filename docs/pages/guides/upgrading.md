@@ -7,6 +7,34 @@ sections in order when skipping a release.
 
 **Related terms:** migration, breaking changes, update, version.
 
+## 0.21 to 0.22
+
+### Radius and edge hooks have no default value
+
+`--btn-radius`, `--card-radius`, `--badge-radius`, `--segmented-radius`,
+`--join-radius`, `--choice-card-radius`, `--range-thumb-radius` and
+`--switch-border` are no longer declared on their component. Search
+application CSS for them read without a fallback and give it the component's
+default:
+
+```css
+.card > .list > li:first-child > .list-item {
+  border-start-start-radius: calc(var(--card-radius, var(--radius-lg)) - var(--border-width));
+}
+```
+
+The defaults are `--radius` for buttons, segmented tracks, joined groups and
+choice cards, `--radius-lg` for cards, `--radius-full` for badges, chips and
+range thumbs, and `--switch-bg` for `--switch-border`.
+
+### Rendering changes without an edit
+
+- These hooks set on a container, a section or a theme root now reach every
+  component inside it; they used to be ignored there.
+- A radius set on `.btn` or `.choice-card` now also reaches `.btn.link` and
+  `.choice-card.chip`, which kept their own corner before. To keep it, set the
+  hook on them: `.btn.link { --btn-radius: var(--radius-sm); }`.
+
 ## 0.20 to 0.21
 
 ### Field borders
