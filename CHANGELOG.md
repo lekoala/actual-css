@@ -1,6 +1,12 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Changed
+- Default theme, light: `--surface` is a tinted `hsl(262 15% 98%)` under a white `--surface-raised`, so a field in a card reads by its fill as well as its quiet edge, as in dark.
+- Default theme, light: `--surface-subtle` steps to `hsl(262 24% 94%)`, one step past the tinted canvas.
+- Default theme: `--secondary-soft-fg`, `--success-soft-fg`, `--warning-soft-fg`, `--danger-soft-fg` and `--neutral-soft-fg` mix more `--text`, keeping 4.5:1 on the darker `--surface-subtle`.
+- `square` and `gradient` demo themes: fields rest on the 3:1 `--border-control` edge, since their canvas and cards share one white.
+- Docs: Tokens · Color describes the surface ladder and when a theme needs `--control-default-border: var(--border-control)`.
 
 ## [0.21.0] - 2026-11-27
 ### Added

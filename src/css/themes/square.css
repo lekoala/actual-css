@@ -26,6 +26,9 @@
   --text-subtle: hsl(220 8% 55%);
 
   --border: hsl(220 15% 88%);
+  /* Canvas and raised share one white, so a field has no fill to read by:
+     it takes the 3:1 edge instead of the quiet one. */
+  --control-default-border: var(--border-control);
   --focus: hsl(220 75% 57%);
   --soft-fg-mix: 50%;
   --hover-overlay: hsl(220 30% 10% / 0.04);

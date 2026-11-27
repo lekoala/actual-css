@@ -67,10 +67,15 @@
   --neutral: hsl(258 7% 43%);
   --neutral-fg: hsl(0 0% 98%);
 
-  /* Surfaces */
-  --surface: hsl(0 0% 100%);
+  /* Surfaces: a raised surface is lighter than the canvas in both schemes, and
+     subtle sits one step past the canvas. Fields fill with --surface
+     (--control-default-bg), so in a card they read by their fill as well as
+     the quiet edge. A canvas equal to raised leaves the edge alone: the quiet
+     field border depends on this ladder. Darkening subtle costs the soft ink
+     contrast; the --*-soft-fg mixes below are tuned to it. */
+  --surface: hsl(262 15% 98%);
   --surface-raised: hsl(0 0% 100%);
-  --surface-subtle: hsl(262 24% 96%);
+  --surface-subtle: hsl(262 24% 94%);
   --surface-solid: hsl(261 16% 13%);
 
   /* Text */
@@ -187,11 +192,11 @@
 :where(:root),
 [data-theme="light"],
 [data-theme="dark"] {
-  --secondary-soft-fg: var(--secondary);
-  --success-soft-fg: color-mix(in oklab, var(--text) 4%, var(--success));
-  --warning-soft-fg: color-mix(in oklab, var(--text) 12%, var(--warning));
-  --danger-soft-fg: color-mix(in oklab, var(--text) 3%, var(--danger));
-  --neutral-soft-fg: color-mix(in oklab, var(--text) 8%, var(--neutral));
+  --secondary-soft-fg: color-mix(in oklab, var(--text) 4%, var(--secondary));
+  --success-soft-fg: color-mix(in oklab, var(--text) 8%, var(--success));
+  --warning-soft-fg: color-mix(in oklab, var(--text) 18%, var(--warning));
+  --danger-soft-fg: color-mix(in oklab, var(--text) 8%, var(--danger));
+  --neutral-soft-fg: color-mix(in oklab, var(--text) 14%, var(--neutral));
 }
 
 :where([data-theme]:not([data-theme="light"]):not([data-theme="dark"])) {
@@ -250,9 +255,9 @@
     --neutral: light-dark(hsl(258 7% 43%), hsl(258 10% 72%));
     --neutral-fg: light-dark(hsl(0 0% 98%), hsl(260 18% 10%));
 
-    --surface: light-dark(hsl(0 0% 100%), hsl(263 17% 9%));
+    --surface: light-dark(hsl(262 15% 98%), hsl(263 17% 9%));
     --surface-raised: light-dark(hsl(0 0% 100%), hsl(263 15% 12%));
-    --surface-subtle: light-dark(hsl(262 24% 96%), hsl(263 13% 16%));
+    --surface-subtle: light-dark(hsl(262 24% 94%), hsl(263 13% 16%));
     --surface-solid: light-dark(hsl(261 16% 13%), hsl(0 0% 96%));
 
     --text: light-dark(hsl(261 20% 13%), hsl(260 12% 95%));

@@ -103,9 +103,9 @@ Surface tokens describe the canvas and elevation model. Components should prefer
 
 ```css
 :root {
-  --surface: hsl(0 0% 100%);
+  --surface: hsl(262 15% 98%);
   --surface-raised: hsl(0 0% 100%);
-  --surface-subtle: hsl(262 24% 96%);
+  --surface-subtle: hsl(262 24% 94%);
   --surface-solid: hsl(261 16% 13%);
 
   --text: hsl(261 20% 13%);
@@ -117,7 +117,30 @@ Surface tokens describe the canvas and elevation model. Components should prefer
 }
 ```
 
-The surface levels are: `surface` (canvas), `surface-raised` (cards, raised surfaces), `surface-subtle` (the working subtle level — for hover overlays, form fields, table headers), and `surface-solid` (the inverse surface, used for accent areas).
+The surface levels are: `surface` (canvas), `surface-raised` (cards, dialogs,
+drawers, menus), `surface-subtle` (hover fills, table headers, rails, readonly
+and disabled fields), and `surface-solid` (the inverse surface, used for accent
+areas).
+
+The levels form one ladder in both schemes: the canvas, a lighter raised
+surface, and a subtle step past the canvas. In light the canvas is a tinted
+off-white under white cards; in dark, where a shadow barely shows, a raised
+surface is lighter than the canvas.
+
+Fields fill with `--surface` wherever they sit (`--control-default-bg`), so a
+field in a card reads by its fill as well as its quiet edge, in both schemes.
+On the canvas, the edge identifies it alone.
+
+A field is identified by its edge or by its fill. A theme whose canvas and
+raised surface share one color keeps fields on their edge alone, and should
+set `--control-default-border: var(--border-control)` ([field
+borders](./theming.md#field-borders-quiet-or-strong-field-contrast-wcag-1411)).
+A fill difference improves the layout but does not replace the 3:1 edge WCAG
+1.4.11 asks for. Among the demo themes, `lavender` and `ocean` take the fill
+path; `square` and `gradient` keep one white and take the edge.
+
+Moving `--surface-subtle` away from the canvas lowers soft ink contrast on it;
+re-check the soft pairs with `actual-css contrast` after changing either.
 
 Surfaces are painted material and may be translucent. Two roles must stay opaque, so they have their own tokens, both defaulting to `--surface`:
 
@@ -133,7 +156,7 @@ color and file inputs. Text fields, OTP cells and join addons rest on
 `--control-default-border`, the quiet `--border`, and take `--border-control`
 under increased contrast ([field borders](./theming.md#field-borders-quiet-or-strong-field-contrast-wcag-1411)). It is
 derived from `--text` and `--surface`; on the default palette it holds 3:1
-against `--surface` and 2.9–3.0 against `--surface-subtle`. `actual-css
+against `--surface` and `--surface-raised`, and 2.8 against `--surface-subtle`. `actual-css
 contrast` reports it for your theme. `--border-control-mix` sets the ink share;
 raise it when a tinted or translucent surface pulls the edge under 3:1. The mix
 resolves at a theme boundary: set it on `:root` or a `[data-theme]` island,

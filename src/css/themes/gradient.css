@@ -32,6 +32,9 @@
   --text-subtle: hsl(210 9% 62%);
 
   --border: hsl(210 14% 89%);
+  /* Canvas and raised share one white, so a field has no fill to read by:
+     it takes the 3:1 edge instead of the quiet one, as Bootstrap 4 fields do. */
+  --control-default-border: var(--border-control);
   --focus: hsl(211 75% 51%);
   --soft-fg-mix: 40%;
   --hover-overlay: hsl(210 30% 10% / 0.04);

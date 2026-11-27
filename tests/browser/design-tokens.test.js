@@ -17,8 +17,8 @@ const core = await coreTokenCss();
 it("the default theme exports both schemes with their own values", async () => {
   const resolved = await resolveTokens({ css: framework, aliasSources: [core] });
   expect(Object.keys(resolved.modes)).toEqual(["light", "dark"]);
-  expect(resolved.modes.light.surface).toEqual({ components: [1, 1, 1], alpha: 1 });
-  expect(resolved.modes.dark.surface).not.toEqual(resolved.modes.light.surface);
+  expect(resolved.modes.light["surface-raised"]).toEqual({ components: [1, 1, 1], alpha: 1 });
+  expect(resolved.modes.dark["surface-raised"]).not.toEqual(resolved.modes.light["surface-raised"]);
   expect(resolved.lengths["space-40"]).toEqual({ px: 16, css: "1rem" });
   // 0.65rem: exact, not the 1/64px layout snap (10.390625).
   expect(resolved.lengths["bar-height"].px).toBe(10.4);
