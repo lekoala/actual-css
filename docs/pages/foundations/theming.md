@@ -185,6 +185,39 @@ fill. The `tactile` theme combines the three.
 
 → [Elevation tokens](./tokens.md#elevation)
 
+### Restyle every control in one region / sketch / hand-drawn look
+
+The radius scale, elevation, finish and decorative edge hooks inherit, so one
+rule on a region restyles every component inside it, whatever the composition.
+Set the scale first: fields, buttons, cards and checks all read it.
+
+```css
+.sketch {
+  --radius-sm: 2px;
+  --radius: 4px;
+  --radius-lg: 6px;
+  --badge-radius: var(--radius-sm);
+  --bar-radius: var(--radius-sm);
+
+  --switch-border: var(--text);
+  --progress-border: var(--border-width) solid var(--border);
+
+  --finish: none;
+  --shadow-control: 0 0 #0000;
+  --shadow-inset: 0 0 #0000;
+}
+```
+
+Pills keep `--radius-full`; set their hook to reshape them, as `--badge-radius`
+and `--bar-radius` do above. These component radius hooks inherit, for a part
+that departs from the scale: `--btn-radius`, `--card-radius`, `--badge-radius`,
+`--check-radius`, `--choice-card-radius`, `--range-thumb-radius`,
+`--segmented-radius`, `--join-radius`, `--bar-radius`. `.join.circle` stays
+round.
+
+State colors stay with their component: `--choice-border` and `--switch-bg`
+follow checked, hover and disabled, so set them on the component's selector.
+
 ### Keep bare native controls on-theme / accent-color
 
 Bare checkboxes, radios, ranges, and `<progress>` follow the theme through

@@ -130,6 +130,7 @@ deletion once `::slider-fill` is interoperable — see
 - `--range-thumb-size` — thumb height, which is also the control's height.
 - `--range-thumb-inline-size` — thumb width; follows `--range-thumb-size` (a round thumb) unless set.
 - `--range-thumb-radius` — thumb corner; `0` with a narrower width makes a block thumb. The focus ring follows both.
+  Set it on a theme or region to reach every slider inside.
 - `--range-track-height` — track thickness.
 - `--range-thumb-bg` — thumb color. Defaults to the local intent, then `--primary`.
 - `--range-track-bg` — track color.

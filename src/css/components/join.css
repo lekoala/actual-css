@@ -22,8 +22,9 @@
  * --control-bg
  * --control-fg
  */
+/* --join-radius is fallback-only (read below as var(--join-radius,
+   var(--radius))), so a theme or region sets it for every group. */
 .join {
-  --join-radius: var(--radius);
   --join-ss: 0;
   --join-se: 0;
   --join-es: 0;
@@ -34,7 +35,8 @@
 }
 
 /* The .circle utility cannot round a join: corners are written as longhands
-   on the children below, so the group radius must flow through the token. */
+   on the children below, so the group radius must flow through the token.
+   Declared, not a fallback: the explicit class wins over a region's radius. */
 .join.circle {
   --join-radius: var(--radius-full);
 }
@@ -78,20 +80,20 @@
 }
 
 .join > :first-child {
-  --join-ss: var(--join-radius);
-  --join-es: var(--join-radius);
+  --join-ss: var(--join-radius, var(--radius));
+  --join-es: var(--join-radius, var(--radius));
 }
 
 .join > :last-child {
-  --join-se: var(--join-radius);
-  --join-ee: var(--join-radius);
+  --join-se: var(--join-radius, var(--radius));
+  --join-ee: var(--join-radius, var(--radius));
 }
 
 .join > :only-child {
-  --join-ss: var(--join-radius);
-  --join-se: var(--join-radius);
-  --join-es: var(--join-radius);
-  --join-ee: var(--join-radius);
+  --join-ss: var(--join-radius, var(--radius));
+  --join-se: var(--join-radius, var(--radius));
+  --join-es: var(--join-radius, var(--radius));
+  --join-ee: var(--join-radius, var(--radius));
 }
 
 .join > * + * {

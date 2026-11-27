@@ -109,7 +109,8 @@ which both stacks it and gives the tabs runtime Up and Down.
 - `--segmented-bg` — track fill.
 - `--segmented-pad` — inset between the track and its segments, also the gap
   between segments; the segment radius is the track radius minus it.
-- `--segmented-radius` — track corner radius.
+- `--segmented-radius` — track corner radius, one length: the segments subtract the padding
+  from it. Set it on a theme or region to reach every track inside.
 - `--segmented-fg` — label ink of the unselected segments.
 - `--segmented-selected-bg` — fill of the selected segment: `--surface-raised`
   in a light scheme, lifted above the track in a dark one. Its shadow follows

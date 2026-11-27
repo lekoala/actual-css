@@ -33,6 +33,8 @@
 - `--progress-value` — filled bar color. Prefer an intent class over setting this directly.
 - `--bar-height` — bar thickness, shared with `.meter`.
 - `--bar-radius` — corner of the track and the value, shared with `.meter`; `0` squares the bar.
+- `--progress-border` — a full `border` shorthand around the track, unset by default. The edge
+  sits inside `--bar-height`.
 
 `.sm` / `.lg` are intentionally not supported: a bar keeps its inline size and only changes
 thickness, and a design asks for a 4px or a 12px bar, not for a "small" one. Set the hook

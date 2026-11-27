@@ -205,7 +205,8 @@ chips with an explicit intent. Otherwise it follows the chip's intent.
 
 - `--choice-card-pad` — inner padding.
 - `--choice-card-gap` — space between the indicator column and the label.
-- `--choice-card-radius` — corner radius.
+- `--choice-card-radius` — corner radius of every card, chips included; set it on a theme or
+  region. Unset, `.chip` keeps its pill.
 - `--choice-card-check-size` — size of the indicator, and the width of its
   column.
 - `--choice-card-border` / `--choice-card-bg` — resting border and background;

@@ -125,6 +125,115 @@ it("lifts moving parts with --shadow-control and falls back to --shadow", async 
   });
 });
 
+// Trap: a hook the component redeclares on itself never sees a container's
+// value. These are fallback-only, so one ancestor restyles every instance;
+// the disabled switch edge stays state-owned.
+it("takes --check-radius, --switch-border and --progress-border from an ancestor", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const styles = await view.evaluate(`(() => {
+      const css = (id) => getComputedStyle(document.getElementById(id));
+      const bar = (id) => ({ border: css(id).borderTopWidth + " " + css(id).borderTopColor, height: document.getElementById(id).offsetHeight });
+      return {
+        check: css("sketch-check").borderRadius,
+        radio: css("sketch-radio").borderRadius,
+        switchRest: css("sketch-switch").borderTopColor,
+        switchOn: css("sketch-switch-on").borderTopColor,
+        switchDisabled: css("sketch-switch-off").borderTopColor,
+        plainRest: [css("plain-switch").borderTopColor, css("plain-switch").backgroundColor],
+        plainOn: [css("plain-switch-on").borderTopColor, css("plain-switch-on").backgroundColor],
+        progress: bar("sketch-progress"),
+        plainProgress: css("relief-progress").borderTopWidth,
+      };
+    })()`);
+
+    expect(styles.check).toBe("1px 5px 2px 4px");
+    expect(styles.radio).not.toBe(styles.check);
+    expect(styles.switchRest).toBe("rgb(0, 128, 0)");
+    expect(styles.switchOn).toBe("rgb(0, 128, 0)");
+    expect(styles.switchDisabled).not.toBe("rgb(0, 128, 0)");
+    // Unset, the edge follows the track in every state.
+    expect(styles.plainRest[0]).toBe(styles.plainRest[1]);
+    expect(styles.plainOn[0]).toBe(styles.plainOn[1]);
+    // The edge sits inside --bar-height: the bar keeps its thickness.
+    expect(styles.progress).toEqual({ border: "2px rgb(0, 128, 0)", height: 16 });
+    expect(styles.plainProgress).toBe("0px");
+  });
+});
+
+// The radius hooks are fallback-only: unset, every component and variant keeps
+// its own default; set on a region, they reach every instance and variant
+// inside it, except .join.circle, whose explicit class wins; set locally, they
+// win over the region.
+it("takes every radius hook from an ancestor and keeps each default", async () => {
+  await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
+    const radii = await view.evaluate(`(() => {
+      const radius = (el) => getComputedStyle(el).borderTopLeftRadius;
+      const ref = (name) => radius(document.getElementById("ref-" + name));
+      const read = (id) => {
+        const part = (name) => document.querySelector("#" + id + " [data-part='" + name + "']");
+        const segmented = part("segmented");
+        return {
+          card: radius(part("card")),
+          badge: radius(part("badge")),
+          btn: radius(part("btn")),
+          link: radius(part("link")),
+          segmented: radius(segmented),
+          segment: parseFloat(radius(segmented.querySelector(".segment"))) + parseFloat(getComputedStyle(segmented).paddingTop) + "px",
+          join: radius(part("join").firstElementChild),
+          choiceCard: radius(part("choice-card")),
+          chip: radius(part("chip")),
+          circle: radius(part("circle").firstElementChild),
+        };
+      };
+      return {
+        ref: { radius: ref("radius"), sm: ref("radius-sm"), lg: ref("radius-lg"), full: ref("radius-full") },
+        default: read("radius-default"),
+        region: read("radius-region"),
+        local: read("radius-local"),
+      };
+    })()`);
+    const { ref } = radii;
+
+    expect(radii.default).toEqual({
+      card: ref.lg,
+      badge: ref.full,
+      btn: ref.radius,
+      link: ref.sm,
+      segmented: ref.radius,
+      segment: ref.radius,
+      join: ref.radius,
+      choiceCard: ref.radius,
+      chip: ref.full,
+      circle: ref.full,
+    });
+    expect(radii.region).toEqual({
+      card: "9px",
+      badge: "3px",
+      btn: "7px",
+      link: "7px",
+      segmented: "11px",
+      segment: "11px",
+      join: "5px",
+      choiceCard: "13px",
+      chip: "13px",
+      circle: ref.full,
+    });
+    for (const part of [
+      "card",
+      "badge",
+      "btn",
+      "link",
+      "segmented",
+      "join",
+      "choiceCard",
+      "chip",
+    ]) {
+      expect(radii.local[part], part).toBe("1px");
+    }
+    expect(radii.local.circle).toBe(ref.full);
+  });
+});
+
 it("turns the accordion marker by its hook and swaps its glyph", async () => {
   await withBrowserPage(fixtureUrl(FIXTURE), async (view) => {
     const marker = await view.evaluate(`(() => {

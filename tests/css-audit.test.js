@@ -1267,7 +1267,9 @@ test("checked choices fall back to the selected token, not primary", () => {
   expect(choiceCss).toContain("--choice-mark: var(--intent-fg, var(--state-selected-fg));");
   expect(switchCss).toContain("--switch-bg: var(--intent, var(--state-selected));");
   expect(switchCss).toContain(".switch:checked {");
-  expect(switchCss).toContain("--switch-border: var(--switch-bg);");
+  // The checked edge follows the track through the fallback, so an ancestor's
+  // --switch-border still reaches it.
+  expect(switchCss).toContain("var(--switch-border, var(--switch-bg))");
   expect(switchCss).toContain("--switch-knob: var(--intent-fg, var(--state-selected-fg));");
   expect(choiceCardCss).toContain("--choice-card-border: var(--intent, var(--state-selected));");
   expect(choiceCardCss).toContain("var(--intent, var(--state-selected))");

@@ -238,7 +238,7 @@ the disc is small; an invisible hit area keeps the pointer target at 24px.
 
 ## CSS hooks
 
-- `--badge-radius` — corner radius.
+- `--badge-radius` — corner radius; set it on a theme or region to reach every badge inside.
 - `--badge-size` — minimum block size; also the square size of an `:empty` dot badge.
 - `--badge-dot-size` — size of an `:empty` dot badge.
 - `--badge-font-size` — label font size.

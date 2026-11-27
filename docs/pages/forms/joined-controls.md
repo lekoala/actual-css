@@ -66,4 +66,5 @@ group adds a boundary and nothing else.
 ## CSS hooks
 
 - `--join-radius` — outer corner radius of the joined group. The per-corner
-  values of each child are derived from it.
+  values of each child are derived from it. Set it on a theme or region to reach
+  every group inside; `.join.circle` stays round.

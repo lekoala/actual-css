@@ -30,9 +30,10 @@
 .range {
   --range-thumb-size: 1.125rem;
   /* The thumb's shape, on vendor pseudo-elements a theme cannot reach in one
-     rule. The focus ring is a box-shadow, so it follows both. */
+     rule. The focus ring is a box-shadow, so it follows both.
+     --range-thumb-radius is fallback-only (read on the thumbs below), so a
+     theme or region sets it for every slider inside. */
   --range-thumb-inline-size: var(--range-thumb-size);
-  --range-thumb-radius: var(--radius-full);
   --range-track-height: 0.625rem;
   --range-thumb-bg: var(--intent, var(--primary));
   --range-track-bg: var(--border);
@@ -95,7 +96,7 @@
   -webkit-appearance: none;
   inline-size: var(--range-thumb-inline-size);
   block-size: var(--range-thumb-size);
-  border-radius: var(--range-thumb-radius);
+  border-radius: var(--range-thumb-radius, var(--radius-full));
   border: 0;
   background: var(--range-thumb-bg);
   margin-block-start: calc((var(--range-track-height) - var(--range-thumb-size)) / 2);
@@ -113,7 +114,7 @@
 .range::-moz-range-thumb {
   inline-size: var(--range-thumb-inline-size);
   block-size: var(--range-thumb-size);
-  border-radius: var(--range-thumb-radius);
+  border-radius: var(--range-thumb-radius, var(--radius-full));
   border: 0;
   background: var(--range-thumb-bg);
   cursor: inherit;

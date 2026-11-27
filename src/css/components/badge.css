@@ -62,7 +62,6 @@
   --badge-bg: var(--ui-bg, var(--badge-default-bg));
   --badge-fg: var(--ui-fg, var(--badge-default-fg));
   --badge-border: var(--ui-border, var(--badge-default-border));
-  --badge-radius: var(--radius-full);
 
   display: inline-flex;
   align-items: center;
@@ -77,7 +76,8 @@
   min-block-size: var(--badge-size);
   padding-inline: var(--badge-pad-x);
   border: var(--border-width) solid var(--badge-border);
-  border-radius: var(--badge-radius);
+  /* Fallback-only: a theme or region sets --badge-radius for every badge. */
+  border-radius: var(--badge-radius, var(--radius-full));
   background: var(--badge-bg);
   color: var(--badge-fg);
   font-size: var(--badge-font-size);

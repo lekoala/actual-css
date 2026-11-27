@@ -219,7 +219,7 @@ treatments on either side of it.
 
 ## CSS hooks
 
-- `--card-radius` — corner radius.
+- `--card-radius` — corner radius; set it on a theme or region to reach every card inside.
 - `--card-max-inline-size` — maximum width.
 - `--card-pad` — inner padding, relayed to direct children for `.bleed`. `.compact` lowers it.
 - `--card-gap` — space between direct children of a bare card. `.compact` lowers it; a parent's `--gap` and an inherited density do not reach it. A composed layout primitive owns its own gap instead.

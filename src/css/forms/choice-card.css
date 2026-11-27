@@ -37,7 +37,6 @@
 .choice-card {
   --choice-card-pad: var(--density-space, var(--space-40));
   --choice-card-gap: var(--space-30);
-  --choice-card-radius: var(--radius);
   --choice-card-border: var(--border-control);
   --choice-card-bg: var(--surface);
   --choice-card-check-size: 1.25em;
@@ -51,7 +50,9 @@
   column-gap: var(--choice-card-gap);
   padding: var(--choice-card-pad);
   border: var(--border-width) solid var(--form-invalid-border, var(--choice-card-border));
-  border-radius: var(--choice-card-radius);
+  /* Fallback-only: a theme or region sets --choice-card-radius for every
+     card, chips included; each keeps its own default (see .chip). */
+  border-radius: var(--choice-card-radius, var(--radius));
   background: var(--choice-card-bg);
   color: var(--text);
   /* Consumed so .sm/.lg reach the card; the indicator's em sizing follows. */
@@ -191,10 +192,10 @@
    indicator. Must follow them: several ties are won by source order. */
 .choice-card.chip {
   --choice-card-pad: 0 var(--control-pad-x);
-  --choice-card-radius: var(--radius-full);
   --choice-card-check-size: 1em;
 
   display: inline-flex;
+  border-radius: var(--choice-card-radius, var(--radius-full));
   align-items: center;
   min-block-size: var(--control-size);
   line-height: 1.2;

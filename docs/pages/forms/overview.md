@@ -193,6 +193,9 @@ root; keyboard focus and an open custom select keep it. Unset, it falls back
 to `--shadow-inset`, the recess fields share with the switch, range, progress
 and segmented rails ([Elevation](../foundations/tokens.md#elevation)).
 
+Set `--check-radius` to reshape every `.check` inside a theme or region; the
+radio keeps its circle.
+
 ## Notes
 
 - `required` is enough on native inputs. `aria-required="true"` is redundant and not used in these examples.

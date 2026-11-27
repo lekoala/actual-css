@@ -638,7 +638,8 @@
       "--progress-track",
       "--progress-value",
       "--bar-height",
-      "--bar-radius"
+      "--bar-radius",
+      "--progress-border"
     ],
     "states": [
       "indeterminate"

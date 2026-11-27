@@ -39,7 +39,6 @@
 .segmented {
   --segmented-bg: var(--surface-subtle);
   --segmented-pad: var(--space-10);
-  --segmented-radius: var(--radius);
   --segmented-fg: var(--text-muted);
   --segmented-selected-bg: var(--surface-raised);
 
@@ -53,7 +52,9 @@
   margin: 0;
   padding: var(--segmented-pad);
   border: var(--border-width) solid transparent;
-  border-radius: var(--segmented-radius);
+  /* Fallback-only, so a theme or region sets it. One length: the segments
+     subtract the padding from it. */
+  border-radius: var(--segmented-radius, var(--radius));
   background: var(--segmented-bg);
   /* A rail, recessed with the fields when a theme sets --shadow-inset. */
   box-shadow: var(--shadow-inset, none);
@@ -95,7 +96,7 @@
   padding: calc(var(--space-10) / 2) var(--space-30);
   padding-block: clamp(0px, (var(--segment-min-size) - 1lh) / 2, var(--space-10) / 2);
   border: 0;
-  border-radius: calc(var(--segmented-radius) - var(--segmented-pad));
+  border-radius: calc(var(--segmented-radius, var(--radius)) - var(--segmented-pad));
   background: transparent;
   color: var(--segmented-fg);
   font: inherit;

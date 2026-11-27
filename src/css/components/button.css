@@ -53,7 +53,6 @@
   --btn-bg: var(--ui-bg, var(--btn-default-bg, var(--intent, var(--neutral))));
   --btn-fg: var(--ui-fg, var(--btn-default-fg, var(--intent-fg, var(--neutral-fg))));
   --btn-border: var(--ui-border, var(--btn-default-border, transparent));
-  --btn-radius: var(--radius);
   --btn-hover-overlay: var(--hover-overlay-solid, var(--hover-overlay));
   --btn-border-block: calc(
     var(--border-width) +
@@ -82,7 +81,9 @@
     var(--btn-border-color, var(--btn-border))
   );
   border-block-end-width: var(--btn-border-block-end-width, var(--border-width));
-  border-radius: var(--btn-radius);
+  /* Fallback-only: a theme or region sets --btn-radius for every button,
+     variants included; each variant keeps its own default (see .link). */
+  border-radius: var(--btn-radius, var(--radius));
   /* why: the fill is a color and the finish (--finish, the token every solid
      fill reads) an image layered over it, so a theme lights every intent the
      same way without restating its color, and the hover (a background-color
@@ -237,7 +238,6 @@
   --ui-bg: transparent;
   --ui-fg: var(--intent, currentColor);
   --ui-border: transparent;
-  --btn-radius: var(--radius-sm);
   /* border: 0 below; the padding must not subtract a border it lacks. */
   --btn-border-block: 0px;
 
@@ -252,6 +252,7 @@
      .btn border made transparent would turn into a visible box in forced
      colors. :focus-visible keeps its own outline. */
   border: 0;
+  border-radius: var(--btn-radius, var(--radius-sm));
   text-decoration: underline;
   text-underline-offset: 0.18em;
 }

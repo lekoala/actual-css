@@ -37,9 +37,9 @@
      dark knob on a quiet track (the knob as the cue) turned the knob dark
      when off and light when on, as if from two systems. The border takes the
      fill, so every state stays one uniform shape; a disabled track keeps a
-     quiet --border edge, as a disabled check does. */
+     quiet --border edge, as a disabled check does. --switch-border is
+     fallback-only (see the border below), so a container can set it. */
   --switch-bg: var(--border-control);
-  --switch-border: var(--switch-bg);
   --switch-knob: var(--surface-raised);
   --switch-block-size: calc(var(--choice-control-size) + 0.125em);
   --switch-width: calc(var(--switch-block-size) * 1.8);
@@ -73,7 +73,8 @@
   inline-size: var(--switch-width);
   block-size: var(--switch-block-size);
   margin: 0;
-  border: var(--border-width) solid var(--form-invalid-border, var(--switch-border));
+  border: var(--border-width) solid
+    var(--form-invalid-border, var(--switch-border, var(--switch-bg)));
   border-radius: var(--radius-full);
   background: var(--switch-bg);
   /* A rail, recessed with the fields when a theme sets --shadow-inset. */
@@ -135,7 +136,6 @@
 /* The checked track is a solid fill: it takes the theme finish. */
 .switch:checked {
   --switch-bg: var(--intent, var(--state-selected));
-  --switch-border: var(--switch-bg);
   --switch-knob: var(--intent-fg, var(--state-selected-fg));
 
   background-image: var(--finish, none);

@@ -52,7 +52,6 @@
      inherited, so the --gap of a parent grid became the rhythm inside every
      card (+79px per card on a 38px grid). */
   --card-gap: var(--space-30);
-  --card-radius: var(--radius-lg);
   --card-max-inline-size: none;
   --card-bg: var(--ui-bg, var(--surface-raised));
   --card-fg: var(--ui-fg, var(--text));
@@ -70,7 +69,8 @@
   background: var(--card-bg);
   color: var(--card-fg);
   border: var(--border-width) solid var(--ui-border, var(--border));
-  border-radius: var(--card-radius);
+  /* Fallback-only: a theme or region sets --card-radius for every card. */
+  border-radius: var(--card-radius, var(--radius-lg));
 }
 
 /* Theme link ink is tuned for the page, not an intent fill. currentColor

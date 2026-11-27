@@ -16,6 +16,7 @@
  * --choice-border
  * --choice-bg
  * --choice-mark
+ * --check-radius
  *
  * --choice-control-size (tokens.css) is the shared typographic size for every
  * inline choice; switch.css derives its track from it so a checkbox and a
@@ -165,8 +166,10 @@
   cursor: pointer;
 }
 
+/* Fallback-only, so a theme or container sets it for every checkbox inside.
+   The radio keeps its circle: one or many reads in the shape. */
 .check {
-  border-radius: var(--radius-sm);
+  border-radius: var(--check-radius, var(--radius-sm));
 }
 
 .radio {

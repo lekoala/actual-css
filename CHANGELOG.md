@@ -1,6 +1,20 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Added
+- `--check-radius`: corner of every `.check` in a theme or region; `.radio` keeps its circle.
+- `--progress-border`: an optional `border` shorthand around the `.progress` track, inside `--bar-height`.
+- Docs: Theming · "Restyle every control in one region" sets every radius, edge and finish hook on one region.
+- Design note `tokens.md`: a public hook is inheritable by default, read with its default as a fallback.
+
+### Changed
+- `--btn-radius`, `--card-radius`, `--badge-radius`, `--segmented-radius`, `--join-radius`, `--choice-card-radius` and `--range-thumb-radius` are fallback-only: set on a theme or region, they reach every instance inside.
+- Unset radius hooks and `--switch-border` no longer hold a value: read them with their default, e.g. `var(--card-radius, var(--radius-lg))`.
+- `.btn.link` and `.choice-card.chip` keep their own default corner but follow a radius hook set by a region; `.join.circle` stays round.
+
+### Fixed
+- `--switch-border` set on an ancestor reaches every enabled `.switch`; unset, the edge still follows `--switch-bg`.
+- `.progress` parts fill the host's content box, so a `--progress-border` edge does not clip their lower corners.
 
 ## [0.21.1] - 2026-11-27
 ### Changed

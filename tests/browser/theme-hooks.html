@@ -21,6 +21,20 @@
       --shadow-inset: rgb(0 0 0) 0px 2px 0px 0px inset;
       --finish: linear-gradient(rgb(255 0 0), rgb(0 0 255));
     }
+    .sketch {
+      --check-radius: 1px 5px 2px 4px;
+      --switch-border: rgb(0 128 0);
+      --progress-border: 2px solid rgb(0 128 0);
+      --bar-height: 1rem;
+    }
+    .region {
+      --btn-radius: 7px;
+      --card-radius: 9px;
+      --badge-radius: 3px;
+      --segmented-radius: 11px;
+      --join-radius: 5px;
+      --choice-card-radius: 13px;
+    }
     .plus {
       --accordion-marker-icon: var(--icon-plus);
       --accordion-marker-open-rotate: 45deg;
@@ -58,6 +72,51 @@
     <label class="segment"><input type="radio" name="plain" checked>One</label>
     <label class="segment"><input type="radio" name="plain">Two</label>
   </div>
+
+  <div class="sketch stack">
+    <div class="cluster">
+      <input class="check" type="checkbox" id="sketch-check" aria-label="Sketch check">
+      <input class="radio" type="radio" id="sketch-radio" aria-label="Sketch radio">
+      <input class="switch" type="checkbox" role="switch" id="sketch-switch" aria-label="Sketch switch">
+      <input class="switch" type="checkbox" role="switch" id="sketch-switch-on" aria-label="Sketch switch on" checked>
+      <input class="switch" type="checkbox" role="switch" id="sketch-switch-off" aria-label="Sketch switch disabled" disabled>
+    </div>
+    <progress class="progress" id="sketch-progress" value="100" max="100"></progress>
+  </div>
+  <input class="switch" type="checkbox" role="switch" id="plain-switch" aria-label="Plain switch">
+  <input class="switch" type="checkbox" role="switch" id="plain-switch-on" aria-label="Plain switch on" checked>
+
+  <!-- Radius hooks: the same composition with defaults, inside a region that
+       sets every radius, and with a local override inside that region. -->
+  <div class="cluster">
+    <span id="ref-radius" style="border-radius: var(--radius)"></span>
+    <span id="ref-radius-sm" style="border-radius: var(--radius-sm)"></span>
+    <span id="ref-radius-lg" style="border-radius: var(--radius-lg)"></span>
+    <span id="ref-radius-full" style="border-radius: var(--radius-full)"></span>
+  </div>
+  <div class="stack" id="radius-default"></div>
+  <div class="region stack" id="radius-region"></div>
+  <div class="region stack" id="radius-local"
+       style="--btn-radius: 1px; --card-radius: 1px; --badge-radius: 1px; --segmented-radius: 1px; --join-radius: 1px; --choice-card-radius: 1px"></div>
+  <template id="radius-parts">
+    <div class="card" data-part="card">Card</div>
+    <span class="badge" data-part="badge">Badge</span>
+    <button class="btn" type="button" data-part="btn">Button</button>
+    <button class="btn link" type="button" data-part="link">Link</button>
+    <div class="segmented" data-part="segmented">
+      <label class="segment"><input type="radio" checked>One</label>
+      <label class="segment"><input type="radio">Two</label>
+    </div>
+    <div class="join" data-part="join"><input class="input" aria-label="Join"><button class="btn" type="button">Go</button></div>
+    <label class="choice-card" data-part="choice-card"><input type="checkbox"><span>Card</span></label>
+    <label class="choice-card chip" data-part="chip"><input type="checkbox"><span>Chip</span></label>
+    <div class="join circle" data-part="circle"><input class="input" aria-label="Circle"><button class="btn" type="button">Go</button></div>
+  </template>
+  <script>
+    for (const id of ["radius-default", "radius-region", "radius-local"]) {
+      document.getElementById(id).append(document.getElementById("radius-parts").content.cloneNode(true));
+    }
+  </script>
 
   <div class="accordion" id="acc-default">
     <details open><summary>Default</summary><p>Body</p></details>

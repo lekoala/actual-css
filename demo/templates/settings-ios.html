@@ -128,13 +128,13 @@
 
     /* A row's hover fill would square off the card's corner. */
     [data-theme="ios-demo"] .card > .list > li:first-child > .list-item {
-      border-start-start-radius: calc(var(--card-radius) - var(--border-width));
-      border-start-end-radius: calc(var(--card-radius) - var(--border-width));
+      border-start-start-radius: calc(var(--card-radius, var(--radius-lg)) - var(--border-width));
+      border-start-end-radius: calc(var(--card-radius, var(--radius-lg)) - var(--border-width));
     }
 
     [data-theme="ios-demo"] .card > .list > li:last-child > .list-item {
-      border-end-start-radius: calc(var(--card-radius) - var(--border-width));
-      border-end-end-radius: calc(var(--card-radius) - var(--border-width));
+      border-end-start-radius: calc(var(--card-radius, var(--radius-lg)) - var(--border-width));
+      border-end-end-radius: calc(var(--card-radius, var(--radius-lg)) - var(--border-width));
     }
 
     /* The iOS knob floats; the core keeps it flat on purpose. */

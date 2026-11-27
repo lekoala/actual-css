@@ -140,9 +140,10 @@ same optical line. Change the type or the control size and they stay level:
 
 - `--switch-bg` — track fill. At rest it is `--border-control`: the filled pill
   is the 3:1 edge that identifies the unchecked switch on its surface.
-- `--switch-border` — track edge. It follows `--switch-bg`, so the track reads
-  as one shape; a disabled track takes the quiet `--border` of a disabled
-  check. Validation takes precedence.
+- `--switch-border` — track edge. Unset, it follows `--switch-bg`, so the track
+  reads as one shape. Set it on a theme or container to draw one edge on every
+  enabled switch inside; a disabled track keeps the quiet `--border` of a
+  disabled check. Validation takes precedence.
 - `--switch-knob` — knob fill. At rest it is `--surface-raised` in a light
   scheme and `--surface-opaque` in a dark one, so it contrasts with the track
   and keeps the tone of the checked knob.

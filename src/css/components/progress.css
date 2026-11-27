@@ -15,6 +15,7 @@
  * --progress-value
  * --bar-height
  * --bar-radius
+ * --progress-border
  */
 /* Intent boundary — inherited intents do not tint this component.
    Local intent classes still win because :where() has zero specificity. */
@@ -32,7 +33,9 @@
   inline-size: 100%;
   block-size: var(--bar-height);
   overflow: hidden;
-  border: 0;
+  /* Fallback-only, a full border shorthand. It takes its room inside
+     --bar-height, which the parts below fill. */
+  border: var(--progress-border, 0);
   border-radius: var(--bar-radius);
   background: var(--progress-track);
   /* A rail, recessed with the fields when a theme sets --shadow-inset. */
@@ -40,8 +43,10 @@
 }
 
 /* The bar box paints over the host's inset shadow, so it carries it too. */
+/* The parts fill the host's content box rather than restating --bar-height,
+   so a --progress-border edge does not clip their lower corners. */
 .progress::-webkit-progress-bar {
-  block-size: var(--bar-height);
+  block-size: 100%;
   border-radius: var(--bar-radius);
   background: var(--progress-track);
   box-shadow: var(--shadow-inset, none);
@@ -51,13 +56,13 @@
    layers of one shorthand, so --progress-value may stay a color or become a
    gradient (only the last layer accepts a color). */
 .progress::-webkit-progress-value {
-  block-size: var(--bar-height);
+  block-size: 100%;
   border-radius: var(--bar-radius);
   background: var(--finish, none), var(--progress-value);
 }
 
 .progress::-moz-progress-bar {
-  block-size: var(--bar-height);
+  block-size: 100%;
   border-radius: var(--bar-radius);
   background: var(--finish, none), var(--progress-value);
 }

@@ -20,6 +20,22 @@ A reset is safe only when the instance itself consumes the hook. The children
 of `.switcher` and `.sidebar-layout` consume their layout hooks, so those hooks
 keep inheriting: a nested instance may also need its parent's value as a child.
 
+A new public hook is inheritable unless there is a stated reason: it works
+from a theme root, a section or a copied block. The component reads it with
+its default as a fallback, `var(--card-radius, var(--radius-lg))`, instead of
+declaring it on itself, because a declaration on the component hides every
+ancestor's value. A variant with another default restates the fallback rather
+than redeclaring the hook (`.btn.link`). A rule may still declare it when the
+state or an explicit class owns the value (the disabled `--switch-border`,
+`.join.circle`), and the hook's docs say so.
+
+The radius, elevation, finish and decorative edge families follow this.
+State colors (`--choice-border`, `--switch-bg`) stay local: they are
+redeclared per state, and an inherited value would have to beat checked,
+hover and disabled. Dimensions and spacing are decided case by case: a card's
+padding set on a region would also reach nested cards. Older hooks convert
+when a concrete need appears; Actual Blocks remixes are where it surfaces.
+
 ## Intent boundaries
 
 Intent classes expose `--intent`, `--intent-fg`, and `--intent-soft-fg`.

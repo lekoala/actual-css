@@ -362,7 +362,8 @@ on its components. Tap both rows on a phone to compare:
   selected by `.sm`/`.lg`. It inherits, so a container can set it for every
   button inside. `.btn.link` takes the surrounding text size and `.icon-only`
   the field text size instead.
-- `--btn-radius` — corner radius.
+- `--btn-radius` — corner radius of every button, variants included; set it on a theme or region.
+  Unset, `.link` keeps a smaller corner.
 - `--btn-gap` — space between an icon and the label text (default `0.375em`).
 - `--btn-shadow` — resting elevation (unset by default). It inherits, so a
   theme can set it once on its root; the solid hover overlay composes with it.
