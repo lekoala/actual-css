@@ -163,23 +163,16 @@
     }
 
     /* Close over a painted band. --close-bg and --close-color are public hooks
-       (close.css): the hero keeps a translucent square so the muted X holds on
-       the mesh, while the solid warning band drops the chip and takes its own
-       ink, brightening on hover. */
+       (close.css): the hero adds a translucent chip so the muted X holds on
+       the mesh, while the solid warning band takes its own ink, brightening on
+       hover. */
     .modal-hero > .close {
       --close-bg: color-mix(in oklab, var(--surface-opaque) 30%, transparent);
     }
 
     .modal-release > .close {
-      --close-bg: transparent;
       --close-color: color-mix(in oklab, var(--warning-fg) 70%, transparent);
       --close-hover-color: var(--warning-fg);
-    }
-
-    /* The light import band also drops the chip; its surface keeps the default
-       muted X legible without an ink override. */
-    .modal-illustration > .close {
-      --close-bg: transparent;
     }
 
     /* Profile island: icon-led term rows and a display number. */

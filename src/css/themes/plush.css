@@ -175,8 +175,8 @@
   box-shadow: var(--shadow);
 }
 
-/* Common buttons are pills. */
-[data-theme="plush"] .btn {
+/* Common buttons are pills; the close X follows as a disc. */
+[data-theme="plush"] :is(.btn, .close) {
   --btn-radius: var(--radius-full);
 }
 

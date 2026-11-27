@@ -1,6 +1,13 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+### Changed
+- The dialog corner `.close` has no resting fill; `--close-bg` sets one where a band needs it.
+- `.close` follows `--btn-radius`; the Plush and Material themes set it on `.close` too, so their close is round.
+- `.close` hovers with the ghost-button wash tinted from its ink, the dialog corner included.
+
+### Fixed
+- A `.drawer` header drops its first and last child's margins, so a heading centers on the corner `.close`.
 
 ## [0.22.0] - 2026-11-27
 ### Added

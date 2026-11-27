@@ -121,8 +121,8 @@
   box-shadow: inset 0 -1px 0 var(--form-invalid-border, var(--focus));
 }
 
-/* Material 3 common buttons are pills. */
-[data-theme="material"] .btn {
+/* Material 3 common buttons are pills; the close X follows as a disc. */
+[data-theme="material"] :is(.btn, .close) {
   --btn-radius: var(--radius-full);
 }
 

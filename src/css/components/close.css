@@ -22,9 +22,7 @@
  * --close-hover-overlay
  */
 .close {
-  /* Routes the hover/active wash, as --btn-hover-overlay does for .btn. A
-     context that wants ink-only feedback (the dialog corner) sets it
-     transparent. */
+  /* Routes the hover/active wash, as --btn-hover-overlay does for .btn. */
   --close-hover-overlay: var(--hover-overlay);
 
   display: inline-grid;
@@ -34,10 +32,20 @@
   block-size: var(--close-size, var(--control-size));
   padding: 0;
   border: 0;
-  border-radius: var(--radius);
-  background: transparent;
+  /* A button shape: the hover wash takes the theme's button corners (a pill
+     theme gets a disc), not the field radius. */
+  border-radius: var(--btn-radius, var(--radius));
+  background: var(--close-bg, transparent);
   color: inherit;
   cursor: pointer;
+}
+
+/* The ghost-button wash: tinted by the ink, so it shows on any fill and
+   follows the hover color. The neutral overlay is the fallback. */
+@supports (color: color-mix(in oklch, red, white)) {
+  .close {
+    --close-hover-overlay: color-mix(in oklch, currentColor 10%, transparent);
+  }
 }
 
 .close::before {
@@ -50,7 +58,7 @@
 }
 
 /* An inset overlay, not a background: it tints whatever fill the context gave
-   the control (the dialog corner's --surface-subtle) instead of replacing it. */
+   the control (--close-bg) instead of replacing it. */
 @media (hover: hover) {
   .close:hover {
     box-shadow: inset 0 0 0 999px var(--close-hover-overlay);
@@ -70,17 +78,16 @@
    surface rather than to the header or a scroll container inside it. Matched
    on the documented positions (the dialog, its form, its header, or a form
    inside that header) so a .close inside content — an alert in the body —
-   keeps its own place. The corner drops the wash: only the ink changes. */
+   keeps its own place. No resting fill: a box beside the title outweighs it;
+   hover brings the wash. The headers reset their title margins so a title
+   centers on the close (modal.css, drawer.css). */
 :where(dialog):is(.modal, .drawer) > .close,
 :where(dialog):is(.modal, .drawer) > :is(form, header) > .close,
 :where(dialog):is(.modal, .drawer) > :is(form, header) > :is(form, header) > .close {
-  --close-hover-overlay: transparent;
-
   position: absolute;
   z-index: 1;
   inset-block-start: var(--space-20);
   inset-inline-end: var(--space-20);
-  background: var(--close-bg, var(--surface-subtle));
   color: var(--close-color, var(--text-muted));
 }
 

@@ -247,3 +247,16 @@
 :where(dialog).drawer > :where(form) > header:where(.bleed) {
   padding-inline-end: max(var(--bleed-pad, 0px), var(--drawer-close-reserve));
 }
+
+/* The panel padding is the header's top edge: a heading's prose margin pushed
+   the title a line below the corner close it should center on. As in the
+   modal, only the structural header's own edges. */
+:where(dialog).drawer > header > :first-child,
+:where(dialog).drawer > :where(form) > header > :first-child {
+  margin-block-start: 0;
+}
+
+:where(dialog).drawer > header > :last-child,
+:where(dialog).drawer > :where(form) > header > :last-child {
+  margin-block-end: 0;
+}

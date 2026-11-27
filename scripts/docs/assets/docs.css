@@ -636,8 +636,8 @@
   font-size: var(--font-size-lg);
 }
 
-/* 40px target without the permanent fill of the corner close. In the header
-   row the dialog's corner rule does not apply, so only size and ink do. The
+/* A 40px target. In the header row the dialog's corner rule does not apply,
+   so the ink is restated here with the corner's muted-to-text pair. The
    panel's own top padding is the gap to the field, so the header keeps its
    bottom edge flush with it. */
 .docs-search-dialog > .docs-search-header {

@@ -27,15 +27,14 @@
    drawer. It stays structurally dark but takes its chromatic character from
    the active theme: pinning the light scheme resolves every token in this
    subtree to its branded-dark face (--surface-solid is the preset's dark
-   surface on the light branch). The dialog close corner would paint a light
-   --surface-subtle block with dark ink on that branch, so it takes the rail's
-   translucent wash and ink instead. Edges take the same wash: --border is a
+   surface on the light branch). The dialog close corner would paint dark ink
+   on that branch, so it takes the rail's ink instead, and its hover wash
+   follows that ink. Edges take a translucent wash: --border is a
    light line on that branch (the drawer's 1px white edge). --ui-fg is the
    navbar contract for a bar with its own ink: the brand and the nav links take
    it, and their hover tint derives from it. */
 .admini-rail {
   --ui-fg: var(--surface);
-  --close-bg: rgb(255 255 255 / 0.08);
   --close-color: var(--surface);
   --close-hover-color: var(--surface);
 
