@@ -1,6 +1,8 @@
 # Actual CSS Changelog
 
 ## [Unreleased]
+
+## [0.21.1] - 2026-11-27
 ### Changed
 - Default theme, light: `--surface` is a tinted `hsl(262 15% 98%)` under a white `--surface-raised`, so a field in a card reads by its fill as well as its quiet edge, as in dark.
 - Default theme, light: `--surface-subtle` steps to `hsl(262 24% 94%)`, one step past the tinted canvas.
